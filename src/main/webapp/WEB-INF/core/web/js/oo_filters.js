@@ -1,39 +1,5 @@
 (function (_super) {
 
-  hui.on = function(node,event,func,bind) {
-    if (event=='tab') {
-      if (bind) {
-        func = func.bind(bind);
-      }
-      var moved = false;
-      var touched = false;
-      hui.listen(node,'touchstart',function() {
-        touched = true;
-        moved = false;
-      },bind);
-      hui.listen(node,'touchmove',function() {
-        moved = true;
-      },bind);
-      hui.listen(node,'touchcancel',function() {
-        console.log('cancel')
-      },bind);
-      hui.listen(node,'touchend',function() {
-        touched = false;
-        if (!moved) {
-          touched = true;
-          func();
-        }
-      },bind);
-      hui.listen(node,'click',function() {
-        if (!moved && !touched) {
-          func();
-        }
-      },bind);
-    } else {
-      hui.listen(node,event,func,bind);      
-    }
-  }
-
   oo.Filters = function(options) {
     _super.call(this, options);
     this.items = hui.findAll('.oo_filters_bar_item');
@@ -46,7 +12,7 @@
     _open: null,
     _items : {},
   	_attach : function() {
-      hui.on(this.element,'tab',this._click,this);
+      hui.on(this.element,'tap',this._click,this);
       hui.ui.listen({$$afterResize : this._resize.bind(this)})
   	},
     _click : function(e) {
