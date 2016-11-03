@@ -16,3 +16,4 @@ src/main/resources/onlineobjects.cfg.xml.deployed
 node_modules
 .sass-cache
 .DS_Store
+.metadata
