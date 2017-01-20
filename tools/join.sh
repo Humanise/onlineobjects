@@ -7,7 +7,7 @@ import sys
 
 pathname = os.path.dirname(sys.argv[0])
 base = os.path.abspath(pathname)+'/..'
-    
+
 def joinStyle(files,more='') :
     destination = codecs.open(base+'/bin/joined'+more+'.css', mode='w')
     dev = codecs.open(base+'/bin/development'+more+'.css', mode='w')
@@ -20,7 +20,7 @@ def joinStyle(files,more='') :
         destination.write(file.read())
         destination.write('\n\n')
         file.close();
-    
+
     destination.close();
     dev.close();
 
@@ -37,7 +37,7 @@ def joinScript(files,more='') :
         destination.write(file.read())
         destination.write('\n\n')
         file.close();
-    
+
     destination.close();
     dev.close();
 
@@ -96,7 +96,7 @@ jsFiles = [
     'js/Links.js',
     'js/MarkupEditor.js',
     'js/ColorPicker.js',
-    'js/LocationField.js',
+    'js/LocationInput.js',
     'js/StyleLength.js',
     'js/DateTimeField.js',
     'js/TokenField.js',
@@ -183,13 +183,13 @@ cssFiles = [
     'links',
     'effects',
     'colorpicker',
-    'locationfield',
+    'locationinput',
     'tokenfield',
     'checkbox',
     'checkboxes',
     'infoview',
     'radiobutton',
-    'numberfield',
+    'numberinput',
     'rendering',
     'colorinput',
     'structure',
@@ -202,11 +202,12 @@ cssFiles = [
     'columns',
     'markupeditor',
     'objectinput',
-    'rows'
+    'rows',
+    'textinput'
 ]
 
 cssFilesSite = [
-    'icon', 'curtain', 'imageviewer', 'editor', 'overlay', 'box', 'button', 'formula', 'message', 'searchfield', 'checkbox', 'checkboxes'
+    'icon', 'curtain', 'imageviewer', 'editor', 'overlay', 'box', 'button', 'formula', 'textinput', 'message', 'searchfield', 'checkbox', 'checkboxes'
 ]
 
 print('Joining JavaScript')
@@ -221,7 +222,7 @@ print('Joining all JavaScript')
 allFiles = [];
 for file in jsFiles :
     allFiles.append(file)
-    
+
 files = os.listdir(base+'/js')
 
 for file in files :
@@ -230,7 +231,7 @@ for file in files :
         if not path in allFiles :
             allFiles.append(path)
             print('- '+path)
-    
+
 files = os.listdir(base+'/ext')
 
 for file in files :

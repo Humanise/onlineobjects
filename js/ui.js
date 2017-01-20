@@ -19,9 +19,9 @@ hui.ui = {
 	latestTopIndex : 2000,
 	toolTips : {},
 	confirmOverlays : {},
-	
+
 	delayedUntilReady : [],
-	
+
 	texts : {
 		request_error : {en:'An error occurred on the server',da:'Der skete en fejl på serveren'},
 		'continue' : {en:'Continue',da:'Fortsæt'},
@@ -44,6 +44,9 @@ hui.ui.get = function(nameOrComponent) {
 	}
 };
 
+hui.ui.is = function(component, constructor) {
+  return component.__proto__ == constructor.prototype;
+}
 
 /**
  * Called when the DOM is ready and hui.ui is ready
@@ -72,20 +75,26 @@ hui.ui._resize = function() {
 
 hui.ui._afterResize = function() {
   hui.onDraw(function() {
-  	hui.ui.callSuperDelegates(hui.ui,'$afterResize');    
+    hui.ui.callSuperDelegates(hui.ui,'$afterResize');
+    for (key in hui.ui.objects) {
+      var component = hui.ui.objects[key];
+      if (component.$$draw) {
+        component.$$draw();
+      }
+    }
   })
 };
 
 /**
  * Show a confirming overlay
  * <pre><strong>options:</strong> {
- *  element : «Element», // the element to show at
- *  widget : «Widget», // the widget to show at
- *  text : «String», // the text message
- *  okText : «String», // text of OK button
- *  cancelText «String», // text of cancel button
- *  $ok: «Function», // called when user clicks the OK button
- *  $cancel: «Function» // called when user clicks the Cancel button
+ *  element : Element, // the element to show at
+ *  widget : Widget, // the widget to show at
+ *  text : String, // the text message
+ *  okText : String, // text of OK button
+ *  cancelText String, // text of cancel button
+ *  $ok: Function, // called when user clicks the OK button
+ *  $cancel: Function // called when user clicks the Cancel button
  * }
  * </pre>
  * @param options {Object} The options
@@ -136,7 +145,7 @@ hui.ui.confirmOverlay = function(options) {
 
 /**
  * Unregisters a widget
- * @param widget {Widget} The widget to destroy 
+ * @param widget {Widget} The widget to destroy
  */
 hui.ui.destroy = function(widget) {
   if (typeof(widget.destroy)=='function') {
@@ -209,6 +218,16 @@ hui.ui.getAncestor = function(widget,cls) {
 	return null;
 };
 
+hui.ui.getComponents = function(predicate) {
+  var comps = [];
+  var o = hui.ui.objects;
+	for (var key in o) {
+    if (predicate(o[key])) {
+      comps.push(o[key]);
+    }
+  }
+  return comps;
+}
 
 
 hui.ui.changeState = function(state) {
@@ -226,7 +245,7 @@ hui.ui.changeState = function(state) {
 		}
 	}
 	hui.ui.state=state;
-	
+
 	this.reLayout();
 };
 
@@ -246,22 +265,22 @@ hui.ui.reLayout = function() {
 
 hui.ui.nextIndex = function() {
 	hui.ui.latestIndex++;
-	return 	hui.ui.latestIndex;
+	return hui.ui.latestIndex;
 };
 
 hui.ui.nextPanelIndex = function() {
 	hui.ui.latestPanelIndex++;
-	return 	hui.ui.latestPanelIndex;
+	return hui.ui.latestPanelIndex;
 };
 
 hui.ui.nextAlertIndex = function() {
 	hui.ui.latestAlertIndex++;
-	return 	hui.ui.latestAlertIndex;
+	return hui.ui.latestAlertIndex;
 };
 
 hui.ui.nextTopIndex = function() {
 	hui.ui.latestTopIndex++;
-	return 	hui.ui.latestTopIndex;
+	return hui.ui.latestTopIndex;
 };
 
 
@@ -270,13 +289,13 @@ hui.ui.nextTopIndex = function() {
 
 /**
  * Shows a "curtain" behind an element
- * @param options { widget:«widget», color:«cssColor | 'auto'», zIndex:«cssZindex» }
+ * #param options { widget: Widget, color: String, zIndex: Number }
  */
 hui.ui.showCurtain = function(options) {
 	var widget = options.widget;
 	if (!widget.curtain) {
 		widget.curtain = hui.build('div',{'class':'hui_curtain',style:'z-index:none'});
-		
+
 		var body = hui.get.firstByClass(document.body,'hui_body');
 		if (!body) {
 			body=document.body;
@@ -314,7 +333,7 @@ hui.ui.showCurtain = function(options) {
 	}
 	curtain.style.zIndex=options.zIndex;
 	if (options.transparent) {
-		curtain.style.display='block';		
+		curtain.style.display='block';
 	} else {
 		hui.style.setOpacity(curtain,0);
 		curtain.style.display='block';
@@ -383,7 +402,7 @@ hui.ui.confirm = function(options) {
 			hui.ui.callDelegates(alert,'cancel');
 		}});
 		alert.addButton(cancel);
-	
+
 		ok = hui.ui.Button.create({name:name+'_ok',text : options.ok || 'OK',highlighted:options.highlighted==='ok'});
 		alert.addButton(ok);
 	} else {
@@ -565,19 +584,9 @@ hui.ui.createIcon = function(icon,size,tag) {
 	return hui.build(tag || 'span',{'class':'hui_icon hui_icon_'+size,style:'background-image: url('+hui.ui.getIconUrl(icon,size)+')'});
 };
 
-hui.ui.wrapInField = function(element) {
-	var w = hui.build('div',{'class':'hui_field',html:
-		'<span class="hui_field_top"><span><span></span></span></span>'+
-		'<span class="hui_field_middle"><span class="hui_field_middle"><span class="hui_field_content"></span></span></span>'+
-		'<span class="hui_field_bottom"><span><span></span></span></span>'
-	});
-	hui.get.firstByClass(w,'hui_field_content').appendChild(element);
-	return w;
-};
-
 /**
  * Add focus class to an element
- * @param options {Object} {element : «Element», class : «String»}
+ * @param options {Object} {element : Element, class : String}
  */
 hui.ui.addFocusClass = function(options) {
 	var ce = options.classElement || options.element, c = options['class'];
@@ -705,7 +714,7 @@ hui.ui.registerComponent = function(component) {
 	if (hui.ui.objects[component.name]) {
 		hui.log('Widget replaced: '+component.name,hui.ui.objects[component.name]);
 	}
-	hui.ui.objects[component.name] = component;  
+	hui.ui.objects[component.name] = component;
 };
 
 /** Send a message to all ancestors of a widget */
@@ -1011,7 +1020,7 @@ hui.ui.parseSubItems = function(parent,array) {
 		var node = children[i];
 		if (node.nodeType==1 && node.nodeName=='title') {
 			array.push({title:node.getAttribute('title'),type:'title'});
-		} else if (node.nodeType==1 && node.nodeName=='item') {
+		} else if (node.nodeType==1 && (node.nodeName=='item' || node.nodeName=='option')) {
 			var sub = [];
 			hui.ui.parseSubItems(node,sub);
 			array.push({

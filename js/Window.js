@@ -54,16 +54,18 @@ hui.ui.Window.prototype = {
 		if (this.close) {
 			hui.listen(this.close,'click',function(e) {
 				this.hide();
-				this.fire('userClosedWindow'); // TODO maybe rename to closeByUser
+				this.fire('userClosedWindow'); // TODO: remove
+				this.fire('close');
 			}.bind(this));
 			hui.listen(this.close,'mousedown',function(e) {hui.stop(e)});
 		}
 		hui.drag.register({
-			element : this.titlebar,
-			onStart : this._onDragStart.bind(this) ,
-			onBeforeMove : this._onBeforeMove.bind(this) ,
- 			onMove : this._onMove.bind(this),
-			onAfterMove : this._onAfterMove.bind(this)
+      touch: true,
+      element : this.titlebar,
+      $before : this._onDragStart.bind(this) ,
+      $startMove : this._onBeforeMove.bind(this) ,
+      $move : this._onMove.bind(this),
+      $endMove : this._onAfterMove.bind(this)
 		});
 		hui.listen(this.element,'mousedown',function() {
 			self.element.style.zIndex = hui.ui.nextPanelIndex();
@@ -103,7 +105,7 @@ hui.ui.Window.prototype = {
 			}
 			if (!this.element.style.left) {
 				this.element.style.left = Math.round((hui.window.getViewWidth()-width)/2)+'px';
-			}			
+			}
 		}
 		if (hui.browser.opacity) {
 			hui.animate(this.element,'opacity',1,0);
@@ -174,7 +176,7 @@ hui.ui.Window.prototype = {
 			curtain.style.display = '';
 		}.bind(this),300);
 	},
-	
+
 	move : function(point) {
 		hui.style.set(this.element,{top:point.top+'px',left:point.left+'px'});
 	},
@@ -204,4 +206,5 @@ hui.ui.Window.prototype = {
     }
 }
 
+hui.define && hui.define('hui.Window',hui.Window);
 /* EOF */
