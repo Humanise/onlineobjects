@@ -11,6 +11,9 @@
 Header set Cache-Control "public"
 Header unset Cookie
 </FilesMatch>
+<FilesMatch "\.(xsd)$">
+Header set Content-Type "text/xml"
+</FilesMatch>
 </IfModule>
 
 <IfModule mod_expires.c>

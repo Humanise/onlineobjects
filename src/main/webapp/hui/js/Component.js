@@ -15,7 +15,7 @@ hui.ui.Component = function(options) {
 	this.element = hui.get(options.element);
   this.delegates = [];
   if (this.nodes) {
-  	this.nodes = hui.collect(this.nodes,this.element);
+    this.nodes = hui.collect(this.nodes,this.element);
   }
   if (options.listen) {
     this.listen(options.listen);
@@ -31,8 +31,11 @@ hui.ui.Component.prototype = {
   listen : function(listener) {
     this.delegates.push(listener);
   },
+  /**
+   * Fire an event with this component as the sender
+   */
   fire : function(name,value,event) {
-  		return hui.ui.callDelegates(this,name,value,event);
+    return hui.ui.callDelegates(this,name,value,event);
   },
   /**
    * Get the components root element
@@ -41,19 +44,29 @@ hui.ui.Component.prototype = {
   getElement : function() {
     return this.element;
   },
+  /**
+   * Removes the component from the DOM
+   * @see hui.ui.destroy
+   */
   destroy : function() {
     if (this.element) {
       hui.dom.remove(this.element);
     }
   },
 	valueForProperty : function(property) {
-	  return this[property];
+    return this[property];
 	},
+  /**
+   * Notify others of a value change
+   */
 	fireValueChange : function() {
 		this.fire('valueChanged',this.value);
 		hui.ui.firePropertyChange(this,'value',this.value);
 		hui.ui.callAncestors(this,'childValueChanged',this.value);
 	},
+  /**
+   * Notify others of a layout change
+   */
 	fireSizeChange : function() {
 		hui.ui.callAncestors(this,'$$childSizeChanged');
 	}
