@@ -10,6 +10,8 @@ import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -18,11 +20,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.StackObjectPool;
 import org.apache.log4j.Logger;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import dk.in2isoft.onlineobjects.core.Core;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
@@ -81,7 +89,9 @@ public class In2iGui {
 		Transformer transformer = null;;
 		try {
 			if (devMode) {
+			    validate(source);
 				transformer = createTransformer(true);
+				 // create a SchemaFactory capable of understanding WXS schemas
 			} else {
 				transformer = (Transformer) pool.borrowObject();
 			}
@@ -117,6 +127,43 @@ public class In2iGui {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	private void validate(StreamSource source) throws SAXException, IOException {
+		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+		ConfigurationService config = Core.getInstance().getConfigurationService();
+		String schemaPath = config.getFile("hui/xslt/schema.xsd").getAbsolutePath();
+		// load a WXS schema, represented by a Schema instance
+		Source schemaFile = new StreamSource(new File(schemaPath));
+		Schema schema = factory.newSchema(schemaFile);
+
+		// create a Validator instance, which can be used to validate an instance document
+		Validator validator = schema.newValidator();
+		validator.setErrorHandler(new ErrorHandler() {
+			
+			@Override
+			public void warning(SAXParseException exception) throws SAXException {
+				log.warn(exception.getMessage(), exception);
+			}
+			
+			@Override
+			public void fatalError(SAXParseException exception) throws SAXException {
+				log.fatal(exception.getMessage(), exception);
+			}
+			
+			@Override
+			public void error(SAXParseException exception) throws SAXException {
+				log.error(exception.getMessage(), exception);
+			}
+		});
+
+		// validate the DOM tree
+		try {
+		    validator.validate(source);
+		} catch (SAXException e) {
+		    // instance document is invalid!
 		}
 	}
 	
