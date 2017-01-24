@@ -13,7 +13,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 
-@Dependencies(js = { "/hui/js/TextField.js" }, css = { "/hui/css/formula.css" }, requires = { HUIComponent.class })
+@Dependencies(js = { "/hui/js/TextField.js" }, css = { "/hui/css/textinput.css" }, requires = { HUIComponent.class })
 @FacesComponent(value = TextFieldComponent.TYPE)
 public class TextFieldComponent extends AbstractComponent {
 
@@ -56,27 +56,24 @@ public class TextFieldComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
 		String value = Components.getBindingAsString(this, "value", this.value, context);
-		if (adaptive) {
-			writer.startDiv("hui_field");
-		} else {
-			writer.startSpan("hui_field");
-		}
 		writer.withId(id);
-		if (width > 0) {
-			writer.withStyle("width: " + width + "px;");
-		}
-		if (StringUtils.isNotBlank(placeholder)) {
-			writer.startEm("hui_field_placeholder").write(placeholder).endEm();
-		}
-		writer.startSpan("hui_field_top").startSpan().startSpan().endSpan().endSpan().endSpan();
-		writer.startSpan("hui_field_middle").startSpan("hui_field_middle").startSpan("hui_field_content");
 		if (multiline) {
-			writer.startSpan("hui_formula_text_multiline");
-			writer.startElement("textarea").withClass("hui_formula_text").write(value).endElement("textarea");
-			writer.endSpan();
+			writer.startElement("textarea").withClass("hui_textinput");
+			if (width > 0) {
+				writer.withStyle("width: " + width + "px;");
+			}
+			if (StringUtils.isNotBlank(placeholder)) {
+				writer.withAttribute("placeholder", placeholder);
+			}
+			writer.write(value).endElement("textarea");
 		} else {
-			writer.startSpan("hui_field_singleline");
-			writer.startElement("input").withClass("hui_formula_text");
+			writer.startElement("input").withClass("hui_textinput");
+			if (width > 0) {
+				writer.withStyle("width: " + width + "px;");
+			}
+			if (StringUtils.isNotBlank(placeholder)) {
+				writer.withAttribute("placeholder", placeholder);
+			}
 			if (secret) {
 				writer.withAttribute("type", "password");
 			}
@@ -87,14 +84,6 @@ public class TextFieldComponent extends AbstractComponent {
 				writer.withAttribute("name", inputName);
 			}
 			writer.endElement("input");
-			writer.endSpan();
-		}
-		writer.endSpan().endSpan().endSpan();
-		writer.startSpan("hui_field_bottom").startSpan().startSpan().endSpan().endSpan().endSpan();
-		if (adaptive) {
-			writer.endDiv();
-		} else {
-			writer.endSpan();
 		}
 		ScriptWriter js = writer.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.TextField").property("element", id);

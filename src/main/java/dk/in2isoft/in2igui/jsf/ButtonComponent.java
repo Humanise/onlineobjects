@@ -124,7 +124,7 @@ public class ButtonComponent extends AbstractComponent {
 			writer.withStyle(css);
 		}
 		String text = getText(context);
-		writer.startSpan().startSpan().write(text).endSpan().endSpan();
+		writer.write(text);
 		writer.endA();
 	}
 
