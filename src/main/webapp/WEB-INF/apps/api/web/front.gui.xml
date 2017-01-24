@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" state="persons" title="OnlineObjects API" padding="10">
-	<controller name="controller" source="js/controller.js"/>
-	
+	<controller name="controller" url="js/controller.js"/>
+
 	<structure>
 		<top>
 		</top>
@@ -9,9 +9,8 @@
 			<left>
 				<overflow>
 					<selection value="textAnalysis" name="selection">
-						<item icon="common/internet" title="Text analysis" value="textAnalysis"/>
-						<item icon="common/internet" title="Extract text" value="textExtraction"/>
-						
+						<option icon="common/internet" text="Text analysis" value="textAnalysis"/>
+						<option icon="common/internet" text="Extract text" value="textExtraction"/>
 					</selection>
 				</overflow>
 			</left>
@@ -31,17 +30,17 @@
 										</field>
 									</fields>
 									<buttons>
-										<button title="Go" highlighted="true" submit="true"/>
+										<button text="Go" highlighted="true" submit="true"/>
 									</buttons>
 								</formula>
 								</overflow>
 							</row>
 							<row>
-								<code-input name="textAnalysisOutput"/>
+								<code-input name="textAnalysisOutput" height="full"/>
 							</row>
 						</split>
 					</page>
-					
+
 					<page key="textExtraction">
 						<formula name="textExtractionFormula">
 							<fields>
@@ -52,12 +51,11 @@
 									<code-input name="textExtractionOutput"/>
 								</field>
 							</fields>
-							<buttons>
-								<button title="Go" highlighted="true" submit="true"/>
-							</buttons>
 						</formula>
+						<buttons>
+							<button text="Go" highlighted="true" submit="true"/>
+						</buttons>
 					</page>
-					
 				</pages>
 			</center>
 		</middle>
@@ -76,19 +74,19 @@
 						<text-input key="address"/>
 					</field>
 					<field label="Beskrivelse">
-						<text-input key="description" multiline="true"/>
+						<text-input key="description" breaks="true"/>
 					</field>
 					<field label="Nøgleord">
 						<tokens key="tags"/>
 					</field>
-					<buttons>
-						<button title="Slet" name="deleteBookmark"/>
-						<button title="Annuller" name="cancelBookmark"/>
-						<button title="Gem" highlighted="true" name="saveBookmark"/>
-					</buttons>
 				</fields>
+				<buttons>
+					<button text="Slet" name="deleteBookmark"/>
+					<button text="Annuller" name="cancelBookmark"/>
+					<button text="Gem" highlighted="true" name="saveBookmark"/>
+				</buttons>
 			</formula>
 		</space>
 	</window>
-	
+
 </gui>

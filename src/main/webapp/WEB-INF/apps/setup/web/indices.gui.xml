@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gui xmlns="uri:hui" title="Indstillinger" padding="10">	
-	<controller source="indices.js"/>
-	
+<gui xmlns="uri:hui" title="Indstillinger" padding="10">
+	<controller url="indices.js"/>
+
 	<source name="selectionSource" url="getIndexOptions"/>
-	
+
 	<source name="listSource" url="getIndexDocuments">
 		<parameter key="page" value="@list.window.page"/>
 		<parameter key="search" value="@search.value"/>
@@ -15,9 +15,9 @@
 			<toolbar>
 				<icon icon="common/new" text="Add address" name="newPublisher"/>
 				<right>
-					<field label="Search">
+					<item label="Search">
 						<searchfield name="search" expanded-width="200"/>
-					</field>
+					</item>
 				</right>
 			</toolbar>
 		</top>
@@ -25,7 +25,7 @@
 			<left>
 				<overflow>
 					<selection name="selection">
-						<items source="selectionSource"/>
+						<options source="selectionSource"/>
 					</selection>
 				</overflow>
 			</left>
@@ -49,7 +49,7 @@
 		</middle>
 		<bottom/>
 	</structure>
-	
+
 	<window name="publisherWindow" title="OnlinePublisher instance" padding="5" width="300">
 		<formula name="publisherFormula">
 			<fields>
@@ -61,11 +61,11 @@
 				</field>
 			</fields>
 			<buttons top="10">
-				<button title="Cancel" name="cancelPublisher"/>
-				<button title="Delete" name="deletePublisher">
+				<button text="Cancel" name="cancelPublisher"/>
+				<button text="Delete" name="deletePublisher">
 					<confirm text="Are you sure?" ok="Yes, delete" cancel="No"/>
 				</button>
-				<button title="Save" name="savePublisher" highlighted="true" submit="true"/>
+				<button text="Save" name="savePublisher" highlighted="true" submit="true"/>
 			</buttons>
 		</formula>
 	</window>

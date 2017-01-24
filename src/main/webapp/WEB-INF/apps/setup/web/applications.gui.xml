@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Scheduler" padding="10">
-	<controller source="applications.js"/>
-	<source name="listSource">
-	</source>
+	<controller url="applications.js"/>
+	<source name="listSource"/>
+
 	<structure>
 		<top>
 			<toolbar>
-				<icon icon="common/folder" overlay="new" title="New application" name="newApplication"/>
+				<icon icon="common/folder" overlay="new" text="New application" name="newApplication"/>
 			</toolbar>
 		</top>
 		<middle>
@@ -19,18 +19,22 @@
 			</center>
 		</middle>
 	</structure>
-	
+
 	<window name="applicationWindow" title="Application" width="300" padding="5">
 		<formula name="applicationFormula">
-			<group>
-				<text key="name" label="Name"/>
-				<text key="domain" label="Domain"/>
-				<buttons>
-					<button name="cancelApplication" text="Cancel"/>
-					<button name="deleteApplication" text="Delete"/>
-					<button text="Save" highlighted="true" submit="true"/>
-				</buttons>
-			</group>
+			<fields>
+        <field label="Name">
+          <text-input key="name"/>
+        </field>
+        <field label="Domain">
+          <text-input key="domain"/>
+        </field>
+      </fields>
+			<buttons>
+				<button name="cancelApplication" text="Cancel"/>
+				<button name="deleteApplication" text="Delete"/>
+				<button text="Save" highlighted="true" submit="true"/>
+			</buttons>
 		</formula>
 	</window>
 </gui>

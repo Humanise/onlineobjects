@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gui xmlns="uri:hui" title="Indstillinger" padding="10">	
-	<controller source="users.js"/>
-	
+<gui xmlns="uri:hui" title="Indstillinger" padding="10">
+	<controller url="users.js"/>
+
 	<source name="listSource" url="listUsers">
 		<parameter key="page" value="@list.window.page"/>
 		<parameter key="search" value="@search.value"/>
@@ -17,9 +17,9 @@
 			<toolbar>
 				<icon icon="common/new" text="Add member" name="newMember"/>
 				<right>
-					<field label="Search">
+					<item label="Search">
 						<searchfield name="search" expanded-width="200"/>
-					</field>
+					</item>
 				</right>
 			</toolbar>
 		</top>
@@ -27,7 +27,7 @@
 			<left>
 				<overflow>
 					<selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
-						<item icon="common/user" title="All users" value="dk.in2isoft.onlineobjects.model.Entity"/>
+						<option icon="common/user" text="All users" value="dk.in2isoft.onlineobjects.model.Entity"/>
 					</selection>
 				</overflow>
 			</left>
@@ -48,7 +48,7 @@
 		</middle>
 		<bottom/>
 	</structure>
-	
+
 	<window name="userEditor" title="User" padding="5" width="300">
 		<formula name="userFormula">
 			<fields>
@@ -59,17 +59,17 @@
 					<text-input key="username"/>
 				</field>
 				<field label="Privileges">
-					<checkbox name="publicView" label="View" right="10"/>
-					<checkbox name="publicModify" label="Modify" right="10"/>
-					<checkbox name="publicDelete" label="Delete"/>
+					<checkbox name="publicView" text="View"/>
+					<checkbox name="publicModify" text="Modify"/>
+					<checkbox name="publicDelete" text="Delete"/>
 				</field>
 			</fields>
 			<buttons top="10">
-				<button title="Cancel" name="cancelUser"/>
-				<button title="Delete" name="deleteUser">
+				<button text="Cancel" name="cancelUser"/>
+				<button text="Delete" name="deleteUser">
 					<confirm text="Are you sure?" ok="Yes, delete" cancel="No"/>
 				</button>
-				<button title="Update" name="saveUser" highlighted="true"/>
+				<button text="Update" name="saveUser" highlighted="true"/>
 			</buttons>
 		</formula>
 	</window>
@@ -91,8 +91,8 @@
 				</field>
 			</fields>
 			<buttons top="10">
-				<button title="Cancel" name="cancelMember"/>
-				<button title="Create" submit="true" highlighted="true"/>
+				<button text="Cancel" name="cancelMember"/>
+				<button text="Create" submit="true" highlighted="true"/>
 			</buttons>
 		</formula>
 	</window>

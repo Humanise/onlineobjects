@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Scheduler" padding="10">
-	<controller name="controller" source="scheduler.js"/>
+	<controller name="controller" url="scheduler.js"/>
 	<source url="listJobs" name="listSource"/>
 	<source url="listJobLog" name="logListSource"/>
 	<structure>
 		<top>
 			<toolbar>
-				<icon icon="common/refresh" title="Opdater" name="refresh"/>
-				<icon icon="common/stop" title="Stop" name="interrupt" disabled="true"/>
-				<icon icon="common/play" title="Run" name="start" disabled="true"/>
-				<icon icon="common/pause" title="Pause" name="pause" disabled="true"/>
+				<icon icon="common/refresh" text="Opdater" name="refresh"/>
+				<icon icon="common/stop" text="Stop" name="interrupt" disabled="true"/>
+				<icon icon="common/play" text="Run" name="start" disabled="true"/>
+				<icon icon="common/pause" text="Pause" name="pause" disabled="true"/>
 				<right>
-					<field label="Active">
+					<item label="Active">
 						<checkbox name="active"/>
-					</field>
+					</item>
+					<item label="Live">
+            <checkbox name="live" value="true"/>
+					</item>
 				</right>
 			</toolbar>
 		</top>
 		<middle>
+      <left></left>
+      <center>
 			<bar variant="layout">
 				<text text="Checking..." name="statusText"/>
-				<right>
-					<div style="display: inline-block; margin: 4px 3px 0 0;">
-						<checkbox label="Live" name="live" value="true"/>
-					</div>
-				</right>
 			</bar>
 			<split>
 				<row>
@@ -38,7 +38,8 @@
 					</overflow>
 				</row>
 			</split>
+      </center>
 		</middle>
 		<bottom/>
-	</structure>				
+	</structure>
 </gui>

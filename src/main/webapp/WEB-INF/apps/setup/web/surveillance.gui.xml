@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Scheduler" padding="10">
 
-	<controller source="surveillance.js"/>
+	<controller url="surveillance.js"/>
+
 	<source name="listSource" url="getSurveillanceList">
 		<parameter key="kind" value="@selection.value"/>
 	</source>
 	<structure>
 		<top>
 			<toolbar>
-				<icon icon="common/refresh" title="Opdater" name="refresh"/>
-				<field label="Live">
+				<icon icon="common/refresh" text="Opdater" name="refresh"/>
+				<item label="Live">
 					<checkbox name="live"/>
-				</field>
+				</item>
 			</toolbar>
 		</top>
 		<middle>
 			<left>
 				<overflow>
 					<selection value="longestRunningRequests" name="selection">
-						<item icon="common/time" title="Longest requests" value="longestRunningRequests"/>
-						<item icon="common/warning" title="Latest exceptions" value="latestExceptions"/>
-						<item icon="view/list" title="Log" value="log"/>
+						<option icon="common/time" text="Longest requests" value="longestRunningRequests"/>
+						<option icon="common/warning" text="Latest exceptions" value="latestExceptions"/>
+						<option icon="view/list" text="Log" value="log"/>
 					</selection>
 				</overflow>
 			</left>
@@ -31,5 +32,5 @@
 			</center>
 		</middle>
 		<bottom></bottom>
-	</structure>				
+	</structure>
 </gui>

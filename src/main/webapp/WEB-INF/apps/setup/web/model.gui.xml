@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Indstillinger" padding="10">
 
-	<controller name="controller" source="model.js"/>
-	<source name="listSource" url="listEntities">
-		<parameter key="page" value="@list.window.page"/>
-		<parameter key="type" value="@selection.value"/>
-		<parameter key="text" value="@search.value"/>
-	</source>
-	<source name="classSource" url="getClasses"/>
+  <controller name="controller" url="model.js"/>
 
-	<structure>
-		<top>
-			<toolbar>
-				<icon icon="common/info" name="infoTool" text="Info"/>
-				<right>
-					<field label="Search">
-						<searchfield name="search" expandedWidth="200"/>
-					</field>
-				</right>
-			</toolbar>
-		</top>
-		<middle>
-			<left>
-				<overflow>
-					<selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
-						<item icon="common/object" title="All classes" value="dk.in2isoft.onlineobjects.model.Entity"/>
-						<title>Classes</title>
-						<items name="classes" source="classSource"/>
-					</selection>
-				</overflow>
-			</left>
-			<center>
-				<overflow>
-					<list name="list" source="listSource"/>
-				</overflow>
-			</center>
-		</middle>
-		<bottom/>
-	</structure>
-	
-	<window name="entityEditor" width="300" padding="5">
-		<formula name="entityFormula">
-			<fields labels="above">
-				<field label="Public access">
-					<checkbox label="Modify" key="publicAlter" right="10"/>
-					<checkbox label="View" key="publicView" right="10"/>
-					<checkbox label="Delete" key="publicDelete"/>
-				</field>
-			</fields>
-			<buttons>
-				<button title="Delete" name="deleteEntity">
+  <source name="listSource" url="listEntities">
+    <parameter key="page" value="@list.window.page"/>
+    <parameter key="type" value="@selection.value"/>
+    <parameter key="text" value="@search.value"/>
+  </source>
+  <source name="classSource" url="getClasses"/>
+
+  <structure>
+    <top>
+      <toolbar>
+        <icon icon="common/info" name="infoTool" text="Info"/>
+        <right>
+          <item label="Search">
+            <searchfield name="search" expanded-width="200"/>
+          </item>
+        </right>
+      </toolbar>
+    </top>
+    <middle>
+      <left>
+        <overflow>
+          <selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
+            <option icon="common/object" text="All classes" value="dk.in2isoft.onlineobjects.model.Entity"/>
+            <title>Classes</title>
+            <options name="classes" source="classSource"/>
+          </selection>
+        </overflow>
+      </left>
+      <center>
+        <overflow>
+          <list name="list" source="listSource"/>
+        </overflow>
+      </center>
+    </middle>
+    <bottom/>
+  </structure>
+
+  <window name="entityEditor" width="300" padding="5">
+    <formula name="entityFormula">
+      <fields labels="above">
+        <field label="Public access">
+          <checkbox text="Modify" key="publicAlter"/>
+          <checkbox text="View" key="publicView"/>
+          <checkbox text="Delete" key="publicDelete"/>
+        </field>
+      </fields>
+      <buttons>
+        <button text="Delete" name="deleteEntity">
           <confirm text="Are you sure?"/>
         </button>
-				<button title="Update" name="updateEntity" highlighted="true"/>
-			</buttons>
-		</formula>
-	</window>
+        <button text="Update" name="updateEntity" highlighted="true"/>
+      </buttons>
+    </formula>
+  </window>
 </gui>

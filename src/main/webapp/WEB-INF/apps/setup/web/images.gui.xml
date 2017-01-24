@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Indstillinger" padding="10">
-	<controller source="images.js"/>
+	<controller url="images.js"/>
 	<source name="imagesSource" url="listImages">
 		<parameter key="text" value="@search.value"/>
 		<parameter key="tag" value="@tags.value"/>
 	</source>
 	<source name="classSource" url="getImageTags"/>
+
 	<structure>
 		<top>
 			<toolbar>
-				<icon icon="common/refresh" title="Sync images" name="syncImages"/>
+				<icon icon="common/refresh" text="Sync images" name="syncImages"/>
 				<right>
-					<field label="Search">
+					<item label="Search">
 						<searchfield name="search" expanded-width="200"/>
-					</field>
+					</item>
 				</right>
 			</toolbar>
 		</top>
@@ -21,8 +22,8 @@
 			<left>
 				<overflow>
 					<selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
-						<item icon="common/image" title="All images"/>
-						<items name="tags" source="classSource"/>
+						<option icon="common/image" text="All images"/>
+						<options name="tags" source="classSource"/>
 					</selection>
 				</overflow>
 			</left>
