@@ -56,9 +56,9 @@ public class TextFieldComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
 		String value = Components.getBindingAsString(this, "value", this.value, context);
-		writer.withId(id);
 		if (multiline) {
 			writer.startElement("textarea").withClass("hui_textinput");
+			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");
 			}
@@ -68,6 +68,7 @@ public class TextFieldComponent extends AbstractComponent {
 			writer.write(value).endElement("textarea");
 		} else {
 			writer.startElement("input").withClass("hui_textinput");
+			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");
 			}

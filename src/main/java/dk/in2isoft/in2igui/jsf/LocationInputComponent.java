@@ -12,7 +12,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.in2igui.data.LocationData;
 
 @FacesComponent(value="hui.locationInput")
-@Dependencies(js = { "/hui/js/hui_require.js",  "/hui/js/LocationField.js", "/hui/js/LocationPicker.js", "/hui/js/Input.js", "/hui/js/NumberValidator.js" }, css = { "/hui/css/locationfield.css" }, requires = { HUIComponent.class}, uses = { LocationPickerComponent.class })
+@Dependencies(js = { "/hui/js/hui_require.js",  "/hui/js/LocationInput.js", "/hui/js/LocationPicker.js", "/hui/js/Input.js", "/hui/js/NumberValidator.js" }, css = { "/hui/css/locationinput.css" }, requires = { HUIComponent.class}, uses = { LocationPickerComponent.class })
 public class LocationInputComponent extends AbstractComponent {
 
 	public LocationInputComponent() {
@@ -37,30 +37,19 @@ public class LocationInputComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
-		out.startSpan("hui_locationfield").withId(getClientId());
-		out.startSpan("hui_field_top").startSpan().startSpan().endSpan().endSpan().endSpan();
+		out.startSpan("hui_locationinput").withId(getClientId());
 		
-		out.startSpan("hui_field_middle").startSpan("hui_field_middle").startSpan("hui_field_content");
+		out.startSpan("hui_locationinput_latitude").startSpan().startInput().endInput().endSpan().endSpan();
 		
-		out.startSpan();
+		out.startSpan("hui_locationinput_longitude").startSpan().startInput().endInput().endSpan().endSpan();
 		
-		out.startSpan("hui_locationfield_latitude").startSpan().startInput().endInput().endSpan().endSpan();
-		
-		out.startSpan("hui_locationfield_longitude").startSpan().startInput().endInput().endSpan().endSpan();
-
-		out.endSpan();
-		
-		out.endSpan().endSpan().endSpan();
-		
-		out.startSpan("hui_field_bottom").startSpan().startSpan().endSpan().endSpan().endSpan();
-		
-		out.startVoidA("hui_locationfield_picker").endA();
+		out.startVoidA("hui_locationinput_picker").endA();
 		out.endSpan();
 		
 		LocationData location = getBinding("value");
 		
 		ScriptWriter js = out.getScriptWriter().startScript();
-		js.startNewObject("hui.ui.LocationField").property("element", getClientId());
+		js.startNewObject("hui.ui.LocationInput").property("element", getClientId());
 		if (name!=null) {
 			js.comma().property("name", name);
 		}

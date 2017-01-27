@@ -46,19 +46,18 @@ public class SearchFieldComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
 		String value = Components.getBindingAsString(this, "value", this.value, context);
-		writer.startSpan(adaptive ? "hui_searchfield hui_searchfield_adaptive" : "hui_searchfield").withId(id);
+		writer.startSpan(adaptive ? "hui_searchfield hui_searchfield-adaptive" : "hui_searchfield").withId(id);
 		if (width > 0) {
 			writer.withStyle("width: " + width + "px;");
 		}
 		writer.startEm("hui_searchfield_placeholder").write(placeholder).endEm();
 		writer.startVoidA("hui_searchfield_reset").endA();
-		writer.startSpan().startSpan();
-		writer.startElement("input");
+		writer.startElement("input").withClass("hui_searchfield_input");
 		if (value != null) {
 			writer.withAttribute("value", value);
 		}
 		writer.endElement("input");
-		writer.endSpan().endSpan().endSpan();
+		writer.endSpan();
 		
 		ScriptWriter js = writer.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.SearchField").property("element", id);

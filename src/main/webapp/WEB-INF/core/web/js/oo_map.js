@@ -4,7 +4,7 @@ oo.Map = function(options) {
 	this.name = options.name;
 	hui.ui.extend(this);
 	if (options.dynamic) {
-		hui.ui.onReady(this._init.bind(this));		
+		hui.ui.onReady(this._init.bind(this));
 	} else {
 		hui.ui.onReady(this._initStatic.bind(this));
 	}
@@ -26,7 +26,7 @@ oo.Map.prototype = {
 					this._edit(a);
 				}
 			}
-		}.bind(this))		
+		}.bind(this))
 	},
 	_initStatic : function() {
 		hui.log('Init static');
@@ -48,7 +48,7 @@ oo.Map.prototype = {
 		}
 		var map = new google.maps.Map(this.element, myOptions);
 		var marker = new google.maps.Marker({
-			position : myLatlng, 
+			position : myLatlng,
 			map : map
 		});
 	},
@@ -63,7 +63,7 @@ oo.Map.prototype = {
 			var form = this._editForm = hui.ui.Formula.create();
 			var group = form.buildGroup(null,[
 				{label:'Title',type:'TextField',options:{key:'title'}},
-				{label:'Location',type:'LocationField',options:{key:'location'}}
+				{label:'Location',type:'LocationInput',options:{key:'location'}}
 			]);
 			var buttons = group.createButtons();
 			buttons.add(hui.ui.Button.create({text:'Cancel',small:true,listener:{

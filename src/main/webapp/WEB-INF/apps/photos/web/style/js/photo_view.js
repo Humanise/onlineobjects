@@ -2,14 +2,14 @@ var photoView = {
 	imageId : null,
 	editable : false,
 	username : null,
-	
+
 	$ready : function() {
     var data = hui.get.firstByClass(document.body, 'js-data');
 
 		photoView.editable = data.getAttribute('data-editable') == 'true';
 		photoView.imageId = parseInt(data.getAttribute('data-id'),10);
 		photoView.username = data.getAttribute('data-username');
-    
+
 		if (this.editable) {
 			new oo.InlineEditor({
 				element : 'editableTitle',
@@ -37,7 +37,7 @@ var photoView = {
 		if (a) {
 			hui.ui.confirmOverlay({element:a,text:'Delete word?',$ok : function() {
 				this._removeWord(parseInt(a.getAttribute('data'),10));
-			}.bind(this)})			
+			}.bind(this)})
 		}
 	},
 	$click$addLocation : function(widget) {
@@ -48,7 +48,7 @@ var photoView = {
 	$click$saveLocation : function() {
 		var values = hui.ui.get('locationForm').getValues(),
 			panel = hui.ui.get('locationPanel');
-		
+
 		hui.ui.request({
 			message : {start:'Updating location', delay:300, success:'The location is changed'},
 			url : oo.appContext+'/updateLocation',
@@ -95,9 +95,9 @@ var photoView = {
 				hui.ui.msg({text:'Unable to synchronize metadata',icon:'common/warning',duration:2000});
 			}
 		})
-		
+
 	},
-	
+
 	$add$words : function(info) {
 		if (!this.imageId) {
 			throw 'No id';
@@ -113,7 +113,7 @@ var photoView = {
 			}
 		})
 	},
-	
+
 	$delete$words : function(info) {
 		hui.ui.request({
 			message : {start:'Removing word', delay:300, success:'The word is removed'},
@@ -126,7 +126,7 @@ var photoView = {
 			}
 		})
 	},
-	
+
 	$valueChanged$publicAccess : function(value) {
 		hui.ui.request({
 			message : {start:'Changing access', delay:300, success:'Access has changed'},
@@ -137,7 +137,7 @@ var photoView = {
 			}
 		})
 	},
-	
+
 	$valueChanged$theMap : function(info) {
 		hui.ui.request({
 			message : {start:'Changing location', delay:300, success:'The location is changed'},
@@ -150,7 +150,7 @@ var photoView = {
 			}
 		});
 	},
-	
+
 	$click$deletePhoto : function(info) {
 		hui.ui.confirmOverlay({widget:info,text:'Delete?',$ok : function() {
 			hui.ui.request({
@@ -166,7 +166,7 @@ var photoView = {
 			})
 		}.bind(this)})
 	},
-	
+
 	$click$viewMetaData : function() {
 		hui.ui.request({
 			url : oo.appContext+'/getMetaData',

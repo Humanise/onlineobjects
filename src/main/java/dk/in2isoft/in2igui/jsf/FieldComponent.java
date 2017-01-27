@@ -56,7 +56,7 @@ public class FieldComponent extends AbstractComponent {
 			writer.startElement("th").withClass("hui_formula_middle");
 			writer.startElement("label").withClass("hui_formula_field").text(label).endElement("label");
 			writer.endElement("th");
-			writer.startElement("td").withClass("hui_formula_field");
+			writer.startElement("td").withClass("hui_formula_field").startDiv("hui_formula_field_body");
 		}
 	}
 
@@ -65,7 +65,7 @@ public class FieldComponent extends AbstractComponent {
 		if (isAbove()) {
 			writer.endDiv().endDiv();
 		} else {
-			writer.endElement("td").endElement("tr");
+			writer.endDiv().endElement("td").endElement("tr");
 		}
 	}
 

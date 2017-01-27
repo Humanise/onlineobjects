@@ -55,7 +55,7 @@ public class ListComponent extends AbstractComponent {
 		out.startSpan("hui_list_count").endSpan();
 		out.endDiv();
 		out.startDiv("hui_list_body");
-		out.startElement("table");
+		out.startElement("table").withClass("hui_list_table");
 		out.startElement("thead").startElement("tr").endElement("tr").endElement("thead");
 		out.startElement("tbody").endElement("tbody");
 		out.endElement("table");
