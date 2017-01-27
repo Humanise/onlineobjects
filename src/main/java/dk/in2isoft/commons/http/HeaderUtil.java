@@ -17,7 +17,7 @@ public class HeaderUtil {
 	private static Map<String,String> mimeTypes = new ImmutableMap.Builder<String, String>().put("html", "text/html").put("htm", "text/html").put(
 			"xhtml", "application/xhtml+xml").put("js", "text/javascript").put("css", "text/css").put("png",
 			"image/png").put("gif", "image/gif").put("jpg", "image/jpeg").put("jpeg", "image/jpeg").put("swf",
-			"application/x-shockwave-flash").put("woff", "application/x-font-woff").put("eot", "application/vnd.ms-fontobject").put("otf", "application/octet-stream").put("ttf", "application/octet-stream").build();
+			"application/x-shockwave-flash").put("woff", "application/x-font-woff").put("eot", "application/vnd.ms-fontobject").put("otf", "application/octet-stream").put("ttf", "application/octet-stream").put("svg", "image/svg+xml").build();
 	
 	public static void setOneWeekCache(HttpServletResponse response) {		
         response.setDateHeader("Expires", System.currentTimeMillis()+604800*1000);
