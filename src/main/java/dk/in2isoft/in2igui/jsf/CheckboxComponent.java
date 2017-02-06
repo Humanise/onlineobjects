@@ -45,8 +45,8 @@ public class CheckboxComponent extends AbstractComponent {
 		String id = getClientId();
 		Boolean value = getValue(context);
 		out.startVoidA(Boolean.TRUE.equals(value) ? "hui_checkbox hui_checkbox_selected" : "hui_checkbox").withId(id);
-		out.startSpan().startSpan().endSpan().endSpan();
-		out.write(label);
+		out.startSpan("hui_checkbox_button").endSpan();
+		out.startSpan("hui_checkbox_label").write(label).endSpan();
 		out.endA();
 		
 		ScriptWriter js = out.getScriptWriter().startScript();
