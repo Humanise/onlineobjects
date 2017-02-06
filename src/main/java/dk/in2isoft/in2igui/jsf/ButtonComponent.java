@@ -81,7 +81,7 @@ public class ButtonComponent extends AbstractComponent {
 		if (confirm != null) {
 			String confirmation = Strings.asNonBlank(confirm.getText(context), "Are you sure?");
 			String okText = Strings.asNonBlank(confirm.getOkText(context), "OK");
-			String canceltext = Strings.asNonBlank(confirm.getOkText(context), "Cancel");
+			String canceltext = Strings.asNonBlank(confirm.getCancelText(context), "Cancel");
 			js.write(",confirm:{text:'").writeScriptString(confirmation).write("',okText:'").writeScriptString(okText).write("',cancelText:'").writeScriptString(canceltext)
 					.write("'}");
 		}
@@ -98,24 +98,18 @@ public class ButtonComponent extends AbstractComponent {
 		ClassBuilder cls = new ClassBuilder("hui_button").add(styleClass).add("hui_button", variant);
 		if (small) {
 			cls.add("hui_button_small").add("hui_button_small", variant);
-			if (highlighted) {
-				cls.add("hui_button_small_highlighted");
-			}
 		} else if (mini) {
 			cls.add("hui_button_mini").add("hui_button_mini", variant);
-			if (highlighted) {
-				cls.add("hui_button_mini_highlighted");
-			}
 		} else if (tiny) {
 			cls.add("hui_button_tiny").add("hui_button_tiny", variant);
-			if (highlighted) {
-				cls.add("hui_button_tiny_highlighted");
-			}
-		} else {
-			if (highlighted) {
-				cls.add("hui_button_highlighted").add("hui_button_highlighted", variant);
-			}
 		}
+		if (highlighted) {
+			cls.add("hui_is_highlighted");
+		}
+		if (disabled) {
+			cls.add("hui_is_disabled");
+		}
+		
 		writer.startVoidA(cls);
 		writer.withId(id);
 		if (left != null || right != null) {
