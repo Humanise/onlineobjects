@@ -119,11 +119,11 @@ public class TagWriter {
 	}
 	
 	public TagWriter startVoidA(Object className) throws IOException {
-		return startElement("a").withAttribute("href","javascript:void(0);").withClass(className);
+		return startElement("a").withAttribute("href","javascript://").withClass(className);
 	}
 	
 	public TagWriter startVoidA() throws IOException {
-		return startElement("a").withAttribute("href","javascript:void(0);");
+		return startElement("a").withAttribute("href","javascript://");
 	}
 
 	public TagWriter endA() throws IOException {
