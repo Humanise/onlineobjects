@@ -29,10 +29,10 @@ hui.onReady(function() {
     y : size / 2
   };
   var arcSkew = 0.045;//0.005;
-  var arc1 = d.addArc({center : center,fill : 'none', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc2 = d.addArc({center : center,fill : 'none', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc3 = d.addArc({center : center,fill : 'none', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc4 = d.addArc({center : center,fill : 'none', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
+  var arc1 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
+  var arc2 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
+  var arc3 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
+  var arc4 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
 
   var circle = d.addCircle({cx:center.x,cy:center.y,r:0,fill : 'none', stroke:{color:'#999',width : '1.5px'},width:0});
 
