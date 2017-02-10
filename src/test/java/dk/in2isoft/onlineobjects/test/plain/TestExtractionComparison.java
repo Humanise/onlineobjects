@@ -34,7 +34,6 @@ import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
-import dk.in2isoft.onlineobjects.test.FastTests;
 import dk.in2isoft.onlineobjects.test.SlowTests;
 
 @Category(SlowTests.class)

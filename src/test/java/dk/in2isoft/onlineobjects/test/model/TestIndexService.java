@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.parsing.HTMLDocument;
-import dk.in2isoft.onlineobjects.apps.reader.index.ReaderQuery;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;

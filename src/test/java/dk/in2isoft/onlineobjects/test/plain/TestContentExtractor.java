@@ -3,18 +3,15 @@ package dk.in2isoft.onlineobjects.test.plain;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import nu.xom.Document;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.openjena.atlas.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import nu.xom.Document;
 
 public class TestContentExtractor extends AbstractSpringTestCase {
 	

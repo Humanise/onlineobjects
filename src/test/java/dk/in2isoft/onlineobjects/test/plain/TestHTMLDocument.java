@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import nu.xom.Document;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -35,6 +35,9 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 
 	protected File getTestFile(String name) throws IOException {
 		File file = context.getResource(name).getFile();
+		if (!file.exists()) {
+			throw new IllegalStateException("The test file does not exist: "+name);
+		}
 		return file;
 	}
 	

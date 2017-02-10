@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.test.plain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +42,11 @@ public class TestImageService extends AbstractSpringTestCase {
 	@Test
 	public void testInfo() throws EndUserException, IOException {
 		File file = getTestFile("testImageWithGPS.jpg");
-		ImageProperties propeties = imageService.getImageProperties(file);
-		assertEquals(1600,propeties.getWidth());
-		assertEquals(1200,propeties.getHeight());
-		assertEquals(MimeTypes.IMAGE_JPEG,propeties.getMimeType());
+		ImageProperties properties = imageService.getImageProperties(file);
+		assertNotNull(properties);
+		assertEquals(1600,properties.getWidth());
+		assertEquals(1200,properties.getHeight());
+		assertEquals(MimeTypes.IMAGE_JPEG,properties.getMimeType());
 	}
 
 	@Test
