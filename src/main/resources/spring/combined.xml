@@ -135,6 +135,10 @@
 
 	<bean id="dependencyService" class="dk.in2isoft.onlineobjects.ui.DependencyService" autowire="byType"/>
 
+	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService">
+		<property name="configurationService" ref="configurationService"/>
+	</bean>
+
 	<bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType"/>
 
 	<!-- Tools -->

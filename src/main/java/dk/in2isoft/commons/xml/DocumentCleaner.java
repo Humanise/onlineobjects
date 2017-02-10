@@ -136,13 +136,21 @@ public class DocumentCleaner {
 								while (elementToRemove.getChildCount()>0) {
 									nu.xom.Node child = elementToRemove.removeChild(0);
 									if (parent instanceof Element || !(child instanceof Text)) {
-										parent.insertChild(child, index);
+										if (parent instanceof nu.xom.Document) {
+											log.debug("The parent is a document");
+										} else {
+											parent.insertChild(child, index);
+										}
 									}
 									index ++;
 								}
 							}
 						}
-						parent.removeChild(toRemove);
+						if (parent instanceof nu.xom.Document) {
+							log.warn("Cannot remove the child node");
+						} else {
+							parent.removeChild(toRemove);
+						}
 					}
 				}
 			}

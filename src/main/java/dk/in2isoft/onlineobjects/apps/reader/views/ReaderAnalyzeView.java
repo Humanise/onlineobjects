@@ -15,7 +15,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.jsf.AbstractView;
-import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;

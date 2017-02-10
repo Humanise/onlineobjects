@@ -3,8 +3,6 @@ package dk.in2isoft.onlineobjects.modules.language;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
-
 import dk.in2isoft.onlineobjects.core.Pair;
 
 public class TextDocumentAnalytics implements Serializable {

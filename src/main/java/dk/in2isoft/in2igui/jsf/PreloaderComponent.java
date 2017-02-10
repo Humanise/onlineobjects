@@ -1,4 +1,4 @@
-package dk.in2isoft.onlineobjects.ui.jsf;
+package dk.in2isoft.in2igui.jsf;
 
 import java.io.IOException;
 
@@ -8,20 +8,15 @@ import javax.faces.context.FacesContext;
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
-import dk.in2isoft.in2igui.jsf.PreloaderComponent;
+import dk.in2isoft.in2igui.jsf.HUIComponent;
 
-@FacesComponent(value=PhotoViewerComponent.FAMILY)
-@Dependencies(
-	js = {"/WEB-INF/core/web/js/oo_photoviewer.js"},
-	css = {"/WEB-INF/core/web/css/oo_photoviewer.css"},
-	requires = {OnlineObjectsComponent.class}, 
-	uses = {PreloaderComponent.class}
-)
-public class PhotoViewerComponent extends AbstractComponent {
+@FacesComponent(value=PreloaderComponent.FAMILY)
+@Dependencies(js = { "/hui/js/hui_preloader.js" }, requires = { HUIComponent.class })
+public class PreloaderComponent extends AbstractComponent {
 
-	public static final String FAMILY = "onlineobjects.photoviewer";
+	public static final String FAMILY = "hui.preloader";
 		
-	public PhotoViewerComponent() {
+	public PreloaderComponent() {
 		super(FAMILY);
 	}
 

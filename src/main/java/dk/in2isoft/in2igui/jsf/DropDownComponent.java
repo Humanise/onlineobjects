@@ -14,7 +14,6 @@ import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
-import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
 @FacesComponent(value=DropDownComponent.TYPE)
 @Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/DropDown.js" }, css = { "/hui/css/dropdown.css" }, requires = { HUIComponent.class })
@@ -79,13 +78,13 @@ public class DropDownComponent extends AbstractComponent {
 			StringBuilder sb = new StringBuilder("[");
 			boolean first = true;
 			for (Object object : list) {
-				if (object instanceof Option) {
-					Option option = (Option) object;
+				if (object instanceof dk.in2isoft.in2igui.data.Option) {
+					dk.in2isoft.in2igui.data.Option option = (dk.in2isoft.in2igui.data.Option) object;
 					if (!first) {
 						sb.append(",");
 					}
 					sb.append("{");
-					sb.append("text:'").append(StringEscapeUtils.escapeJavaScript(option.getLabel())).append("'");
+					sb.append("text:'").append(StringEscapeUtils.escapeJavaScript(option.getText())).append("'");
 					sb.append(",value:");
 					if (option.getValue()==null) {
 						sb.append("null");

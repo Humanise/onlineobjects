@@ -2,8 +2,6 @@ package dk.in2isoft.onlineobjects.modules.dannet;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
 import dk.in2isoft.commons.lang.Strings;
 
 public class DanNetUtil {

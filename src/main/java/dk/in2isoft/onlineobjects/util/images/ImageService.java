@@ -93,10 +93,13 @@ public class ImageService extends AbstractCommandLineInterface {
 			properties.setMimeType(imageInfo.getMimeType());
 			return properties;
 		} catch (EndUserException e) {
+			log.error(e.getMessage(),e);
 			return null;
 		} catch (ImageReadException e) {
+			log.error(e.getMessage(),e);
 			return null;
 		} catch (IOException e) {
+			log.error(e.getMessage(),e);
 			return null;
 		}
 	}

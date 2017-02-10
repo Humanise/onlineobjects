@@ -1,10 +1,8 @@
 package dk.in2isoft.onlineobjects.apps.words.views.util;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -17,7 +15,6 @@ import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
 import dk.in2isoft.onlineobjects.modules.language.LanguageFacetsDataProvider;
-import dk.in2isoft.onlineobjects.modules.language.LanguageStatisticsDataProvider;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 

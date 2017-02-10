@@ -32,7 +32,7 @@ oo.Map.prototype = {
 		hui.log('Init static');
 		var loc = this.options.location;
 		if (loc) {
-			var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&maptype=terrain&sensor=false';
+			var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&maptype=terrain&sensor=false&key=AIzaSyC0jPmRh2M5ZNKHhBiRWd5RATUuP3Ia9gM ';
 			this.element.style.backgroundImage='url(\''+url+'\')';
 		}
 	},

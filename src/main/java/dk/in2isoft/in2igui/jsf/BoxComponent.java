@@ -36,6 +36,7 @@ public class BoxComponent extends AbstractComponent {
 
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
+		// TODO
 	}
 
 	public void setName(String name) {

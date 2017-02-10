@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.PostAddToViewEvent;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Dependencies;

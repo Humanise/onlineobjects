@@ -39,7 +39,7 @@ public class FieldComponent extends AbstractComponent {
 		if (parent!=null && parent instanceof FieldsComponent) {
 			return ((FieldsComponent) parent).isLabelsAbove();
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
