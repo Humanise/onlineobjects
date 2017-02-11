@@ -5,14 +5,23 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 
+import org.springframework.beans.factory.InitializingBean;
+
 import dk.in2isoft.commons.http.HeaderUtil;
-import dk.in2isoft.in2igui.In2iGui;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class In2iGuiResponder implements Responder {
+public class In2iGuiResponder implements Responder, InitializingBean {
 
 	//private static Logger log = Logger.getLogger(In2iGuiResponder.class);
+	private ConfigurationService configurationService;
+	private String huiPath;
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		this.huiPath = configurationService.getFile("hui").getPath();
+	}
 	
 	public boolean applies(Request request) {
 		String[] path = request.getFullPath();
@@ -23,7 +32,7 @@ public class In2iGuiResponder implements Responder {
 
 		String[] path = request.getFullPath();
 		StringBuilder file = new StringBuilder();
-		file.append(In2iGui.getInstance().getPath());
+		file.append(huiPath);
 		for (int i = 1; i < path.length; i++) {
 			file.append(File.separatorChar);
 			file.append(path[i]);
@@ -35,5 +44,9 @@ public class In2iGuiResponder implements Responder {
 			HeaderUtil.setNotFound(request.getResponse());
 		}
 		return null;
+	}
+	
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
 	}
 }

@@ -29,18 +29,16 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.StackObjectPool;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
-public class HUIService implements InitializingBean {
+public class HUIService {
 
 	private static Logger log = Logger.getLogger(HUIService.class);
 
-	private String path = "";
 	private ObjectPool<Transformer> pool;
 
 	private Templates templates;
@@ -70,22 +68,12 @@ public class HUIService implements InitializingBean {
 			
 		});
 	}
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		path = configurationService.getFile("hui").getAbsolutePath();
-	}
-
-	
-	public String getPath() {
-		return path;
-	}
 
 	private void render(StreamSource source, OutputStream output, String context,boolean devMode) throws IOException {
 		Transformer transformer = null;;
 		try {
 			if (devMode) {
-			    validate(source);
+			    //validate(source);
 				transformer = createTransformer(true);
 				 // create a SchemaFactory capable of understanding WXS schemas
 			} else {
@@ -226,7 +214,7 @@ public class HUIService implements InitializingBean {
 					"<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>").append(
 					"<xsl:output method='xml' indent='no' encoding='UTF-8'/>").append(
 					"<xsl:param name='dev'/><xsl:param name='version'/><xsl:param name='context'/><xsl:param name='profile'/><xsl:param name='language'/><xsl:param name='pathVersion'/>").append(
-					"<xsl:include href='").append(path).append("/xslt/gui.xsl'/>").append(
+					"<xsl:include href='").append(configurationService.getFile("hui").getAbsolutePath()).append("/xslt/gui.xsl'/>").append(
 					"<xsl:template match='/'><xsl:apply-templates/></xsl:template>").append("</xsl:stylesheet>");
 			StringReader xslReader = new StringReader(xslString.toString());
 			TransformerFactory factory = TransformerFactory.newInstance();

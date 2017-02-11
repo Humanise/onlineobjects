@@ -87,7 +87,7 @@ public class CommunityController extends ApplicationController {
 		} else if (request.testLocalPathStart("model.action")) {
 			model(request);
 		} else if (request.testLocalPathStart("iphone")) {
-			FileBasedInterface ui = new FileBasedInterface(getFile("iphone", "index.gui.xml"));
+			FileBasedInterface ui = new FileBasedInterface(getFile("iphone", "index.gui.xml"), huiService);
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathStart(new String[] { null })) {
 			handleUser(request);

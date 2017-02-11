@@ -12,16 +12,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dk.in2isoft.onlineobjects.services.FileService;
+import dk.in2isoft.onlineobjects.ui.HUIService;
 
 public abstract class AbstractInterface implements Interface {
 
 	private List<Widget> widgets = new ArrayList<Widget>();
 	private Map<String,Object> parameters = new HashMap<String, Object>();
+	private HUIService huiService;
+	
+	public AbstractInterface(HUIService huiService) {
+		this.huiService = huiService;
+	}
 
 	public void render(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		File file = getFile();
 		if (file != null && parameters.isEmpty()) {
-			In2iGui.getInstance().render(file, request, response);
+			huiService.render(file, request, response);
 		} else if (file != null && !parameters.isEmpty()) {
 			String string = FileService.readTextUTF8(file);
 			
@@ -30,13 +36,13 @@ public abstract class AbstractInterface implements Interface {
 				String value = entry.getValue()!=null ? entry.getValue().toString() : "";
 				string = string.replaceAll(name, value);
 			}
-			In2iGui.getInstance().render(string, request, response);
+			huiService.render(string, request, response);
 		} else {
 			StringBuilder gui = new StringBuilder();
 			gui.append("<gui xmlns='uri:hui' context='../../../../'>");
 			assemble(gui);
 			gui.append("</gui>");
-			In2iGui.getInstance().render(gui.toString(), request,response);
+			huiService.render(gui.toString(), request,response);
 		}
 	}
 	

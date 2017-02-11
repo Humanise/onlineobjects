@@ -15,12 +15,14 @@ import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.ui.AbstractController;
+import dk.in2isoft.onlineobjects.ui.HUIService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class ApplicationController extends AbstractController implements ModelEventListener,InitializingBean {
 
 	protected EventService eventService;
 	protected ModelService modelService;
+	protected HUIService huiService;
 	
 	public ApplicationController(String name) {
 		super(name);
@@ -62,6 +64,10 @@ public abstract class ApplicationController extends AbstractController implement
 
 	public void relationWasUpdated(Relation relation) {
 	}
+	
+	public void setHuiService(HUIService huiService) {
+		this.huiService = huiService;
+	}
 
 	public boolean showGui(Request request) throws IOException {
 		String[] localPath = request.getLocalPath();
@@ -73,7 +79,7 @@ public abstract class ApplicationController extends AbstractController implement
 			file = getFile(Strings.combine("web", localPath, "index.gui.xml"));
 		}
 		if (file.exists()) {
-			FileBasedInterface ui = new FileBasedInterface(file);
+			FileBasedInterface ui = new FileBasedInterface(file, huiService);
 			ui.render(request.getRequest(), request.getResponse());
 			return true;
 		} else {

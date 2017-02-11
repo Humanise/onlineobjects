@@ -5,11 +5,13 @@ import java.io.IOException;
 
 import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.in2igui.Interface;
+import dk.in2isoft.onlineobjects.ui.HUIService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class PrivateSpaceController {
 
 	private CommunityController communityController;
+	private HUIService huiService;
 	private File persons;
 	private File images;
 	private File settings;
@@ -21,7 +23,7 @@ public class PrivateSpaceController {
 		if (persons==null) {
 			persons = communityController.getFile("web","gui","private","persons.gui.xml");
 		}
-		Interface ui = new FileBasedInterface(persons);
+		Interface ui = new FileBasedInterface(persons, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -30,7 +32,7 @@ public class PrivateSpaceController {
 		if (images==null) {
 			images = communityController.getFile("web","gui","private","images.gui.xml");		
 		}
-		Interface ui = new FileBasedInterface(images);
+		Interface ui = new FileBasedInterface(images, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -39,7 +41,7 @@ public class PrivateSpaceController {
 		if (bookmarks==null) {
 			bookmarks = communityController.getFile("web","gui","private","bookmarks.gui.xml");
 		}
-		Interface ui = new FileBasedInterface(bookmarks);
+		Interface ui = new FileBasedInterface(bookmarks, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -48,7 +50,7 @@ public class PrivateSpaceController {
 		if (bookmarksAlone==null) {
 			bookmarksAlone = communityController.getFile("web","gui","private","bookmarks_alone.gui.xml");
 		}
-		Interface ui = new FileBasedInterface(bookmarksAlone);
+		Interface ui = new FileBasedInterface(bookmarksAlone, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -57,7 +59,7 @@ public class PrivateSpaceController {
 		if (integration==null) {
 			integration = communityController.getFile("web","gui","private","integration.gui.xml");
 		}
-		Interface ui = new FileBasedInterface(integration);
+		Interface ui = new FileBasedInterface(integration, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -66,7 +68,7 @@ public class PrivateSpaceController {
 		if (settings==null) {
 			settings = communityController.getFile("web","gui","private","settings.gui.xml");
 		}
-		Interface ui = new FileBasedInterface(settings);
+		Interface ui = new FileBasedInterface(settings, huiService);
 		ui.setParameter("username", request.getSession().getUser().getUsername());
 		ui.render(request.getRequest(),request.getResponse());
 	}
@@ -77,5 +79,9 @@ public class PrivateSpaceController {
 
 	public CommunityController getCommunityController() {
 		return communityController;
+	}
+	
+	public void setHuiService(HUIService huiService) {
+		this.huiService = huiService;
 	}
 }

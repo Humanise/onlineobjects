@@ -42,7 +42,7 @@ public class APIController extends APIControllerBase {
 	@Path(expression = "/")
 	public void front(Request request) throws IOException {
 
-		FileBasedInterface ui = new FileBasedInterface(getFile("web", "front.gui.xml"));
+		FileBasedInterface ui = new FileBasedInterface(getFile("web", "front.gui.xml"), huiService);
 		ui.render(request.getRequest(), request.getResponse());
 	}
 

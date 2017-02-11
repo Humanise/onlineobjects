@@ -39,7 +39,7 @@ public class DesktopController extends DesktopControlerBase {
 	public void unknownRequest(Request request) throws IOException, EndUserException {
 		String[] localPath = request.getLocalPath();
 		if (localPath.length==0) {
-			FileBasedInterface ui = new FileBasedInterface(getFile("web","index.gui.xml"));
+			FileBasedInterface ui = new FileBasedInterface(getFile("web","index.gui.xml"), huiService);
 			ui.render(request.getRequest(), request.getResponse());
 		} else {
 			super.unknownRequest(request);
