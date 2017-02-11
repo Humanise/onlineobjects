@@ -1,16 +1,15 @@
 hui.onReady(function() {
-
-  var size = 340,
-    logo = hui.get('logo');
+  //return;
+  var logo = hui.get('logo');
+  var size = logo.clientWidth;
 
 
   if (isMobile() || hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
     return;
   }
 
-  if (hui.window.getViewWidth()<800 && false) {
-    size = 300;
-    logo.style.marginLeft = '-150px';
+  if (hui.window.getViewWidth()<800) {
+    //return;
   }
 
   logo.innerHTML = '';
@@ -29,12 +28,12 @@ hui.onReady(function() {
     y : size / 2
   };
   var arcSkew = 0.045;//0.005;
-  var arc1 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc2 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc3 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
-  var arc4 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#999',width : '1.5px' }, skew: arcSkew});
+  var arc1 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
+  var arc2 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
+  var arc3 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
+  var arc4 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
 
-  var circle = d.addCircle({cx:center.x,cy:center.y,r:0,fill : 'none', stroke:{color:'#999',width : '1.5px'},width:0});
+  var circle = d.addCircle({cx:center.x,cy:center.y,r:0,fill : 'none', stroke:{color:'#888',width : '1.5px'},width:0});
 
 
   var title = hui.get('title');
@@ -95,7 +94,9 @@ hui.onReady(function() {
         $render : function(shape,pos) {
           shape.setRadius(pos*50)
         },
-        $complete : function() { loopCircle(shape);}
+        $complete : function() {
+          loopCircle(shape);
+        }
       })
     }
 
@@ -113,18 +114,18 @@ hui.onReady(function() {
     }
 
     function startArc(arc,start,end,extra) {
-      var ran = Math.random()*3000;
-      var turns = Math.round(Math.random()*3)+1;
+      var ran = Math.random() * 3000;
+      var turns = Math.round(Math.random() * 3) + 1;
       hui.animate({ node : arc,
-        duration : 8000-ran,
+        duration : 8000 - ran,
         delay : ran,
         ease : hui.ease.elastic,
         $render : function(node,pos) {
           arc.update({
-            startDegrees : (start+3)*pos + 360*turns*pos + skew,
-            endDegrees : (end+-3) + 360*turns*pos + skew,
-            innerRadius : 121 + pos*-60,
-            outerRadius : 120 + pos*-60 + pos*(70+extra)
+            startDegrees : (start + 3) * pos + 360 * turns * pos + skew,
+            endDegrees : (end +- 3) + 360 * turns * pos + skew,
+            innerRadius : 121 + pos * -60,
+            outerRadius : 120 + pos * -60 + pos * ((70/340)*size + extra)
           })
         },
         $complete : function() {
