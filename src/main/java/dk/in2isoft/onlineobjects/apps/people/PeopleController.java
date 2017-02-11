@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import dk.in2isoft.onlineobjects.apps.community.ProfileImageImporter;
 import dk.in2isoft.onlineobjects.apps.community.UserProfileInfo;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;

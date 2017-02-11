@@ -15,12 +15,12 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.in2igui.data.Diagram;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
 import dk.in2isoft.onlineobjects.apps.words.importing.HTMLDocumentImporter;
 import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
 import dk.in2isoft.onlineobjects.apps.words.perspectives.WordEnrichmentPerspective;
 import dk.in2isoft.onlineobjects.apps.words.perspectives.WordsImportRequest;
 import dk.in2isoft.onlineobjects.core.Pair;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;

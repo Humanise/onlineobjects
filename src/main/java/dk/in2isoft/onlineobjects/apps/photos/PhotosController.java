@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.in2igui.data.ListData;
 import dk.in2isoft.onlineobjects.apps.photos.perspectives.GalleryModificationRequest;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;

@@ -18,7 +18,7 @@ import dk.in2isoft.in2igui.data.ListDataRow;
 import dk.in2isoft.in2igui.data.ListObjects;
 import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.onlineobjects.apps.community.remoting.InternetAddressInfo;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;

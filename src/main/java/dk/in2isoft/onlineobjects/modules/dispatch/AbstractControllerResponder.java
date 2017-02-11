@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;

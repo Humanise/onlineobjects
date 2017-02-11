@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;

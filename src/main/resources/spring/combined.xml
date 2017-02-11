@@ -118,9 +118,6 @@
 	<bean id="feedService" class="dk.in2isoft.onlineobjects.services.FeedService" autowire="byType"/>
 	<bean id="ratingService" class="dk.in2isoft.onlineobjects.services.RatingService" autowire="byType"/>
 	
-	<bean id="videoService" class="dk.in2isoft.onlineobjects.modules.video.VideoService" autowire="byType"/>
-	<bean id="youTubeService" class="dk.in2isoft.onlineobjects.modules.youtube.YouTubeService" autowire="byType"/>
-	
 	<bean id="localizationService" class="dk.in2isoft.onlineobjects.modules.localization.LocalizationService" autowire="byType"/>
 	
 	<bean id="userService" class="dk.in2isoft.onlineobjects.modules.user.UserService" autowire="byType"/>

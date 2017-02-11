@@ -23,8 +23,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
 import dk.in2isoft.onlineobjects.core.Pair;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;

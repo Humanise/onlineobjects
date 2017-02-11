@@ -17,7 +17,6 @@ import dk.in2isoft.onlineobjects.test.plain.TestSemanticService;
 import dk.in2isoft.onlineobjects.test.plain.TestStrings;
 import dk.in2isoft.onlineobjects.test.plain.TestURLUtil;
 import dk.in2isoft.onlineobjects.test.plain.TestValidationUtil;
-import dk.in2isoft.onlineobjects.test.plain.TestYoutubeService;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -32,7 +31,6 @@ import dk.in2isoft.onlineobjects.test.plain.TestYoutubeService;
 	TestSemanticService.class,
 	TestHeaderUtil.class,
 	TestURLUtil.class,
-	TestYoutubeService.class,
 	TestHTMLParsing.class,
 	TestStrings.class
 })

@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.apps.desktop.model.WidgetListItem;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.ImportPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.UserInfoPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.WidgetPerspective;
-import dk.in2isoft.onlineobjects.apps.videosharing.Path;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;

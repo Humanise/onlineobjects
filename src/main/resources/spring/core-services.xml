@@ -18,8 +18,6 @@
 	<bean id="authenticationController" class="dk.in2isoft.onlineobjects.service.authentication.AuthenticationController" autowire="byType"/>
 	<bean id="authenticationLoginView" class="dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView"/>
 	
-	<bean id="videoController" class="dk.in2isoft.onlineobjects.service.video.VideoController" autowire="byType"/>
-	
 	<bean id="languageController" class="dk.in2isoft.onlineobjects.service.language.LanguageController" autowire="byType"/>
 	
 	<bean id="dependencyController" class="dk.in2isoft.onlineobjects.service.dependency.DependencyController" autowire="byType"/>
