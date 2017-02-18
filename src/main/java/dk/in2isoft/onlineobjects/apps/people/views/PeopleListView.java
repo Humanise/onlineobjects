@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.onlineobjects.apps.community.jsf.AbstractManagedBean;
-import dk.in2isoft.onlineobjects.apps.community.views.UserInfo;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
@@ -15,6 +13,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 

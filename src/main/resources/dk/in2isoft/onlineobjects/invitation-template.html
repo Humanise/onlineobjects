@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Invitation til OnlineMe</title>
+    <style>
+      body {
+        background: #f6f6f6;
+        padding: 10px 30px;
+        font-family: Arial,Helvetica,sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0 0 20px;
+        font-size: 32px;
+        font-weight: normal;
+        color: #234;
+      }
+
+      p {
+        font-size: 16px;
+        color: #234;
+        margin: 10px 0;
+        line-height: 1.4;
+      }
+
+      a {
+        color: #ddd;
+      }
+
+      a span {
+        color: #3366FF;
+      }
+
+      a:hover, a:hover span {
+        color: #0033AA;
+      }
+
+      .logo {
+        font-size: 1em;
+        letter-spacing: 0.06em;
+        color: #999;
+        line-height: 1em;
+      }
+
+      .logo span {
+        color: #000;
+      }
+
+      .info {
+        margin-top: 30px;
+      }
+
+      .info p {
+        color: #789;
+        font-size: 12px;
+      }
+
+      .body {
+        border: 1px solid #eee;
+        background: #fff;
+        border-radius: 5px;
+        padding: 30px 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="body">
+      <h1>Invitation til <span class="logo">Online<span>Objects</span></span></h1>
+      <p>Hej ${invited-name}, <a href="${inviter-url}"><span>${inviter-name}</span></a> har inviteret dig til at blive medlem af f&#230;llesskabet <span class="logo">Online<span>Objects</span></span>.</p>
+      <p>Hvis du klikker p&#229; linket herunder bliver du taget til en side hvor du kan tilmelde dig.</p>
+      <p>Tilmeld: <a href="${invite-url}"><span>${invite-url}</span></a>.</p>
+      <div class="info">
+        <p><em>Denne besked er sendt af systemet <a href="http://www.onlineobjects.com/"><span>OnlineObjects</span></a> p&#229; opfordring af en bruger.</em></p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.onlineobjects.apps.community.jsf.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
 public class ComponentTestView extends AbstractManagedBean implements InitializingBean {

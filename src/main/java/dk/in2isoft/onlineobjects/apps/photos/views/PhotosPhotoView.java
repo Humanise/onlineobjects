@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.community.jsf.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.apps.photos.PhotosController;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
@@ -29,6 +28,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.services.PersonService;
+import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MapPoint;
 import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
@@ -60,6 +60,8 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 	private List<ImageGallery> galleries;
 	
 	private String fullPersonName;
+	
+	private String gradient;
 	
 	public void afterPropertiesSet() throws Exception {
 		UserSession session = getRequest().getSession();
@@ -147,7 +149,14 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 			language = path[0];
 			
 			galleries = modelService.getParents(image, ImageGallery.class,session);
+			if (canModify) {
+				gradient = imageService.getColors(image);				
+			}
 		}
+	}
+	
+	public String getGradient() {
+		return gradient;
 	}
 	
 	public List<SelectItem> getProperties() {

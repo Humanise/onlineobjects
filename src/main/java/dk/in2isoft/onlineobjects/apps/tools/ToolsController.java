@@ -2,10 +2,13 @@ package dk.in2isoft.onlineobjects.apps.tools;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.joda.time.DateTime;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -17,7 +20,6 @@ import dk.in2isoft.in2igui.data.ListData;
 import dk.in2isoft.in2igui.data.ListDataRow;
 import dk.in2isoft.in2igui.data.ListObjects;
 import dk.in2isoft.in2igui.data.ListWriter;
-import dk.in2isoft.onlineobjects.apps.community.remoting.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -32,6 +34,7 @@ import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
+import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -39,6 +42,7 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.language.WordByInternetAddressQuery;
+import dk.in2isoft.onlineobjects.modules.networking.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 
@@ -104,9 +108,39 @@ public class ToolsController extends ToolsControllerBase {
 		}
 		return list;
 	}
+
+	@Path
+	public Map<String,Object> getImage(Request request) throws ModelException, IllegalRequestException {
+		Long id = request.getId();
+		Map<String,Object> data = new HashMap<String, Object>();
+		Image image = modelService.get(Image.class, id, request.getSession());
+		data.put("image", image);
+		data.put("name", image.getName());
+		data.put("description", image.getPropertyValue(Image.PROPERTY_DESCRIPTION));
+		data.put("tags", image.getPropertyValues(Property.KEY_COMMON_TAG));
+		return data;
+	}
+
+	@Path
+	public void updateImage(Request request) throws EndUserException {
+		Long id = request.getId();
+		String name = request.getString("name");
+		String description = request.getString("description");
+		List<String> tags = request.getStrings("tags");
+		Image image = modelService.get(Image.class, id, request.getSession());
+		image.setName(name);
+		image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, description);
+		image.overrideProperties(Property.KEY_COMMON_TAG, tags);
+		modelService.updateItem(image, request.getSession());
+	}
 	
 	@Path
 	public void listPersons(Request request) throws EndUserException, IOException {
+		String subset = request.getString("subset");
+		if ("invitations".equals(subset)) {
+			listInvitations(request);
+			return;
+		}
 		String text = request.getString("text");
 		UserSession session = request.getSession();
 		Query<Person> query = new Query<Person>(Person.class).withPrivileged(session);
@@ -127,6 +161,31 @@ public class ToolsController extends ToolsControllerBase {
 	}
 
 	@Path
+	public void listInvitations(Request request) throws IOException, ModelException {
+
+		List<Invitation> invitations = modelService.getChildren(request.getSession().getUser(), Invitation.class, request.getSession());
+
+		ListWriter out = new ListWriter(request);
+		out.startList();
+		out.startHeaders().header("Date").header("Code").header("State").header("Person").header("E-mail").endHeaders();
+		for (Iterator<Invitation> i = invitations.iterator(); i.hasNext();) {
+			Invitation invitation = i.next();
+			DateTime created = new DateTime(invitation.getCreated().getTime());
+			Person invited = (Person) modelService.getChild(invitation, Person.class);
+			EmailAddress email = invited==null ? null : (EmailAddress) modelService.getChild(invited, EmailAddress.class);
+
+			out.startRow().withId(invitation.getId()).withKind("invitation");
+			out.startCell().text(created.toString("d/M-yyyy HH:mm")).endCell();
+			out.startCell().text(invitation.getCode()).endCell();
+			out.startCell().text(invitation.getState()).endCell();
+			out.startCell().text(invited!=null ? invited.getName() : "-- no person --").endCell();
+			out.startCell().text(email!=null ? email.getAddress(): "-- no email --").endCell();
+			out.endRow();
+		}
+		out.endList();
+	}
+
+	@Path
 	public Map<String,Object> loadPerson(Request request) throws ModelException, ContentNotFoundException, IllegalRequestException {
 		Long id = request.getId();
 		
@@ -138,7 +197,39 @@ public class ToolsController extends ToolsControllerBase {
 		data.put("emails", emails);
 		List<PhoneNumber> phones = modelService.getChildren(person, PhoneNumber.class, privileged);
 		data.put("phones", phones);
+		// TODO Use personpespective
 		return data;
+	}
+	
+	@Path
+	public void savePerson(Request request) throws EndUserException {
+		PersonPerspective perspective = request.getObject("data", PersonPerspective.class);
+		if (perspective==null) {
+			throw new IllegalRequestException("Invalid data");
+		}
+		Person dummy = perspective.getPerson();
+		Person person;
+		if (dummy.getId()>0) {
+			person = modelService.get(Person.class, dummy.getId(), request.getSession());
+		} else {
+			person = new Person();
+		}
+		person.setGivenName(dummy.getGivenName());
+		person.setAdditionalName(dummy.getAdditionalName());
+		person.setFamilyName(dummy.getFamilyName());
+		person.setNamePrefix(dummy.getNamePrefix());
+		person.setNameSuffix(dummy.getNameSuffix());
+		modelService.createOrUpdateItem(person, request.getSession());
+		personService.updateDummyEmailAddresses(person, perspective.getEmails(), request.getSession());
+		personService.updateDummyPhoneNumbers(person, perspective.getPhones(), request.getSession());
+	}
+	
+	@Path
+	public Invitation createInvitation(Request request) throws EndUserException {
+		String name = request.getString("name", "No name");
+		String email = request.getString("email", "No email");
+		String message = request.getString("message");
+		return invitationService.createInvitation(name, email, message, request.getSession());
 	}
 	
 	@Path

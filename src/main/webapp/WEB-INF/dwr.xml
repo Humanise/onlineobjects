@@ -13,12 +13,6 @@
     <create creator="new" javascript="Desktop" scope="application">
       <param name="class" value="dk.in2isoft.onlineobjects.apps.desktop.RemotingFacade"/>
     </create>
-    <create creator="new" javascript="AppCommunity" scope="application">
-      <param name="class" value="dk.in2isoft.onlineobjects.apps.community.remoting.CommunityRemotingFacade"/>
-    </create>
-    <create creator="new" javascript="AppSchool" scope="application">
-      <param name="class" value="dk.in2isoft.onlineobjects.apps.school.SchoolRemotingFacade"/>
-    </create>
     <create creator="new" javascript="AppSetup" scope="application">
       <param name="class" value="dk.in2isoft.onlineobjects.apps.setup.SetupRemotingFacade"/>
     </create>

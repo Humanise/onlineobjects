@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Locale;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.apps.community.services.MemberService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
 import dk.in2isoft.onlineobjects.modules.localization.LocalizationService;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherService;
 import dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class SetupControllerBase extends ApplicationController {

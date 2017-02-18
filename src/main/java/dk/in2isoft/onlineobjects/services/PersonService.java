@@ -1,23 +1,30 @@
 package dk.in2isoft.onlineobjects.services;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.community.UserProfileInfo;
+import dk.in2isoft.onlineobjects.core.EntitylistSynchronizer;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Address;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
+import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 
 public class PersonService {
 
@@ -111,6 +118,66 @@ public class PersonService {
 		info.setPhones(modelService.getChildren(person, PhoneNumber.class,priviledged));
 		info.setUrls(modelService.getChildren(person, InternetAddress.class,priviledged));
 		return info;
+	}
+	
+	public void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Privileged session) throws EndUserException {
+		
+		// Remove empty addresses
+		for (Iterator<EmailAddress> i = addresses.iterator(); i.hasNext();) {
+			EmailAddress emailAddress = i.next();
+			if (!Strings.isNotBlank(emailAddress.getAddress())) {
+				i.remove();
+			}
+		}
+		
+		List<EmailAddress> existing = modelService.getChildren(parent, EmailAddress.class, session);
+		EntitylistSynchronizer<EmailAddress> sync = new EntitylistSynchronizer<EmailAddress>(existing,addresses);
+		
+		for (Entry<EmailAddress, EmailAddress> entry : sync.getUpdated().entrySet()) {
+			EmailAddress original = entry.getKey();
+			EmailAddress dummy = entry.getValue();
+			original.setAddress(dummy.getAddress());
+			original.setContext(dummy.getContext());
+		}
+		
+		for (EmailAddress emailAddress : sync.getNew()) {
+			modelService.createItem(emailAddress, session);
+			modelService.createRelation(parent, emailAddress, session);
+		}
+		
+		for (EmailAddress emailAddress : sync.getDeleted()) {
+			modelService.deleteEntity(emailAddress, session);
+		}
+	}
+
+	
+	public void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Privileged priviledged) throws EndUserException {
+
+		// Remove empty addresses
+		for (Iterator<PhoneNumber> i = phones.iterator(); i.hasNext();) {
+			PhoneNumber number = i.next();
+			if (!Strings.isNotBlank(number.getNumber())) {
+				i.remove();
+			}
+		}
+		List<PhoneNumber> existing = modelService.getChildren(parent, PhoneNumber.class, priviledged);
+		EntitylistSynchronizer<PhoneNumber> sync = new EntitylistSynchronizer<PhoneNumber>(existing,phones);
+		
+		for (Entry<PhoneNumber, PhoneNumber> entry : sync.getUpdated().entrySet()) {
+			PhoneNumber original = entry.getKey();
+			PhoneNumber dummy = entry.getValue();
+			original.setNumber(dummy.getNumber());
+			original.setContext(dummy.getContext());
+		}
+		
+		for (PhoneNumber number : sync.getNew()) {
+			modelService.createItem(number, priviledged);
+			modelService.createRelation(parent, number, priviledged);
+		}
+		
+		for (PhoneNumber number : sync.getDeleted()) {
+			modelService.deleteEntity(number, priviledged);
+		}
 	}
 	
 	public Integer getYearsOld(Person person) {

@@ -226,6 +226,9 @@ public class ConfigurationService implements InitializingBean {
 			url.append("/").append(locale.getLanguage());
 		}
 		if (path!=null) {
+			if (!path.startsWith("/")) {
+				url.append("/");
+			}
 			url.append(path);
 		} else {
 			url.append("/");

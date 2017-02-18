@@ -2,9 +2,11 @@
 <gui xmlns="uri:hui" state="persons" title="Persons">
 	<controller name="controller" source="../controller.js"/>
 	<controller name="personsController" source="../persons.js"/>
-  
-  <source name="personListSource" url="../listPersons"/>
-  
+
+  <source name="personListSource" url="../listPersons">
+    <parameter key="subset" value="@selector.value"/>
+  </source>
+
 	<bar>
 		<button text="Offentligt" icon="inset/public" name="barPublic"/>
 		<button text="Hjemmeside" icon="inset/globe" name="barWebsite"/>
@@ -32,19 +34,14 @@
 			</top>
 			<middle>
 				<left>
-					<selection value="persons">
+					<selection value="persons" name="selector">
 						<item icon="common/person" title="Alle personer" value="persons"/>
 						<item icon="common/letter" title="Invitationer" value="invitations"/>
 					</selection>
 				</left>
 				<center>
 					<overflow>
-						<list name="personList" state="persons" source="personListSource"/>
-						<list name="invitationList" state="invitations">
-							<column title="Dato" key="created"/>
-							<column title="Inviteret" key="person"/>
-							<column title="Status" key="state"/>
-						</list>
+						<list name="list" state="persons" source="personListSource"/>
 					</overflow>
 				</center>
 			</middle>
@@ -53,7 +50,7 @@
 	</div>
 
 	<window name="personWindow" title="Person" width="400" padding="5">
-		<formula name="personFormula">			
+		<formula name="personFormula">
 			<columns space="10" flexible="true">
 				<column>
 					<fields labels="above">

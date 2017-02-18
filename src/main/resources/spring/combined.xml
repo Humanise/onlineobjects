@@ -131,6 +131,10 @@
 	<bean id="pileService" class="dk.in2isoft.onlineobjects.services.PileService" autowire="byType"/>
 
 	<bean id="dependencyService" class="dk.in2isoft.onlineobjects.ui.DependencyService" autowire="byType"/>
+	
+	<bean id="invitationService" class="dk.in2isoft.onlineobjects.modules.user.InvitationService" autowire="byType"/>
+	
+	<bean id="memberService" class="dk.in2isoft.onlineobjects.modules.user.MemberService" autowire="byType"/>
 
 	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService">
 		<property name="configurationService" ref="configurationService"/>

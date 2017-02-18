@@ -2,7 +2,6 @@ package dk.in2isoft.onlineobjects.apps.account.views;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.onlineobjects.apps.community.jsf.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -10,6 +9,7 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 
 public class AccountSettingsView extends AbstractManagedBean implements InitializingBean {
 

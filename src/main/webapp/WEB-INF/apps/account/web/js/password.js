@@ -1,7 +1,7 @@
 var passwordView = {
-	
+
 	key : null,
-	
+
 	$ready : function() {
     this.key = hui.get('js-account-data').getAttribute('data-key');
 		hui.ui.get('resetPasswordForm').focus();
@@ -16,7 +16,7 @@ var passwordView = {
 		if (values.password!==values.passwordAgain) {
 			form.focus();
 			hui.ui.msg.fail({text:{da:'De to kodeord er ikke ens',en:'The passwords are not equal'}});
-			return;			
+			return;
 		}
 		hui.ui.request({
 			url : oo.baseContext+'/changePasswordUsingKey',
@@ -28,7 +28,7 @@ var passwordView = {
 				hui.ui.msg.success({text:{da:'Din kode er ændret',en:'Your password is changed'}});
 				form.reset();
 				setTimeout(function() {
-					document.location = oo.baseContext+'/';					
+					document.location = oo.baseContext+'/';
 				},1000);
 			},
 			$failure : function(a,b) {

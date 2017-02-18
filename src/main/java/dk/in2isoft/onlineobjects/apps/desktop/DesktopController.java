@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.in2igui.data.KeyboardNavigatorItem;
-import dk.in2isoft.onlineobjects.apps.community.remoting.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.apps.desktop.importing.GenericImportListener;
 import dk.in2isoft.onlineobjects.apps.desktop.model.WidgetList;
 import dk.in2isoft.onlineobjects.apps.desktop.model.WidgetListItem;
@@ -31,6 +30,7 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.modules.importing.HttpImportTransport;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 import dk.in2isoft.onlineobjects.modules.importing.UploadImportTransport;
+import dk.in2isoft.onlineobjects.modules.networking.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DesktopController extends DesktopControlerBase {

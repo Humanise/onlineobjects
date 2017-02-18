@@ -44,6 +44,8 @@ public class EmailService {
 			HtmlEmail email = new HtmlEmail();
 			email.setCharset("UTF-8");
 			email.setHostName(host);
+			email.setSSL(true);
+			email.setSslSmtpPort("465");
 			email.setAuthentication(username, password);
 			email.addTo(address,name);
 			email.setFrom(defaultSenderAddress, defaultSenderName);
@@ -54,8 +56,7 @@ public class EmailService {
 			if (textBody!=null) {
 				email.setMsg(textBody);
 			}
-			email.setSSL(true);
-			//email.setDebug(true);
+			email.setDebug(true);
 			log.info("Sending email to: "+address);
 			email.send();
 			log.info("Sent email to: "+address);

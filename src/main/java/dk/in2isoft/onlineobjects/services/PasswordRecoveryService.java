@@ -71,7 +71,7 @@ public class PasswordRecoveryService {
 		parms.put("name", person.getFullName());
 		parms.put("url",url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
-		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/apps/account/resources/passwordrecovery-template.html", parms);
+		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/passwordrecovery-template.html", parms);
 		
 		emailService.sendHtmlMessage("Reset password for OnlineObjects", html, email.getAddress(),person.getName());
 		return true;

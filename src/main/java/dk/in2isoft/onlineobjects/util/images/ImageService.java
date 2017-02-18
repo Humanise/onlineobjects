@@ -83,6 +83,22 @@ public class ImageService extends AbstractCommandLineInterface {
 		return dimensions;
 	}
 	
+	public String getColors(Image image) throws EndUserException {
+		File file = getImageFile(image);
+		int[] dimensions = getImageDimensions(file);
+		int width = dimensions[0];
+		int height = dimensions[1];
+		String top = getAverageColor(file, width, Math.round(height/3f), 0, 0);
+		String middle = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f));
+		String bottom = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f*2)); 
+		return "rgb(" + top + "),rgb(" + middle + "),rgb(" + bottom + ")";
+	}
+
+	private String getAverageColor(File file, int width, int height, int x, int y) throws EndUserException {
+		String cmd = "/convert " + file.getAbsolutePath() + " -crop "+width+"x"+height+"+"+x+"+"+y+" -resize 1x1 -format %[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)] info:-";
+		return execute(configurationService.getImageMagickPath() + "/" + cmd);
+	}
+	
 	public ImageProperties getImageProperties(File file) {
 		try {
 			ImageProperties properties = new ImageProperties();

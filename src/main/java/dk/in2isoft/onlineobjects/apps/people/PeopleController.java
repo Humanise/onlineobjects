@@ -2,19 +2,21 @@ package dk.in2isoft.onlineobjects.apps.people;
 
 import java.io.IOException;
 
-import dk.in2isoft.onlineobjects.apps.community.ProfileImageImporter;
-import dk.in2isoft.onlineobjects.apps.community.UserProfileInfo;
+import dk.in2isoft.onlineobjects.apps.people.utils.ProfileImageImporter;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
+import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 
 public class PeopleController extends PeopleControllerBase {
 	
+
+	public static final String MOUNT = "people";
 
 	@Path
 	public UserProfileInfo getUserProfile(Request request) throws EndUserException {
@@ -27,7 +29,7 @@ public class PeopleController extends PeopleControllerBase {
 		if (person==null) {
 			throw new EndUserException("The user does not have a person!");
 		}
-		return communityDAO.build(person,request.getSession());
+		return memberService.build(person,request.getSession());
 	}
 
 	@Path
@@ -41,7 +43,7 @@ public class PeopleController extends PeopleControllerBase {
 		if (person==null) {
 			throw new EndUserException("The user does not have a person!");
 		}
-		communityDAO.save(info, person, request.getSession());
+		memberService.save(info, person, request.getSession());
 	}
 
 	@Path

@@ -92,7 +92,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		}
 		List<Option> links = new ArrayList<>();
 		links.add(Option.of("Account", configurationService.getApplicationContext("account", null, request)));
-		links.add(Option.of("Profile", configurationService.getApplicationContext("people", null, request)));
+		links.add(Option.of("Profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
 		info.setLinks(links);
 		request.sendObject(info);
 	}

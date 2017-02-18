@@ -56,5 +56,9 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isValidPassword("abBC12+"));
 
 		assertTrue(ValidationUtil.isValidPassword("abcABC123-+&"));
+		
+		// TODO
+		assertTrue(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
+		
 	}
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.onlineobjects.apps.community.jsf.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -18,6 +17,7 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordCloudQuery;
 import dk.in2isoft.onlineobjects.modules.photos.PhotoIndexQuery;
 import dk.in2isoft.onlineobjects.modules.photos.PhotoService;
+import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.CloudItem;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;

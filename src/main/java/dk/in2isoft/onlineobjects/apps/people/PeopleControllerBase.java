@@ -6,12 +6,12 @@ import java.util.Locale;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.apps.community.CommunityDAO;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
@@ -20,8 +20,8 @@ public class PeopleControllerBase extends ApplicationController {
 
 	protected ImageService imageService;
 	protected SecurityService securityService;
-	protected CommunityDAO communityDAO;
 	protected ImportService importService;
+	protected MemberService memberService;
 
 	public PeopleControllerBase() {
 		super("people");
@@ -62,11 +62,11 @@ public class PeopleControllerBase extends ApplicationController {
 		this.securityService = securityService;
 	}
 	
-	public void setCommunityDAO(CommunityDAO communityDAO) {
-		this.communityDAO = communityDAO;
-	}
-	
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
+	}
+	
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 }

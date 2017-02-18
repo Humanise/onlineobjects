@@ -112,12 +112,9 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void addTag(Request request) throws ModelException, SecurityException {
-		String tag = request.getString("tag");
-		Long id = request.getLong("id",null);
-		if (StringUtils.isBlank(tag)) {
-			return;
-		}
+	public void addTag(Request request) throws ModelException, SecurityException, IllegalRequestException {
+		String tag = request.getString("tag", "No tag provided");
+		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request.getSession());
 		if (entity!=null) {
 			List<String> existingTags = entity.getPropertyValues(Property.KEY_COMMON_TAG);
@@ -176,7 +173,7 @@ public class ModelController extends ModelControllerBase {
 	@Path
 	public void removeEntity(Request request) throws IllegalRequestException, ModelException, SecurityException {
 
-		long id = request.getLong("id");
+		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request.getSession());
 		Code.checkNotNull(entity, "Entity not found");
 		modelService.deleteEntity(entity, request.getSession());
