@@ -152,6 +152,11 @@
           <h2 class="reader_analyze_block_title">HTML</h2>
           <div class="reader_analyze_html"><o:out value="#{readerAnalyzeView.analytics.html}" escape="false"/></div>
         </div>
+
+        <div class="reader_analyze_block">
+          <h2 class="reader_analyze_block_title">XML</h2>
+          <div class="reader_analyze_html"><pre>#{readerAnalyzeView.analytics.xml}</pre></div>
+        </div>
       </div>
 
       <o:dependency from="local" src="/css/reader_analyze.css"/>
