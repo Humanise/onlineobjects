@@ -25,14 +25,15 @@ oo.Masonry.prototype = {
 			$$afterResize : this._rebuild.bind(this)
 		})
 		hui.listen(window,'scroll',this._reveal.bind(this));
-		hui.listen(this.element,'click',this._click.bind(this));
+		hui.on(this.element,'tap',this._click.bind(this));
 	},
 	_rebuild : function() {
 		var fullWidth = this.element.clientWidth;
 		if (Math.abs(this.latestWidth-fullWidth)<100) {
 			return;
 		}
-		hui.log('_rebuild');
+    this.height = hui.between(100,Math.round(fullWidth / 3),200)
+    hui.log(this.height);
 		this.latestWidth = fullWidth;
 		var rows = [];
 		var row = [];
@@ -54,6 +55,16 @@ oo.Masonry.prototype = {
 			item.row = rows.length;
 			row.push(info);
 		}
+    // If the last row has one and the second last has more than 2... move one
+    if (rows.length > 1) {
+      if (rows[rows.length-1].length == 1) {
+        if (rows[rows.length-2].length > 2) {
+          var popped = rows[rows.length-2].pop();
+          rows[rows.length-1].unshift(popped);
+        }
+      }
+    }
+
 		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
 			var total = 0;
@@ -62,19 +73,30 @@ oo.Masonry.prototype = {
 			}
 			var adjustment = fullWidth/total;
 			var pos = 0;
+      var rowHeight = Number.MAX_VALUE;
+
+      for (var j = 0; j < row.length; j++) {
+        var last = j == row.length - 1;
+        var info = row[j], item = info.item;
+        var percent = info.width / fullWidth * 100;
+        percent = Math.round(adjustment * percent);
+        pos+=percent;
+        if (last) {
+          percent += 100 - pos;
+        }
+        info.percent = percent;
+        rowHeight = Math.min(rowHeight, (percent/100 * fullWidth) * item.height/item.width );
+      }
+      rowHeight = Math.floor(rowHeight);
+
 			for (var j = 0; j < row.length; j++) {
-				var last = j==row.length-1;
+				var last = j == row.length - 1;
 				var info = row[j], item = info.item;
-				var percent = info.width / fullWidth * 100;
-				percent = Math.round(adjustment * percent);
-				pos+=percent;
-				if (last) {
-					percent+=100-pos;
-				}
+				var percent = info.percent;
 				var cls = last ? 'oo_masonry_item oo_masonry_item_last' : 'oo_masonry_item';
 				if (item.element) {
 					item.element.style.width = percent+'%';
-					item.element.style.height = this.height+'px';
+					item.element.style.height = rowHeight+'px';
 					item.element.className = cls;
           item.element.style.backgroundImage = 'linear-gradient(' + item.colors + ')';
 				} else {
@@ -82,7 +104,7 @@ oo.Masonry.prototype = {
 						'class' : cls,
 						style : {
 							width : percent+'%',
-							height : this.height+'px',
+							height : rowHeight+'px',
               backgroundImage: 'linear-gradient(' + item.colors + ')'
 						},
 						'data' : item.index,
@@ -115,8 +137,9 @@ oo.Masonry.prototype = {
 			if (top > max || bottom < min) {
 				continue;
 			}
-			var width = Math.round(item.width/item.height * this.height);
-      var url = this._getUrl(item,{width:width,height:this.height});
+      var height = Math.ceil(element.clientHeight/30) * 30;
+			var width = Math.round(item.width/item.height * height);
+      var url = this._getUrl(item,{width:width,height:height});
       this._load(item.element,url);
 			item.revealed = true;
 		}
@@ -159,11 +182,12 @@ oo.Masonry.prototype = {
 		}
 		this._toggled = index;
 		var item = this.items[index],
-			element = item.element;
+			element = item.element,
+    top = hui.position.getTop(element) + element.clientHeight - hui.position.getTop(this.element) + 2;
 		if (!item.disclosed) {
 			item.disclosed = hui.build('div',{
 				'class' : 'oo_masonry_disclosed',
-				style : {top : (item.row*this.height+1)+'px'},
+				style : {top : top + 'px'},
 				parent: this.element
 			})
 		} else {
