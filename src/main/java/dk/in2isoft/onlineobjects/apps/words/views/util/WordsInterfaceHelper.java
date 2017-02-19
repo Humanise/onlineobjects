@@ -55,6 +55,10 @@ public class WordsInterfaceHelper implements InitializingBean {
 		}
 		return languagesCache.get(language);
 	}
+	
+	public boolean isKnownLanguage(String langCode) {
+		return languageFacetsDataProvider.getData().containsKey(langCode);
+	}
 
 	public List<Option> getCategoryOptions(Locale locale) {
 		String language = locale.getLanguage();
@@ -88,5 +92,21 @@ public class WordsInterfaceHelper implements InitializingBean {
 	
 	public List<Option> getLetterOptions(Locale locale) {
 		return alphabeth;
+	}
+	
+	public boolean isLetter(String str) {
+		return str!=null && Strings.contains(str, Strings.ALPHABETH);
+	}
+	
+	public Messages getWordsMessages() {
+		return wordsMessages;
+	}
+	
+	public Messages getLanguageMessages() {
+		return languageMessages;
+	}
+	
+	public Messages getCategoryMessages() {
+		return categoryMessages;
 	}
 }

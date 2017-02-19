@@ -3,12 +3,12 @@
 @include when {
   .oo_filters_bar {
     font-size: 0;
-    margin: 5px -5px 5px 0;
+    margin: 5px -5px 5px -5px;
 
     &_item {
       display: inline-block;
-      height: 24px;
-      line-height: 24px;
+      height: 26px;
+      line-height: 26px;
       padding: 0 24px 0 7px;
       color: #666;
       position: relative;
@@ -16,13 +16,13 @@
       -webkit-user-select: none;
       border-radius: 3px;
       font-weight: 400;
-      font-size: 12px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 1px;
       overflow: hidden;
       white-space: nowrap;
       margin-right: 1px;
-        
+
       @include icon-before('\e911') {
         position: absolute;
         right: 0px;
@@ -32,14 +32,14 @@
         padding: 4px 6px;
         color: #666;
       }
-          
+
       &.is-active {
         background: #f3f3f3;
         border: none;
         color: #000;
         font-weight: bold;
         letter-spacing: 0;
-        
+
         &:before {
           color: inherit;
           background: inherit;
@@ -51,7 +51,7 @@
       &.is-open.is-active {
         background: #333;
         color: #fff;
-      
+
         &:before {
           content: '\e914';
           color: #fff;
@@ -59,7 +59,7 @@
       }
     }
   }
-  
+
   .oo_filters_body {
     overflow: hidden;
     height: 0;
@@ -71,9 +71,9 @@
     box-shadow: inset 0 1px 6px #000;
     transform: translate3d(0,0,0);
   }
-  
+
   .oo_filters {
-    
+
     &_filter {
       opacity: 0;
       position: absolute;
@@ -83,13 +83,13 @@
       transition: opacity .3s;
       padding: 10px;
       @include border-box;
-      
+
       &.is-visible {
         opacity: 1;
         z-index: 1;
       }
     }
-    
+
     &_option {
       display: inline-block;
       font-size: 15px;
@@ -100,21 +100,21 @@
       line-height: 22px;
       height: 22px;
       border: 1px solid transparent;
-      
+
       &-index {
         text-transform: uppercase;
       }
-    
+
       &:hover {
         background: #f3f3f3;
       }
-      
+
       &.is-selected {
         background: #ddd;
         border: 1px solid #ddd;
         color: #000;
       }
-      
+
       &-any {
         text-transform: none;
 
@@ -130,17 +130,17 @@
       display: none;
     }
   }
-  
+
   .oo_filters_intro {
     margin: 40px 0;
     text-align: center;
     font-size: 0;
-    
+
     &_title {
       border-bottom: 1px solid #eee;
       height: 0;
       margin-bottom: 20px;
-      
+
       &_text {
         background: #fff;
         position: relative;
@@ -153,7 +153,7 @@
         font-size: 16px;
       }
     }
-    
+
     &_option {
       display: inline-block;
       font-size: 16px;
@@ -168,7 +168,7 @@
         font-size: 20px;
         padding: 0 6px;
       }
-    
+
       &:hover {
         background: #f3f3f3;
       }
@@ -180,7 +180,7 @@
   .oo_filters_bar {
     display: none;
   }
-  
+
   .oo_filters_body {
     overflow: visible;
     height: auto !important;
@@ -189,13 +189,13 @@
     margin: 0;
     box-shadow: none;
   }
-  
+
   .oo_filters_filter {
     opacity: 1;
     position: static;
     transition: opacity 0s;
-  	padding: 0;
-    
+    padding: 0;
+
     &-index {
       margin-top: 10px;
     }
@@ -219,17 +219,17 @@
         border: 1px solid #333;
         color: #fff;
       }
-      
+
       &-any.is-selected {
         background: #eee;
         border: 1px solid #ddd;
         color: #000;
       }
-    }    
+    }
   }
 
   .oo_filters {
-    
+
     &_title-block {
       display: block;
       border-bottom: 1px solid #eee;
@@ -238,7 +238,7 @@
       margin-top: 20px;
     }
   }
-  
+
   .oo_filters_title_text {
     display: inline-block;
     line-height: 20px;

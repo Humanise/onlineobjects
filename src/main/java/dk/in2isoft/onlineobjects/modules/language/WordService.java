@@ -187,6 +187,13 @@ public class WordService {
 			}
 			searchQuery.append("source:").append(source);
 		}
+		if (query.isSourceDefined()) {
+			if (searchQuery.length()>0) {
+				searchQuery.append(" AND ");
+			}
+			searchQuery.append("NOT source:none");
+			
+		}
 		if (Strings.isDefined(words)) {
 			if (searchQuery.length()>0) {
 				searchQuery.append(" AND ");

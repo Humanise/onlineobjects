@@ -9,6 +9,7 @@ public class WordQuery extends IndexQuery {
 	private String[] words;
 	private String source;
 	private boolean cached;
+	private boolean sourceDefined;
 
 	public WordQuery withText(String text) {
 		this.text = text;
@@ -81,5 +82,13 @@ public class WordQuery extends IndexQuery {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public boolean isSourceDefined() {
+		return sourceDefined;
+	}
+
+	public void setSourceDefined(boolean sourceDefined) {
+		this.sourceDefined = sourceDefined;
 	}
 }

@@ -1,24 +1,25 @@
 package dk.in2isoft.onlineobjects.apps.words.views;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.model.Language;
-import dk.in2isoft.onlineobjects.model.LexicalCategory;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
@@ -49,6 +50,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 	private String language;
 	private String category;
 	private String source;
+	private String state;
 	
 	private int pageSize = 20;
 	private List<Option> pages;
@@ -61,7 +63,11 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 	private List<Option> letterOptions;
 	private String effectiveQuery;
 	private Messages wordsMsg;
+	private Messages languageMsg;
+	private Messages categoryMsg;
 	private String description;
+
+	private List<Option> suggestions;
 			
 	public void afterPropertiesSet() throws Exception {
 		Request request = getRequest();
@@ -70,6 +76,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		language = request.getString("language");
 		category = request.getString("category");
 		source = request.getString("source");
+		state = request.getString("state");
 		
 		String[] localPath = request.getLocalPath();
 		page = 0;
@@ -77,15 +84,17 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 			page = Math.max(0, NumberUtils.toInt(localPath[2])-1);
 		}
 
-		wordsMsg = new Messages(WordsController.class);
-		languageMsg = new Messages(Language.class);
-		categoryMsg = new Messages(LexicalCategory.class);
+		wordsMsg = wordsInterfaceHelper.getWordsMessages();
+		languageMsg = wordsInterfaceHelper.getLanguageMessages();
+		categoryMsg = wordsInterfaceHelper.getCategoryMessages();
 		
 		languageOptions = buildLanguageOptions(request);
 		categoryOptions = buildCategoryOptions(request);
 		
-		
 		WordQuery query = new WordQuery().withText(text).withLetter(letter).withCategory(category).withLanguage(language).withSource(source).withPage(page).withPageSize(20);
+		if ("validated".equals(state)) {
+			query.setSourceDefined(true);
+		}
 		query.cached(request.getBoolean("cached"));
 		SearchResult<WordListPerspective> result = wordService.search(query);
 
@@ -98,6 +107,57 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		
 		buildTitle();
 		buildPages();
+		buildSuggestions(request);
+	}
+	
+	private void buildSuggestions(Request request) {
+		suggestions = Lists.newArrayList();
+		Locale locale = getLocale();
+		String textLetter = text.toLowerCase(locale);
+		if (wordsInterfaceHelper.isLetter(textLetter)) {
+
+			Option option = new Option();
+			option.setValue(buildUrl(request, "", language, category, textLetter, state));
+			option.setLabel(wordsMsg.get("search_for_words_starting_with", locale) + " \"" + textLetter + "\"");
+			suggestions.add(option);
+		}
+		Iterable<String> languages = getLanguages(request);
+		for (String langCode : languages) {
+			if (!langCode.equals(this.language) && wordsInterfaceHelper.isKnownLanguage(langCode)) {
+				Option option = new Option();
+				option.setValue(buildUrl(request, text, langCode, category, letter, state));
+				option.setLabel(wordsMsg.get("search_for_words_in", locale) + " " + languageMsg.get("code",langCode, locale).toLowerCase(locale));
+				suggestions.add(option);
+			}
+		}
+		if (!"validated".equals(state)) {
+			Option option = new Option();
+			option.setValue(buildUrl(request, text, language, category, letter, "validated"));
+			option.setLabel(wordsMsg.get("search_for_validated_words", locale));
+			suggestions.add(option);
+		}
+	}
+	
+	private LinkedHashSet<String> getLanguages(Request request) {
+		LinkedHashSet<String> languages = Sets.newLinkedHashSet();
+		String acceptLanguage = request.getRequest().getHeader("Accept-Language");
+		if (Strings.isNotBlank(acceptLanguage)) {
+			String[] parts = acceptLanguage.split(",");
+			for (String part : parts) {
+				Pattern patter = Pattern.compile("([a-z]+)(-([A-Za-z]+))?;?(q=[0-9]\\.[0-9])?");
+				Matcher matcher = patter.matcher(part);
+				if (matcher.matches()) {
+					String language = matcher.group(1);
+					languages.add(language);
+				}
+			}
+			
+		}
+		return languages;
+	}
+	
+	public List<Option> getSuggestions() {
+		return suggestions;
 	}
 
 	private void highlight() {
@@ -155,6 +215,9 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 				title.append("\"").append(word).append("\"");
 			}
 		}
+		if ("validated".equals(state)) {
+			title.append(" ").append(wordsMsg.get("that_are_validated", locale));
+		}
 		this.title = title.toString();
 		this.description = title.toString();
 	}
@@ -179,16 +242,13 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 	public boolean isBlank() {
 		return list.isEmpty();
 	}	
-	
-	private Messages languageMsg;
-	private Messages categoryMsg;
 		
 	private List<Option> buildCategoryOptions(Request request) {
 		List<Option> options = Lists.newArrayList();
 		Locale locale = getLocale();
 		{
 			Option option = new Option();
-			option.setValue(buildUrl(request, text, language, null,letter));
+			option.setValue(buildUrl(request, text, language, null,letter, state));
 			option.setLabel(wordsMsg.get("any", locale));
 			option.setKey("default");
 			option.setSelected(StringUtils.isBlank(category));
@@ -197,7 +257,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		for (Option cat : wordsInterfaceHelper.getCategoryOptions(locale)) {
 			Option option = new Option();
 			String code = cat.getValue().toString();
-			option.setValue(buildUrl(request, text, language, code,letter));
+			option.setValue(buildUrl(request, text, language, code,letter, state));
 			option.setLabel(categoryMsg.get("code",code, locale));
 			option.setSelected(code.equals(category));
 			options.add(option);
@@ -205,13 +265,14 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		return options;
 	}
 	
-	private String buildUrl(Request request,String text, String language, String category, String letter) {
+	private String buildUrl(Request request,String text, String language, String category, String letter, String state) {
 		UrlBuilder url = new UrlBuilder(request.getLocalContext());
 		url.folder(request.getLanguage()).folder("search");
 		url.parameter("category", category);
 		url.parameter("language", language);
 		url.parameter("text", text);
 		url.parameter("letter", letter);
+		url.parameter("state", state);
 		return url.toString();
 	}
 
@@ -220,7 +281,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		Locale locale = getLocale();
 		{
 			Option option = new Option();
-			option.setValue(buildUrl(request, text, null, category,letter));
+			option.setValue(buildUrl(request, text, null, category,letter, state));
 			option.setLabel(wordsMsg.get("any", locale));
 			option.setKey("default");
 			option.setSelected(StringUtils.isBlank(language));
@@ -229,7 +290,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		for (Option lang : wordsInterfaceHelper.getLanguageOptions(locale)) {
 			Option option = new Option();
 			String value = lang.getValue().toString();
-			option.setValue(buildUrl(request, text, value, category,letter));
+			option.setValue(buildUrl(request, text, value, category,letter, state));
 			option.setLabel(languageMsg.get("code",value, locale));
 			option.setSelected(value.equals(language));
 			options.add(option);
@@ -244,7 +305,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 			option.setLabel(translate("any"));
 			option.setKey("default");
 			option.setSelected(Strings.isBlank(letter));
-			option.setValue(buildUrl(request, text, language, category, null));
+			option.setValue(buildUrl(request, text, language, category, null, state));
 			options.add(option);
 		}
 		List<Option> letters = wordsInterfaceHelper.getLetterOptions(getLocale());
@@ -252,7 +313,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 			Option option = new Option();
 			option.setLabel(character.getLabel());
 			option.setSelected(character.getValue().equals(letter));
-			option.setValue(buildUrl(request, text, language, category, character.getValue().toString()));
+			option.setValue(buildUrl(request, text, language, category, character.getValue().toString(), state));
 			options.add(option);
 		}
 		return options;
@@ -277,6 +338,10 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		return text;
 	}
 	
+	public String getState() {
+		return state;
+	}
+
 	public String getLanguage() {
 		return language;
 	}
@@ -397,7 +462,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 		if (num>1) {
 			url.folder(num);
 		}
-		url.parameter("text", text).parameter("category", category).parameter("language", language).parameter("letter", letter);
+		url.parameter("text", text).parameter("category", category).parameter("language", language).parameter("letter", letter).parameter("state", state);
 		option.setValue(url.toString());
 		option.setKey(num==1 ? "default" : null);
 		option.setLabel(num+"");
