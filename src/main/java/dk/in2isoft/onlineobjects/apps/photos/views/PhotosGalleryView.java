@@ -121,6 +121,12 @@ public class PhotosGalleryView extends AbstractManagedBean implements Initializi
 				item.width = image.getWidth();
 				item.title = image.getName();
 				item.href = "/" + language + "/photo/" + item.id + ".html";
+				item.colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+				item.rotation = image.getPropertyDoubleValue(Property.KEY_PHOTO_ROTATION);
+				if (item.rotation!=null && (item.rotation.intValue()==90 || item.rotation.intValue()==270)) {
+					item.height = image.getWidth();
+					item.width = image.getHeight();
+				}
 				masonryList.add(item);
 			}
 		}

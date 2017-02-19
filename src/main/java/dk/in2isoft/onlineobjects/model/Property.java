@@ -33,6 +33,7 @@ public class Property {
 	public static final String KEY_PHOTO_CAMERA_MAKE = "photo.camera.make";
 	public static final String KEY_PHOTO_TAKEN = "photo.taken";
 	public static final String KEY_PHOTO_ROTATION = "photo.rotation";
+	public static final String KEY_PHOTO_COLORS = "photo.colors";
 	public static final String KEY_PHOTO_FLIP_VERTICALLY = "photo.flip.vertically";
 	public static final String KEY_PHOTO_FLIP_HORIZONTALLY = "photo.flip.horizontally";
 
@@ -40,6 +41,7 @@ public class Property {
 	public static final String KEY_INTERNETADDRESS_ENCODING = "internetaddress.encoding";
 
 	public static final String KEY_WORD_SUGGESTION_LANGUAGE = "word.suggestion.language";
+
 
 	private long id;
 

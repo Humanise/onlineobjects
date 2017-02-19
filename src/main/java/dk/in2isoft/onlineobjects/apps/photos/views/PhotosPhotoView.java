@@ -61,8 +61,6 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 	
 	private String fullPersonName;
 	
-	private String gradient;
-	
 	public void afterPropertiesSet() throws Exception {
 		UserSession session = getRequest().getSession();
 		image = modelService.get(Image.class, getImageId(), session);
@@ -149,14 +147,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 			language = path[0];
 			
 			galleries = modelService.getParents(image, ImageGallery.class,session);
-			if (canModify) {
-				gradient = imageService.getColors(image);				
-			}
 		}
-	}
-	
-	public String getGradient() {
-		return gradient;
 	}
 	
 	public List<SelectItem> getProperties() {

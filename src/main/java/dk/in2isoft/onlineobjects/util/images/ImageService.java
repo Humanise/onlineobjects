@@ -26,6 +26,7 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 
 import dk.in2isoft.commons.geo.GeoDistance;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -223,6 +224,15 @@ public class ImageService extends AbstractCommandLineInterface {
 		String mimeType = fileService.getMimeType(file);
 		if (!StringUtils.equals(mimeType, image.getContentType())) {
 			image.setContentType(mimeType);
+			modelService.updateItem(image, priviledged);
+		}
+	}
+	
+	public void synchronizeColors(Image image, Privileged priviledged) throws EndUserException {
+		String colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+		if (Strings.isBlank(colors)) {
+			String newColors = getColors(image);
+			image.overrideFirstProperty(Property.KEY_PHOTO_COLORS, newColors);
 			modelService.updateItem(image, priviledged);
 		}
 	}

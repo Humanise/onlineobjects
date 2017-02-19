@@ -43,6 +43,12 @@ public class PhotosFrontView extends AbstractManagedBean implements Initializing
 			item.width = image.getWidth();
 			item.title = image.getTitle();
 			item.href = "/" + language + "/photo/" + item.id + ".html";
+			item.rotation = image.getRotation();
+			if (item.rotation!=null && (item.rotation.intValue()==90 || item.rotation.intValue()==270)) {
+				item.height = image.getWidth();
+				item.width = image.getHeight();
+			}
+			item.colors = image.getColors();
 			masonryList.add(item);
 		}
 	}

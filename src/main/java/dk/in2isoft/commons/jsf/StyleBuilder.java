@@ -82,6 +82,11 @@ public class StyleBuilder {
 		return this;
 	}
 
+	public StyleBuilder withLinearGradient(String config) {
+		sb.append("background-image: linear-gradient(").append(config).append(");");
+		return this;
+	}
+
 	public StyleBuilder withRule(String style) {
 		if (style!=null) {
 			sb.append(style);

@@ -15,6 +15,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.StyleBuilder;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Numbers;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.jsf.ImageViewerComponent;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -68,6 +69,10 @@ public class ThumbnailComponent extends AbstractComponent implements DependableC
 		Image image = getBinding("image");
 		StyleBuilder style = new StyleBuilder();
 		style.withWidth(width).withHeight(height);
+		String gradient = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+		if (Strings.isNotBlank(gradient)) {
+			style.withLinearGradient(gradient);
+		}
 
 		Double rotation = null;
 		boolean rotated = false;

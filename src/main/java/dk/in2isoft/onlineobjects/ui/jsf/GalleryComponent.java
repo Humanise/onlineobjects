@@ -13,6 +13,7 @@ import dk.in2isoft.commons.jsf.ClassBuilder;
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
+import dk.in2isoft.commons.jsf.StyleBuilder;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.jsf.ProgressIndicatorComponent;
@@ -144,6 +145,10 @@ public class GalleryComponent extends AbstractComponent {
 		}
 		out.startSpan("oo_gallery_photo");
 		if (image != null) {
+			String colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+			if (Strings.isNotBlank(colors)) {
+				out.withStyle(new StyleBuilder().withLinearGradient(colors));
+			}
 			String url = getUrl(image, width, height);
 			if (removable) {
 				out.startSpan("oo_gallery_hover");

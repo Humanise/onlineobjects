@@ -2,11 +2,11 @@ oo.Masonry = function(options) {
 	this.options = options;
 	this.element = hui.get(options.element);
 	this.name = options.name;
-	
+
 	this.height = 200;
 	this.items = [];
 	this.latestWidth = 0;
-	
+
 	hui.ui.extend(this);
 	this._attach();
 }
@@ -76,12 +76,14 @@ oo.Masonry.prototype = {
 					item.element.style.width = percent+'%';
 					item.element.style.height = this.height+'px';
 					item.element.className = cls;
+          item.element.style.backgroundImage = 'linear-gradient(' + item.colors + ')';
 				} else {
 					item.element = hui.build('div',{
 						'class' : cls,
 						style : {
-							width : percent+'%', 
-							height : this.height+'px'
+							width : percent+'%',
+							height : this.height+'px',
+              backgroundImage: 'linear-gradient(' + item.colors + ')'
 						},
 						'data' : item.index,
 						parent : this.element
@@ -93,7 +95,11 @@ oo.Masonry.prototype = {
 	},
 	_getUrl : function(item,info) {
 		var x = window.devicePixelRatio==2 ? 2 : 1;
-		return oo.baseContext+'/service/image/id'+item.id+'width'+(info.width*x)+'height'+(info.height * x)+'.jpg';
+    var url = oo.baseContext+'/service/image/id'+item.id+'width'+(info.width*x)+'height'+(info.height * x);
+    if (item.rotation) {
+      url+='rotation' + item.rotation+'.0';
+    }
+		return url+'.jpg';
 	},
 	_reveal : function() {
 		var min = hui.window.getScrollTop();
@@ -110,10 +116,18 @@ oo.Masonry.prototype = {
 				continue;
 			}
 			var width = Math.round(item.width/item.height * this.height);
-			item.element.style.backgroundImage = 'url(' + this._getUrl(item,{width:width,height:this.height}) + ')';
+      var url = this._getUrl(item,{width:width,height:this.height});
+      this._load(item.element,url);
 			item.revealed = true;
 		}
 	},
+  _load : function(node,url) {
+    var img = new Image()
+    img.onload = function() {
+      node.style.backgroundImage = 'url(' + url + ')';
+    }
+    img.src = url;
+  },
 	_click : function(e) {
 		e = hui.event(e);
 		var item = e.findByClass('oo_masonry_item');
@@ -122,12 +136,12 @@ oo.Masonry.prototype = {
 			if (hui.window.getViewWidth()<400) {
 				document.location = this.items[index].href;
 			} else {
-				this._toggle(index);				
+				this._toggle(index);
 			}
 		}
 	},
 	_toggle : function(index) {
-		var dur = 1000;
+		var dur = 400;
 		if (this._toggled!==undefined) {
 			var tog = this.items[this._toggled];
 			hui.animate({node:tog.disclosed,css:{height:'0px'},duration:200,ease:hui.ease.fastSlow})
@@ -136,7 +150,7 @@ oo.Masonry.prototype = {
 				var same = this._toggled === index;
 				this._toggled = undefined;
 				if (!same) {
-					this._toggle(index);					
+					this._toggle(index);
 				} else {
 					this._reveal();
 				}
@@ -161,13 +175,13 @@ oo.Masonry.prototype = {
 			node : item.disclosed,
 			css : {height: (height-1) + 'px'},
 			duration : dur,
-			ease : hui.ease.elastic
+			ease : hui.ease.backOut
 		})
 		hui.animate({
 			node : element,
-			css : {marginBottom:height + 'px'},
+			css : {'margin-bottom':height + 'px'},
 			duration : dur,
-			ease : hui.ease.elastic,
+			ease : hui.ease.backOut,
 			$complete : function() {
 				hui.window.scrollTo({
 					element : item.disclosed,
@@ -177,15 +191,16 @@ oo.Masonry.prototype = {
 		})
 	},
 	_updateDiclosed : function(item,height) {
-		item.disclosed.innerHTML = '<div class="oo_masonry_disclosed_image" style="background-image: url(' +
-		this._getUrl(item,{width:this.latestWidth,height:600}) +
-		')"></div>' + 
-		'<div class="oo_masonry_disclosed_info">' + 
-			'<h1 class="oo_masonry_disclosed_title">' + hui.string.escape(item.title) + '</h1>' + 
+		item.disclosed.innerHTML = '<div class="oo_masonry_disclosed_image" style="background-image: linear-gradient(' + item.colors + ')"></div>' +
+		'<div class="oo_masonry_disclosed_info">' +
+			'<h1 class="oo_masonry_disclosed_title">' + hui.string.escape(item.title) + '</h1>' +
 			'<p class="oo_masonry_disclosed_actions">'+
 				//'<a href="javascript://">Full screen</a>'+
 				'<a href="' + item.href + '">Info...</a>'+
 			'</p>'+
 		'</div>';
+    var url = this._getUrl(item,{width:this.latestWidth,height:600});
+    var node = hui.find('.oo_masonry_disclosed_image',item.disclosed);
+    this._load(node,url);
 	}
 };

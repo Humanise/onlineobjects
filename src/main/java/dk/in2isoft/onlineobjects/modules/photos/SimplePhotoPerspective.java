@@ -6,6 +6,8 @@ public class SimplePhotoPerspective {
 	private int height;
 	private String title;
 	private long ownerId;
+	private Float rotation;
+	private String colors;
 
 	public long getId() {
 		return id;
@@ -45,6 +47,22 @@ public class SimplePhotoPerspective {
 
 	public void setOwnerId(long ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public Float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Float rotation) {
+		this.rotation = rotation;
+	}
+
+	public String getColors() {
+		return colors;
+	}
+
+	public void setColors(String colors) {
+		this.colors = colors;
 	}
 
 }
