@@ -6,8 +6,6 @@ public class UserPerspective {
 	private String name;
 	private String username;
 	private boolean publicView;
-	private boolean publicModify;
-	private boolean publicDelete;
 
 	public void setId(long id) {
 		this.id = id;
@@ -39,21 +37,5 @@ public class UserPerspective {
 
 	public boolean isPublicView() {
 		return publicView;
-	}
-
-	public void setPublicModify(boolean publicModify) {
-		this.publicModify = publicModify;
-	}
-
-	public boolean isPublicModify() {
-		return publicModify;
-	}
-
-	public void setPublicDelete(boolean publicDelete) {
-		this.publicDelete = publicDelete;
-	}
-
-	public boolean isPublicDelete() {
-		return publicDelete;
 	}
 }

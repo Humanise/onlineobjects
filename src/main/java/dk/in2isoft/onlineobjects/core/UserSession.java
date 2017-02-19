@@ -68,10 +68,6 @@ public class UserSession implements Privileged {
 		}
 	}
 
-	public boolean isSuper() {
-		return (user==null ? false : user.isSuper());
-	}
-
 	@Override
 	public String toString() {
 		return "User session for user:"+user;

@@ -8,11 +8,12 @@ import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 import dk.in2isoft.onlineobjects.publishing.CompoundDocumentBuilder;
 import dk.in2isoft.onlineobjects.publishing.Document;
 import dk.in2isoft.onlineobjects.publishing.DocumentBuilder;
 
-
+@Appearance(icon="file/generic")
 public class CompoundDocument extends Entity implements Document {
 
 	public static String TYPE = Entity.TYPE+"/CompoundDocument";
@@ -27,10 +28,6 @@ public class CompoundDocument extends Entity implements Document {
 
 	public String getType() {
 		return TYPE;
-	}
-
-	public String getIcon() {
-		return "Template/Generic";
 	}
 
 	public DocumentBuilder getBuilder() {

@@ -228,16 +228,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 	
-	public void synchronizeColors(Image image, Privileged priviledged) throws EndUserException {
-		String colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
-		if (Strings.isBlank(colors)) {
-			String newColors = getColors(image);
-			image.overrideFirstProperty(Property.KEY_PHOTO_COLORS, newColors);
-			modelService.updateItem(image, priviledged);
-		}
-	}
-	
-	public void synchronizeMetaData(Image image, Privileged priviledged) throws SecurityException, ModelException {
+	public void synchronizeMetaData(Image image, Privileged priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		ImageMetaData metaData = getMetaData(file);
 		boolean modified = false;
@@ -258,6 +249,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		if (!ArrayUtils.isEmpty(metaData.getKeywords())) {
 			image.overrideProperties(Property.KEY_COMMON_TAG, Arrays.asList(metaData.getKeywords()));
+			modified = true;
 		}
 		if (metaData.getObjectName()!=null) {
 			image.setName(metaData.getObjectName());
@@ -269,12 +261,21 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		if (metaData.getRotation()!=null) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_ROTATION, metaData.getRotation().doubleValue());
+			modified = true;
 		}
 		if (Boolean.TRUE.equals(metaData.getFlippedHorizontally())) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_FLIP_HORIZONTALLY, "true");
+			modified = true;
 		}
 		if (Boolean.TRUE.equals(metaData.getFlippedVertically())) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_FLIP_VERTICALLY, "true");
+			modified = true;
+		}
+		String colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+		if (Strings.isBlank(colors)) {
+			String newColors = getColors(image);
+			image.overrideFirstProperty(Property.KEY_PHOTO_COLORS, newColors);
+			modified = true;
 		}
 		if (modified) {
 			modelService.updateItem(image, priviledged);

@@ -136,10 +136,6 @@ public class Core {
 		public long getIdentity() {
 			return -1;
 		}
-
-		public boolean isSuper() {
-			return true;
-		}
 	}
 
 	public boolean isStarted() {

@@ -83,7 +83,8 @@ var photoView = {
 			}
 		})
 	},
-	$click$syncMetaData : function() {
+	$click$syncMetaData : function(button) {
+    button.setEnabled(false)
 		hui.ui.request({
 			message : {start:'Synchronizing',delay:300, success:'The meta data is synchronized'},
 			url : oo.appContext+'/synchronizeMetaData',
@@ -93,7 +94,10 @@ var photoView = {
 			},
 			$failure : function() {
 				hui.ui.msg({text:'Unable to synchronize metadata',icon:'common/warning',duration:2000});
-			}
+			},
+      $finally : function() {
+        button.setEnabled(true)
+      }
 		})
 
 	},

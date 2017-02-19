@@ -74,4 +74,5 @@ public class Privilege {
 	public void setView(boolean view) {
 		this.view = view;
 	}
+	
 }

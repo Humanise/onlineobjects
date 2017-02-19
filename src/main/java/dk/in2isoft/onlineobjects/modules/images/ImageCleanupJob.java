@@ -36,7 +36,6 @@ public class ImageCleanupJob extends ServiceBackedJob {
 				}
 				imageService.synchronizeContentType(image, admin);
 				imageService.synchronizeMetaData(image, admin);
-				imageService.synchronizeColors(image, admin);
 				modelService.commit();
 				status.setProgress(i, list.size());
 			} catch (EndUserException e) {

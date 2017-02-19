@@ -98,6 +98,7 @@ public class MemberService {
 		user.setUsername(username);
 		user.setPassword(password);
 		modelService.createItem(user, session);
+		securityService.grantFullPrivileges(user, user);
 
 		// Create a person
 		Person person = new Person();
@@ -114,17 +115,19 @@ public class MemberService {
 
 		// Create relation between user and person
 		modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, user);
-
+		/*
+		TODO Disabled web site creation for now
 		// Create a web site
 		WebSite site = new WebSite();
 		site.setName(buildWebSiteTitle(fullName));
 		modelService.createItem(site, user);
-		securityService.grantPublicPrivileges(site, true, false, false);
+		securityService.makePublicVisible(site, user);
 
 		// Create relation between user and web site
 		modelService.createRelation(user, site,user);
 
 		webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
+		*/
 		return user;
 	}
 

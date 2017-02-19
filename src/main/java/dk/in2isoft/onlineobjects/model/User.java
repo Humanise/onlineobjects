@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.model;
 
 import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 
 @Appearance(icon="common/user")
@@ -62,7 +61,4 @@ public class User extends Entity implements Privileged {
 	public long getIdentity() {
 		return getId();
 	}
-
-	public boolean isSuper() {
-		return SecurityService.ADMIN_USERNAME.equals(username);
-	}}
+}

@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.Results;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.events.ModelPrivilegesEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -39,6 +40,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	private IndexService indexService;
 	private ModelService modelService;
 	private PileService pileService;
+	private SecurityService securityService;
 	
 	private static final Logger log = Logger.getLogger(ReaderIndexer.class);
 	
@@ -102,7 +104,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	public void index(InternetAddress address) {
 		try {
 			User owner = modelService.getOwner(address);
-			if (owner!=null && !owner.isSuper()) {
+			if (owner!=null && !securityService.isAdminUser(owner)) {
 				Document document = documentBuilder.build(address);
 				log.debug("Re-indexing : "+address);
 				getIndexManager(owner).update(address, document);
@@ -290,5 +292,9 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void setPileService(PileService pileService) {
 		this.pileService = pileService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

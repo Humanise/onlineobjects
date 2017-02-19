@@ -16,7 +16,6 @@ import org.joda.time.format.PeriodFormatterBuilder;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Mapper;
 import dk.in2isoft.commons.lang.Strings;
@@ -74,14 +73,16 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void listUsers(Request request) throws IOException,EndUserException {
 		User publicUser = securityService.getPublicUser();
+		Privileged admin = securityService.getAdminPrivileged();
 		int page = request.getInt("page");
-		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, 10);
+		int pageSize = 40;
+		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
 		SearchResult<User> result = modelService.search(query);
 
 		ListWriter writer = new ListWriter(request);
 		
 		writer.startList();
-		writer.window(result.getTotalCount(), 10, page);
+		writer.window(result.getTotalCount(), pageSize, page);
 		writer.startHeaders();
 		writer.header("Name");
 		writer.header("Username");
@@ -89,7 +90,10 @@ public class SetupController extends SetupControllerBase {
 		writer.header("E-mail");
 		writer.header("Image");
 		writer.header("Images");
-		writer.header("Public permissions",1);
+		writer.header("ID");
+		writer.header("Public",1);
+		writer.header("Self",1);
+		writer.header("Admin",1);
 		writer.endHeaders();
 		for (User user : result.getList()) {
 			Query<Image> imgQuery = Query.after(Image.class).withPrivileged(user);
@@ -121,7 +125,8 @@ public class SetupController extends SetupControllerBase {
 			}
 			writer.endCell();
 			writer.startCell().text(imageCount).endCell();
-			writer.startCell();
+			writer.startCell().text(user.getId()).endCell();
+			writer.startCell().startIcons();
 			if (securityService.canView(user, publicUser)) {
 				writer.icon("monochrome/view");
 			}
@@ -131,7 +136,29 @@ public class SetupController extends SetupControllerBase {
 			if (securityService.canDelete(user, publicUser)) {
 				writer.icon("monochrome/delete");
 			}
-			writer.endCell();
+			writer.endIcons().endCell();
+			writer.startCell().startIcons();
+			if (securityService.canView(user, user)) {
+				writer.icon("monochrome/view");
+			}
+			if (securityService.canModify(user, user)) {
+				writer.icon("monochrome/edit");
+			}
+			if (securityService.canDelete(user, user)) {
+				writer.icon("monochrome/delete");
+			}
+			writer.endIcons().endCell();
+			writer.startCell().startIcons();
+			if (securityService.canView(user, admin)) {
+				writer.icon("monochrome/view");
+			}
+			if (securityService.canModify(user, admin)) {
+				writer.icon("monochrome/edit");
+			}
+			if (securityService.canDelete(user, admin)) {
+				writer.icon("monochrome/delete");
+			}
+			writer.endIcons().endCell();
 			writer.endRow();
 		}
 		writer.endList();
@@ -141,14 +168,19 @@ public class SetupController extends SetupControllerBase {
 	public void listUsersObjects(Request request) throws IOException,EndUserException {
 		long id = request.getLong("userId");
 		int page = request.getInt("page");
+		String type = request.getString("type");
 		
 		User publicUser = securityService.getPublicUser();
 		User user = modelService.get(User.class, id, request.getSession());
 		if (user==null) {
 			return;
 		}
-		Query<Entity> query = Query.of(Entity.class).withPrivileged(user).withPaging(page, 30);
-		SearchResult<Entity> result = modelService.search(query);
+		Class<? extends Entity> typeClass = modelService.getEntityClass(type);
+		if (typeClass==null) {
+			return;
+		}
+		Query<? extends Entity> query = Query.of(typeClass).withPrivileged(user).withPaging(page, 30);
+		SearchResult<? extends Entity> result = modelService.search(query);
 
 		ListWriter writer = new ListWriter(request);
 		
@@ -157,6 +189,7 @@ public class SetupController extends SetupControllerBase {
 		writer.startHeaders();
 		writer.header("Name",40);
 		writer.header("Type");
+		writer.header("ID");
 		writer.header("Private grants",1);
 		writer.header("Public grants",1);
 		writer.endHeaders();
@@ -164,8 +197,9 @@ public class SetupController extends SetupControllerBase {
 			Privilege privilege = securityService.getPrivilege(entity.getId(), user);
 			Privilege publicPrivilege = securityService.getPrivilege(entity.getId(), publicUser);
 			writer.startRow();
-			writer.startCell().withIcon(entity.getIcon()).text(entity.getName()).endCell();
+			writer.startCell().withIcon(entity.getIcon()).startWrap().text(entity.getName()).endWrap().endCell();
 			writer.startCell().text(entity.getClass().getSimpleName()).endCell();
+			writer.cell(entity.getId());
 			writer.startCell().nowrap();
 			if (privilege.isView()) {
 				writer.icon("monochrome/view");
@@ -208,8 +242,6 @@ public class SetupController extends SetupControllerBase {
 		perspective.setUsername(user.getUsername());
 		perspective.setName(user.getName());
 		perspective.setPublicView(securityService.canView(user, publicUser));
-		perspective.setPublicModify(securityService.canModify(user, publicUser));
-		perspective.setPublicDelete(securityService.canDelete(user, publicUser));
 		request.sendObject(perspective);
 	}
 	
@@ -219,9 +251,11 @@ public class SetupController extends SetupControllerBase {
 		User user = modelService.get(User.class, request.getLong("id"), privileged);
 		List<Entity> list = modelService.list(Query.of(Entity.class).withPrivileged(user));
 		for (Entity entity : list) {
-			modelService.deleteEntity(entity, privileged);
+			if (!entity.equals(user)) {
+				modelService.deleteEntity(entity, privileged);
+			}
 		}
-		modelService.deleteEntity(user, privileged);		
+		modelService.deleteEntity(user, privileged);
 	}
 	
 	@Path
@@ -239,8 +273,17 @@ public class SetupController extends SetupControllerBase {
 		}
 		user.setName(perspective.getName());
 		modelService.updateItem(user, request.getSession());
-		
-		securityService.grantPublicPrivileges(user, perspective.isPublicView(), perspective.isPublicModify(), perspective.isPublicDelete());
+		if (securityService.isAdminUser(user)) {
+			modelService.grantPrivileges(user, user, true, true, false);
+			securityService.grantPublicPrivileges(user, perspective.isPublicView(), false, false);
+		} else if (securityService.isPublicUser(user)) {
+			securityService.grantPublicPrivileges(user, true, false, false);
+			// TODO: Does it make sense to grant administrator privileges?
+			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false);
+		} else {
+			modelService.grantPrivileges(user, user, true, true, true);
+			securityService.grantPublicPrivileges(user, perspective.isPublicView(), false, false);
+		}
 	}
 	
 	@Path
@@ -428,29 +471,26 @@ public class SetupController extends SetupControllerBase {
 		int page = request.getInt("page");
 		String clazz = request.getString("type");
 		String text = request.getString("text");
+		Class<? extends Entity> className = modelService.getEntityClass(clazz);
 		ListData list = new ListData();
 		list.addHeader("Name");
 		list.addHeader("Type");
 		list.addHeader("Public view");
 		list.addHeader("Public modify");
 		list.addHeader("Public delete");
-		Class<Entity> className;
-		if (Strings.isBlank(clazz)) {
-			className = Entity.class;
-		} else {
-			className = Code.<Entity>castClass(Class.forName(clazz));
-		}
-		Query<Entity> query = (Query<Entity>) Query.of(className).withWords(text).withPaging(page, 50);
-		SearchResult<Entity> result = modelService.search(query);
-		list.setWindow(result.getTotalCount(), 50, page);
-		for (Entity entity : result.getList()) {
-			String kind = entity.getClass().getSimpleName().toLowerCase();
-			list.newRow(entity.getId(),kind);
-			list.addCell(entity.getName(), entity.getIcon());
-			list.addCell(entity.getType());
-			list.addCell(securityService.canView(entity, publicUser));
-			list.addCell(securityService.canModify(entity, publicUser));
-			list.addCell(securityService.canDelete(entity, publicUser));
+		if (className!=null) {
+			Query<? extends Entity> query = Query.of(className).withWords(text).withPaging(page, 50);
+			SearchResult<? extends Entity> result = modelService.search(query);
+			list.setWindow(result.getTotalCount(), 50, page);
+			for (Entity entity : result.getList()) {
+				String kind = entity.getClass().getSimpleName().toLowerCase();
+				list.newRow(entity.getId(),kind);
+				list.addCell(entity.getName(), entity.getIcon());
+				list.addCell(entity.getType());
+				list.addCell(securityService.canView(entity, publicUser));
+				list.addCell(securityService.canModify(entity, publicUser));
+				list.addCell(securityService.canDelete(entity, publicUser));
+			}
 		}
 		return list;
 	}
@@ -461,8 +501,8 @@ public class SetupController extends SetupControllerBase {
 		Collection<ItemData> items = Lists.newArrayList();
 		for (Class<?> clazz : classes) {
 			ItemData data = new ItemData();
-			data.setValue(clazz.getCanonicalName());
-			data.setTitle(clazz.getSimpleName());
+			data.setValue(clazz.getSimpleName());
+			data.setText(clazz.getSimpleName());
 			Appearance annotation = clazz.getAnnotation(Appearance.class);
 			if (annotation!=null) {
 				data.setIcon(annotation.icon());
@@ -514,7 +554,7 @@ public class SetupController extends SetupControllerBase {
 		for (Entry<String, Integer> itemData : properties.entrySet()) {
 			ItemData data = new ItemData();
 			data.setValue(itemData.getKey());
-			data.setTitle(itemData.getKey());
+			data.setText(itemData.getKey());
 			data.setBadge(itemData.getValue().toString());
 			data.setIcon("common/folder");
 			items.add(data);
@@ -616,7 +656,7 @@ public class SetupController extends SetupControllerBase {
 		List<String> names = indexService.getIndexNames();
 		for (String name : names) {
 			ItemData item = new ItemData();
-			item.setTitle(name);
+			item.setText(name);
 			item.setValue(name);
 			options.add(item);
 		}

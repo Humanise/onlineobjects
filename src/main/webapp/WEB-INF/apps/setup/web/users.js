@@ -1,19 +1,12 @@
 hui.ui.listen({
 	userId : 0,
-	
+
 	$valueChanged$search : function() {
 		list.resetState();
 	},
 	$open$list : function(row) {
 		if (row.kind=='user') {
 			this.loadUser(row);
-		} else {
-			this.entityId = row.id;
-			entityEditor.setTitle(row.title);
-			AppSetup.getEntityInfo(row.id,function(info) {
-				entityFormula.setValues(info);
-				entityEditor.show();
-			});
 		}
 	},
 	loadUser : function(row) {
@@ -51,6 +44,7 @@ hui.ui.listen({
 		userEditor.hide();
 	},
 	$click$deleteUser : function() {
+		userEditor.setBusy('Deleting');
 		hui.ui.request({
 			url : 'deleteUser',
 			parameters :{id : this.userId},
@@ -58,22 +52,28 @@ hui.ui.listen({
 				userFormula.reset();
 				userEditor.hide();
 				listSource.refresh();
-			}
+			},
+      $failure : function() {
+        hui.ui.msg.fail({text:'Unable to delete member'});
+      },
+      $finally : function() {
+        userEditor.setBusy(false);
+      }
 		})
 	},
 	$select$selection : function() {
 		list.resetState();
 	},
-  
-  
+
+
   // Members...
-  
+
   $click$newMember : function() {
     memberWindow.show();
     memberFormula.reset();
     memberFormula.focus();
   },
-  
+
   $submit$memberFormula : function() {
     var values = memberFormula.getValues();
 		memberWindow.setBusy('Creating');
@@ -90,9 +90,9 @@ hui.ui.listen({
         hui.ui.msg.fail({text:'Unable to create member'});
       },
       $finally : function() {
-    		memberWindow.setBusy(false);
+        memberWindow.setBusy(false);
       }
 		})
-    
+
   }
 });

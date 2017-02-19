@@ -10,7 +10,10 @@
 	<source name="listObjectsSource" url="listUsersObjects">
 		<parameter key="page" value="@objectsList.window.page"/>
 		<parameter key="userId" value="@list.selection.id"/>
+		<parameter key="type" value="@typeSelection.value"/>
 	</source>
+
+  <source name="classSource" url="getClasses"/>
 
 	<structure>
 		<top>
@@ -26,9 +29,13 @@
 		<middle>
 			<left>
 				<overflow>
-					<selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
-						<option icon="common/user" text="All users" value="dk.in2isoft.onlineobjects.model.Entity"/>
+					<selection value="users" name="selection">
+						<option icon="common/user" text="All users" value="users"/>
 					</selection>
+
+          <selection name="typeSelection">
+            <options name="classes" source="classSource" title="Types"/>
+          </selection>
 				</overflow>
 			</left>
 			<center>
@@ -59,9 +66,7 @@
 					<text-input key="username"/>
 				</field>
 				<field label="Privileges">
-					<checkbox name="publicView" text="View"/>
-					<checkbox name="publicModify" text="Modify"/>
-					<checkbox name="publicDelete" text="Delete"/>
+					<checkbox name="publicView" text="Publicly viewable"/>
 				</field>
 			</fields>
 			<buttons top="10">

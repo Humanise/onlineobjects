@@ -138,7 +138,7 @@ public class SecurityService {
 	}
 	
 	public boolean canView(Item item,Privileged privileged) {
-		if (privileged.isSuper()) {
+		if (isAdminUser(privileged)) {
 			return true;
 		}
 		List<Privileged> expand = expand(privileged);
@@ -153,11 +153,17 @@ public class SecurityService {
 	public boolean canDelete(Item item,Privileged privileged) {
 		if (item instanceof User) {
 			User user = (User) item;
-			if (SecurityService.ADMIN_USERNAME.equals(user.getUsername())) {
+			if (isAdminUser(user)) {
+				return false;
+			}
+			if (isPublicUser(user)) {
 				return false;
 			}
 		}
-		if (privileged.isSuper()) {
+		if (isPublicUser(privileged)) {
+			return false;
+		}
+		if (isAdminUser(privileged)) {
 			return true;
 		}
 		List<Privileged> expand = expand(privileged);
@@ -169,11 +175,14 @@ public class SecurityService {
 		return false;
 	}
 	
-	public boolean canModify(Item item,Privileged priviledged) {
-		if (priviledged.isSuper()) {
+	public boolean canModify(Item item,Privileged privileged) {
+		if (isAdminUser(privileged)) {
 			return true;
 		}
-		List<Privileged> expand = expand(priviledged);
+		if (isPublicUser(privileged)) {
+			return false;
+		}
+		List<Privileged> expand = expand(privileged);
 		for (Privileged priv : expand) {
 			if (canExactlyModify(item, priv)) {
 				return true;
@@ -182,8 +191,8 @@ public class SecurityService {
 		return false;
 	}
 	
-	private boolean canExactlyView(Item item, Privileged priviledged) {
-		Privilege privilege = getPrivilege(item.getId(), priviledged);
+	private boolean canExactlyView(Item item, Privileged privileged) {
+		Privilege privilege = getPrivilege(item.getId(), privileged);
 		if (privilege==null) {
 			return false;
 		} else {
@@ -191,8 +200,8 @@ public class SecurityService {
 		}
 	}
 	
-	private boolean canExactlyDelete(Item item, Privileged priviledged) {
-		Privilege privilege = getPrivilege(item.getId(), priviledged);
+	private boolean canExactlyDelete(Item item, Privileged privileged) {
+		Privilege privilege = getPrivilege(item.getId(), privileged);
 		if (privilege==null) {
 			return false;
 		} else {
@@ -200,8 +209,8 @@ public class SecurityService {
 		}
 	}
 	
-	private boolean canExactlyModify(Item item, Privileged priviledged) {
-		Privilege privilege = getPrivilege(item.getId(), priviledged);
+	private boolean canExactlyModify(Item item, Privileged privileged) {
+		Privilege privilege = getPrivilege(item.getId(), privileged);
 		if (privilege==null) {
 			return false;
 		} else {
@@ -216,12 +225,20 @@ public class SecurityService {
 		return publicUser;
 	}
 
+	public boolean isPublicUser(Privileged privileged) {
+		return privileged.getIdentity()==getPublicUser().getIdentity();
+	}
+
 	public Privileged getAdminPrivileged() {
 		if (adminPrivileged==null) {
 			User user = modelService.getUser(SecurityService.ADMIN_USERNAME);
-			adminPrivileged = new DummyPrivileged(user.getId(), true);
+			adminPrivileged = new DummyPrivileged(user.getId());
 		}
 		return adminPrivileged;
+	}
+
+	public boolean isAdminUser(Privileged privileged) {
+		return privileged.getIdentity() == getAdminPrivileged().getIdentity();
 	}
 
 	public User getUserBySecret(String secret) {
@@ -254,16 +271,21 @@ public class SecurityService {
 		modelService.grantPrivileges(item, getPublicUser(), true, false, false);
 	}
 	
-	public void makePublicHidden(Item item, Privileged priviledged) throws SecurityException {
-		if (!canModify(item, priviledged)) {
+	public void makePublicHidden(Item item, Privileged privileged) throws SecurityException {
+		if (!canModify(item, privileged)) {
 			throw new SecurityException("The user cannot make this non public");
 		}
 		User publicUser = getPublicUser();
 		modelService.removePriviledges(item, publicUser);
 	}
 
+	@Deprecated
 	public void grantPublicPrivileges(Item item, boolean view, boolean alter, boolean delete) throws ModelException {
 		modelService.grantPrivileges(item, getPublicUser(), view, alter, delete);		
+	}
+
+	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException {
+		modelService.grantPrivileges(item, privileged, true, true, true);
 	}
 
 	public UserSession ensureUserSession(HttpSession session) {
@@ -331,4 +353,5 @@ public class SecurityService {
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
+
 }

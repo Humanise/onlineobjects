@@ -37,7 +37,8 @@ public class Entity extends Item {
 
 	@Override
 	public String getIcon() {
-		return "common/object";
+		Appearance appearance = getClass().getAnnotation(Appearance.class);
+		return appearance!=null ? appearance.icon() : "common/object";
 	}
 
 	public String getType() {

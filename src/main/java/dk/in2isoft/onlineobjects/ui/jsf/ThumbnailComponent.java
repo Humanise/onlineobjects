@@ -69,10 +69,6 @@ public class ThumbnailComponent extends AbstractComponent implements DependableC
 		Image image = getBinding("image");
 		StyleBuilder style = new StyleBuilder();
 		style.withWidth(width).withHeight(height);
-		String gradient = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
-		if (Strings.isNotBlank(gradient)) {
-			style.withLinearGradient(gradient);
-		}
 
 		Double rotation = null;
 		boolean rotated = false;
@@ -80,6 +76,10 @@ public class ThumbnailComponent extends AbstractComponent implements DependableC
 		double imageWidth = 0;
 
 		if (image != null) {
+			String gradient = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
+			if (Strings.isNotBlank(gradient)) {
+				style.withLinearGradient(gradient);
+			}
 			rotation = image.getPropertyDoubleValue(Property.KEY_PHOTO_ROTATION);
 			rotated = (rotation != null && (rotation == -90 || rotation == 90));
 			imageHeight = (double) image.getHeight();

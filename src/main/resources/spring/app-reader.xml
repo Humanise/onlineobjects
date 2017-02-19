@@ -35,6 +35,7 @@
    		<property name="indexService" ref="indexService"/>
    		<property name="modelService" ref="modelService"/>
    		<property name="pileService" ref="pileService"/>
+   		<property name="securityService" ref="securityService"/>
    	</bean>
    	
    	<bean class="dk.in2isoft.onlineobjects.apps.reader.ReaderSearcher">

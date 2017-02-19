@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.model;
 
+import dk.in2isoft.onlineobjects.model.annotations.Appearance;
+
+@Appearance(icon="common/email")
 public class EmailAddress extends Entity {
 
 	public static final String ADDRESS_PROPERTY = "address";
@@ -20,10 +23,6 @@ public class EmailAddress extends Entity {
 
 	public String getType() {
 		return TYPE;
-	}
-
-	public String getIcon() {
-		return "common/email";
 	}
 
 	public String getAddress() {
