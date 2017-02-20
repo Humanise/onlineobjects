@@ -101,7 +101,8 @@ public class SecurityService {
 	public void changePasswordUsingKey(String key, String password, UserSession session) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
 		User user = passwordRecoveryService.getUserByRecoveryKey(key);
 		if (user!=null) {
-			changePassword(user, password, session);
+			Privileged admin = getAdminPrivileged();
+			changePassword(user, password, admin);
 			changeUser(session, user.getUsername(), password);
 		}
 	}
@@ -264,8 +265,8 @@ public class SecurityService {
 		return getPublicUser();
 	}
 
-	public void makePublicVisible(Item item, Privileged priviledged) throws SecurityException, ModelException {
-		if (!canModify(item, priviledged)) {
+	public void makePublicVisible(Item item, Privileged privileged) throws SecurityException, ModelException {
+		if (!canModify(item, privileged)) {
 			throw new SecurityException("The user cannot make this public");
 		}
 		modelService.grantPrivileges(item, getPublicUser(), true, false, false);
@@ -276,15 +277,22 @@ public class SecurityService {
 			throw new SecurityException("The user cannot make this non public");
 		}
 		User publicUser = getPublicUser();
-		modelService.removePriviledges(item, publicUser);
+		modelService.removePrivileges(item, publicUser, privileged);
 	}
 
 	@Deprecated
-	public void grantPublicPrivileges(Item item, boolean view, boolean alter, boolean delete) throws ModelException {
+	public void grantPublicPrivileges(Item item, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
 		modelService.grantPrivileges(item, getPublicUser(), view, alter, delete);		
 	}
 
-	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException {
+	public void grantPublicView(Item item, boolean view, Privileged privileged) throws ModelException, SecurityException {
+		if (!canModify(item, privileged)) {
+			throw new SecurityException("The user cannot change public visibility");
+		}
+		modelService.grantPrivileges(item, getPublicUser(), view, false, false);		
+	}
+
+	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException, SecurityException {
 		modelService.grantPrivileges(item, privileged, true, true, true);
 	}
 
@@ -352,6 +360,16 @@ public class SecurityService {
 	
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
+	}
+
+	public void setPassword(User user, String password) throws ExplodingClusterFuckException, SecurityException {
+		if (!user.isNew()) {
+			throw new SecurityException("Cannot set password of persistent user");
+		}
+		String salt = passwordEncryptionService.generateSalt();
+		String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
+		user.setPassword(encryptedPassword);
+		user.setSalt(salt);
 	}
 
 }

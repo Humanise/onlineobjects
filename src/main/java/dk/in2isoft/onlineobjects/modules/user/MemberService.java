@@ -20,14 +20,12 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
-import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.model.WebSite;
 import dk.in2isoft.onlineobjects.services.WebModelService;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
@@ -96,7 +94,7 @@ public class MemberService {
 		// Create a user
 		User user = new User();
 		user.setUsername(username);
-		user.setPassword(password);
+		securityService.setPassword(user,password);
 		modelService.createItem(user, session);
 		securityService.grantFullPrivileges(user, user);
 
@@ -112,6 +110,9 @@ public class MemberService {
 		
 		// Create relation between person and email
 		modelService.createRelation(person, emailAddress, user);
+
+		// Create relation between person and email
+		modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, user);
 
 		// Create relation between user and person
 		modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, user);
@@ -185,7 +186,7 @@ public class MemberService {
 		return null;
 	}
 
-	
+	/*
 	private String buildWebSiteTitle(String fullName) {
 		fullName = fullName.trim();
 		if (fullName.endsWith("s")) {
@@ -194,7 +195,7 @@ public class MemberService {
 			fullName+="'s";			
 		}
 		return fullName+" hjemmeside";
-	}
+	}*/
 
 	public UserProfileInfo build(Person person,Privileged priviledged) throws ModelException {
 		UserProfileInfo info = new UserProfileInfo();

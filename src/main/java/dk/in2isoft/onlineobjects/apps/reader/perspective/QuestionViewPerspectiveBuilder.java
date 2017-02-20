@@ -6,13 +6,14 @@ import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 
 public class QuestionViewPerspectiveBuilder extends EntityViewPerspectiveBuilder {
 
-	public QuestionViewPerspective build(long id, UserSession session) throws ModelException, ContentNotFoundException {
+	public QuestionViewPerspective build(long id, UserSession session) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, session);
 		QuestionViewPerspective perspective = new QuestionViewPerspective();
 		perspective.setId(id);

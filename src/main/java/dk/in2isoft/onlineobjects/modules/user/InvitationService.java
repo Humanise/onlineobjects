@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -52,7 +53,7 @@ public class InvitationService {
 		return invitation;
 	}
 
-	public Invitation createInvitation(UserSession session, Person invited, String message) throws ModelException {
+	public Invitation createInvitation(UserSession session, Person invited, String message) throws ModelException, SecurityException {
 		User user = session.getUser();
 
 		Invitation invitation = new Invitation();

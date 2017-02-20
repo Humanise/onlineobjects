@@ -22,7 +22,7 @@ public class TestPerson extends AbstractSpringTestCase {
 		String givenName = Strings.generateRandomString(5);
 		String additionalName = Strings.generateRandomString(5);
 		String familyName = Strings.generateRandomString(5);
-		Privileged priviledged = getPublicUser();
+		Privileged priviledged = getAdminUser();
 		Person person = new Person();
 		person.setGivenName(givenName);
 		person.setAdditionalName(additionalName);

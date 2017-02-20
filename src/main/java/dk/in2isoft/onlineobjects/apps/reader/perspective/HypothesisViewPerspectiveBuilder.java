@@ -8,6 +8,7 @@ import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
@@ -15,7 +16,7 @@ import dk.in2isoft.onlineobjects.model.Statement;
 public class HypothesisViewPerspectiveBuilder extends EntityViewPerspectiveBuilder {
 
 
-	public HypothesisViewPerspective build(long id, UserSession session) throws ModelException, ContentNotFoundException {
+	public HypothesisViewPerspective build(long id, UserSession session) throws ModelException, ContentNotFoundException, SecurityException {
 		@Nullable
 		Hypothesis question = modelService.get(Hypothesis.class, id, session);
 		if (question == null) {

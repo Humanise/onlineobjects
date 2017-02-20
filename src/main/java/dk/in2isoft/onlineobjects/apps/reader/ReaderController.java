@@ -254,7 +254,7 @@ public class ReaderController extends ReaderControllerBase {
 	}
 
 	@Path
-	public List<FeedPerspective> getFeeds(Request request) throws ModelException {
+	public List<FeedPerspective> getFeeds(Request request) throws EndUserException {
 		UserSession session = request.getSession();
 		Pile pile = getFeedPile(session);
 		List<InternetAddress> children = modelService.getChildren(pile, InternetAddress.class, session);
@@ -286,12 +286,12 @@ public class ReaderController extends ReaderControllerBase {
 		return options;
 	}
 
-	private Pile getFeedPile(UserSession session) throws ModelException {
+	private Pile getFeedPile(UserSession session) throws ModelException, SecurityException {
 		return pileService.getOrCreatePileByKey("feeds", session.getUser());
 	}
 
 	@Path
-	public void addFeed(Request request) throws ModelException, IllegalRequestException, NetworkException {
+	public void addFeed(Request request) throws EndUserException {
 		String url = request.getString("url");
 		NetworkResponse response = null;
 		try {
@@ -381,19 +381,19 @@ public class ReaderController extends ReaderControllerBase {
 	}
 
 	@Path
-	public QuestionViewPerspective viewQuestion(Request request) throws ModelException, ContentNotFoundException, IllegalRequestException {
+	public QuestionViewPerspective viewQuestion(Request request) throws EndUserException {
 		Long id = request.getId();
 		return questionViewPerspectiveBuilder.build(id, request.getSession());
 	}
 
 	@Path
-	public HypothesisViewPerspective viewHypothesis(Request request) throws ModelException, ContentNotFoundException, IllegalRequestException {
+	public HypothesisViewPerspective viewHypothesis(Request request) throws EndUserException {
 		Long id = request.getId();
 		return hypothesisViewPerspectiveBuilder.build(id, request.getSession());
 	}
 
 	@Path
-	public void addQuote(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public void addQuote(Request request) throws EndUserException {
 		Long id = request.getId();
 		String text = request.getString("text");
 		if (Strings.isNotBlank(text)) {
@@ -476,7 +476,7 @@ public class ReaderController extends ReaderControllerBase {
 	}
 
 	@Path
-	public SimpleEntityPerspective addInternetAddress(Request request) throws ModelException, IllegalRequestException {
+	public SimpleEntityPerspective addInternetAddress(Request request) throws EndUserException {
 		String url = request.getString("url");
 		if (Strings.isBlank(url)) {
 			throw new IllegalRequestException("No URL");
@@ -512,7 +512,7 @@ public class ReaderController extends ReaderControllerBase {
 	}
 
 	@Path
-	public void addWord(Request request) throws ModelException {
+	public void addWord(Request request) throws EndUserException {
 		Long internetAddressId = request.getLong("internetAddressId");
 		Long wordId = request.getLong("wordId");
 		UserSession session = request.getSession();

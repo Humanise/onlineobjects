@@ -38,7 +38,7 @@ public class PersonService {
 		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class);
 	}
 	
-	public Person getOrCreatePerson(String text, Privileged privileged) throws ModelException {
+	public Person getOrCreatePerson(String text, Privileged privileged) throws ModelException, SecurityException {
 		if (Strings.isBlank(text) || privileged == null) {
 			return null;
 		}

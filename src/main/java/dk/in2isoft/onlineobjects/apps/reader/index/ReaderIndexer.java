@@ -19,6 +19,7 @@ import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.events.ModelPrivilegesEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -195,7 +196,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 		}
 	}
 	
-	private void indexStatus(Document doc, Entity entity, User owner) throws ModelException {
+	private void indexStatus(Document doc, Entity entity, User owner) throws ModelException, SecurityException {
 
 		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES);

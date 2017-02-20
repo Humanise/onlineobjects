@@ -14,7 +14,7 @@ public class PileService {
 
 	private ModelService modelService;
 	
-	public Pile getOrCreateGlobalPile(String key, Privileged privileged) throws ModelException {
+	public Pile getOrCreateGlobalPile(String key, Privileged privileged) throws ModelException, SecurityException {
 		Query<Pile> query = Query.after(Pile.class).withCustomProperty(Pile.PROPERTY_KEY, key);
 		Pile first = modelService.search(query).getFirst();
 		if (first==null) {
@@ -26,7 +26,7 @@ public class PileService {
 		return first;
 	}
 	
-	public Pile getOrCreatePileByKey(String key, User user) throws ModelException {
+	public Pile getOrCreatePileByKey(String key, User user) throws ModelException, SecurityException {
 		Query<Pile> query = Query.after(Pile.class).withCustomProperty(Pile.PROPERTY_KEY, key).from(user);
 		Pile first = modelService.search(query).getFirst();
 		if (first==null) {
@@ -39,7 +39,7 @@ public class PileService {
 		return first;
 	}
 
-	public Pile getOrCreatePileByRelation(User user, String relationKind) throws ModelException {
+	public Pile getOrCreatePileByRelation(User user, String relationKind) throws ModelException, SecurityException {
 		Query<Pile> query = Query.after(Pile.class).from(user, relationKind).withPrivileged(user);
 		Pile pile = modelService.getFirst(query);
 		if (pile==null) {

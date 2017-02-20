@@ -100,6 +100,7 @@ span.oo_gallery_photo
 span.oo_gallery_photo img
 {
 	border: none;
+  display: block;
 }
 
 div.oo_gallery_frame span.oo_gallery_photo

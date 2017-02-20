@@ -20,7 +20,7 @@ public class TestWord extends AbstractSpringTestCase {
 	public void testCreate() throws EndUserException {
 		
 		String text = new Date().toString();
-		Privileged priviledged = getPublicUser();
+		Privileged priviledged = getAdminUser();
 		Word word = new Word();
 		word.setText(text);
 		assertEquals(text, word.getText());

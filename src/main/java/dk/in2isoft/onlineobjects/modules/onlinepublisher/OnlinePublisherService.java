@@ -10,6 +10,7 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -28,7 +29,7 @@ public class OnlinePublisherService {
 	private SecurityService securityService;
 	private NetworkService networkService;
 
-	public List<InternetAddress> getSites(Privileged privileged) throws ModelException {
+	public List<InternetAddress> getSites(Privileged privileged) throws ModelException, SecurityException {
 		Pile pile = getPile(privileged);
 		Query<InternetAddress> query = Query.after(InternetAddress.class).from(pile);
 		return modelService.list(query);
@@ -64,8 +65,8 @@ public class OnlinePublisherService {
 				status.setProgress(index, sites.size());
 				index++;
 			}
-		} catch (ModelException e) {
-			status.error("A problem happened in the model", e);
+		} catch (EndUserException e) {
+			status.error("A problem happened in the model or secuity", e);
 		}
 		status.setProgress(1);
 		status.log("Heart massage finished");
@@ -113,7 +114,7 @@ public class OnlinePublisherService {
 		}
 	}
 
-	private Pile getPile(Privileged privileged) throws ModelException {
+	private Pile getPile(Privileged privileged) throws ModelException, SecurityException {
 		return pileService.getOrCreateGlobalPile("onlinepublisher.sites", privileged);
 	}
 	

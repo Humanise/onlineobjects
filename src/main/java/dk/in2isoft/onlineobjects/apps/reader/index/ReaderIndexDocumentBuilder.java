@@ -16,7 +16,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Pile;
@@ -35,7 +35,7 @@ public class ReaderIndexDocumentBuilder implements IndexDocumentBuilder<Internet
 	private SecurityService securityService;
 	private PileService pileService;
 	
-	public Document build(InternetAddress address) throws ModelException {
+	public Document build(InternetAddress address) throws EndUserException {
 		
 		Document doc = new Document();
 		doc.add(new TextField("title", Strings.asNonBlank(address.getName(),"blank"), Field.Store.YES));

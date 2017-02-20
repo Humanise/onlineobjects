@@ -5,10 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -18,9 +16,6 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestPublicAccessibility extends AbstractSpringTestCase {
-
-	@Autowired
-	private SecurityService securityService;
 	
 	@Test
 	public void testGrantUsingUnsavedObjects() throws EndUserException {
@@ -28,19 +23,19 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		Comment comment = new Comment();
 		boolean caught = false;
 		try {
-			modelService.grantFullPrivileges(comment, user);
+			securityService.grantFullPrivileges(comment, user);
 		} catch (ModelException e) {
 			// Should throw exception because the user is not persistent
 			caught = true;
 		}
 		assertTrue(caught);
 
-		modelService.createItem(user, getPublicUser());
+		modelService.createItem(user, getAdminUser());
 		
 		caught = false;
 		try {
-			modelService.grantFullPrivileges(comment, user);
-		} catch (ModelException e) {
+			securityService.grantFullPrivileges(comment, user);
+		} catch (SecurityException e) {
 			// Should throw exception because the comment is not persistent
 			caught = true;
 		}
@@ -54,18 +49,40 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User publicUser = securityService.getPublicUser();
 		User user = new User();
 		
-		modelService.createItem(user, publicUser);
+		modelService.createItem(user, getAdminUser());
+		securityService.makePublicVisible(user, getAdminUser());
+		{
+			boolean catched = false;
+			try {
+				securityService.grantFullPrivileges(user, publicUser);
+				Assert.fail("Public user can be made to edit or delete users");
+			} catch (SecurityException e) {
+				catched = true;
+			}
+			assertTrue(catched);
+		}
 		
+		// Public should now only be able to view the user
 		assertTrue(securityService.canView(user, publicUser));
-		assertTrue(securityService.canDelete(user, publicUser));
-		assertTrue(securityService.canModify(user, publicUser));
+		assertFalse(securityService.canDelete(user, publicUser));
+		assertFalse(securityService.canModify(user, publicUser));
 
 		// Test that user can access if "public" has access 
-		assertTrue(securityService.canDelete(user, user));
-		assertTrue(securityService.canModify(user, user));
 		assertTrue(securityService.canView(user, user));
+		assertFalse(securityService.canDelete(user, user));
+		assertFalse(securityService.canModify(user, user));
 		
-		modelService.removePriviledges(user, publicUser);
+		{ // You should not be able to just remove privileges as public user
+			boolean catched = false;
+			try {
+				modelService.removePrivileges(user, publicUser);
+			} catch (SecurityException e) {
+				catched = true;
+			}
+			assertTrue(catched);
+		}
+
+		securityService.makePublicHidden(user, getAdminUser());
 
 		assertFalse(securityService.canView(user, publicUser));
 		assertFalse(securityService.canDelete(user, publicUser));
@@ -77,7 +94,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		
 		tryDeleteAndFail(user,publicUser);
 		
-		modelService.grantFullPrivileges(user, user);
+		securityService.grantFullPrivileges(user, user);
 		
 		assertTrue(securityService.canDelete(user, user));
 		assertTrue(securityService.canModify(user, user));
@@ -103,34 +120,12 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User publicUser = securityService.getPublicUser();
 		User user = new User();
 		
-		modelService.createItem(user, publicUser);
+		modelService.createItem(user, getAdminUser());
 		
-		assertTrue(securityService.canDelete(user, publicUser));
-		assertTrue(securityService.canDelete(user, user));
-		
-		modelService.deleteEntity(user, user);
-		
-		modelService.commit();
-	}
-
-	@Test
-	public void testPublicDelete2() throws EndUserException {
-
-		User publicUser = securityService.getPublicUser();
-		User user = new User();
-		
-		modelService.createItem(user, publicUser);
-		modelService.removePriviledges(user, publicUser);
 		assertFalse(securityService.canDelete(user, publicUser));
-
-		// Test that user can access if "public" has access 
 		assertFalse(securityService.canDelete(user, user));
 		
-		tryDeleteAndFail(user,user);
-		
-		securityService.grantPublicPrivileges(user, false, false, true);
-		
-		modelService.deleteEntity(user, user);
+		modelService.deleteEntity(user, getAdminUser());
 		
 		modelService.commit();
 	}
@@ -142,21 +137,25 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User user = new User();
 		Comment comment = new Comment();
 		
-		modelService.createItem(user, publicUser);
-		modelService.createItem(comment, publicUser);
-		
-		// The user can delete the comment since public can delete it
+		modelService.createItem(user, getAdminUser());
+		securityService.grantFullPrivileges(user, user);
+		modelService.createItem(comment, user);
+
+		// The public user cannot delete anything
+		assertFalse(securityService.canDelete(comment, publicUser));
+
+		// The user can delete the comment since it created it
 		assertTrue(securityService.canDelete(comment, user));
 		
-		modelService.removePriviledges(comment, publicUser);
+		modelService.removePrivileges(comment, user);
 		
-		// The user can not delete the comment since public can not
+		// The user can no longer delete the comment
 		assertFalse(securityService.canDelete(comment, user));
 		
 		// Test that the user cannot delete the comment
 		tryDeleteAndFail(comment, user);
 		
-		securityService.grantPublicPrivileges(comment, false, false, true);
+		modelService.grantPrivileges(comment, publicUser, true, true, true);
 
 		// Now the user can delete again
 		assertTrue(securityService.canDelete(comment, user));
@@ -188,7 +187,4 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		assertTrue(caught);
 	}
 	
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
 }

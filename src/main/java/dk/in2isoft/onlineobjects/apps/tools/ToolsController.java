@@ -311,7 +311,7 @@ public class ToolsController extends ToolsControllerBase {
 	}
 	
 	@Path
-	public void addInternetAddress(Request request) throws ModelException, IllegalRequestException {
+	public void addInternetAddress(Request request) throws EndUserException {
 		try {
 			informationService.addInternetAddress(request.getString("url"), request.getSession());			
 		} catch (IllegalArgumentException e) {

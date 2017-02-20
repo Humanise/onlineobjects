@@ -275,14 +275,14 @@ public class SetupController extends SetupControllerBase {
 		modelService.updateItem(user, request.getSession());
 		if (securityService.isAdminUser(user)) {
 			modelService.grantPrivileges(user, user, true, true, false);
-			securityService.grantPublicPrivileges(user, perspective.isPublicView(), false, false);
+			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
 		} else if (securityService.isPublicUser(user)) {
-			securityService.grantPublicPrivileges(user, true, false, false);
+			securityService.makePublicVisible(user, request.getSession());
 			// TODO: Does it make sense to grant administrator privileges?
 			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false);
 		} else {
 			modelService.grantPrivileges(user, user, true, true, true);
-			securityService.grantPublicPrivileges(user, perspective.isPublicView(), false, false);
+			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
 		}
 	}
 	
@@ -529,10 +529,10 @@ public class SetupController extends SetupControllerBase {
 	}
 	
 	@Path
-	public void updateEntityInfo(Request request) throws ModelException {
+	public void updateEntityInfo(Request request) throws ModelException, SecurityException {
 		EntityInfo info = request.getObject("data", EntityInfo.class);
 		Entity entity = modelService.get(Entity.class, info.getId(), request.getSession());
-		securityService.grantPublicPrivileges(entity,info.isPublicView(),info.isPublicAlter(),info.isPublicDelete());
+		securityService.grantPublicView(entity, info.isPublicView(), request.getSession());
 	}
 	
 	@Path
@@ -563,7 +563,7 @@ public class SetupController extends SetupControllerBase {
 	}
 
 	@Path
-	public void listPublishers(Request request) throws ModelException, IOException {
+	public void listPublishers(Request request) throws EndUserException, IOException {
 		
 		List<InternetAddress> sites = onlinePublisherService.getSites(request.getSession());
 		

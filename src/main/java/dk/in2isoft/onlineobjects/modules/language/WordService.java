@@ -249,7 +249,7 @@ public class WordService {
 		return impressions;
 	}
 	
-	public Word createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException {
+	public Word createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -377,7 +377,7 @@ public class WordService {
 		updateWord(word,modification,source,privileged);
 	}
 
-	public @NonNull InternetAddress getSource(String src, Privileged privileged) throws ModelException {
+	public @NonNull InternetAddress getSource(String src, Privileged privileged) throws ModelException, SecurityException {
 		Query<InternetAddress> query = Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, src);
 		List<InternetAddress> list = modelService.list(query);
 		for (InternetAddress address : list) {
@@ -541,7 +541,7 @@ public class WordService {
 		return null;
 	}
 	
-	private void ensureOriginator(Word word, UserSession session) throws ModelException {
+	private void ensureOriginator(Word word, UserSession session) throws ModelException, SecurityException {
 
 		User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class);
 		if (user==null) {

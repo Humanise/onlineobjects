@@ -55,7 +55,7 @@ public class TestImageService extends AbstractSpringTestCase {
 		File copy = File.createTempFile("testImage", "jpg");
 		org.apache.commons.io.FileUtils.copyFile(file, copy);
 		Assert.assertTrue(copy.exists());
-		Privileged privileged = getPublicUser();
+		Privileged privileged = getAdminUser();
 		
 		Image image = imageService.createImageFromFile(copy, "test image", privileged);
 		Assert.assertNotNull(image);

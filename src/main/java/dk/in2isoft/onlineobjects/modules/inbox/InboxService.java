@@ -10,6 +10,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.AnyModelChangeListener;
 import dk.in2isoft.onlineobjects.core.events.EventService;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -43,7 +44,7 @@ public class InboxService implements InitializingBean {
 		});
 	}
 
-	public Pile getOrCreateInbox(User privileged) throws ModelException {
+	public Pile getOrCreateInbox(User privileged) throws ModelException, SecurityException {
 		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX).withPrivileged(privileged);
 		Pile inbox = modelService.getFirst(query);
 		if (inbox==null) {
@@ -56,13 +57,13 @@ public class InboxService implements InitializingBean {
 		return inbox;
 	}
 	
-	public void add(User user, Entity entity) throws ModelException {
+	public void add(User user, Entity entity) throws ModelException, SecurityException {
 		if (modelService.getRelation(user, entity)==null) {
 			modelService.createRelation(getOrCreateInbox(user), entity, user);
 		}
 	}
 	
-	public int getCount(User user) throws ModelException {
+	public int getCount(User user) throws ModelException, SecurityException {
 		if (counts.containsKey(user.getId())) {
 			return counts.get(user.getId());
 		}
@@ -82,7 +83,7 @@ public class InboxService implements InitializingBean {
 		}
 		try {
 			return getCount(user);
-		} catch (ModelException e) {
+		} catch (EndUserException e) {
 			log.error("Unable to get inbox count for user="+user+", will silently rebort zero",e);
 			return 0;
 		}
