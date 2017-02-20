@@ -24,16 +24,12 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordImportRow;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
-import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestCSVParsing extends AbstractSpringTestCase {
 	
 	private static Logger log = Logger.getLogger(TestCSVParsing.class);
-	
-	@Autowired
-	private SemanticService semanticService;
-		
+			
 	@Autowired
 	private WordsModelService wordsModelService;
 
@@ -130,11 +126,7 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 		
 		return topHit;
 	}
-	
-	public void setSemanticService(SemanticService semanticService) {
-		this.semanticService = semanticService;
-	}
-	
+		
 	public void setWordsModelService(WordsModelService wordsModelService) {
 		this.wordsModelService = wordsModelService;
 	}

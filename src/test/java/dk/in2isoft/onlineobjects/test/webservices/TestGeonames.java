@@ -7,18 +7,13 @@ import org.geonames.ToponymSearchResult;
 import org.geonames.WebService;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
-import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 @Ignore
 public class TestGeonames extends AbstractSpringTestCase {
 
 	private static final Logger log = Logger.getLogger(TestGeonames.class);
-
-	@Autowired
-	private ImageService imageService;
 
 	@Test
 	public void testRead() throws Exception {
@@ -33,7 +28,4 @@ public class TestGeonames extends AbstractSpringTestCase {
 
 	}
 
-	public void setImageService(ImageService imageService) {
-		this.imageService = imageService;
-	}
 }

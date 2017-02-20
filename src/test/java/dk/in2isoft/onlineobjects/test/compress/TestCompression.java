@@ -7,20 +7,15 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 import org.mozilla.javascript.ErrorReporter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestCompression extends AbstractSpringTestCase {
 	
-	@Autowired
-	private FileService fileService;
-
 	@Test
 	public void testCompressCSS() throws EndUserException, IOException {
 		Reader reader = new FileReader(getTestFile("compress/style.css"));
