@@ -2,7 +2,6 @@
 .project
 .settings
 target
-build.xml
 log4j.properties
 hibernate.cfg.xml
 configuration.properties
@@ -18,3 +17,4 @@ node_modules
 .DS_Store
 .metadata
 src/main/webapp/hui
+tmp

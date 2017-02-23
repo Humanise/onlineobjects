@@ -1,3 +1,9 @@
+include Makefile.config
+
+.DEFAULT_GOAL := test
+
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+
 test:
 	mvn test -q
 
@@ -12,11 +18,11 @@ install:
 	mvn clean install -DskipTests=true
 
 deploy:
-	cd /Users/jbm/Udvikling/Workspace/onlineobjects/src/main/webapp/hui/tools/
-	/Users/jbm/Udvikling/Workspace/onlineobjects/src/main/webapp/hui/tools/compile.sh
-	cd /Users/jbm/Udvikling/Workspace/onlineobjects/
+	cd ${ROOT_DIR}/src/main/webapp/hui/tools/
+	${ROOT_DIR}/src/main/webapp/hui/tools/compile.sh
+	cd ${ROOT_DIR}
 	mvn clean install -DskipTests=true
 	ant deploy
-	rsync -r -a -v -e "ssh -l root" --delete /Users/jbm/Midlertidigt/OnlineObjects/onlineobjects 87.230.95.85:/root/sync
+	rsync -r -a -v -e "ssh -l root" --delete ${ROOT_DIR}/tmp/OnlineObjects/onlineobjects ${SYNC_DIST}
 	
-	ssh root@87.230.95.85 "make deploy"
+	${SYNC_FINALLY}
