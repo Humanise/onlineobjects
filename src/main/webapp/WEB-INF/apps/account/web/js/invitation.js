@@ -11,12 +11,13 @@ hui.ui.listen({
       url : '/signUp',
       parameters : {
         username : values.username,
+        email : values.email,
         password : values.password,
         code : this._getCode()
       },
       $object : function(response) {
         if (response.success) {
-          hui.ui.alert({text:'It worked!'})
+          document.location = '/';
         } else {
           hui.ui.alert({title:'It failed!',text : response.description});
         }

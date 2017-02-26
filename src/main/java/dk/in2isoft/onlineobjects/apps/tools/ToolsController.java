@@ -163,7 +163,8 @@ public class ToolsController extends ToolsControllerBase {
 	@Path
 	public void listInvitations(Request request) throws IOException, ModelException {
 
-		List<Invitation> invitations = modelService.getChildren(request.getSession().getUser(), Invitation.class, request.getSession());
+		UserSession session = request.getSession();
+		List<Invitation> invitations = modelService.getChildren(session.getUser(), Invitation.class, session);
 
 		ListWriter out = new ListWriter(request);
 		out.startList();
@@ -171,8 +172,8 @@ public class ToolsController extends ToolsControllerBase {
 		for (Iterator<Invitation> i = invitations.iterator(); i.hasNext();) {
 			Invitation invitation = i.next();
 			DateTime created = new DateTime(invitation.getCreated().getTime());
-			Person invited = (Person) modelService.getChild(invitation, Person.class);
-			EmailAddress email = invited==null ? null : (EmailAddress) modelService.getChild(invited, EmailAddress.class);
+			Person invited = modelService.getChild(invitation, Person.class, session);
+			EmailAddress email = invited==null ? null : (EmailAddress) modelService.getChild(invited, EmailAddress.class, session);
 
 			out.startRow().withId(invitation.getId()).withKind("invitation");
 			out.startCell().text(created.toString("d/M-yyyy HH:mm")).endCell();
@@ -229,14 +230,23 @@ public class ToolsController extends ToolsControllerBase {
 		String name = request.getString("name", "No name");
 		String email = request.getString("email", "No email");
 		String message = request.getString("message");
-		return invitationService.createInvitation(name, email, message, request.getSession());
+		return invitationService.createAndSendInvitation(name, email, message, request.getSession().getUser());
 	}
 	
 	@Path
 	public void deletePerson(Request request) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
 		Long id = request.getId();
-		Person person = modelService.getRequired(Person.class, id, request.getSession());
-		modelService.deleteEntity(person, request.getSession());
+		UserSession session = request.getSession();
+		Person person = modelService.getRequired(Person.class, id, session);
+		List<EmailAddress> mails = modelService.getChildren(person, EmailAddress.class, session);
+		for (EmailAddress mail : mails) {
+			modelService.deleteEntity(mail, session);
+		}
+		List<PhoneNumber> phones = modelService.getChildren(person, PhoneNumber.class, session);
+		for (PhoneNumber phone : phones) {
+			modelService.deleteEntity(phone, session);
+		}
+		modelService.deleteEntity(person, session);
 	}
 	
 	@Path

@@ -256,8 +256,16 @@ public class ModelService {
 	}
 
 	private void createItem(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
+		if (securityService.isPublicUser(privileged) && !(item instanceof User)) {
+			throw new SecurityException("Public can only create new users");
+		}
 		if (!item.isNew()) {
 			throw new ModelException("Tried to create an already created item!");
+		}
+		if (item instanceof User) {
+			// TODO: Make sure users are OK
+		} else if (securityService.isPublicUser(privileged)) {
+			throw new SecurityException("Public can only create users");
 		}
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
@@ -281,14 +289,14 @@ public class ModelService {
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
 			int count = q.executeUpdate();
-			log.info("Deleting relation privileges for: " + entity.getClass().getName() + "; count: " + count);
+			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
 			String hql = "delete Relation relation where relation.from=:entity or relation.to=:entity)";
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
 			int count = q.executeUpdate();
-			log.info("Deleting relations for: " + entity.getClass().getName() + "; count: " + count);
+			log.info("Deleting relations for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 	}
 
@@ -564,10 +572,12 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj) throws ModelException {
 		return getParent(entity, null, classObj);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind).withPaging(0, 1);
@@ -579,16 +589,50 @@ public class ModelService {
 		}
 	}
 
+	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.to(entity,kind).withPaging(0, 1);
+		if (!securityService.isAdminUser(privileged)) {
+			q.withPrivileged(privileged,securityService.getPublicUser());
+		}
+		List<T> list = list(q);
+		if (!list.isEmpty()) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	@Deprecated
 	public @Nullable <T extends Entity> T getChild(Entity entity, @NonNull Class<T> classObj) throws ModelException {
 		return getChild(entity, null, classObj);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity,kind).withPaging(0, 1);
 		List<T> supers = list(q);
 		if (!supers.isEmpty()) {
 			return supers.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public <T extends Entity> @Nullable T getChild(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
+		return getChild(entity, null, classObj, privileged);
+	}
+
+	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.from(entity,kind).withPaging(0, 1);
+		if (!securityService.isAdminUser(privileged)) {
+			q.withPrivileged(privileged,securityService.getPublicUser());
+		}
+		List<T> list = list(q);
+		if (!list.isEmpty()) {
+			return list.get(0);
 		} else {
 			return null;
 		}
@@ -691,7 +735,7 @@ public class ModelService {
 
 	public void removePrivileges(Item object, Privileged subject, Privileged user) throws SecurityException {
 		if (!securityService.canModify(object, user)) {
-			throw new SecurityException("The user "+subject+" cannot make this "+object+" public");
+			throw new SecurityException("The user "+subject+" cannot modify "+object+" - so cannot remove privileges");
 		}
 		Session session = getSession();
 		Query q = session.createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
@@ -940,6 +984,7 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(item,relationKind);
@@ -971,6 +1016,7 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildrenOrdered(Entity entity, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity).inPosition();

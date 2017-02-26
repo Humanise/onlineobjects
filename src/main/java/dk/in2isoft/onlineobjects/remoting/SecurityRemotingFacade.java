@@ -5,9 +5,6 @@ import org.apache.commons.lang.StringUtils;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
-import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.model.Person;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
 import dk.in2isoft.onlineobjects.ui.AbstractRemotingFacade;
 
@@ -28,19 +25,6 @@ public class SecurityRemotingFacade extends AbstractRemotingFacade {
 
 	public boolean logOut() throws EndUserException {
 		return securityService.logOut(getUserSession());
-	}
-
-	public User getUser() {
-		return getUserSession().getUser();
-	}
-
-	public Person getUsersPerson() throws ModelException {
-		User user = getUserSession().getUser();
-		return modelService.getChild(user, Person.class);
-	}
-	
-	public boolean recoverPassword(String usernameOrEmail) throws EndUserException {
-		return getPasswordRecoveryService().sendRecoveryMail(usernameOrEmail,getUserSession());
 	}
 	
 	public void setSecurityService(SecurityService securityService) {

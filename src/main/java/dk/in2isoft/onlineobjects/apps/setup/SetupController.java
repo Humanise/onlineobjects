@@ -246,16 +246,11 @@ public class SetupController extends SetupControllerBase {
 	}
 	
 	@Path
-	public void deleteUser(Request request) throws ModelException, SecurityException {
+	public void deleteUser(Request request) throws EndUserException {
 		UserSession privileged = request.getSession();
-		User user = modelService.get(User.class, request.getLong("id"), privileged);
-		List<Entity> list = modelService.list(Query.of(Entity.class).withPrivileged(user));
-		for (Entity entity : list) {
-			if (!entity.equals(user)) {
-				modelService.deleteEntity(entity, privileged);
-			}
-		}
-		modelService.deleteEntity(user, privileged);
+		Long id = request.getId();
+		User user = modelService.getRequired(User.class, id, privileged);
+		memberService.deleteMember(user, privileged);
 	}
 	
 	@Path

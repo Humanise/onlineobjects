@@ -22,6 +22,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,7 +56,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		}
 	}
 
-	protected Privileged getPublicUser() {
+	protected User getPublicUser() {
 		return securityService.getPublicUser();
 	}
 
@@ -115,7 +116,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		boolean caught = false;
 		try {
 			runnable.run();
-		} catch (Exception e) {
+		} catch (EndUserException e) {
 			// Catch exception when trying to delete
 			caught = true;
 		}
@@ -136,10 +137,6 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
 	}
 
 	public void setSecurityService(SecurityService securityService) {

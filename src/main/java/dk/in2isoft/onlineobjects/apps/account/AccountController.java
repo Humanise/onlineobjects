@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.apps.account;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
@@ -12,6 +15,8 @@ import dk.in2isoft.onlineobjects.ui.data.Response;
 
 
 public class AccountController extends AccountControllerBase {
+	
+	private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 	
 	public static final String MOUNT = "account";
 
@@ -47,11 +52,14 @@ public class AccountController extends AccountControllerBase {
 		try {
 			String code = request.getString("code", "Code is required");
 			String username = request.getString("username", "Username is required");
+			String email = request.getString("email", "E-mail is required");
 			String password = request.getString("password", "Password is required");
-			invitationService.signUpFromInvitation(request.getSession(), code, username, password);
+			invitationService.signUpFromInvitation(request.getSession(), code, username, email, password);
 			response.setSuccess(true);
 		} catch (EndUserException e) {
+			log.warn(e.getMessage(), e);
 			response.setDescription(e.getMessage());
+			modelService.rollBack(); // TODO is this the wrong place to do this?
 		}
 		return response;
 	}

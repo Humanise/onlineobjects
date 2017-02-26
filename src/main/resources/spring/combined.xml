@@ -61,7 +61,8 @@
 		<property name="emailService" ref="emailService" />
 		<property name="modelService" ref="modelService" />
 		<property name="configurationService" ref="configurationService"/>
-	
+		<property name="securityService" ref="securityService"/>
+		<property name="memberService" ref="memberService"/>
 	</bean>
 
 	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType"/>

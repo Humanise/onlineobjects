@@ -63,12 +63,12 @@ public class MemberService {
 		}
 	}
 
-	public Image getUsersProfilePhoto(User user) throws ModelException {
-		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class);
+	public Image getUsersProfilePhoto(User user, Privileged privileged) throws ModelException {
+		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, privileged);
 	}
 	
-	public Person getUsersPerson(User user) throws ModelException {
-		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class);
+	public Person getUsersPerson(User user, Privileged privileged) throws ModelException {
+		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, privileged);
 	}
 
 
@@ -81,22 +81,36 @@ public class MemberService {
 		return user;
 	}
 
-	public User createMember(UserSession session, String username,
+	public User createMember(Privileged creator, String username,
 			String password, String fullName, String email)
 			throws IllegalRequestException, EndUserException, ModelException {
+		if (creator==null) {
+			throw new IllegalRequestException("Cannot create user without a creator");
+		}
+		
+		// TODO: Move this to the core
 		validateNewMember(username, password, fullName, email);
 		
 		User existing = modelService.getUser(username);
 		if (existing != null) {
-			throw new EndUserException("The user allready exists","userExists");
+			throw new IllegalRequestException("The user allready exists","userExists");
+		}
+		if (isPrimaryEmailTaken(email)) {
+			throw new IllegalRequestException("The e-mail is already in use", "emailExists");
 		}
 
 		// Create a user
 		User user = new User();
 		user.setUsername(username);
-		securityService.setPassword(user,password);
-		modelService.createItem(user, session);
+		securityService.setPassword(user, password);
+		modelService.createItem(user, creator);
+
+		// Make sure only the user has access to itself
+		modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
 		securityService.grantFullPrivileges(user, user);
+		
+		// Make sure we do not accidentally use it agin
+		creator = null;
 
 		// Create a person
 		Person person = new Person();
@@ -132,6 +146,17 @@ public class MemberService {
 		return user;
 	}
 
+	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
+		List<Entity> list = modelService.list(Query.of(Entity.class).withPrivileged(user));
+		// TODO check that an item is not shared with others
+		for (Entity entity : list) {
+			if (!entity.equals(user)) {
+				modelService.deleteEntity(entity, privileged);
+			}
+		}
+		modelService.deleteEntity(user, privileged);
+	}
+
 	/**
 	 * Will create, update or delete the primary email address
 	 * @param user
@@ -142,18 +167,18 @@ public class MemberService {
 	 * @throws IllegalRequestException 
 	 */
 	public void changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
-		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class);
-		if (StringUtils.isBlank(email)) {
-			if (emailAddress!=null) {
-				modelService.deleteEntity(emailAddress, privileged);
-			}
-			return;
-		}
 		email = email.trim();
 		if (!ValidationUtil.isWellFormedEmail(email)) {
 			throw new IllegalRequestException("The email is not well formed: "+email);
 		}
+		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 		if (emailAddress!=null) {
+			if (email.equals(emailAddress.getAddress())) {
+				throw new IllegalRequestException("The email is the same");
+			}
+			if (isPrimaryEmailTaken(email)) {
+				throw new IllegalRequestException("The email is taken");
+			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.updateItem(emailAddress, privileged);
@@ -166,6 +191,10 @@ public class MemberService {
 		}
 	}
 	
+	private boolean isPrimaryEmailTaken(String email) throws ModelException {
+		return getUserByPrimaryEmail(email, securityService.getAdminPrivileged()) != null;
+	}
+
 	/**
 	 * TODO: Optimize this
 	 * @param email
@@ -184,6 +213,10 @@ public class MemberService {
 			}
 		}
 		return null;
+	}
+	
+	public EmailAddress getUsersPrimaryEmail(User user, Privileged privileged) throws ModelException {
+		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 	}
 
 	/*
@@ -344,5 +377,6 @@ public class MemberService {
 	public SecurityService getSecurityService() {
 		return securityService;
 	}
+
 
 }
