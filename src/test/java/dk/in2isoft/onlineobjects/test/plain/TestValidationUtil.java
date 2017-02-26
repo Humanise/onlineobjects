@@ -3,9 +3,9 @@ package dk.in2isoft.onlineobjects.test.plain;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
@@ -16,10 +16,20 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 	
 	@Test
 	public void testEmailValidation() {
-		assertTrue(ValidationUtil.isWellFormedEmail("jbm@atira.dk"));
-		assertTrue(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.dk"));
-		assertTrue(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.dk       "));
-		assertTrue(ValidationUtil.isWellFormedEmail("       xx.jb_0m@atira.dk       "));
+		assertTrue(ValidationUtil.isWellFormedEmail("me@domain.dk"));
+		assertTrue(ValidationUtil.isWellFormedEmail("me.and.mynames@sub.domain.com"));
+		assertTrue(ValidationUtil.isWellFormedEmail("xx.jb_0m@domain.dk"));
+
+		// Unicode DNS
+		assertTrue(ValidationUtil.isWellFormedEmail("xx.jb_0m@a" + Strings.UNICODE_AA + "ira.dk"));
+		// Modern TLD
+		assertTrue(ValidationUtil.isWellFormedEmail("me.and.mynames@sub.domain.cancerresearch"));
+
+		assertFalse(ValidationUtil.isWellFormedEmail("dora@.com"));
+
+		
+		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.dk       "));
+		assertFalse(ValidationUtil.isWellFormedEmail("       xx.jb_0m@atira.dk       "));
 
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira"));
 		assertFalse(ValidationUtil.isWellFormedEmail(null));
@@ -27,7 +37,6 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isWellFormedEmail("xx"));
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.00"));
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira."));
-		assertTrue(StringUtils.containsOnly("abc", "abcdefghijklmnopqrstuvwxyz0123456789"));
 	}
 
 	@Test
@@ -38,8 +47,11 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isValidUsername(" abc"));
 		assertFalse(ValidationUtil.isValidUsername("abc123+"));
 		assertFalse(ValidationUtil.isValidUsername("jonasmunk@mac.com"));
+		assertFalse(ValidationUtil.isValidUsername("a"));
+		assertFalse(ValidationUtil.isValidUsername("1"));
+		assertFalse(ValidationUtil.isValidUsername("12"));
 
-		assertTrue(ValidationUtil.isValidUsername("a"));
+		assertTrue(ValidationUtil.isValidUsername("ab"));
 		assertTrue(ValidationUtil.isValidUsername("abc"));
 		assertTrue(ValidationUtil.isValidUsername("abc123"));
 	}
@@ -50,15 +62,18 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isValidPassword(null));
 		assertFalse(ValidationUtil.isValidPassword(" "));
 		assertFalse(ValidationUtil.isValidPassword("          "));
+		assertFalse(ValidationUtil.isValidPassword("\n\n\n\n\n\n\n\n\n\n\n"));
 		assertFalse(ValidationUtil.isValidPassword("     abcABC123-+&     "));
 		assertFalse(ValidationUtil.isValidPassword(" abcABC123-+&"));
 		assertFalse(ValidationUtil.isValidPassword("abcABC123-+& "));
 		assertFalse(ValidationUtil.isValidPassword("abBC12+"));
+		assertFalse(ValidationUtil.isValidPassword("abcAB C123-+&"));
 
 		assertTrue(ValidationUtil.isValidPassword("abcABC123-+&"));
+		assertTrue(ValidationUtil.isValidPassword("new$ecr8p4$s"));
+		assertTrue(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
 		
 		// TODO
-		assertFalse(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
 		
 	}
 }

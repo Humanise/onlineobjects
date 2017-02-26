@@ -13,11 +13,20 @@ public class ValidationUtil {
 	private static final Pattern PASSWORD = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 	
 	public static boolean isWellFormedEmail(String email) {
-		return EmailValidator.getInstance().isValid(email);
+		if (email==null || !email.equals(email.trim())) {
+			return false;
+		}
+		return EmailValidator.getInstance(false, true).isValid(email);
 	}
 	
 	public static boolean isValidUsername(String username) {
 		if (Strings.isBlank(username)) {
+			return false;
+		}
+		if (username.length()<2) {
+			return false;
+		}
+		if (Strings.isInteger(username)) {
 			return false;
 		}
 		if ("core".equals(username) || "app".equals(username) || "service".equals(username) || "dwr".equals(username) || "hui".equals(username)) {
@@ -30,7 +39,14 @@ public class ValidationUtil {
 		if (password==null) {
 			return false;
 		}
-		return PASSWORD.matcher(password).matches();
+		for (int i = 0; i < password.length(); i++) {
+			char character = password.charAt(i);
+			if (Character.isWhitespace(character)) {
+				return false;
+			}
+		}
+		return password.length() > 7;
+		//return PASSWORD.matcher(password).matches();
 	}
 
 	public static boolean isWellFormedURI(String str) {
