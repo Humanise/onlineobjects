@@ -18,3 +18,4 @@ node_modules
 .metadata
 src/main/webapp/hui
 tmp
+Makefile.config
