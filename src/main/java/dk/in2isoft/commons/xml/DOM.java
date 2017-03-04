@@ -62,16 +62,17 @@ public class DOM {
 	}
 
 	public static nu.xom.Document parseXOM(String string) {
-
-		try (StringReader reader = new StringReader(string)) {
-			Builder bob = new Builder();
-			return bob.build(reader);
-		} catch (ValidityException e) {
-			
-		} catch (ParsingException e) {
-			
-		} catch (IOException e) {
-			
+		if (Strings.isNotBlank(string)) {
+			try (StringReader reader = new StringReader(string)) {
+				Builder bob = new Builder();
+				return bob.build(reader);
+			} catch (ValidityException e) {
+				
+			} catch (ParsingException e) {
+				
+			} catch (IOException e) {
+				
+			}
 		}
 		return null;
 	}
