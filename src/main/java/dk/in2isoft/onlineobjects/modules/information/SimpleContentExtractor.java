@@ -43,11 +43,11 @@ public class SimpleContentExtractor implements ContentExtractor {
 		if (heading!=null) {
 			longestText.add(heading);
 		}
-/*		for (Element element : longestText) {
-			log.info(element.toXML());
-		}*/
+		//for (Element element : longestText) {
+		//	log.info(element.toXML());
+		//}
 		Element nearestAncestor = findNearestAncestor(longestText);
-				
+		//log.info(nearestAncestor.toXML());
 		Pair<Document,Element> pair = createEmptyDocument(document);
 		Element body = pair.getValue();
 		if (nearestAncestor!=null) {
@@ -161,7 +161,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		Node root = document;
 		Nodes articles = document.query("//*[local-name()='article']");
 		if (articles.size()>0) {
-			root = articles.get(0);
+			//root = articles.get(0);
 		}
 		Multimap<Integer, Element> map = HashMultimap.create();
 		Nodes ps = root.query(".//*");
@@ -178,6 +178,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		map.entries().stream().sorted((o1,o2) -> {
 			return o2.getKey().compareTo(o1.getKey());
 		}).limit(2).collect(Collectors.toList()).forEach(entry -> {
+			//log.info(entry.getKey() + ": "+entry.getValue().toXML());
 			lst.add(entry.getValue());
 		});
 		
