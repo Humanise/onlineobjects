@@ -147,7 +147,7 @@ public class DocumentCleaner {
 							}
 						}
 						if (parent instanceof nu.xom.Document) {
-							log.warn("Cannot remove the child node");
+							//log.warn("Cannot remove the root node");
 						} else {
 							parent.removeChild(toRemove);
 						}

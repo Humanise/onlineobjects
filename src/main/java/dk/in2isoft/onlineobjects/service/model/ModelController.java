@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -23,6 +21,7 @@ import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -126,7 +125,7 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void addWord(Request request) throws IOException, ModelException, IllegalRequestException {
+	public void addWord(Request request) throws IOException, EndUserException {
 		String text = request.getString("text");
 		String language = request.getString("language");
 		String category = request.getString("category");
@@ -136,13 +135,13 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void changePrimaryEmail(Request request) throws IOException, ModelException, IllegalRequestException, SecurityException {
+	public void changePrimaryEmail(Request request) throws IOException, EndUserException {
 		String email = request.getString("email");
 		memberService.changePrimaryEmail(request.getSession().getUser(),email,request.getSession());
 	}
 	
 	@Path(start="listInbox")
-	public void listInbox(Request request) throws IOException, ModelException {
+	public void listInbox(Request request) throws IOException, EndUserException {
 		int page = request.getInt("page");
 		
 		User user = request.getSession().getUser();
@@ -328,7 +327,7 @@ public class ModelController extends ModelControllerBase {
 	}
 	
 	@Path
-	public Object createFromFinder(Request request) throws IllegalRequestException, ModelException {
+	public Object createFromFinder(Request request) throws IllegalRequestException, ModelException, SecurityException {
 		String type = request.getString("type", "No type provided");
 		if (Person.class.getSimpleName().equals(type)) {
 			Person person = new Person();

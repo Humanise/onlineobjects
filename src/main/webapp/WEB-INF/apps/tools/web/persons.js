@@ -80,13 +80,16 @@ var personsController = {
 
   ///////////////////////////// Invitations /////////////////////////////
 
+  _busySending : false,
+
   $click$newInvitation : function() {
     invitationFormula.reset();
     invitationWindow.show();
   },
   $click$sendInvitation : function() {
     var form = invitationFormula.getValues();
-    invitationWindow.hide();
+    invitationWindow.setBusy('Sending invitation');
+    this._busySending = true;
     var self = this;
     hui.ui.request({
       url : "/createInvitation",
@@ -98,9 +101,14 @@ var personsController = {
           text: 'Personen vil modtage en email med oplysninger om hvordan han/hun kan tilmelde sig!'
         });
         list.refresh();
+        invitationWindow.hide();
       },
       $failure : function() {
         hui.ui.alert({text:'Unable to send the invitation'});
+      },
+      $finally : function() {
+        invitationWindow.setBusy(false);
+        self._busySending = false;
       }
     })
   }

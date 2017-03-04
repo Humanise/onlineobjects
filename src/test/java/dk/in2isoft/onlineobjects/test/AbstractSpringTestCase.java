@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.test;
 
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,6 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,6 +37,9 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 	
 	@Autowired
 	protected ModelService modelService;
+
+	@Autowired
+	protected SecurityService securityService;
 
 	protected File getTestFile(String name) throws IOException {
 		File file = context.getResource(name).getFile();
@@ -48,24 +56,12 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		}
 	}
 
-	protected Privileged getPublicUser() {
-		return modelService.getUser("public");
-	}
-	
-	public void setModelService(ModelService modelService) {
-		this.modelService = modelService;
+	protected User getPublicUser() {
+		return securityService.getPublicUser();
 	}
 
-	public ModelService getModelService() {
-		return modelService;
-	}
-
-	public void setConfigurationService(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
+	protected Privileged getAdminUser() {
+		return securityService.getAdminPrivileged();
 	}
 
 	public void setContext(ApplicationContext context) {
@@ -113,5 +109,37 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 			throw new IllegalStateException("The output dir can not be written");
 		}
 		return dir;
+	}
+
+	
+	protected void assertFails(FailableRunnable runnable) {
+		boolean caught = false;
+		try {
+			runnable.run();
+		} catch (EndUserException e) {
+			// Catch exception when trying to delete
+			caught = true;
+		}
+		assertTrue(caught);
+		
+	}
+	
+	@FunctionalInterface
+	protected interface FailableRunnable {
+	    public abstract void run() throws EndUserException;
+	}
+	
+	// Wiring...
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
+	}
+
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

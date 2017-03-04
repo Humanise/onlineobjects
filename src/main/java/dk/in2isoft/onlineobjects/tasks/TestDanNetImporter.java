@@ -349,31 +349,31 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		return found;
 	}
 
-	private void createSynonym(Word localWord, Node sense, boolean outgoing) throws ModelException {
+	private void createSynonym(Word localWord, Node sense, boolean outgoing) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_SYNONYMOUS, outgoing);
 	}
 
-	private void createDiscipline(Word localWord, Node sense) throws ModelException {
+	private void createDiscipline(Word localWord, Node sense) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_DISCIPLINE, true);
 	}
 
-	private void createGeneralization(Word localWord, Node sense) throws ModelException {
+	private void createGeneralization(Word localWord, Node sense) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, true);
 	}
 
-	private void createSpecialization(Word localWord, Node sense) throws ModelException {
+	private void createSpecialization(Word localWord, Node sense) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, false);
 	}
 
-	private void createPartOf(Word localWord, Node sense) throws ModelException {
+	private void createPartOf(Word localWord, Node sense) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, false);
 	}
 
-	private void createContains(Word localWord, Node sense) throws ModelException {
+	private void createContains(Word localWord, Node sense) throws ModelException, SecurityException {
 		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, true);
 	}
 
-	private void createRelation(Word localWord, Node sense, String kind, boolean outgoing) throws ModelException {
+	private void createRelation(Word localWord, Node sense, String kind, boolean outgoing) throws ModelException, SecurityException {
 		String label = getLabel(sense);
 		if (Strings.isBlank(label)) {
 			print("Will not create relation since the label is null : " + getSimpleURI(sense));
@@ -480,7 +480,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		modelService.commit();
 	}
 
-	private Word findLocalWord(Node sense, String label) throws ModelException {
+	private Word findLocalWord(Node sense, String label) throws ModelException, SecurityException {
 		Word localWord = findWord(label, sense.getURI());
 		if (localWord==null) {
 			localWord = new Word();
@@ -493,7 +493,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		return localWord;
 	}
 
-	private void updateCategory(Node type, Word localWord) throws ModelException {
+	private void updateCategory(Node type, Word localWord) throws ModelException, SecurityException {
 		LexicalCategory lexicalCategory = modelService.getParent(localWord, LexicalCategory.class);
 		if (lexicalCategory==null) {
 			String code = map.get(type.getURI());
@@ -511,7 +511,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		}
 	}
 
-	private void updateLanguage(Entity danish, Word localWord) throws ModelException {
+	private void updateLanguage(Entity danish, Word localWord) throws ModelException, SecurityException {
 		Language language = modelService.getParent(localWord, Language.class);
 		if (language==null) {
 			modelService.createRelation(danish, localWord, publicUser);

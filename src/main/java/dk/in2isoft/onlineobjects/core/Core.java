@@ -88,7 +88,7 @@ public class Core {
 		return getBean(StorageService.class);
 	}
 
-	private void ensureUsers() throws ModelException {
+	private void ensureUsers() throws ModelException, SecurityException {
 		User publicUser = getModel().getUser(SecurityService.PUBLIC_USERNAME);
 		if (publicUser == null) {
 			log.warn("No public user present!");
@@ -112,7 +112,7 @@ public class Core {
 		}
 	}
 
-	private void ensureApplications() throws ModelException {
+	private void ensureApplications() throws ModelException, SecurityException {
 		Query<Application> query = Query.of(Application.class);
 		List<Application> apps = getModel().list(query);
 		boolean found = false;

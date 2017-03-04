@@ -22,12 +22,15 @@ public class TestEmailService extends AbstractSpringTestCase {
 		Map<String, Object> model = new HashMap<String, Object>();
         model.put("invited-name", "Jonas Munk");
         model.put("inviter-name", "John Andersen");
-        model.put("inviter-url", "John Andersen");
+        model.put("inviter-url", "http://www.google.com/");
+        model.put("invite-url", "http://www.duckduckgo.com/");
         model.put("url", "http://www.in2isoft.dk/");
         model.put("base-url", configurationService.getBaseUrl());
         String html = emailService.applyTemplate(InvitationService.INVITATION_TEMPLATE, model);
         Assert.assertTrue(html.contains("Jonas Munk"));
-		emailService.sendHtmlMessage("Test HTML",html,"jonasmunk@mac.com","Jonas Munk");
+        String mail = getProperty("mail.receiver.address");
+        String name = getProperty("mail.receiver.name");
+		emailService.sendHtmlMessage("Test HTML",html,mail,name);
 	}
 
 	public void setEmailService(EmailService emailService) {

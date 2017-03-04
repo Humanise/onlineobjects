@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.test.plain;
 
-import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
@@ -10,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
-
-import nu.xom.Document;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
@@ -32,18 +28,16 @@ import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.ReadabilityExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
-import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.test.SlowTests;
+import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
+import nu.xom.Document;
 
 @Category(SlowTests.class)
 public class TestExtractionComparison extends AbstractSpringTestCase {
 	
 	@Autowired
 	private HTMLService htmlService;
-
-	@Autowired
-	private SemanticService semanticService;
 
 	private static final Logger log = LoggerFactory.getLogger(TestExtractionComparison.class);
 	
@@ -152,7 +146,4 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		this.htmlService = htmlService;
 	}
 	
-	public void setSemanticService(SemanticService semanticService) {
-		this.semanticService = semanticService;
-	}
 }

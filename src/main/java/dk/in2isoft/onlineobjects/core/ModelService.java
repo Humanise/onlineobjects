@@ -247,7 +247,7 @@ public class ModelService {
 		}
 	}
 
-	public void createItem(Item item, Privileged privileged) throws ModelException {
+	public void createItem(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 	}
 	
@@ -255,14 +255,22 @@ public class ModelService {
 		return getSession().isDirty();
 	}
 
-	private void createItem(Item item, Privileged privileged, Session session) throws ModelException {
+	private void createItem(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
+		if (securityService.isPublicUser(privileged) && !(item instanceof User)) {
+			throw new SecurityException("Public can only create new users");
+		}
 		if (!item.isNew()) {
 			throw new ModelException("Tried to create an already created item!");
+		}
+		if (item instanceof User) {
+			// TODO: Make sure users are OK
+		} else if (securityService.isPublicUser(privileged)) {
+			throw new SecurityException("Public can only create users");
 		}
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
 		session.save(item);
-		grantPrivileges(item, privileged, true, true, true);
+		grantPrivilegesPrivately(item, privileged, true, true, true);
 		eventService.fireItemWasCreated(item);
 	}
 
@@ -281,14 +289,14 @@ public class ModelService {
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
 			int count = q.executeUpdate();
-			log.info("Deleting relation privileges for: " + entity.getClass().getName() + "; count: " + count);
+			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
 			String hql = "delete Relation relation where relation.from=:entity or relation.to=:entity)";
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
 			int count = q.executeUpdate();
-			log.info("Deleting relations for: " + entity.getClass().getName() + "; count: " + count);
+			log.info("Deleting relations for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 	}
 
@@ -316,6 +324,7 @@ public class ModelService {
 		eventService.fireItemWasDeleted(item);
 	}
 
+	// TODO Change to update
 	public void updateItem(Item item, Privileged privileged) throws SecurityException,
 			ModelException {
 		if (!canUpdate(item, privileged)) {
@@ -398,7 +407,7 @@ public class ModelService {
 		return null;
 	}
 
-	public Relation createRelation(Entity from, Entity to, Privileged privileged) throws ModelException {
+	public Relation createRelation(Entity from, Entity to, Privileged privileged) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;
 		}
@@ -407,7 +416,7 @@ public class ModelService {
 		return relation;
 	}
 
-	public Relation createRelation(Entity from, Entity to, String kind, Privileged privileged) throws ModelException {
+	public Relation createRelation(Entity from, Entity to, String kind, Privileged privileged) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;
 		}
@@ -563,10 +572,12 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj) throws ModelException {
 		return getParent(entity, null, classObj);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind).withPaging(0, 1);
@@ -578,16 +589,50 @@ public class ModelService {
 		}
 	}
 
+	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.to(entity,kind).withPaging(0, 1);
+		if (!securityService.isAdminUser(privileged)) {
+			q.withPrivileged(privileged,securityService.getPublicUser());
+		}
+		List<T> list = list(q);
+		if (!list.isEmpty()) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	@Deprecated
 	public @Nullable <T extends Entity> T getChild(Entity entity, @NonNull Class<T> classObj) throws ModelException {
 		return getChild(entity, null, classObj);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity,kind).withPaging(0, 1);
 		List<T> supers = list(q);
 		if (!supers.isEmpty()) {
 			return supers.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public <T extends Entity> @Nullable T getChild(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
+		return getChild(entity, null, classObj, privileged);
+	}
+
+	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.from(entity,kind).withPaging(0, 1);
+		if (!securityService.isAdminUser(privileged)) {
+			q.withPrivileged(privileged,securityService.getPublicUser());
+		}
+		List<T> list = list(q);
+		if (!list.isEmpty()) {
+			return list.get(0);
 		} else {
 			return null;
 		}
@@ -684,7 +729,14 @@ public class ModelService {
 		return Code.castList(list);
 	}
 
-	public void removePriviledges(Item object, Privileged subject) {
+	public void removePrivileges(Item object, Privileged subject) throws SecurityException {
+		removePrivileges(object, subject, subject);
+	}
+
+	public void removePrivileges(Item object, Privileged subject, Privileged user) throws SecurityException {
+		if (!securityService.canModify(object, user)) {
+			throw new SecurityException("The user "+subject+" cannot modify "+object+" - so cannot remove privileges");
+		}
 		Session session = getSession();
 		Query q = session.createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
 		q.setLong("object", object.getId());
@@ -837,46 +889,51 @@ public class ModelService {
 	}
 
 	@Deprecated
-	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException {
+	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException, SecurityException {
 		grantPrivileges(item, privileged, true, true, true);
 	}
 
-	public void grantPrivileges(Item item, Privileged priviledged, boolean view, boolean alter, boolean delete) throws ModelException {
-		if (priviledged==null) {
+	public void grantPrivileges(Item item, Privileged privileged, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
+		if (privileged==null) {
 			throw new ModelException("Privileged is null");
 		}
-		if (priviledged.getIdentity()<1) {
-			throw new ModelException("Privileged ID is "+priviledged.getIdentity());
+		if (privileged.getIdentity()<1) {
+			throw new ModelException("Privileged ID is "+privileged.getIdentity());
 		}
 		if (item.isNew()) {
-			throw new ModelException("The item is new so cannot grant privileges: identity="+priviledged.getIdentity());
+			throw new SecurityException("The item is new so cannot grant privileges: identity="+privileged.getIdentity());
 		}
 		if (item instanceof User && securityService.isAdminUser((User) item)) {
 			if (delete) {
-				throw new ModelException("It is not allowed to make the admin deletable");
+				throw new SecurityException("It is not allowed to make the admin deletable");
 			}
-			if (alter && item.getId()!=priviledged.getIdentity()) {
-				throw new ModelException("Admin can only be modified by itself");
+			if (alter && item.getId()!=privileged.getIdentity()) {
+				throw new SecurityException("Admin can only be modified by itself");
 			}
 		}
 		if (item instanceof User && securityService.isPublicUser((User) item)) {
 			if (delete) {
-				throw new ModelException("It is not allowed to make the public deletable");
+				throw new SecurityException("It is not allowed to make the public deletable");
 			}
-			if (alter && !securityService.isAdminUser(priviledged)) {
-				throw new ModelException("Only admin can modify the public user");
+			if (alter && !securityService.isAdminUser(privileged)) {
+				throw new SecurityException("Only admin can modify the public user");
 			}
 		}
-		if (item instanceof User && securityService.isPublicUser(priviledged)) {
+		if (item instanceof User && securityService.isPublicUser(privileged)) {
 			if (delete || alter) {
-				throw new ModelException("The public user is not alowed to delete or modify any users");
+				throw new SecurityException("The public user is not alowed to delete or modify any users");
 			}
 		}
+		grantPrivilegesPrivately(item, privileged, view, alter, delete);
+	}
+
+	private void grantPrivilegesPrivately(Item item, Privileged user, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
+
 		Session session = getSession();
-		List<Privilege> list = getPrivileges(item.getId(), priviledged.getIdentity());
+		List<Privilege> list = getPrivileges(item.getId(), user.getIdentity());
 		Privilege privilege;
 		if (list.size()==0) {
-			privilege = new Privilege(priviledged.getIdentity(), item.getId());
+			privilege = new Privilege(user.getIdentity(), item.getId());
 		} else {
 			privilege = list.get(0);
 			for (int i = 1; i < list.size(); i++) {
@@ -927,6 +984,7 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(item,relationKind);
@@ -958,6 +1016,7 @@ public class ModelService {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildrenOrdered(Entity entity, Class<T> classObj) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity).inPosition();

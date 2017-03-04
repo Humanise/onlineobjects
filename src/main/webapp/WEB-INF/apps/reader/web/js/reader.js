@@ -68,7 +68,7 @@ var reader = {
     this._activeViewer = newViewer;
     if (this._activeViewer) {
       this._activeViewer.show(options);
-      history.pushState(options,'TODO','./?type='+options.type+'&id='+options.id);
+      history.pushState(options,'TODO',document.location.pathname + '?type='+options.type+'&id='+options.id);
     }
   },
   edit : function(options) {

@@ -183,7 +183,7 @@ public class WordsModelService {
 		return diagram;
 	}
 	
-	public void createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException {
+	public void createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -210,12 +210,12 @@ public class WordsModelService {
 			Word word = new Word();
 			word.setText(text);
 			modelService.createItem(word, session);
-			securityService.grantPublicPrivileges(word, true, true, false);
+			securityService.makePublicVisible(word, session);
 			Relation languageRelation = modelService.createRelation(language, word, session);
-			securityService.grantPublicPrivileges(languageRelation, true, true, false);
+			securityService.makePublicVisible(languageRelation, session);
 			if (lexicalCategory!=null) {
 				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, session);
-				securityService.grantPublicPrivileges(categoryRelation, true, true, false);
+				securityService.makePublicVisible(categoryRelation, session);
 			}
 			ensureOriginator(word,session.getUser());
 		}
@@ -243,7 +243,7 @@ public class WordsModelService {
 		Relation relation = modelService.getRelation(parentWord, childWord, kind);
 		if (relation==null) {
 			Relation newRelation = modelService.createRelation(parentWord, childWord, kind, session);
-			securityService.grantPublicPrivileges(newRelation, true, true, false);
+			securityService.makePublicVisible(newRelation, session);
 			
 		}
 	}
@@ -268,7 +268,7 @@ public class WordsModelService {
 		modelService.deleteRelations(parents, privileged);
 		if (language!=null) {
 			Relation relation = modelService.createRelation(language, word, privileged);
-			securityService.grantPublicPrivileges(relation, true, true, false);
+			securityService.makePublicVisible(relation, privileged);
 		}
 		ensureOriginator(word,originator);
 	}
@@ -286,7 +286,7 @@ public class WordsModelService {
 		List<Relation> parents = modelService.getRelationsTo(word, LexicalCategory.class);
 		modelService.deleteRelations(parents, privileged);
 		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, privileged);
-		securityService.grantPublicPrivileges(categoryRelation, true, true, false);
+		securityService.makePublicVisible(categoryRelation, privileged);
 		ensureOriginator(word,originator);		
 	}
 
@@ -305,14 +305,14 @@ public class WordsModelService {
 		return word;
 	}
 
-	private void ensureOriginator(Word word, User originator) throws ModelException {
+	private void ensureOriginator(Word word, User originator) throws ModelException, SecurityException {
 		User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class);
 		if (user==null) {
 			modelService.createRelation(word, originator, Relation.KIND_COMMON_ORIGINATOR, originator);
 		}
 	}
 
-	public void addToPostponed(Word word) throws ModelException {
+	public void addToPostponed(Word word) throws ModelException, SecurityException {
 		User admin = modelService.getUser("admin");
 		Pile pile = pileService.getOrCreateGlobalPile("words.postponed", admin);
 		Relation relation = modelService.getRelation(pile, word);

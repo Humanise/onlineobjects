@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -66,7 +67,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	public void recoverPassword(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
-		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request.getSession())) {
+		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail)) {
 			
 		} else {
 			throw new IllegalRequestException("Username or e-mail not found");
@@ -75,10 +76,11 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	
 
 	public void getUserInfo(Request request) throws ModelException, IOException {
-		User user = request.getSession().getUser();
-		Image image = memberService.getUsersProfilePhoto(user);
-		Person person = memberService.getUsersPerson(user);
-		String language = request.getString("language");
+		UserSession session = request.getSession();
+		User user = session.getUser();
+		Image image = memberService.getUsersProfilePhoto(user, session);
+		Person person = memberService.getUsersPerson(user, session);
+		//String language = request.getString("language");
 		
 		UserInfoPerspective info = new UserInfoPerspective();
 		info.setUsername(user.getUsername());

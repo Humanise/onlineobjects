@@ -22,6 +22,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.NetworkException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -153,7 +154,7 @@ public class InformationService {
 									word.addProperty(Property.KEY_WORD_SUGGESTION_LANGUAGE, topLanguage);
 
 									modelService.createItem(word, admin);
-									securityService.grantPublicPrivileges(word, true, false, false);
+									securityService.makePublicVisible(word, admin);
 									status.log("New word found: " + word);
 
 									modelService.createRelation(internetAddress, word, Relation.KIND_COMMON_SOURCE,
@@ -173,12 +174,14 @@ public class InformationService {
 			status.error("Unable to fetch feed: " + feed, e);
 		} catch (ModelException e) {
 			status.error("Failed to persist something", e);
+		} catch (SecurityException e) {
+			status.error("Permissions problem", e);
 		} finally {
 			modelService.commit();
 		}
 	}
 
-	public InternetAddress addInternetAddress(String url, Privileged privileged) throws ModelException {
+	public InternetAddress addInternetAddress(String url, Privileged privileged) throws ModelException, SecurityException {
 		if (!URLUtil.isValidHttpUrl(url)) {
 			throw new IllegalArgumentException("URL not valid: " + url);
 		}
@@ -233,7 +236,7 @@ public class InformationService {
 				status.log(a.getName() + " vs " + b.getName() + " = " + similarity);
 				index++;
 			}
-		} catch (ModelException e) {
+		} catch (EndUserException e) {
 			status.error("Error while calculating similarity", e);
 		} finally {
 			modelService.commit();
@@ -241,7 +244,7 @@ public class InformationService {
 	}
 
 	private void createSimilarity(InternetAddress a, InternetAddress b, double similarity, Privileged privileged)
-			throws ModelException {
+			throws ModelException, SecurityException {
 		Relation a2b = modelService.getRelation(a, b, Kind.similarity.toString());
 		Relation b2a = modelService.getRelation(b, a, Kind.similarity.toString());
 

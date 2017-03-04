@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
@@ -136,7 +136,7 @@ public class MailListener {
 			}
 		} catch (IOException e) {
 			status.error("Unable to get stream", e);
-		} catch (ModelException e) {
+		} catch (EndUserException e) {
 			status.error("Unable to create image", e);
 		} finally {
 			IOUtils.closeQuietly(output);

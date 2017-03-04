@@ -20,7 +20,7 @@ public class TestRelations extends AbstractSpringTestCase {
 
 	@Test
 	public void testRelations() throws SQLException, ModelException, SecurityException {
-		Privileged priviledged = getPublicUser();
+		Privileged priviledged = getAdminUser();
 
 		WebPage page = new WebPage();
 		modelService.createItem(page, priviledged);

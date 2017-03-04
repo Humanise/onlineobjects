@@ -15,6 +15,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -28,7 +29,7 @@ public class ReaderModelService {
 	private ModelService modelService;
 	private PileService pileService;
 
-	public void categorize(Entity entity, CategorizableViewPerspective perspective, UserSession session) throws ModelException {
+	public void categorize(Entity entity, CategorizableViewPerspective perspective, UserSession session) throws ModelException, SecurityException {
 		Pile inbox = pileService.getOrCreatePileByRelation(session.getUser(), Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(session.getUser(), Relation.KIND_SYSTEM_USER_FAVORITES);
 

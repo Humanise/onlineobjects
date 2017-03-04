@@ -86,11 +86,11 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				language.setName(entry.getValue());
 				modelService.createItem(language, adminUser);
 				log.info("Language ("+entry.getValue()+") created!");
-				securityService.grantPublicPrivileges(language, true, false, false);
+				securityService.makePublicVisible(language, adminUser);
 				modelService.commit();
 			} else {
 				for (Language item : result.getList()) {
-					securityService.grantPublicPrivileges(item, true, false, false);
+					securityService.makePublicVisible(item, adminUser);
 					modelService.commit();
 				}
 			}
@@ -101,7 +101,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 			Query<LexicalCategory> query = Query.of(LexicalCategory.class).withField(LexicalCategory.CODE, entry.getKey());
 			SearchResult<LexicalCategory> result = modelService.search(query);
 			for (LexicalCategory item : result.getList()) {
-				securityService.grantPublicPrivileges(item, true, false, false);
+				securityService.makePublicVisible(item, adminUser);
 				modelService.commit(); 
 			}
 			if (result.getTotalCount()==0) {
@@ -111,7 +111,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				category.setName(entry.getValue());
 				modelService.createItem(category, adminUser);
 				log.info("Lexical category ("+entry.getValue()+") created!");
-				securityService.grantPublicPrivileges(category, true, false, false);
+				securityService.makePublicVisible(category, adminUser);
 				modelService.commit();
 				map.put(category.getCode(), category);
 			} else if (result.getTotalCount()>1) {

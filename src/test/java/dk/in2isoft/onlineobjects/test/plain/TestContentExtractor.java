@@ -5,19 +5,14 @@ import java.net.MalformedURLException;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
-import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import nu.xom.Document;
 
 public class TestContentExtractor extends AbstractSpringTestCase {
 	
-	@Autowired
-	private HTMLService htmlService;
-
 	@Test
 	public void testSimple() throws MalformedURLException, IOException {
 		String xml = "<?xml version='1.0'?>"
@@ -48,7 +43,4 @@ public class TestContentExtractor extends AbstractSpringTestCase {
 		Assert.assertEquals(expected , serialized);
 	}
 	
-	public void setHtmlService(HTMLService htmlService) {
-		this.htmlService = htmlService;
-	}
 }

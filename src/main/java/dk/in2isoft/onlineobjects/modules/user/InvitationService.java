@@ -7,11 +7,15 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.account.AccountController;
 import dk.in2isoft.onlineobjects.apps.people.PeopleController;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -27,6 +31,7 @@ public class InvitationService {
 	private EmailService emailService;
 	private ConfigurationService configurationService;
 	private MemberService memberService;
+	private SecurityService securityService;
 	
 	public final static String INVITATION_TEMPLATE = "dk/in2isoft/onlineobjects/invitation-template.html";
 	
@@ -35,52 +40,52 @@ public class InvitationService {
 		return modelService.search(query).getFirst();
 	}
 
-	public Invitation createInvitation(String name, String emailAddress, String message, UserSession session) throws EndUserException {
+	public Invitation createAndSendInvitation(String name, String emailAddress, String message, User sender) throws EndUserException {
 		Person person = new Person();
 		person.setFullName(name);
-		modelService.createItem(person, session);
+		modelService.createItem(person, sender);
 		
 		EmailAddress email = new EmailAddress();
 		email.setAddress(emailAddress);
-		modelService.createItem(email, session);
+		modelService.createItem(email, sender);
 		
 		Relation personEmail = new Relation(person,email);
-		modelService.createItem(personEmail, session);
+		modelService.createItem(personEmail, sender);
 		
-		Invitation invitation = createInvitation(session, person, message);
+		Invitation invitation = createInvitation(sender, person, message);
 		sendInvitation(invitation);
 		return invitation;
 	}
 
-	public Invitation createInvitation(UserSession session, Person invited, String message) throws ModelException {
-		User user = session.getUser();
+	public Invitation createInvitation(User sender, Person invited, String message) throws ModelException, SecurityException {
 
 		Invitation invitation = new Invitation();
 		invitation.setCode(Strings.generateRandomString(40));
 		invitation.setMessage(message);
-		modelService.createItem(invitation, session);
+		modelService.createItem(invitation, sender);
 
 		// Create relation from user to invitation
-		Relation userInvitation = new Relation(user, invitation);
+		Relation userInvitation = new Relation(sender, invitation);
 		userInvitation.setKind(Relation.KIND_INIVATION_INVITER);
-		modelService.createItem(userInvitation, session);
+		modelService.createItem(userInvitation, sender);
 
 		// Create relation from invitation to person
 		Relation invitationPerson = new Relation(invitation, invited);
 		invitationPerson.setKind(Relation.KIND_INIVATION_INVITED);
-		modelService.createItem(invitationPerson, session);
+		modelService.createItem(invitationPerson, sender);
 
 		return invitation;
 	}
 
 	public void sendInvitation(Invitation invitation) throws EndUserException {
-		Person person = modelService.getChild(invitation, Person.class);
-		User inviter = modelService.getParent(invitation, Relation.KIND_INIVATION_INVITER, User.class);
-		Person inviterPerson = modelService.getChild(inviter, Relation.KIND_SYSTEM_USER_SELF, Person.class);
+		Privileged privileged = securityService.getAdminPrivileged();
+		Person person = modelService.getChild(invitation, Person.class, privileged);
+		User inviter = modelService.getParent(invitation, Relation.KIND_INIVATION_INVITER, User.class, privileged);
+		Person inviterPerson = modelService.getChild(inviter, Relation.KIND_SYSTEM_USER_SELF, Person.class, privileged);
 		if (person == null) {
 			throw new EndUserException("The invitation does not have a person associated");
 		}
-		EmailAddress mail = modelService.getChild(person, EmailAddress.class);
+		EmailAddress mail = modelService.getChild(person, EmailAddress.class, privileged);
 		if (mail == null) {
 			throw new EndUserException("The person does not have an email");
 		}
@@ -98,7 +103,7 @@ public class InvitationService {
 	}
 
 	public void signUpFromInvitation(UserSession session, String code,
-			String username, String password) throws EndUserException {
+			String username, String email, String password) throws EndUserException {
 
 		Invitation invitation = getInvitation(code);
 		if (invitation == null) {
@@ -108,54 +113,47 @@ public class InvitationService {
 			throw new EndUserException("The invitation is not active. The state is: " + invitation.getState());
 		}
 		
-		Person person = modelService.getChild(invitation, Person.class);
-		EmailAddress email = modelService.getChild(person, EmailAddress.class);
-		
-		User newUser = memberService.signUp(session, username, password, person.getFullName(), email.getAddress());
+		Person person;
+		{
+			Privileged admin = securityService.getAdminPrivileged();
+			person = modelService.getChild(invitation, Person.class,admin);
 
+			invitation.setState(Invitation.STATE_ACCEPTED);
+			modelService.updateItem(invitation, admin);
+		}
+		
+		User newUser = memberService.signUp(session, username, password, person.getFullName(), email);
+		if (!newUser.equals(session.getUser())) {
+			throw new StupidProgrammerException("The new user has not been logged in");
+		}
+		
 		// Create relation between user and invitation
 		Relation invitaionUserRelation = new Relation(invitation, newUser);
 		invitaionUserRelation.setKind(Relation.KIND_INIVATION_INVITED);
 		modelService.createItem(invitaionUserRelation, session);
 
-		// TODO: Is it OK to give the new user access to the invitation?
-		modelService.grantFullPrivileges(invitation, session);
+		// The new user should be able to see the invite
+		modelService.grantPrivileges(invitation, session, true, false, false);
 
-		// Set state of invitation to accepted
-		invitation.setState(Invitation.STATE_ACCEPTED);
-		modelService.updateItem(invitation, session);
 	}
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
 
-	public ModelService getModelService() {
-		return modelService;
-	}
-
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
-	}
-
-	public EmailService getEmailService() {
-		return emailService;
 	}
 
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
 
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
-	}
-
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
 
-	public MemberService getMemberService() {
-		return memberService;
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
-
 }

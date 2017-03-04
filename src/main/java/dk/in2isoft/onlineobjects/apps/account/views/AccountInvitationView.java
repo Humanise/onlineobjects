@@ -24,6 +24,7 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 	private EmailAddress email;
 
 	public void afterPropertiesSet() throws Exception {
+		// TODO: Use a more safe perspective 
 		invitation = invitationService.getInvitation(getCode());
 		if (invitation!=null) {
 			inviterUser = modelService.getParent(invitation, User.class);
@@ -56,8 +57,8 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 		return inviterPerson;
 	}
 	
-	public EmailAddress getEmail() {
-		return email;
+	public String getEmail() {
+		return email.getAddress();
 	}
 	
 	public Person getPerson() {

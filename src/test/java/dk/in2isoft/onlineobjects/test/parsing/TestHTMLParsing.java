@@ -8,14 +8,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.Text;
-import nu.xom.XPathContext;
-
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +23,19 @@ import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.Serializing;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
-import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.Text;
+import nu.xom.XPathContext;
 
 public class TestHTMLParsing extends AbstractSpringTestCase {
 	
 	private static Logger log = Logger.getLogger(TestHTMLParsing.class);
-	
-	@Autowired
-	private SemanticService semanticService;
-		
+			
 	@Autowired
 	private HTMLService htmlService;
 
@@ -250,10 +245,6 @@ public class TestHTMLParsing extends AbstractSpringTestCase {
 		}
 	}
 
-	public void setSemanticService(SemanticService semanticService) {
-		this.semanticService = semanticService;
-	}
-	
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
 	}

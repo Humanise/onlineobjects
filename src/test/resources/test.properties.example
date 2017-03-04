@@ -6,6 +6,9 @@ mail.password=
 mail.address=
 mail.name=
 
+mail.receiver.address=mail@host.com
+mail.receiver.name=John Doe
+
 analytics.username=
 analytics.password=
 

@@ -2,7 +2,7 @@
 <project default="deploy" name="OnlineObjects 2" basedir=".">
 
 	<target name="init">
-		<property name="dest" value="/Users/jbm/Midlertidigt" />
+		<property name="dest" value="${basedir}/tmp" />
 	</target>
 
 	<target name="deploy" depends="init">
@@ -18,22 +18,23 @@
 		<copy todir="${dest}/OnlineObjects/onlineobjects/WEB-INF/lib">
 			<fileset dir="${basedir}/lib" excludes="*sources*.jar *javadoc*.jar" />
 		</copy>
-		
+
 		<!-- Library files -->
-		
+
 		<copy todir="${dest}/OnlineObjects/onlineobjects/WEB-INF/lib">
 			<fileset dir="${basedir}/target/OnlineObjects/WEB-INF/lib">
 				<exclude name="*sources*.jar"/>
 				<exclude name="*javadoc*.jar"/>
 				<exclude name="jetty*.jar"/>
+				<exclude name="org.apache.servicemix.bundles.lucene-3.0.1_2.jar"/>
 				<exclude name="servlet-api-2.5-20081211.jar"/> <!-- From Jetty -->
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${dest}/OnlineObjects/onlineobjects/hui">
 			<fileset dir="${basedir}/src/main/webapp/hui">
 				<exclude name="node_modules/"/>
-			</fileset>
+      </fileset>
 		</copy>
 		<copy todir="${dest}/OnlineObjects/onlineobjects/jsf">
 			<fileset dir="${basedir}/src/main/webapp/jsf" />
@@ -66,7 +67,7 @@
 			<fileset dir="${basedir}/src/main/java" includes="**/*.properties" />
 		</copy>
 		<copy todir="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes">
-			<fileset dir="${basedir}/src/main/resources" includes="**/*.properties" />
+			<fileset dir="${basedir}/src/main/resources" includes="**/*.properties, **/*.html" />
 		</copy>
 
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/model.hbm.xml" file="${basedir}/src/main/resources/model.hbm.xml" />
@@ -76,7 +77,7 @@
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/log4j.properties" file="${basedir}/src/main/resources/log4j.properties.deployed" overwrite="true" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/hibernate.cfg.xml" file="${basedir}/src/main/resources/hibernate.cfg.xml.deployed" overwrite="true" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/onlineobjects.cfg.xml" file="${basedir}/src/main/resources/onlineobjects.cfg.xml.deployed" overwrite="true" />
-		<delete dir="${dest}/OnlineObjects_temp" />
+    <delete dir="${dest}/OnlineObjects_temp" />
 	</target>
 
 	<target name="schema" description="Generates SQL" depends="init">
