@@ -55,4 +55,5 @@
    	</bean>
    	
    	<bean id="readerAnalyzeView" scope="request" class="dk.in2isoft.onlineobjects.apps.reader.views.ReaderAnalyzeView" autowire="byType"/>
+   	<bean id="readerExtractionView" scope="request" class="dk.in2isoft.onlineobjects.apps.reader.views.ReaderExtractionView" autowire="byType"/>
 </beans>

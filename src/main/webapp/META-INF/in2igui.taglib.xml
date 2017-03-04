@@ -253,4 +253,11 @@
       <renderer-type>hui.objectInput</renderer-type>
     </component>
   </tag>
+  <tag>
+    <tag-name>foundation</tag-name>
+    <component>
+      <component-type>hui.foundation</component-type>
+      <renderer-type>hui.foundation</renderer-type>
+    </component>
+  </tag>
 </facelet-taglib>

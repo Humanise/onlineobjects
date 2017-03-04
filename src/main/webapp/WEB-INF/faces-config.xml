@@ -302,5 +302,9 @@
 	    <component-type>hui.objectInput</component-type>
     	<component-class>dk.in2isoft.in2igui.jsf.ObjectInputComponent</component-class>
   	</component>
+    <component>
+	    <component-type>hui.foundation</component-type>
+    	<component-class>dk.in2isoft.in2igui.jsf.FoundationComponent</component-class>
+  	</component>
 
 </faces-config>
