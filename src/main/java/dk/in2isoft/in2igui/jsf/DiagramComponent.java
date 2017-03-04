@@ -15,7 +15,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 @Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/hui_require.js", "/hui/js/Diagram.js" }, css = { "/hui/css/diagram.css" }, requires = { HUIComponent.class }, uses = {DrawingComponent.class})
 public class DiagramComponent extends AbstractComponent {
 
-	public static final String TYPE = "hui.button";
+	public static final String TYPE = "hui.diagram";
 
 	private String name;
 
