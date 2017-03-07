@@ -203,10 +203,13 @@ public class InformationService {
 			Privileged admin = securityService.getAdminPrivileged();
 			MissingSimilarityQuery simQuery = new MissingSimilarityQuery();
 			List<SimilarityResult> results = modelService.list(simQuery);
+			modelService.commit();
 			int index = 0;
 			int total = results.size();
 			for (SimilarityResult pair : results) {
-
+				if (status.isInterrupted()) {
+					break;
+				}
 				User privileged = modelService.get(User.class, pair.getUserId(), admin);
 				status.log("Found missing similarity (user=" + privileged.getUsername() + ")");
 				status.setProgress(index, total);
@@ -235,6 +238,7 @@ public class InformationService {
 
 				status.log(a.getName() + " vs " + b.getName() + " = " + similarity);
 				index++;
+				modelService.commit();
 			}
 		} catch (EndUserException e) {
 			status.error("Error while calculating similarity", e);

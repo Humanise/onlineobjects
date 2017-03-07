@@ -10,9 +10,14 @@ public class JobStatus {
 	private float progress;
 	private SchedulingService schedulingService;
 	private Key<?> key;
+	private boolean interrupted;
 
 	public float getProgress() {
 		return progress;
+	}
+	
+	public boolean isInterrupted() {
+		return interrupted;
 	}
 
 	public void setProgress(int index, int total) {
@@ -52,6 +57,10 @@ public class JobStatus {
 	
 	public void setLog(Logger log) {
 		this.log = log;
+	}
+
+	public void interrupt() {
+		this.interrupted = true;
 	}
 
 	public static JobStatus get(JobExecutionContext context) {
