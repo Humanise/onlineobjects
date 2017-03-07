@@ -62,6 +62,14 @@ public class SecurityService {
 		return false;
 	}
 	
+	public void changeUserBySecret(UserSession userSession, String secret) throws SecurityException {
+		User userBySecret = getUserBySecret(secret);
+		if (userBySecret==null) {
+			throw new SecurityException("No user found with the secret");
+		}
+		userSession.setUser(userBySecret);
+	}
+	
 	public User getUser(String username, String password) {
 		User user = modelService.getUser(username);
 		if (user==null) {

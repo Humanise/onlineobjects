@@ -1,14 +1,17 @@
 package dk.in2isoft.onlineobjects.apps.api;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.openjena.atlas.logging.Log;
 
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
@@ -27,15 +30,20 @@ import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
+import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
+import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
+import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
+import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class APIController extends APIControllerBase {
 
@@ -105,6 +113,7 @@ public class APIController extends APIControllerBase {
 		String secret = request.getString("secret");
 
 		// TODO Validate URL
+		// ValidationUtil.isWellFormedURI(url);
 
 		// System.out.println(url);
 		// System.out.println(quote);
@@ -139,6 +148,29 @@ public class APIController extends APIControllerBase {
 		}
 	}
 
+	@Path(start={"v1.0","addImage"})
+	public void addImage(Request request) throws IOException, EndUserException {
+
+		DataImporter importer = importService.createImporter();
+		importer.setListener(new ImageImporter(modelService, imageService) {
+			@Override
+			protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {
+				String secret = parameters.get("secret");
+				if (Strings.isBlank(secret)) {
+					throw new IllegalRequestException("No secret");
+				}
+				securityService.changeUserBySecret(request.getSession(), secret);
+				return true;
+			}
+			
+			@Override
+			protected void postProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
+				
+			}
+		});
+		importer.importMultipart(this, request);
+	}	
+	
 	@Path(start = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);

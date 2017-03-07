@@ -129,6 +129,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		ImageMetaData imageMetaData = new ImageMetaData();
 		try {
 			Metadata metadata;
+			// TODO: No need to try this if not a JPEG
 			metadata = JpegMetadataReader.readMetadata(file);
 			Directory exifDirectory = metadata.getDirectory(ExifIFD0Directory.class);
 			Directory gpsDirectory = metadata.getDirectory(GpsDirectory.class);
