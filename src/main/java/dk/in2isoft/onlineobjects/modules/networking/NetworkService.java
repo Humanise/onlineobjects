@@ -11,11 +11,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 
 import dk.in2isoft.commons.http.HeaderUtil;
@@ -72,6 +78,33 @@ public class NetworkService {
 			log.error(e.getMessage(), e);
 		}
 		return null;
+	}
+	
+	public URL resolveToReal(URL url) {
+		try {
+			HttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
+			HttpContext localContext = new BasicHttpContext();
+
+			// connect and receive 
+			HttpGet httpget = new HttpGet(url.toURI());
+			HttpResponse response = httpclient.execute(httpget, localContext);
+
+			// obtain redirect target
+			Header locationHeader = response.getFirstHeader("location");
+			if (locationHeader!=null) {
+				return resolveToReal(new URL(locationHeader.getValue()));
+			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return url;
 	}
 
 	public NetworkResponse get(URL url) throws URISyntaxException, IOException {
