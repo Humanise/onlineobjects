@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.util;
 
 import java.net.URI;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -10,7 +9,7 @@ import dk.in2isoft.commons.lang.Strings;
 
 public class ValidationUtil {
 	
-	private static final Pattern PASSWORD = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+	//private static final Pattern PASSWORD = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 	
 	public static boolean isWellFormedEmail(String email) {
 		if (email==null || !email.equals(email.trim())) {

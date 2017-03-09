@@ -96,8 +96,7 @@ public class PhotosController extends PhotosControllerBase {
 	@Path
 	public void searchWords(Request request) throws IOException {
 		String text = request.getString("text");
-		Integer page = request.getInt("page");
-		if (page==null) page=0;
+		int page = request.getInt("page");
 		ListData list = new ListData();
 		list.addHeader("Word");
 		Query<Word> query = Query.of(Word.class).withWords(text).withPaging(page, 50);

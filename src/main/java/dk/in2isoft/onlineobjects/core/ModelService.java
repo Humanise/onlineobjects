@@ -416,6 +416,7 @@ public class ModelService {
 		return relation;
 	}
 
+	// TODO make kind the second argument
 	public Relation createRelation(Entity from, Entity to, String kind, Privileged privileged) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;

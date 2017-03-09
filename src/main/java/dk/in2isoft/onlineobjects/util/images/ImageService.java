@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,8 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.geo.GeoDistance;
 import dk.in2isoft.commons.lang.Strings;
@@ -58,6 +61,8 @@ public class ImageService extends AbstractCommandLineInterface {
 	};
 
 	private static Logger log = Logger.getLogger(ImageService.class);
+	private Set<String> mimes = Sets.newHashSet("image/jpeg", "image/png", "image/gif", "application/pdf");
+	private Set<String> extensions = Sets.newHashSet("jpg", "png", "gif", "pdf");
 	
 	private StorageService storageService;
 	private ConfigurationService configurationService;
@@ -82,6 +87,14 @@ public class ImageService extends AbstractCommandLineInterface {
 			throw new EndUserException("Could not parse output: " + result);
 		}
 		return dimensions;
+	}
+	
+	public boolean isSupportedMimeType(String mime) {
+		return mime!=null && mimes.contains(mime);
+	}
+
+	public boolean isSupportedExtension(String extension) {
+		return extension!=null && extensions.contains(extension);
 	}
 	
 	public String getColors(Image image) throws EndUserException {

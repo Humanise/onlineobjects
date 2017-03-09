@@ -1,6 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
@@ -9,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.openjena.atlas.logging.Log;
 
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
@@ -39,11 +35,9 @@ import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
-import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
-import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class APIController extends APIControllerBase {
 
@@ -78,15 +72,13 @@ public class APIController extends APIControllerBase {
 	public ClientKeyResponse getSecret(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
-		String clientId = request.getString("client");
+		//String clientId = request.getString("client");
 		
 		User user = securityService.getUser(username, password);
 		if (user==null) {
 			try {
 				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-				
-			}
+			} catch (InterruptedException e) {}
 			throw new SecurityException("User not found");
 		}
 		String secret = user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
@@ -109,43 +101,17 @@ public class APIController extends APIControllerBase {
 	@Path(start={"v1.0","bookmark"})
 	public void bookmark(Request request) throws IOException, EndUserException {
 		String url = request.getString("url", "An URL parameters must be provided");
+		String secret = request.getString("secret", "A secret key is necessary");
 		String quote = request.getString("quote");
-		String secret = request.getString("secret");
-
-		// TODO Validate URL
-		// ValidationUtil.isWellFormedURI(url);
-
-		// System.out.println(url);
-		// System.out.println(quote);
-		// System.out.println(secret);
 
 		User user = securityService.getUserBySecret(secret);
-		if (user != null) {
-			Query<InternetAddress> query = Query.after(InternetAddress.class).withPrivileged(user).withField(InternetAddress.FIELD_ADDRESS, url);
-			InternetAddress address = modelService.search(query).getFirst();
-			if (address == null) {
-				address = new InternetAddress();
-				address.setAddress(url);
-				HTMLDocument doc = htmlService.getDocumentSilently(url);
-				if (doc != null) {
-					address.setName(doc.getTitle());
-				} else {
-					address.setName(Strings.simplifyURL(url));
-				}
-				modelService.createItem(address, user);
-
-				inboxService.add(user, address);
-			}
-			if (Strings.isNotBlank(quote)) {
-				Statement part = new Statement();
-				part.setName(StringUtils.abbreviate(quote, 50));
-				part.setText(quote);
-				modelService.createItem(part, user);
-				modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
-			}
-		} else {
+		if (user==null) {
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {}
 			throw new SecurityException("No user found with that secret key");
 		}
+		internetAddressService.importAddress(url, quote, user);
 	}
 
 	@Path(start={"v1.0","addImage"})

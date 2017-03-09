@@ -63,6 +63,7 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		if (transformation.isFlipVertically()) {
 			sb.append("_flip-v");
 		}
+		sb.append(".jpg");
 		return sb.toString();
 	}
 	

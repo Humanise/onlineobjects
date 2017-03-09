@@ -20,7 +20,6 @@ import com.google.common.collect.Sets;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.FeedPerspective;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.HypothesisEditPerspective;
@@ -481,16 +480,8 @@ public class ReaderController extends ReaderControllerBase {
 		if (Strings.isBlank(url)) {
 			throw new IllegalRequestException("No URL");
 		}
-
-		InternetAddress internetAddress = new InternetAddress();
-		internetAddress.setAddress(url);
-		HTMLDocument doc = htmlService.getDocumentSilently(url);
-		if (doc != null) {
-			internetAddress.setName(doc.getTitle());
-		} else {
-			internetAddress.setName(Strings.simplifyURL(url));
-		}
-		modelService.createItem(internetAddress, request.getSession());
+		
+		InternetAddress internetAddress = internetAddressService.importAddress(url, null, request.getSession().getUser());
 
 		return SimpleEntityPerspective.create(internetAddress);
 	}

@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.junit.Test;
@@ -39,9 +42,30 @@ public class TestNetworkService extends AbstractSpringTestCase {
 
 	@Test
 	public void testResolveUrl() throws Exception {
-		URL url = new URL("http://feedproxy.google.com/~r/alistapart/main/~3/BU6iDJCwiVY/i-dont-need-help");
-		URL real = networkService.resolveToReal(url);
+		URI url = new URI("http://feedproxy.google.com/~r/alistapart/main/~3/BU6iDJCwiVY/i-dont-need-help");
+		URI real = networkService.resolveRedirects(url);
 		assertEquals("https://alistapart.com/article/i-dont-need-help", real.toString());
+	}
+
+	@Test
+	public void testResolveInfinite() throws Exception {
+		URI url = new URI("http://dev.humanise.dk/redirect.php?infinite=true");
+		URI resolved = networkService.resolveRedirects(url);
+		assertEquals("http://dev.humanise.dk/redirect.php?infinite=true", resolved.toString());
+	}
+
+	@Test
+	public void testResolveCountdown() throws Exception {
+		URI url = new URI("http://dev.humanise.dk/redirect.php?countdown=10");
+		URI resolved = networkService.resolveRedirects(url);
+		assertEquals("http://dev.humanise.dk/redirect.php?countdown=5", resolved.toString());
+	}
+	
+	@Test
+	public void testRemoveTrackingParameters() throws MalformedURLException, URISyntaxException {
+		URI url = new URI("https://www.nngroup.com/articles/cards-component/?utm_source=Alertbox&im=ok&utm_campaign=43da43b3f9-Cards_UI_Component_Chinese+Complex_2016_11_07&utm_medium=email&utm_term=0_7f29a2b335-43da43b3f9-40181465#hello");
+		URI cleaned = networkService.removeTrackingParameters(url);
+		assertEquals(new URL("https://www.nngroup.com/articles/cards-component/?im=ok#hello"), cleaned);
 	}
 
 	@Test

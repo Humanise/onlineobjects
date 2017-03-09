@@ -16,6 +16,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
+import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 import dk.in2isoft.onlineobjects.services.FeedService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
@@ -43,6 +44,7 @@ public abstract class ReaderControllerBase extends ApplicationController {
 	protected HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder;
 	protected PersonService personService;
 	protected ReaderModelService readerModelService;
+	protected InternetAddressService internetAddressService;
 
 	public ReaderControllerBase() {
 		super("reader");
@@ -150,5 +152,9 @@ public abstract class ReaderControllerBase extends ApplicationController {
 	
 	public void setReaderModelService(ReaderModelService readerModelService) {
 		this.readerModelService = readerModelService;
+	}
+	
+	public void setInternetAddressService(InternetAddressService internetAddressService) {
+		this.internetAddressService = internetAddressService;
 	}
 }

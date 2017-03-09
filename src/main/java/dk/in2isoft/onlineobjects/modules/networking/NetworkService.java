@@ -7,39 +7,46 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Sets;
+
 import dk.in2isoft.commons.http.HeaderUtil;
 import dk.in2isoft.commons.lang.Files;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse.State;
 
 public class NetworkService {
 	
 	private static final Logger log = Logger.getLogger(NetworkService.class);
 	
+	private static final Set<String> TRACKING_PARAMS = Sets.newHashSet("utm_source","utm_medium","utm_campaign","utm_term","utm_content"); 
+	
 	public String getStringSilently(String url) {
 		try {
 			return getString(new URL(url));
-		} catch (MalformedURLException e) {
-			log.error(e.getMessage(), e);
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-		} catch (URISyntaxException e) {
+		} catch (IOException | URISyntaxException e) {
 			log.error(e.getMessage(), e);
 		}
 		return null;
@@ -48,14 +55,12 @@ public class NetworkService {
 	public String getString(URL url) throws IOException, URISyntaxException {
 		NetworkResponse response = null;
 		try {
-			response = get(url);
+			response = get(url.toURI());
 			if (response.isSuccess()) {
 				String string = Files.readString(response.getFile(),response.getEncoding());
 				return string;
 			}
-		} catch (IOException e) {
-			throw e;
-		} catch (URISyntaxException e) {
+		} catch (IOException | URISyntaxException e) {
 			throw e;
 		} finally {
 			response.cleanUp();
@@ -64,50 +69,71 @@ public class NetworkService {
 	}
 	
 	public NetworkResponse get(String spec) throws URISyntaxException, IOException {
-		return get(new URL(spec));
+		return get(new URI(spec));
 	}
 	
 	public NetworkResponse getSilently(String url) {
 		try {
-			return get(new URL(url));
-		} catch (MalformedURLException e) {
-			log.error(e.getMessage(), e);
-		} catch (URISyntaxException e) {
-			log.error(e.getMessage(), e);
-		} catch (IOException e) {
+			return get(new URI(url));
+		} catch (IOException | URISyntaxException e) {
 			log.error(e.getMessage(), e);
 		}
 		return null;
 	}
 	
-	public URL resolveToReal(URL url) {
-		try {
-			HttpClient httpclient = HttpClients.custom().disableRedirectHandling().build();
-			HttpContext localContext = new BasicHttpContext();
-
-			// connect and receive 
-			HttpGet httpget = new HttpGet(url.toURI());
-			HttpResponse response = httpclient.execute(httpget, localContext);
-
-			// obtain redirect target
-			Header locationHeader = response.getFirstHeader("location");
-			if (locationHeader!=null) {
-				return resolveToReal(new URL(locationHeader.getValue()));
+	public URI resolveRedirects(URI url) {
+		int i = 0;
+		while (i < 5) {
+			i++;
+			try {
+				HttpClient client = HttpClients.custom().disableRedirectHandling().build();
+				HttpContext context = new BasicHttpContext();
+	
+				// connect and receive 
+				HttpGet get = new HttpGet(url);
+				HttpResponse response = client.execute(get, context);
+	
+				// obtain redirect target
+				Header locationHeader = response.getFirstHeader("location");
+				if (locationHeader!=null) {
+					url = new URI(locationHeader.getValue());
+				}
+				
+			} catch (URISyntaxException | IOException e) {
+				break;
 			}
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return url;
 	}
 
+	/**
+	 * Removes tracking parameters and #fragments from an URL
+	 * @param resolved
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws MalformedURLException
+	 */
+	public URI removeTrackingParameters(URI uri) {
+		try {
+			List<NameValuePair> parameters = URLEncodedUtils.parse(uri, Strings.UTF8);
+			parameters = parameters.stream().filter(pair -> !TRACKING_PARAMS.contains(pair.getName())).collect(Collectors.toList());
+			URIBuilder builder = new URIBuilder(uri).clearParameters();
+			if (!parameters.isEmpty()) {
+				builder.addParameters(parameters);
+			}
+			return builder.build();
+		} catch (URISyntaxException e) {
+			log.warn("Unable to remove tracking params", e);
+		}
+		return uri;
+	}
+
+	@Deprecated
 	public NetworkResponse get(URL url) throws URISyntaxException, IOException {
+		return get(url.toURI());
+	}
+
+	public NetworkResponse get(URI uri) throws IOException {
 		NetworkResponse response = new NetworkResponse();
 		InputStream input = null;
 		InputStreamReader reader = null;
@@ -118,9 +144,9 @@ public class NetworkService {
 			file.deleteOnExit();
 			String encoding = null;
 			String contentType = null;
-			if (url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
+			if (isHttpOrHttps(uri)) {
 				CloseableHttpClient client = HttpClients.createDefault();
-				method = new HttpGet(url.toURI());
+				method = new HttpGet(uri);
 				method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
 				CloseableHttpResponse res = client.execute(method);
 				int code = res.getStatusLine().getStatusCode();
@@ -138,7 +164,7 @@ public class NetworkService {
 				HttpEntity entity = res.getEntity();
 				input = entity.getContent();
 			} else {
-				input = url.openStream();
+				input = uri.toURL().openStream();
 				response.setState(State.SUCCESS);
 			}
 			output = new FileOutputStream(file);
@@ -150,8 +176,6 @@ public class NetworkService {
 			return response;
 		} catch (IOException e) {
 			throw e;
-		} catch (URISyntaxException e) {
-			throw e;
 		} finally {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(reader);
@@ -159,6 +183,11 @@ public class NetworkService {
 				method.releaseConnection();
 			}
 		}		
+	}
+
+	public boolean isHttpOrHttps(URI uri) {
+		String scheme = uri.getScheme();
+		return uri!=null && (scheme.equals("http") || scheme.equals("https"));
 	}
 	
 }

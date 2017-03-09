@@ -52,7 +52,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		File folder = new File(getResourcesDir(),"extraction");
 		Assert.assertTrue(folder.isDirectory());
 		File[] htmlFiles = folder.listFiles((FileFilter) pathname -> {
-			return pathname.getName().endsWith("original.html");
+			return pathname.getName().endsWith(".original.html");
 		});
 		DocumentCleaner cleaner = new DocumentCleaner();
 		

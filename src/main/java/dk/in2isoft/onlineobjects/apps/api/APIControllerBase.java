@@ -11,6 +11,7 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
+import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -25,6 +26,7 @@ public abstract class APIControllerBase extends ApplicationController {
 	protected WordService wordService;
 	protected ImportService importService;
 	protected ImageService imageService;
+	protected InternetAddressService internetAddressService;
 	
 	protected ReaderSearcher readerSearcher;
 	
@@ -75,5 +77,9 @@ public abstract class APIControllerBase extends ApplicationController {
 
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
+	}
+	
+	public void setInternetAddressService(InternetAddressService internetAddressService) {
+		this.internetAddressService = internetAddressService;
 	}
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.io.Files;
+
 import dk.in2isoft.commons.http.FilePusher;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -53,6 +55,7 @@ public class ImageController extends ServiceController {
 		Parameters param = new Parameters();
 		if (path.length>0) {
 			String subject = path[path.length-1];
+			String extension = Files.getFileExtension(subject);
 			param.id = Long.valueOf(match(idPattern,subject));
 			param.width = parseInt(match(widthPattern,subject));
 			param.height = parseInt(match(heightPattern,subject));
@@ -64,6 +67,7 @@ public class ImageController extends ServiceController {
 			param.verticalFlip = subject.contains("flipv");
 			param.horizontalFlip = subject.contains("fliph");
 			param.inherit = subject.contains("inherit");
+			param.format = imageService.isSupportedExtension(extension) ? extension : null;
 		} else {
 			param.id = request.getLong("id");
 			param.thumbnail = request.getInt("thumbnail");
@@ -76,6 +80,8 @@ public class ImageController extends ServiceController {
 			param.verticalFlip = request.getBoolean("flipVertically");
 			param.horizontalFlip = request.getBoolean("flipHorizontally");
 			param.inherit = request.getBoolean("inherit");
+			String format = request.getString("format");
+			param.format = imageService.isSupportedExtension(format) ? format : null;
 		}
 		process(request,param);
 	}
@@ -143,7 +149,7 @@ public class ImageController extends ServiceController {
 		
 		if (trans.isTransformed()) {
 			file = imageTransformationService.transform(parameters.id, trans);
-			mime = "image/jpeg";			
+			mime = "image/jpeg";
 		} else {
 			file = imageService.getImageFile(image);
 			mime = image.getContentType();
@@ -183,5 +189,6 @@ public class ImageController extends ServiceController {
 		boolean verticalFlip;
 		boolean horizontalFlip;
 		boolean inherit;
+		String format;
 	}
 }

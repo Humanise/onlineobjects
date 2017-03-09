@@ -38,6 +38,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 	public Document extract(Document document) {
 		//log.info(document.toXML());
 		document = simplify(document);
+		//log.info(document.toXML());
 		List<Element> longestText = findLongestText(document);
 		Element heading = findHeading(document);
 		if (heading!=null) {
@@ -143,6 +144,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		if (role!=null && roles.contains(role)) {
 			return false;
 		}
+		/** TOO dangerous to use...
 		String cls = element.getAttributeValue("class");
 		if (cls!=null) {
 			cls = cls.toLowerCase();
@@ -153,7 +155,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 				return element.query("//*[local-name()='h1']").size() == 0;
 			}
 		}
-		
+		**/
 		return true;
 	}
 

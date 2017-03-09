@@ -1,16 +1,26 @@
 package dk.in2isoft.onlineobjects.modules.networking;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.Relation;
+import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.services.StorageService;
 
 public class InternetAddressService {
@@ -18,6 +28,8 @@ public class InternetAddressService {
 	StorageService storageService;
 	NetworkService networkService;
 	ModelService modelService;
+	HTMLService htmlService;
+	InboxService inboxService;
 
 	public HTMLDocument getHTMLDocument(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
 
@@ -47,6 +59,44 @@ public class InternetAddressService {
 		return htmlDocument;
 	}
 	
+	public InternetAddress importAddress(String urlString, String quote, User user) throws ModelException, SecurityException, IllegalRequestException {
+		String url;
+		try {
+			URI uri = new URI(urlString);
+			uri = networkService.resolveRedirects(uri);
+			uri = networkService.removeTrackingParameters(uri);
+			if (!networkService.isHttpOrHttps(uri)) {
+				throw new IllegalRequestException("The scheme of '" + uri + "' is unsupported");
+			}
+			url = uri.toString();
+		} catch (URISyntaxException e) {
+			throw new IllegalRequestException("", e);
+		}
+		Query<InternetAddress> query = Query.after(InternetAddress.class).withPrivileged(user).withField(InternetAddress.FIELD_ADDRESS, url);
+		InternetAddress address = modelService.search(query).getFirst();
+		if (address == null) {
+			address = new InternetAddress();
+			address.setAddress(url);
+			HTMLDocument doc = htmlService.getDocumentSilently(url);
+			if (doc != null) {
+				address.setName(doc.getTitle());
+			} else {
+				address.setName(Strings.simplifyURL(url));
+			}
+			modelService.createItem(address, user);
+
+			inboxService.add(user, address);
+		}
+		if (Strings.isNotBlank(quote)) {
+			Statement part = new Statement();
+			part.setName(StringUtils.abbreviate(quote, 50));
+			part.setText(quote);
+			modelService.createItem(part, user);
+			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
+		}
+		return address;
+	}
+	
 	// Wiring...
 	
 	public void setStorageService(StorageService storageService) {
@@ -59,5 +109,13 @@ public class InternetAddressService {
 	
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
+	}
+	
+	public void setInboxService(InboxService inboxService) {
+		this.inboxService = inboxService;
+	}
+	
+	public void setHtmlService(HTMLService htmlService) {
+		this.htmlService = htmlService;
 	}
 }
