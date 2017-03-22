@@ -1,30 +1,18 @@
 package dk.in2isoft.onlineobjects.apps.reader.views;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.InitializingBean;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
-import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.modules.information.InspectingContentExtractor;
-import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalytics;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import nu.xom.Document;
-import nu.xom.tests.XOMTestCase;
 
 public class ReaderExtractionView extends AbstractView implements InitializingBean {
 	
