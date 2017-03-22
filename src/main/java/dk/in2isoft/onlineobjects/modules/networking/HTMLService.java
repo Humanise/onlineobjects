@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 
@@ -19,7 +18,7 @@ public class HTMLService {
 	public HTMLDocument getDocumentSilently(URI uri) {
 		NetworkResponse response = null;
 		try {
-			response = networkService.get(uri.toURL());
+			response = networkService.get(uri);
 			if (response.isSuccess()) {
 				String mimeType = response.getMimeType();
 				if (mimeType==null || "text/html".equals(mimeType)) {
@@ -33,8 +32,6 @@ public class HTMLService {
 				log.error("Getting HTML document unsuccessful: "+uri);
 			}
 		} catch (MalformedURLException e) {
-			log.error(e.getMessage(),e);
-		} catch (URISyntaxException e) {
 			log.error(e.getMessage(),e);
 		} catch (IOException e) {
 			log.error(e.getMessage(),e);

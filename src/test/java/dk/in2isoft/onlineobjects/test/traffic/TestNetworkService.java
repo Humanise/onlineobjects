@@ -46,6 +46,15 @@ public class TestNetworkService extends AbstractSpringTestCase {
 		URI real = networkService.resolveRedirects(url);
 		assertEquals("https://alistapart.com/article/i-dont-need-help", real.toString());
 	}
+	
+	
+
+	@Test
+	public void testResolveUrlAgain() throws Exception {
+		URI url = new URI("http://feedproxy.google.com/~r/37signals/beMH/~3/xozycK64-YI/the-richest-man-in-town-f115f0eb227");
+		URI real = networkService.resolveRedirects(url);
+		assertTrue(real.toString().startsWith("https://m.signalvnoise.com/the-richest-man-in-town-f115f0eb227"));
+	}
 
 	@Test
 	public void testResolveInfinite() throws Exception {
@@ -65,7 +74,7 @@ public class TestNetworkService extends AbstractSpringTestCase {
 	public void testRemoveTrackingParameters() throws MalformedURLException, URISyntaxException {
 		URI url = new URI("https://www.nngroup.com/articles/cards-component/?utm_source=Alertbox&im=ok&utm_campaign=43da43b3f9-Cards_UI_Component_Chinese+Complex_2016_11_07&utm_medium=email&utm_term=0_7f29a2b335-43da43b3f9-40181465#hello");
 		URI cleaned = networkService.removeTrackingParameters(url);
-		assertEquals(new URL("https://www.nngroup.com/articles/cards-component/?im=ok#hello"), cleaned);
+		assertEquals(new URI("https://www.nngroup.com/articles/cards-component/?im=ok#hello"), cleaned);
 	}
 
 	@Test

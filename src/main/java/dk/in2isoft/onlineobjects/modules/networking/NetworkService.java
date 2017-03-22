@@ -97,6 +97,9 @@ public class NetworkService {
 				Header locationHeader = response.getFirstHeader("location");
 				if (locationHeader!=null) {
 					url = new URI(locationHeader.getValue());
+					log.info("Redirect: "+url);
+				} else {
+					break;
 				}
 				
 			} catch (URISyntaxException | IOException e) {
