@@ -23,19 +23,14 @@ import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 
 public class PersonService {
 
 	private ModelService modelService;
-	
-	public Person getUsersMainPerson(User user) throws ModelException {
-		return modelService.getChild(user, Person.class);
-	}
-	
-	public Address getPersonsPreferredAddress(Person person) throws ModelException {
-		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class);
+		
+	public Address getPersonsPreferredAddress(Person person, Privileged privileged) throws ModelException {
+		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class, privileged);
 	}
 	
 	public Person getOrCreatePerson(String text, Privileged privileged) throws ModelException, SecurityException {
@@ -88,7 +83,7 @@ public class PersonService {
 	}
 	
 	public void updatePersonsPreferredAddress(Person person, Address address, Privileged privileged) throws ModelException, SecurityException {
-		Address existing = getPersonsPreferredAddress(person);
+		Address existing = getPersonsPreferredAddress(person, privileged);
 		if (existing!=null) {
 			existing.setStreet(address.getStreet());
 			existing.setCity(address.getCity());

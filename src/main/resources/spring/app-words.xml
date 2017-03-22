@@ -62,7 +62,6 @@
 	<bean id="wordsSearchView"
 		class="dk.in2isoft.onlineobjects.apps.words.views.WordsSearchView"
 		scope="request">
-		<property name="modelService" ref="modelService" />
 		<property name="wordService" ref="wordService" />
 		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper"/>
 	</bean>
