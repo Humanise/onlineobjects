@@ -37,8 +37,8 @@ public class AccountSettingsView extends AbstractManagedBean implements Initiali
 			return;
 		}
 		allowed = true;
-		person = modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class);
-		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class);
+		person = modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, user);
+		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, user);
 		if (email!=null) {
 			primaryEmail = email.getAddress();
 		}

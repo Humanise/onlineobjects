@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -52,9 +53,10 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 		Pair<User, Person> next = result.iterator().next();
 		user = next.getKey();
 		person = next.getValue();
-		canModify = securityService.canModify(person, getRequest().getSession());
+		Privileged privileged = getRequest().getSession();
+		canModify = securityService.canModify(person, privileged);
 		try {
-			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class);
+			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class,  privileged);
 		} catch (ModelException e) {
 			// TODO: Do something usefull
 		}

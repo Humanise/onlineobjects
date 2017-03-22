@@ -36,7 +36,7 @@ public class PageRenderingService {
 
 	public void render(WebPage page,Request request) throws EndUserException {
 		// Get the page content
-		Entity document = modelService.getChild(page, Relation.KIND_WEB_CONTENT, Entity.class);
+		Entity document = modelService.getChild(page, Relation.KIND_WEB_CONTENT, Entity.class, request.getSession());
 		//ImageGallery document = (ImageGallery)model.getFirstSubRelation(page, ImageGallery.TYPE, ImageGallery.class);
 		if (document==null) {
 			throw new EndUserException("The page does not have a document!");

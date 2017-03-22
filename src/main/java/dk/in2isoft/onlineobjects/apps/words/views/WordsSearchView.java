@@ -17,7 +17,6 @@ import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
-import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
@@ -33,7 +32,6 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class WordsSearchView extends AbstractView implements InitializingBean {
 
 	private static final int PAGING = 10;
-	private ModelService modelService;
 	private WordService wordService;
 	private WordsInterfaceHelper wordsInterfaceHelper;
 	
@@ -472,10 +470,6 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 	
 	public int getCount() {
 		return count;
-	}
-	
-	public void setModelService(ModelService modelService) {
-		this.modelService = modelService;
 	}
 	
 	public void setWordService(WordService wordService) {

@@ -590,6 +590,10 @@ public class ModelService {
 		}
 	}
 
+	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
+		return getParent(entity, null, classObj, privileged);
+	}
+
 	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind).withPaging(0, 1);

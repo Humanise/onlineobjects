@@ -74,6 +74,7 @@ public class SetupController extends SetupControllerBase {
 	public void listUsers(Request request) throws IOException,EndUserException {
 		User publicUser = securityService.getPublicUser();
 		Privileged admin = securityService.getAdminPrivileged();
+		Privileged privileged = request.getSession();
 		int page = request.getInt("page");
 		int pageSize = 40;
 		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
@@ -98,11 +99,11 @@ public class SetupController extends SetupControllerBase {
 		for (User user : result.getList()) {
 			Query<Image> imgQuery = Query.after(Image.class).withPrivileged(user);
 			Long imageCount = modelService.count(imgQuery);
-			Image image = modelService.getChild(user, Image.class);
-			Person person = modelService.getChild(user, Person.class);
+			Image image = modelService.getChild(user, Image.class, privileged);
+			Person person = modelService.getChild(user, Person.class, privileged);
 			EmailAddress email = null;
 			if (person!=null) {
-				email = modelService.getChild(person, EmailAddress.class);
+				email = modelService.getChild(person, EmailAddress.class ,privileged);
 			}
 			writer.startRow().withId(user.getId()).withKind("user");
 			writer.startCell().withIcon(user.getIcon()).text(user.getName()).endCell();

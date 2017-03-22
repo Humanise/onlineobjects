@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UserQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -24,26 +25,27 @@ public class PeopleListView extends AbstractManagedBean implements InitializingB
 	private ListModel<UserInfo> model;
 
 	public void afterPropertiesSet() throws Exception {
+		Privileged privileged = getRequest().getSession();
 		model = new ListModel<UserInfo>() {
 			@Override
 			public ListModelResult<UserInfo> getResult() {
 				UserQuery query = new UserQuery().withPaging(getPage(), getPageSize()).withPublicView();
 				PairSearchResult<User, Person> search = modelService.searchPairs(query);
-				return new ListModelResult<UserInfo>(convert(search.getList()),search.getTotalCount());
+				return new ListModelResult<UserInfo>(convert(search.getList(), privileged),search.getTotalCount());
 			}
 			
 		};
 		model.setPageSize(10);
 	}
 	
-	private List<UserInfo> convert(List<Pair<User,Person>> list) {
+	private List<UserInfo> convert(List<Pair<User,Person>> list, Privileged privileged) {
 		List<UserInfo> result = new ArrayList<UserInfo>();
 		for (Pair<User, Person> pair : list) {
 			UserInfo info = new UserInfo();
 			info.setPerson(pair.getValue());
 			info.setUser(pair.getKey());
 			try {
-				info.setImage(modelService.getChild(pair.getKey(), Image.class));
+				info.setImage(modelService.getChild(pair.getKey(), Image.class, privileged));
 			} catch (ModelException ignore) {}
 			result.add(info);
 		}

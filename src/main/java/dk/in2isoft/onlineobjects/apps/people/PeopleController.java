@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import dk.in2isoft.onlineobjects.apps.people.utils.ProfileImageImporter;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
@@ -21,25 +22,27 @@ public class PeopleController extends PeopleControllerBase {
 	@Path
 	public UserProfileInfo getUserProfile(Request request) throws EndUserException {
 		Long userId = request.getLong("userId");
-		User user = modelService.get(User.class, userId, request.getSession());
+		UserSession privileged = request.getSession();
+		User user = modelService.get(User.class, userId, privileged);
 		if (user==null) {
 			throw new EndUserException("The user was not found");
 		}
-		Person person = modelService.getChild(user, Person.class);
+		Person person = modelService.getChild(user, Person.class, privileged);
 		if (person==null) {
 			throw new EndUserException("The user does not have a person!");
 		}
-		return memberService.build(person,request.getSession());
+		return memberService.build(person,privileged);
 	}
 
 	@Path
 	public void updateUserProfile(Request request) throws EndUserException {
 		UserProfileInfo info = request.getObject("info", UserProfileInfo.class);
-		User user = modelService.get(User.class, info.getUserId(), request.getSession());
+		UserSession privileged = request.getSession();
+		User user = modelService.get(User.class, info.getUserId(), privileged);
 		if (user==null) {
 			throw new EndUserException("The user was not found");
 		}
-		Person person = modelService.getChild(user, Person.class);
+		Person person = modelService.getChild(user, Person.class, privileged);
 		if (person==null) {
 			throw new EndUserException("The user does not have a person!");
 		}

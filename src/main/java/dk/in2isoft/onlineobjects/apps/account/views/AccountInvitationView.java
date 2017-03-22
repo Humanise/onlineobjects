@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -16,6 +18,7 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 	
 	private ModelService modelService;
 	private InvitationService invitationService;
+	private SecurityService securityService;
 	
 	private Invitation invitation;
 	private User inviterUser;
@@ -25,12 +28,13 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 
 	public void afterPropertiesSet() throws Exception {
 		// TODO: Use a more safe perspective 
+		Privileged admin = securityService.getAdminPrivileged();
 		invitation = invitationService.getInvitation(getCode());
 		if (invitation!=null) {
-			inviterUser = modelService.getParent(invitation, User.class);
-			inviterPerson = modelService.getChild(inviterUser, Person.class);
-			person = modelService.getChild(invitation, Person.class);
-			email = modelService.getChild(person, EmailAddress.class);
+			inviterUser = modelService.getParent(invitation, null, User.class, admin);
+			inviterPerson = modelService.getChild(inviterUser, Person.class, admin);
+			person = modelService.getChild(invitation, Person.class, admin);
+			email = modelService.getChild(person, EmailAddress.class, admin);
 		}
 	}
 	

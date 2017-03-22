@@ -207,7 +207,7 @@ public class MemberService {
 		
 		List<EmailAddress> list = modelService.list(query);
 		for (EmailAddress emailAddress : list) {
-			User user = modelService.getParent(emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, User.class);
+			User user = modelService.getParent(emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
 			if (user!=null) {
 				return user;
 			}
