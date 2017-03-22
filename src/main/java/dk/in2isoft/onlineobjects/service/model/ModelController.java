@@ -330,8 +330,6 @@ public class ModelController extends ModelControllerBase {
 	public Object createFromFinder(Request request) throws IllegalRequestException, ModelException, SecurityException {
 		String type = request.getString("type", "No type provided");
 		if (Person.class.getSimpleName().equals(type)) {
-			Person person = new Person();
-			modelService.createItem(person, request.getSession());
 			String name = request.getString("fullName", "No name");
 			return personService.getOrCreatePerson(name, request.getSession());
 		}
