@@ -71,7 +71,7 @@
           <groups>${testcase.groups}</groups>
         </configuration>
       </plugin>
-
+<!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jdeps-plugin</artifactId>
@@ -79,15 +79,15 @@
         <executions>
           <execution>
             <goals>
-              <goal>jdkinternals</goal> <!-- verify main classes -->
-              <goal>test-jdkinternals</goal> <!-- verify test classes -->
+              <goal>jdkinternals</goal
+              <goal>test-jdkinternals</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
         </configuration>
       </plugin>
-
+ -->
     </plugins>
   </build>
 
