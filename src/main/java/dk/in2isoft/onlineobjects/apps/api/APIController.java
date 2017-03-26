@@ -167,7 +167,7 @@ public class APIController extends APIControllerBase {
 			}
 			else if (entity instanceof Statement) {
 				row.text = ((Statement) entity).getText();
-				Query<InternetAddress> q = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).withPrivileged(request.getSession());
+				Query<InternetAddress> q = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).withPrivileged(user);
 				InternetAddress addr = modelService.search(q).getFirst();
 				if (addr != null) {
 					row.url = addr.getAddress();
