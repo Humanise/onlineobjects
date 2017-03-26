@@ -31,6 +31,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordImpression.WordRelationGro
 import dk.in2isoft.onlineobjects.modules.language.WordRelationRow;
 import dk.in2isoft.onlineobjects.modules.language.WordRelationsQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class WordsWordView extends AbstractView implements InitializingBean {
@@ -54,11 +55,13 @@ public class WordsWordView extends AbstractView implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		StopWatch watch = new StopWatch();
 		watch.start();
-		String[] path = getRequest().getLocalPath();
-		Locale locale = getRequest().getLocale();
+		Request request = getRequest();
+		String[] path = request.getLocalPath();
+		Locale locale = request.getLocale();
 		text = getWord(path);
 		if (text!=null) {
-			words = wordService.getImpressions(Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text));
+			Query<Word> query = Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text);
+			words = wordService.getImpressions(query, request.getSession());
 			for (WordImpression impression : words) {
 				Multimap<String, WordRelation> map = getRelations(impression);
 				List<WordRelationGroup> relationsList = Lists.newArrayList();

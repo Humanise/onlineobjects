@@ -7,6 +7,7 @@ import java.io.File;
 
 import nu.xom.Element;
 import dk.in2isoft.commons.util.StackTraceUtil;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
@@ -24,7 +25,7 @@ public class ErrorRenderer extends XSLTInterfaceAdapter {
 	}
 
 	@Override
-	protected void buildContent(Element parent) {
+	protected void buildContent(Element parent, Privileged privileged) {
 		Element error = createPageNode(parent, "error");
 		Element message = create("message", exception.getMessage());
 		if (exception instanceof EndUserException) {

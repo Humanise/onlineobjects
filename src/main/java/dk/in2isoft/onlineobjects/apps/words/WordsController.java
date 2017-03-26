@@ -75,7 +75,7 @@ public class WordsController extends WordsControllerBase {
 	public void getDiagram(Request request) throws ModelException, IOException {
 		String text = request.getString("word");
 		
-		Diagram diagram = wordsModelService.getDiagram(text);
+		Diagram diagram = wordsModelService.getDiagram(text, request.getSession());
 		
 		request.sendObject(diagram);
 	}

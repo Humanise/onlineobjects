@@ -15,10 +15,13 @@
 	
 	<bean class="dk.in2isoft.onlineobjects.publishing.CompoundDocumentBuilder">
 		<property name="modelService" ref="modelService"/>
+		<property name="conversionService" ref="conversionService"/>
 	</bean>
 	
 	<bean class="dk.in2isoft.onlineobjects.publishing.ImageGalleryBuilder">
 		<property name="modelService" ref="modelService"/>
+		<property name="conversionService" ref="conversionService"/>
+		<property name="configurationService" ref="configurationService"/>
 	</bean>
 
 </beans>

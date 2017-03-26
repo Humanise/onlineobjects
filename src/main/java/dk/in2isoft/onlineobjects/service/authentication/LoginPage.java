@@ -2,13 +2,14 @@ package dk.in2isoft.onlineobjects.service.authentication;
 
 import java.io.File;
 
-import nu.xom.Element;
-import nu.xom.Node;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.XSLTInterfaceAdapter;
+import nu.xom.Element;
+import nu.xom.Node;
 
 public class LoginPage extends XSLTInterfaceAdapter {
 
@@ -31,10 +32,10 @@ public class LoginPage extends XSLTInterfaceAdapter {
 	}
 
 	@Override
-	protected void buildContent(Element parent) throws ModelException {
+	protected void buildContent(Element parent, Privileged privileged) throws ModelException {
 		parent.appendChild(create("redirect", redirect));
 		parent.appendChild(create("action", action));
-		Node userNode = convertToNode(currentUser);
+		Node userNode = convertToNode(currentUser, privileged);
 		parent.appendChild(userNode);
 	}
 	

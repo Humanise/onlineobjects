@@ -18,6 +18,7 @@
 			<bean
 				class="dk.in2isoft.onlineobjects.modules.index.WordIndexDocumentBuilder">
 				<property name="wordService" ref="wordService" />
+				<property name="securityService" ref="securityService" />
 			</bean>
 		</property>
 	</bean>

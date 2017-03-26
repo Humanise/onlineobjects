@@ -19,26 +19,26 @@ public class WebModelService {
 	private ModelService modelService;
 	private PageRenderingService pageRenderingService;
 	
-	public WebPage getWebSiteFrontPage(WebSite site) throws ModelException {
+	public WebPage getWebSiteFrontPage(WebSite site, Privileged privileged) throws ModelException {
 		WebPage page = null;
-		WebNode node = modelService.getChild(site, WebNode.class);
+		WebNode node = modelService.getChild(site, WebNode.class, privileged);
 		if (node!=null) {
-			page = modelService.getChild(node, WebPage.class);
+			page = modelService.getChild(node, WebPage.class, privileged);
 		}
 		return page;
 	}
 
-	public WebSite getUsersWebSite(User user) throws ModelException {
-		WebSite site = modelService.getChild(user, WebSite.class);
+	public WebSite getUsersWebSite(User user, Privileged privileged) throws ModelException {
+		WebSite site = modelService.getChild(user, WebSite.class, privileged);
 		return site;
 	}
 	
-	public WebSite getWebSiteOfPage(WebPage page) throws ModelException {
-		WebNode node = modelService.getParent(page, WebNode.class);
+	public WebSite getWebSiteOfPage(WebPage page, Privileged privileged) throws ModelException {
+		WebNode node = modelService.getParent(page, WebNode.class, privileged);
 		if (node==null) {
 			return null;
 		}
-		WebSite site = modelService.getParent(node, WebSite.class);
+		WebSite site = modelService.getParent(node, WebSite.class, privileged);
 		return site;
 	}
 
@@ -46,7 +46,7 @@ public class WebModelService {
 		WebPage page = null;
 		WebNode node = modelService.get(WebNode.class, id, privileged);
 		if (node!=null) {
-			page = modelService.getChild(node, WebPage.class);
+			page = modelService.getChild(node, WebPage.class, privileged);
 		}
 		return page;
 	}
@@ -94,27 +94,27 @@ public class WebModelService {
 		
 	}
 
-	public void moveNodeUp(WebNode node, Privileged priviledged) throws ModelException, SecurityException {
+	public void moveNodeUp(WebNode node, Privileged privileged) throws ModelException, SecurityException {
 
-		WebSite site = modelService.getParent(node, WebSite.class);
+		WebSite site = modelService.getParent(node, WebSite.class, privileged);
 		List<Relation> relations = modelService.getRelationsFrom(site,WebNode.class);
 		int index = getIndexOfNode(relations,node);
 		if (index>0) {
 			Relation relation = relations.remove(index);
 			relations.add(index-1, relation);
-			updatePositions(relations, priviledged);
+			updatePositions(relations, privileged);
 		}
 	}
 
-	public void moveNodeDown(WebNode node, Privileged priviledged) throws ModelException, SecurityException {
+	public void moveNodeDown(WebNode node, Privileged privileged) throws ModelException, SecurityException {
 
-		WebSite site = modelService.getParent(node, WebSite.class);
+		WebSite site = modelService.getParent(node, WebSite.class, privileged);
 		List<Relation> relations = modelService.getRelationsFrom(site,WebNode.class);
 		int index = getIndexOfNode(relations,node);
 		if (index<relations.size()-1) {
 			Relation relation = relations.remove(index);
 			relations.add(index+1, relation);
-			updatePositions(relations, priviledged);
+			updatePositions(relations, privileged);
 		}
 	}
 	
@@ -142,12 +142,12 @@ public class WebModelService {
 			throw new EndUserException("The page does not exist");
 		}
 		
-		WebNode node = modelService.getParent(page, WebNode.class);
+		WebNode node = modelService.getParent(page, WebNode.class, privileged);
 		if (node==null) {
 			throw new EndUserException("The page has no menu item");
 		}
-		WebSite site = modelService.getParent(node, WebSite.class);
-		List<WebNode> nodes = modelService.getChildren(site, WebNode.class);
+		WebSite site = modelService.getParent(node, WebSite.class, privileged);
+		List<WebNode> nodes = modelService.getChildren(site, WebNode.class, privileged);
 		return nodes.size()==1;
 	}
 	

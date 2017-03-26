@@ -294,7 +294,7 @@ public class ImageService extends AbstractCommandLineInterface {
 			modelService.updateItem(image, priviledged);
 		}
 		if (metaData.getLatitude()!=null && metaData.getLongitude()!=null) {
-			Location location = modelService.getParent(image, Location.class);
+			Location location = modelService.getParent(image, Location.class, priviledged);
 			if (location==null) {
 				location = new Location();
 				location.setLatitude(metaData.getLatitude());
@@ -305,7 +305,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 
-	public ImageInfo getImageInfo(Image image) throws ModelException {
+	public ImageInfo getImageInfo(Image image, Privileged privileged) throws ModelException {
 		ImageInfo info = new ImageInfo();
 		info.setId(image.getId());
 		info.setName(image.getName());
@@ -314,7 +314,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		info.setCameraMake(image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MAKE));
 		info.setCameraModel(image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MODEL));
 		info.setTags(image.getPropertyValues(Property.KEY_COMMON_TAG));
-		Location location = modelService.getParent(image, Location.class);
+		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
 			info.setLocation(new ImageLocation(location.getLatitude(), location.getLongitude()));
 		}
@@ -330,7 +330,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		image.overrideFirstProperty(Property.KEY_PHOTO_TAKEN, info.getTaken());
 		image.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
 		modelService.updateItem(image, priviledged);
-		Location location = modelService.getParent(image, Location.class);
+		Location location = modelService.getParent(image, Location.class, priviledged);
 		if (info.getLocation()==null) {
 			if (location!=null) {
 				modelService.deleteEntity(location, priviledged);
@@ -370,7 +370,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	}
 	
 	public void updateImageLocation(Image image, ImageLocation imageLocation, Privileged priviledged) throws ModelException, SecurityException {
-		Location existing = modelService.getParent(image, Location.class);
+		Location existing = modelService.getParent(image, Location.class, priviledged);
 		if (imageLocation==null && existing==null) {
 			return;
 		}
@@ -448,7 +448,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	}
 
 	public void deleteImage(Image image, Privileged privileged) throws ModelException, SecurityException {
-		Location location = modelService.getParent(image, Location.class);
+		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
 			modelService.deleteEntity(location, privileged);
 		}

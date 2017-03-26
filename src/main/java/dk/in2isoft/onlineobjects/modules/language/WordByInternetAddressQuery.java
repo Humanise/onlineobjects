@@ -32,7 +32,7 @@ public class WordByInternetAddressQuery implements CustomQuery<ItemData> {
 		item.setId(((Number) row[0]).longValue());
 		item.setValue(((Number) row[0]));
 		
-		item.setTitle((String) (row[1]==null ? "none" : row[1]));
+		item.setText((String) (row[1]==null ? "none" : row[1]));
 		item.setBadge(((Number) row[2]).toString());
 		return item;
 	}

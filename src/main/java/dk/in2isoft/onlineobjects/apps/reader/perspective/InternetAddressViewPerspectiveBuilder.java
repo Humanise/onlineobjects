@@ -53,7 +53,6 @@ import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalytics;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
-import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import nu.xom.Attribute;
@@ -73,7 +72,6 @@ public class InternetAddressViewPerspectiveBuilder {
 	private SemanticService semanticService;
 	private Map<String,ContentExtractor> contentExtractors;
 	private ReaderModelService readerModelService;
-	private InternetAddressService internetAddressService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 
 	public InternetAddressViewPerspective build(Long id, String algorithm, boolean highlight, UserSession session) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
@@ -204,76 +202,72 @@ public class InternetAddressViewPerspectiveBuilder {
 			Document extracted = extractor.extract(xom);
 			*/
 			Document extracted = xom;
-			if (extracted == null) {
-				article.setFormatted("<p><em>Unable to extract text.</em></p>");
-			} else {
 
-				DocumentToText doc2txt = new DocumentToText();
-				String text = doc2txt.getText(extracted);
-				article.setText("<p>" + text.trim().replaceAll("\n\n", "</p><p>").replaceAll("\n", "<br/>") + "</p>");
+			DocumentToText doc2txt = new DocumentToText();
+			String text = doc2txt.getText(extracted);
+			article.setText("<p>" + text.trim().replaceAll("\n\n", "</p><p>").replaceAll("\n", "<br/>") + "</p>");
 
-				DocumentCleaner cleaner = new DocumentCleaner();
-				cleaner.setUrl(data.address.getAddress());
-				cleaner.clean(extracted);
-				
-				Document annotated = annotate(article, data, highlight, extracted, watch);
-				
-				HTMLWriter formatted = new HTMLWriter();
-				formatted.startDiv().withClass("reader_internetaddress_body");
-				formatted.html(DOM.getBodyXML(annotated));
-				formatted.endDiv();
-				
-				List<StatementPerspective> quotes = article.getQuotes();
-				
-				if (!quotes.isEmpty()) {
-					formatted.startDiv().withClass("reader_internetaddress_footer");
-					for (StatementPerspective statement : quotes) {
-						String cls = "js_reader_action reader_internetaddress_quote";
-						if (!statement.isFound()) {
-							cls+=" reader_internetaddress_quote-missing";
-						}
-						formatted.startBlockquote().withClass(cls).withDataMap("action","highlightStatement","id",statement.getId());
-						formatted.text(statement.getText());
-						List<ItemData> authors = statement.getAuthors();
-						if (authors!=null && !authors.isEmpty()) {
-							formatted.startSpan().text(" - ");
-							for (int i = 0; i < authors.size(); i++) {
-								if (i > 0) {
-									formatted.text(", ");
-								}
-								formatted.text(authors.get(i).getText());
+			DocumentCleaner cleaner = new DocumentCleaner();
+			cleaner.setUrl(data.address.getAddress());
+			cleaner.clean(extracted);
+			
+			Document annotated = annotate(article, data, highlight, extracted, watch);
+			
+			HTMLWriter formatted = new HTMLWriter();
+			formatted.startDiv().withClass("reader_internetaddress_body");
+			formatted.html(DOM.getBodyXML(annotated));
+			formatted.endDiv();
+			
+			List<StatementPerspective> quotes = article.getQuotes();
+			
+			if (!quotes.isEmpty()) {
+				formatted.startDiv().withClass("reader_internetaddress_footer");
+				for (StatementPerspective statement : quotes) {
+					String cls = "js_reader_action reader_internetaddress_quote";
+					if (!statement.isFound()) {
+						cls+=" reader_internetaddress_quote-missing";
+					}
+					formatted.startBlockquote().withClass(cls).withDataMap("action","highlightStatement","id",statement.getId());
+					formatted.text(statement.getText());
+					List<ItemData> authors = statement.getAuthors();
+					if (authors!=null && !authors.isEmpty()) {
+						formatted.startSpan().text(" - ");
+						for (int i = 0; i < authors.size(); i++) {
+							if (i > 0) {
+								formatted.text(", ");
 							}
-						}
-						formatted.startVoidA().withClass("oo_icon oo_icon_info_light reader_internetaddress_quote_icon js_reader_action").withDataMap("action","editStatement","id",statement.getId()).endA();
-						formatted.endBlockquote();
-					}
-					formatted.endDiv();
-				}
-				
-
-				
-				List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
-				List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
-				List<InternetAddress> list2 = modelService.list(Query.after(InternetAddress.class).withPrivileged(session).withIds(ids));
-				
-				Function<Long,String> find = id -> {
-					for (InternetAddress internetAddress : list2) {
-						if (internetAddress.getId()==id) {
-							return internetAddress.getName();
+							formatted.text(authors.get(i).getText());
 						}
 					}
-					return "- not found -";
-				};
-				
-				NumberFormat numberFormat = NumberFormat.getPercentInstance();
-				
-				for (Similarity similarity : list) {
-					formatted.startDiv().withClass("reader_meta_similar").text(numberFormat.format(similarity.getSimilarity())).text(" \u00B7 ").text(find.apply(similarity.getId())).endDiv();
+					formatted.startVoidA().withClass("oo_icon oo_icon_info_light reader_internetaddress_quote_icon js_reader_action").withDataMap("action","editStatement","id",statement.getId()).endA();
+					formatted.endBlockquote();
 				}
-				
-				article.setFormatted(formatted.toString());
-
+				formatted.endDiv();
 			}
+			
+
+			
+			List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
+			List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
+			List<InternetAddress> list2 = modelService.list(Query.after(InternetAddress.class).withPrivileged(session).withIds(ids));
+			
+			Function<Long,String> find = id -> {
+				for (InternetAddress internetAddress : list2) {
+					if (internetAddress.getId()==id) {
+						return internetAddress.getName();
+					}
+				}
+				return "- not found -";
+			};
+			
+			NumberFormat numberFormat = NumberFormat.getPercentInstance();
+			
+			for (Similarity similarity : list) {
+				formatted.startDiv().withClass("reader_meta_similar").text(numberFormat.format(similarity.getSimilarity())).text(" \u00B7 ").text(find.apply(similarity.getId())).endDiv();
+			}
+			
+			article.setFormatted(formatted.toString());
+
 		}
 	}
 
@@ -517,11 +511,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}
-	
-	public void setInternetAddressService(InternetAddressService internetAddressService) {
-		this.internetAddressService = internetAddressService;
-	}
-	
+		
 	public void setContentExtractors(Map<String,ContentExtractor> contentExtractors) {
 		this.contentExtractors = contentExtractors;
 	}

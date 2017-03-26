@@ -23,10 +23,10 @@ public class PublishingRemotingFacade extends AbstractRemotingFacade {
 		if (page==null) {
 			throw new IllegalRequestException("Page not found");
 		}
-		WebNode node = modelService.getParent(page, WebNode.class);
+		WebNode node = modelService.getParent(page, WebNode.class, getUserSession());
 		WebSite site = null;
 		if (node!=null) {
-			site = modelService.getParent(node, WebSite.class);
+			site = modelService.getParent(node, WebSite.class, getUserSession());
 		}
 		WebPageInfo info = new WebPageInfo();
 		info.setPageTitle(page.getName());
@@ -45,10 +45,10 @@ public class PublishingRemotingFacade extends AbstractRemotingFacade {
 		page.setName(info.getPageTitle());
 		page.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
 
-		WebNode node = modelService.getParent(page, WebNode.class);
+		WebNode node = modelService.getParent(page, WebNode.class, getUserSession());
 		node.setName(info.getNodeTitle());
 		
-		WebSite site = modelService.getParent(node, WebSite.class);
+		WebSite site = modelService.getParent(node, WebSite.class, getUserSession());
 		site.setName(info.getSiteTitle());
 		
 		modelService.updateItem(page, getUserSession());

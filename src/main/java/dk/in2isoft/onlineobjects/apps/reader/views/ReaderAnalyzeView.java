@@ -29,17 +29,11 @@ import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalytics;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
-import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
-import dk.in2isoft.onlineobjects.services.LanguageService;
-import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ReaderAnalyzeView extends AbstractView implements InitializingBean {
 	
 	private ModelService modelService;
-	private InternetAddressService internetAddressService;
-	private SemanticService semanticService;
-	private LanguageService languageService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 	
 	private InternetAddress internetAddress;
@@ -167,19 +161,7 @@ public class ReaderAnalyzeView extends AbstractView implements InitializingBean 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
-	public void setInternetAddressService(InternetAddressService internetAddressService) {
-		this.internetAddressService = internetAddressService;
-	}
-	
-	public void setSemanticService(SemanticService semanticService) {
-		this.semanticService = semanticService;
-	}
-	
-	public void setLanguageService(LanguageService languageService) {
-		this.languageService = languageService;
-	}
-		
+			
 	public void setTextDocumentAnalyzer(TextDocumentAnalyzer textDocumentAnalyzer) {
 		this.textDocumentAnalyzer = textDocumentAnalyzer;
 	}

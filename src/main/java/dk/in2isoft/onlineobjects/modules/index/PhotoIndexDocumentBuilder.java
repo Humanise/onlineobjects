@@ -52,7 +52,8 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		for (Long id : viewers) {
 			doc.add(new LongField("viewerId",id,Field.Store.YES));
 		}
-		List<Word> words = modelService.getChildren(image, null, Word.class);
+		// TODO: Is it ok to load this using admin?
+		List<Word> words = modelService.getChildren(image, null, Word.class, securityService.getAdminPrivileged());
 		for (Word word : words) {
 			doc.add(new TextField("word", word.getText(), Field.Store.YES));
 			doc.add(new LongField("wordId",word.getId(),Field.Store.YES));

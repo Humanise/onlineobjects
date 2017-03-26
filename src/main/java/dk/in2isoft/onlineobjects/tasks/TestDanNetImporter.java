@@ -494,7 +494,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	}
 
 	private void updateCategory(Node type, Word localWord) throws ModelException, SecurityException {
-		LexicalCategory lexicalCategory = modelService.getParent(localWord, LexicalCategory.class);
+		LexicalCategory lexicalCategory = modelService.getParent(localWord, LexicalCategory.class, adminUser);
 		if (lexicalCategory==null) {
 			String code = map.get(type.getURI());
 			if (code!=null) {
@@ -512,7 +512,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	}
 
 	private void updateLanguage(Entity danish, Word localWord) throws ModelException, SecurityException {
-		Language language = modelService.getParent(localWord, Language.class);
+		Language language = modelService.getParent(localWord, Language.class, adminUser);
 		if (language==null) {
 			modelService.createRelation(danish, localWord, publicUser);
 			modelService.commit();

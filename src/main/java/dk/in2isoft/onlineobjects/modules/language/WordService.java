@@ -216,16 +216,16 @@ public class WordService {
 		return isq;
 	}
 	
-	public WordImpression getImpression(Word word) throws ModelException {
+	public WordImpression getImpression(Word word, Privileged privileged) throws ModelException {
 		WordImpression impression = new WordImpression();
 		if (trademarks.contains(word.getText().toLowerCase())) {
 			impression.setTrademark(true);
 		}
 		impression.setWord(word);
-		impression.setLanguage(modelService.getParent(word, Language.class));
-		impression.setLexicalCategory(modelService.getParent(word, LexicalCategory.class));
-		impression.setOriginator(modelService.getChild(word, User.class));
-		impression.setSource(modelService.getChild(word, Relation.KIND_COMMON_SOURCE, InternetAddress.class));
+		impression.setLanguage(modelService.getParent(word, Language.class, privileged));
+		impression.setLexicalCategory(modelService.getParent(word, LexicalCategory.class, privileged));
+		impression.setOriginator(modelService.getChild(word, User.class, privileged));
+		impression.setSource(modelService.getChild(word, Relation.KIND_COMMON_SOURCE, InternetAddress.class, privileged));
 		impression.setGlossary(word.getPropertyValue(Property.KEY_SEMANTICS_GLOSSARY));
 		impression.setExamples(word.getPropertyValues(Property.KEY_SEMANTICS_EXAMPLE));
 		String dataSource = word.getPropertyValue(Property.KEY_DATA_SOURCE);
@@ -237,14 +237,14 @@ public class WordService {
 	}
 
 
-	public List<WordImpression> getImpressions(Query<Word> query) throws ModelException {
-		return getImpressions(modelService.list(query));
+	public List<WordImpression> getImpressions(Query<Word> query, Privileged privileged) throws ModelException {
+		return getImpressions(modelService.list(query), privileged);
 	}
 
-	public List<WordImpression> getImpressions(List<Word> list) throws ModelException {
+	public List<WordImpression> getImpressions(List<Word> list, Privileged privileged) throws ModelException {
 		List<WordImpression> impressions = Lists.newArrayList();
 		for (Word word : list) {
-			impressions.add(getImpression(word));
+			impressions.add(getImpression(word, privileged));
 		}
 		return impressions;
 	}
@@ -276,14 +276,14 @@ public class WordService {
 			Word word = new Word();
 			word.setText(text);
 			modelService.createItem(word, session);
-			securityService.grantPublicPrivileges(word, true, false, false);
+			securityService.grantPublicView(word, true, session);
 			Relation languageRelation = modelService.createRelation(language, word, session);
-			securityService.grantPublicPrivileges(languageRelation, true, false, false);
+			securityService.grantPublicView(languageRelation, true, session);
 			if (lexicalCategory!=null) {
 				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, session);
-				securityService.grantPublicPrivileges(categoryRelation, true, false, false);
+				securityService.grantPublicView(categoryRelation, true, session);
 			}
-			ensureOriginator(word, session);
+			ensureOriginator(word, session.getUser());
 			return word;
 		} else {
 			return list.iterator().next();
@@ -412,7 +412,7 @@ public class WordService {
 		address.setAddress(src);
 		address.setName(Strings.simplifyURL(src));
 		modelService.createItem(address, privileged);
-		securityService.grantPublicPrivileges(address, true, false, false);
+		securityService.grantPublicView(address, true, privileged);
 		return address;
 	}
 	
@@ -452,7 +452,7 @@ public class WordService {
 			}
 		}
 		//modelService.getChildren(word, Relation.KIND_COMMON_ORIGINATOR, InternetAddress.class);
-		securityService.grantPublicPrivileges(word, true, false, false);
+		securityService.grantPublicView(word, true, privileged);
 	}
 
 	public void updateSource(Word word, Entity source, Privileged privileged) throws ModelException, SecurityException {
@@ -469,7 +469,7 @@ public class WordService {
 
 			if (create) {
 				Relation relation = modelService.createRelation(word, source, Relation.KIND_COMMON_SOURCE, privileged);
-				securityService.grantPublicPrivileges(relation, true, false, false);
+				securityService.grantPublicView(relation, true, privileged);
 			}
 		}
 	}
@@ -486,7 +486,7 @@ public class WordService {
 		}
 		if (!found) {
 			Relation relation = modelService.createRelation(language, word, privileged);
-			securityService.grantPublicPrivileges(relation, true, false, false);
+			securityService.grantPublicView(relation, true, privileged);
 		}
 	}
 
@@ -502,7 +502,7 @@ public class WordService {
 		}
 		if (!found) {
 			Relation relation = modelService.createRelation(category, word, privileged);
-			securityService.grantPublicPrivileges(relation, true, false, false);
+			securityService.grantPublicView(relation, true, privileged);
 		}
 	}
 
@@ -541,11 +541,11 @@ public class WordService {
 		return null;
 	}
 	
-	private void ensureOriginator(Word word, UserSession session) throws ModelException, SecurityException {
+	public void ensureOriginator(Word word, User user) throws ModelException, SecurityException {
 
-		User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class);
-		if (user==null) {
-			modelService.createRelation(word, session.getUser(), Relation.KIND_COMMON_ORIGINATOR, session);
+		User existing = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, securityService.getAdminPrivileged());
+		if (existing==null) {
+			modelService.createRelation(word, user, Relation.KIND_COMMON_ORIGINATOR, user);
 		}
 	}
 	

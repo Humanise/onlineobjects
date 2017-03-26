@@ -65,7 +65,7 @@ public class TestImageService extends AbstractSpringTestCase {
 		assertEquals("iPhone",image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MODEL));
 
 		// Check the location
-		Location location = modelService.getParent(image, Location.class);
+		Location location = modelService.getParent(image, Location.class, privileged);
 		Assert.assertNotNull(location);
 		assertEquals(new Double(57.225833333333334),new Double(location.getLatitude()));
 		assertEquals(new Double(9.515666666666666),new Double(location.getLongitude()));

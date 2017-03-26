@@ -2,13 +2,14 @@ package dk.in2isoft.onlineobjects.model.conversion;
 
 import nu.xom.Element;
 import nu.xom.Node;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
 
 public class ImageConverter extends EntityConverter {
 
 	@Override
-	protected Node generateSubXML(Entity entity) {
+	protected Node generateSubXML(Entity entity, Privileged privileged) {
 		Image image = (Image) entity;
 		image.getIcon();
 		Element root = new Element("Image",Image.NAMESPACE);

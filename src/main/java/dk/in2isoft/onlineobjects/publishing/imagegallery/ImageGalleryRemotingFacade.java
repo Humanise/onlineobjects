@@ -18,10 +18,8 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 	// Logger.getLogger(ImageGalleryRemotingFacade.class);
 
 	public List<Image> listImages(long galleryId) throws EndUserException {
-		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId,
-				getUserSession());
-		List<Image> subs = modelService
-				.getChildrenOrdered(gallery, Image.class);
+		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId,getUserSession());
+		List<Image> subs = modelService.getChildrenOrdered(gallery, Image.class, getUserSession());
 		return subs;
 	}
 

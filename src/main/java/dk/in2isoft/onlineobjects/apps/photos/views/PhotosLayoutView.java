@@ -71,7 +71,7 @@ public class PhotosLayoutView extends AbstractManagedBean implements Initializin
 				galleries.add(option);
 			}
 			modifiable = this.user.getId() == getRequest().getSession().getUser().getId();
-			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class);
+			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, getRequest().getSession());
 		}
 	}
 	

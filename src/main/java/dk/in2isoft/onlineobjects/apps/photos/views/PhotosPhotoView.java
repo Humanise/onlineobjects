@@ -78,13 +78,13 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 				secret = !securityService.canView(image, securityService.getPublicUser());
 			}
 			
-			imageInfo = imageService.getImageInfo(image);
+			imageInfo = imageService.getImageInfo(image, session);
 			
 			if (imageInfo.getRotation()!=null && (Math.abs(imageInfo.getRotation())==90)) {
 				vertical=!vertical;
 			}
 			
-			location = modelService.getParent(image, Location.class);
+			location = modelService.getParent(image, Location.class, session);
 
 			user = modelService.getOwner(image);
 			if (user!=null) {
@@ -94,7 +94,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 				if (first!=null) {
 					user = first.getKey();
 					person = first.getValue();
-					personImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class);
+					personImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, session);
 					fullPersonName = personService.getFullPersonName(person, 14);
 				}
 			}
@@ -133,7 +133,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 				mapPoint.setLatitude(location.getLatitude());
 				mapPoint.setLongitude(location.getLongitude());
 			}
-			List<Word> wordChildren = modelService.getChildren(image, null, Word.class);
+			List<Word> wordChildren = modelService.getChildren(image, null, Word.class, session);
 			words = Lists.newArrayList();
 			for (Word word : wordChildren) {
 				String link = "";

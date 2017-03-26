@@ -46,7 +46,7 @@ public class CommonRemotingFacade extends AbstractRemotingFacade {
 		for (Class<?> clazz : classes) {
 			ItemData data = new ItemData();
 			data.setValue(clazz.getCanonicalName());
-			data.setTitle(clazz.getSimpleName());
+			data.setText(clazz.getSimpleName());
 			data.setIcon("common/folder");
 			items.add(data);
 		}
@@ -79,7 +79,7 @@ public class CommonRemotingFacade extends AbstractRemotingFacade {
 		List<ItemData> list = Lists.newArrayList();
 		for (Entry<String,Integer> entry : properties.entrySet()) {
 			ItemData item = new ItemData();
-			item.setTitle(entry.getKey());
+			item.setText(entry.getKey());
 			item.setValue(entry.getKey());
 			item.setKind("tag");
 			item.setBadge(entry.getValue().toString());

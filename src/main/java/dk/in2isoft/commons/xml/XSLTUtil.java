@@ -147,7 +147,7 @@ public class XSLTUtil {
 		} else {
 			response.setContentType("text/html");
 		}
-		Document data = ui.getData();
+		Document data = ui.getData(request.getSession());
 		try {
 			applyXSLT(data, new StreamSource(ui.getStylesheet()), response.getOutputStream(), parameters);
 		} catch (IllegalStateException e) {
@@ -158,7 +158,7 @@ public class XSLTUtil {
 	private static void writeSource(XSLTInterface ui, Request request) throws IOException, ModelException {
 		request.getResponse().setContentType("text/xml");
 		Serializer serializer = new Serializer(request.getResponse().getOutputStream());
-		serializer.write(ui.getDocument());
+		serializer.write(ui.getDocument(request.getSession()));
 	}
 
 	public static void applyXSLT(String xmlData, File[] xsltFile, HttpServletResponse response,

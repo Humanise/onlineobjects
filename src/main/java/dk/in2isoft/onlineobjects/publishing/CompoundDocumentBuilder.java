@@ -2,27 +2,27 @@ package dk.in2isoft.onlineobjects.publishing;
 
 import java.util.Map.Entry;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.XPathContext;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
 
-import dk.in2isoft.onlineobjects.core.Core;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.CompoundDocument;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.services.ConversionService;
+import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.XPathContext;
 
 public class CompoundDocumentBuilder extends DocumentBuilder {
 	
 	private ModelService modelService;
+	private ConversionService conversionService;
 
 	private static ImmutableMap<String, String> styles = ImmutableMap.of(Property.KEY_STYLE_MARGIN_TOP, "top", Property.KEY_STYLE_MARGIN_BOTTOM, "bottom", Property.KEY_STYLE_MARGIN_LEFT, "left", Property.KEY_STYLE_MARGIN_RIGHT, "right");
 	
@@ -56,7 +56,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 			Entity part = modelService.get(Entity.class, id, privileged);
 			insertMargins(section, part);
 			if (part!=null) {
-				Node partNode = Core.getInstance().getConversionService().generateXML(part);
+				Node partNode = conversionService.generateXML(part, privileged);
 				section.appendChild(partNode);
 			}
 		}
@@ -74,14 +74,17 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 
 	@Override
 	public Entity create(Privileged priviledged) throws EndUserException {
-		ModelService model = Core.getInstance().getModel();
 		CompoundDocument document = new CompoundDocument();
-		model.createItem(document, priviledged);
+		modelService.createItem(document, priviledged);
 		return document;
 	}
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	public void setConversionService(ConversionService conversionService) {
+		this.conversionService = conversionService;
 	}
 
 }

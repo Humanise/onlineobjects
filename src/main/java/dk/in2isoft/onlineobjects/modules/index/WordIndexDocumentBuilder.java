@@ -5,6 +5,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -18,10 +19,11 @@ import dk.in2isoft.onlineobjects.modules.language.WordService;
 public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 	
 	private WordService wordService;
+	private SecurityService securityService;
 
 	public Document build(Word word) throws ModelException {
 		
-		WordImpression impression = wordService.getImpression(word);
+		WordImpression impression = wordService.getImpression(word, securityService.getAdminPrivileged());
 		StringBuilder text = new StringBuilder();
 		text.append(word.getText()).append(" ");
 		String glossary = word.getPropertyValue(Property.KEY_SEMANTICS_GLOSSARY);
@@ -73,5 +75,9 @@ public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -4,10 +4,6 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-import nu.xom.Node;
-import dk.in2isoft.onlineobjects.core.Core;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -16,13 +12,19 @@ import dk.in2isoft.onlineobjects.model.HeaderPart;
 import dk.in2isoft.onlineobjects.model.HtmlPart;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.ConversionService;
+import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Node;
 
 public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder {
 
 	private static String NAMESPACE = "http://uri.onlineobjects.com/publishing/Document/ImageGallery/";
 	
 	private ModelService modelService;
+	private ConversionService conversionService;
+	private ConfigurationService configurationService;
 
 	// private static Logger log = Logger.getLogger(ImageGalleryBuilder.class);
 
@@ -38,7 +40,6 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 	@Override
 	public Node build(Document document, Privileged priviledged) throws EndUserException {
 		ImageGallery gallery = (ImageGallery) document;
-		ConversionService converter = Core.getInstance().getConversionService();
 
 		String style = gallery.getPropertyValue(ImageGallery.PROPERTY_FRAMESTYLE);
 		if (style == null)
@@ -51,62 +52,61 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 		settings.addAttribute(new Attribute("style", style));
 		root.appendChild(settings);
 
-		HeaderPart header = modelService.getChild(gallery, HeaderPart.class);
+		HeaderPart header = modelService.getChild(gallery, HeaderPart.class, priviledged);
 		if (header != null) {
-			root.appendChild(converter.generateXML(header));
+			root.appendChild(conversionService.generateXML(header,priviledged));
 		}
 
-		HtmlPart html = modelService.getChild(gallery, HtmlPart.class);
+		HtmlPart html = modelService.getChild(gallery, HtmlPart.class, priviledged);
 		if (html != null) {
-			root.appendChild(converter.generateXML(html));
+			root.appendChild(conversionService.generateXML(html,priviledged));
 		}
 
 		Element tiled = new Element("tiled", NAMESPACE);
 		root.appendChild(tiled);
 		Element row = new Element("row", NAMESPACE);
 		int columns = gallery.getTiledColumns();
-		List<Image> images = modelService.getChildrenOrdered(gallery, Image.class);
+		List<Image> images = modelService.getChildrenOrdered(gallery, Image.class, priviledged);
 		for (int i = 0; i < images.size(); i++) {
 			if (i % columns == 0) {
 				row = new Element("row", NAMESPACE);
 				tiled.appendChild(row);
 			}
 			Entity image = images.get(i);
-			row.appendChild(converter.generateXML(image));
+			row.appendChild(conversionService.generateXML(image,priviledged));
 		}
 		return root;
 	}
 
 	@Override
 	public Entity create(Privileged priviledged) throws EndUserException {
-		ModelService model = Core.getInstance().getModel();
 
 		// Create an image gallery
 		ImageGallery gallery = new ImageGallery();
 		gallery.setName("Mine billeder");
-		model.createItem(gallery, priviledged);
+		modelService.createItem(gallery, priviledged);
 
 		// Create gallery title
 		HeaderPart header = new HeaderPart();
 		header.setText("Mine billeder");
-		model.createItem(header, priviledged);
-		model.createRelation(gallery, header, priviledged);
+		modelService.createItem(header, priviledged);
+		modelService.createRelation(gallery, header, priviledged);
 
 		// Create gallery title
 		HtmlPart text = new HtmlPart();
 		text.setHtml("Dette er nogle billeder jeg har taget");
-		model.createItem(text, priviledged);
-		model.createRelation(gallery, text, priviledged);
+		modelService.createItem(text, priviledged);
+		modelService.createRelation(gallery, text, priviledged);
 
 		return gallery;
 	}
 
-	public void buildFeed(Document document, FeedWriter writer) throws EndUserException {
+	public void buildFeed(Document document, FeedWriter writer, Privileged privileged) throws EndUserException {
 		ImageGallery gallery = (ImageGallery) document;
-		List<Image> images = modelService.getChildren(gallery, Image.class);
+		List<Image> images = modelService.getChildren(gallery, Image.class, privileged);
 		try {
 			writer.startFeed();
-			writer.startChannel(gallery.getName(),Core.getInstance().getConfigurationService().getBaseUrl());
+			writer.startChannel(gallery.getName(),configurationService.getBaseUrl());
 			for (Image image : images) {
 				writer.writeItem(image.getName(), image.getPropertyValue(Image.PROPERTY_DESCRIPTION), image.getUpdated());
 			}
@@ -119,5 +119,13 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	public void setConversionService(ConversionService conversionService) {
+		this.conversionService = conversionService;
+	}
+	
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
 	}
 }

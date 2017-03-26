@@ -11,6 +11,7 @@ import nu.xom.Element;
 import dk.in2isoft.commons.xml.XSLTUtil;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
@@ -36,7 +37,8 @@ public class PageRenderingService {
 
 	public void render(WebPage page,Request request) throws EndUserException {
 		// Get the page content
-		Entity document = modelService.getChild(page, Relation.KIND_WEB_CONTENT, Entity.class, request.getSession());
+		UserSession privileged = request.getSession();
+		Entity document = modelService.getChild(page, Relation.KIND_WEB_CONTENT, Entity.class, privileged);
 		//ImageGallery document = (ImageGallery)model.getFirstSubRelation(page, ImageGallery.TYPE, ImageGallery.class);
 		if (document==null) {
 			throw new EndUserException("The page does not have a document!");
@@ -48,7 +50,7 @@ public class PageRenderingService {
 			FeedBuilder source = (FeedBuilder) builder;
 			try {
 				FeedWriter writer = new FeedWriter(request.getResponse());
-				source.buildFeed((Document) document, writer);
+				source.buildFeed((Document) document, writer, privileged);
 			} catch (IOException e) {
 				throw new EndUserException(e);
 			}
@@ -56,7 +58,7 @@ public class PageRenderingService {
 		}
 		
 		// Get the website
-		WebSite site = webModelService.getWebSiteOfPage(page);
+		WebSite site = webModelService.getWebSiteOfPage(page, privileged);
 		// Create root
 		Element root = new Element("WebPage", NAMESPACE);
 		root.addAttribute(new Attribute("id",String.valueOf(page.getId())));
@@ -66,23 +68,23 @@ public class PageRenderingService {
 		
 		// Append context
 		Element context = new Element("context", NAMESPACE);
-		context.appendChild(conversionService.generateXML(site));
-		context.appendChild(conversionService.generateXML(page));
+		context.appendChild(conversionService.generateXML(site,privileged));
+		context.appendChild(conversionService.generateXML(page,privileged));
 		
-		WebNode node = (WebNode)modelService.getParent(page,WebNode.class);
-		context.appendChild(conversionService.generateXML(node));
+		WebNode node = (WebNode)modelService.getParent(page,WebNode.class, privileged);
+		context.appendChild(conversionService.generateXML(node, privileged));
 		
 		Element nodes = new Element("nodes", NAMESPACE);
 		List<Relation> childRelations = modelService.getRelationsFrom(site, WebNode.class);
 		for (Relation relation : childRelations) {
-			nodes.appendChild(conversionService.generateXML(relation.getTo()));
+			nodes.appendChild(conversionService.generateXML(relation.getTo(), privileged));
 		}
 		context.appendChild(nodes);
 		root.appendChild(context);
 		// Append content
 		Element content = new Element("content", NAMESPACE);
 		content.addAttribute(new Attribute("id",String.valueOf(document.getId())));
-		content.appendChild(builder.build((Document)document, request.getSession()));
+		content.appendChild(builder.build((Document)document, privileged));
 		root.appendChild(content);
 		
 		String template = page.getPropertyValue(WebPage.PROPERTY_TEMPLATE);
@@ -93,7 +95,7 @@ public class PageRenderingService {
 		File frame = configurationService.getFile(new String[] {"WEB-INF","apps","community","web","layouts","horizontal.xsl"});
 
 		Map<String, String> parameters = buildParameters(request);
-		parameters.put("privilege-document-modify", String.valueOf(securityService.canModify(document, request.getSession())));
+		parameters.put("privilege-document-modify", String.valueOf(securityService.canModify(document, privileged)));
 		parameters.put("page-design",template);
 		try {
 			if (request.getBoolean("viewsource")) {

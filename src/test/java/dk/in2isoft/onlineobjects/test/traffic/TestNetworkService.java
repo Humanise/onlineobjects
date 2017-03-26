@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

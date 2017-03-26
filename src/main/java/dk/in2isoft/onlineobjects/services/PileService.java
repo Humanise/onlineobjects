@@ -46,7 +46,6 @@ public class PileService {
 			pile = new Pile();
 			pile.setName(relationKind + " for "+user.getUsername());
 			modelService.createItem(pile, user);
-			modelService.grantFullPrivileges(pile, user);
 			modelService.createRelation(user, pile, relationKind, user);
 		}
 		return pile;

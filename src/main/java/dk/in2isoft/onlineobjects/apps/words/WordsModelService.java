@@ -38,6 +38,7 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
+import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.PileService;
@@ -52,6 +53,7 @@ public class WordsModelService {
 	private PileService pileService;
 	private SemanticService semanticService;
 	private ImportService importService;
+	private WordService wordService;
 	
 	private Map<String,Object> getData(Entity entity) {
 		Map<String,Object> data = Maps.newHashMap();
@@ -61,7 +63,7 @@ public class WordsModelService {
 		return data;
 	}
 
-	public Diagram getDiagram(String text) throws ModelException {
+	public Diagram getDiagram(String text, Privileged privileged) throws ModelException {
 		Messages msg = new Messages(WordsController.class);
 		boolean showLanguage = !false;
 		Diagram diagram = new Diagram();
@@ -95,7 +97,7 @@ public class WordsModelService {
 				diagram.addEdge(wordNode,msg.get(relation.getKind(), locale),childNode);
 				
 				if (!diagram.isFull() && showLanguage) {
-					Language language = modelService.getParent(child, Language.class);
+					Language language = modelService.getParent(child, Language.class, privileged);
 					if (language!=null) {
 						Node langNode = new Node();
 						langNode.setId(language.getId());
@@ -122,7 +124,7 @@ public class WordsModelService {
 				diagram.addEdge(wordNode,msg.get(relation.getKind()+".reverse", locale),childNode);
 
 				if (!diagram.isFull() && showLanguage) {
-					Language language = modelService.getParent(parent, Language.class);
+					Language language = modelService.getParent(parent, Language.class, privileged);
 					if (language!=null) {
 						Node langNode = new Node();
 						langNode.setId(language.getId());
@@ -135,7 +137,7 @@ public class WordsModelService {
 			}
 
 			if (!diagram.isFull() && showLanguage) {
-				Language language = modelService.getParent(word, Language.class);
+				Language language = modelService.getParent(word, Language.class, privileged);
 				if (language!=null) {
 					Node langNode = new Node();
 					langNode.setId(language.getId());
@@ -146,7 +148,7 @@ public class WordsModelService {
 				}
 			}
 			if (!diagram.isFull()) {
-				LexicalCategory category = modelService.getParent(word, LexicalCategory.class);
+				LexicalCategory category = modelService.getParent(word, LexicalCategory.class, privileged);
 				if (category!=null) {
 					Node categoryNode = new Node();
 					categoryNode.setId(category.getId());
@@ -156,7 +158,7 @@ public class WordsModelService {
 					diagram.addEdge(wordNode,"Category",categoryNode);
 
 					if (!diagram.isFull()) {
-						LexicalCategory superCategory = modelService.getParent(category, Relation.KIND_STRUCTURE_SPECIALIZATION, LexicalCategory.class);
+						LexicalCategory superCategory = modelService.getParent(category, Relation.KIND_STRUCTURE_SPECIALIZATION, LexicalCategory.class, privileged);
 						if (superCategory!=null) {
 							Node superNode = new Node();
 							superNode.setId(superCategory.getId());
@@ -169,7 +171,7 @@ public class WordsModelService {
 				}
 			}
 			if (!diagram.isFull()) {
-				User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class);
+				User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, privileged);
 				if (user!=null) {
 					Node userNode = new Node();
 					userNode.setId(user.getId());
@@ -217,7 +219,7 @@ public class WordsModelService {
 				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, session);
 				securityService.makePublicVisible(categoryRelation, session);
 			}
-			ensureOriginator(word,session.getUser());
+			wordService.ensureOriginator(word,session.getUser());
 		}
 	}
 
@@ -270,7 +272,7 @@ public class WordsModelService {
 			Relation relation = modelService.createRelation(language, word, privileged);
 			securityService.makePublicVisible(relation, privileged);
 		}
-		ensureOriginator(word,originator);
+		wordService.ensureOriginator(word,originator);
 	}
 
 	public void changeCategory(long wordId, String category, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
@@ -287,7 +289,7 @@ public class WordsModelService {
 		modelService.deleteRelations(parents, privileged);
 		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, privileged);
 		securityService.makePublicVisible(categoryRelation, privileged);
-		ensureOriginator(word,originator);		
+		wordService.ensureOriginator(word,originator);		
 	}
 
 	
@@ -303,13 +305,6 @@ public class WordsModelService {
 			throw new IllegalRequestException("Word not found (id="+wordId+")");
 		}
 		return word;
-	}
-
-	private void ensureOriginator(Word word, User originator) throws ModelException, SecurityException {
-		User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class);
-		if (user==null) {
-			modelService.createRelation(word, originator, Relation.KIND_COMMON_ORIGINATOR, originator);
-		}
 	}
 
 	public void addToPostponed(Word word) throws ModelException, SecurityException {
@@ -411,5 +406,9 @@ public class WordsModelService {
 	
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
+	}
+	
+	public void setWordService(WordService wordService) {
+		this.wordService = wordService;
 	}
 }

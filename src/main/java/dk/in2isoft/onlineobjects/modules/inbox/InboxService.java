@@ -51,7 +51,6 @@ public class InboxService implements InitializingBean {
 			inbox = new Pile();
 			inbox.setName("Inbox for "+privileged.getUsername());
 			modelService.createItem(inbox, privileged);
-			modelService.grantFullPrivileges(inbox, privileged);
 			modelService.createRelation(privileged, inbox, Relation.KIND_SYSTEM_USER_INBOX, privileged);
 		}
 		return inbox;
