@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.information;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -249,11 +250,11 @@ public class InformationService {
 
 	private void createSimilarity(InternetAddress a, InternetAddress b, double similarity, Privileged privileged)
 			throws ModelException, SecurityException {
-		Relation a2b = modelService.getRelation(a, b, Kind.similarity.toString());
-		Relation b2a = modelService.getRelation(b, a, Kind.similarity.toString());
+		Optional<Relation> a2b = modelService.getRelation(a, b, Kind.similarity.toString(), privileged);
+		Optional<Relation> b2a = modelService.getRelation(b, a, Kind.similarity.toString(), privileged);
 
 		// TODO Make sure there is exactly 1 relation
-		if (a2b == null && b2a == null) {
+		if (!a2b.isPresent() && !b2a.isPresent()) {
 			Relation relation = new Relation(a, b);
 			relation.setStrength(similarity);
 			relation.setKind(Kind.similarity);

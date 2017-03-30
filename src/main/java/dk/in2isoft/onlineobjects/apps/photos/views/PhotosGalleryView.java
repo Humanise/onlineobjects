@@ -52,14 +52,14 @@ public class PhotosGalleryView extends AbstractManagedBean implements Initializi
 		Locale locale = request.getLocale();
 		String[] path = request.getLocalPath();
 		long id = Numbers.parseLong(path[2]);
+		final UserSession session = request.getSession();
 		if (id>0) {
-			imageGallery = modelService.get(ImageGallery.class, id,request.getSession());
+			imageGallery = modelService.get(ImageGallery.class, id, session);
 			if (imageGallery==null) {
 				throw new ContentNotFoundException("The gallery does not exist");
 			}
-			final UserSession session = request.getSession();
 			title = imageGallery.getName();
-			user = modelService.getOwner(imageGallery);
+			user = modelService.getOwner(imageGallery, session);
 			username = user.getUsername();
 			modifiable = user!=null && user.getId()==session.getIdentity();
 			List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, session);

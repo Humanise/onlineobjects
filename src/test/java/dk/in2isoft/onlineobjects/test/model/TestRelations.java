@@ -20,37 +20,37 @@ public class TestRelations extends AbstractSpringTestCase {
 
 	@Test
 	public void testRelations() throws SQLException, ModelException, SecurityException {
-		Privileged priviledged = getAdminUser();
+		Privileged privileged = getAdminUser();
 
 		WebPage page = new WebPage();
-		modelService.createItem(page, priviledged);
+		modelService.createItem(page, privileged);
 		assertTrue(page.getId() > 0);
 		modelService.commit();
 
 		WebNode node = new WebNode();
-		modelService.createItem(node, priviledged);
-		modelService.createRelation(page, node, priviledged);
+		modelService.createItem(node, privileged);
+		modelService.createRelation(page, node, privileged);
 
 		Person person = new Person();
-		modelService.createItem(person, priviledged);
-		modelService.createRelation(page, person, priviledged);
+		modelService.createItem(person, privileged);
+		modelService.createRelation(page, person, privileged);
 		{
-			List<Relation> childRelations = modelService.getRelationsFrom(page);
+			List<Relation> childRelations = modelService.find().relations(privileged).from(page).list();
 			assertTrue(childRelations.size() == 2);
 		}
 		{
-			List<Relation> childRelations = modelService.getRelationsFrom(page, WebNode.class);
+			List<Relation> childRelations = modelService.getRelationsFrom(page, WebNode.class, privileged);
 			assertTrue(childRelations.size() == 1);
 			assertTrue(childRelations.get(0).getTo() instanceof WebNode);
 		}
 		{
-			List<Relation> childRelations = modelService.getRelationsFrom(page, Person.class);
+			List<Relation> childRelations = modelService.getRelationsFrom(page, Person.class, privileged);
 			assertTrue(childRelations.size() == 1);
 			assertTrue(childRelations.get(0).getTo() instanceof Person);
 		}
-		modelService.deleteEntity(page, priviledged);
-		modelService.deleteEntity(node, priviledged);
-		modelService.deleteEntity(person, priviledged);
+		modelService.deleteEntity(page, privileged);
+		modelService.deleteEntity(node, privileged);
+		modelService.deleteEntity(person, privileged);
 		modelService.commit();
 	}
 

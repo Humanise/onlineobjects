@@ -26,6 +26,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		// Public can create a User
 		modelService.createItem(user, getPublicUser());
 
+		// Public cannot delete the user again
 		assertFails(()->modelService.deleteEntity(user, getPublicUser()));
 		
 		modelService.deleteEntity(user, getAdminUser());
@@ -35,11 +36,12 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 	public void testGrantUsingUnsavedObjects() throws EndUserException {
 		User user = new User();
 		Comment comment = new Comment();
-		assertFails(() -> securityService.grantFullPrivileges(comment, user));
+		assertFails(() -> securityService.grantFullPrivileges(comment, user, getAdminUser()));
 
 		modelService.createItem(user, getAdminUser());
 		
-		assertFails(() -> securityService.grantFullPrivileges(comment, user));
+		// Cannot grant privileges since the comment is unsaved
+		assertFails(() -> securityService.grantFullPrivileges(comment, user, getAdminUser()));
 		
 		modelService.commit();
 	}
@@ -52,7 +54,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		modelService.createItem(user, getAdminUser());
 		securityService.makePublicVisible(user, getAdminUser());
 		
-		assertFails(()->securityService.grantFullPrivileges(user, publicUser));
+		assertFails(()->securityService.grantFullPrivileges(user, publicUser, getAdminUser()));
 		
 		// Public should now only be able to view the user
 		assertTrue(securityService.canView(user, publicUser));
@@ -79,7 +81,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		
 		assertFails(()->modelService.deleteEntity(user, publicUser));
 		
-		securityService.grantFullPrivileges(user, user);
+		securityService.grantFullPrivileges(user, user, getAdminUser());
 		
 		assertTrue(securityService.canDelete(user, user));
 		assertTrue(securityService.canModify(user, user));
@@ -116,7 +118,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		Comment comment = new Comment();
 		
 		modelService.createItem(user, getAdminUser());
-		securityService.grantFullPrivileges(user, user);
+		securityService.grantFullPrivileges(user, user, getAdminUser());
 		modelService.createItem(comment, user);
 
 		// The public user cannot delete anything
@@ -133,7 +135,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		// Test that the user cannot delete the comment
 		assertFails(()->modelService.deleteEntity(comment, user));
 		
-		modelService.grantPrivileges(comment, publicUser, true, true, true);
+		modelService.grantPrivileges(comment, publicUser, true, true, true, getAdminUser());
 
 		// Now the user can delete again
 		assertTrue(securityService.canDelete(comment, user));

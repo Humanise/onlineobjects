@@ -128,7 +128,7 @@ public class WordsController extends WordsControllerBase {
 		Long wordId = request.getLong("wordId");
 		Locale locale = new Locale(request.getString("language"));
 		
-		Relation relation = modelService.getRelation(relationid);
+		Relation relation = modelService.getRelation(relationid, request.getSession()).orElseThrow(() -> new IllegalRequestException("Word not found"));
 		Entity to = relation.getTo();
 		Entity from = relation.getFrom();
 		Entity word = null;

@@ -34,7 +34,7 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 	public void updateImagePositions(long galleryId, long[] ids)
 			throws ModelException, SecurityException {
 		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId, getUserSession());
-		List<Relation> relations = modelService.getRelationsFrom(gallery);
+		List<Relation> relations = modelService.find().relations(getUserSession()).from(gallery).list();
 		for (int i = 0; i < ids.length; i++) {
 			for (Relation relation : relations) {
 				if (relation.getTo().getId() == ids[i]) {

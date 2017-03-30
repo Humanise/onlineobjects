@@ -107,7 +107,7 @@ public class MemberService {
 
 		// Make sure only the user has access to itself
 		modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
-		securityService.grantFullPrivileges(user, user);
+		securityService.grantFullPrivileges(user, user, securityService.getAdminPrivileged());
 		
 		// Make sure we do not accidentally use it agin
 		creator = null;
@@ -147,7 +147,7 @@ public class MemberService {
 	}
 
 	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
-		List<Entity> list = modelService.list(Query.of(Entity.class).withPrivileged(user));
+		List<Entity> list = modelService.list(Query.of(Entity.class).as(user));
 		// TODO check that an item is not shared with others
 		for (Entity entity : list) {
 			if (!entity.equals(user)) {

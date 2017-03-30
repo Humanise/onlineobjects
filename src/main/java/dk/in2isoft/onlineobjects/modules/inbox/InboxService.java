@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.modules.inbox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,7 +46,7 @@ public class InboxService implements InitializingBean {
 	}
 
 	public Pile getOrCreateInbox(User privileged) throws ModelException, SecurityException {
-		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX).withPrivileged(privileged);
+		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX).as(privileged);
 		Pile inbox = modelService.getFirst(query);
 		if (inbox==null) {
 			inbox = new Pile();
@@ -57,7 +58,7 @@ public class InboxService implements InitializingBean {
 	}
 	
 	public void add(User user, Entity entity) throws ModelException, SecurityException {
-		if (modelService.getRelation(user, entity)==null) {
+		if (!modelService.getRelation(user, entity, user).isPresent()) {
 			modelService.createRelation(getOrCreateInbox(user), entity, user);
 		}
 	}
@@ -69,7 +70,7 @@ public class InboxService implements InitializingBean {
 		
 		// TODO Optimize this by caching id=count
 		Pile inbox = getOrCreateInbox(user);
-		Query<Entity> query = Query.after(Entity.class).from(inbox).withPrivileged(user);
+		Query<Entity> query = Query.after(Entity.class).from(inbox).as(user);
 		//List<Entity> list = modelService.list(query);
 		int count = modelService.count(query).intValue();
 		counts.put(user.getId(), count);
@@ -91,11 +92,11 @@ public class InboxService implements InitializingBean {
 	public boolean remove(User user, long id) throws ModelException, SecurityException {
 		Pile inbox = getOrCreateInbox(user);
 		Entity entity = modelService.get(Entity.class, id, user);
-		Relation relation = modelService.getRelation(inbox, entity);
-		if (relation==null) {
+		Optional<Relation> relation = modelService.getRelation(inbox, entity, user);
+		if (!relation.isPresent()) {
 			return false;
 		}
-		modelService.deleteRelation(relation, user);
+		modelService.deleteRelation(relation.get(), user);
 		return true;
 	}
 	

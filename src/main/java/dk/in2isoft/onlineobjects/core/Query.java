@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 
-public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuery<T> {
+public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuery<T>, PrivilegedQuery {
 
 	//private static Logger log = Logger.getLogger(Query.class);
 
@@ -166,7 +166,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return this;
 	}
 
-	public Query<T> withPrivileged(Privileged... privileged) {
+	public Query<T> as(Privileged... privileged) {
 		if (privileged==null || privileged.length==1 && privileged[0]==null) {
 			this.privileged = null;
 		}

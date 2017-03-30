@@ -82,7 +82,7 @@ public class ReaderModelService {
 	}
 
 	public List<Person> getAuthors(Entity entity, Privileged privileged) {
-		Query<Person> query = Query.of(Person.class).from(entity, Relation.KIND_COMMON_AUTHOR).withPrivileged(privileged);
+		Query<Person> query = Query.of(Person.class).from(entity, Relation.KIND_COMMON_AUTHOR).as(privileged);
 		List<Person> people = modelService.list(query);
 		return people;
 	}

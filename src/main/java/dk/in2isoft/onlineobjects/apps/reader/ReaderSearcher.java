@@ -58,7 +58,7 @@ public class ReaderSearcher {
 		{
 			List<Long> addressIds = idsByType.get(InternetAddress.class.getSimpleName().toLowerCase());
 			if (!addressIds.isEmpty()) {
-				Query<InternetAddress> query = Query.after(InternetAddress.class).withIds(addressIds).withPrivileged(privileged);
+				Query<InternetAddress> query = Query.after(InternetAddress.class).withIds(addressIds).as(privileged);
 
 				list.addAll(modelService.list(query));
 			}
@@ -66,7 +66,7 @@ public class ReaderSearcher {
 		{
 			List<Long> partIds = idsByType.get(Statement.class.getSimpleName().toLowerCase());
 			if (!partIds.isEmpty()) {
-				Query<Statement> query = Query.after(Statement.class).withIds(partIds).withPrivileged(privileged);
+				Query<Statement> query = Query.after(Statement.class).withIds(partIds).as(privileged);
 
 				list.addAll(modelService.list(query));
 			}
@@ -74,7 +74,7 @@ public class ReaderSearcher {
 		{
 			List<Long> partIds = idsByType.get(Question.class.getSimpleName().toLowerCase());
 			if (!partIds.isEmpty()) {
-				Query<Question> query = Query.after(Question.class).withIds(partIds).withPrivileged(privileged);
+				Query<Question> query = Query.after(Question.class).withIds(partIds).as(privileged);
 
 				list.addAll(modelService.list(query));
 			}
@@ -82,7 +82,7 @@ public class ReaderSearcher {
 		{
 			List<Long> partIds = idsByType.get(Hypothesis.class.getSimpleName().toLowerCase());
 			if (!partIds.isEmpty()) {
-				Query<Hypothesis> query = Query.after(Hypothesis.class).withIds(partIds).withPrivileged(privileged);
+				Query<Hypothesis> query = Query.after(Hypothesis.class).withIds(partIds).as(privileged);
 
 				list.addAll(modelService.list(query));
 			}

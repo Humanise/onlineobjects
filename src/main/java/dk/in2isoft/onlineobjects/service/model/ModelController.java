@@ -19,6 +19,7 @@ import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.in2igui.data.Node;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -62,7 +63,7 @@ public class ModelController extends ModelControllerBase {
 	
 	@Path(start={"image","list"})
 	public void listImage(Request request) throws IOException, ModelException {
-		Query<Image> query = Query.after(Image.class).withPaging(0, 40).withPrivileged(request.getSession()).orderByCreated().descending();
+		Query<Image> query = Query.after(Image.class).withPaging(0, 40).as(request.getSession()).orderByCreated().descending();
 		SearchResult<Image> result = modelService.search(query);
 		request.sendObject(result.getList());
 	}
@@ -189,6 +190,7 @@ public class ModelController extends ModelControllerBase {
 	@Path
 	public Diagram diagram(Request request) throws IllegalRequestException, ModelException, SecurityException {
 		Long id = request.getLong("id");
+		Privileged privileged = request.getSession();
 		Diagram diagram = new Diagram();
 		
 		Entity entity = modelService.get(Entity.class, id, request.getSession());
@@ -205,7 +207,8 @@ public class ModelController extends ModelControllerBase {
 		Predicate<? super Relation> filterDissimilar = e -> {
 			return Kind.similarity.toString().equals(e.getKind()) ? e.getStrength() > 0.5 : true;
 		};
-		modelService.getRelationsFrom(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
+		// TODO build filtering+limit into query 
+		modelService.find().relations(privileged).from(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getTo();
 
 			Node otherNode = new Node();
@@ -215,8 +218,8 @@ public class ModelController extends ModelControllerBase {
 			diagram.addNode(otherNode);
 			diagram.addEdge(center, relation.getKind(), otherNode);			
 		});;
-
-		modelService.getRelationsTo(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
+		// TODO build filtering+limit into query 
+		modelService.find().relations(privileged).to(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getFrom();
 
 			Node otherNode = new Node();
@@ -303,7 +306,7 @@ public class ModelController extends ModelControllerBase {
 		String text = request.getString("text");
 		int page = request.getInt("windowPage");
 		
-		Query<? extends Entity> query = Query.after(entityClass).withPaging(page, 20).withWords(text).withPrivileged(request.getSession());
+		Query<? extends Entity> query = Query.after(entityClass).withPaging(page, 20).withWords(text).as(request.getSession());
 		SearchResult<? extends Entity> result = modelService.search(query);
 
 

@@ -133,7 +133,7 @@ public class InvitationService {
 		modelService.createItem(invitaionUserRelation, session);
 
 		// The new user should be able to see the invite
-		modelService.grantPrivileges(invitation, session, true, false, false);
+		modelService.grantPrivileges(invitation, session, true, false, false, securityService.getAdminPrivileged());
 
 	}
 

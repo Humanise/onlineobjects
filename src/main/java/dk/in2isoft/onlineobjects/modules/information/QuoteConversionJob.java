@@ -7,6 +7,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.Results;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -23,6 +24,7 @@ public class QuoteConversionJob extends ServiceBackedJob {
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		ModelService modelService = schedulingSupportFacade.getModelService();
+		Privileged admin = schedulingSupportFacade.getSecurityService().getAdminPrivileged();
 		Query<HtmlPart> query = Query.after(HtmlPart.class);
 		float total = modelService.count(query).floatValue();
 		Results<HtmlPart> results = modelService.scroll(query);
@@ -34,11 +36,11 @@ public class QuoteConversionJob extends ServiceBackedJob {
 			status.setProgress(num/total);
 			HtmlPart part = results.get();
 			try {
-				List<Relation> relations = modelService.getRelations(part);
+				List<Relation> relations = modelService.getRelations(part, admin);
 				for (Relation relation : relations) {
 					if (Relation.KIND_STRUCTURE_CONTAINS.equals(relation.getKind())) {
 						if (relation.getFrom().getClass().equals(InternetAddress.class)) {
-							User owner = modelService.getOwner(part);
+							User owner = modelService.getOwner(part, admin);
 							
 							Statement statement = new Statement();
 							statement.setText(part.getHtml());

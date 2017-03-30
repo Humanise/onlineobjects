@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
@@ -31,6 +33,7 @@ import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.type.LongType;
 
 import com.google.common.collect.Lists;
 
@@ -190,6 +193,10 @@ public class ModelService {
 		return session;
 	}
 
+	protected Query createQuery(String hql) {
+		return getSession().createQuery(hql);
+	}
+
 	public void addToSession(Item item) {
 		getSession().merge(item);
 	}
@@ -270,7 +277,9 @@ public class ModelService {
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
 		session.save(item);
-		grantPrivilegesPrivately(item, privileged, true, true, true);
+		if (!securityService.isAdminUser(privileged)) {
+			grantPrivilegesPrivately(item, privileged, true, true, true);
+		}
 		eventService.fireItemWasCreated(item);
 	}
 
@@ -282,6 +291,7 @@ public class ModelService {
 		deleteItem(entity, privileged);
 	}
 
+	@Deprecated
 	private void removeAllRelations(Entity entity) {
 		Session session = getSession();
 		{
@@ -374,17 +384,6 @@ public class ModelService {
 		return securityService.canDelete(item, privileged);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	public <T extends Entity> @Nullable T get(Class<T> entityClass, Long id) throws ModelException {
-		T entity = (T) getSession().get(entityClass, id);
-		if (entity != null) {
-			return entity;
-		} else {
-			return null;
-		}
-	}
-
 	public <T extends Entity> @NonNull T getRequired(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Privileged privileged) throws ModelException,ContentNotFoundException {
 		@Nullable
 		T found = get(entityClass, id, privileged);
@@ -396,9 +395,7 @@ public class ModelService {
 	
 	public <T extends Entity> @Nullable T get(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(entityClass);
-		if (!securityService.isAdminUser(privileged)) {
-			query.withPrivileged(privileged,securityService.getPublicUser());
-		}
+		setPrivileged(privileged, query);
 		query.withIds(id);
 		List<T> result = list(query);
 		if (!result.isEmpty()) {
@@ -427,167 +424,42 @@ public class ModelService {
 		return relation;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelations(Entity entity) throws ModelException {
+	public List<Relation> getRelations(Entity entity, Privileged privileged) throws ModelException, SecurityException {
+		// TODO: Extend RelationQuery to support this
+		if (!securityService.isAdminUser(privileged)) {
+			throw new SecurityException("Only admin can get all relations");
+		}
 		String hql = "from Relation as relation where relation.from=:entity or relation.to=:entity order by relation.position";
-		Query q = getSession().createQuery(hql);
+		Query q = createQuery(hql);
 		q.setEntity("entity", entity);
-		List<Relation> result = q.list();
+		List<Relation> result = Code.cast(q.list());
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelationsFrom(Entity entity) throws ModelException {
-		String hql = "from Relation as relation where relation.from=? order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity(0, entity);
-		List<Relation> result = q.list();
-		for (int i = 0; i < result.size(); i++) {
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
+	public List<Relation> getRelationsFrom(Entity entity, Class<? extends Entity> clazz, Privileged privileged) throws ModelException {
+		return find().relations(privileged).from(entity).to(clazz).list();
 	}
 
-	public List<Relation> getRelationsFrom(Entity entity, Class<?> clazz) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" child where relation.from=:entity and relation.to=child order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		List<Relation> result = Code.castList(q.list());
-		for (int i = 0; i < result.size(); i++) {
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
+	public List<Relation> getRelationsFrom(Entity entity, Class<? extends Entity> clazz, String relationKind, Privileged privileged) throws ModelException {
+		return find().relations(privileged).from(entity).to(clazz).withKind(relationKind).list();
 	}
 
-	public List<Relation> getRelationsFrom(Entity entity, Class<?> clazz, Privileged privileged) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" child,Privilege as priv where relation.from=:entity and relation.to=child and priv.object=relation.to and priv.subject=:privileged order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		q.setLong("privileged", privileged.getIdentity());
-		List<Relation> result = Code.castList(q.list());
-		for (int i = 0; i < result.size(); i++) {
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
+	public List<Relation> getRelationsTo(Entity entity, Class<? extends Entity> clazz, String relationKind, Privileged privileged) throws ModelException {
+		return find().relations(privileged).to(entity).from(clazz).withKind(relationKind).list();
 	}
-
-	public List<Relation> getRelationsFrom(Entity entity, Class<?> clazz, String relationKind, Privileged privileged) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" child,Privilege as priv where relation.from=:entity and relation.to=child and relation.kind=:kind and priv.object=relation.to and priv.subject=:privileged order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		q.setString("kind", relationKind);
-		q.setLong("privileged", privileged.getIdentity());
-		List<Relation> result = Code.castList(q.list());
-		for (int i = 0; i < result.size(); i++) {
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
-	}
-
-	public List<Relation> getRelationsTo(Entity entity, Class<?> clazz, String relationKind, Privileged privileged) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" child,Privilege as priv where relation.to=:entity and relation.from=child and relation.kind=:kind and priv.object=relation.from and priv.subject=:privileged order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		q.setString("kind", relationKind);
-		q.setLong("privileged", privileged.getIdentity());
-		List<Relation> result = Code.castList(q.list());
-		for (int i = 0; i < result.size(); i++) {
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelationsFrom(Entity entity, Class<?> clazz,String relationKind) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" other where relation.from=:entity and relation.to=other and relation.kind=:kind order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		q.setString("kind", relationKind);
-		List<Relation> result = q.list();
-		for (int i = 0; i < result.size(); i++) {
-			//getSession().getTransaction().rollback();
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelationsTo(Entity entity, Class<?> clazz) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" child where relation.to=:entity and relation.from=child order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		List<Relation> result = q.list();
-		for (int i = 0; i < result.size(); i++) {
-			//getSession().getTransaction().rollback();
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelationsTo(Entity entity) throws ModelException {
-		Session session = getSession();
-		Query q = session.createQuery("from Relation as relation where relation.to=?");
-		q.setEntity(0, entity);
-		List<Relation> result = q.list();
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Relation> getRelationsTo(Entity entity, Class<?> clazz,String relationKind) throws ModelException {
-		String hql = "select relation from Relation as relation,"+clazz.getName()+" other where relation.to=:entity and relation.from=other and relation.kind=:kind order by relation.position";
-		Query q = getSession().createQuery(hql);
-		q.setEntity("entity", entity);
-		q.setString("kind", relationKind);
-		List<Relation> result = q.list();
-		for (int i = 0; i < result.size(); i++) {
-			//getSession().getTransaction().rollback();
-			result.set(i, getSubject(result.get(i)));
-		}
-		return result;
-	}
-
-	public <T> List<T> getParents(Entity entity, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.to(entity);
-		return list(q);
-	}
-
 
 	public <T> List<T> getParents(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged);
-		}
+		setPrivileged(privileged, q);
 		return list(q);
 	}
-
 
 	public <T> List<T> getParents(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged);
-		}
+		setPrivileged(privileged, q);
 		return list(q);
-	}
-
-	@Deprecated
-	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj) throws ModelException {
-		return getParent(entity, null, classObj);
-	}
-
-	@Deprecated
-	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.to(entity,kind).withPaging(0, 1);
-		List<T> supers = list(q);
-		if (!supers.isEmpty()) {
-			return supers.get(0);
-		} else {
-			return null;
-		}
 	}
 
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
@@ -597,29 +469,10 @@ public class ModelService {
 	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind).withPaging(0, 1);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged,securityService.getPublicUser());
-		}
+		setPrivileged(privileged, q);
 		List<T> list = list(q);
 		if (!list.isEmpty()) {
 			return list.get(0);
-		} else {
-			return null;
-		}
-	}
-
-	@Deprecated
-	public @Nullable <T extends Entity> T getChild(Entity entity, @NonNull Class<T> classObj) throws ModelException {
-		return getChild(entity, null, classObj);
-	}
-
-	@Deprecated
-	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.from(entity,kind).withPaging(0, 1);
-		List<T> supers = list(q);
-		if (!supers.isEmpty()) {
-			return supers.get(0);
 		} else {
 			return null;
 		}
@@ -632,9 +485,7 @@ public class ModelService {
 	public <T extends Entity> @Nullable T getChild(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity,kind).withPaging(0, 1);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged,securityService.getPublicUser());
-		}
+		setPrivileged(privileged, q);
 		List<T> list = list(q);
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -679,10 +530,10 @@ public class ModelService {
 		return getPriviledge(item, priviledged, getSession());
 	}
 
-	public Privilege getPriviledge(Item item, Privileged priviledged, Session session) {
+	public Privilege getPriviledge(Item item, Privileged privileged, Session session) {
 		Query q = session.createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject");
 		q.setLong("object", item.getId());
-		q.setLong("subject", priviledged.getIdentity());
+		q.setLong("subject", privileged.getIdentity());
 		Privilege privilege = (Privilege) q.uniqueResult();
 		if (privilege != null) {
 			return privilege;
@@ -692,26 +543,50 @@ public class ModelService {
 	}
 
 	public List<Privilege> getPrivileges(Item item) {
-		Query q = getSession().createQuery("from Privilege as priv where priv.object=:object");
+		Query q = createQuery("from Privilege as priv where priv.object=:object");
 		q.setLong("object", item.getId());
 		List<Privilege> list = Code.castList(q.list());
 		return list;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public User getOwner(Item item) throws ModelException {
-		Session session = getSession();
-		Query q = session.createQuery("select user from User as user, Privilege as priv where priv.alter=true and priv.object=:object and priv.subject=user.id");
-		q.setLong("object", item.getId());
-		List<User> list = q.list();
-		for (User user : list) {
-			if (!SecurityService.PUBLIC_USERNAME.equals(user.getUsername())) {
-				return user;
-			}
-		}
-		return null;
+	public User getOwner(Item item, Privileged privileged) throws ModelException {
+		Query q = buildOwnerQuery(item, privileged);
+		q.setMaxResults(1);
+		return (User) getSubject(q.uniqueResult());
 	}
 
+	public List<User> getOwners(Item item, Privileged privileged) throws ModelException {
+		Query q = buildOwnerQuery(item, privileged);
+		List<User> object = Code.castList(q.list());
+		return getSubjects(object);
+	}
+
+	private Query buildOwnerQuery(Item item, Privileged privileged) {
+		String hql = "select user from User as user, Privilege as itemPriv";
+		if (!securityService.isAdminUser(privileged)) {
+			hql+=", Privilege as userPriv";
+		}
+		hql+=" where itemPriv.alter=true and itemPriv.object=:object and itemPriv.subject=user.id" +
+			" and user.id!=:public and user.id!=:admin";
+		if (!securityService.isAdminUser(privileged)) {
+			hql += " and userPriv.object=user and userPriv.subject in (:privileged)";
+		}
+		hql +=" order by itemPriv.id asc";
+		Query q = createQuery(hql);
+		q.setLong("object", item.getId());
+		q.setLong("public", securityService.getPublicUser().getId());
+		q.setLong("admin", securityService.getAdminPrivileged().getIdentity());
+		if (!securityService.isAdminUser(privileged)) {
+			List<Long> privs = new ArrayList<>();
+			privs.add(privileged.getIdentity());
+			if (!securityService.isPublicUser(privileged)) {
+				privs.add(securityService.getPublicUser().getId());
+			}
+			q.setParameterList("privileged", privs, LongType.INSTANCE);
+		}
+		return q;
+	}
+	
 	public Privilege getPrivilege(long object, long subject) {
 		List<Privilege> list = getPrivileges(object, subject);
 		if (list.size()>1) {
@@ -726,8 +601,7 @@ public class ModelService {
 	}
 
 	private List<Privilege> getPrivileges(long object, long subject) {
-		Session session = getSession();
-		Query q = session.createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject");
+		Query q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject");
 		q.setLong("object", object);
 		q.setLong("subject", subject);
 		List<?> list = q.list();
@@ -742,8 +616,7 @@ public class ModelService {
 		if (!securityService.canModify(object, user)) {
 			throw new SecurityException("The user "+subject+" cannot modify "+object+" - so cannot remove privileges");
 		}
-		Session session = getSession();
-		Query q = session.createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
+		Query q = createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
 		q.setLong("object", object.getId());
 		q.setLong("subject", subject.getIdentity());
 		int count = q.executeUpdate();
@@ -762,11 +635,10 @@ public class ModelService {
 		return new Results<T>(q.scroll(ScrollMode.FORWARD_ONLY));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Object[]> querySQL(String sql) throws ModelException {
 		try {
 			SQLQuery query = getSession().createSQLQuery(sql);
-			return query.list();
+			return Code.castList(query.list());
 		} catch (HibernateException e) {
 			log.error(e.getMessage(),e);
 		}
@@ -893,43 +765,43 @@ public class ModelService {
 		return new PairSearchResult<T,U>(map,count.intValue());
 	}
 
-	@Deprecated
-	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException, SecurityException {
-		grantPrivileges(item, privileged, true, true, true);
-	}
-
-	public void grantPrivileges(Item item, Privileged privileged, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
-		if (privileged==null) {
+	public void grantPrivileges(Item item, Privileged user, boolean view, boolean alter, boolean delete, Privileged granter) throws ModelException, SecurityException {
+		if (!securityService.canModify(item, granter)) {
+			throw new SecurityException("The granter cannot modify the privileges");
+		}
+		if (user==null) {
 			throw new ModelException("Privileged is null");
 		}
-		if (privileged.getIdentity()<1) {
-			throw new ModelException("Privileged ID is "+privileged.getIdentity());
+		if (user.getIdentity()<1) {
+			throw new ModelException("Privileged ID is "+user.getIdentity());
 		}
 		if (item.isNew()) {
-			throw new SecurityException("The item is new so cannot grant privileges: identity="+privileged.getIdentity());
+			throw new SecurityException("The item is new so cannot grant privileges: identity="+user.getIdentity());
 		}
-		if (item instanceof User && securityService.isAdminUser((User) item)) {
-			if (delete) {
-				throw new SecurityException("It is not allowed to make the admin deletable");
+		if (item instanceof User) {
+			if (securityService.isAdminUser((User) item)) {
+				if (delete) {
+					throw new SecurityException("It is not allowed to make the admin deletable");
+				}
+				if (alter && item.getId()!=user.getIdentity()) {
+					throw new SecurityException("Admin can only be modified by itself");
+				}
 			}
-			if (alter && item.getId()!=privileged.getIdentity()) {
-				throw new SecurityException("Admin can only be modified by itself");
+			if (securityService.isPublicUser((User) item)) {
+				if (delete) {
+					throw new SecurityException("It is not allowed to make the public deletable");
+				}
+				if (alter && !securityService.isAdminUser(user)) {
+					throw new SecurityException("Only admin can modify the public user");
+				}
+			}
+			if (securityService.isPublicUser(user)) {
+				if (delete || alter) {
+					throw new SecurityException("The public user is not alowed to delete or modify any users");
+				}
 			}
 		}
-		if (item instanceof User && securityService.isPublicUser((User) item)) {
-			if (delete) {
-				throw new SecurityException("It is not allowed to make the public deletable");
-			}
-			if (alter && !securityService.isAdminUser(privileged)) {
-				throw new SecurityException("Only admin can modify the public user");
-			}
-		}
-		if (item instanceof User && securityService.isPublicUser(privileged)) {
-			if (delete || alter) {
-				throw new SecurityException("The public user is not alowed to delete or modify any users");
-			}
-		}
-		grantPrivilegesPrivately(item, privileged, view, alter, delete);
+		grantPrivilegesPrivately(item, user, view, alter, delete);
 	}
 
 	private void grantPrivilegesPrivately(Item item, Privileged user, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
@@ -954,16 +826,13 @@ public class ModelService {
 	}
 
 	private void removeAllPrivileges(Item item) {
-		
-		
-		Session session = getSession();
-		Query query = session.createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id");
+
+		Query query = createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id");
 		query.setLong("object", item.getId());
 		List<User> users = Code.castList(query.list());
 		
-		
 		String hql = "delete Privilege p where p.object = :id";
-		Query q = session.createQuery(hql);
+		Query q = createQuery(hql);
 		q.setLong("id", item.getId());
 		int count = q.executeUpdate();
 		log.info("Deleting privileges for: " + item.getClass().getName() + "; count: " + count);
@@ -974,70 +843,40 @@ public class ModelService {
 	public List<Entity> getChildren(Entity item, String relationKind, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<Entity> q = dk.in2isoft.onlineobjects.core.Query.of(Entity.class);
 		q.from(item,relationKind);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged,securityService.getPublicUser());
-		}
-		return list(q);
-	}
-
-	/**
-	 * Performance warning!
-	 */
-	public List<Entity> getChildren(Entity item, String relationKind) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<Entity> q = dk.in2isoft.onlineobjects.core.Query.of(Entity.class);
-		q.from(item,relationKind);
-		return list(q);
-	}
-
-	@Deprecated
-	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.from(item,relationKind);
+		setPrivileged(privileged, q);
 		return list(q);
 	}
 
 	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj, Privileged privileged) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.from(item,relationKind);
+		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		query.from(item,relationKind);
+		setPrivileged(privileged, query);
+		return list(query);
+	}
+
+	private <T> void setPrivileged(Privileged privileged, PrivilegedQuery query) {
 		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged,securityService.getPublicUser());
+			query.as(privileged,securityService.getPublicUser());
 		}
-		return list(q);
 	}
-
-	@Deprecated
-	public <T> List<T> getChildren(Entity entity, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.from(entity);
-		return list(q);
-	}
-
+	
 	public <T> List<T> getChildren(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity);
-		if (!securityService.isAdminUser(privileged)) {
-			q.withPrivileged(privileged,securityService.getPublicUser());
-		}
-		return list(q);
-	}
-
-	@Deprecated
-	public <T> List<T> getChildrenOrdered(Entity entity, Class<T> classObj) throws ModelException {
-		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
-		q.from(entity).inPosition();
+		setPrivileged(privileged, q);
 		return list(q);
 	}
 
 	public <T> List<T> getChildrenOrdered(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity).inPosition();
-		q.withPrivileged(privileged);
+		setPrivileged(privileged, q);
 		return list(q);
 	}
 
+	@Deprecated
 	public Map<String, Float> getPropertyCloud(String key, String query, Class<? extends Entity> cls) {
 		Map<String, Float> cloud = new LinkedHashMap<String, Float>();
-		Session session = getSession();
 		StringBuilder hql = new StringBuilder();
 		hql.append("select p.value as value,count(p.id) as count from ");
 		hql.append(cls.getSimpleName()).append(" as entity");
@@ -1046,7 +885,7 @@ public class ModelService {
 			hql.append(" and lower(value) like lower(:query)");
 		}
 		hql.append(" group by p.value order by lower(value)");
-		Query q = session.createQuery(hql.toString());
+		Query q = createQuery(hql.toString());
 		q.setString("key", key);
 		if (Strings.isNotBlank(query)) {
 			q.setString("query", "%" + query + "%");
@@ -1070,11 +909,10 @@ public class ModelService {
 	}
 	
 	public Map<String, Integer> getProperties(String key, Class<? extends Entity> cls, Privileged priviledged) {
-		Session session = getSession();
 		StringBuilder hql = new StringBuilder();
 		hql.append("select p.value as value,count(p.id) as count from ");
 		hql.append(cls.getSimpleName()).append(" as entity");
-		if (priviledged!=null) {
+		if (priviledged!=null) { // TODO: Is this allowed
 			hql.append(",").append(Privilege.class.getName()).append(" as priv");
 		}
 		hql.append(" left join entity.properties as p  where p.key=:key");
@@ -1082,7 +920,7 @@ public class ModelService {
 			hql.append(" and entity.id = priv.object and priv.subject=").append(priviledged.getIdentity());
 		}
 		hql.append(" group by p.value order by lower(value)");
-		Query q = session.createQuery(hql.toString());
+		Query q = createQuery(hql.toString());
 		q.setString("key", key);
 		Map<String, Integer> list = new LinkedHashMap<String, Integer>();
 		ScrollableResults scroll = q.scroll();
@@ -1092,53 +930,19 @@ public class ModelService {
 		return list;
 	}
 
-	public Relation getRelation(Entity from, Entity to) {
-		Session session = getSession();
-		StringBuilder hql = new StringBuilder("from Relation as r ");
-		hql.append(" where r.from.id=:from and r.to.id=:to");
-		Query q = session.createQuery(hql.toString());
-		q.setLong("from", from.getId());
-		q.setLong("to", to.getId());
-		List<Relation> list = list(q, Relation.class);
-		if (list.size() > 0) {
-			return getSubject(list.get(0));
-		}
-		return null;
+	public Optional<Relation> getRelation(long id, Privileged privileged) {
+		return find().relations(privileged).withId(id).first();
 	}
 
-	public Relation getRelation(long id) {
-		Session session = getSession();
-		StringBuilder hql = new StringBuilder("from Relation as r where r.id=:id");
-		Query q = session.createQuery(hql.toString());
-		q.setLong("id", id);
-		List<Relation> list = list(q, Relation.class);
-		if (list.size() > 0) {
-			return getSubject(list.get(0));
-		}
-		return null;
+	public Optional<Relation> getRelation(Entity from, Entity to, String kind, Privileged privileged) {
+		return find().relations(privileged).from(from).to(to).withKind(kind).first();
 	}
 
-	public Relation getRelation(Entity from, Entity to, String kind) {
-		Session session = getSession();
-		StringBuilder hql = new StringBuilder("from Relation as r ");
-		hql.append(" where r.from.id=:from and r.to.id=:to and r.kind=:kind");
-		Query q = session.createQuery(hql.toString());
-		q.setLong("from", from.getId());
-		q.setLong("to", to.getId());
-		q.setString("kind", kind);
-		List<Relation> list = list(q, Relation.class);
-		if (list.size() > 0) {
-			return getSubject(list.get(0));
-		}
-		return null;
+	public Optional<Relation> getRelation(Entity from, Entity to, Privileged privileged) {
+		return find().relations(privileged).from(from).to(to).first();
 	}
 
 	/* Util */
-
-	@SuppressWarnings("unchecked")
-	private <T> List<T> list(Query q, Class<T> classObj) {
-		return (List<T>) q.list();
-	}
 
 	/**
 	 * @return the subject that a HibernateProxy object proxies or
@@ -1150,10 +954,10 @@ public class ModelService {
 		if (obj instanceof HibernateProxy) {
 			obj = (T) ((AbstractLazyInitializer) ((HibernateProxy) obj).getHibernateLazyInitializer()).getImplementation();
 		}
-		if (obj==null) {
-			log.error("The objects is null");
-		}
 		return obj;
+	}
+	public static <T> List<T> getSubjects(List<T> list) {
+		return list.stream().map(obj -> getSubject(obj)).collect(Collectors.toList());
 	}
 
 	public void setEventService(EventService eventService) {
@@ -1166,5 +970,24 @@ public class ModelService {
 	
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	public Finder find() {
+		return new Finder(this, securityService); // TODO only one instance
+	}
+	
+	public static class Finder {
+		
+		private ModelService modelService;
+		private SecurityService securityService;
+
+		public Finder(ModelService modelService, SecurityService securityService) {
+			this.modelService = modelService;
+			this.securityService = securityService;
+		}
+
+		public RelationQuery relations(Privileged privileged) {
+			return new RelationQuery(modelService, securityService).as(privileged);
+		}
 	}
 }

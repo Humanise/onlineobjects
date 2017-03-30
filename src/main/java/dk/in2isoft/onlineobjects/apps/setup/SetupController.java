@@ -97,7 +97,7 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Admin",1);
 		writer.endHeaders();
 		for (User user : result.getList()) {
-			Query<Image> imgQuery = Query.after(Image.class).withPrivileged(user);
+			Query<Image> imgQuery = Query.after(Image.class).as(user);
 			Long imageCount = modelService.count(imgQuery);
 			Image image = modelService.getChild(user, Image.class, privileged);
 			Person person = modelService.getChild(user, Person.class, privileged);
@@ -180,7 +180,7 @@ public class SetupController extends SetupControllerBase {
 		if (typeClass==null) {
 			return;
 		}
-		Query<? extends Entity> query = Query.of(typeClass).withPrivileged(user).withPaging(page, 30);
+		Query<? extends Entity> query = Query.of(typeClass).as(user).withPaging(page, 30);
 		SearchResult<? extends Entity> result = modelService.search(query);
 
 		ListWriter writer = new ListWriter(request);
@@ -270,14 +270,14 @@ public class SetupController extends SetupControllerBase {
 		user.setName(perspective.getName());
 		modelService.updateItem(user, request.getSession());
 		if (securityService.isAdminUser(user)) {
-			modelService.grantPrivileges(user, user, true, true, false);
+			modelService.grantPrivileges(user, user, true, true, false, securityService.getAdminPrivileged());
 			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
 		} else if (securityService.isPublicUser(user)) {
 			securityService.makePublicVisible(user, request.getSession());
 			// TODO: Does it make sense to grant administrator privileges?
-			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false);
+			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false, securityService.getAdminPrivileged());
 		} else {
-			modelService.grantPrivileges(user, user, true, true, true);
+			modelService.grantPrivileges(user, user, true, true, true, securityService.getAdminPrivileged());
 			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
 		}
 	}

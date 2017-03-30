@@ -90,7 +90,7 @@ public class ToolsController extends ToolsControllerBase {
 		String text = request.getString("text");
 		String tag = request.getString("tag");
 		ListObjects list = new ListObjects();
-		Query<Image> query = new Query<Image>(Image.class).withPrivileged(request.getSession());
+		Query<Image> query = new Query<Image>(Image.class).as(request.getSession());
 		query.withWords(text);
 		if (Strings.isNotBlank(tag)) {
 			query.withCustomProperty(Property.KEY_COMMON_TAG, tag);
@@ -143,7 +143,7 @@ public class ToolsController extends ToolsControllerBase {
 		}
 		String text = request.getString("text");
 		UserSession session = request.getSession();
-		Query<Person> query = new Query<Person>(Person.class).withPrivileged(session);
+		Query<Person> query = new Query<Person>(Person.class).as(session);
 		query.withWords(text);
 		List<Person> persons = modelService.list(query);
 		
@@ -153,7 +153,7 @@ public class ToolsController extends ToolsControllerBase {
 		for (Person person : persons) {
 			out.startRow().withId(person.getId());
 			out.startCell().text(person.getFullName()).endCell();
-			Long addressCount = modelService.count(Query.after(InternetAddress.class).to(person).withPrivileged(session));
+			Long addressCount = modelService.count(Query.after(InternetAddress.class).to(person).as(session));
 			out.startCell().text(addressCount).endCell();
 			out.endRow();
 		}
@@ -255,7 +255,7 @@ public class ToolsController extends ToolsControllerBase {
 		String tag = request.getString("tag");
 		Long wordId = request.getLong("word",null);
 		int page = request.getInt("page");
-		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).withPrivileged(request.getSession()).withWords(search);
+		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(search);
 		query.withPaging(page, 30);
 		if (Strings.isNotBlank(tag)) {
 			query.withCustomProperty(Property.KEY_COMMON_TAG, tag);

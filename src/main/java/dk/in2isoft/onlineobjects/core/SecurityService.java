@@ -274,10 +274,7 @@ public class SecurityService {
 	}
 
 	public void makePublicVisible(Item item, Privileged privileged) throws SecurityException, ModelException {
-		if (!canModify(item, privileged)) {
-			throw new SecurityException("The user cannot make this public");
-		}
-		modelService.grantPrivileges(item, getPublicUser(), true, false, false);
+		modelService.grantPrivileges(item, getPublicUser(), true, false, false, privileged);
 	}
 	
 	public void makePublicHidden(Item item, Privileged privileged) throws SecurityException {
@@ -288,20 +285,12 @@ public class SecurityService {
 		modelService.removePrivileges(item, publicUser, privileged);
 	}
 
-	@Deprecated
-	public void grantPublicPrivileges(Item item, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
-		modelService.grantPrivileges(item, getPublicUser(), view, alter, delete);		
+	public void grantPublicView(Item item, boolean view, Privileged granter) throws ModelException, SecurityException {
+		modelService.grantPrivileges(item, getPublicUser(), view, false, false, granter);		
 	}
 
-	public void grantPublicView(Item item, boolean view, Privileged privileged) throws ModelException, SecurityException {
-		if (!canModify(item, privileged)) {
-			throw new SecurityException("The user cannot change public visibility");
-		}
-		modelService.grantPrivileges(item, getPublicUser(), view, false, false);		
-	}
-
-	public void grantFullPrivileges(Item item, Privileged privileged) throws ModelException, SecurityException {
-		modelService.grantPrivileges(item, privileged, true, true, true);
+	public void grantFullPrivileges(Item item, Privileged user, Privileged granter) throws ModelException, SecurityException {
+		modelService.grantPrivileges(item, user, true, true, true, granter);
 	}
 
 	public UserSession ensureUserSession(HttpSession session) {

@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -113,7 +114,7 @@ public class ReaderController extends ReaderControllerBase {
 				perspective.setStatementId(entity.getId());
 				Statement htmlPart = (Statement) entity;
 				writer.startP().withClass("reader_list_text reader_list_quote").text(htmlPart.getText()).endP();
-				Query<InternetAddress> query = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).withPrivileged(session);
+				Query<InternetAddress> query = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).as(session);
 				InternetAddress addr = modelService.search(query).getFirst();
 				if (addr != null) {
 					perspective.setAddressId(addr.getId());
@@ -185,7 +186,7 @@ public class ReaderController extends ReaderControllerBase {
 			if (Strings.isBlank(url)) {
 				rendering.startH2().text("Empty").endH2();				
 			} else {
-				InternetAddress found = modelService.getFirst(Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, url).withPrivileged(privileged ));
+				InternetAddress found = modelService.getFirst(Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, url).as(privileged ));
 				perspective.addAction("Open", "open");
 				if (found!=null) {
 					rendering.startH2().text(found.getName()).endH2();
@@ -465,8 +466,8 @@ public class ReaderController extends ReaderControllerBase {
 			Privileged session = request.getSession();
 			InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
 			Person person = personService.getOrCreatePerson(text, session);
-			Relation relation = modelService.getRelation(address, person, Relation.KIND_COMMON_AUTHOR);
-			if (relation==null) {
+			Optional<Relation> relation = modelService.getRelation(address, person, Relation.KIND_COMMON_AUTHOR, session);
+			if (!relation.isPresent()) {
 				modelService.createRelation(address, person, Relation.KIND_COMMON_AUTHOR, session);				
 			}
 		} else {
@@ -509,22 +510,22 @@ public class ReaderController extends ReaderControllerBase {
 		UserSession session = request.getSession();
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, internetAddressId, session);
 		Word word = modelService.get(Word.class, wordId, session);
-		Relation relation = modelService.getRelation(internetAddress, word);
-		if (relation == null) {
+		Optional<Relation> relation = modelService.getRelation(internetAddress, word, session);
+		if (!relation.isPresent()) {
 			modelService.createRelation(internetAddress, word, session);
 		}
 	}
 
 	@Path
-	public void removeWord(Request request) throws ModelException, SecurityException {
+	public void removeWord(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		Long internetAddressId = request.getLong("internetAddressId");
 		Long wordId = request.getLong("wordId");
 		UserSession session = request.getSession();
-		InternetAddress internetAddress = modelService.get(InternetAddress.class, internetAddressId, session);
+		InternetAddress internetAddress = modelService.getRequired(InternetAddress.class, internetAddressId, session);
 		Word word = modelService.get(Word.class, wordId, session);
-		Relation relation = modelService.getRelation(internetAddress, word);
-		if (relation != null) {
-			modelService.deleteRelation(relation, modelService.getUser(SecurityService.ADMIN_USERNAME));
+		Optional<Relation> relation = modelService.getRelation(internetAddress, word, session);
+		if (relation.isPresent()) {
+			modelService.deleteRelation(relation.get(), modelService.getUser(SecurityService.ADMIN_USERNAME));
 		}
 	}
 
@@ -579,7 +580,7 @@ public class ReaderController extends ReaderControllerBase {
 				return option;
 			}).collect(Collectors.toList()));
 		}
-		List<Question> questions = modelService.list(Query.after(Question.class).from(statement, Relation.ANSWERS).withPrivileged(session));
+		List<Question> questions = modelService.list(Query.after(Question.class).from(statement, Relation.ANSWERS).as(session));
 		perspective.setQuestions(questions.stream().map((Question q) -> {
 			ItemData option = new ItemData();
 			option.setId(q.getId());
@@ -596,10 +597,10 @@ public class ReaderController extends ReaderControllerBase {
 			return option;
 		};
 
-		List<Hypothesis> supports = modelService.list(Query.after(Hypothesis.class).from(statement, Relation.SUPPORTS).withPrivileged(session));
+		List<Hypothesis> supports = modelService.list(Query.after(Hypothesis.class).from(statement, Relation.SUPPORTS).as(session));
 		perspective.setSupports(supports.stream().map(hypothesisMapper).collect(Collectors.toList()));
 
-		List<Hypothesis> contradicts = modelService.list(Query.after(Hypothesis.class).from(statement, Relation.CONTRADTICS).withPrivileged(session));
+		List<Hypothesis> contradicts = modelService.list(Query.after(Hypothesis.class).from(statement, Relation.CONTRADTICS).as(session));
 		perspective.setContradicts(contradicts.stream().map(hypothesisMapper).collect(Collectors.toList()));
 
 		return perspective;

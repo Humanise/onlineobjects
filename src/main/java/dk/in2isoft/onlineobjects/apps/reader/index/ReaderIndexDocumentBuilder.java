@@ -57,9 +57,9 @@ public class ReaderIndexDocumentBuilder implements IndexDocumentBuilder<Internet
 		}
 		doc.add(new TextField("words", wordText.toString(), Field.Store.NO));
 
-		User owner = modelService.getOwner(address);
+		User owner = modelService.getOwner(address, admin);
 
-		Query<Person> authors = Query.of(Person.class).from(address, Relation.KIND_COMMON_AUTHOR).withPrivileged(owner);
+		Query<Person> authors = Query.of(Person.class).from(address, Relation.KIND_COMMON_AUTHOR).as(owner);
 		List<Person> people = modelService.list(authors);
 		for (Person person : people) {
 			doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));

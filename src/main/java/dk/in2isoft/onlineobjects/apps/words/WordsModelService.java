@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -82,7 +83,7 @@ public class WordsModelService {
 			diagram.addNode(wordNode);
 			Locale locale = new Locale("en");
 			
-			List<Relation> relationsAwayFrom = modelService.getRelationsFrom(word, Word.class);
+			List<Relation> relationsAwayFrom = modelService.find().relations(privileged).from(word).to(Word.class).list();
 			for (Relation relation : relationsAwayFrom) {
 				if (diagram.isFull()) {
 					break;
@@ -109,7 +110,7 @@ public class WordsModelService {
 				}
 			}
 			
-			List<Relation> parentRelations = modelService.getRelationsTo(word, Word.class);
+			List<Relation> parentRelations = modelService.find().relations(privileged).to(word).from(Word.class).list();
 			for (Relation relation : parentRelations) {
 				if (diagram.isFull()) {
 					break;
@@ -224,10 +225,9 @@ public class WordsModelService {
 	}
 
 	public void deleteRelation(long id, UserSession session) throws IllegalRequestException, SecurityException, ModelException {
-		Relation relation = modelService.getRelation(id);
-		if (relation==null) {
-			throw new IllegalRequestException("Relation not found (id="+id+")");
-		}
+		Relation relation = modelService.getRelation(id, session).orElseThrow(() -> 
+			new IllegalRequestException("Relation not found (id="+id+")")
+		);
 		modelService.deleteRelation(relation, session);
 	}
 
@@ -242,8 +242,8 @@ public class WordsModelService {
 			throw new IllegalRequestException("Illegal relation: "+kind);
 		}
 		
-		Relation relation = modelService.getRelation(parentWord, childWord, kind);
-		if (relation==null) {
+		Optional<Relation> relation = modelService.getRelation(parentWord, childWord, kind, session);
+		if (!relation.isPresent()) {
 			Relation newRelation = modelService.createRelation(parentWord, childWord, kind, session);
 			securityService.makePublicVisible(newRelation, session);
 			
@@ -266,7 +266,7 @@ public class WordsModelService {
 				throw new IllegalRequestException("Unsupported language ("+languageCode+")");
 			}
 		}
-		List<Relation> parents = modelService.getRelationsTo(word, Language.class);
+		List<Relation> parents = modelService.find().relations(privileged).to(word).from(Language.class).list();
 		modelService.deleteRelations(parents, privileged);
 		if (language!=null) {
 			Relation relation = modelService.createRelation(language, word, privileged);
@@ -285,7 +285,7 @@ public class WordsModelService {
 		if (lexicalCategory==null) {
 			throw new IllegalRequestException("Unsupported category ("+category+")");
 		}
-		List<Relation> parents = modelService.getRelationsTo(word, LexicalCategory.class);
+		List<Relation> parents = modelService.find().relations(privileged).to(word).from(LexicalCategory.class).list();
 		modelService.deleteRelations(parents, privileged);
 		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, privileged);
 		securityService.makePublicVisible(categoryRelation, privileged);
@@ -310,8 +310,8 @@ public class WordsModelService {
 	public void addToPostponed(Word word) throws ModelException, SecurityException {
 		User admin = modelService.getUser("admin");
 		Pile pile = pileService.getOrCreateGlobalPile("words.postponed", admin);
-		Relation relation = modelService.getRelation(pile, word);
-		if (relation==null) {
+		Optional<Relation> relation = modelService.getRelation(pile, word, admin);
+		if (!relation.isPresent()) {
 			modelService.createRelation(pile, word, admin);
 		}
 	}

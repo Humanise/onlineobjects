@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -58,9 +59,9 @@ public class PhotosFrontView extends AbstractManagedBean implements Initializing
 
 			@Override
 			public ListModelResult<GalleryItem> getResult() {
-				Query<Image> query = Query.of(Image.class).orderByCreated().withPaging(getPage(), getPageSize()).withPrivileged(securityService.getPublicUser()).descending();
+				Query<Image> query = Query.of(Image.class).orderByCreated().withPaging(getPage(), getPageSize()).as(securityService.getPublicUser()).descending();
 				SearchResult<Image> result = modelService.search(query);
-				List<GalleryItem> list = convert(result.getList());
+				List<GalleryItem> list = convert(result.getList(), getRequest().getSession());
 				return new ListModelResult<GalleryItem>(list,result.getTotalCount());
 			}
 			
@@ -69,12 +70,12 @@ public class PhotosFrontView extends AbstractManagedBean implements Initializing
 		return model;
 	}
 	
-	private List<GalleryItem> convert(List<Image> images) {
+	private List<GalleryItem> convert(List<Image> images, Privileged privileged) {
 		List<GalleryItem> list = new ArrayList<GalleryItem>();
 		for (Image image : images) {
 			User user = null;
 			try {
-				user = modelService.getOwner(image);
+				user = modelService.getOwner(image, privileged);
 			} catch (ModelException ignore) {}
 			list.add(GalleryItem.create(image, user));
 		}		

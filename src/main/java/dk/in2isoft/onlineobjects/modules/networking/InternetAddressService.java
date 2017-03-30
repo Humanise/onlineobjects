@@ -72,7 +72,7 @@ public class InternetAddressService {
 		} catch (URISyntaxException e) {
 			throw new IllegalRequestException("", e);
 		}
-		Query<InternetAddress> query = Query.after(InternetAddress.class).withPrivileged(user).withField(InternetAddress.FIELD_ADDRESS, url);
+		Query<InternetAddress> query = Query.after(InternetAddress.class).as(user).withField(InternetAddress.FIELD_ADDRESS, url);
 		InternetAddress address = modelService.search(query).getFirst();
 		if (address == null) {
 			address = new InternetAddress();

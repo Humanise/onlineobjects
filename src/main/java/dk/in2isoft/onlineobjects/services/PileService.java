@@ -1,5 +1,7 @@
 package dk.in2isoft.onlineobjects.services;
 
+import java.util.Optional;
+
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -40,7 +42,7 @@ public class PileService {
 	}
 
 	public Pile getOrCreatePileByRelation(User user, String relationKind) throws ModelException, SecurityException {
-		Query<Pile> query = Query.after(Pile.class).from(user, relationKind).withPrivileged(user);
+		Query<Pile> query = Query.after(Pile.class).from(user, relationKind).as(user);
 		Pile pile = modelService.getFirst(query);
 		if (pile==null) {
 			pile = new Pile();
@@ -53,11 +55,11 @@ public class PileService {
 
 	public void addOrRemoveFromPile(User user, String relationKind, Entity enity, boolean add) throws ModelException, SecurityException {
 		Pile favorites = this.getOrCreatePileByRelation(user, relationKind);
-		Relation relation = modelService.getRelation(favorites, enity);
-		if (add && relation==null) {
+		Optional<Relation> relation = modelService.getRelation(favorites, enity, user);
+		if (add && !relation.isPresent()) {
 			modelService.createRelation(favorites, enity, user);
-		} else if (!add && relation!=null) {
-			modelService.deleteRelation(relation, user);
+		} else if (!add && relation.isPresent()) {
+			modelService.deleteRelation(relation.get(), user);
 		}
 		
 	}

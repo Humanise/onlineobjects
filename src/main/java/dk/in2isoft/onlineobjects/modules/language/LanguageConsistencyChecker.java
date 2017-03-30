@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
@@ -146,8 +147,8 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 			Pair<LexicalCategory, LexicalCategory> pair = i.next();
 			LexicalCategory parent = pair.getKey();
 			LexicalCategory child = pair.getValue();
-			Relation relation = modelService.getRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION);
-			if (relation==null) {
+			Optional<Relation> relation = modelService.getRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
+			if (!relation.isPresent()) {
 				log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");		
 				modelService.createRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
 				modelService.commit(); 				

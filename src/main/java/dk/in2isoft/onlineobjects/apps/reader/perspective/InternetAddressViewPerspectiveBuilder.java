@@ -114,7 +114,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	}
 
 	private List<ItemData> getAuthors(Entity address, UserSession session) {
-		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).withPrivileged(session);
+		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).as(session);
 		List<Person> people = modelService.list(query);
 		List<ItemData> authors = people.stream().map((Person p) -> {
 			ItemData option = new ItemData();
@@ -249,7 +249,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			
 			List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
 			List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
-			List<InternetAddress> list2 = modelService.list(Query.after(InternetAddress.class).withPrivileged(session).withIds(ids));
+			List<InternetAddress> list2 = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids));
 			
 			Function<Long,String> find = id -> {
 				for (InternetAddress internetAddress : list2) {

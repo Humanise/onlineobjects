@@ -145,7 +145,7 @@ public class DesktopController extends DesktopControlerBase {
 	@Path
 	public WidgetList listBookmarks(Request request) throws IOException {
 		String text = request.getString("text");
-		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).withPrivileged(request.getSession()).withWords(text);
+		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
 		List<InternetAddress> result = modelService.search(query).getList();
 		
@@ -162,7 +162,7 @@ public class DesktopController extends DesktopControlerBase {
 	@Path
 	public void complete(Request request) throws IOException {
 		String text = request.getString("text");
-		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).withPrivileged(request.getSession()).withWords(text);
+		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
 		SearchResult<InternetAddress> result = modelService.search(query);
 		

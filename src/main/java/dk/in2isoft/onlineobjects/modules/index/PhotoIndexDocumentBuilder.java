@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -53,12 +54,13 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 			doc.add(new LongField("viewerId",id,Field.Store.YES));
 		}
 		// TODO: Is it ok to load this using admin?
-		List<Word> words = modelService.getChildren(image, null, Word.class, securityService.getAdminPrivileged());
+		Privileged adminPrivileged = securityService.getAdminPrivileged();
+		List<Word> words = modelService.getChildren(image, null, Word.class, adminPrivileged);
 		for (Word word : words) {
 			doc.add(new TextField("word", word.getText(), Field.Store.YES));
 			doc.add(new LongField("wordId",word.getId(),Field.Store.YES));
 		}
-		User owner = modelService.getOwner(image);
+		User owner = modelService.getOwner(image, adminPrivileged);
 		if (owner!=null) {
 			doc.add(new LongField("ownerId",owner.getId(),Field.Store.YES));
 		}

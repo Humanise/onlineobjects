@@ -53,7 +53,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 
 		clear(privileged);
 		{
-			Query<InternetAddress> query = Query.after(InternetAddress.class).withPrivileged(privileged);
+			Query<InternetAddress> query = Query.after(InternetAddress.class).as(privileged);
 			Results<InternetAddress> scroll = modelService.scroll(query);
 			try {
 				while (scroll.next()) {
@@ -65,7 +65,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 			}
 		}
 		{
-			Query<Statement> query = Query.after(Statement.class).withPrivileged(privileged);
+			Query<Statement> query = Query.after(Statement.class).as(privileged);
 			Results<Statement> scroll = modelService.scroll(query);
 			try {
 				while (scroll.next()) {
@@ -77,7 +77,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 			}
 		}
 		{
-			Query<Question> query = Query.after(Question.class).withPrivileged(privileged);
+			Query<Question> query = Query.after(Question.class).as(privileged);
 			Results<Question> scroll = modelService.scroll(query);
 			try {
 				while (scroll.next()) {
@@ -89,7 +89,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 			}
 		}
 		{
-			Query<Hypothesis> query = Query.after(Hypothesis.class).withPrivileged(privileged);
+			Query<Hypothesis> query = Query.after(Hypothesis.class).as(privileged);
 			Results<Hypothesis> scroll = modelService.scroll(query);
 			try {
 				while (scroll.next()) {
@@ -104,8 +104,8 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void index(InternetAddress address) {
 		try {
-			User owner = modelService.getOwner(address);
-			if (owner!=null && !securityService.isAdminUser(owner)) {
+			User owner = modelService.getOwner(address, securityService.getAdminPrivileged());
+			if (owner!=null) {
 				Document document = documentBuilder.build(address);
 				log.debug("Re-indexing : "+address);
 				getIndexManager(owner).update(address, document);
@@ -117,7 +117,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void index(Question question) {
 		try {
-			User owner = modelService.getOwner(question);
+			User owner = modelService.getOwner(question, securityService.getAdminPrivileged());
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (question.getText()!=null) {
@@ -127,7 +127,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 				doc.add(new TextField("title", Strings.asNonBlank(question.getName(),"blank"), Field.Store.YES));
 				indexStatus(doc, question, owner);
 
-				Query<Person> authors = Query.of(Person.class).from(question, Relation.KIND_COMMON_AUTHOR).withPrivileged(owner);
+				Query<Person> authors = Query.of(Person.class).from(question, Relation.KIND_COMMON_AUTHOR).as(owner);
 				List<Person> people = modelService.list(authors);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
@@ -144,7 +144,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void index(Hypothesis hypothesis) {
 		try {
-			User owner = modelService.getOwner(hypothesis);
+			User owner = modelService.getOwner(hypothesis, securityService.getAdminPrivileged());
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (hypothesis.getText()!=null) {
@@ -154,7 +154,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 				doc.add(new TextField("title", Strings.asNonBlank(hypothesis.getName(),"blank"), Field.Store.YES));
 				indexStatus(doc, hypothesis, owner);
 
-				Query<Person> authors = Query.of(Person.class).from(hypothesis, Relation.KIND_COMMON_AUTHOR).withPrivileged(owner);
+				Query<Person> authors = Query.of(Person.class).from(hypothesis, Relation.KIND_COMMON_AUTHOR).as(owner);
 				List<Person> people = modelService.list(authors);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
@@ -171,7 +171,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void index(Statement statement) {
 		try {
-			User owner = modelService.getOwner(statement);
+			User owner = modelService.getOwner(statement, securityService.getAdminPrivileged());
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (statement.getText()!=null) {
@@ -181,7 +181,7 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 				doc.add(new TextField("title", Strings.asNonBlank(statement.getName(),"blank"), Field.Store.YES));
 				indexStatus(doc, statement, owner);
 
-				Query<Person> authors = Query.of(Person.class).from(statement, Relation.KIND_COMMON_AUTHOR).withPrivileged(owner);
+				Query<Person> authors = Query.of(Person.class).from(statement, Relation.KIND_COMMON_AUTHOR).as(owner);
 				List<Person> people = modelService.list(authors);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));

@@ -60,7 +60,7 @@ public class PhotosLayoutView extends AbstractManagedBean implements Initializin
 		this.person = pair.getValue();
 		fullPersonName = personService.getFullPersonName(person, 14);
 		if (user!=null) {
-			Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).withPrivileged(user);
+			Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
 			if (user.getId()!=getRequest().getSession().getIdentity()) {
 				galleryQuery.withPublicView();
 			}

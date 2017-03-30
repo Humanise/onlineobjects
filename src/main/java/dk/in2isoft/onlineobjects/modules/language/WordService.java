@@ -445,7 +445,7 @@ public class WordService {
 		}
 		updateSource(word, source, privileged);
 		if (modification.clearOriginators) {
-			List<Relation> originators = modelService.getRelationsFrom(word, InternetAddress.class, Relation.KIND_COMMON_ORIGINATOR);
+			List<Relation> originators = modelService.find().relations(privileged).from(word).to(InternetAddress.class).withKind(Relation.KIND_COMMON_ORIGINATOR).list();
 			log.info("Word->InternetAddress originator count: " + originators.size());
 			for (Relation relation : originators) {
 				modelService.deleteRelation(relation, privileged);
@@ -457,7 +457,7 @@ public class WordService {
 
 	public void updateSource(Word word, Entity source, Privileged privileged) throws ModelException, SecurityException {
 		if (source!=null) {
-			Relation existing = modelService.getRelation(word, source, Relation.KIND_COMMON_SOURCE);
+			Relation existing = modelService.getRelation(word, source, Relation.KIND_COMMON_SOURCE, privileged).orElse(null);
 			boolean create = false;
 			if (existing==null) {
 				create = true;
@@ -475,7 +475,7 @@ public class WordService {
 	}
 	
 	private void changeLanguage(Word word, Language language, Privileged privileged) throws ModelException, SecurityException {
-		List<Relation> parents = modelService.getRelationsTo(word, Language.class);
+		List<Relation> parents = modelService.find().relations(privileged).to(word).from(Language.class).list();
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(language)) {
@@ -491,7 +491,7 @@ public class WordService {
 	}
 
 	private void changeCategory(Word word, LexicalCategory category, Privileged privileged) throws ModelException, SecurityException {
-		List<Relation> parents = modelService.getRelationsTo(word, LexicalCategory.class);
+		List<Relation> parents = modelService.find().relations(privileged).to(word).from(LexicalCategory.class).list();
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(category)) {
@@ -530,7 +530,7 @@ public class WordService {
 	}
 	
 	public Word getWordBySourceId(String sourceId, Privileged privileged) {
-		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId).withPrivileged(privileged);
+		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId).as(privileged);
 		List<Word> list = modelService.list(query);
 		if (!list.isEmpty()) {
 			if (list.size() > 1) {

@@ -16,7 +16,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Pile;
-import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
@@ -89,8 +88,7 @@ public class OnlinePublisherService {
 		address.setName(perspective.getName());
 		modelService.createOrUpdateItem(address, privileged);
 		Pile pile = getPile(privileged);
-		Relation relation = modelService.getRelation(pile, address);
-		if (relation==null) {
+		if (!modelService.getRelation(pile, address,privileged).isPresent()) {
 			modelService.createRelation(pile, address, privileged);
 		}
 	}

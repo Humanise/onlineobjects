@@ -86,7 +86,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 			
 			location = modelService.getParent(image, Location.class, session);
 
-			user = modelService.getOwner(image);
+			user = modelService.getOwner(image, session);
 			if (user!=null) {
 				UserQuery query = new UserQuery().withUsername(user.getUsername());
 				PairSearchResult<User,Person> searchPairs = modelService.searchPairs(query);
@@ -99,7 +99,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 				}
 			}
 			
-			Query<Image> allQuery = Query.after(Image.class).withPrivileged(user).orderByCreated();
+			Query<Image> allQuery = Query.after(Image.class).as(user).orderByCreated();
 			if (user==null || user.getId()!=session.getIdentity()) {
 				allQuery.withPublicView();
 			}

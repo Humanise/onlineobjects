@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.apps.photos;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.Lists;
 
@@ -67,12 +68,9 @@ public class PhotosController extends PhotosControllerBase {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");
 		Image image = getImage(imageId,session);
-		Word word = modelService.get(Word.class, wordId, session);
-		if (word==null) {
-			throw new ContentNotFoundException("The word was not found");
-		}
-		Relation relation = modelService.getRelation(image, word);
-		if (relation==null) {
+		Word word = modelService.getRequired(Word.class, wordId, session);
+		Optional<Relation> relation = modelService.getRelation(image, word, session);
+		if (!relation.isPresent()) {
 			modelService.createRelation(image, word, session);
 		}
 	}
@@ -83,13 +81,10 @@ public class PhotosController extends PhotosControllerBase {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");
 		Image image = getImage(imageId,session);
-		Word word = modelService.get(Word.class, wordId, session);
-		if (word==null) {
-			throw new ContentNotFoundException("The word was not found");
-		}
-		Relation relation = modelService.getRelation(image, word);
-		if (relation!=null) {
-			modelService.deleteRelation(relation, session);
+		Word word = modelService.getRequired(Word.class, wordId, session);
+		Optional<Relation> relation = modelService.getRelation(image, word, session);
+		if (relation.isPresent()) {
+			modelService.deleteRelation(relation.get(), session);
 		}
 	}
 
@@ -180,9 +175,9 @@ public class PhotosController extends PhotosControllerBase {
 		Image image = modelService.getRequired(Image.class, imageId, session);
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, galleryId, session);
 		
-		Relation relation = modelService.getRelation(gallery, image);
-		if (relation!=null) {
-			modelService.deleteRelation(relation, session);
+		Optional<Relation> relation = modelService.getRelation(gallery, image, session);
+		if (relation.isPresent()) {
+			modelService.deleteRelation(relation.get(), session);
 		}
 	}
 	
@@ -194,7 +189,7 @@ public class PhotosController extends PhotosControllerBase {
 			throw new IllegalRequestException("Malformed data");
 		}
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, per.getGalleryId(), session);
-		float position = getMaxImagePosition(gallery);
+		float position = getMaxImagePosition(gallery, session);
 		int num = 0;
 		for (SimpleEntityPerspective imagePerspective : per.getImages()) {
 			Image image = modelService.get(Image.class, imagePerspective.getId(), session);
@@ -218,9 +213,9 @@ public class PhotosController extends PhotosControllerBase {
 		imageGalleryService.changeSequence(info.getGalleryId(), ids, session);
 	}
 	
-	private float getMaxImagePosition(Entity gallery) throws ModelException {
+	private float getMaxImagePosition(Entity gallery, Privileged privileged) throws ModelException {
 		float max = 0;
-		List<Relation> relations = modelService.getRelationsFrom(gallery,Image.class);
+		List<Relation> relations = modelService.getRelationsFrom(gallery,Image.class, privileged);
 		for (Relation relation : relations) {
 			max = Math.max(max, relation.getPosition());
 		}
@@ -230,7 +225,7 @@ public class PhotosController extends PhotosControllerBase {
 	@Path
 	public List<Image> imageFinderGallery(Request request) {
 		UserSession session = request.getSession();
-		Query<Image> query = Query.of(Image.class).withPrivileged(session).orderByCreated().descending();
+		Query<Image> query = Query.of(Image.class).as(session).orderByCreated().descending();
 		List<Image> list = modelService.list(query);
 		return list;
 	}

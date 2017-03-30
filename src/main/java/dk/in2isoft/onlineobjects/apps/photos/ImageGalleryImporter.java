@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -32,15 +33,15 @@ public class ImageGalleryImporter extends ImageImporter {
 		ImageGallery gallery = modelService.get(ImageGallery.class, imageGalleryId, request.getSession());
 		
 		Relation relation = new Relation(gallery, image);
-		relation.setPosition(getMaxImagePosition(gallery) + 1 + index);
+		relation.setPosition(getMaxImagePosition(gallery, request.getSession()) + 1 + index);
 		modelService.createItem(relation, request.getSession());
 
 		imported.add(SimpleEntityPerspective.create(image));
 	}
 
-	private float getMaxImagePosition(Entity gallery) throws EndUserException {
+	private float getMaxImagePosition(Entity gallery, Privileged privileged) throws EndUserException {
 		float max = 0;
-		List<Relation> relations = modelService.getRelationsFrom(gallery,Image.class);
+		List<Relation> relations = modelService.getRelationsFrom(gallery,Image.class, privileged);
 		for (Relation relation : relations) {
 			max = Math.max(max, relation.getPosition());
 		}

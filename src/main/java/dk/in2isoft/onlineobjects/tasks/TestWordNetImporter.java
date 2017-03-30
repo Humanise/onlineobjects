@@ -209,10 +209,10 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		}
 		String kind = modification.getRelationKind();
 		boolean bidirectional = Relation.KIND_SEMANTICS_SYNONYMOUS.equals(kind);
-		if (modelService.getRelation(from, to, kind)!=null) {
+		if (modelService.getRelation(from, to, kind,admin).isPresent()) {
 			return;
 		}
-		if (bidirectional && modelService.getRelation(to, from, kind)!=null) {
+		if (bidirectional && modelService.getRelation(to, from, kind, admin).isPresent()) {
 			return;
 		}
 		Relation relation = modelService.createRelation(from, to, kind, admin);

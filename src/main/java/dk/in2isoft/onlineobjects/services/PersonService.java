@@ -38,7 +38,7 @@ public class PersonService {
 			return null;
 		}
 		text = text.replaceAll("[\\s]+", " ").trim();
-		Query<Person> query = Query.after(Person.class).withName(text).withPrivileged(privileged);
+		Query<Person> query = Query.after(Person.class).withName(text).as(privileged);
 		Person person = modelService.getFirst(query);
 		if (person==null) {
 			person = new Person();

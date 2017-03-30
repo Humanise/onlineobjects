@@ -439,22 +439,22 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	}
 
 	private void removeExistingSynonyms(Word localWord) throws ModelException, SecurityException {
-		List<Relation> outgoingSynonyms = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS);
+		List<Relation> outgoingSynonyms = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
 		modelService.deleteRelations(outgoingSynonyms, adminUser);
-		List<Relation> indcomingSynonyms = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS);
+		List<Relation> indcomingSynonyms = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
 		modelService.deleteRelations(indcomingSynonyms, adminUser);
 	}
 
 	private void removeExistingGeneralizations(Word localWord) throws ModelException, SecurityException {
-		List<Relation> from = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION);
+		List<Relation> from = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
 		modelService.deleteRelations(from, adminUser);
-		List<Relation> to = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION);
+		List<Relation> to = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
 		modelService.deleteRelations(to, adminUser);
 	}
 
 	private void removeExistingDisciplines(Word localWord) throws ModelException, SecurityException {
 		{
-			List<Relation> relations = modelService.getRelationsFrom(localWord, Word.class,Relation.KIND_SEMANTICS_DISCIPLINE);
+			List<Relation> relations = modelService.getRelationsFrom(localWord, Word.class,Relation.KIND_SEMANTICS_DISCIPLINE, adminUser);
 			modelService.deleteRelations(relations, adminUser);
 		}
 	}
