@@ -28,5 +28,10 @@ public class ImageConverter extends EntityConverter {
 		
 		return root;
 	}
+	
+	@Override
+	public Class<? extends Entity> getType() {
+		return Image.class;
+	}
 
 }

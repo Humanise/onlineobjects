@@ -19,4 +19,8 @@ public class UserConverter extends EntityConverter {
 		return root;
 	}
 
+	@Override
+	public Class<? extends Entity> getType() {
+		return User.class;
+	}
 }

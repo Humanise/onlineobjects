@@ -18,4 +18,8 @@ public class HeaderPartConverter extends EntityConverter {
 		return root;
 	}
 
+	@Override
+	public Class<? extends Entity> getType() {
+		return HeaderPart.class;
+	}
 }

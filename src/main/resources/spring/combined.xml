@@ -77,7 +77,22 @@
 	
 	<bean id="eventService" class="dk.in2isoft.onlineobjects.core.events.EventService" autowire="byType"/>
 	
-	<bean id="conversionService" class="dk.in2isoft.onlineobjects.services.ConversionService"/>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.EmailAddressConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.HeaderPartConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.HtmlPartConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.ImageConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.ImagePartConverter">
+		<property name="conversionService" ref="conversionService"/>
+		<property name="modelService" ref="modelService"/>
+	</bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.PersonConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.UserConverter"></bean>
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.WebSiteConverter"></bean>
+	<!-- Important to come last -->
+	<bean class="dk.in2isoft.onlineobjects.model.conversion.EntityConverter"></bean>
+
+
+	<bean id="conversionService" class="dk.in2isoft.onlineobjects.services.ConversionService" autowire="byType"/>
 	
 	
 	<bean id="webModelService" class="dk.in2isoft.onlineobjects.services.WebModelService" autowire="byType"/>

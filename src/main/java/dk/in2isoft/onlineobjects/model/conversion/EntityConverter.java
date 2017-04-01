@@ -24,6 +24,10 @@ public class EntityConverter {
 		return root;
 	}
 	
+	public Class<? extends Entity> getType() {
+		return Entity.class;
+	}
+	
 	protected Node generateSubXML(Entity entity, Privileged privileged) throws ModelException {
 		return null;
 	}

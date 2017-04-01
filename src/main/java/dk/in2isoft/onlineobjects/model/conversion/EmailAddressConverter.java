@@ -17,4 +17,8 @@ public class EmailAddressConverter extends EntityConverter {
 		return root;
 	}
 
+	@Override
+	public Class<? extends Entity> getType() {
+		return EmailAddress.class;
+	}
 }
