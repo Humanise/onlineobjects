@@ -21,7 +21,6 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class AbstractControllerResponder {
 
-	private static final Class<?>[] args = { Request.class };
 	protected ConfigurationService configurationService;
 
 	public AbstractControllerResponder() {

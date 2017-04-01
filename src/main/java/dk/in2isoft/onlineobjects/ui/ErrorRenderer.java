@@ -10,18 +10,18 @@ import dk.in2isoft.commons.util.StackTraceUtil;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import dk.in2isoft.onlineobjects.services.ConversionService;
 
 public class ErrorRenderer extends XSLTInterfaceAdapter {
 
 	private Exception exception;
 	private ConfigurationService configurationService;
-	private Request request;
 	private Integer status;
 
-	public ErrorRenderer(Exception ex, Request request, ConfigurationService configurationService) {
+	public ErrorRenderer(Exception ex, Request request, ConfigurationService configurationService, ConversionService conversionService) {
+		super(conversionService);
 		this.exception = ex;
 		this.configurationService = configurationService;
-		this.request = request;
 	}
 
 	@Override

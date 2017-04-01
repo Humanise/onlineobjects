@@ -9,7 +9,6 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.modules.information.InspectingContentExtractor;
-import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import nu.xom.Document;
@@ -17,7 +16,6 @@ import nu.xom.Document;
 public class ReaderExtractionView extends AbstractView implements InitializingBean {
 	
 	private ModelService modelService;
-	private TextDocumentAnalyzer textDocumentAnalyzer;
 	private InternetAddressService internetAddressService;
 	
 	private InternetAddress internetAddress;
@@ -69,10 +67,6 @@ public class ReaderExtractionView extends AbstractView implements InitializingBe
 		this.modelService = modelService;
 	}
 		
-	public void setTextDocumentAnalyzer(TextDocumentAnalyzer textDocumentAnalyzer) {
-		this.textDocumentAnalyzer = textDocumentAnalyzer;
-	}
-	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}

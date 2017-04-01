@@ -9,15 +9,10 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Application;
-import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.ui.AbstractRemotingFacade;
-import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public class SetupRemotingFacade extends AbstractRemotingFacade {
-	
-	private ImageService imageService;
-	private FileService fileService;
-	
+		
 	@Override
 	public boolean isAccessAllowed(Method method) throws SecurityException {
 		String username = getUserSession().getUser().getUsername();
@@ -68,7 +63,4 @@ public class SetupRemotingFacade extends AbstractRemotingFacade {
 		}
 	}
 
-	public void setImageService(ImageService imageService) {
-		this.imageService = imageService;
-	}
 }

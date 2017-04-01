@@ -73,7 +73,7 @@ public class HUIService {
 		Transformer transformer = null;;
 		try {
 			if (devMode) {
-			    //validate(source);
+			    validate(source);
 				transformer = createTransformer(true);
 				 // create a SchemaFactory capable of understanding WXS schemas
 			} else {

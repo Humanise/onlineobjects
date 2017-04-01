@@ -1,19 +1,24 @@
 package dk.in2isoft.onlineobjects.ui;
 
+import org.apache.xerces.dom.DOMImplementationImpl;
+
+import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.model.Entity;
+import dk.in2isoft.onlineobjects.services.ConversionService;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.converters.DOMConverter;
 
-import org.apache.xerces.dom.DOMImplementationImpl;
-
-import dk.in2isoft.onlineobjects.core.Core;
-import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.model.Entity;
-
 
 public abstract class XSLTInterfaceAdapter extends XSLTInterface {
+	
+	private ConversionService conversionService;
+
+	public XSLTInterfaceAdapter(ConversionService conversionService) {
+		this.conversionService = conversionService;
+	}
 
 	@Override
 	public final org.w3c.dom.Document getData(Privileged privileged) throws ModelException {
@@ -33,11 +38,11 @@ public abstract class XSLTInterfaceAdapter extends XSLTInterface {
 	}
 
 	protected String convertToXML(Entity entity, Privileged privileged) throws ModelException {
-		return Core.getInstance().getConversionService().generateXML(entity, privileged).toXML();
+		return this.conversionService.generateXML(entity, privileged).toXML();
 	}
 
 	protected Node convertToNode(Entity entity, Privileged privileged) throws ModelException {
-		return Core.getInstance().getConversionService().generateXML(entity, privileged);
+		return this.conversionService.generateXML(entity, privileged);
 	}
 	
 	protected abstract void buildContent(Element parent, Privileged privileged) throws ModelException;

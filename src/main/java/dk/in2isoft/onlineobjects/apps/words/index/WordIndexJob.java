@@ -7,12 +7,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
-import com.google.common.collect.Lists;
-
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.PropertyLimitation.Comparison;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.Results;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Word;
@@ -64,7 +61,7 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 			status.error("Error while fetching words", e);
 		}
 	}
-
+/*
 	private void oldSchool(JobExecutionContext context) {
 		JobStatus status = getStatus(context);
 		WordIndexer wordIndexer = schedulingSupportFacade.getWordIndexer();
@@ -105,7 +102,7 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 		}
 		results.close();
 		status.log("Finished indexing words");
-	}
+	}*/
 
 	public void interrupt() throws UnableToInterruptJobException {
 		interrupted = true;

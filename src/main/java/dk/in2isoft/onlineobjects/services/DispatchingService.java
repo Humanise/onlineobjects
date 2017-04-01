@@ -36,6 +36,7 @@ public class DispatchingService {
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
 	private ConfigurationService configurationService;
+	private ConversionService conversionService;
 
 	private List<Responder> responders;
 	
@@ -123,7 +124,7 @@ public class DispatchingService {
 
 	public void displayError(Request request, Exception ex) {
 		ex = findUserException(ex);
-		ErrorRenderer renderer = new ErrorRenderer(ex,request,configurationService);
+		ErrorRenderer renderer = new ErrorRenderer(ex,request,configurationService, conversionService);
 		try {
 			if (ex instanceof ContentNotFoundException) {
 				log.error(ex.getMessage()+" : "+request.getRequest().getRequestURL().toString());
@@ -187,5 +188,9 @@ public class DispatchingService {
 	
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
+	}
+	
+	public void setConversionService(ConversionService conversionService) {
+		this.conversionService = conversionService;
 	}
 }
