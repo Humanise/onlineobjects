@@ -20,7 +20,7 @@ alter table location drop constraint FK714F9FB5E94A3D71
 alter table person drop constraint FKC4E39B55E94A3D71
 alter table phonenumber drop constraint FKEF7FCE37E94A3D71
 alter table pile drop constraint FK348132E94A3D71
-alter table property drop constraint FKC4CDDDD559D64C8B
+alter table property drop constraint FKC4CDDDD5BD260F4D
 alter table question drop constraint FKBA823BE6E94A3D71
 alter table rating drop constraint FKC815B19DE94A3D71
 alter table relation drop constraint FKDEF3F9FCAC959B89
@@ -137,7 +137,7 @@ alter table location add constraint FK714F9FB5E94A3D71 foreign key (id) referenc
 alter table person add constraint FKC4E39B55E94A3D71 foreign key (id) references entity
 alter table phonenumber add constraint FKEF7FCE37E94A3D71 foreign key (id) references entity
 alter table pile add constraint FK348132E94A3D71 foreign key (id) references entity
-alter table property add constraint FKC4CDDDD559D64C8B foreign key (entity_id) references entity
+alter table property add constraint FKC4CDDDD5BD260F4D foreign key (entity_id) references entity
 alter table question add constraint FKBA823BE6E94A3D71 foreign key (id) references entity
 alter table rating add constraint FKC815B19DE94A3D71 foreign key (id) references entity
 alter table relation add constraint FKDEF3F9FCAC959B89 foreign key (super_entity_id) references entity

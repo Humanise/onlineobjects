@@ -85,20 +85,20 @@
 			<fileset dir="${basedir}/lib">
 				<include name="**/*.jar" />
 			</fileset>
-			<fileset dir="${basedir}/libdep">
+			<fileset dir="${basedir}/target/OnlineObjects/WEB-INF/lib">
 				<include name="**/*.jar" />
 			</fileset>
-			<path location="${basedir}/bin" />
-			<pathelement location="${basedir}/src/java" />
+			<path location="${basedir}/target/OnlineObjects/WEB-INF/classes" />
+			<pathelement location="${basedir}/src/main/java" />
+			<pathelement location="${basedir}/src/main/resources" />
 		</path>
 
 		<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="toolslib" />
 		<mkdir dir="${basedir}/sql" />
 		<hibernatetool destdir="${basedir}/sql">
-			<classpath refid="toolslib">
-			</classpath>
-			<configuration configurationfile="${basedir}/conf/hibernate.cfg.xml"/>
-			<hbm2ddl export="false" outputfilename="db_new.sql" format="true" drop="false" />
+			<classpath refid="toolslib"/>
+			<configuration configurationfile="${basedir}/src/main/resources/hibernate.cfg.xml"/>
+			<hbm2ddl export="false" outputfilename="schema_ant.sql" format="false" drop="true" />
 		</hibernatetool>
 	</target>
 </project>
