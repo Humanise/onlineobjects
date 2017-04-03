@@ -263,16 +263,13 @@ public class ModelService {
 	}
 
 	private void createItem(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
-		if (securityService.isPublicUser(privileged) && !(item instanceof User)) {
-			throw new SecurityException("Public can only create new users");
-		}
 		if (!item.isNew()) {
 			throw new ModelException("Tried to create an already created item!");
 		}
-		if (item instanceof User) {
-			// TODO: Make sure users are OK
-		} else if (securityService.isPublicUser(privileged)) {
-			throw new SecurityException("Public can only create users");
+		if (securityService.isPublicUser(privileged)) {
+			if (!(item instanceof User)) {
+				throw new SecurityException("Public can only create new users");
+			}
 		}
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
@@ -281,6 +278,26 @@ public class ModelService {
 			grantPrivilegesPrivately(item, privileged, true, true, true);
 		}
 		eventService.fireItemWasCreated(item);
+	}
+	
+
+	/**
+	 * Will create a core user if it doesn't already exist
+	 * @param user
+	 * @throws SecurityException
+	 */
+	public void createCoreUser(User user) throws SecurityException {
+		if (!securityService.isCoreUser(user)) {
+			throw new SecurityException("The user is not a core user");
+		}
+		User existing = getUser(user.getUsername());
+		if (existing!=null) {
+			throw new SecurityException("The user already exists");
+		}
+		Session session = getSession();
+		user.setCreated(new Date());
+		user.setUpdated(new Date());
+		session.save(user);
 	}
 
 	public void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {

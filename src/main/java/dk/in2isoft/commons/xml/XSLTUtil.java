@@ -24,17 +24,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import nu.xom.Serializer;
-
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.core.Core;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.XSLTInterface;
+import nu.xom.Serializer;
 
 public class XSLTUtil {
 	
@@ -140,7 +138,7 @@ public class XSLTUtil {
 		parameters.put("domain-is-ip", String.valueOf(request.isIP()));
 		parameters.put("base-context", request.getBaseContext());
 		parameters.put("user-name", request.getSession().getUser().getUsername());
-		parameters.put("development-mode", String.valueOf(Core.getInstance().getConfigurationService().isDevelopmentMode()));
+		parameters.put("development-mode", "false");
 		response.setCharacterEncoding(Strings.UTF8);
 		if (isXhtmlCapable(request.getRequest())) {
 			response.setContentType("application/xhtml+xml");

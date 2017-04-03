@@ -6,6 +6,16 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
+
+	<bean class="dk.in2isoft.onlineobjects.core.UserConsistencyChecker">
+    	<property name="modelService" ref="modelService"/>
+    	<property name="passwordEncryptionService" ref="passwordEncryptionService"/>
+    </bean>
+
+	<bean class="dk.in2isoft.onlineobjects.core.ApplicationConsistencyChecker">
+    	<property name="modelService" ref="modelService"/>
+    	<property name="securityService" ref="securityService"/>
+    </bean>
     
     <import resource="core-scheduling.xml"/>
     <import resource="core-publishing.xml"/>
@@ -30,6 +40,7 @@
     <import resource="app-people.xml"/>
     <import resource="app-api.xml"/>
     <import resource="app-reader.xml"/>
+    
 
 	<bean id="configurationService" class="dk.in2isoft.onlineobjects.services.ConfigurationService" autowire="byType">
 		<property name="basePath" value="${basePath}"/>
@@ -73,7 +84,7 @@
 	
 	<bean id="passwordEncryptionService" class="dk.in2isoft.onlineobjects.core.PasswordEncryptionService" autowire="byType"/>
 	
-	<bean id="lifeCycleService" class="dk.in2isoft.onlineobjects.services.LifeCycleService"/>
+	<bean id="lifeCycleService" class="dk.in2isoft.onlineobjects.services.LifeCycleService" autowire="byType"/>
 	
 	<bean id="eventService" class="dk.in2isoft.onlineobjects.core.events.EventService" autowire="byType"/>
 	

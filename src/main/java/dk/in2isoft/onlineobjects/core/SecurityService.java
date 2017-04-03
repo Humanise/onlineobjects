@@ -235,7 +235,8 @@ public class SecurityService {
 	}
 
 	public boolean isPublicUser(Privileged privileged) {
-		return privileged.getIdentity()==getPublicUser().getIdentity();
+		User pub = getPublicUser();
+		return pub!=null && privileged.getIdentity()==pub.getIdentity();
 	}
 
 	public Privileged getAdminPrivileged() {
@@ -247,7 +248,8 @@ public class SecurityService {
 	}
 
 	public boolean isAdminUser(Privileged privileged) {
-		return privileged.getIdentity() == getAdminPrivileged().getIdentity();
+		Privileged admin = getAdminPrivileged();
+		return admin!=null && privileged.getIdentity() == admin.getIdentity();
 	}
 
 	public User getUserBySecret(String secret) {
@@ -367,6 +369,10 @@ public class SecurityService {
 		String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
 		user.setPassword(encryptedPassword);
 		user.setSalt(salt);
+	}
+
+	public boolean isCoreUser(User user) {
+		return SecurityService.ADMIN_USERNAME.equals(user.getUsername()) || SecurityService.PUBLIC_USERNAME.equals(user.getUsername());
 	}
 
 }
