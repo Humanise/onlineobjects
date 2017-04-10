@@ -104,10 +104,10 @@ public class SchedulingSupportFacade {
 		this.onlinePublisherService = onlinePublisherService;
 	}
 	
-	public <E extends Entity> ConfigurableIndexer<E> getConfigurableIndexer(Class<E> type) {
+	public ConfigurableIndexer<? extends Entity> getConfigurableIndexer(Class<? extends Entity> type) {
 		for (ConfigurableIndexer<? extends Entity> indexer : configurableIndexers) {
 			if (type.equals(indexer.getType())) {
-				return (ConfigurableIndexer<E>) indexer;
+				return indexer;
 			}
 		}
 		return null;

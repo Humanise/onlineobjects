@@ -8,6 +8,7 @@ import org.apache.lucene.document.Document;
 
 import com.google.common.collect.Maps;
 
+import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -33,13 +34,14 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	
 	public void entityWasCreated(Entity entity) {
 		if (type.isAssignableFrom(entity.getClass())) {
-			index((E) entity);
+			index(entity);
 		}
 	}
 	
-	public void index(E entity) {
+	public void index(Entity entity) {
 		try {
-			Document document = documentBuilder.build(entity);
+			E ent = Code.cast(entity);
+			Document document = documentBuilder.build(ent);
 			log.debug("Re-indexing : "+entity);
 			indexManager.update(entity, document);
 		} catch (EndUserException e) {
@@ -63,7 +65,7 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 
 	public void entityWasUpdated(Entity entity) {
 		if (type.isAssignableFrom(entity.getClass())) {
-			index((E) entity);
+			index(entity);
 		}		
 	}
 
@@ -79,28 +81,28 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 
 	public void relationWasCreated(Relation relation) {
 		if (type.isAssignableFrom(relation.getFrom().getClass())) {
-			index((E) relation.getFrom());
+			index(relation.getFrom());
 		}
 		if (type.isAssignableFrom(relation.getTo().getClass())) {
-			index((E) relation.getTo());
+			index(relation.getTo());
 		}
 	}
 
 	public void relationWasUpdated(Relation relation) {
 		if (type.isAssignableFrom(relation.getFrom().getClass())) {
-			index((E) relation.getFrom());
+			index(relation.getFrom());
 		}
 		if (type.isAssignableFrom(relation.getTo().getClass())) {
-			index((E) relation.getTo());
+			index(relation.getTo());
 		}
 	}
 
 	public void relationWasDeleted(Relation relation) {
 		if (type.isAssignableFrom(relation.getFrom().getClass())) {
-			index((E) relation.getFrom());
+			index(relation.getFrom());
 		}
 		if (type.isAssignableFrom(relation.getTo().getClass())) {
-			index((E) relation.getTo());
+			index(relation.getTo());
 		}
 	}
 

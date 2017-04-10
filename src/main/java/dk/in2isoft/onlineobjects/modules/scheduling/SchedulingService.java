@@ -4,11 +4,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
-import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.BufferUtils;
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -34,6 +33,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.modules.surveillance.LogEntry;
@@ -43,7 +43,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 
 	private final static Logger log = Logger.getLogger(SchedulingService.class);
 	
-	private Buffer liveLog = BufferUtils.synchronizedBuffer(new CircularFifoBuffer(200));
+	private Queue<LogEntry> liveLog = Queues.synchronizedQueue(new CircularFifoQueue<LogEntry>(200));
 	
 	private SchedulingSupportFacade schedulingSupportFacade;
 	

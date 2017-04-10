@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.scheduling;
 
-import org.apache.commons.collections.Buffer;
+import java.util.Queue;
+
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,9 +19,9 @@ import dk.in2isoft.onlineobjects.modules.surveillance.LogEntry;
 
 public class LoggingSchedulerListener implements SchedulerListener, JobListener, TriggerListener {
 	
-	private Buffer log;
+	private Queue<LogEntry> log;
 
-	public LoggingSchedulerListener(Buffer log) {
+	public LoggingSchedulerListener(Queue<LogEntry> log) {
 		this.log = log;
 	}
 	
