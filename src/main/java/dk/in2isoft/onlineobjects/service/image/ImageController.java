@@ -123,6 +123,7 @@ public class ImageController extends ServiceController {
 		String mime;
 		ImageTransformation trans = new ImageTransformation();
 		trans.setCropped(parameters.cropped);
+		trans.setFormat(parameters.format);
 		if (parameters.thumbnail>0) {
 			trans.setHeight(parameters.thumbnail);
 			trans.setWidth(parameters.thumbnail);
@@ -149,7 +150,11 @@ public class ImageController extends ServiceController {
 		
 		if (trans.isTransformed()) {
 			file = imageTransformationService.transform(parameters.id, trans);
-			mime = "image/jpeg";
+			if ("png".equals(trans.getFormat())) {
+				mime = "image/png";
+			} else {
+				mime = "image/jpeg";
+			}
 		} else {
 			file = imageService.getImageFile(image);
 			mime = image.getContentType();

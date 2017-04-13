@@ -9,6 +9,7 @@ public class ImageTransformation {
 	private float rotation;
 	private boolean flipVertically;
 	private boolean flipHorizontally;
+	private String format;
 
 	public void setWidth(int width) {
 		this.width = width;
@@ -76,5 +77,13 @@ public class ImageTransformation {
 
 	public void setFlipHorizontally(boolean flipHorizontally) {
 		this.flipHorizontally = flipHorizontally;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 }

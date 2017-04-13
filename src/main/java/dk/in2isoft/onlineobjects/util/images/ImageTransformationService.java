@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.util.images;
 
 import java.io.File;
+
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -63,7 +65,12 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		if (transformation.isFlipVertically()) {
 			sb.append("_flip-v");
 		}
-		sb.append(".jpg");
+		sb.append(".");
+		if (Strings.isNotBlank(transformation.getFormat())) {
+			sb.append(transformation.getFormat());
+		} else {
+			sb.append("jpg");
+		}
 		return sb.toString();
 	}
 	

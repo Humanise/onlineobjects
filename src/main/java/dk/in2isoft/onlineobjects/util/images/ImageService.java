@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.sanselan.ImageReadException;
-import org.apache.sanselan.Sanselan;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -71,21 +69,38 @@ public class ImageService extends AbstractCommandLineInterface {
 	public ImageService() {
 	}
 	
-	public int[] getImageDimensions(File file) throws EndUserException {
-		int[] dimensions = new int[] { 0, 0 };
+	private String magickTypeToMimeType(String magick) {
+		if ("PNG".equals( magick)) {
+			return "image/png";
+		}
+		else if ("JPEG".equals( magick)) {
+			return "image/jpeg";
+		}
+		else if ("PDF".equals( magick)) {
+			return "application/pdf";
+		}
+		return null;
+	}
+	
+	public ImageProperties getImageProperties(File file) throws EndUserException {
 		log.debug(file.getAbsolutePath());
 		log.debug("Exists: " + file.exists());
-		String cmd = configurationService.getImageMagickPath() + "/identify -quiet -format \"%wx%h\" " + file.getAbsolutePath() + "[0]";
+		String cmd = configurationService.getImageMagickPath() + "/identify -quiet -format \"%m-%wx%h\" " + file.getAbsolutePath() + "[0]";
 		String result = execute(cmd).trim();
-		Pattern pattern = Pattern.compile(".*\"([0-9]+)x([0-9]+)\"");
+		Pattern pattern = Pattern.compile(".*\"([a-zA-Z]+)-([0-9]+)x([0-9]+)\"");
 		Matcher matcher = pattern.matcher(result);
 		if (matcher.matches()) {
-			dimensions[0] = Integer.parseInt(matcher.group(1));
-			dimensions[1] = Integer.parseInt(matcher.group(2));
+			ImageProperties properties = new ImageProperties();
+			String format = matcher.group(1);
+			int width = Integer.parseInt(matcher.group(2));
+			int height = Integer.parseInt(matcher.group(3));
+			properties.setMimeType(magickTypeToMimeType(format));
+			properties.setWidth(width);
+			properties.setHeight(height);
+			return properties;
 		} else {
 			throw new EndUserException("Could not parse output: " + result);
 		}
-		return dimensions;
 	}
 	
 	public boolean isSupportedMimeType(String mime) {
@@ -98,9 +113,9 @@ public class ImageService extends AbstractCommandLineInterface {
 	
 	public String getColors(Image image) throws EndUserException {
 		File file = getImageFile(image);
-		int[] dimensions = getImageDimensions(file);
-		int width = dimensions[0];
-		int height = dimensions[1];
+		ImageProperties props = getImageProperties(file);
+		int width = props.getWidth();
+		int height = props.getHeight();
 		String top = getAverageColor(file, width, Math.round(height/3f), 0, 0);
 		String middle = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f));
 		String bottom = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f*2)); 
@@ -112,27 +127,6 @@ public class ImageService extends AbstractCommandLineInterface {
 		return execute(configurationService.getImageMagickPath() + "/" + cmd);
 	}
 	
-	public ImageProperties getImageProperties(File file) {
-		try {
-			ImageProperties properties = new ImageProperties();
-			int[] dimensions = getImageDimensions(file);
-			properties.setWidth(dimensions[0]);
-			properties.setHeight(dimensions[1]);
-			org.apache.sanselan.ImageInfo imageInfo = Sanselan.getImageInfo(file);
-			properties.setMimeType(imageInfo.getMimeType());
-			return properties;
-		} catch (EndUserException e) {
-			log.error(e.getMessage(),e);
-			return null;
-		} catch (ImageReadException e) {
-			log.error(e.getMessage(),e);
-			return null;
-		} catch (IOException e) {
-			log.error(e.getMessage(),e);
-			return null;
-		}
-	}
-
 	public ImageMetaData getMetaData(Image image) {
 		return getMetaData(getImageFile(image));
 	}
@@ -438,9 +432,9 @@ public class ImageService extends AbstractCommandLineInterface {
 	}
 
 	public void changeImageFile(Image image, File file,String contentType) throws EndUserException {
-		int[] dimensions = getImageDimensions(file);
-		image.setWidth(dimensions[0]);
-		image.setHeight(dimensions[1]);
+		ImageProperties props = getImageProperties(file);
+		image.setWidth(props.getWidth());
+		image.setHeight(props.getHeight());
 		image.setContentType(contentType);
 		image.setFileSize(file.length());
 		File folder = storageService.getItemFolder(image);

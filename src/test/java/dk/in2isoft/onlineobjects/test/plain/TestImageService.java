@@ -29,9 +29,9 @@ public class TestImageService extends AbstractSpringTestCase {
 	@Test
 	public void testMetaData() throws EndUserException, IOException {
 		File file = getTestFile("testImageWithGPS.jpg");
-		int[] imageDimensions = imageService.getImageDimensions(file);
-		assertEquals(1600,imageDimensions[0]);
-		assertEquals(1200,imageDimensions[1]);
+		ImageProperties imageDimensions = imageService.getImageProperties(file);
+		assertEquals(1600,imageDimensions.getWidth());
+		assertEquals(1200,imageDimensions.getHeight());
 		ImageMetaData metaData = imageService.getMetaData(file);
 		assertEquals("Apple",metaData.getCameraMake());
 		assertEquals("iPhone",metaData.getCameraModel());

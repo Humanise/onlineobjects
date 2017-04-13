@@ -81,7 +81,47 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			imageTransformationService.transform(file, transform, converted);
 		}
 	}
-	
+
+	@Test
+	public void testPDF() throws IOException, EndUserException {
+		File pdf = getTestFile("images/humanise.pdf");
+		{
+			ImageProperties properties = imageService.getImageProperties(pdf);
+			assertEquals("application/pdf", properties.getMimeType());
+		}
+		{			
+			ImageTransformation transform = new ImageTransformation();
+			transform.setWidth(300);
+			transform.setHeight(200);
+			transform.setFormat("jpg");
+			File converted = new File(getOutputDir(),"humanise_300x200.jpg");
+			if (converted.exists()) {
+				converted.delete();
+			}
+			imageTransformationService.transform(pdf, transform, converted);
+			ImageProperties properties = imageService.getImageProperties(converted);
+			assertEquals("image/jpeg", properties.getMimeType());
+			assertEquals(300, properties.getWidth());
+			assertEquals(200, properties.getHeight());
+		}
+
+		{			
+			ImageTransformation transform = new ImageTransformation();
+			transform.setWidth(300);
+			transform.setHeight(200);
+			transform.setFormat("png");
+			File converted = new File(getOutputDir(),"humanise_300x200.png");
+			if (converted.exists()) {
+				converted.delete();
+			}
+			imageTransformationService.transform(pdf, transform, converted);
+			ImageProperties properties = imageService.getImageProperties(converted);
+			assertEquals("image/png", properties.getMimeType());
+			assertEquals(300, properties.getWidth());
+			assertEquals(200, properties.getHeight());
+		}
+}
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
