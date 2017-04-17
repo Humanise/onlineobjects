@@ -2,22 +2,22 @@ var questionViewer = {
   id : null,
   data : null,
   locked : false,
-  
+
   nodes : {
     root : '.js_question',
     text : '.js_question_text',
     body : '.js_question_body'
   },
-  
+
   $ready : function() {
     this.nodes = hui.collect(this.nodes);
     this._attach();
   },
-  
+
   $click$closeQuestion : function() {
     this.hide();
   },
-  
+
   $click$questionInfo : function() {
     reader.edit({type:'Question',id:this.id});
   },
@@ -58,18 +58,18 @@ var questionViewer = {
       }.bind(this)
     });
   },
-  
+
   _lock : function() {
     this.locked = true;
   },
   _unlock : function() {
-    this.locked = false;    
+    this.locked = false;
   },
-  
+
   _attach : function() {
     hui.listen(this.nodes.body,'click',this._click,this);
   },
-  
+
   _click : function(e) {
     e = hui.event(e);
     var clickable = e.findByClass('js-clickable');
@@ -82,11 +82,11 @@ var questionViewer = {
       }
     }
   },
-  
+
   $questionChanged$questionEditor : function() {
     this._load();
   },
-  
+
   show : function(options) {
     this.id = options.id;
     this.nodes.root.style.display = 'block';
@@ -96,7 +96,7 @@ var questionViewer = {
   hide : function(e) {
     this.nodes.root.style.display = 'none';
   },
-  
+
   _load : function() {
     hui.ui.request({
       url : '/viewQuestion',
@@ -106,7 +106,7 @@ var questionViewer = {
         this._render();
       }.bind(this),
       $finally : function() {
-        
+
       }.bind(this)
     });
   },
