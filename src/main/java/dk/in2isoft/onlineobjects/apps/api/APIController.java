@@ -3,7 +3,6 @@ package dk.in2isoft.onlineobjects.apps.api;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,22 +18,17 @@ import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.onlineobjects.apps.reader.index.ReaderQuery;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
-import dk.in2isoft.onlineobjects.model.Entity;
-import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
-import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
-import dk.in2isoft.onlineobjects.model.Question;
-import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
+import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
+import dk.in2isoft.onlineobjects.modules.knowledge.QuestionApiPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -135,7 +129,7 @@ public class APIController extends APIControllerBase {
 			}
 		});
 		importer.importMultipart(this, request);
-	}	
+	}
 	
 	@Path(start = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
@@ -153,35 +147,21 @@ public class APIController extends APIControllerBase {
 		query.setSubset("everything");
 		query.setType(Lists.newArrayList("any"));
 		query.setText(request.getString("text"));
-		SearchResult<Entity> searchResult = readerSearcher.search(query, user);
-		
-		List<KnowledgeListRow> list = new ArrayList<>();
-		for (Entity entity : searchResult.getList()) {
-			KnowledgeListRow row = new KnowledgeListRow();
-			row.id = entity.getId();
-			row.type = entity.getClass().getSimpleName();
-			if (entity instanceof InternetAddress) {
-				InternetAddress address = (InternetAddress) entity;
-				row.url = address.getAddress();
-				row.text = address.getName();
-			}
-			else if (entity instanceof Statement) {
-				row.text = ((Statement) entity).getText();
-				Query<InternetAddress> q = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).as(user);
-				InternetAddress addr = modelService.search(q).getFirst();
-				if (addr != null) {
-					row.url = addr.getAddress();
-				}
-			}
-			else if (entity instanceof Question) {
-				row.text = ((Question) entity).getText();
-			}
-			else if (entity instanceof Hypothesis) {
-				row.text = ((Hypothesis) entity).getText();
-			}
-			list.add(row);
-		}
-		return new SearchResult<>(list, searchResult.getTotalCount());
+		return knowledgeService.search(query, user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "question" })
+	public QuestionApiPerspective viewQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		return knowledgeService.getQuestionPerspective(id, user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "address" })
+	public InternetAddressApiPerspective viewAddress(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		return knowledgeService.getAddressPerspective(id, user);
 	}
 
 	private User getUserForSecretKey(Request request) throws SecurityException {

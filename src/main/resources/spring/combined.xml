@@ -28,6 +28,7 @@
     <import resource="module-onlinepublisher.xml"/>
     <import resource="module-organic.xml"/>
     <import resource="module-inbox.xml"/>
+    <import resource="module-knowledge.xml"/>
     <import resource="app-setup.xml"/>
     <import resource="app-community.xml"/>
     <import resource="app-developer.xml"/>

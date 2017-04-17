@@ -6,9 +6,9 @@ import java.util.Locale;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.apps.reader.ReaderSearcher;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
@@ -27,8 +27,7 @@ public abstract class APIControllerBase extends ApplicationController {
 	protected ImportService importService;
 	protected ImageService imageService;
 	protected InternetAddressService internetAddressService;
-	
-	protected ReaderSearcher readerSearcher;
+	protected KnowledgeService knowledgeService;
 	
 	public APIControllerBase() {
 		super("api");
@@ -63,10 +62,6 @@ public abstract class APIControllerBase extends ApplicationController {
 		this.inboxService = inboxService;
 	}
 	
-	public void setReaderSearcher(ReaderSearcher readerSearcher) {
-		this.readerSearcher = readerSearcher;
-	}
-	
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
@@ -81,5 +76,9 @@ public abstract class APIControllerBase extends ApplicationController {
 	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
+	}
+	
+	public void setKnowledgeService(KnowledgeService knowledgeService) {
+		this.knowledgeService = knowledgeService;
 	}
 }
