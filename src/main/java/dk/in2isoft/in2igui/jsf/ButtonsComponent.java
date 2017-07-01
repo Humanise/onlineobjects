@@ -37,15 +37,20 @@ public class ButtonsComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String cls = "hui_buttons";
 		if ("right".equals(align)) {
-			cls+=" hui_buttons_right";
+			cls+=" hui_buttons-right";
+		}
+		if ("left".equals(align)) {
+			cls+=" hui_buttons-left";
+		}
+		if ("center".equals(align)) {
+			cls+=" hui_buttons-center";
 		}
 		out.startDiv(cls);
-		out.startDiv("hui_buttons_body");
 	}
 	
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
-		out.endDiv().endDiv();
+		out.endDiv();
 	}
 
 	public void setAlign(String align) {
