@@ -40,9 +40,10 @@ public class ImageImporter implements ImportListener<Object> {
 		imageService.changeImageFile(image, file, mimeType);
 		imageService.synchronizeMetaData(image, request.getSession());
 		modelService.updateItem(image, request.getSession());
-		modelService.commit();
 		importedImages.add(image);
+		image = modelService.get(Image.class, image.getId(), request.getSession());
 		postProcessImage(image, parameters, request);
+		modelService.commit();
 	}
 	
 	protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {

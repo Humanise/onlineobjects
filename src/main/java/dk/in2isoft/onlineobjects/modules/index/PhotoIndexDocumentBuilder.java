@@ -27,7 +27,8 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 	private SecurityService securityService;
 	
 	public Document build(Image image) throws ModelException {
-		
+		Privileged adminPrivileged = securityService.getAdminPrivileged();
+		image = modelService.get(Image.class, image.getId(), adminPrivileged);
 		StringBuilder text = new StringBuilder();
 		text.append(image.getName()).append(" ");
 		String glossary = image.getPropertyValue(Image.PROPERTY_DESCRIPTION);
@@ -54,7 +55,6 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 			doc.add(new LongField("viewerId",id,Field.Store.YES));
 		}
 		// TODO: Is it ok to load this using admin?
-		Privileged adminPrivileged = securityService.getAdminPrivileged();
 		List<Word> words = modelService.getChildren(image, null, Word.class, adminPrivileged);
 		for (Word word : words) {
 			doc.add(new TextField("word", word.getText(), Field.Store.YES));

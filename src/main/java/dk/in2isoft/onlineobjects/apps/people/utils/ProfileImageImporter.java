@@ -26,11 +26,11 @@ public class ProfileImageImporter extends ImageImporter {
 	protected void postProcessImage(Image image, Map<String,String> parameters, Request request) throws EndUserException {
 
 		User user = request.getSession().getUser();
+		securityService.makePublicVisible(image, request.getSession());
 		List<Relation> list = modelService.getRelationsFrom(user, Image.class, Relation.KIND_SYSTEM_USER_IMAGE, user);
 		for (Relation relation : list) {
-			modelService.deleteRelation(relation, request.getSession());
+			modelService.deleteRelation(relation, this.securityService.getAdminPrivileged());
 		}
-		securityService.makePublicVisible(image, request.getSession());
 		modelService.createRelation(user, image, Relation.KIND_SYSTEM_USER_IMAGE, request.getSession());
 	}
 }
