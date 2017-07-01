@@ -66,7 +66,7 @@ public class ImageController extends ServiceController {
 			param.rotation = parseFloat(match(rotationPattern,subject));
 			param.verticalFlip = subject.contains("flipv");
 			param.horizontalFlip = subject.contains("fliph");
-			param.inherit = subject.contains("inherit");
+			param.inherit = true;
 			param.format = imageService.isSupportedExtension(extension) ? extension : null;
 		} else {
 			param.id = request.getLong("id");
@@ -79,7 +79,7 @@ public class ImageController extends ServiceController {
 			param.rotation = request.getFloat("rotation");
 			param.verticalFlip = request.getBoolean("flipVertically");
 			param.horizontalFlip = request.getBoolean("flipHorizontally");
-			param.inherit = request.getBoolean("inherit");
+			param.inherit = request.getBoolean("inherit",true);
 			String format = request.getString("format");
 			param.format = imageService.isSupportedExtension(format) ? format : null;
 		}
