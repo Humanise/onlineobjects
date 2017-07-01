@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -105,7 +107,10 @@ public abstract class AbstractController {
 			throw new EndUserException(e);
 		} catch (InvocationTargetException e) {
 			Throwable cause = e.getCause();
-			if (cause!=null) {
+			if (cause instanceof EndUserException) {
+				throw (EndUserException) cause;
+			}
+			else if (cause!=null) {
 				throw new EndUserException(cause);
 			} else {
 				throw new EndUserException(e);
