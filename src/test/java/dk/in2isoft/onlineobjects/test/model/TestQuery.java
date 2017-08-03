@@ -31,7 +31,7 @@ public class TestQuery extends AbstractSpringTestCase {
 	}
 
 	private String queryToHql(Query<?> query) {
-		Session session = ModelService.getSessionfactory().getCurrentSession();
+		Session session = modelService.getSessionfactory().getCurrentSession();
 		session.beginTransaction();
 		org.hibernate.Query hibernateQuery = query.createItemQuery(session);
 		String string = hibernateQuery.getQueryString();

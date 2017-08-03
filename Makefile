@@ -19,7 +19,7 @@ install:
 
 deploy:
 	cd ${ROOT_DIR}/src/main/webapp/hui/tools/
-	${ROOT_DIR}/src/main/webapp/hui/tools/compile.sh
+	grunt --gruntfile ${ROOT_DIR}/src/main/webapp/hui/Gruntfile.js build
 	cd ${ROOT_DIR}
 	mvn clean install -DskipTests=true
 	ant deploy

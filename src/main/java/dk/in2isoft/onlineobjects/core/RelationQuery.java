@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 
 import dk.in2isoft.commons.lang.Code;
@@ -130,14 +131,15 @@ public class RelationQuery {
 
 	public Optional<Relation> first() {
 		Query query = modelService.createQuery(getHQL());
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
-		query.setMaxResults(1);
-		List<Relation> list = Code.castList(query.list());
-		return list.isEmpty() ? Optional.empty() : Optional.of(ModelService.getSubject(list.get(0)));
+		Relation unique = (Relation) query.uniqueResult();
+		return unique==null ? Optional.empty() : Optional.of(ModelService.getSubject(unique));
 	}
 
 	public Stream<Relation> stream(int max) {
 		Query query = modelService.createQuery(getHQL());
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		query.setMaxResults(max);
 		List<Relation> list = Code.castList(query.list());
@@ -146,6 +148,7 @@ public class RelationQuery {
 
 	public Stream<Relation> stream() {
 		Query query = modelService.createQuery(getHQL());
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		List<Relation> list = Code.castList(query.list());
 		return list.stream();
@@ -153,6 +156,7 @@ public class RelationQuery {
 
 	public List<Relation> list() {
 		Query query = modelService.createQuery(getHQL());
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		List<Relation> list = Code.castList(query.list());
 		return list;

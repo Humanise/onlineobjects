@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
@@ -13,10 +14,13 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
+import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
+import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Question;
@@ -25,12 +29,46 @@ import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import nu.xom.Document;
 
 public class KnowledgeService {
 	private ModelService modelService;
 	private ReaderSearcher readerSearcher;
 	private InternetAddressService internetAddressService;
+	private MemberService memberService;
+
+	public Question createQuestion(String text, User user) throws ModelException, SecurityException, IllegalRequestException {
+		if (Strings.isBlank(text)) {
+			throw new IllegalRequestException("The question is empty");
+		}
+		text = text.trim();
+		Question question = new Question();
+		question.setText(text);
+		question.setName(text);
+		modelService.createItem(question, user);
+		return question;
+	}
+
+	public Hypothesis createHypothesis(String text, User user) throws ModelException, SecurityException, IllegalRequestException {
+		if (Strings.isBlank(text)) {
+			throw new IllegalRequestException("The hypothesis is empty");
+		}
+		text = text.trim();
+		Hypothesis hypothesis = new Hypothesis();
+		hypothesis.setText(text);
+		hypothesis.setName(text);
+		modelService.createItem(hypothesis, user);
+		return hypothesis;
+	}
+
+	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
+		HypothesisApiPerspective hypothesisPerspective = new HypothesisApiPerspective();
+		hypothesisPerspective.setId(hypothesis.getId());
+		hypothesisPerspective.setText(hypothesis.getText());
+		return hypothesisPerspective;
+	}
 
 	public QuestionApiPerspective getQuestionPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
 		Question question = modelService.getRequired(Question.class, id, user);
@@ -85,6 +123,24 @@ public class KnowledgeService {
 		
 		return addressPerspective;
 	}
+	
+	public ProfileApiPerspective getProfile(User user) throws ModelException {
+		ProfileApiPerspective profile = new ProfileApiPerspective();
+		profile.setUsername(user.getUsername());
+		EmailAddress email = memberService.getUsersPrimaryEmail(user, user);
+		if (email!=null) {
+			profile.setEmail(email.getAddress());			
+		}
+		Person person = memberService.getUsersPerson(user, user);
+		if (person!=null) {
+			profile.setFullName(person.getFullName());
+		}
+		Image photo = memberService.getUsersProfilePhoto(user, user);
+		if (photo!=null) {
+			profile.setProfilePhotoId(photo.getId());
+		}
+		return profile;
+	}
 
 	public SearchResult<KnowledgeListRow> search(ReaderQuery query, User user) throws ExplodingClusterFuckException, SecurityException {
 		SearchResult<Entity> searchResult = readerSearcher.search(query, user);
@@ -130,5 +186,9 @@ public class KnowledgeService {
 	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
+	}
+	
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 }

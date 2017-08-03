@@ -137,8 +137,8 @@ public class DispatchingService {
 				log.error(ex.toString(), ex);				
 			}
 			if (ex instanceof SecurityException) {
-				request.getResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);
-				renderer.setStatus(HttpServletResponse.SC_FORBIDDEN);
+				request.getResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				renderer.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			} else if (ex instanceof ContentNotFoundException) {
 				request.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
 				renderer.setStatus(HttpServletResponse.SC_NOT_FOUND);

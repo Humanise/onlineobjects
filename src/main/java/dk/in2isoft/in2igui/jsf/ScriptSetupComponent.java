@@ -33,11 +33,13 @@ public class ScriptSetupComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		Request request = Components.getRequest();
 
-		writer.startScript().newLine();
+		writer.newLine().startElement("script").withAttribute("data-hui-context", request.getBaseContext()).withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
+
+/*		writer.startScript().newLine();
 		writer.write("window.hui = window.hui || {};").newLine();
 		writer.write("hui.ui = hui.ui || {};").newLine();
 		writer.write("hui.ui.context = '").write(request.getBaseContext()).write("';").newLine();
 		writer.write("hui.ui.language = '").write(request.getLanguage()).write("';").newLine();
-		writer.endScript().newLine();
+		writer.endScript().newLine();*/
 	}
 }

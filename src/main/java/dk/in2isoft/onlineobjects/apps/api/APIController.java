@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.apps.api;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +23,18 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
+import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.Question;
+import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
+import dk.in2isoft.onlineobjects.modules.knowledge.HypothesisApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
+import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.QuestionApiPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
@@ -61,7 +68,32 @@ public class APIController extends APIControllerBase {
 		PrintWriter writer = response.getWriter();
 		writer.write(extractText(url));
 	}
-    
+
+	@Path(start={"v1.0","signup"})
+	public void signup(Request request) throws IOException, EndUserException {
+		String username = request.getString("username", "No username");
+		String password = request.getString("password", "No password");
+		String fullName = request.getString("fullName");
+		String email = request.getString("email");
+		memberService.signUp(request.getSession(), username, password, fullName, email);
+	}
+
+	@Path(start={"v1.0","changePassword"})
+	public void changePassword(Request request) throws IOException, EndUserException {
+		String username = request.getString("username", "No username");
+		String existingPassword = request.getString("existingPassword", "No existing password");
+		String newPassword = request.getString("newPassword", "No new password");
+		securityService.changePassword(username, existingPassword, newPassword, request.getSession());
+	}
+
+	@Path(start={"v1.0","recover"})
+	public void recover(Request request) throws IOException, EndUserException {
+		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
+		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail)) {
+			throw new IllegalRequestException("Username or e-mail not found");
+		}
+	}
+
 	@Path(start={"v1.0","authentication"})
 	public ClientKeyResponse getSecret(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
@@ -131,6 +163,8 @@ public class APIController extends APIControllerBase {
 		importer.importMultipart(this, request);
 	}
 	
+	/* ------- Knowledge ------- */
+	
 	@Path(start = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
@@ -138,16 +172,36 @@ public class APIController extends APIControllerBase {
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
 		if (pageSize == 0) {
-			pageSize = 30;
+			pageSize = 60;
+		}
+		String type = request.getString("type");
+		ArrayList<String> types;
+		if (type.equals(Statement.class.getSimpleName())) {
+			types = Lists.newArrayList(Statement.class.getSimpleName());
+		} else if (type.equals(Question.class.getSimpleName())) {
+			types = Lists.newArrayList(Question.class.getSimpleName());
+		} else if (type.equals(Hypothesis.class.getSimpleName())) {
+			types = Lists.newArrayList(Hypothesis.class.getSimpleName());
+		} else if (type.equals(InternetAddress.class.getSimpleName())) {
+			types = Lists.newArrayList(InternetAddress.class.getSimpleName());
+		} else {
+			types = Lists.newArrayList("any");
 		}
 
 		ReaderQuery query = new ReaderQuery();
 		query.setPage(page);
 		query.setPageSize(pageSize);
 		query.setSubset("everything");
-		query.setType(Lists.newArrayList("any"));
+		query.setType(types);
 		query.setText(request.getString("text"));
 		return knowledgeService.search(query, user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "question", "add" })
+	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = knowledgeService.createQuestion(request.getString("text"), user);
+		return knowledgeService.getQuestionPerspective(question.getId(), user);
 	}
 
 	@Path(start = { "v1.0", "knowledge", "question" })
@@ -155,6 +209,26 @@ public class APIController extends APIControllerBase {
 		User user = getUserForSecretKey(request);
 		Long id = request.getId();
 		return knowledgeService.getQuestionPerspective(id, user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "hypothesis" })
+	public HypothesisApiPerspective viewHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		return knowledgeService.getHypothesisPerspective(id, user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "hypothesis", "add" })
+	public HypothesisApiPerspective addHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Hypothesis hypothesis = knowledgeService.createHypothesis(request.getString("text"), user);
+		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
+	}
+
+	@Path(start = { "v1.0", "knowledge", "profile" })
+	public ProfileApiPerspective getProfile(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		return knowledgeService.getProfile(user);
 	}
 
 	@Path(start = { "v1.0", "knowledge", "address" })

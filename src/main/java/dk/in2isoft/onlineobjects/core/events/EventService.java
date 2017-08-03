@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
+import org.hibernate.event.PostDeleteEvent;
+import org.hibernate.event.PostDeleteEventListener;
 
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 
-public class EventService {
+public class EventService implements PostDeleteEventListener {
 
 	private List<ModelEventListener> modelEventListeners = new CopyOnWriteArrayList<ModelEventListener>();
 	private static Logger log = Logger.getLogger(EventService.class);
@@ -70,4 +72,12 @@ public class EventService {
 			}
 		}
 	}
+
+	@Override
+	public void onPostDelete(PostDeleteEvent event) {
+		Object object = event.getEntity();
+		log.info("Deleted: "+object);
+		
+	}
+
 }

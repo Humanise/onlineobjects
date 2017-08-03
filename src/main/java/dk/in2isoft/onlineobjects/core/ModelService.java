@@ -28,12 +28,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.event.PostDeleteEventListener;
 import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.LongType;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
@@ -56,11 +58,11 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
-public class ModelService {
+public class ModelService implements InitializingBean {
 
 	private static Logger log = Logger.getLogger(ModelService.class);
 
-	private static final SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 
 	private EventService eventService;
 	private SecurityService securityService;
@@ -71,20 +73,26 @@ public class ModelService {
 	
 	private static final ThreadLocal<String> threadIsDirty = new ThreadLocal<String>();
 
-	static {
-		try {
-			sessionFactory = new Configuration().configure().buildSessionFactory();
-		} catch (Throwable t) {
-			log.fatal("Could not create session factory", t);
-			throw new ExceptionInInitializerError(t);
-		}
-	}
 	
-	public static SessionFactory getSessionfactory() {
+	public SessionFactory getSessionfactory() {
 		return sessionFactory;
 	}
 
 	protected ModelService() {
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		try {
+			Configuration configuration = new Configuration();
+			PostDeleteEventListener[] postDeleteEventListener = {eventService};
+			configuration.getEventListeners().setPostCommitDeleteEventListeners(postDeleteEventListener);
+			sessionFactory = configuration.configure().buildSessionFactory();
+		} catch (Throwable t) {
+			log.fatal("Could not create session factory", t);
+			throw new ExceptionInInitializerError(t);
+		}
+
 		loadModelInfo();
 	}
 

@@ -52,6 +52,7 @@ public class ImportScriptsComponent extends AbstractComponent {
 			writer.writeScript(request.getBaseContext()+"/hui/bin/minimized.js"+stamp).newLine();
 			
 		}
+		writer.startElement("script").withAttribute("data-hui-context", request.getBaseContext()).endElement("script");
 		
 		writer.startScript().newLine();
 		writer.write("hui.ui.context = '").write(request.getBaseContext()).write("';").newLine();
