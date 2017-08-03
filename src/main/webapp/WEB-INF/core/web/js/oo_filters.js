@@ -5,16 +5,16 @@
     this.items = hui.findAll('.oo_filters_bar_item');
     this.filters = hui.findAll('.oo_filters_filter');
     this.body = hui.find('.oo_filters_body');
-  	this._attach();
+    this._attach();
   }
 
   oo.Filters.prototype = {
     _open: null,
     _items : {},
-  	_attach : function() {
+    _attach : function() {
       hui.on(this.element,'tap',this._click,this);
       hui.ui.listen({$$afterResize : this._resize.bind(this)})
-  	},
+    },
     _click : function(e) {
       e = hui.event(e);
       var item = e.findByClass('oo_filters_bar_item');
@@ -51,7 +51,7 @@
   }
 
   hui.extend(oo.Filters, _super);
-  
+
   window.define && define('oo.Filters',oo.Filters);
 
 })(hui.ui.Component);

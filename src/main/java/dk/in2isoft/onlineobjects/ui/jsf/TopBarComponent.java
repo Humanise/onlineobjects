@@ -1,7 +1,9 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
@@ -33,6 +35,19 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class TopBarComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.topBar";
+
+	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
+	private static List<String> privateApps = Lists.newArrayList("reader", "desktop", "tools");
+	private static Map<String,String> icons = new HashMap<String, String>();
+	
+	static {
+		icons.put("words", "book");
+		icons.put("people", "user");
+		icons.put("photos", "camera");
+		icons.put("reader", "star_line_selected");
+		icons.put("desktop", "view_grid");
+		icons.put("tools", "archive_line_selected");
+	}
 
 	public TopBarComponent() {
 		super(FAMILY);
@@ -70,31 +85,31 @@ public class TopBarComponent extends AbstractComponent {
 		 * out.write("Community").endA().endLi();
 		 */
 
-		List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
-		List<String> privateApps = Lists.newArrayList("reader", "desktop", "tools");
 		if (request.isUser(SecurityService.ADMIN_USERNAME)) {
 			privateApps.add("setup");
 		}
 
 		for (String app : primaryApps) {
-			out.startLi("oo_topbar_menu_item oo_topbar_" + app);
+			boolean selected = request.isApplication(app);
+			out.startLi("oo_topbar_menu_item oo_topbar_" + app + (selected ? " is-selected" : ""));
 			String cls = "oo_topbar_item oo_topbar_menu_link";
-			if (request.isApplication(app)) {
+			if (selected) {
 				cls += " is-selected";
 			}
-			out.startA(cls);
+			out.startA(cls).withAttribute("data-icon", icons.get(app));;
 			out.withHref(configurationService.getApplicationContext(app, null, request));
 			out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
 		}
 
 		if (!publicUser && !privateApps.isEmpty()) {
 			for (String app : privateApps) {
-				out.startLi("oo_topbar_menu_item oo_topbar_" + app);
+				boolean selected = request.isApplication(app);
+				out.startLi("oo_topbar_menu_item oo_topbar_" + app + (selected ? " is-selected" : ""));
 				String cls = "oo_topbar_item oo_topbar_menu_link";
-				if (request.isApplication(app)) {
+				if (selected) {
 					cls += " is-selected";
 				}
-				out.startA(cls);
+				out.startA(cls).withAttribute("data-icon", icons.get(app));
 				out.withHref(configurationService.getApplicationContext(app, null, request));
 				out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
 			}
