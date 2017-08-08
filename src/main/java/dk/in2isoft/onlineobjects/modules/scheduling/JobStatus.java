@@ -26,7 +26,7 @@ public class JobStatus {
 
 	public void setProgress(float progress) {
 		this.progress = progress;
-		String text = "Progress: "+Math.round(progress*100)+"%";
+		String text = "Progress: "+(Math.round(progress*1000)/10.0)+"%";
 		schedulingService.log(text,key);
 		log.warn(text+" - "+key.getName()+" : "+key.getGroup());
 	}
