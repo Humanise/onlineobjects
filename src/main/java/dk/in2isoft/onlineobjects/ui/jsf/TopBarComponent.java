@@ -85,10 +85,6 @@ public class TopBarComponent extends AbstractComponent {
 		 * out.write("Community").endA().endLi();
 		 */
 
-		if (request.isUser(SecurityService.ADMIN_USERNAME)) {
-			privateApps.add("setup");
-		}
-
 		for (String app : primaryApps) {
 			boolean selected = request.isApplication(app);
 			out.startLi("oo_topbar_menu_item oo_topbar_" + app + (selected ? " is-selected" : ""));
