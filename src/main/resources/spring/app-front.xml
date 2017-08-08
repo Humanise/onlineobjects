@@ -8,4 +8,7 @@
     ">
 
    	<bean id="frontController" class="dk.in2isoft.onlineobjects.apps.front.FrontController" autowire="byType"/>
+   	
+   	<bean id="frontEntityView" class="dk.in2isoft.onlineobjects.apps.front.views.FrontEntityView" autowire="byType" scope="request"/>
+
 </beans>
