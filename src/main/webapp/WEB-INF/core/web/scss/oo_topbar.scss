@@ -81,7 +81,6 @@
     transition-property: top, background-color;
     transition-duration: .7s;
     overflow: auto;
-    padding-top: 50px;
     box-sizing: border-box;
     font-size: 0;
     text-align: center;
@@ -97,6 +96,24 @@
         opacity: 1;
         transition-delay: .2s;
       }
+    }
+    &_title {
+      font-size: 14px;
+      text-align: center;
+      line-height: 20px;
+      padding: 10px;
+      display: block;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    &_close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 20px;
+      padding: 10px;
+      color: #999;
     }
 
     &_link {

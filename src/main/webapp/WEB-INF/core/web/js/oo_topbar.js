@@ -40,9 +40,15 @@ oo.TopBar.prototype = {
   _showMenu : function() {
     var self = this;
     if (!this._menu) {
-      var menu = this._menu = hui.build('div.oo_topbar_drop',{parent:document.body});
-      hui.on(menu,'tap',function() {
-        hui.cls.remove(menu, 'is-visible');
+      var menu = this._menu = hui.build('div.oo_topbar_drop',{
+        parent: document.body,
+        html: '<span class="oo_topbar_drop_title">OnlineObjects</span><span class="oo_topbar_drop_close oo_icon oo_icon_close_line"></span>'
+      });
+      hui.on(menu,'tap',function(e) {
+        e = hui.event(e);
+        if (!e.findByTag('a')) {
+          hui.cls.remove(menu, 'is-visible');
+        }
       })
       var links = hui.findAll('.oo_topbar_menu_link', this.element);
       for (var i = 0; i < links.length; i++) {
