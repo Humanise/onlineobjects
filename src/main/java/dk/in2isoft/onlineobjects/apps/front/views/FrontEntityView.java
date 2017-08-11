@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
@@ -165,11 +166,12 @@ public class FrontEntityView extends AbstractView implements InitializingBean {
 		public static EntityPerspective from(Entity entity, Locale locale) {
 			EntityPerspective perspective = new EntityPerspective();
 			perspective.id = entity.getId();
-			perspective.name = entity.getName();
+			perspective.name = Strings.isBlank(entity.getName()) ? "<No name>" : entity.getName();
 			perspective.type = entity.getClass().getSimpleName();
 			perspective.href = "/" + locale.getLanguage() + "/" + entity.getClass().getSimpleName().toLowerCase() + "/" + entity.getId(); 
 			return perspective;
 		}
+
 		public static EntityPerspective from(Class<? extends Entity> type, long id, Locale locale) {
 			EntityPerspective perspective = new EntityPerspective();
 			perspective.id = id;

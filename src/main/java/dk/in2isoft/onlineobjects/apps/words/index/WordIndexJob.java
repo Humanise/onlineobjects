@@ -32,13 +32,12 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 		JobStatus status = getStatus(context);
 		WordIndexer wordIndexer = schedulingSupportFacade.getWordIndexer();
 		ModelService modelService = schedulingSupportFacade.getModelService();
-		/*
 		try {
 			status.log("Clearing index");
 			wordIndexer.clear();
 		} catch (EndUserException e) {
 			status.error("Error while clearing index", e);
-		}*/
+		}
 		
 		//Query.after(Word.class).withCustomProperty("common.source", Comparison.LIKE, "http://www.wordnet.dk/%");
 		

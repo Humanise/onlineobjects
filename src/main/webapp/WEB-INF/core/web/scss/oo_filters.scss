@@ -81,7 +81,7 @@
       width: 100%;
       font-size: 0;
       transition: opacity .3s;
-      padding: 10px;
+      padding: 5px;
       @include border-box;
 
       &.is-visible {
@@ -92,13 +92,13 @@
 
     &_option {
       display: inline-block;
-      font-size: 15px;
+      font-size: 16px;
       color: #fff;
-      padding: 0 5px;
+      padding: 0 8px;
       text-decoration: none;
       border-radius: 3px;
-      line-height: 22px;
-      height: 22px;
+      line-height: 30px;
+      height: 30px;
       border: 1px solid transparent;
 
       &-index {
@@ -106,7 +106,7 @@
       }
 
       &:hover {
-        background: #f3f3f3;
+        background: #000;
       }
 
       &.is-selected {
@@ -181,38 +181,51 @@
     display: none;
   }
 
-  .oo_filters_body {
-    overflow: visible;
-    height: auto !important;
-    position: static;
-    background: none;
-    margin: 0;
-    box-shadow: none;
-  }
-
-  .oo_filters_filter {
-    opacity: 1;
-    position: static;
-    transition: opacity 0s;
-    padding: 0;
-
-    &-index {
-      margin-top: 10px;
-    }
-
-    &-block {
-      float: right;
-      width: 40%;
-      clear: right;
-      text-align: center;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      padding-left: 20px;
-    }
-  }
   .oo_filters {
+
+    &_body {
+      overflow: visible;
+      height: auto !important;
+      position: static;
+      background: none;
+      margin: 0;
+      box-shadow: none;
+    }
+
+    &_filter {
+      opacity: 1;
+      position: static;
+      transition: opacity 0s;
+      padding: 0;
+
+      &-index {
+        margin-top: 10px;
+      }
+
+      &-block {
+        float: right;
+        width: 40%;
+        clear: right;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding-left: 20px;
+      }
+    }
+
     &_option {
       color: #666;
+      height: 26px;
+      line-height: 26px;
+      padding: 0 5px;
+
+      &-index {
+        font-size: 15px;
+      }
+
+      &:hover {
+        background: #f3f3f3;
+      }
 
       &.is-selected {
         background: #333;
@@ -226,9 +239,6 @@
         color: #000;
       }
     }
-  }
-
-  .oo_filters {
 
     &_title-block {
       display: block;

@@ -69,7 +69,7 @@
   width: 100%;
   font-size: 0;
   transition: opacity .3s;
-  padding: 10px;
+  padding: 5px;
   box-sizing: border-box;
   -moz-box-sizing: border-box; }
   .oo_filters_filter.is-visible {
@@ -77,18 +77,18 @@
     z-index: 1; }
 .oo_filters_option {
   display: inline-block;
-  font-size: 15px;
+  font-size: 16px;
   color: #fff;
-  padding: 0 5px;
+  padding: 0 8px;
   text-decoration: none;
   border-radius: 3px;
-  line-height: 22px;
-  height: 22px;
+  line-height: 30px;
+  height: 30px;
   border: 1px solid transparent; }
   .oo_filters_option-index {
     text-transform: uppercase; }
   .oo_filters_option:hover {
-    background: #f3f3f3; }
+    background: #000; }
   .oo_filters_option.is-selected {
     background: #ddd;
     border: 1px solid #ddd;
@@ -146,7 +146,6 @@
     background: none;
     margin: 0;
     box-shadow: none; }
-
   .oo_filters_filter {
     opacity: 1;
     position: static;
@@ -162,9 +161,15 @@
       margin-top: 20px;
       margin-bottom: 10px;
       padding-left: 20px; }
-
   .oo_filters_option {
-    color: #666; }
+    color: #666;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 5px; }
+    .oo_filters_option-index {
+      font-size: 15px; }
+    .oo_filters_option:hover {
+      background: #f3f3f3; }
     .oo_filters_option.is-selected {
       background: #333;
       border: 1px solid #333;
@@ -173,7 +178,6 @@
       background: #eee;
       border: 1px solid #ddd;
       color: #000; }
-
   .oo_filters_title-block {
     display: block;
     border-bottom: 1px solid #eee;
