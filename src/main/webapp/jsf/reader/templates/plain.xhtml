@@ -1,26 +1,26 @@
 <f:view contentType="text/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:gui="http://www.in2isoft.dk/in2igui"
-	xmlns:o="http://www.onlineobjects.com/jsf" 
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	locale="#{readerView.locale}"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  locale="#{readerView.locale}"
 >
 
-	<o:doctype/>
-	<html xmlns="http://www.w3.org/1999/xhtml">
-		<o:head>
-			<meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale = 1, maximum-scale = 10, minimum-scale = 0.2"/>
-			<title>Reader - OnlineObjects</title>
-			<o:fonts additional="Merriweather:400,300,300italic,400italic,700,700italic,900,900italic;Lora:400,700,400italic,700italic"/>
-			<gui:scriptSetup/>
-			<o:scriptSetup/>
+  <o:doctype/>
+  <html xmlns="http://www.w3.org/1999/xhtml">
+    <o:head>
+      <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale = 1, maximum-scale = 10, minimum-scale = 0.2"/>
+      <title>Reader - OnlineObjects</title>
+      <o:fonts additional="Merriweather:400,300,300italic,400italic,700,700italic,900,900italic;Lora:400,700,400italic,700italic"/>
+      <gui:scriptSetup/>
+      <o:scriptSetup/>
     </o:head>
-		<o:body>
-			<o:topBar/>
-			<ui:insert name="body"/>
-		</o:body>
-	</html>
-      
+    <o:body>
+      <o:topBar/>
+      <ui:insert name="body"/>
+    </o:body>
+  </html>
+
 </f:view>

@@ -6,6 +6,7 @@ public class InternetAddressApiPerspective {
 	private String title;
 	private String url;
 	private String html;
+	private String text;
 
 	public long getId() {
 		return id;
@@ -37,5 +38,13 @@ public class InternetAddressApiPerspective {
 
 	public void setHtml(String html) {
 		this.html = html;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 }

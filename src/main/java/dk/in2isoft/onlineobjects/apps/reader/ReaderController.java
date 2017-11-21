@@ -27,6 +27,7 @@ import dk.in2isoft.onlineobjects.apps.reader.perspective.HypothesisEditPerspecti
 import dk.in2isoft.onlineobjects.apps.reader.perspective.HypothesisViewPerspective;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressEditPerspective;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspective;
+import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.ListItemPerspective;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.PeekPerspective;
 import dk.in2isoft.onlineobjects.apps.reader.perspective.QuestionEditPerspective;
@@ -376,8 +377,13 @@ public class ReaderController extends ReaderControllerBase {
 		boolean hightlight = request.getBoolean("highlight");
 		String algorithm = request.getString("algorithm");
 		UserSession session = request.getSession();
+		
+		Settings settings = new Settings();
+		settings.setExtractionAlgorithm(algorithm);
+		settings.setHighlight(hightlight);
+		settings.setCssNamespace("reader_text_");
 
-		return internetAddressViewPerspectiveBuilder.build(articleId, algorithm, hightlight, session);
+		return internetAddressViewPerspectiveBuilder.build(articleId, settings, session);
 	}
 
 	@Path
@@ -482,7 +488,7 @@ public class ReaderController extends ReaderControllerBase {
 			throw new IllegalRequestException("No URL");
 		}
 		
-		InternetAddress internetAddress = internetAddressService.importAddress(url, null, request.getSession().getUser());
+		InternetAddress internetAddress = internetAddressService.importAddress(url, request.getSession().getUser());
 
 		return SimpleEntityPerspective.create(internetAddress);
 	}

@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.commons.lang.StringUtils;
+import org.openjena.atlas.logging.Log;
 
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
@@ -59,7 +60,7 @@ public class InternetAddressService {
 		return htmlDocument;
 	}
 	
-	public InternetAddress importAddress(String urlString, String quote, User user) throws ModelException, SecurityException, IllegalRequestException {
+	public InternetAddress importAddress(String urlString, User user) throws ModelException, SecurityException, IllegalRequestException {
 		String url;
 		try {
 			URI uri = new URI(urlString);
@@ -86,13 +87,6 @@ public class InternetAddressService {
 			modelService.createItem(address, user);
 
 			inboxService.add(user, address);
-		}
-		if (Strings.isNotBlank(quote)) {
-			Statement part = new Statement();
-			part.setName(StringUtils.abbreviate(quote, 50));
-			part.setText(quote);
-			modelService.createItem(part, user);
-			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
 		}
 		return address;
 	}

@@ -2,16 +2,21 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.commons.parsing.HTMLDocument;
-import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.apps.reader.ReaderSearcher;
 import dk.in2isoft.onlineobjects.apps.reader.index.ReaderQuery;
+import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspective;
+import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspectiveBuilder;
+import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -27,16 +32,15 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
-import nu.xom.Document;
 
 public class KnowledgeService {
 	private ModelService modelService;
 	private ReaderSearcher readerSearcher;
 	private InternetAddressService internetAddressService;
 	private MemberService memberService;
+	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
 
 	public Question createQuestion(String text, User user) throws ModelException, SecurityException, IllegalRequestException {
 		if (Strings.isBlank(text)) {
@@ -48,6 +52,28 @@ public class KnowledgeService {
 		question.setName(text);
 		modelService.createItem(question, user);
 		return question;
+	}
+	
+	public Statement addStatementToInternetAddress(String text, Long internetAddressId, User user) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+		InternetAddress address = modelService.getRequired(InternetAddress.class, internetAddressId, user);
+		return addStatementToInternetAddress(text, address, user);
+	}
+	
+	public Statement addStatementToInternetAddress(String text, InternetAddress address, User user) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+		if (Strings.isBlank(text)) {
+			throw new IllegalRequestException("No text");
+		}
+		text = text.trim();
+		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", text).as(user).from(address, Relation.KIND_STRUCTURE_CONTAINS);
+		if (modelService.count(existingQuery) == 0) {
+			Statement part = new Statement();
+			part.setName(StringUtils.abbreviate(text, 50));
+			part.setText(text);
+			modelService.createItem(part, user);
+			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
+			return part;
+		}
+		return null;
 	}
 
 	public Hypothesis createHypothesis(String text, User user) throws ModelException, SecurityException, IllegalRequestException {
@@ -64,10 +90,41 @@ public class KnowledgeService {
 
 	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
-		HypothesisApiPerspective hypothesisPerspective = new HypothesisApiPerspective();
-		hypothesisPerspective.setId(hypothesis.getId());
-		hypothesisPerspective.setText(hypothesis.getText());
-		return hypothesisPerspective;
+		HypothesisApiPerspective perspective = new HypothesisApiPerspective();
+		perspective.setId(hypothesis.getId());
+		perspective.setText(hypothesis.getText());
+
+		List<Statement> supports = modelService.getParents(hypothesis, Relation.SUPPORTS, Statement.class, user);
+		perspective.setSupporting(supports.stream().map(statement -> {
+			StatementApiPerspective statementPerspective = new StatementApiPerspective();
+			statementPerspective.setId(statement.getId());
+			statementPerspective.setText(statement.getText());
+			return statementPerspective;
+		}).collect(Collectors.toList()));
+		List<Statement> contradicts = modelService.getParents(hypothesis, Relation.CONTRADTICS, Statement.class, user);
+		perspective.setContradicting(contradicts.stream().map(address -> {
+			StatementApiPerspective addressPerspective = new StatementApiPerspective();
+			addressPerspective.setId(address.getId());
+			addressPerspective.setText(address.getText());
+			return addressPerspective;
+		}).collect(Collectors.toList()));
+		return perspective;
+	}
+
+	public StatementApiPerspective getStatementPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
+		Statement statement = modelService.getRequired(Statement.class, id, user);
+		StatementApiPerspective perspective = new StatementApiPerspective();
+		perspective.setId(statement.getId());
+		perspective.setText(statement.getText());
+		List<InternetAddress> answers = modelService.getParents(statement, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, user);
+		perspective.setAddresses(answers.stream().map(address -> {
+			InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
+			addressPerspective.setId(address.getId());
+			addressPerspective.setTitle(address.getName());
+			addressPerspective.setUrl(address.getAddress());
+			return addressPerspective;
+		}).collect(Collectors.toList()));
+		return perspective;
 	}
 
 	public QuestionApiPerspective getQuestionPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
@@ -107,19 +164,24 @@ public class KnowledgeService {
 		return questionPerspective;
 	}
 
-	public InternetAddressApiPerspective getAddressPerspective(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
-		InternetAddress address = modelService.getRequired(InternetAddress.class, id, user);
+	public InternetAddressApiPerspective getAddressPerspective(Long id, UserSession session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
+		return getAddressPerspective(address, session);
+	}
+
+	public InternetAddressApiPerspective getAddressPerspective(InternetAddress address, UserSession session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
 		InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
 		addressPerspective.setId(address.getId());
 		addressPerspective.setTitle(address.getName());
 		addressPerspective.setUrl(address.getAddress());
 		
-		HTMLDocument htmlDocument = internetAddressService.getHTMLDocument(address, user);
-		SimpleContentExtractor extractor = new SimpleContentExtractor();
-		Document extracted = extractor.extract(htmlDocument.getXOMDocument());
-		DocumentCleaner cleaner = new DocumentCleaner();
-		cleaner.clean(extracted);
-		addressPerspective.setHtml(extracted.toXML());
+		Settings settings = new Settings();
+		settings.setExtractionAlgorithm("OnlineObjects"); // TODO Should be a constant
+		
+		InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, session);
+		
+		addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
+		addressPerspective.setText(internetAddressViewPerspective.getText());
 		
 		return addressPerspective;
 	}
@@ -190,5 +252,9 @@ public class KnowledgeService {
 	
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
+	}
+	
+	public void setInternetAddressViewPerspectiveBuilder(InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder) {
+		this.internetAddressViewPerspectiveBuilder = internetAddressViewPerspectiveBuilder;
 	}
 }

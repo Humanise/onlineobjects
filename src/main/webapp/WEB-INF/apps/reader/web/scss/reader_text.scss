@@ -1,15 +1,15 @@
 @import 'shared';
 
 .reader_text {
-  
-  &_quote {
+
+  &_statement {
     background: rgba(255, 203, 0, 0.5);
     font-style: normal;
     border-radius: 6px;
     padding: 0 3px;
     margin: 0 -3px;
     transition: background-color .3s;
-    
+
     &.is-highlighted {
       background-color: #FF92AB;
       color: #940028;
@@ -23,7 +23,7 @@
     padding: 0 3px;
     margin: 0 -3px;
     transition: background-color .3s;
-    
+
     &.is-highlighted {
       background-color: #FF92AB;
       color: #940028;
@@ -43,7 +43,7 @@
     border-radius: 6px;
     padding: 0 3px;
     margin: 0 -3px;
-    
+
     &:before {
       content: 'P';
       display: inline-block;
@@ -72,15 +72,40 @@
 
   .sentence {
     background: none;
+
+    &:before {
+      content: '{';
+      color: #999;
+    }
+
+    &:after {
+      content: '}';
+      color: #999;
+    }
   }
 
-  .sentence::before {
-    content: '{';
-    color: #999;
+  &_picture {
+    display: inline-block;
+    position: relative;
+    background: $view-dark-background-color;
+    width: 100%;
+    font-size: 0;
+
+    &_body {
+      display: inline-block;
+    }
+
+    &_image {
+      position: absolute;
+      width: 100%;
+      height: auto;
+    }
   }
 
-  .sentence::after {
-    content: '}';
-    color: #999;
+  &_image {
+    height: auto;
+    max-width: 100%;
+    filter: grayscale(1) sepia(0.2);
+    -webkit-filter: grayscale(1) sepia(0.2);
   }
 }

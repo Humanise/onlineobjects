@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.apps.reader.perspective;
 
-import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +49,15 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery.Similarity;
+import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalytics;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
+import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
+import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -74,7 +77,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	private ReaderModelService readerModelService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 
-	public InternetAddressViewPerspective build(Long id, String algorithm, boolean highlight, UserSession session) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
+	public InternetAddressViewPerspective build(Long id, Settings settings, UserSession session) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		InternetAddress address = modelService.get(InternetAddress.class, id, session);
@@ -92,11 +95,16 @@ public class InternetAddressViewPerspectiveBuilder {
 
 		article.setTitle(address.getName());
 		article.setUrl(address.getAddress());
+		article.setUrlText(Strings.simplifyURL(address.getAddress()));
 		article.setAuthors(getAuthors(address, session));
 
 		readerModelService.categorize(address, article, session);
+		watch.split();
+		log.trace("Categorize: " + watch.getSplitTime());
 
 		loadStatements(address, article, session);
+		watch.split();
+		log.trace("Load statements: " + watch.getSplitTime());
 
 		article.setHeader(buildHeader(address));
 		article.setInfo(buildInfo(data, session));
@@ -105,7 +113,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		watch.split();
 		log.trace("Base: " + watch.getSplitTime());
 		if (xom != null) {
-			buildRendering(xom, data, article, algorithm, highlight, watch, session);
+			buildRendering(xom, data, article, settings, watch, session);
 		}
 
 		watch.stop();
@@ -113,7 +121,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return article;
 	}
 
-	private List<ItemData> getAuthors(Entity address, UserSession session) {
+	private List<ItemData> getAuthors(Entity address, Privileged session) {
 		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).as(session);
 		List<Person> people = modelService.list(query);
 		List<ItemData> authors = people.stream().map((Person p) -> {
@@ -125,7 +133,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return authors;
 	}
 
-	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, UserSession session) throws ModelException {
+	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Privileged session) throws ModelException {
 		List<Statement> statements = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, session);
 		List<StatementPerspective> quoteList = Lists.newArrayList();
 		for (Statement statement : statements) {
@@ -163,7 +171,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return writer.toString();
 	}
 
-	private String buildInfo(ArticleData data, UserSession session) throws ModelException {
+	private String buildInfo(ArticleData data, Privileged session) throws ModelException {
 		HTMLWriter writer = new HTMLWriter();
 		writer.startH2().withClass("reader_meta_header").text("Tags").endH2();
 		writer.startP().withClass("reader_meta_tags");
@@ -185,7 +193,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return writer.toString();
 	}
 
-	private void buildRendering(Document xom, ArticleData data, InternetAddressViewPerspective article, String algorithm, boolean highlight, StopWatch watch, Privileged session) throws ModelException,
+	private void buildRendering(Document xom, ArticleData data, InternetAddressViewPerspective perspective, Settings settings, StopWatch watch, Privileged session) throws ModelException,
 			ExplodingClusterFuckException {
 
 		{
@@ -193,85 +201,82 @@ public class InternetAddressViewPerspectiveBuilder {
 				log.warn("No XOM document");
 				return;
 			}
-			/*
-			ContentExtractor extractor = contentExtractors.get(algorithm);
+			ContentExtractor extractor = contentExtractors.get(settings.getExtractionAlgorithm());
 			if (extractor==null) {
-				log.warn("Unknown extrator: " + algorithm);
+				log.warn("Unknown extrator: " + settings.getExtractionAlgorithm());
 				extractor = new SimpleContentExtractor();
 			}
 			Document extracted = extractor.extract(xom);
-			*/
-			Document extracted = xom;
+			watch.split();
+			log.trace("Extracted: " + watch.getSplitTime());
 
 			DocumentToText doc2txt = new DocumentToText();
 			String text = doc2txt.getText(extracted);
-			article.setText("<p>" + text.trim().replaceAll("\n\n", "</p><p>").replaceAll("\n", "<br/>") + "</p>");
+			perspective.setText(text);
+
+			watch.split();
+			log.trace("Text version: " + watch.getSplitTime());
 
 			DocumentCleaner cleaner = new DocumentCleaner();
 			cleaner.setUrl(data.address.getAddress());
 			cleaner.clean(extracted);
+
+			watch.split();
+			log.trace("Cleaned: " + watch.getSplitTime());
 			
-			Document annotated = annotate(article, data, highlight, extracted, watch);
-			
+			Document annotated = annotate(perspective, data, settings, extracted, watch);
+
+			watch.split();
+			log.trace("Annotate done: " + watch.getSplitTime());
+
 			HTMLWriter formatted = new HTMLWriter();
-			formatted.startDiv().withClass("reader_internetaddress_body");
 			formatted.html(DOM.getBodyXML(annotated));
-			formatted.endDiv();
-			
-			List<StatementPerspective> quotes = article.getQuotes();
-			
-			if (!quotes.isEmpty()) {
-				formatted.startDiv().withClass("reader_internetaddress_footer");
-				for (StatementPerspective statement : quotes) {
-					String cls = "js_reader_action reader_internetaddress_quote";
-					if (!statement.isFound()) {
-						cls+=" reader_internetaddress_quote-missing";
-					}
-					formatted.startBlockquote().withClass(cls).withDataMap("action","highlightStatement","id",statement.getId());
-					formatted.text(statement.getText());
-					List<ItemData> authors = statement.getAuthors();
-					if (authors!=null && !authors.isEmpty()) {
-						formatted.startSpan().text(" - ");
-						for (int i = 0; i < authors.size(); i++) {
-							if (i > 0) {
-								formatted.text(", ");
-							}
-							formatted.text(authors.get(i).getText());
-						}
-					}
-					formatted.startVoidA().withClass("oo_icon oo_icon_info_light reader_internetaddress_quote_icon js_reader_action").withDataMap("action","editStatement","id",statement.getId()).endA();
-					formatted.endBlockquote();
-				}
-				formatted.endDiv();
-			}
-			
+			watch.split();
+			log.trace("Get body XML: " + watch.getSplitTime());
 
 			
-			List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
-			List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
-			List<InternetAddress> list2 = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids));
 			
-			Function<Long,String> find = id -> {
-				for (InternetAddress internetAddress : list2) {
-					if (internetAddress.getId()==id) {
-						return internetAddress.getName();
-					}
-				}
-				return "- not found -";
-			};
+			renderSimilar(data, session, perspective, watch);
 			
-			NumberFormat numberFormat = NumberFormat.getPercentInstance();
-			
-			for (Similarity similarity : list) {
-				formatted.startDiv().withClass("reader_meta_similar").text(numberFormat.format(similarity.getSimilarity())).text(" \u00B7 ").text(find.apply(similarity.getId())).endDiv();
-			}
-			
-			article.setFormatted(formatted.toString());
+			perspective.setFormatted(formatted.toString());
 
 		}
 	}
+	
+	private void trace(String msg, StopWatch watch) {
+		watch.split();
+		log.trace(msg + ": " + watch.getSplitTime());
+		
+	}
 
-	private Document annotate(InternetAddressViewPerspective article, ArticleData data, boolean highlight, Document xomDocument, StopWatch watch) throws ModelException, ExplodingClusterFuckException {
+	private void renderSimilar(ArticleData data, Privileged session, InternetAddressViewPerspective perspetive, StopWatch watch) throws ModelException {
+		List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
+		trace("Similarity query", watch);
+
+		List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
+		List<InternetAddress> addresses = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids));
+		trace("List similar", watch);
+		
+		Function<Long,InternetAddress> find = id -> {
+			for (InternetAddress internetAddress : addresses) {
+				if (internetAddress.getId()==id) {
+					return internetAddress;
+				}
+			}
+			return null;
+		};
+		
+		List<SimilarityPerspective> similarities = new ArrayList<>();
+		for (Similarity similarity : list) {
+			SimilarityPerspective similarityPerspective = new SimilarityPerspective();
+			similarity.setSimilarity(similarity.getSimilarity());
+			InternetAddress address = find.apply(similarity.getId());
+			similarityPerspective.setEntity(SimpleEntityPerspective.create(address));
+		}
+		perspetive.setSimilar(similarities);
+	}
+
+	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch) throws ModelException, ExplodingClusterFuckException {
 		watch.split();
 		log.trace("Parsed HTML: " + watch.getSplitTime());
 		
@@ -286,9 +291,11 @@ public class InternetAddressViewPerspectiveBuilder {
 		Locale locale = languageService.getLocale(text);
 		watch.split();
 		log.trace("Get locale: " + watch.getSplitTime());
-		if (highlight && locale!=null) {
+		if (settings.isHighlight() && locale!=null) {
 			if (locale.getLanguage().equals("da") || locale.getLanguage().equals("en")) {
 				annotatePeople(watch, decorated, text, locale);
+				watch.split();
+				log.trace("Annotate people: " + watch.getSplitTime());
 			}
 		}
 		StringSearcher searcher = new StringSearcher();
@@ -303,7 +310,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", statement.getId());
-				attributes.put("class", "reader_text_quote js_reader_item");
+				attributes.put("class", settings.getCssNamespace() + "statement js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "mark", attributes);
 				
@@ -313,6 +320,8 @@ public class InternetAddressViewPerspectiveBuilder {
 				statement.setFound(true);
 			}
 		}
+		watch.split();
+		log.trace("Decorate statements: " + watch.getSplitTime());
 		for (StatementPerspective hypothesis : article.getHypotheses()) {
 			List<Result> found = searcher.search(hypothesis.getText(), text);
 			hypothesis.setFirstPosition(text.length());
@@ -324,7 +333,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", hypothesis.getId());
-				attributes.put("class", "reader_text_hypothesis js_reader_item");
+				attributes.put("class", settings.getCssNamespace() + "hypothesis js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "mark", attributes);
 				
@@ -334,6 +343,9 @@ public class InternetAddressViewPerspectiveBuilder {
 				hypothesis.setFound(true);
 			}
 		}
+		watch.split();
+		log.trace("Decorate hypothesis: " + watch.getSplitTime());
+
 		for (Word keyword : data.keywords) {
 			List<Result> found = searcher.search(keyword.getText().toLowerCase(), textLowercased);
 			for (Result result : found) {
@@ -344,22 +356,27 @@ public class InternetAddressViewPerspectiveBuilder {
 				
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", keyword.getId());
-				attributes.put("class", "reader_text_word js_reader_item");
+				attributes.put("class", settings.getCssNamespace() + "word js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "span", attributes);
 			}
 		}
+
+		watch.split();
+		log.trace("Decorate keywords: " + watch.getSplitTime());
 		
 		Collections.sort(statements,(a,b) -> {
 			return a.getFirstPosition() - b.getFirstPosition();
 		});
 		decorated.build();
 		Document document = decorated.getDocument();
-		annotateLinks(document);
+		annotateLinks(document, settings);
+		watch.split();
+		log.trace("Decorate links: " + watch.getSplitTime());
 		return document;
 	}
 
-	private void annotateLinks(Document document) {
+	private void annotateLinks(Document document, Settings settings) {
 		XPathContext context = new XPathContext();
 		String namespaceURI = document.getRootElement().getNamespaceURI();
 		context.addNamespace("html", namespaceURI);
@@ -389,23 +406,22 @@ public class InternetAddressViewPerspectiveBuilder {
 				float ratio = Float.parseFloat(height) / Float.parseFloat(width);
 				Element wrapper = new Element("span", namespaceURI);
 				wrapper.addAttribute(new Attribute("style", "max-width: " + width + "px;"));
-				wrapper.addAttribute(new Attribute("class", "reader_view_picture"));
+				wrapper.addAttribute(new Attribute("class", settings.getCssNamespace() + "picture"));
 				ParentNode parent = node.getParent();
 				parent.insertChild(wrapper, parent.indexOf(node));
 				
 				Element body = new Element("span", namespaceURI);
-				body.addAttribute(new Attribute("class","reader_view_picture_body"));
+				body.addAttribute(new Attribute("class", settings.getCssNamespace() + "picture_body"));
 				body.addAttribute(new Attribute("style", "padding-bottom: "+ (ratio * 100) + "%;"));
 				
 				body.appendChild(parent.removeChild(node));
 				wrapper.appendChild(body);
 
-				node.addAttribute(new Attribute("class", "reader_view_picture_img"));
+				node.addAttribute(new Attribute("class", settings.getCssNamespace() + "picture_image"));
 			} else {
-				node.addAttribute(new Attribute("class", "reader_view_img"));
+				node.addAttribute(new Attribute("class", settings.getCssNamespace() + "image"));
 			}
 		}
-		
 	}
 
 	private void annotatePeople(StopWatch watch, DecoratedDocument decorated, String text, Locale locale) throws ExplodingClusterFuckException, ModelException {
@@ -492,6 +508,40 @@ public class InternetAddressViewPerspectiveBuilder {
 	private class ArticleData {
 		InternetAddress address;
 		List<Word> keywords;
+	}
+	
+	public static class Settings {
+		private boolean highlight;
+		private String extractionAlgorithm;
+		private String cssNamespace;
+		
+		public Settings() {
+			cssNamespace = "";
+		}
+
+		public boolean isHighlight() {
+			return highlight;
+		}
+
+		public void setHighlight(boolean highlight) {
+			this.highlight = highlight;
+		}
+
+		public String getExtractionAlgorithm() {
+			return extractionAlgorithm;
+		}
+
+		public void setExtractionAlgorithm(String extractionAlgorithm) {
+			this.extractionAlgorithm = extractionAlgorithm;
+		}
+
+		public String getCssNamespace() {
+			return cssNamespace;
+		}
+
+		public void setCssNamespace(String cssNamespace) {
+			this.cssNamespace = cssNamespace;
+		}
 	}
 
 	// Wiring...

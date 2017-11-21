@@ -1,11 +1,11 @@
-.reader_text_quote {
+.reader_text_statement {
   background: rgba(255, 203, 0, 0.5);
   font-style: normal;
   border-radius: 6px;
   padding: 0 3px;
   margin: 0 -3px;
   transition: background-color .3s; }
-  .reader_text_quote.is-highlighted {
+  .reader_text_statement.is-highlighted {
     background-color: #FF92AB;
     color: #940028; }
 .reader_text_hypothesis {
@@ -52,9 +52,26 @@
   margin: 0 -3px; }
 .reader_text .sentence {
   background: none; }
-.reader_text .sentence::before {
-  content: '{';
-  color: #999; }
-.reader_text .sentence::after {
-  content: '}';
-  color: #999; }
+  .reader_text .sentence:before {
+    content: '{';
+    color: #999; }
+  .reader_text .sentence:after {
+    content: '}';
+    color: #999; }
+.reader_text_picture {
+  display: inline-block;
+  position: relative;
+  background: #F5F2E2;
+  width: 100%;
+  font-size: 0; }
+  .reader_text_picture_body {
+    display: inline-block; }
+  .reader_text_picture_image {
+    position: absolute;
+    width: 100%;
+    height: auto; }
+.reader_text_image {
+  height: auto;
+  max-width: 100%;
+  filter: grayscale(1) sepia(0.2);
+  -webkit-filter: grayscale(1) sepia(0.2); }

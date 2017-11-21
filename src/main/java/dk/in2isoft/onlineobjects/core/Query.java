@@ -330,6 +330,10 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 			hql.append(")");
 		}
+		if (ids!=null && ids.length==0) {
+			hql.append(" and obj.id = -99"); // TODO Find a better way finding nothing
+			
+		}
 		if (customProperties.size() > 0) {
 			for (int i = 0; i < customProperties.size(); i++) {
 				PropertyLimitation propertyLimitation = customProperties.get(i);

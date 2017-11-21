@@ -96,7 +96,10 @@
     <ui:define name="viewer">
       <div class="reader_view js_internetaddress_viewer">
           <div class="reader_view_head">
-            <div class="js_internetaddress_header reader_view_head_info"></div>
+            <div class="js_internetaddress_header reader_view_head_info">
+              <div class="reader_view_title js-viewer-title"></div>
+              <div class="reader_view_url"><a class="reader_view_link js-viewer-link js_reader_action"></a></div>
+            </div>
               <o:link name="closeAddress" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
               <div class="reader_view_head_actions">
                 <o:icon icon="more" size="16" name="analyzeButton" styleClass="reader_view_head_action"/>
@@ -111,11 +114,16 @@
                 </span>
             </div>
           </div>
-          <div class="reader_viewer_content reader_viewer_content_formatted" id="viewer_content">
+          <div class="reader_view_content reader_view_content_formatted is-show-formatted js-viewer-content">
             <div class="oo_spinner" id="viewer_spinner"></div>
-            <div class="reader_viewer_perpective reader_viewer_perpective_formatted reader_internetaddress_perspective-formatted" id="viewer_formatted"></div>
-            <div class="reader_viewer_perpective reader_viewer_perpective_text" id="viewer_text"></div>
-            <iframe class="reader_viewer_perpective reader_viewer_perpective_web" id="viewer_frame"></iframe>
+            <div class="reader_view_perpective reader_view_perpective_formatted">
+              <div class="js-viewer-formatted reader_view_formatted"></div>
+              <div class="js-viewer-footer reader_view_footer"></div>
+            </div>
+            <div class="reader_view_perpective reader_view_perpective_text">
+              <div class="reader_view_text js-viewer-text"></div>
+            </div>
+            <iframe class="reader_view_perpective reader_view_perpective_web" id="viewer_frame"></iframe>
           </div>
       </div>
 

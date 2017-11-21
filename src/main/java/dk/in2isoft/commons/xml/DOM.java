@@ -122,17 +122,17 @@ public class DOM {
 		c.addNamespace("html", document.getRootElement().getNamespaceURI());
 		Nodes bodies = document.query("//html:body", c);
 		if (bodies.size() > 0) {
-			Node node = bodies.get(0);
+			Node node = bodies.get(bodies.size() - 1);
 			if (node instanceof Element) {
 				Element body = (Element) node;
 				int childCount = body.getChildCount();
 				for (int i = 0; i < childCount; i++) {
 					Node child = body.getChild(i);
-
 					sb.append(child.toXML());
 				}
 			}
+			return sb.toString();
 		}
-		return sb.toString();
+		return "";
 	}
 }

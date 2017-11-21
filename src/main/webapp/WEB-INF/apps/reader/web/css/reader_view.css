@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .reader_view {
   position: absolute;
   top: 0px;
@@ -15,34 +16,82 @@
     bottom: 0;
     right: 0;
     z-index: 1; }
+  .reader_view_head {
+    position: absolute;
+    height: 65px;
+    border-bottom: 1px solid #ECE5D5;
+    width: 100%;
+    box-sizing: border-box;
+    background: #F5F2E2; }
+  .reader_view_title {
+    font-size: 24px;
+    font-weight: 200;
+    margin: 0 40px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 32px;
+    padding: 5px 0 0 10px;
+    color: #3A3326; }
+  .reader_view_url {
+    font-size: 11px;
+    margin: 5px 320px 0 0;
+    padding-left: 10px;
+    white-space: nowrap;
+    overflow: hidden; }
+    .reader_view_url > a {
+      text-decoration: none;
+      color: #B3B09D; }
+  .reader_view_text {
+    font-family: 'Monaco', monospace;
+    padding: 40px 40px;
+    color: #3A3326; }
+    .reader_view_text > p {
+      margin: 0 0 20px;
+      line-height: 1.5; }
+      .reader_view_text > p:last-child {
+        margin: 0; }
+  .reader_view_formatted {
+    padding: 40px;
+    color: #3A3326; }
+    .reader_view_formatted > h1 {
+      margin: 0 0 20px;
+      font-size: 42px; }
+    .reader_view_formatted > hr {
+      border: none;
+      border-top: 1px solid #ECE5D5;
+      margin: 40px 0; }
+  .reader_view_footer {
+    background: #F5F2E2;
+    padding: 20px 40px; }
+  .reader_view_quote {
+    position: relative;
+    font-weight: 300;
+    margin: 10px 0 10px 0px;
+    padding-bottom: 10px;
+    color: #3A3326; }
+    .reader_view_quote:before {
+      font-family: 'OnlineObjects';
+      content: "";
+      position: absolute;
+      margin-left: -30px;
+      font-size: 20px;
+      line-height: 1em;
+      top: -1px;
+      color: #E2DBC5; }
+    .reader_view_quote.is-not-found {
+      text-decoration: line-through; }
+    .reader_view_quote_icon {
+      margin-left: 5px;
+      text-decoration: none;
+      color: #D8D3B8;
+      margin-top: -2px;
+      cursor: pointer; }
+    .reader_view_quote:hover .reader_view_quote_icon {
+      color: #AD9F76; }
+      .reader_view_quote:hover .reader_view_quote_icon:hover {
+        color: #564e34; }
 
-.reader_view_head {
-  position: absolute;
-  height: 65px;
-  border-bottom: 1px solid #ECE5D5;
-  width: 100%;
-  box-sizing: border-box;
-  background: #F5F2E2; }
-
-.reader_view_head_info h1 {
-  font-size: 24px;
-  font-weight: 200;
-  margin: 0 40px 0 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 32px;
-  padding: 5px 0 0 10px;
-  color: #3A3326; }
-.reader_view_head_info p {
-  font-size: 11px;
-  margin: 5px 320px 0 0;
-  padding-left: 10px;
-  white-space: nowrap;
-  overflow: hidden; }
-  .reader_view_head_info p > a {
-    text-decoration: none;
-    color: #B3B09D; }
 .reader_view_head_info:hover p > a {
   color: #8C876C;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1); }
@@ -98,21 +147,37 @@
   .reader_view_close:hover {
     color: #564e34; }
 
-.reader_view_picture {
-  display: inline-block;
-  position: relative;
-  background: #F5F2E2;
-  width: 100%;
-  font-size: 0; }
-  .reader_view_picture_body {
-    display: inline-block; }
-  .reader_view_picture_img {
-    position: absolute;
-    width: 100%;
-    height: auto; }
+.reader_view_content {
+  padding: 0;
+  top: 65px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: auto;
+  box-sizing: border-box;
+  position: absolute;
+  background-color: #FFFCEC;
+  font-family: 'Merriweather';
+  font-size: 12pt; }
 
-.reader_view_img {
-  height: auto;
-  max-width: 100%;
-  filter: grayscale(1) sepia(0.2);
-  -webkit-filter: grayscale(1) sepia(0.2); }
+/** View **/
+.reader_view_perspective {
+  display: none; }
+
+.reader_view_perpective {
+  display: none; }
+
+.reader_view_content.is-show-formatted > .reader_view_perpective_formatted,
+.reader_view_content.is-show-text > .reader_view_perpective_text,
+.reader_view_content.is-show-web > .reader_view_perpective_web {
+  display: block; }
+
+.reader_view_perpective_web {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: none; }

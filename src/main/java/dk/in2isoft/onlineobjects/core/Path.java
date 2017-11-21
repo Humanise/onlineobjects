@@ -8,5 +8,7 @@ public @interface Path {
 
 	String[] start() default {};
 	
+	String[] exactly() default {};
+	
 	String expression() default "";
 }

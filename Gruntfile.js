@@ -77,7 +77,7 @@ module.exports = function(grunt) {
         options: {
           sassDir: "scss",
           cssDir: "css",
-			    noLineComments: true,
+          noLineComments: true,
         }
       }
     },
@@ -104,7 +104,7 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', 'Watch', ['watch']);
-  
+
   //grunt.registerTask('test', ['qunit']);
   grunt.registerTask('test', 'Run tests', function(testname) {
     if(!!testname) {

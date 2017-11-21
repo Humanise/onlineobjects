@@ -22,7 +22,9 @@ public class ReaderQuery extends IndexQuery {
 	private String subset;
 	private List<Long> wordIds;
 	private List<Long> authorIds;
-
+	private Boolean inbox;
+	private Boolean favorite;
+	
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -65,6 +67,14 @@ public class ReaderQuery extends IndexQuery {
 
 	public void setAuthorIds(List<Long> authorIds) {
 		this.authorIds = authorIds;
+	}
+	
+	public void setInbox(Boolean inbox) {
+		this.inbox = inbox;
+	}
+	
+	public void setFavorite(Boolean favorite) {
+		this.favorite = favorite;
 	}
 	
 	public static String build(ReaderQuery query) {
@@ -114,18 +124,19 @@ public class ReaderQuery extends IndexQuery {
 				indexQuery.append("author:").append(id);
 			}
 		}
-		if ("inbox".equals(query.getSubset())) {
+		if ("inbox".equals(query.getSubset()) || (query.inbox!=null && query.inbox==true)) {
 			if (indexQuery.length() > 0) {
 				indexQuery.append(" AND ");
 			}
 			indexQuery.append("inbox:yes");
 		}
-		if ("favorite".equals(query.getSubset())) {
+		if ("favorite".equals(query.getSubset()) || (query.favorite!=null && query.favorite==true)) {
 			if (indexQuery.length() > 0) {
 				indexQuery.append(" AND ");
 			}
 			indexQuery.append("favorite:yes");
-		} else if ("archive".equals(query.getSubset())) {
+		}
+		if ("archive".equals(query.getSubset()) || (query.inbox!=null && query.inbox==false)) {
 			if (indexQuery.length() > 0) {
 				indexQuery.append(" AND ");
 			}

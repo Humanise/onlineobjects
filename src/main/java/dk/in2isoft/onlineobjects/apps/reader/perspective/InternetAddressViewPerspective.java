@@ -4,12 +4,14 @@ import java.util.List;
 
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.ui.data.Option;
+import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
 
 public class InternetAddressViewPerspective implements CategorizableViewPerspective {
 
 	private long id;
 	private String title;
 	private String url;
+	private String urlText;
 
 	private String info;
 	private String header;
@@ -24,6 +26,8 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 	private List<StatementPerspective> hypotheses;
 	private List<Option> words;
 	private List<ItemData> authors;
+
+	private List<SimilarityPerspective> similar;
 
 	public long getId() {
 		return id;
@@ -127,5 +131,21 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 
 	public void setHypotheses(List<StatementPerspective> hypotheses) {
 		this.hypotheses = hypotheses;
+	}
+
+	public String getUrlText() {
+		return urlText;
+	}
+
+	public void setUrlText(String urlText) {
+		this.urlText = urlText;
+	}
+
+	public List<SimilarityPerspective> getSimilar() {
+		return similar;
+	}
+
+	public void setSimilar(List<SimilarityPerspective> similar) {
+		this.similar = similar;
 	}
 }

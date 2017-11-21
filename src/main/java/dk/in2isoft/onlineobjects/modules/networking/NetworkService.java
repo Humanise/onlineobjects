@@ -190,7 +190,7 @@ public class NetworkService {
 
 	public boolean isHttpOrHttps(URI uri) {
 		String scheme = uri.getScheme();
-		return uri!=null && (scheme.equals("http") || scheme.equals("https"));
+		return scheme!=null && (scheme.equals("http") || scheme.equals("https"));
 	}
 	
 }

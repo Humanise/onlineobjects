@@ -2,15 +2,15 @@
 
 .reader_view
 {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: none;
-	z-index: 200;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: none;
+  z-index: 200;
   background-color: $view-background-color;
-  
+
   &.is-locked::before
   {
     content: '';
@@ -22,56 +22,129 @@
     right: 0;
     z-index: 1;
   }
-}
 
-.reader_view_head
-{
-  position: absolute;
-  height: 65px;
-  border-bottom: 1px solid #ECE5D5;
-  width: 100%;
-  box-sizing: border-box;
-  background: $view-dark-background-color;
-}  
+  &_head {
+    position: absolute;
+    height: 65px;
+    border-bottom: 1px solid $view-line-color;
+    width: 100%;
+    box-sizing: border-box;
+    background: $view-dark-background-color;
+  }
 
-.reader_view_head_info {
-  h1
-  {
-  	font-size: 24px;
-  	font-weight: 200;
-  	margin: 0 40px 0 0;
-  	white-space: nowrap;
-  	overflow: hidden;
-  	text-overflow: ellipsis;
-  	line-height: 32px;
-  	padding: 5px 0 0 10px;
+  &_title {
+    font-size: 24px;
+    font-weight: 200;
+    margin: 0 40px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 32px;
+    padding: 5px 0 0 10px;
     color: $view-text-color;
   }
 
-  p
-  {
-  	font-size: 11px;
-  	margin: 5px 320px 0 0;
-  	padding-left: 10px;
-  	white-space: nowrap;
-  	overflow: hidden;
-    
+  &_url {
+    font-size: 11px;
+    margin: 5px 320px 0 0;
+    padding-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+
     > a {
       text-decoration: none;
       color: $view-dark-dimmed-color;
     }
   }
-  
+
+  &_text {
+    font-family: 'Monaco', monospace;
+    padding: 40px 40px;
+    color: $view-text-color;
+
+    > p {
+      margin: 0 0 20px;
+      line-height: 1.5;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  &_formatted {
+    padding: 40px;
+    color: $view-text-color;
+
+    > h1 {
+      margin: 0 0 20px;
+      font-size: 42px;
+    }
+    > hr {
+      border: none;
+      border-top: 1px solid $view-line-color;
+      margin: 40px 0;
+    }
+  }
+
+  &_footer {
+    background: $view-dark-background-color;
+    padding: 20px 40px;
+  }
+
+  &_quote {
+    position: relative;
+    font-weight: 300;
+    margin: 10px 0 10px 0px;
+    padding-bottom: 10px;
+    color: $view-text-color;
+
+    &:before {
+      @include icon('quote');
+      position: absolute;
+      margin-left: -30px;
+      font-size: 20px;
+      line-height: 1em;
+      top: -1px;
+      color: $view-effect-color;
+    }
+
+    &.is-not-found {
+      text-decoration: line-through;
+    }
+
+    &_icon {
+      margin-left: 5px;
+      text-decoration: none;
+      color: $view-dimmed-color;
+      margin-top: -2px;
+      cursor: pointer;
+    }
+
+    &:hover &_icon {
+      color: $view-action-color;
+
+      &:hover {
+        color: $view-action-color-hover;
+      }
+    }
+  }
+}
+
+
+.reader_view_head_info {
+
   &:hover {
     p > a {
       color: #8C876C;
       box-shadow: inset 0 -1px 0 rgba(0,0,0,.1);
       &:hover {
-        color: #36f;        
+        color: #36f;
       }
     }
   }
 }
+
 
 .reader_view_head_actions {
   position: absolute;
@@ -83,20 +156,20 @@
 .reader_view_head_action {
   color: $view-dark-action-color;
   margin-right: 10px;
-	vertical-align: middle;
-	display: inline-block;
+  vertical-align: middle;
+  display: inline-block;
   cursor: pointer;
   &:hover {
-    color: $view-dark-action-color-hover;    
+    color: $view-dark-action-color-hover;
   }
 
   &:active {
     transform: scale(.8);
   }
-  
+
   &.oo_icon-selected {
     color: $view-action-selected-color;
-    
+
     &:hover {
       color: $view-action-selected-color-hover;
     }
@@ -105,24 +178,24 @@
 
 .reader_view_segmented {
   display: inline-block;
-	vertical-align: middle;
-	font-size: 0;
-  
+  vertical-align: middle;
+  font-size: 0;
+
   &_item {
-  	text-transform: uppercase;
-  	text-decoration: none;
+    text-transform: uppercase;
+    text-decoration: none;
     color: $view-dark-action-color;
-  	font-size: 14px;
-  	padding: 0 3px;
-    
+    font-size: 14px;
+    padding: 0 3px;
+
     &:hover {
-      color: $view-dark-action-color-hover;    
+      color: $view-dark-action-color-hover;
     }
-  
+
     &-selected {
-    	color: $view-action-selected-color;
+      color: $view-action-selected-color;
       font-weight: 600;
-      
+
       &:hover {
         color: $view-action-selected-color-hover;
       }
@@ -132,39 +205,61 @@
 
 .reader_view_close
 {
-	text-decoration: none;
-	color: $view-action-color;
-	position: absolute;
-	right: 10px;
-	top: 10px;
-	font-size: 20px;
-  
+  text-decoration: none;
+  color: $view-action-color;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+
   &:hover {
-  	color: $view-action-color-hover;    
+    color: $view-action-color-hover;
   }
 }
 
-.reader_view_picture {
-  display: inline-block;
-  position: relative;
-  background: $view-dark-background-color;
+.reader_view_content
+{
+  padding: 0;
+  top: 65px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: auto;
+  box-sizing: border-box;
+  position: absolute;
+  background-color: #FFFCEC;
+  font-family: 'Merriweather';
+  font-size: 12pt;
+}
+
+
+
+/** View **/
+
+.reader_view {
+  &_perspective {
+    display: none;
+  }
+}
+
+.reader_view_perpective {
+  display: none;
+}
+
+.reader_view_content.is-show-formatted > .reader_view_perpective_formatted,
+.reader_view_content.is-show-text > .reader_view_perpective_text,
+.reader_view_content.is-show-web > .reader_view_perpective_web
+{
+  display: block;
+}
+
+.reader_view_perpective_web {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
-  font-size: 0;
-  
-  &_body {
-    display: inline-block;    
-  }
-
-  &_img {
-    position: absolute;
-    width: 100%;
-    height: auto;
-  }
-}
-
-.reader_view_img {
-  height: auto;
-  max-width: 100%;
-  filter: grayscale(1) sepia(0.2);
-  -webkit-filter: grayscale(1) sepia(0.2);
+  height: 100%;
+  border: none;
 }

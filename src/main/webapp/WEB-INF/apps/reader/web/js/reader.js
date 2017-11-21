@@ -1,13 +1,13 @@
 require(['all'],function() {
   var view = new oo.View({
-  	name : 'listView',
-  	element : 'my_view',
-  	pageSize : 20,
-  	source : hui.ui.get('listSource'),
-  	emptyHtml : '<div class="reader_list_pending"></div>',
-  	$render : function(info) {
-  		return info.html;
-  	}
+    name : 'listView',
+    element : 'my_view',
+    pageSize : 20,
+    source : hui.ui.get('listSource'),
+    emptyHtml : '<div class="reader_list_pending"></div>',
+    $render : function(info) {
+      return info.html;
+    }
   });
 })
 
@@ -23,11 +23,11 @@ var reader = {
 
     var id = hui.location.getInt('id');
     var type = hui.location.getParameter('type');
-		if (type && id) {
+    if (type && id) {
       window.setTimeout(function() {
         this.view({type:type,id:id});
       }.bind(this))
-		}
+    }
     hui.listen(window,'popstate',function(e) {
       hui.log(e);
       this.view(e.state);
@@ -123,25 +123,25 @@ var reader = {
     }
   },
 
-	$addressWasDeleted$addressEditor : function() {
-		this._reloadList();
+  $addressWasDeleted$addressEditor : function() {
+    this._reloadList();
     hui.ui.get('tagSource').refresh();
-	},
+  },
 
-	$addressChanged : function() {
-		this._reloadList();
-	},
+  $addressChanged : function() {
+    this._reloadList();
+  },
   $wordChanged : function() {
     hui.ui.get('tagSource').refresh();
   },
   $statementChanged : function() {
-		this._reloadList();
+    this._reloadList();
   },
   $questionChanged : function() {
-		this._reloadList();
+    this._reloadList();
   },
   $hypothesisChanged : function() {
-		this._reloadList();
+    this._reloadList();
   },
 
   $valueChanged$search : function() {
@@ -180,15 +180,15 @@ var reader = {
         hui.ui.get('feedSource').refresh();
       }.bind(this),
       $failure : function() {
-   			hui.ui.showMessage({text:'Feed could not be added',icon:'common/warning',duration:3000});
+        hui.ui.showMessage({text:'Feed could not be added',icon:'common/warning',duration:3000});
       }
     })
   },
 
-	_reloadList : function() {
-		hui.ui.get('listView').reset();
+  _reloadList : function() {
+    hui.ui.get('listView').reset();
     hui.ui.get('listSource').refresh();
-	},
+  },
 
   // Add
 

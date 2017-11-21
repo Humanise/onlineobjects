@@ -88,7 +88,7 @@
           <c:otherwise>
             <ul class="words_list">
               <c:forEach items="#{wordsSearchView.list}" var="word">
-                <li>
+                <li class="words_list_item">
                   <o:link href="/#{wordsLayoutView.language}/word/#{word.urlPart}.html"><o:out value="#{word.highlightedText}" escape="false"/></o:link>
                   <span class="words_list_info">
                   <c:if test="#{not empty word.lexicalCategory}">

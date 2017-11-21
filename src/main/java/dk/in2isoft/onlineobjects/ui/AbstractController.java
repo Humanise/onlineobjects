@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -46,20 +44,34 @@ public abstract class AbstractController {
 			Path annotation = method.getAnnotation(Path.class);
 			
 			if (annotation!=null) {
+
+				String[] exactly = annotation.exactly();
+				if (exactly.length > 0) {
+					if (request.testLocalPathFull(exactly)) {
+						invokeMothod(request, method);
+						return;
+					}
+				}
+			}
+		}
+		for (Method method : methods) {
+			Path annotation = method.getAnnotation(Path.class);
+			
+			if (annotation!=null) {
 				if (Strings.isNotBlank(annotation.expression())) {
 					if (request.getLocalPathAsString().matches(annotation.expression())) {
 						invokeMothod(request, method);
 						return;
 					}
-				}
-				
-				String[] start = annotation.start();
-				if (start.length==0) {
-					start = new String[] {method.getName()};
-				}
-				if (request.testLocalPathStart(start)) {
-					invokeMothod(request, method);
-					return;
+				} else {
+					String[] start = annotation.start();
+					if (start.length==0) {
+						start = new String[] {method.getName()};
+					}
+					if (request.testLocalPathStart(start)) {
+						invokeMothod(request, method);
+						return;
+					}
 				}
 			}
 		}

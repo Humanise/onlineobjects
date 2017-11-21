@@ -67,7 +67,8 @@
     margin-right: -4px;
     margin-top: -2px;
     color: #ddd;
-    line-height: 1em; }
+    line-height: 1em;
+    -webkit-font-smoothing: antialiased; }
 
 .reader_list_quote:before {
   font-family: 'OnlineObjects';
