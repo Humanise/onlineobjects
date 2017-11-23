@@ -61,6 +61,10 @@ public class InternetAddressService {
 	}
 	
 	public InternetAddress importAddress(String urlString, User user) throws ModelException, SecurityException, IllegalRequestException {
+		if (Strings.isBlank(urlString)) {
+			throw new IllegalRequestException("The url is empty");
+		}
+		urlString = urlString.trim();
 		String url;
 		try {
 			URI uri = new URI(urlString);
