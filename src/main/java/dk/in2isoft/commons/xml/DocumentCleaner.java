@@ -2,30 +2,22 @@ package dk.in2isoft.commons.xml;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
+
+import dk.in2isoft.commons.lang.Strings;
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-
-import dk.in2isoft.commons.lang.Strings;
 
 public class DocumentCleaner {
 
@@ -99,6 +91,7 @@ public class DocumentCleaner {
 				String nodeName = element.getLocalName().toLowerCase();
 				if (!validTags.contains(nodeName)) {
 					nodesToRemove.add(element);
+					continue;
 				}
 				
 				element.getAttributeCount();
@@ -176,9 +169,26 @@ public class DocumentCleaner {
 	private void removeLeaves(nu.xom.Document document) {
 		boolean modified = false;
 
-		Nodes leaves = document.query("//*[not(node())]");
+		Nodes leaves = document.query("//*");
 		for (int i = 0; i < leaves.size(); i++) {
 			Element node = (Element) leaves.get(i);
+			int childCount = node.getChildCount();
+			boolean leaf = true; 
+			for (int j = 0; j < childCount; j++) {
+				nu.xom.Node child = node.getChild(j);
+				if (child instanceof Element) {
+					leaf = false;
+					break;
+				}
+				if (child instanceof Text) {
+					String text = ((Text) child).getValue();
+					if (Strings.isNotBlank(text)) {
+						leaf = false;
+						break;
+					}
+				}
+			}
+			if (!leaf) continue;
 			String name = node.getLocalName().toLowerCase();
 			if (!validLeaves.contains(name)) {
 				ParentNode parent = node.getParent();
@@ -192,7 +202,7 @@ public class DocumentCleaner {
 			removeLeaves(document);
 		}
 	}
-	
+	/*
 	@Deprecated
 	public void clean(Document document) {
 
@@ -241,4 +251,5 @@ public class DocumentCleaner {
 			}
 		}
 	}
+	*/
 }
