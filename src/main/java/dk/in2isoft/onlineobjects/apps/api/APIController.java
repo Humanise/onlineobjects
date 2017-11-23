@@ -133,8 +133,9 @@ public class APIController extends APIControllerBase {
 		String quote = request.getString("quote");
 
 		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
-
-		knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
+		if (Strings.isNotBlank(quote)) {
+			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
+		}
 	}
 
 	@Path(start={"v1.0","addImage"})
