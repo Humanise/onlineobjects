@@ -237,8 +237,9 @@ var internetAddressViewer = {
   },
   _formatText : function(text) {
     // TODO This should use split in order to handle HTML in the text
-    text = text || '';
-    return '<p>' + text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>') + '</p>';
+    text = hui.string.escape(text || '');
+    // TODO: This cleanup should be done server side
+    return '<p>' + text.trim().replace(/[ \xa0]*[\n][ \xa0]*/g,'\n').replace(/[\n]{2,}/g,'</p><p>').replace(/\n/g,'<br/>') + '</p>';
   },
 
   _drawArticle : function(article) {

@@ -30,7 +30,6 @@ import dk.in2isoft.onlineobjects.apps.reader.ReaderModelService;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -44,7 +43,6 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery;
@@ -80,16 +78,21 @@ public class InternetAddressViewPerspectiveBuilder {
 	public InternetAddressViewPerspective build(Long id, Settings settings, UserSession session) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
 		StopWatch watch = new StopWatch();
 		watch.start();
+		watch.split();
 		InternetAddress address = modelService.get(InternetAddress.class, id, session);
 		if (address == null) {
 			throw new IllegalRequestException("Not found");
 		}
+		trace("Load", watch);
 
 		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyze(address, session);
+		trace("Get analytics", watch);
 		Document xom = DOM.parseXOM(analytics.getXml());
+		trace("Parse dom", watch);
 		//HTMLDocument document = internetAddressService.getHTMLDocument(address, session);
 		
-		ArticleData data = buildData(address);
+		ArticleData data = buildData(address, session);
+		trace("Build data", watch);
 
 		InternetAddressViewPerspective article = new InternetAddressViewPerspective();
 
@@ -99,25 +102,21 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setAuthors(getAuthors(address, session));
 
 		readerModelService.categorize(address, article, session);
-		watch.split();
-		log.trace("Categorize: " + watch.getSplitTime());
+		trace("Categorize", watch);
 
 		loadStatements(address, article, session);
-		watch.split();
-		log.trace("Load statements: " + watch.getSplitTime());
+		trace("Load statements", watch);
 
 		article.setHeader(buildHeader(address));
 		article.setInfo(buildInfo(data, session));
 		article.setId(address.getId());
 
-		watch.split();
-		log.trace("Base: " + watch.getSplitTime());
+		trace("Build info", watch);
 		if (xom != null) {
 			buildRendering(xom, data, article, settings, watch, session);
 		}
 
-		watch.stop();
-		log.trace("Total: " + watch.getTime());
+		trace("Total", watch);
 		return article;
 	}
 
@@ -156,11 +155,10 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setHypotheses(perpectives);
 	}
 	
-	private ArticleData buildData(InternetAddress address) throws ModelException {
+	private ArticleData buildData(InternetAddress address, UserSession session) throws ModelException {
 		ArticleData data = new ArticleData();
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
 		data.address = address;
-		data.keywords = modelService.getChildren(address, Word.class, admin);
+		data.keywords = modelService.getChildren(address, Word.class, session);
 		return data;
 	}
 
@@ -207,32 +205,28 @@ public class InternetAddressViewPerspectiveBuilder {
 				extractor = new SimpleContentExtractor();
 			}
 			Document extracted = extractor.extract(xom);
-			watch.split();
-			log.trace("Extracted: " + watch.getSplitTime());
+			trace("Extracted", watch);
 
 			DocumentToText doc2txt = new DocumentToText();
 			String text = doc2txt.getText(extracted);
 			perspective.setText(text);
 
 			watch.split();
-			log.trace("Text version: " + watch.getSplitTime());
+			trace("Text version", watch);
 
 			DocumentCleaner cleaner = new DocumentCleaner();
 			cleaner.setUrl(data.address.getAddress());
 			cleaner.clean(extracted);
 
-			watch.split();
-			log.trace("Cleaned: " + watch.getSplitTime());
+			trace("Cleaned", watch);
 			
 			Document annotated = annotate(perspective, data, settings, extracted, watch);
 
-			watch.split();
-			log.trace("Annotate done: " + watch.getSplitTime());
+			trace("Annotated", watch);
 
 			HTMLWriter formatted = new HTMLWriter();
 			formatted.html(DOM.getBodyXML(annotated));
-			watch.split();
-			log.trace("Get body XML: " + watch.getSplitTime());
+			trace("Get body", watch);
 
 			
 			
@@ -244,8 +238,9 @@ public class InternetAddressViewPerspectiveBuilder {
 	}
 	
 	private void trace(String msg, StopWatch watch) {
+		long prev = watch.getSplitTime();
 		watch.split();
-		log.trace(msg + ": " + watch.getSplitTime());
+		log.trace(msg + ": " + watch.getSplitTime() + " (" + (watch.getSplitTime() - prev) + ")");
 		
 	}
 
@@ -277,25 +272,20 @@ public class InternetAddressViewPerspectiveBuilder {
 	}
 
 	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch) throws ModelException, ExplodingClusterFuckException {
-		watch.split();
-		log.trace("Parsed HTML: " + watch.getSplitTime());
 		
 		List<StatementPerspective> statements = article.getQuotes();
 
 		DecoratedDocument decorated = new DecoratedDocument(xomDocument);
 		String text = decorated.getText();
 		String textLowercased = text.toLowerCase();
-		watch.split();
-		log.trace("Decorated: " + watch.getSplitTime());
+		trace("Decorate setup", watch);
 
 		Locale locale = languageService.getLocale(text);
-		watch.split();
-		log.trace("Get locale: " + watch.getSplitTime());
+		trace("Locale", watch);
 		if (settings.isHighlight() && locale!=null) {
 			if (locale.getLanguage().equals("da") || locale.getLanguage().equals("en")) {
 				annotatePeople(watch, decorated, text, locale);
-				watch.split();
-				log.trace("Annotate people: " + watch.getSplitTime());
+				trace("Annotate people", watch);
 			}
 		}
 		StringSearcher searcher = new StringSearcher();
@@ -320,8 +310,8 @@ public class InternetAddressViewPerspectiveBuilder {
 				statement.setFound(true);
 			}
 		}
-		watch.split();
-		log.trace("Decorate statements: " + watch.getSplitTime());
+
+		trace("Decorate statements", watch);
 		for (StatementPerspective hypothesis : article.getHypotheses()) {
 			List<Result> found = searcher.search(hypothesis.getText(), text);
 			hypothesis.setFirstPosition(text.length());
@@ -343,8 +333,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				hypothesis.setFound(true);
 			}
 		}
-		watch.split();
-		log.trace("Decorate hypothesis: " + watch.getSplitTime());
+		trace("Decorate hypothesis", watch);
 
 		for (Word keyword : data.keywords) {
 			List<Result> found = searcher.search(keyword.getText().toLowerCase(), textLowercased);
@@ -362,8 +351,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			}
 		}
 
-		watch.split();
-		log.trace("Decorate keywords: " + watch.getSplitTime());
+		trace("Decorate keywords", watch);
 		
 		Collections.sort(statements,(a,b) -> {
 			return a.getFirstPosition() - b.getFirstPosition();
@@ -371,8 +359,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		decorated.build();
 		Document document = decorated.getDocument();
 		annotateLinks(document, settings);
-		watch.split();
-		log.trace("Decorate links: " + watch.getSplitTime());
+		trace("Decorate links", watch);
 		return document;
 	}
 
@@ -434,7 +421,6 @@ public class InternetAddressViewPerspectiveBuilder {
 		for (String line : lines) {
 			Span[] sentences = semanticService.getSentencePositions(line, locale);
 			watch.split();
-			log.trace("Sentences: " + watch.getSplitTime());
 			for (Span sentence : sentences) {
 				// decorated.decorate(sentence.getStart(), sentence.getEnd(),
 				// "mark", getClassMap("sentence") );
@@ -465,12 +451,11 @@ public class InternetAddressViewPerspectiveBuilder {
 			pos += line.length();
 		}
 
-		watch.split();
-		log.trace("Part of speech: " + watch.getSplitTime());
+		trace("Part of speech", watch);
+
 		List<WordListPerspective> names = findNames(nouns);
 
-		watch.split();
-		log.trace("Find names: " + watch.getSplitTime());
+		trace("Find names", watch);
 
 		for (Span span : nounSpans) {
 			String cls = "noun";

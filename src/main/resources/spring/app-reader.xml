@@ -19,6 +19,9 @@
    				<entry key="Readability">
    					<bean class="dk.in2isoft.onlineobjects.modules.information.ReadabilityExtractor"/>
    				</entry>
+   				<entry key="Crux">
+   					<bean class="dk.in2isoft.onlineobjects.modules.information.CruxExtractor"/>
+   				</entry>
    			</map>
    		</property>
    	</bean>

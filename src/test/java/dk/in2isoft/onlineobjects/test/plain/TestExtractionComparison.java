@@ -25,6 +25,7 @@ import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.modules.information.Boilerpipe;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.CruxExtractor;
 import dk.in2isoft.onlineobjects.modules.information.ReadabilityExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
@@ -48,6 +49,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		extractors.add(new Extractor("readability", new ReadabilityExtractor()));
 		extractors.add(new Extractor("oo", new SimpleContentExtractor()));
 		extractors.add(new Extractor("boilerpipe", new Boilerpipe()));
+		extractors.add(new Extractor("crux", new CruxExtractor()));
 		
 		File folder = new File(getResourcesDir(),"extraction");
 		Assert.assertTrue(folder.isDirectory());
