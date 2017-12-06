@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +30,7 @@ import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
+import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
@@ -209,6 +211,32 @@ public class APIController extends APIControllerBase {
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		Question question = knowledgeService.createQuestion(request.getString("text"), user);
+		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "question", "add", "answer" })
+	public QuestionApiPerspective addAnswerToQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
+		Optional<Relation> found = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(answer, question, Relation.ANSWERS, user);
+			modelService.commit();
+		}
+		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "question", "remove", "answer" })
+	public QuestionApiPerspective removeAnswerFromQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
+		List<Relation> relations = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).list();
+		for (Relation relation : relations) {
+			modelService.deleteRelation(relation, user);
+		}
+		modelService.commit();
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
 	}
 

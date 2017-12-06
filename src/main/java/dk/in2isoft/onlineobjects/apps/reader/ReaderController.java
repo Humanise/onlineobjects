@@ -451,11 +451,11 @@ public class ReaderController extends ReaderControllerBase {
 			}
 			Privileged session = request.getSession();
 			InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
-			Question part = new Question();
-			part.setName(StringUtils.abbreviate(text, 50));
-			part.setText(text);
-			modelService.createItem(part, session);
-			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, session);
+			Question question = new Question();
+			question.setName(StringUtils.abbreviate(text, 50));
+			question.setText(text);
+			modelService.createItem(question, session);
+			modelService.createRelation(address, question, Relation.KIND_STRUCTURE_CONTAINS, session);
 		}
 	}
 
