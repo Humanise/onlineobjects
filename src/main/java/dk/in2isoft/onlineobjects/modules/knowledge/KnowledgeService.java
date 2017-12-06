@@ -124,6 +124,13 @@ public class KnowledgeService {
 			addressPerspective.setUrl(address.getAddress());
 			return addressPerspective;
 		}).collect(Collectors.toList()));
+		List<Question> questions = modelService.getChildren(statement, Relation.ANSWERS, Question.class, user);
+		perspective.setQuestions(questions.stream().map(question -> {
+			QuestionApiPerspective p = new QuestionApiPerspective();
+			p.setId(question.getId());
+			p.setText(question.getText());
+			return p;
+		}).collect(Collectors.toList()));
 		return perspective;
 	}
 

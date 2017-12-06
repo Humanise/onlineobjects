@@ -8,6 +8,7 @@ public class StatementApiPerspective {
 	private long id;
 	private List<PersonApiPerspective> authors;
 	private List<InternetAddressApiPerspective> addresses;
+	private List<QuestionApiPerspective> questions;
 
 	public String getText() {
 		return text;
@@ -39,5 +40,13 @@ public class StatementApiPerspective {
 
 	public void setAddresses(List<InternetAddressApiPerspective> addresses) {
 		this.addresses = addresses;
+	}
+
+	public List<QuestionApiPerspective> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<QuestionApiPerspective> questions) {
+		this.questions = questions;
 	}
 }
