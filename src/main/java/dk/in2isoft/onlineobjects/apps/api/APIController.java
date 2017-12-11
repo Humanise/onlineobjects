@@ -28,7 +28,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
-import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
@@ -111,7 +110,10 @@ public class APIController extends APIControllerBase {
 			} catch (InterruptedException e) {}
 			throw new SecurityException("User not found");
 		}
-		String secret = user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
+		String secret = securityService.getSecret(user);
+		if (Strings.isBlank(secret)) {
+			throw new SecurityException("Unable to perform request");
+		}
 
 		ClientKeyResponse response = new ClientKeyResponse();
 		response.setSecret(secret);
@@ -129,6 +131,7 @@ public class APIController extends APIControllerBase {
 	}
 	
 	@Path(start={"v1.0","bookmark"})
+	@Deprecated
 	public void bookmark(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		String url = request.getString("url", "An URL parameters must be provided");
@@ -207,11 +210,30 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getQuestionPerspective(id, user);
 	}
 
+	@Path(exactly = { "v1.0", "knowledge", "question", "update" })
+	public QuestionApiPerspective updateQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		Question dummy = new Question();
+		dummy.setId(id);
+		dummy.setText(request.getString("text", "Text is required"));
+		knowledgeService.updateQuestion(dummy, user);
+		modelService.commit();
+		return knowledgeService.getQuestionPerspective(id, user);
+	}
+
 	@Path(exactly = { "v1.0", "knowledge", "question", "add" })
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		Question question = knowledgeService.createQuestion(request.getString("text"), user);
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "question", "delete" })
+	public void deleteQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteQuestion(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add", "answer" })
@@ -261,6 +283,25 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getStatementPerspective(id, user);
 	}
 
+	@Path(exactly = { "v1.0", "knowledge", "statement", "delete" })
+	public void deleteStatement(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteStatement(id, user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "statement", "update" })
+	public StatementApiPerspective updateStatement(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		Statement dummy = new Statement();
+		dummy.setId(id);
+		dummy.setText(request.getString("text", "Text is required"));
+		knowledgeService.updateStatement(dummy, user);
+		modelService.commit();
+		return knowledgeService.getStatementPerspective(id, user);
+	}
+
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add" })
 	public StatementApiPerspective addStatement(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
@@ -270,6 +311,17 @@ public class APIController extends APIControllerBase {
 		}
 		String text = request.getString("text", "No text provided");
 		Statement statement = knowledgeService.addStatementToInternetAddress(text, id, user);
+		if (statement == null) {
+			throw new IllegalRequestException("The statement could not be added");
+		}
+		return knowledgeService.getStatementPerspective(statement.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "statement", "add", "personal" })
+	public StatementApiPerspective addPersonalStatement(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		String text = request.getString("text", "No text provided");
+		Statement statement = knowledgeService.addPersonalStatement(text, user);
 		if (statement == null) {
 			throw new IllegalRequestException("The statement could not be added");
 		}
@@ -293,9 +345,14 @@ public class APIController extends APIControllerBase {
 	public InternetAddressApiPerspective addInternetAddress(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		String url = request.getString("url", "An URL parameters must be provided");
+		String quote = request.getString("quote");
 
 		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
 
+		if (Strings.isNotBlank(quote)) {
+			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
+		}
+		
 		return knowledgeService.getAddressPerspective(internetAddress, new UserSession(user));
 	}
 

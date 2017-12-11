@@ -4,9 +4,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.commons.lang.StringUtils;
-import org.openjena.atlas.logging.Log;
-
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
@@ -18,8 +15,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
-import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.services.StorageService;

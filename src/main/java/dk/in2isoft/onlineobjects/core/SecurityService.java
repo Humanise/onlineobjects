@@ -327,6 +327,20 @@ public class SecurityService {
 		return !SecurityService.RESERVED_USERNAMES.contains(user.getUsername());
 	}
 
+	public String getSecret(User user) throws ModelException, SecurityException {
+		User reloaded = modelService.get(User.class, user.getId(), user);
+		if (reloaded!=null) {
+			String secret = reloaded.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
+			if (Strings.isBlank(secret)) {
+				secret = Strings.generateRandomString(50);
+				reloaded.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
+				modelService.updateItem(reloaded, user);
+			}
+			return secret;
+		}
+		return null;
+	}
+
 	public String generateNewSecret(User user) throws ModelException, SecurityException {
 		User reloaded = modelService.get(User.class, user.getId(), user);
 		if (reloaded!=null) {
