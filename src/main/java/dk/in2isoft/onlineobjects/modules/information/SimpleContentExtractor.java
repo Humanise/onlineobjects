@@ -201,18 +201,19 @@ public class SimpleContentExtractor implements ContentExtractor {
 			}
 		}
 		Multiset<Node> keys = paths.keys();
-		List<Element> collection = Lists.newArrayList(paths.get(keys.iterator().next()));
-		Collections.reverse(collection);
-		
-		for (Element prospect : collection) {
-			for (Node key : keys) {
-				if (!paths.containsEntry(key, prospect)) {
-					return common;
+		if (!keys.isEmpty()) {
+			List<Element> collection = Lists.newArrayList(paths.get(keys.iterator().next()));
+			Collections.reverse(collection);
+			
+			for (Element prospect : collection) {
+				for (Node key : keys) {
+					if (!paths.containsEntry(key, prospect)) {
+						return common;
+					}
 				}
+				common = prospect;
 			}
-			common = prospect;
 		}
-		
 		return common;
 	}
 		
