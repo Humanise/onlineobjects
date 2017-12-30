@@ -150,7 +150,11 @@ public class NetworkService {
 			if (isHttpOrHttps(uri)) {
 				CloseableHttpClient client = HttpClients.createDefault();
 				method = new HttpGet(uri);
-				method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
+				if (uri.getHost().endsWith("sundhed.dk")) {
+					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");					
+				} else {
+					method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
+				}
 				CloseableHttpResponse res = client.execute(method);
 				int code = res.getStatusLine().getStatusCode();
 				if (code == 200) {
