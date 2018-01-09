@@ -174,7 +174,8 @@ public class MemberService {
 		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 		if (emailAddress!=null) {
 			if (email.equals(emailAddress.getAddress())) {
-				throw new IllegalRequestException("The email is the same");
+				return;
+				//throw new IllegalRequestException("The email is the same");
 			}
 			if (isPrimaryEmailTaken(email)) {
 				throw new IllegalRequestException("The email is taken");
@@ -183,6 +184,9 @@ public class MemberService {
 			emailAddress.setName(email);
 			modelService.updateItem(emailAddress, privileged);
 		} else {
+			if (isPrimaryEmailTaken(email)) {
+				throw new IllegalRequestException("The email is taken");
+			}
 			emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);

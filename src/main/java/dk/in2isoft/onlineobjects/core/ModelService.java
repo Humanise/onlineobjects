@@ -51,6 +51,9 @@ import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.util.ModelClassInfo;
+import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
+import dk.in2isoft.onlineobjects.model.validation.UserValidator;
+import dk.in2isoft.onlineobjects.util.ValidationUtil;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -70,6 +73,7 @@ public class ModelService implements InitializingBean {
 	private Collection<ModelClassInfo> modelClassInfo;
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
+	private List<EntityValidator> entityValidators;
 	
 	private static final ThreadLocal<String> threadIsDirty = new ThreadLocal<String>();
 
@@ -79,6 +83,10 @@ public class ModelService implements InitializingBean {
 	}
 
 	protected ModelService() {
+		entityValidators = new ArrayList<>();
+		UserValidator userValidator = new UserValidator();
+		userValidator.setModelService(this);
+		entityValidators.add(userValidator);
 	}
 	
 	@Override
@@ -279,6 +287,7 @@ public class ModelService implements InitializingBean {
 				throw new SecurityException("Public can only create new users");
 			}
 		}
+		validate(item);
 		item.setCreated(new Date());
 		item.setUpdated(new Date());
 		session.save(item);
@@ -365,10 +374,20 @@ public class ModelService implements InitializingBean {
 		if (!canUpdate(item, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot update Item=" + item);
 		}
+		validate(item);
 		Session session = getSession();
 		item.setUpdated(new Date());
 		session.update(item);
 		eventService.fireItemWasUpdated(item);
+	}
+
+	private void validate(Item item) throws ModelException, SecurityException {
+		if (item instanceof Entity) {
+			Entity entity = (Entity) item;
+			for (EntityValidator validator : entityValidators) {
+				validator.validate(entity);
+			}
+		}
 	}
 
 	

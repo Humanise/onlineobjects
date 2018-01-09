@@ -19,6 +19,11 @@ public class StyleBuilder {
 		sb.append("width:").append(width).append(";");
 		return this;
 	}
+
+	public StyleBuilder withMaxWidth(String width) {
+		sb.append("max-width:").append(width).append(";");
+		return this;
+	}
 	
 	public StyleBuilder withHeight(Number height) {
 		if (height!=null) {

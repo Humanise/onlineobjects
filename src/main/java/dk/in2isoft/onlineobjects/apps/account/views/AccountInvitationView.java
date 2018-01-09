@@ -81,15 +81,11 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 		this.modelService = modelService;
 	}
 
-	public ModelService getModelService() {
-		return modelService;
-	}
-
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
 	}
-
-	public InvitationService getInvitationService() {
-		return invitationService;
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" state="persons" title="Images">
 
-  <controller name="controller" source="../controller.js"/>
-  <controller name="imagesController" source="../images.js"/>
+  <controller name="controller" url="../controller.js"/>
+  <controller name="imagesController" url="../images.js"/>
   <source name="imagesSource" url="../listImages">
     <parameter key="text" value="@searchfield.value"/>
     <parameter key="tag" value="@tagSelection.value"/>
@@ -13,35 +13,34 @@
   <bar>
     <button text="Offentligt" icon="inset/public" name="barPublic"/>
     <button text="Hjemmeside" icon="inset/globe" name="barWebsite"/>
-    <button text="Værktøjer" icon="inset/tools" name="barTools" highlighted="true"/>
+    <button text="Værktøjer" icon="inset/tools" name="barTools"/>
     <right>
       <button text="{username}" icon="inset/user" name="barUser"/>
       <button text="Log ud" icon="inset/cross" name="barLogOut"/>
     </right>
   </bar>
 
-  <toolbar variant="dock">
-    <icon icon="common/image" title="Billeder" selected="true" name="toolImages"/>
-    <icon icon="common/person" title="Personer" name="toolPersons"/>
-    <icon icon="common/internet" title="Bogmærker" name="toolBookmarks"/>
-    <icon icon="common/settings" title="Integration" name="toolIntegration"/>
+  <toolbar><!-- variant="dock"-->
+    <icon icon="common/image" text="Billeder" selected="true" name="toolImages"/>
+    <icon icon="common/person" text="Personer" name="toolPersons"/>
+    <icon icon="common/internet" text="Bogmærker" name="toolBookmarks"/>
+    <icon icon="common/settings" text="Integration" name="toolIntegration"/>
   </toolbar>
 
   <div style="position: fixed; top: 90px; bottom: 0; left: 0; right: 0; padding: 10px;">
     <structure>
       <top>
         <toolbar>
-          <icon icon="common/image" overlay="new" title="Tilføj billeder" name="newImage"/>
+          <icon icon="common/image" overlay="new" text="Tilføj billeder" name="newImage"/>
           <divider/>
-          <icon icon="common/play" title="Lysbilledshow" name="slideShow"/>
-          <icon icon="common/delete" title="Slet" name="deleteSelectedImage">
+          <icon icon="common/play" text="Lysbilledshow" name="slideShow"/>
+          <icon icon="common/delete" text="Slet" name="deleteSelectedImage">
             <confirm text="Er du sikker?" ok="Ja, slet" cancel="Nej"/>
           </icon>
           <right>
-            <field label="Søgning">
+            <item label="Søgning">
               <searchfield expanded-width="200" placeholder="Søg her" name="searchfield"/>
-            </field>
-            <space width="5"/>
+            </item>
           </right>
         </toolbar>
       </top>
@@ -49,14 +48,14 @@
         <left>
           <overflow>
           <selection value="all">
-            <item icon="common/image" title="Alle billeder" value="all"/>
+            <option icon="common/image" text="Alle billeder" value="all"/>
             <title>Nøgleord</title>
-            <items source="tagsSource" name="tagSelection"/>
+            <options source="tagsSource" name="tagSelection"/>
           </selection>
           </overflow>
         </left>
         <center>
-          <overflow resize="-190">
+          <overflow>
             <gallery name="imageGallery" source="imagesSource"/>
           </overflow>
         </center>
@@ -73,7 +72,7 @@
       <placeholder title="Upload billeder" text="Vælg billeder på din egen computer..."/>
     </upload>
     <buttons align="center" top="10">
-      <button name="imageUploadButton" title="Vælg billeder..."/>
+      <button name="imageUploadButton" text="Vælg billeder..."/>
     </buttons>
   </window>
 
@@ -86,16 +85,16 @@
             <text-input key="name"/>
           </field>
           <field label="Beskrivelse">
-            <text-input key="description" multiline="true"/>
+            <text-input key="description" breaks="true"/>
           </field>
           <field label="Nøgleord">
             <tokens key="tags"/>
           </field>
         </fields>
         <buttons>
-          <button title="Slet" name="deleteImage"/>
-          <button title="Annuller" name="cancelImage"/>
-          <button title="Gem" highlighted="true" name="saveImage"/>
+          <button text="Slet" name="deleteImage"/>
+          <button text="Annuller" name="cancelImage"/>
+          <button text="Gem" highlighted="true" name="saveImage"/>
         </buttons>
       </formula>
     </space>

@@ -93,6 +93,7 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			ImageTransformation transform = new ImageTransformation();
 			transform.setWidth(300);
 			transform.setHeight(200);
+			transform.setCropped(true);
 			transform.setFormat("jpg");
 			File converted = new File(getOutputDir(),"humanise_300x200.jpg");
 			if (converted.exists()) {
@@ -109,6 +110,7 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			ImageTransformation transform = new ImageTransformation();
 			transform.setWidth(300);
 			transform.setHeight(200);
+			transform.setCropped(true);
 			transform.setFormat("png");
 			File converted = new File(getOutputDir(),"humanise_300x200.png");
 			if (converted.exists()) {

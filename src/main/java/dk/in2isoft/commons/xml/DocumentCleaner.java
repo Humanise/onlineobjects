@@ -89,10 +89,6 @@ public class DocumentCleaner {
 			else if (node instanceof Element) {
 				Element element = (Element) node;
 				String nodeName = element.getLocalName().toLowerCase();
-				if (!validTags.contains(nodeName)) {
-					nodesToRemove.add(element);
-					continue;
-				}
 				
 				element.getAttributeCount();
 				for (int j = element.getAttributeCount() - 1; j >= 0; j--) {
@@ -100,6 +96,11 @@ public class DocumentCleaner {
 					if (!validAttributes.containsEntry(nodeName, attribute.getLocalName())) {
 						element.removeAttribute(attribute);
 					}
+				}
+				
+				if (!validTags.contains(nodeName)) {
+					nodesToRemove.add(element);
+					continue;
 				}
 				
 				if (nodeName.equals("a")) {
@@ -117,33 +118,33 @@ public class DocumentCleaner {
 						}
 					}
 				}
-				
-				for (nu.xom.Node toRemove : nodesToRemove) {
-					ParentNode parent = toRemove.getParent();
-					if (parent!=null) {
-						if (toRemove instanceof Element) {
-							Element elementToRemove = (Element) toRemove;
-							String tagName = elementToRemove.getLocalName().toLowerCase();
-							if (!bannedTags.contains(tagName)) {
-								int index = parent.indexOf(elementToRemove);
-								while (elementToRemove.getChildCount()>0) {
-									nu.xom.Node child = elementToRemove.removeChild(0);
-									if (parent instanceof Element || !(child instanceof Text)) {
-										if (parent instanceof nu.xom.Document) {
-											log.debug("The parent is a document");
-										} else {
-											parent.insertChild(child, index);
-										}
+			}
+			
+			for (nu.xom.Node toRemove : nodesToRemove) {
+				ParentNode parent = toRemove.getParent();
+				if (parent!=null) {
+					if (toRemove instanceof Element) {
+						Element elementToRemove = (Element) toRemove;
+						String tagName = elementToRemove.getLocalName().toLowerCase();
+						if (!bannedTags.contains(tagName)) {
+							int index = parent.indexOf(elementToRemove);
+							while (elementToRemove.getChildCount()>0) {
+								nu.xom.Node child = elementToRemove.removeChild(0);
+								if (parent instanceof Element || !(child instanceof Text)) {
+									if (parent instanceof nu.xom.Document) {
+										log.debug("The parent is a document");
+									} else {
+										parent.insertChild(child, index);
 									}
-									index ++;
 								}
+								index ++;
 							}
 						}
-						if (parent instanceof nu.xom.Document) {
-							//log.warn("Cannot remove the root node");
-						} else {
-							parent.removeChild(toRemove);
-						}
+					}
+					if (parent instanceof nu.xom.Document) {
+						//log.warn("Cannot remove the root node");
+					} else {
+						parent.removeChild(toRemove);
 					}
 				}
 			}

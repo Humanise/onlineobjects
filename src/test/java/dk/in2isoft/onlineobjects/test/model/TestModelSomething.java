@@ -20,8 +20,7 @@ public class TestModelSomething extends AbstractSpringTestCase {
 	@Test
 	public void testPlain() throws EndUserException, InterruptedException {
 		Privileged admin = securityService.getAdminPrivileged();
-		User user = new User();
-		user.setUsername("unitTestUser");
+		User user = getNewTestUser();
 		modelService.createItem(user, admin);
 		securityService.grantPublicView(user, true, admin);
 		Image image = new Image();
@@ -44,8 +43,7 @@ public class TestModelSomething extends AbstractSpringTestCase {
 	//@Test
 	public void testThis() throws EndUserException, InterruptedException {
 		Privileged priviledged = securityService.getAdminPrivileged();
-		User user = new User();
-		user.setUsername("unitTestUser");
+		User user = getNewTestUser();
 		modelService.createItem(user, priviledged);
 		
 		Image image = new Image();

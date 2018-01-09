@@ -22,10 +22,10 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 	
 	@Test
 	public void testLoad() throws EndUserException {
-		User mainUser = new User();
+		User mainUser = getNewTestUser();
 		modelService.createItem(mainUser, getPublicUser());
 
-		User someoneElse = new User();
+		User someoneElse = getNewTestUser();
 		modelService.createItem(someoneElse, getPublicUser());
 		
 		Comment comment = new Comment();
@@ -102,7 +102,7 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 
 	@Test
 	public void testOwner() throws EndUserException {
-		User mainUser = new User();
+		User mainUser = getNewTestUser();
 		modelService.createItem(mainUser, getAdminUser());
 		securityService.grantFullPrivileges(mainUser, mainUser, getAdminUser());
 
@@ -118,7 +118,7 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 		}
 
 		// Create another user
-		User someoneElse = new User();
+		User someoneElse = getNewTestUser();
 		modelService.createItem(someoneElse, getPublicUser());
 
 		// The other user should not be able to see the main user
