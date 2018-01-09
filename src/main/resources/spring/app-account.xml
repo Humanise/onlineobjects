@@ -20,6 +20,7 @@
    	<bean id="accountInvitationView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountInvitationView" scope="request">
    		<property name="modelService" ref="modelService"/>
    		<property name="invitationService" ref="invitationService"/>
+   		<property name="securityService" ref="securityService"/>
    	</bean>
    	
    	
