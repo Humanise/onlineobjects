@@ -16,8 +16,7 @@ public class TestUserQuery extends AbstractSpringTestCase {
     	
 	@Test
 	public void testThis() throws EndUserException {
-		User user = new User();
-		user.setUsername("unitTestUser");
+		User user = getNewTestUser();
 		Person person = new Person();
 		person.setGivenName("test89898897");
 		modelService.createItem(user, getAdminUser());
@@ -25,7 +24,7 @@ public class TestUserQuery extends AbstractSpringTestCase {
 		modelService.createItem(person, priviledged);
 		modelService.createRelation(user, person, priviledged);
 		{
-			UserQuery query = new UserQuery().withUsername("unitTestUser");
+			UserQuery query = new UserQuery().withUsername(user.getUsername());
 			PairSearchResult<User,Person> pairs = modelService.searchPairs(query);
 			assertEquals(1, pairs.getTotalCount());
 		}

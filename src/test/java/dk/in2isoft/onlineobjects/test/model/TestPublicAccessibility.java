@@ -22,7 +22,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		// Public cannot create anything but Users
 		assertFails(()->modelService.createItem(comment, getPublicUser()));
 		
-		User user = new User();
+		User user = getNewTestUser();
 		// Public can create a User
 		modelService.createItem(user, getPublicUser());
 
@@ -34,7 +34,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 
 	@Test
 	public void testGrantUsingUnsavedObjects() throws EndUserException {
-		User user = new User();
+		User user = getNewTestUser();
 		Comment comment = new Comment();
 		assertFails(() -> securityService.grantFullPrivileges(comment, user, getAdminUser()));
 
@@ -49,7 +49,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 	@Test
 	public void testPublicAccess() throws EndUserException {
 		User publicUser = securityService.getPublicUser();
-		User user = new User();
+		User user = getNewTestUser();
 		
 		modelService.createItem(user, getAdminUser());
 		securityService.makePublicVisible(user, getAdminUser());
@@ -98,7 +98,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 	public void testPublicDelete() throws EndUserException {
 
 		User publicUser = securityService.getPublicUser();
-		User user = new User();
+		User user = getNewTestUser();
 		
 		modelService.createItem(user, getAdminUser());
 		
@@ -114,7 +114,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 	public void testPublicDeleteComment() throws EndUserException {
 
 		User publicUser = securityService.getPublicUser();
-		User user = new User();
+		User user = getNewTestUser();
 		Comment comment = new Comment();
 		
 		modelService.createItem(user, getAdminUser());

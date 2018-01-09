@@ -28,6 +28,7 @@ public class TestDocumentCleaner extends TestCase {
 				+ "<p><a href='http://www.somewhere.com/' onclick='doSomethingNasty()'><span>This is a link</span></a></p>"
 				+ "<p> </p>"
 				+ "<ul><li> </li><li><a href='#'></a></li><li>I can stay</li></ul>"
+				+ "<h2><span class='hey'>hep</span></h2>"
 				+ "</body></html>";
 
 		String expected = "<?xml version=\"1.0\"?>\n"
@@ -35,6 +36,7 @@ public class TestDocumentCleaner extends TestCase {
 				+ "<h1>Title</h1>"
 				+ "<p><a href=\"http://www.somewhere.com/\">This is a link</a></p>"
 				+ "<ul><li>I can stay</li></ul>"
+				+ "<h2>hep</h2>"
 				+ "</body></html>\n";
 
 		nu.xom.Document document = DOM.parseXOM(xml);
@@ -57,6 +59,11 @@ public class TestDocumentCleaner extends TestCase {
 		{
 			String xml = "<h1>Remove empty tags</h1><p><strong><em></em></strong></p><h3/><hr/><br/>";
 			String expected = "<h1>Remove empty tags</h1><hr /><br />";
+			tests.put(xml, expected);
+		}
+		{
+			String xml = "<h2><span>Remove spans</span></h2>";
+			String expected = "<h2>Remove spans</h2>";
 			tests.put(xml, expected);
 		}
 		

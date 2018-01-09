@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.NumberUtils;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -62,6 +63,12 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 
 	protected Privileged getAdminUser() {
 		return securityService.getAdminPrivileged();
+	}
+	
+	protected User getNewTestUser() {
+		User user = new User();
+		user.setUsername("testuser" + System.currentTimeMillis() + Math.round(Math.random() * 9999999));
+		return user;
 	}
 
 	public void setContext(ApplicationContext context) {
