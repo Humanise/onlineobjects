@@ -43,7 +43,7 @@ public class BoxComponent extends AbstractComponent {
 		out.startDiv("oo_box");
 		StyleBuilder css = new StyleBuilder();
 		if (isNotBlank(width)) {
-			css.withWidth(toLength(width));
+			css.withMaxWidth(toLength(width));
 		}
 		if (isNotBlank(padding)) {
 			css.withPadding(toLength(padding));
