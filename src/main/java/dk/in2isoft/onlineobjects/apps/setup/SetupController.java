@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.apps.setup;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -87,11 +88,11 @@ public class SetupController extends SetupControllerBase {
 		writer.startHeaders();
 		writer.header("Name");
 		writer.header("Username");
-		writer.header("Person");
 		writer.header("E-mail");
+		writer.header("Person");
+		writer.header("E-mails");
 		writer.header("Image");
 		writer.header("Images");
-		writer.header("ID");
 		writer.header("Public",1);
 		writer.header("Self",1);
 		writer.header("Admin",1);
@@ -101,13 +102,10 @@ public class SetupController extends SetupControllerBase {
 			Long imageCount = modelService.count(imgQuery);
 			Image image = modelService.getChild(user, Image.class, privileged);
 			Person person = modelService.getChild(user, Person.class, privileged);
-			EmailAddress email = null;
-			if (person!=null) {
-				email = modelService.getChild(person, EmailAddress.class ,privileged);
-			}
+			EmailAddress email = memberService.getUsersPrimaryEmail(user, privileged);
 			writer.startRow().withId(user.getId()).withKind("user");
 			writer.startCell().withIcon(user.getIcon()).text(user.getName()).endCell();
-			writer.startCell().text(user.getUsername()).endCell();
+			writer.cell(user.getUsername());
 			writer.startCell();
 			if (person!=null) {
 				writer.withIcon(person.getIcon()).text(person.getFullName());
@@ -120,13 +118,22 @@ public class SetupController extends SetupControllerBase {
 			}
 			writer.endCell();
 			writer.startCell();
+			if (person!=null) {
+				List<EmailAddress> emails = modelService.getChildren(person, EmailAddress.class, privileged);
+				for (Iterator<EmailAddress> i = emails.iterator(); i.hasNext();) {
+					EmailAddress mail = i.next();
+					writer.text(mail.getAddress());
+					if (i.hasNext()) writer.text(", ");
+				}
+			}
+			writer.endCell();
+			writer.startCell();
 			if (image!=null) {
 				writer.withIcon(image.getIcon());
 				writer.text(StringUtils.abbreviateMiddle(image.getName(), "...", 20));
 			}
 			writer.endCell();
-			writer.startCell().text(imageCount).endCell();
-			writer.startCell().text(user.getId()).endCell();
+			writer.cell(imageCount);
 			writer.startCell().startIcons();
 			if (securityService.canView(user, publicUser)) {
 				writer.icon("monochrome/view");
@@ -174,6 +181,20 @@ public class SetupController extends SetupControllerBase {
 		User publicUser = securityService.getPublicUser();
 		User user = modelService.get(User.class, id, request.getSession());
 		if (user==null) {
+			return;
+		}
+		if ("info".equals(type)) {
+			ListWriter writer = new ListWriter(request);
+			
+			writer.startList();
+			writer.startHeaders();
+			writer.header("Key",40);
+			writer.header("Value");
+			writer.endHeaders();
+			writer.startRow().cell("ID").cell(user.getId()).endRow();
+			writer.startRow().cell("Password").cell((Strings.isNotBlank(user.getPassword()) ? "Yes" : "No")).endRow();
+			writer.startRow().cell("Secret").cell(user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
+			writer.endList();
 			return;
 		}
 		Class<? extends Entity> typeClass = modelService.getEntityClass(type);
@@ -242,6 +263,10 @@ public class SetupController extends SetupControllerBase {
 		UserPerspective perspective = new UserPerspective();
 		perspective.setUsername(user.getUsername());
 		perspective.setName(user.getName());
+		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, request.getSession());
+		if (usersPrimaryEmail != null) {
+			perspective.setEmail(usersPrimaryEmail.getAddress());
+		}
 		perspective.setPublicView(securityService.canView(user, publicUser));
 		request.sendObject(perspective);
 	}
@@ -267,6 +292,7 @@ public class SetupController extends SetupControllerBase {
 		if (securityService.canChangeUsername(user)) {
 			user.setUsername(perspective.getUsername());			
 		}
+		memberService.changePrimaryEmail(user, perspective.getEmail(), request.getSession());
 		user.setName(perspective.getName());
 		modelService.updateItem(user, request.getSession());
 		if (securityService.isAdminUser(user)) {

@@ -5,6 +5,7 @@ public class UserPerspective {
 	private long id;
 	private String name;
 	private String username;
+	private String email;
 	private boolean publicView;
 
 	public void setId(long id) {
@@ -37,5 +38,13 @@ public class UserPerspective {
 
 	public boolean isPublicView() {
 		return publicView;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
