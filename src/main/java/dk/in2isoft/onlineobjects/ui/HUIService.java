@@ -73,7 +73,6 @@ public class HUIService {
 		Transformer transformer = null;;
 		try {
 			if (devMode) {
-			    validate(source);
 				transformer = createTransformer(true);
 				 // create a SchemaFactory capable of understanding WXS schemas
 			} else {
@@ -115,13 +114,20 @@ public class HUIService {
 		}
 	}
 
-	private void validate(StreamSource source) throws SAXException, IOException {
+	private void validate(StreamSource source) throws IOException {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
 		String schemaPath = configurationService.getFile("hui/xslt/schema.xsd").getAbsolutePath();
 		// load a WXS schema, represented by a Schema instance
 		Source schemaFile = new StreamSource(new File(schemaPath));
-		Schema schema = factory.newSchema(schemaFile);
+		Schema schema;
+		try {
+			schema = factory.newSchema(schemaFile);
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			log.error(e1);
+			return;
+		}
 
 		// create a Validator instance, which can be used to validate an instance document
 		Validator validator = schema.newValidator();
@@ -170,6 +176,9 @@ public class HUIService {
 				devMode=false;
 			} else if ("true".equals(request.getParameter("dev"))) {
 				devMode=true;
+			}
+			if (devMode) {
+			    validate(new StreamSource( new StringReader(xmlData)));
 			}
 			render(new StreamSource(xmlReader), stream, request.getContextPath(),devMode);
 		} catch (TransformerFactoryConfigurationError e) {
