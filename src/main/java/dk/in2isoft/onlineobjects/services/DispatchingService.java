@@ -81,6 +81,7 @@ public class DispatchingService {
 				try {
 					shouldCommit = responder.dispatch(request, chain);
 				} catch (EndUserException e) {
+					shouldCommit = false;
 					surveillanceService.survey(e,request);
 					displayError(request, e);
 				}
