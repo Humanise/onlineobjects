@@ -12,7 +12,7 @@
 
     <ui:define name="body">
 
-      <o:box width="600" margin="20" padding="20">
+      <o:box>
         <h:panelGroup rendered="#{empty accountInvitationView.invitation}">
           <o:header>Invitationen blev ikke fundet</o:header>
           <p>Det var desværre ikke muligt at finde invitationen. Den er muligvis blevet fjernet efter den er blevet afsendt.</p>
@@ -24,37 +24,42 @@
           </h:panelGroup>
           <h:panelGroup rendered="#{accountInvitationView.invitation.state=='active'}">
             <o:header>Invitation til OnlineObjects</o:header>
-            <p>Hej #{accountInvitationView.person.fullName}.</p>
-            <p><o:link app="people" href="en/#{accountInvitationView.inviterUser.username}">#{accountInvitationView.inviterPerson.fullName}</o:link> har inviteret dig til at blive bruger af OnlineObjects.</p>
-            <h:panelGroup rendered="#{not empty accountInvitationView.invitation.message}">
-              <p>#{accountInvitationView.inviterPerson.givenName} har følgende besked til dig...</p>
-              <blockquote class="note">“<h:outputText value="#{accountInvitationView.formattedMessage}" escape="false"/>”</blockquote>
-            </h:panelGroup>
+            <div class="oo_text account_invitation_text">
+              <p>Hej #{accountInvitationView.person.fullName}.</p>
+              <p><o:link app="people" href="en/#{accountInvitationView.inviterUser.username}">#{accountInvitationView.inviterPerson.fullName}</o:link> har inviteret dig til at blive bruger af OnlineObjects.</p>
+              <h:panelGroup rendered="#{not empty accountInvitationView.invitation.message}">
+                <p>#{accountInvitationView.inviterPerson.givenName} har følgende besked til dig...</p>
+                <blockquote class="note">“<h:outputText value="#{accountInvitationView.formattedMessage}" escape="false"/>”</blockquote>
+              </h:panelGroup>
+            </div>
             <o:header level="2">Tilmeld dig her...</o:header>
-            <gui:formula name="invitationFormula">
-              <gui:fields>
-                <gui:field label="Brugernavn">
-                  <gui:textfield name="invitationUsername" key="username" value="#{accountInvitationView.newUsername}"/>
-                </gui:field>
-                <gui:field label="E-mail">
-                  <gui:textfield name="invitationEmail" key="email" value="#{accountInvitationView.email}"/>
-                </gui:field>
-                <gui:field label="Kodeord">
-                  <gui:textfield name="invitationPassword" key="password" secret="true"/>
-                </gui:field>
-                <gui:field label="Gentag kodeord">
-                  <gui:textfield name="invitationPasswordAgain" key="passwordAgain" secret="true"/>
-                </gui:field>
-              </gui:fields>
-              <gui:buttons>
-                <gui:button text="Tilmeld" name="changePassword" submit="true"/>
-              </gui:buttons>
-            </gui:formula>
+            <div class="account_invitation_form">
+              <gui:formula name="invitationFormula">
+                <gui:fields>
+                  <gui:field label="Brugernavn">
+                    <gui:textfield name="invitationUsername" key="username" value="#{accountInvitationView.newUsername}"/>
+                  </gui:field>
+                  <gui:field label="E-mail">
+                    <gui:textfield name="invitationEmail" key="email" value="#{accountInvitationView.email}"/>
+                  </gui:field>
+                  <gui:field label="Kodeord">
+                    <gui:textfield name="invitationPassword" key="password" secret="true"/>
+                  </gui:field>
+                  <gui:field label="Gentag">
+                    <gui:textfield name="invitationPasswordAgain" key="passwordAgain" secret="true"/>
+                  </gui:field>
+                </gui:fields>
+                <gui:buttons>
+                  <gui:button text="Tilmeld" name="changePassword" submit="true"/>
+                </gui:buttons>
+              </gui:formula>
+            </div>
           </h:panelGroup>
         </h:panelGroup>
       </o:box>
       <div class="js-code" data-code="#{accountInvitationView.code}"></div>
       <o:dependency src="/js/invitation.js" from="local"/>
+      <o:dependency src="/css/oo_text.css" from="core"/>
       <o:dependency src="/hui/js/Alert.js"/>
       <o:dependency src="/hui/css/alert.css"/>
     </ui:define>

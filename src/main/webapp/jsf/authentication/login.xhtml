@@ -18,7 +18,7 @@
 
 	<o:body>
 
-		<o:box width="400" margin="20" padding="20">
+		<o:box>
 			<o:header>#{msg.access_control}</o:header>
 			<p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName}</p>
 			<c:if test="#{not empty authenticationLoginView.message}">

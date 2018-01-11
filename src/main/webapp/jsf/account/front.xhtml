@@ -10,8 +10,8 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box width="500" padding="20" margin="20">
-        <h1 class="account_title">#{msg.account}</h1>
+      <o:box>
+        <o:header>#{msg.account}</o:header>
         <p class="account_user"><strong class="account_user_label">#{msg.username}:</strong> #{accountSettingsView.user.username}</p>
 
         <c:choose>
@@ -20,7 +20,7 @@
               <gui:field label="#{msg.primary_email}">
                 <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}"/>
               </gui:field>
-              <div style="margin: 5px 0 20px -2px">
+              <div style="margin: 5px 0 20px 0">
                 <gui:button text="#{msg.change}" submit="true" variant="light"/>
               </div>
             </gui:formula>
@@ -31,7 +31,7 @@
               <gui:field label="#{msg.new_password}">
                 <gui:textInput key="newPassword" secret="true"/>
               </gui:field>
-              <div style="margin: 5px 0 0 -2px">
+              <div style="margin: 5px 0 0 0">
                 <gui:button text="#{msg.change_password}" submit="true" variant="light"/>
               </div>
             </gui:formula>

@@ -135,17 +135,17 @@ public class HUIService {
 			
 			@Override
 			public void warning(SAXParseException exception) throws SAXException {
-				log.warn(exception.getMessage(), exception);
+				log.warn(exception.getMessage());
 			}
 			
 			@Override
 			public void fatalError(SAXParseException exception) throws SAXException {
-				log.fatal(exception.getMessage(), exception);
+				log.fatal(exception.getMessage());
 			}
 			
 			@Override
 			public void error(SAXParseException exception) throws SAXException {
-				log.error(exception.getMessage(), exception);
+				log.error("[" + exception.getLineNumber() + ":" + exception.getColumnNumber() + "] " + exception.getMessage());
 			}
 		});
 

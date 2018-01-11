@@ -1,0 +1,25 @@
+@import 'shared';
+
+@include if {
+  .oo_text {
+    margin: 0;
+    font-size: 16px;
+
+    > p {
+      margin: 5px 0;
+    }
+
+    > blockquote {
+      margin: 5px 20px;
+    }
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+}

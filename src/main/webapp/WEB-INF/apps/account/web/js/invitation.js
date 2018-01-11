@@ -19,11 +19,11 @@ hui.ui.listen({
         if (response.success) {
           document.location = '/';
         } else {
-          hui.ui.alert({title:'It failed!',text : response.description});
+          hui.ui.msg.fail({text : response.description});
         }
       },
       $failure : function() {
-        hui.ui.alert({text:'It failed!'})
+        hui.ui.msg.fail({text:'It failed!'});
       }
     })
   },
