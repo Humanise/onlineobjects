@@ -1,32 +1,25 @@
-h1.oo_header, h2.oo_header, h3.oo_header, h4.oo_header, h5.oo_header, h6.oo_header
-{
-	margin: 0;
-	color: #666;		
-}
+.oo_header {
+  margin: 0; }
+  .oo_header-1 {
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1; }
+  .oo_header-2 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 18px; }
+  .oo_header-3 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18px; }
 
-h1.oo_header
-{
-	font-size: 52px;
-	font-weight: 100;
-	line-height: 40px;
-	font-family: 'Lato',sans-serif;
-	text-indent: -4px;
-	margin-top: -5px;
-}
-
-h2.oo_header
-{
-	font-size: 32px;
-	font-weight: 100;
-	line-height: 26px;
-	font-family: 'Lato',sans-serif;
-/*	font-family: 'HelveticaNeue-UltraLight','Helvetica Neue','Helvetica','Arial',sans-serif;*/
-}
-
-h3.oo_header
-{
-	font-size: 26px;
-	font-weight: 200;
-	line-height: 22px;	
-	font-family: 'Lato',sans-serif;
-}
+@media screen and (min-width: 600px) {
+  .oo_header-1 {
+    font-size: 36px;
+    line-height: 40px; }
+  .oo_header-2 {
+    font-size: 24px;
+    line-height: 1; }
+  .oo_header-3 {
+    font-size: 18px;
+    line-height: 1; } }
