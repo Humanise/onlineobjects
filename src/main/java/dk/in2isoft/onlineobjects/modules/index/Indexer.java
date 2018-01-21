@@ -1,8 +1,12 @@
 package dk.in2isoft.onlineobjects.modules.index;
 
-import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
+import java.util.List;
 
 public interface Indexer {
 
-	void rebuild(JobStatus status);
+	List<IndexDescription> getIndexInstances();
+	
+	boolean is(IndexDescription description);
+	
+	long getObjectCount(IndexDescription description);
 }

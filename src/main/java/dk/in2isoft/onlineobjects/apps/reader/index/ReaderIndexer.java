@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.reader.index;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -8,8 +9,10 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.DummyPrivileged;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -30,11 +33,16 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.model.Word;
+import dk.in2isoft.onlineobjects.modules.index.IndexDescription;
 import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
+import dk.in2isoft.onlineobjects.modules.index.Indexer;
 import dk.in2isoft.onlineobjects.services.PileService;
 
-public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventListener {
+public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventListener, Indexer {
+
+	private static final String APP_READER_USER  = "app-reader-user-";
 
 	private ReaderIndexDocumentBuilder documentBuilder;
 	
@@ -47,6 +55,34 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	
 	public void clear(Privileged privileged) throws EndUserException {
 		getIndexManager(privileged).clear();
+	}
+	
+	@Override
+	public boolean is(IndexDescription description) {
+		// TODO Auto-generated method stub
+		return description.getName().startsWith(APP_READER_USER );
+	}
+	
+	@Override
+	public long getObjectCount(IndexDescription description) {
+		DummyPrivileged privileged = new DummyPrivileged(description.getUserId());
+		long count = 0;
+		Class<?>[] types = {InternetAddress.class, Question.class, Statement.class, Hypothesis.class};
+		for (Class<?> type : types) {
+			count += modelService.count(Query.after(type).as(privileged));
+		}
+		return count;
+	}
+	
+	@Override
+	public List<IndexDescription> getIndexInstances() {
+		Query<User> query = Query.after(User.class);
+		return modelService.search(query).getList().stream().map(user -> {
+			IndexDescription desc = new IndexDescription();
+			desc.setName(getIndexName(user));
+			desc.setUserId(user.getId());
+			return desc;
+		}).collect(Collectors.toList());
 	}
 	
 	public void reIndex(Privileged privileged) throws EndUserException {
@@ -219,7 +255,11 @@ public class ReaderIndexer implements ModelEventListener, ModelPrivilegesEventLi
 	}
 	
 	private IndexManager getIndexManager(Privileged privileged) {
-		return indexService.getIndex("app-reader-user-"+privileged.getIdentity());
+		return indexService.getIndex(getIndexName(privileged));
+	}
+
+	private String getIndexName(Privileged privileged) {
+		return APP_READER_USER + privileged.getIdentity();
 	}
 	
 	public void entityWasCreated(Entity entity) {

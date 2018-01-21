@@ -38,7 +38,6 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		
 		Document doc = new Document();
 		doc.add(new TextField("text", text.toString(), Field.Store.YES));
-		doc.add(new TextField("type", image.getType(), Field.Store.YES));
 		doc.add(new LongField("fileSize", image.getFileSize(), Field.Store.YES));
 		doc.add(new IntField("width", image.getWidth(), Field.Store.YES));
 		doc.add(new IntField("height", image.getHeight(), Field.Store.YES));

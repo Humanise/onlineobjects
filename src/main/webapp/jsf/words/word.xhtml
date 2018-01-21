@@ -81,6 +81,7 @@
                       click="wordView.addRelation({id:#{word.word.id}})"
                       rendered="#{wordsLayoutView.loggedIn}"
                     />
+                    <o:link rendered="#{wordsLayoutView.loggedIn}" app="front" href="/word/#{word.word.id}">Info</o:link>
                   </p>
                   <c:if test="#{not empty word.glossary}">
                     <p class="words_word_glossary">

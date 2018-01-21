@@ -34,6 +34,7 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -46,6 +47,7 @@ import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.annotations.Appearance;
+import dk.in2isoft.onlineobjects.modules.index.IndexDescription;
 import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.PublisherPerspective;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobInfo;
@@ -675,40 +677,49 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public List<ItemData> getIndexOptions(Request request) {
 		List<ItemData> options = Lists.newArrayList();
-		List<String> names = indexService.getIndexNames();
-		for (String name : names) {
-			ItemData item = new ItemData();
-			item.setText(name);
-			item.setValue(name);
-			options.add(item);
-		}
-		
+		indexService.getIndexers().forEach(indexer -> {
+			indexer.getIndexInstances().forEach(name -> {
+				ItemData item = new ItemData();
+				item.setText(name.getName());
+				item.setValue(Strings.toJSON(name));
+				item.setKind("index");
+				options.add(item);
+			});			
+		});
 		return options;
 	}
 
 	@Path
 	public void getIndexDocuments(Request request) throws IOException, EndUserException {
-		String name = request.getString("name", "No name provided");
+		IndexDescription desc = request.getObject("name", IndexDescription.class);
 		int page = request.getInt("page");
 		int count = request.getInt("count");
 		count = 30;
-		IndexManager manager = indexService.getIndex(name);
+		if (desc == null) {
+			return;
+		}
+		IndexManager manager = indexService.getIndex(desc.getName());
 		if (manager==null) {
-			throw new IllegalRequestException("No index manager width the name '"+name+"'");
+			throw new IllegalRequestException("No index manager width the name '"+desc.getName()+"'");
+		}
+		SearchResult<Document> result;
+		try {
+			result = manager.getDocuments(page,count);
+		} catch (ExplodingClusterFuckException e) {
+			return;
 		}
 
 		ListWriter writer = new ListWriter(request);
-		SearchResult<Document> result = manager.getDocuments(page,count);
 		List<Document> list = result.getList();
 		writer.startList();
 		writer.window(result.getTotalCount(), count, page);
 		writer.startHeaders();
 		writer.header("ID", 30);
-		writer.header("Word");
+		writer.header("Type");
 		writer.header("Text");
 		writer.endHeaders();
 		for (Document document : list) {
-			writer.startRow().cell(document.get("id")).cell(document.get("word")).cell(document.get("text"));
+			writer.startRow().cell(document.get("id")).cell(document.get("type")).cell(document.get("text"));
 			writer.endRow();			
 		}
 		writer.endList();
@@ -716,10 +727,13 @@ public class SetupController extends SetupControllerBase {
 	
 	@Path
 	public void getIndexStatistics(Request request) throws IOException, EndUserException {
-		String name = request.getString("name", "No name provided");
-		IndexManager manager = indexService.getIndex(name);
+		IndexDescription desc = request.getObject("name", IndexDescription.class);
+		if (desc == null) {
+			return;
+		}
+		IndexManager manager = indexService.getIndex(desc.getName());
 		if (manager==null) {
-			throw new IllegalRequestException("No index manager width the name '"+name+"'");
+			throw new IllegalRequestException("No index manager width the name '" + desc.getName() + "'");
 		}
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
@@ -727,7 +741,8 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Property", 30);
 		writer.header("Value");
 		writer.endHeaders();
-		writer.startRow().cell("Count").cell(manager.getDocumentCount()).endRow();
+		writer.startRow().cell("Index count").cell(manager.getDocumentCount()).endRow();
+		writer.startRow().cell("Database count").cell(indexService.getObjectCount(desc)).endRow();
 		writer.endList();
 	}
 	
