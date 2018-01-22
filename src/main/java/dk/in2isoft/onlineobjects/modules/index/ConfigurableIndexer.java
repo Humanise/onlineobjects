@@ -6,19 +6,23 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Code;
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
 
-public class ConfigurableIndexer<E extends Entity> implements ModelEventListener {
+public class ConfigurableIndexer<E extends Entity> implements ModelEventListener, Indexer {
 
 	private Class<E> type;
 	
 	private IndexManager indexManager;
+	private ModelService modelService;
 
 	private IndexDocumentBuilder<E> documentBuilder;
 	
@@ -26,6 +30,22 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 
 	public Class<E> getType() {
 		return type;
+	}
+	
+	@Override
+	public List<IndexDescription> getIndexInstances() {
+		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
+	}
+
+	@Override
+	public boolean is(IndexDescription description) {
+		// TODO Auto-generated method stub
+		return description.getName().equals(indexManager.getDirectoryName());
+	}
+	
+	@Override
+	public long getObjectCount(IndexDescription description) {
+		return modelService.count(Query.after(type));
 	}
 	
 	public void clear() throws EndUserException {
@@ -110,6 +130,10 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	
 	public void setIndexManager(IndexManager indexManager) {
 		this.indexManager = indexManager;
+	}
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
 	}
 	
 	public void setDocumentBuilder(IndexDocumentBuilder<E> documentBuilder) {

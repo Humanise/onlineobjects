@@ -30,16 +30,14 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		Privileged adminPrivileged = securityService.getAdminPrivileged();
 		image = modelService.get(Image.class, image.getId(), adminPrivileged);
 		StringBuilder text = new StringBuilder();
-		text.append(image.getName()).append(" ");
+		text.append(image.getName());
 		String glossary = image.getPropertyValue(Image.PROPERTY_DESCRIPTION);
 		if (Strings.isNotBlank(glossary)) {
 			text.append(" ").append(glossary);
 		}
-		text.append(glossary);
 		
 		Document doc = new Document();
 		doc.add(new TextField("text", text.toString(), Field.Store.YES));
-		doc.add(new TextField("type", image.getType(), Field.Store.YES));
 		doc.add(new LongField("fileSize", image.getFileSize(), Field.Store.YES));
 		doc.add(new IntField("width", image.getWidth(), Field.Store.YES));
 		doc.add(new IntField("height", image.getHeight(), Field.Store.YES));

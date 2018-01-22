@@ -8,11 +8,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.PropertyLimitation.Comparison;
-import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.index.WordIndexer;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
@@ -32,12 +28,13 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 		JobStatus status = getStatus(context);
 		WordIndexer wordIndexer = schedulingSupportFacade.getWordIndexer();
 		ModelService modelService = schedulingSupportFacade.getModelService();
+		/*
 		try {
 			status.log("Clearing index");
 			wordIndexer.clear();
 		} catch (EndUserException e) {
 			status.error("Error while clearing index", e);
-		}
+		}*/
 		
 		//Query.after(Word.class).withCustomProperty("common.source", Comparison.LIKE, "http://www.wordnet.dk/%");
 		

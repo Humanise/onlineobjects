@@ -11,12 +11,12 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 public class IndexService {
 	
 	private ConfigurationService configurationService;
-	private String directoryName = "index";
 
 	public static String WORDS_INDEX = "app-words-general";
 	public static String PHOTOS_INDEX = "app-photos-general";
 	
 	private List<IndexManager> managers = Lists.newArrayList();
+	private List<Indexer> indexers;
 	
 	public IndexManager getIndex(String name) {
 		if (Strings.isBlank(name)) {
@@ -36,26 +36,6 @@ public class IndexService {
 		String name = "user_"+user.getId();
 		return getIndex(name);
 	}
-	
-	public void setConfigurationService(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
-	}
-
-	public void setDirectoryName(String directoryName) {
-		this.directoryName = directoryName;
-	}
-
-	public String getDirectoryName() {
-		return directoryName;
-	}
-	
-	public void setManagers(List<IndexManager> managers) {
-		this.managers = managers;
-	}
 
 	public List<String> getIndexNames() {
 		List<String> names = Lists.newArrayList();
@@ -64,5 +44,32 @@ public class IndexService {
 		}
 		return names;
 	}
+	
+	public List<Indexer> getIndexers() {
+		return indexers;
+	}
+	
+	public Long getObjectCount(IndexDescription description) {
+		for (Indexer indexer : indexers) {
+			if (indexer.is(description)) {
+				return indexer.getObjectCount(description);
+			}
+		}
+		return null;
+	}
+	
+	// Wiring...
 
+	public void setIndexers(List<Indexer> indexers) {
+		this.indexers = indexers;
+	}
+
+	
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+	
+	public void setManagers(List<IndexManager> managers) {
+		this.managers = managers;
+	}
 }

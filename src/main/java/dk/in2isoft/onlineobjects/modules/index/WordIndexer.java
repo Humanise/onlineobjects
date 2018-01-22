@@ -6,8 +6,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -15,9 +18,10 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 
-public class WordIndexer implements ModelEventListener {
+public class WordIndexer implements ModelEventListener, Indexer {
 		
 	private WordIndexDocumentBuilder documentBuilder;
+	private ModelService modelService;
 	
 	private IndexManager indexManager;
 	
@@ -27,6 +31,21 @@ public class WordIndexer implements ModelEventListener {
 
 	public void clear() throws EndUserException {
 		indexManager.clear();
+	}
+	
+	@Override
+	public List<IndexDescription> getIndexInstances() {
+		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
+	}
+	
+	@Override
+	public boolean is(IndexDescription description) {
+		return description.getName().equals(indexManager.getDirectoryName());
+	}
+	
+	@Override
+	public long getObjectCount(IndexDescription description) {
+		return modelService.count(Query.after(Word.class));
 	}
 	
 	public void indexWord(Word word) {
@@ -145,5 +164,9 @@ public class WordIndexer implements ModelEventListener {
 	
 	public void setDocumentBuilder(WordIndexDocumentBuilder documentBuilder) {
 		this.documentBuilder = documentBuilder;
+	}
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
 	}
 }

@@ -2,7 +2,7 @@ hui.onReady(function() {
   //return;
   var logo = hui.get('logo');
   var size = logo.clientWidth;
-
+  console.log(size)
 
   if (isMobile() || hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
     return;

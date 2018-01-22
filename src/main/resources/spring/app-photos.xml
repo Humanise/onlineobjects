@@ -50,6 +50,7 @@
    	<bean id="photoIndexer" class="dk.in2isoft.onlineobjects.modules.index.ConfigurableIndexer">
 		<property name="indexManager" ref="photosIndex" />
 		<property name="type" value="dk.in2isoft.onlineobjects.model.Image"/>
+		<property name="modelService" ref="modelService"/>
 		<property name="documentBuilder">
 			<bean class="dk.in2isoft.onlineobjects.modules.index.PhotoIndexDocumentBuilder">
    				<property name="modelService" ref="modelService"/>

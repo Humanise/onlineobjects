@@ -14,6 +14,7 @@
 
 	<bean id="wordIndexer" class="dk.in2isoft.onlineobjects.modules.index.WordIndexer">
 		<property name="indexManager" ref="wordsIndex" />
+		<property name="modelService" ref="modelService" />
 		<property name="documentBuilder">
 			<bean
 				class="dk.in2isoft.onlineobjects.modules.index.WordIndexDocumentBuilder">
