@@ -53,15 +53,15 @@
   <tag>
     <tag-name>textfield</tag-name>
     <component>
-      <component-type>hui.textfield</component-type>
-      <renderer-type>hui.textfield</renderer-type>
+      <component-type>hui.textinput</component-type>
+      <renderer-type>hui.textinput</renderer-type>
     </component>
   </tag>
   <tag>
     <tag-name>textInput</tag-name>
     <component>
-      <component-type>hui.textfield</component-type>
-      <renderer-type>hui.textfield</renderer-type>
+      <component-type>hui.textinput</component-type>
+      <renderer-type>hui.textinput</renderer-type>
     </component>
   </tag>
   <tag>

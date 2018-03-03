@@ -13,11 +13,11 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 
-@Dependencies(js = { "/hui/js/TextField.js" }, css = { "/hui/css/textinput.css" }, requires = { HUIComponent.class })
-@FacesComponent(value = TextFieldComponent.TYPE)
-public class TextFieldComponent extends AbstractComponent {
+@Dependencies(js = { "/hui/js/TextInput.js" }, css = { "/hui/css/textinput.css" }, requires = { HUIComponent.class })
+@FacesComponent(value = TextInputComponent.TYPE)
+public class TextInputComponent extends AbstractComponent {
 
-	static final String TYPE = "hui.textfield";
+	static final String TYPE = "hui.textinput";
 
 	private String name;
 	private String key;
@@ -30,7 +30,7 @@ public class TextFieldComponent extends AbstractComponent {
 	private boolean adaptive = true;
 	private boolean multiline;
 
-	public TextFieldComponent() {
+	public TextInputComponent() {
 		super(TYPE);
 	}
 
@@ -87,7 +87,7 @@ public class TextFieldComponent extends AbstractComponent {
 			writer.endElement("input");
 		}
 		ScriptWriter js = writer.getScriptWriter().startScript();
-		js.startNewObject("hui.ui.TextField").property("element", id);
+		js.startNewObject("hui.ui.TextInput").property("element", id);
 		if (name != null) {
 			js.comma().property("name", name);
 		}

@@ -193,7 +193,7 @@ hui.ui.listen({
 			var win = hui.ui.Window.create({title:'New note',padding:5,variant:'news',width:500});
 			var form = hui.ui.Formula.create();
 			form.buildGroup(null,[
-				{type:'TextField',options:{value:text,multiline:true}}
+				{type:'TextInput',options:{value:text,multiline:true}}
 			])
 			win.add(form);
 			var buttons = hui.ui.Buttons.create({align:'right'});

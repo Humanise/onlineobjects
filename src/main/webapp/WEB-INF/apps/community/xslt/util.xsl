@@ -23,7 +23,6 @@
 		<xsl:choose>
 			<xsl:when test="$development-mode='true'">
 				<script src="{$base-context}/hui/js/hui.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
-				<script src="{$base-context}/hui/lib/swfupload/swfupload.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/ui.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/Toolbar.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/BoundPanel.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
@@ -37,7 +36,7 @@
 				<script src="{$base-context}/hui/js/Menu.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/ColorPicker.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/Overlay.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
-				<script src="{$base-context}/hui/js/TextField.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
+				<script src="{$base-context}/hui/js/TextInput.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/Box.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 			</xsl:when>
 			<xsl:otherwise>

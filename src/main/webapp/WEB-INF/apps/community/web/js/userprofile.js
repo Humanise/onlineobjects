@@ -57,10 +57,10 @@ oo.community.UserProfile.prototype = {
 		cancel.listen({$click:this.cancelEditor.bind(this)});
 		update.listen({$click:this.saveEditor.bind(this)});
 		var group = form.buildGroup({above:false},[
-			{type:'TextField',options:{label:'Fornavn:',key:'givenName'}},
-			{type:'TextField',options:{label:'Mellemnavn:',key:'additionalName'}},
-			{type:'TextField',options:{label:'Efternavn:',key:'familyName'}},
-			{type:'TextField',options:{label:'Om mig:',key:'resume',lines:5}},
+			{type:'TextInput',options:{label:'Fornavn:',key:'givenName'}},
+			{type:'TextInput',options:{label:'Mellemnavn:',key:'additionalName'}},
+			{type:'TextInput',options:{label:'Efternavn:',key:'familyName'}},
+			{type:'TextInput',options:{label:'Om mig:',key:'resume',lines:5}},
 			{type:'DropDown',options:{label:'Køn:',key:'sex',items:[{value:null,title:'Ukendt'},{value:true,title:'Mand'},{value:false,title:'Kvinde'}]}},
 			{type:'TokenField',options:{label:'Interesser:',key:'interests',width:80}},
 			{type:'TokenField',options:{label:'Yndlingsmusik:',key:'music',width:80}}

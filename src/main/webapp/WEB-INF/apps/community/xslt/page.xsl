@@ -20,7 +20,6 @@
 		<xsl:choose>
 			<xsl:when test="$development-mode='true'">
 				<link rel="stylesheet" href="{$base-context}/hui/css/dev.css" type="text/css" media="screen" title="front" charset="utf-8"/>
-				<script src="{$base-context}/hui/lib/swfupload/swfupload.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/hui.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/hui_animation.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/ui.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
@@ -45,7 +44,7 @@
 				<script src="{$base-context}/hui/js/Gallery.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/Overflow.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/LocationPicker.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
-				<script src="{$base-context}/hui/js/TextField.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
+				<script src="{$base-context}/hui/js/TextInput.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/TokenField.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 				<script src="{$base-context}/hui/js/Input.js" type="text/javascript" charset="utf-8"><xsl:comment/></script>
 			</xsl:when>

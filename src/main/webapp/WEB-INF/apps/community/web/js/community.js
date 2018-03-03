@@ -318,7 +318,7 @@ oo.community.Chrome.Login.prototype = {
 			box.addToDocument();
 			var form = this.recoverForm = hui.ui.Formula.create();
 			var group = form.buildGroup(null,[
-				{type:'TextField',options:{label:'Brugernavn eller e-post-adresse',key:'usernameOrEmail'}}
+				{type:'TextInput',options:{label:'Brugernavn eller e-post-adresse',key:'usernameOrEmail'}}
 			]);
 			var cancel = hui.ui.Button.create({text:'Annuller'});
 			cancel.listen({$click:function() {box.hide()}});

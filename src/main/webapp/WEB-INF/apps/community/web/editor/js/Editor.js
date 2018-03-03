@@ -265,9 +265,9 @@ OO.Editor.prototype = {
 			var f = hui.ui.Formula.create({name:'pageInfoForm'});
 			w.add(f);
 			var g = f.buildGroup({above:true},[
-				{type:'TextField',options:{label:'Website titel',key:'siteTitle'}},
-				{type:'TextField',options:{label:'Sidens titel',key:'pageTitle'}},
-				{type:'TextField',options:{label:'Menupunkt',key:'nodeTitle'}},
+				{type:'TextInput',options:{label:'Website titel',key:'siteTitle'}},
+				{type:'TextInput',options:{label:'Sidens titel',key:'pageTitle'}},
+				{type:'TextInput',options:{label:'Menupunkt',key:'nodeTitle'}},
 				{type:'TokenField',options:{label:'Nøgleord',key:'tags'}}
 			]);
 			var b = g.createButtons({top:10});

@@ -48,7 +48,7 @@ public class DropDownComponent extends AbstractComponent {
 		ClassBuilder cls = new ClassBuilder("hui_dropdown");
 		String id = getClientId();
 		writer.startVoidA(cls).withId(id);
-		writer.startSpan().startSpan().startStrong().endStrong().endSpan().endSpan();
+		writer.startSpan("hui_dropdown_text").endSpan();
 		writer.endA();
 		ScriptWriter js = writer.getScriptWriter().startScript();
 		

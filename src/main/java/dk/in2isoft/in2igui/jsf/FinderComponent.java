@@ -19,7 +19,7 @@ import dk.in2isoft.in2igui.data.FinderConfiguration.FinderSearchConfiguration;
 		ListComponent.class, WindowComponent.class, ButtonComponent.class,
 		SearchFieldComponent.class, SourceComponent.class,
 		UploadComponent.class, StructureComponent.class, OverflowComponent.class,
-		BarComponent.class, SelectionComponent.class, BoundPanelComponent.class, TextFieldComponent.class })
+		BarComponent.class, SelectionComponent.class, BoundPanelComponent.class, TextInputComponent.class })
 public class FinderComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.finder";

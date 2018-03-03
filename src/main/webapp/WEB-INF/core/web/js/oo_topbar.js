@@ -134,8 +134,8 @@ oo.TopBar.prototype = {
 
       var form = this._loginForm = hui.ui.Formula.create({name:'topBarLoginForm'});
       form.buildGroup(null,[
-        {type:'TextField',label:'Username',options:{key:'username'}},
-        {type:'TextField',label:'Password',options:{secret:true,key:'password'}}
+        {type:'TextInput',label:'Username',options:{key:'username'}},
+        {type:'TextInput',label:'Password',options:{secret:true,key:'password'}}
       ]);
       p.add(form);
       var login = hui.ui.Button.create({text:'Log in',variant:'paper',name:'topBarLoginButton'});
@@ -192,7 +192,7 @@ oo.TopBar.prototype = {
       box.add(hui.build('div',{'class':'op_topbar_forgot_intro',text:'Please provide either your username or your e-mail. We will then mail you instructions on how to change your password.'}))
       var form = this._passwordRecoveryForm = hui.ui.Formula.create();
       var group = form.buildGroup(null,[
-        {type:'TextField',label:'Username or e-mail:',options:{key:'usernameOrMail',name:'ooTopBarUsernameOrMail'}}
+        {type:'TextInput',label:'Username or e-mail:',options:{key:'usernameOrMail',name:'ooTopBarUsernameOrMail'}}
       ]);
       var buttons = group.createButtons();
       var cancel = hui.ui.Button.create({text:'Cancel'});

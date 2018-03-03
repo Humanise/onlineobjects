@@ -171,8 +171,8 @@
     	<component-class>dk.in2isoft.in2igui.jsf.ButtonsComponent</component-class>
   	</component>
     <component>
-	    <component-type>hui.textfield</component-type>
-    	<component-class>dk.in2isoft.in2igui.jsf.TextFieldComponent</component-class>
+	    <component-type>hui.textinput</component-type>
+    	<component-class>dk.in2isoft.in2igui.jsf.TextInputComponent</component-class>
   	</component>
     <component>
 	    <component-type>hui.searchfield</component-type>

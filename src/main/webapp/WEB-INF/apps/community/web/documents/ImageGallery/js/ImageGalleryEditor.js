@@ -312,8 +312,8 @@ OO.Editor.ImageGallery.prototype = {
 			panel.add(formula);
 			var group = formula.createGroup();
 
-			group.add(hui.ui.TextField.create({name:'imageEditorTitle',label:'Titel'}));
-			group.add(hui.ui.TextField.create({name:'imageEditorDescription',label:'Beskrivelse',lines:4}));
+			group.add(hui.ui.TextInput.create({name:'imageEditorTitle',label:'Titel'}));
+			group.add(hui.ui.TextInput.create({name:'imageEditorDescription',label:'Beskrivelse',lines:4}));
 			group.add(hui.ui.TokenField.create({name:'imageEditorTags',label:'Nøgleord'}));
 			//group.add(hui.ui.Formula.Location.create({name:'imageEditorLocation',label:'Lokation'}));
 			var buttons = hui.ui.Buttons.create();

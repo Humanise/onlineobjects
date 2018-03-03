@@ -33,7 +33,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.in2igui.jsf.ButtonComponent;
 import dk.in2isoft.in2igui.jsf.LocationInputComponent;
-import dk.in2isoft.in2igui.jsf.TextFieldComponent;
+import dk.in2isoft.in2igui.jsf.TextInputComponent;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.ui.HUIService;
 import nu.xom.Attribute;
@@ -106,7 +106,7 @@ public class TestComponent extends AbstractSpringTestCase {
 
 	@Test
 	public void testTextInput() throws IOException {
-		TextFieldComponent component = new TextFieldComponent();
+		TextInputComponent component = new TextInputComponent();
 		component.setId("myId");
 		
 		String jsfRendering = render(component);

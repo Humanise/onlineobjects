@@ -5,11 +5,11 @@ oo.community.ImgeView = {
 		if (!this.created) {
 			var form = this.imageFormula = hui.ui.Formula.create();
 			var group = form.buildGroup({above:false},[
-				{type:'TextField',options:{label:'Titel:',key:'name'}},
-				{type:'TextField',options:{label:'Beskrivelse:',key:'description',lines:5}},
-				{type:'DateTimeField',options:{label:'Dato:',key:'taken'}},
+				{type:'TextInput',options:{label:'Titel:',key:'name'}},
+				{type:'TextInput',options:{label:'Beskrivelse:',key:'description',lines:5}},
+				{type:'DateTimeInput',options:{label:'Dato:',key:'taken'}},
 				{type:'TokenField',options:{label:'Nøgleord:',key:'tags',width:80}},
-				{type:'LocationField',options:{label:'Lokation',key:'location'}}
+				{type:'LocationInput',options:{label:'Lokation',key:'location'}}
 			]);
 			var buttons = group.createButtons();
 			buttons.add(hui.ui.Button.create({text:'Annuller',name:'cancelEditImage'}));
