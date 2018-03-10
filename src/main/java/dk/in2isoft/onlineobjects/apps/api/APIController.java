@@ -346,13 +346,22 @@ public class APIController extends APIControllerBase {
 		User user = getUserForSecretKey(request);
 		String url = request.getString("url", "An URL parameters must be provided");
 		String quote = request.getString("quote");
+		Long questionId = request.getLong("questionId", null);
 
 		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
 
 		if (Strings.isNotBlank(quote)) {
-			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
+			Statement statement = knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
+			if (questionId != null) {
+				Question question = modelService.getRequired(Question.class, questionId, user);
+				Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
+				if (!found.isPresent()) {
+					modelService.createRelation(statement, question, Relation.ANSWERS, user);
+					modelService.commit();
+				}
+			}
+
 		}
-		
 		return knowledgeService.getAddressPerspective(internetAddress, new UserSession(user));
 	}
 
