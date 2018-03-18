@@ -7,7 +7,10 @@ import dk.in2isoft.commons.jsf.Dependencies;
 
 @FacesComponent(value = HUIComponent.TYPE)
 // TODO Overlay and button are added since they are used for error reporting
-@Dependencies(js = { "/hui/js/hui.js", "/hui/js/ui.js", "/hui/js/Component.js"}, uses = {OverlayComponent.class, ButtonComponent.class}) 
+@Dependencies(
+	js = { "/hui/js/hui.js", "/hui/js/ui.js", "/hui/js/Component.js"},
+	uses = {OverlayComponent.class, ButtonComponent.class}
+) 
 public class HUIComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.ui";

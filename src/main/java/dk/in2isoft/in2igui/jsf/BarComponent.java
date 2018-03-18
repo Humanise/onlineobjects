@@ -45,8 +45,7 @@ public class BarComponent extends AbstractComponent {
 	
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
-		out.startDiv(variant!=null ? "hui_bar hui_bar_"+variant : "hui_bar");
-		out.startDiv("hui_bar_body");
+		out.startDiv(variant!=null ? "hui_bar hui_bar-"+variant : "hui_bar");
 		if (contentWidth>0) {
 			out.withStyle(new StyleBuilder().withWidth(contentWidth).withMargin("0 auto"));
 		}
@@ -60,8 +59,8 @@ public class BarComponent extends AbstractComponent {
 	}
 	
 	@Override
-	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
-		writer.endDiv().endDiv().endDiv();
+	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
+		out.endDiv().endDiv();
 	}
 
 	public void setText(String text) {

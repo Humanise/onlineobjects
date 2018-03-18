@@ -13,7 +13,12 @@ import dk.in2isoft.commons.jsf.StyleBuilder;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value = WindowComponent.TYPE)
-@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Window.js" }, css = { "/hui/css/window.css" }, requires = {HUIComponent.class})
+@Dependencies(
+	js = { "/hui/js/hui_animation.js", "/hui/js/Window.js" },
+	css = { "/hui/css/window.css" },
+	requires = { HUIComponent.class },
+	uses = { SymbolComponent.class }
+)
 public class WindowComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.window";
@@ -50,10 +55,10 @@ public class WindowComponent extends AbstractComponent {
 		out.startDiv(cls).withId(id).withStyle("display:none;");
 		out.startDiv("hui_window_front");
 		out.startDiv("hui_window_close").endDiv();
-		out.startDiv("hui_window_titlebar").startDiv().startDiv();
+		out.startDiv("hui_window_titlebar");
 		out.startSpan("hui_window_title").text(title).endSpan();
-		out.endDiv().endDiv().endDiv();
-		out.startDiv("hui_window_content").startDiv("hui_window_content").startDiv("hui_window_body");
+		out.endDiv();
+		out.startDiv("hui_window_body");
 		StyleBuilder style = new StyleBuilder();
 		if (width > 0) {
 			style.withWidth(width);
@@ -68,8 +73,7 @@ public class WindowComponent extends AbstractComponent {
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
-		out.endDiv().endDiv().endDiv();
-		out.startDiv("hui_window_bottom").startDiv("hui_window_bottom").startDiv("hui_window_bottom").endDiv().endDiv().endDiv();
+		out.endDiv();
 		out.endDiv();
 		out.endDiv();
 		ScriptWriter js = out.getScriptWriter().startScript();

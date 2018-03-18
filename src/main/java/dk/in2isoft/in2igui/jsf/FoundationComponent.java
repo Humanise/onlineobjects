@@ -13,7 +13,12 @@ import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=FoundationComponent.TYPE)
-@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Foundation.js" }, css = { "/hui/css/foundation.css" }, requires = { HUIComponent.class })
+@Dependencies(
+	js = { "/hui/js/hui_animation.js", "/hui/js/Foundation.js" },
+	css = { "/hui/css/foundation.css" },
+	requires = { HUIComponent.class },
+	uses = { SymbolComponent.class }
+)
 public class FoundationComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.foundation";
@@ -41,8 +46,12 @@ public class FoundationComponent extends AbstractComponent {
 		String id = getClientId();
 		out.startDiv("hui_foundation").withId(id);
 
-		out.startDiv("hui_foundation_overlay");
 		out.startDiv("hui_foundation_overlay_toggle").endDiv();
+		out.startDiv("hui_foundation_overlay");
+		out.startDiv("hui_foundation_overlay_title");
+		out.startSpan("hui_foundation_back").text("Back").endSpan();
+		out.startSpan("hui_foundation_overlay_close").endSpan();
+		out.endDiv();
 		{
 			out.startDiv("hui_foundation_navigation hui_context_sidebar");
 			out.startDiv("hui_foundation_resize hui_foundation_resize_navigation").endDiv();
@@ -58,10 +67,10 @@ public class FoundationComponent extends AbstractComponent {
 			out.endDiv();
 		}
 		out.endDiv();
-		
+		out.startDiv("hui_foundation_main");
 		writeFacet(context, out, "actions");
 		writeFacet(context, out, "content");
-
+		out.endDiv();
 		{
 			out.startDiv("hui_foundation_details");
 			out.startDiv("hui_foundation_details_toggle").endDiv();
