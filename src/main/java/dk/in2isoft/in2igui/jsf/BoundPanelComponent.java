@@ -11,6 +11,7 @@ import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
+import dk.in2isoft.commons.lang.Strings;
 
 @FacesComponent(value=BoundPanelComponent.TYPE)
 @Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/BoundPanel.js" }, css = { "/hui/css/boundpanel.css" }, requires = { HUIComponent.class })
@@ -47,10 +48,12 @@ public class BoundPanelComponent extends AbstractComponent {
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
-		out.startDiv().withClass(ClassBuilder.with("hui_boundpanel").add("hui_boundpanel", variant)).withId(id).withStyle("display:none;");
+		ClassBuilder cls = ClassBuilder.with("hui_boundpanel");
+		if (Strings.isNotBlank(variant)) {
+			cls.add("hui_boundpanel-" + variant);
+		}
+		out.startDiv().withClass(cls).withId(id).withStyle("display:none;");
 		out.startDiv("hui_boundpanel_arrow").endDiv();
-		out.startDiv("hui_boundpanel_top").startDiv().startDiv().endDiv().endDiv().endDiv();
-		out.startDiv("hui_boundpanel_body").startDiv("hui_boundpanel_body").startDiv("hui_boundpanel_body");
 		out.startDiv("hui_boundpanel_content");
 		if (width>0) {
 			out.withStyle("width:"+width+"px;");
@@ -60,8 +63,6 @@ public class BoundPanelComponent extends AbstractComponent {
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();
-		out.endDiv().endDiv().endDiv();
-		out.startDiv("hui_boundpanel_bottom").startDiv().startDiv().endDiv().endDiv().endDiv();
 		out.endDiv();
 		ScriptWriter js = out.getScriptWriter();
 		js.startScript();

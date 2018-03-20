@@ -61,11 +61,11 @@ public class FoundationComponent extends AbstractComponent {
 		}
 		{
 			out.startDiv("hui_foundation_results");
-			out.startDiv("hui_foundation_resize hui_foundation_resize_results").endDiv();
 			UIComponent facet = getFacet("results");
 			if (facet!=null) { facet.encodeAll(context); }
 			out.endDiv();
 		}
+		out.startDiv("hui_foundation_resize hui_foundation_resize_overlay").endDiv();
 		out.endDiv();
 		out.startDiv("hui_foundation_main");
 		writeFacet(context, out, "actions");
