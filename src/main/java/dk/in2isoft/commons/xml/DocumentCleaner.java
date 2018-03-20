@@ -49,7 +49,7 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("code","tt","kbd","samp","var","time"));
 		validTags.addAll(Sets.newHashSet("table","tbody","tr","th","td","thead","tfoot","colgroup","col","caption"));
 		validTags.addAll(Sets.newHashSet("dl","dt","dd"));
-		validTags.addAll(Sets.newHashSet("ul","ol","li"));
+		validTags.addAll(Sets.newHashSet("ul","ol","menu","li")); // TODO: menu is deprecated, translate it into ul
 		validTags.addAll(Sets.newHashSet("blockquote","figure","figcaption","pre"));
 		
 		bannedTags.add("script");
