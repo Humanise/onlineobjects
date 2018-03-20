@@ -1,17 +1,17 @@
 @import 'shared';
 
-@include when {
+@include if {
   .reader_analyze {
     background: #fff;
     margin: 20px;
     padding: 20px;
     border: 1px solid #ddd;
-    
+
     &_title {
       border-bottom: 1px solid #eee;
       margin: 0 0 20px;
     }
-    
+
     &_block {
       border: 1px solid #eee;
       margin: 20px 0;
@@ -20,7 +20,7 @@
       &_title {
         margin: 0;
         border-bottom: 1px solid #eee;
-        
+
       }
     }
 
@@ -40,7 +40,7 @@
     &_words {
       padding: 5px 0;
     }
-    
+
     &_word {
       background: #eee;
       border-radius: 3px;
@@ -50,7 +50,7 @@
       line-height: 1;
       font-size: 14px;
     }
-    
+
     &_part {
       display: inline-block;
       margin: 2px 1px 11px;
@@ -61,7 +61,7 @@
       min-width: 20px;
       text-align: center;
       color: #333;
-      
+
       &.is-significant {
         font-weight: 800;
         color: #000;

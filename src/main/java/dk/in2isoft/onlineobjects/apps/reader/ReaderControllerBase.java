@@ -50,7 +50,6 @@ public abstract class ReaderControllerBase extends ApplicationController {
 		super("reader");
 		addJsfMatcher("/", "reader.xhtml");
 		addJsfMatcher("/<language>", "reader.xhtml");
-		addJsfMatcher("/<language>/alt", "reader_alt.xhtml");
 		addJsfMatcher("/<language>/analyze", "analyze.xhtml");
 		addJsfMatcher("/<language>/extract", "extract.xhtml");
 	}

@@ -1,12 +1,12 @@
 @import 'shared';
 
 html,body {
-	position:fixed;
-	overflow:hidden;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	top: 0;
+  position:fixed;
+  overflow:hidden;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 0;
 }
 
 @import 'parts/reader_layout';
@@ -14,4 +14,5 @@ html,body {
 @import 'parts/reader_list';
 @import 'parts/reader_selection';
 @import 'parts/reader_meta';
-
+@import 'parts/reader_head';
+@import 'parts/reader_segmented';

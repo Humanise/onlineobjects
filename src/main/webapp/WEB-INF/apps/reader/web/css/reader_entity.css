@@ -1,14 +1,3 @@
-.reader_entity {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  /*display: none;*/
-  z-index: 200;
-  background-color: #FFFCEC;
-  overflow: auto; }
-
 .reader_entity_title {
   font-family: "Merriweather";
   margin: 25px 50px;

@@ -52,6 +52,7 @@ var reader = {
   _activeViewer : null,
 
   view : function(options) {
+    hui.ui.get('foundation').disposeOverlay();
     if (options.type == 'Statement' && options.addressId) {
       options.id = options.addressId;
       options.type = 'InternetAddress';
@@ -150,14 +151,17 @@ var reader = {
 
   $valueChanged$tags : function() {
     hui.ui.get('listView').reset();
+    hui.ui.get('foundation').submerge();
   },
 
   $valueChanged$subsets : function() {
     hui.ui.get('listView').reset();
+    hui.ui.get('foundation').submerge();
   },
 
   $valueChanged$types : function() {
     hui.ui.get('listView').reset();
+    hui.ui.get('foundation').submerge();
   },
 
   // List...

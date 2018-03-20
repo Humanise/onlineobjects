@@ -8,157 +8,137 @@
   xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
   <ui:composition template="templates/layout.xhtml">
-
-    <ui:define name="sidebar">
-      <div class="reader_sidebar">
-        <gui:rows>
-          <gui:row height="content">
-            <div class="reader_sidebar_block">
-              <o:selection name="subsets" value="everything">
-                <gui:source name="contextsSource" url="#{readerView.baseContext}/getContextOptions"/>
-              </o:selection>
-            </div>
-            <div class="reader_sidebar_block">
-              <h3 class="reader_sidebar_title">Types</h3>
-              <o:selection name="types" value="any">
-                <gui:source name="typesSource" url="#{readerView.baseContext}/getTypeOptions"/>
-              </o:selection>
-            </div>
-            <div class="reader_sidebar_block reader_sidebar_feeds">
-              <h3 class="reader_sidebar_title">Feeds</h3>
-                <o:link name="addFeed" plain="true" styleClass="reader_sidebar_feeds_add">
-                  <o:icon icon="add_line"/>
-                </o:link>
-              <o:selection name="feeds">
-                <gui:source name="feedSource" url="#{readerView.baseContext}/getFeeds"/>
-              </o:selection>
-            </div>
-          </gui:row>
-          <gui:row>
-            <gui:overflow full="true">
+    <ui:define name="body">
+    <gui:foundation name="foundation">
+      <f:facet name="navigation">
+        <div class="reader_sidebar">
+          <gui:rows>
+            <gui:row height="content">
               <div class="reader_sidebar_block">
-                <h3 class="reader_sidebar_title">Tags</h3>
-                <div style="margin: 0 -10px">
-                  <div style="padding: 0 10px">
-                    <o:selection name="tags">
-                      <gui:source name="tagSource" url="#{readerView.baseContext}/getWordCloud"/>
-                    </o:selection>
+                <o:selection name="subsets" value="everything">
+                  <gui:source name="contextsSource" url="#{readerView.baseContext}/getContextOptions"/>
+                </o:selection>
+              </div>
+              <div class="reader_sidebar_block">
+                <h3 class="reader_sidebar_title">Types</h3>
+                <o:selection name="types" value="any">
+                  <gui:source name="typesSource" url="#{readerView.baseContext}/getTypeOptions"/>
+                </o:selection>
+              </div>
+              <div class="reader_sidebar_block reader_sidebar_feeds">
+                <h3 class="reader_sidebar_title">Feeds</h3>
+                  <o:link name="addFeed" plain="true" styleClass="reader_sidebar_feeds_add">
+                    <o:icon icon="add_line"/>
+                  </o:link>
+                <o:selection name="feeds">
+                  <gui:source name="feedSource" url="#{readerView.baseContext}/getFeeds"/>
+                </o:selection>
+              </div>
+            </gui:row>
+            <gui:row>
+              <gui:overflow full="true">
+                <div class="reader_sidebar_block">
+                  <h3 class="reader_sidebar_title">Tags</h3>
+                  <div style="margin: 0 -10px">
+                    <div style="padding: 0 10px">
+                      <o:selection name="tags">
+                        <gui:source name="tagSource" url="#{readerView.baseContext}/getWordCloud"/>
+                      </o:selection>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </gui:overflow>
-          </gui:row>
-        </gui:rows>
-      </div>
-    </ui:define>
-
-    <ui:define name="body">
-      <div class="reader">
-      </div>
-    </ui:define>
-
-    <ui:define name="list">
-
-      <gui:source name="listSource" url="#{readerView.baseContext}/list">
-        <gui:parameter key="page" value="@listView.page"/>
-        <gui:parameter key="pageSize" value="@listView.pageSize"/>
-        <gui:parameter key="text" value="@search.value"/>
-        <gui:parameter key="tags" value="@tags.value"/>
-        <gui:parameter key="subset" value="@subsets.value"/>
-        <gui:parameter key="type" value="@types.value"/>
-      </gui:source>
-
-
-      <div class="reader_list_top">
-        <div class="reader_list_actions">
-          <o:link name="addButton" plain="true" styleClass="reader_list_action">
-            <o:icon icon="add_line" size="20"/>
-            <span class="reader_list_action_text">Add page</span>
-          </o:link>
-          <o:link name="settingsIcon" plain="true" styleClass="reader_list_action">
-            <o:icon icon="gear_line" size="20"/>
-          </o:link>
+              </gui:overflow>
+            </gui:row>
+          </gui:rows>
         </div>
+      </f:facet>
+      <f:facet name="results">
+        <gui:source name="listSource" url="#{readerView.baseContext}/list">
+          <gui:parameter key="page" value="@listView.page"/>
+          <gui:parameter key="pageSize" value="@listView.pageSize"/>
+          <gui:parameter key="text" value="@search.value"/>
+          <gui:parameter key="tags" value="@tags.value"/>
+          <gui:parameter key="subset" value="@subsets.value"/>
+          <gui:parameter key="type" value="@types.value"/>
+        </gui:source>
 
-        <div class="reader_list_search">
+
+        <div class="reader_list_top">
           <gui:searchfield name="search" placeholder="Search" adaptive="true"/>
         </div>
-      </div>
-      <div class="reader_list_middle">
-      <gui:overflow full="true" shadowVariant="white">
-        <div id="my_view" class="oo_view">
-          <div class="oo_spinner"></div>
+        <div class="reader_list_middle">
+          <gui:overflow full="true" shadowVariant="white">
+            <div id="my_view" class="oo_view">
+              <div class="oo_spinner"></div>
+            </div>
+          </gui:overflow>
         </div>
-      </gui:overflow>
-      </div>
-    </ui:define>
+      </f:facet>
 
-    <ui:define name="viewer">
-      <div class="reader_view js_internetaddress_viewer">
-          <div class="reader_view_head">
-            <div class="js_internetaddress_header reader_view_head_info">
-              <div class="reader_view_title js-viewer-title"></div>
-              <div class="reader_view_url"><a class="reader_view_link js-viewer-link js_reader_action"></a></div>
-            </div>
-              <o:link name="closeAddress" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
-              <div class="reader_view_head_actions">
-                <o:icon icon="more" size="16" name="analyzeButton" styleClass="reader_view_head_action"/>
-                <o:icon icon="info_light" size="16" name="infoButton" styleClass="reader_view_head_action"/>
-                <o:icon icon="relations_line" size="16" name="inspectButton" styleClass="reader_view_head_action"/>
-                <o:icon icon="inbox_line" size="16" name="inboxButton" styleClass="reader_view_head_action"/>
-                <o:icon icon="star_line" size="16" name="favoriteButton" styleClass="reader_view_head_action"/>
-                <span class="reader_view_segmented js_internetaddress_viewselector" id="reader_viewer_view">
-                  <a href="#" data-value="text" class="reader_view_segmented_item">Text</a>
-                  <a href="#" data-value="formatted" class="reader_view_segmented_item reader_view_segmented_item-selected">Formatted</a>
-                  <a href="#" data-value="web" class="reader_view_segmented_item">Web</a>
-                </span>
-            </div>
-          </div>
+      <f:facet name="actions">
+        <gui:bar>
+          <o:link name="addButton" plain="true" styleClass="reader_bar_item">
+            <o:icon icon="add_line" size="16"/>
+            <span class="reader_bar_item_text">Add page</span>
+          </o:link>
+          <o:link name="settingsIcon" plain="true" styleClass="reader_bar_item">
+            <o:icon icon="gear_line" size="16"/>
+          </o:link>
+        </gui:bar>
+      </f:facet>
+
+      <f:facet name="content">
+        <div class="reader_view js-internetaddress">
+
+          <ui:include src="parts/head.xhtml"/>
+
           <div class="reader_view_content reader_view_content_formatted is-show-formatted js-viewer-content">
             <div class="oo_spinner" id="viewer_spinner"></div>
-            <div class="reader_view_perpective reader_view_perpective_formatted">
+
+            <div class="reader_view_perspective reader_view_perspective_formatted">
               <div class="js-viewer-formatted reader_view_formatted"></div>
               <div class="js-viewer-footer reader_view_footer"></div>
             </div>
-            <div class="reader_view_perpective reader_view_perpective_text">
+
+            <div class="reader_view_perspective reader_view_perspective_text">
               <div class="reader_view_text js-viewer-text"></div>
             </div>
-            <iframe class="reader_view_perpective reader_view_perpective_web" id="viewer_frame"></iframe>
+
+            <iframe class="reader_view_perspective reader_view_perspective_web js-viewer-frame"></iframe>
+
           </div>
-      </div>
+        </div>
 
-      <div class="reader_view reader_entity js_question">
-        <o:link name="closeQuestion" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
-        <div class="reader_entity_title js_question_text"></div>
-        <div class="reader_entity_actions">
-          <o:icon icon="info_light" size="16" name="questionInfo"/>
-          <o:icon icon="inbox_line" size="16" name="questionInbox"/>
-          <o:icon icon="star_line" size="16" name="questionFavorite"/>
+        <div class="reader_view reader_entity js_question">
+          <o:link name="closeQuestion" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
+          <div class="reader_entity_title js_question_text"></div>
+          <div class="reader_entity_actions">
+            <o:icon icon="info_light" size="16" name="questionInfo"/>
+            <o:icon icon="inbox_line" size="16" name="questionInbox"/>
+            <o:icon icon="star_line" size="16" name="questionFavorite"/>
+          </div>
+          <div class="reader_view_body reader_entity_body js_question_body"></div>
         </div>
-        <div class="reader_view_body reader_entity_body js_question_body">
-        </div>
-      </div>
 
-      <div class="reader_view reader_entity js_hypothesis">
-        <o:link name="closeHypothesis" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
-        <div class="reader_entity_title js_hypothesis_text"></div>
-        <div class="reader_entity_actions">
-          <o:icon icon="info_light" size="16" name="hypothesisInfo"/>
-          <o:icon icon="inbox_line" size="16" name="hypothesisInbox"/>
-          <o:icon icon="star_line" size="16" name="hypothesisFavorite"/>
+        <div class="reader_view reader_entity js_hypothesis">
+          <o:link name="closeHypothesis" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
+          <div class="reader_entity_title js_hypothesis_text"></div>
+          <div class="reader_entity_actions">
+            <o:icon icon="info_light" size="16" name="hypothesisInfo"/>
+            <o:icon icon="inbox_line" size="16" name="hypothesisInbox"/>
+            <o:icon icon="star_line" size="16" name="hypothesisFavorite"/>
+          </div>
+          <div class="reader_entity_body js_hypothesis_body"></div>
         </div>
-        <div class="reader_view_body reader_entity_body js_hypothesis_body">
-        </div>
-      </div>
+      </f:facet>
 
+      <f:facet name="details">
+        <div class="reader_meta js-internetaddress-meta"></div>
+      </f:facet>
+
+    </gui:foundation>
     </ui:define>
 
-
-    <ui:define name="info">
-      <div class="reader_meta js-internetaddress-meta">
-
-      </div>
-    </ui:define>
 
     <ui:define name="bottom">
 

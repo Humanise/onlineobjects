@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+  <ui:composition>
+    <div class="reader_head">
+      <div class="reader_head_title js-viewer-title"></div>
+      <div class="reader_head_url"><a class="js-viewer-link js_reader_action"></a></div>
+      <o:link name="closeAddress" plain="true" styleClass="reader_view_close oo_icon oo_icon_close_line"/>
+
+      <div class="reader_head_actions">
+        <o:icon icon="more" size="16" name="analyzeButton" styleClass="reader_head_action"/>
+        <o:icon icon="info_light" size="16" name="infoButton" styleClass="reader_head_action"/>
+        <o:icon icon="relations_line" size="16" name="inspectButton" styleClass="reader_head_action"/>
+        <o:icon icon="inbox_line" size="16" name="inboxButton" styleClass="reader_head_action"/>
+        <o:icon icon="star_line" size="16" name="favoriteButton" styleClass="reader_head_action"/>
+
+        <span class="reader_segmented js_internetaddress_viewselector" id="reader_viewer_view">
+          <a href="#" data-value="text" class="reader_segmented_item">Text</a>
+          <a href="#" data-value="formatted" class="reader_segmented_item is-selected">Formatted</a>
+          <a href="#" data-value="web" class="reader_segmented_item">Web</a>
+        </span>
+      </div>
+    </div>
+  </ui:composition>
+</html>

@@ -1,18 +1,7 @@
 @import 'shared';
 
 .reader_entity {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	/*display: none;*/
-	z-index: 200;
-  background-color: #FFFCEC;
-  overflow: auto;
-}
 
-.reader_entity {
   &_title {
     font-family: $font-serif;
     margin: 25px 50px;
@@ -22,7 +11,7 @@
     color: $view-text-color;
     font-weight: 600;
   }
-  
+
   &_actions {
     text-align: center;
 
@@ -38,26 +27,26 @@
       &:active {
         transform: scale(.8);
       }
-    
+
       &.oo_icon-selected {
         color: $view-action-selected-color;
-      
+
         &:hover {
           color: $view-action-selected-color-hover;
         }
       }
     }
   }
-  
+
   &_body {
     padding: 20px;
     font-family: $font-serif;
   }
-  
+
   &_list {
     margin-bottom: 30px;
   }
-  
+
   &_list_empty {
     margin: 0;
     color: $view-dimmed-color;
@@ -76,7 +65,7 @@
     text-transform: uppercase;
     letter-spacing: .5px;
   }
-  
+
   &_item
   {
     margin: 10px auto;
@@ -122,7 +111,7 @@
       cursor: pointer;
     }
   }
-  
+
   &_item_info {
     margin: 10px 0 0 20%;
     text-align: right;
@@ -131,7 +120,7 @@
     font-family: $default-font-family;
     color: $view-dimmed-color;
   }
-  
+
   &_item_link
   {
     color: inherit;
@@ -146,6 +135,6 @@
         color: $view-action-color-hover;
       }
     }
-  
+
   }
 }

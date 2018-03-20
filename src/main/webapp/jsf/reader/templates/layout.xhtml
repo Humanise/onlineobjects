@@ -19,22 +19,11 @@
     </o:head>
     <o:body>
       <o:topBar/>
-      <div class="reader_layout">
-        <div class="reader_layout_navigation">
-          <ui:insert name="sidebar"/>
-        </div>
-        <div class="reader_layout_list">
-          <ui:insert name="list"/>
-        </div>
-        <div class="reader_layout_viewer">
-          <ui:insert name="viewer"/>
-        </div>
-        <div class="reader_layout_info">
-          <ui:insert name="info"/>
-        </div>
+      <div style="position: fixed; top: 31px; left: 0; right: 0; bottom: 0; border-top: 1px solid #eee;">
+        <ui:insert name="body"/>
       </div>
-        <ui:insert name="bottom"/>
-        <o:analytics/>
+      <ui:insert name="bottom"/>
+      <o:analytics/>
     </o:body>
   </html>
 
