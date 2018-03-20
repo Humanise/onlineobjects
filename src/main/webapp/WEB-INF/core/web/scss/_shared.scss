@@ -14,17 +14,6 @@ $monospace-font-family: Monaco,monospace;
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#{$from}, endColorstr=#{$to});
 }
 
-@mixin when($params:()) {
-  @if (map-has-key($params, width)) {
-    @media screen and (min-width: #{map-get($params,'width')}) {
-      @content;
-    }
-  }
-  @else {
-    @content;
-  }
-}
-
 @mixin if($params:()) {
   @if (map-has-key($params, width)) {
     @media screen and (min-width: #{map-get($params,'width')}) {

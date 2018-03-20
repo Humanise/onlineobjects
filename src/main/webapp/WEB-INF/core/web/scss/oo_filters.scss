@@ -1,6 +1,6 @@
 @import 'shared';
 
-@include when {
+@include if {
   .oo_filters_bar {
     font-size: 0;
     margin: 5px -5px 5px -5px;
@@ -176,7 +176,7 @@
   }
 }
 
-@include when(( width: 760px )) {
+@include if(( width: 760px )) {
   .oo_filters_bar {
     display: none;
   }

@@ -1,6 +1,6 @@
 @import 'shared';
 
-@include when {
+@include if {
   .words_list {
     color: #ddd;
     font-size: 16px;
@@ -50,7 +50,7 @@
 
 }
 
-@include when(( width : 600px )) {
+@include if(( width : 600px )) {
 
   .words_list {
     list-style: disc;

@@ -1,6 +1,6 @@
 @import 'shared';
 
-@include when {
+@include if {
 
   .oo_topbar {
 
@@ -319,7 +319,7 @@
 
 }
 
-@include when(( width: 500px )) {
+@include if(( width: 500px )) {
   .oo_topbar {
     &_item {
       padding: 0 10px;
@@ -338,7 +338,7 @@
   }
 }
 
-@include when(( width: 700px )) {
+@include if(( width: 700px )) {
   .oo_topbar {
     &_menu {
       &_item {

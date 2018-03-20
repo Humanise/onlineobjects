@@ -1,6 +1,6 @@
 @import 'shared';
 
-@include when {
+@include if {
   .words_search {
     -webkit-tap-highlight-color: transparent;
 
@@ -173,7 +173,7 @@
   }
 }
 
-@include when(( width: 600px )) {
+@include if (( width: 600px )) {
 
   .words_search {
 
@@ -216,7 +216,7 @@
 }
 
 
-@include when(( width: 760px )) {
+@include if (( width: 760px )) {
 
   .words_search_empty {
     text-align: left;
@@ -225,7 +225,7 @@
 
 }
 
-@include when(( width: 800px )) {
+@include if (( width: 800px )) {
 
   .words_search {
 
