@@ -264,9 +264,10 @@ public class InternetAddressViewPerspectiveBuilder {
 		List<SimilarityPerspective> similarities = new ArrayList<>();
 		for (Similarity similarity : list) {
 			SimilarityPerspective similarityPerspective = new SimilarityPerspective();
-			similarity.setSimilarity(similarity.getSimilarity());
+			similarityPerspective.setSimilarity(similarity.getSimilarity().floatValue());
 			InternetAddress address = find.apply(similarity.getId());
 			similarityPerspective.setEntity(SimpleEntityPerspective.create(address));
+			similarities.add(similarityPerspective);
 		}
 		perspetive.setSimilar(similarities);
 	}
