@@ -8,6 +8,7 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -28,7 +29,18 @@ public class InternetAddressService {
 	InboxService inboxService;
 
 	public HTMLDocument getHTMLDocument(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
-
+		Pair<File,String> content = getContent(address, privileged);
+		if (content == null) {
+			return null;
+		}
+		File original = content.getKey();
+		String encoding = content.getValue();
+		HTMLDocument htmlDocument = new HTMLDocument(Files.readString(original, encoding));
+		htmlDocument.setOriginalUrl(address.getAddress());
+		return htmlDocument;
+	}
+	
+	public Pair<File, String> getContent(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
 		File folder = storageService.getItemFolder(address);
 		File original = new File(folder, "original");
 		String encoding = address.getPropertyValue(Property.KEY_INTERNETADDRESS_ENCODING);
@@ -50,9 +62,8 @@ public class InternetAddressService {
 		if (Strings.isBlank(encoding)) {
 			encoding = Strings.UTF8;
 		}
-		HTMLDocument htmlDocument = new HTMLDocument(Files.readString(original, encoding));
-		htmlDocument.setOriginalUrl(address.getAddress());
-		return htmlDocument;
+		
+		return Pair.of(original, encoding);
 	}
 	
 	public InternetAddress importAddress(String urlString, User user) throws ModelException, SecurityException, IllegalRequestException {
