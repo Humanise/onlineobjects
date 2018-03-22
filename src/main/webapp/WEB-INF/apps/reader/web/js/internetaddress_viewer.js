@@ -101,6 +101,9 @@ var internetAddressViewer = {
     else if (data.action == 'editStatement') {
       reader.edit({type:'Statement',id:data.id});
     }
+    else if (data.action == 'viewInternetAddress') {
+      reader.view({type:'InternetAddress', id: data.id});
+    }
     else if (data.action == 'openUrl') {
       window.open(data.url);
     }
@@ -265,7 +268,15 @@ var internetAddressViewer = {
         parent: node
       })
     }.bind(this));
-    this.nodes.footer.style.display = !!article.quotes ? 'block' : 'none';
+    hui.each(article.similar, function(other) {
+      hui.build('div',{
+        'class' : 'reader_view_quote js_reader_action',
+        'data' : hui.string.toJSON({action:'viewInternetAddress', id: other.entity.id}),
+        text: (other.entity.name || 'No title') + " ~ " + (Math.round(other.similarity*1000)/10)+"%",
+        parent: this.nodes.footer
+      })
+    }.bind(this));
+    this.nodes.footer.style.display = this.nodes.footer.childNodes.length ? 'block' : 'none';
     this.nodes.text.innerHTML = this._formatText(article.text);
     hui.dom.setText(this.nodes.title, article.title);
     hui.dom.setText(this.nodes.link, article.urlText);
