@@ -218,8 +218,9 @@ public class InformationService {
 				InternetAddress a = modelService.get(InternetAddress.class, pair.getFirstId(), privileged);
 				InternetAddress b = modelService.get(InternetAddress.class, pair.getSecondId(), privileged);
 
-				status.log("Building analytics");
+				status.log("Building analytics: "+a.getAddress());
 				TextDocumentAnalytics analyticsA = textDocumentAnalyzer.analyze(a, privileged);
+				status.log("Building analytics: "+b.getAddress());
 				TextDocumentAnalytics analyticsB = textDocumentAnalyzer.analyze(b, privileged);
 				double similarity;
 				if (analyticsA!=null && analyticsB!=null) {
