@@ -66,6 +66,16 @@ public class TestDocumentCleaner extends TestCase {
 			String expected = "<h2>Remove spans</h2>";
 			tests.put(xml, expected);
 		}
+		{
+			String xml = "";
+			String expected = "";
+			tests.put(xml, expected);
+		}
+		{
+			String xml = "<div></div>";
+			String expected = "";
+			tests.put(xml, expected);
+		}
 		
 		tests.forEach((dirty, expected) -> {
 			
@@ -74,9 +84,9 @@ public class TestDocumentCleaner extends TestCase {
 					+ dirty
 					+ "</body></html>";
 			expected = "<?xml version=\"1.0\"?>\n"
-					+ "<html xmlns=\"http://www.w3.org/1999/xhtml\"><body>"
-					+ expected
-					+ "</body></html>\n";
+					+ "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
+					+ (expected.isEmpty() ? "<body />" : "<body>" + expected + "</body>")
+					+ "</html>\n";
 			
 			nu.xom.Document document = DOM.parseXOM(dirty);
 

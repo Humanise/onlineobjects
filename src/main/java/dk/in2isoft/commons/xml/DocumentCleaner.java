@@ -2,6 +2,10 @@ package dk.in2isoft.commons.xml;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -60,6 +64,9 @@ public class DocumentCleaner {
 		validLeaves.add("br");
 		validLeaves.add("img");
 		validLeaves.add("col");
+		validLeaves.add("body");
+		validLeaves.add("html");
+		validLeaves.add("head");
 	}
 	
 	public void setUrl(String url) {
@@ -78,11 +85,8 @@ public class DocumentCleaner {
 		if (document.getRootElement()==null) {
 			return;
 		}
-		Nodes nodes = document.query("//node()");
-		int length = nodes.size();
 		Set<nu.xom.Node> nodesToRemove = Sets.newHashSet();
-		for (int i = 0; i < length; i++) {
-			nu.xom.Node node = nodes.get(i);
+		DOM.travel(document, node -> {			
 			if (node instanceof Comment) {
 				nodesToRemove.add(node);
 			}
@@ -100,7 +104,7 @@ public class DocumentCleaner {
 				
 				if (!validTags.contains(nodeName)) {
 					nodesToRemove.add(element);
-					continue;
+					return;
 				}
 				
 				if (nodeName.equals("a")) {
@@ -119,41 +123,41 @@ public class DocumentCleaner {
 					}
 				}
 			}
-			
-			for (nu.xom.Node toRemove : nodesToRemove) {
-				ParentNode parent = toRemove.getParent();
-				if (parent!=null) {
-					if (toRemove instanceof Element) {
-						Element elementToRemove = (Element) toRemove;
-						String tagName = elementToRemove.getLocalName().toLowerCase();
-						if (!bannedTags.contains(tagName)) {
-							int index = parent.indexOf(elementToRemove);
-							while (elementToRemove.getChildCount()>0) {
-								nu.xom.Node child = elementToRemove.removeChild(0);
-								if (parent instanceof Element || !(child instanceof Text)) {
-									if (parent instanceof nu.xom.Document) {
-										log.debug("The parent is a document");
-									} else {
-										parent.insertChild(child, index);
-									}
+		});
+		for (nu.xom.Node toRemove : nodesToRemove) {
+			ParentNode parent = toRemove.getParent();
+			if (parent!=null) {
+				if (toRemove instanceof Element) {
+					Element elementToRemove = (Element) toRemove;
+					String tagName = elementToRemove.getLocalName().toLowerCase();
+					if (!bannedTags.contains(tagName)) {
+						int index = parent.indexOf(elementToRemove);
+						while (elementToRemove.getChildCount()>0) {
+							nu.xom.Node child = elementToRemove.removeChild(0);
+							if (parent instanceof Element || !(child instanceof Text)) {
+								if (parent instanceof nu.xom.Document) {
+									log.debug("The parent is a document");
+								} else {
+									parent.insertChild(child, index);
 								}
-								index ++;
 							}
+							index ++;
 						}
 					}
-					if (parent instanceof nu.xom.Document) {
-						//log.warn("Cannot remove the root node");
-					} else {
-						parent.removeChild(toRemove);
-					}
+				}
+				if (parent instanceof nu.xom.Document) {
+					//log.warn("Cannot remove the root node");
+				} else {
+					parent.removeChild(toRemove);
 				}
 			}
 		}
 		if (uri!=null) {
-			Nodes images = document.query("//*[local-name()='img']");
-			for (int i = 0; i < images.size(); i++) {
-				Element image = (Element) images.get(i);
-				Attribute attribute = image.getAttribute("src");
+			DOM.travelElements(document, element -> {
+				if (!element.getLocalName().equalsIgnoreCase("img")) {
+					return;
+				}
+				Attribute attribute = element.getAttribute("src");
 				if (attribute!=null) {
 					String value = attribute.getValue();
 					try {
@@ -162,17 +166,15 @@ public class DocumentCleaner {
 						log.warn("Error resolving image URL",e);
 					}
 				}
-			}
+				
+			});
 		}
 		removeLeaves(document);
 	}
 	
 	private void removeLeaves(nu.xom.Document document) {
-		boolean modified = false;
-
-		Nodes leaves = document.query("//*");
-		for (int i = 0; i < leaves.size(); i++) {
-			Element node = (Element) leaves.get(i);
+		Set<Element> toRemove = new HashSet<>();
+		DOM.travelElements(document, node -> {
 			int childCount = node.getChildCount();
 			boolean leaf = true; 
 			for (int j = 0; j < childCount; j++) {
@@ -189,14 +191,18 @@ public class DocumentCleaner {
 					}
 				}
 			}
-			if (!leaf) continue;
+			if (!leaf) return;
 			String name = node.getLocalName().toLowerCase();
 			if (!validLeaves.contains(name)) {
-				ParentNode parent = node.getParent();
-				if (parent instanceof Element) {
-					parent.removeChild(node);
-					modified = true;
-				}
+				toRemove.add(node);
+			}
+		});
+		boolean modified = false;
+		for (Element element : toRemove) {
+			ParentNode parent = element.getParent();
+			if (parent instanceof Element) {
+				parent.removeChild(element);
+				modified = true;
 			}
 		}
 		if (modified) {

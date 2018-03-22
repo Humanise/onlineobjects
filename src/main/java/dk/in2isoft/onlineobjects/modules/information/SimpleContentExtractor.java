@@ -5,6 +5,7 @@ import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import nu.xom.Comment;
@@ -26,6 +27,7 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.HTML;
 import dk.in2isoft.onlineobjects.core.Pair;
 
@@ -36,6 +38,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 	private Set<String> illegals = Sets.newHashSet("script","style","noscript");
 
 	public Document extract(Document document) {
+		document = (Document) document.copy();
 		//log.info(document.toXML());
 		document = simplify(document);
 		//log.info(document.toXML());
@@ -104,15 +107,11 @@ public class SimpleContentExtractor implements ContentExtractor {
 	}
 	
 	private Document simplify(Document document) {
-		document = (Document) document.copy();
+		
 				
 		Set<Node> nodesToRemove = Sets.newHashSet();
 		
-		Nodes nodes = document.query("//node()");
-		
-		int size = nodes.size();
-		for (int i = 0; i < size; i++) {
-			Node node = nodes.get(i);
+		DOM.travel(document, node -> {
 			if (node instanceof Comment) {
 				nodesToRemove.add(node);
 			}
@@ -121,8 +120,8 @@ public class SimpleContentExtractor implements ContentExtractor {
 				if (!isValid(element)) {
 					nodesToRemove.add(element);
 				}
-			}
-		}
+			}			
+		});
 		
 		for (Node node : nodesToRemove) {
 			ParentNode parent = node.getParent();
@@ -161,19 +160,16 @@ public class SimpleContentExtractor implements ContentExtractor {
 
 	public List<Element> findLongestText(Document document) {
 		Node root = document;
-		Nodes articles = document.query("//*[local-name()='article']");
-		if (articles.size()>0) {
-			//root = articles.get(0);
-		}
 		Multimap<Integer, Element> map = HashMultimap.create();
-		Nodes ps = root.query(".//*");
-		for (int i = 0; i < ps.size(); i++) {
-			Element p = (Element) ps.get(i);
-			if (!HTML.INLINE_TEXT.contains(p.getLocalName().toLowerCase())) {
-				int length = getTextLength(p);
-				map.put(length, p);
+		DOM.travel(root, node -> {
+			if (node instanceof Element) {
+				Element p = (Element) node;
+				if (!HTML.INLINE_TEXT.contains(p.getLocalName().toLowerCase())) {
+					int length = getTextLength(p);
+					map.put(length, p);
+				}
 			}
-		}
+		});
 		
 		List<Element> lst = Lists.newArrayList(); 
 		

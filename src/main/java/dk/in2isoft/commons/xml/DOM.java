@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +46,26 @@ public class DOM {
 			node = node.getParent();
 		}
 		return ancestors;
+	}
+
+	public static void travel(Node node, Consumer<Node> consumer) {
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			Node child = node.getChild(i);
+			consumer.accept(child);
+			travel(child, consumer);
+		}
+	}
+
+	public static void travelElements(Node node, Consumer<Element> consumer) {
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			Node child = node.getChild(i);
+			if (child instanceof Element) {
+				consumer.accept((Element) child);
+			}
+			travelElements(child, consumer);
+		}
 	}
 
 	public static nu.xom.Document toXOM(Document domDocument) {
