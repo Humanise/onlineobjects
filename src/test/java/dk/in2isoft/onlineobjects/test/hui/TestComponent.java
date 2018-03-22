@@ -156,7 +156,7 @@ public class TestComponent extends AbstractSpringTestCase {
 			element.detach();
 		} else {
 			int declarationCount = element.getNamespaceDeclarationCount();
-			for (int i = 0; i < declarationCount; i++) {
+			for (int i = declarationCount-1; i > -1; i--) {
 				String namespacePrefix = element.getNamespacePrefix(i);
 				element.removeNamespaceDeclaration(namespacePrefix);
 			}
