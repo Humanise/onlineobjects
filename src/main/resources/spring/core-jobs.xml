@@ -44,7 +44,7 @@
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.SimilarityJob"/>
 		<property name="name" value="similaritycalculator"/>
 		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="1"/>
+		<property name="repeatMinutes" value="10"/>
 	</bean>
 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
