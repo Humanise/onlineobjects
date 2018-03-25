@@ -22,7 +22,9 @@ import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.modules.information.Boilerpipe;
+import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.Readability;
+import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 
 public class HTMLDocument extends XMLDocument {
 	
@@ -98,46 +100,16 @@ public class HTMLDocument extends XMLDocument {
     }
         
     public String getExtractedText() {
-    	try {
-			String rawString = getRawString();
-			if (Strings.isNotBlank(rawString)) {
-				return ArticleExtractor.INSTANCE.getText(rawString);
+		String rawString = getRawString();
+		if (Strings.isNotBlank(rawString)) {
+			nu.xom.Document document = new SimpleContentExtractor().extract(getXOMDocument());
+			if (document != null) {
+				DocumentToText doc2text = new DocumentToText();
+				return doc2text.getText(document);
 			}
-		} catch (BoilerpipeProcessingException e) {
-			log.error("Unable to extract text", e);
 		}
     	return null;
     }
-    
-    public nu.xom.Document getExtracted() {
-		String rawString = getRawString();
-		if (Strings.isBlank(rawString)) {
-			return null;
-		}
-		nu.xom.Document readabilityDocument = getExtractedByReadability(rawString);
-		
-		// TODO Use count text-nodes lengths to determine largest content 
-		int readLength = readabilityDocument==null ? 0 : readabilityDocument.toXML().length();
-		if (readLength < 2000) {
-			nu.xom.Document boilerpipeDocument = getExtractedByBoilerpipe(rawString);
-			int boilLength = boilerpipeDocument==null ? 0 : boilerpipeDocument.toXML().length();
-			if (readLength < boilLength) {
-				return boilerpipeDocument;
-			}
-		}
-		return readabilityDocument;
-    }
-
-	private nu.xom.Document getExtractedByBoilerpipe(String html) {
-		Boilerpipe boiler = new Boilerpipe();
-		String extracted = boiler.extract(html);
-		return new HTMLDocument(extracted).getXOMDocument();
-	}
-
-	private nu.xom.Document getExtractedByReadability(String html) {
-		Readability readability = new Readability(html);
-    	return readability.getXomDocument();
-	}
     
     public List<HTMLReference> getFeeds() {
 		List<HTMLReference> refs = Lists.newArrayList();

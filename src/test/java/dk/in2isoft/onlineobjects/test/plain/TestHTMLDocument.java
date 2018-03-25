@@ -141,14 +141,6 @@ public class TestHTMLDocument extends AbstractSpringTestCase {
 			HTMLDocument doc = htmlService.getDocumentSilently(file, Strings.UTF8);
 			Assert.assertNotNull(doc);
 			{
-				File out = new File(folder,file.getName()+".contents.htm");
-				try (FileWriter w = new FileWriter(out)) {
-					Document extracted = doc.getExtracted();
-					cleaner.clean(extracted);
-					w.append(extracted.toXML());
-				}
-			}
-			{
 				File out = new File(folder,file.getName()+".extracted.htm");
 				try (FileWriter w = new FileWriter(out)) {
 					Document document = doc.getXOMDocument();
