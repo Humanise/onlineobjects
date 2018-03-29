@@ -42,6 +42,13 @@ public class Property {
 
 	public static final String KEY_WORD_SUGGESTION_LANGUAGE = "word.suggestion.language";
 
+	public static final String KEY_CLIENT_PLATFORM = "client.platform";
+	public static final String KEY_CLIENT_PLATFORM_VERSION = "client.platform.version";
+	public static final String KEY_CLIENT_VERSION = "client.version";
+	public static final String KEY_CLIENT_BUILD = "client.build";
+	public static final String KEY_CLIENT_HARDWARE = "client.hardware";
+	public static final String KEY_CLIENT_HARDWARE_VERSION = "client.hardware.version";
+
 
 	private long id;
 

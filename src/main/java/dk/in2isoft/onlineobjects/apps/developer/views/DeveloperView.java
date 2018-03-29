@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserQuery;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
@@ -26,7 +26,7 @@ public class DeveloperView extends AbstractManagedBean implements InitializingBe
 	}
 	
 	public List<Item> getUsers() {
-		PairSearchResult<User,Person> result = modelService.searchPairs(new UserQuery());
+		PairSearchResult<User,Person> result = modelService.searchPairs(new UsersPersonQuery());
 		List<Item> list = Lists.newArrayList();
 		for (Pair<User, Person> pair : result.getList()) {
 			Item item = new Item();

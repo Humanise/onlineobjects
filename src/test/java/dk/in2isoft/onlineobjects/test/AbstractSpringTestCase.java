@@ -67,8 +67,12 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 	
 	protected User getNewTestUser() {
 		User user = new User();
-		user.setUsername("testuser" + System.currentTimeMillis() + Math.round(Math.random() * 9999999));
+		user.setUsername(getUniqueTestUserName());
 		return user;
+	}
+
+	protected String getUniqueTestUserName() {
+		return "testuser" + System.currentTimeMillis() + Math.round(Math.random() * 9999999);
 	}
 
 	public void setContext(ApplicationContext context) {

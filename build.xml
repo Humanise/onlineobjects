@@ -88,7 +88,8 @@
 			<fileset dir="${basedir}/target/OnlineObjects/WEB-INF/lib">
 				<include name="**/*.jar" />
 			</fileset>
-			<path location="${basedir}/target/OnlineObjects/WEB-INF/classes" />
+			<pathelement location="${basedir}/src/main/resources/model.hbm.cfg" />
+			<path location="${basedir}/target/classes" />
 			<pathelement location="${basedir}/src/main/java" />
 			<pathelement location="${basedir}/src/main/resources" />
 		</path>

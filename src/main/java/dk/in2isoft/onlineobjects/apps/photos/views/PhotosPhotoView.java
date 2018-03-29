@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserQuery;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
@@ -88,7 +88,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 
 			user = modelService.getOwner(image, session);
 			if (user!=null) {
-				UserQuery query = new UserQuery().withUsername(user.getUsername());
+				UsersPersonQuery query = new UsersPersonQuery().withUsername(user.getUsername());
 				PairSearchResult<User,Person> searchPairs = modelService.searchPairs(query);
 				Pair<User,Person> first = searchPairs.getFirst();
 				if (first!=null) {

@@ -9,7 +9,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.UserQuery;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -29,7 +29,7 @@ public class PeopleListView extends AbstractManagedBean implements InitializingB
 		model = new ListModel<UserInfo>() {
 			@Override
 			public ListModelResult<UserInfo> getResult() {
-				UserQuery query = new UserQuery().withPaging(getPage(), getPageSize()).withPublicView();
+				UsersPersonQuery query = new UsersPersonQuery().withPaging(getPage(), getPageSize()).withPublicView();
 				PairSearchResult<User, Person> search = modelService.searchPairs(query);
 				return new ListModelResult<UserInfo>(convert(search.getList(), privileged),search.getTotalCount());
 			}

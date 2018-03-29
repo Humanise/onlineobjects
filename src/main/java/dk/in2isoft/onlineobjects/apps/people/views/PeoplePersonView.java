@@ -13,7 +13,7 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserQuery;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -45,7 +45,7 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 	private boolean canModify;
 	
 	public void afterPropertiesSet() throws Exception {
-		UserQuery query = new UserQuery().withUsername(getUsersName());
+		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
 		PairSearchResult<User,Person> result = modelService.searchPairs(query);
 		if (result.getTotalCount()==0) {
 			return;

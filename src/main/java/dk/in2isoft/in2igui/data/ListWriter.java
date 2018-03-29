@@ -143,10 +143,16 @@ public class ListWriter extends MarkupWriter {
 		return this;
 	}
 
-	public ListWriter text(Object str) throws IOException {
+	public ListWriter text(Object str) {
 		if (str!=null) {
 			text(str.toString());
 		}
+		return this;
+	}
+
+	public ListWriter lineBreak() {
+		startTag("break");
+		endTag("break");
 		return this;
 	}
 

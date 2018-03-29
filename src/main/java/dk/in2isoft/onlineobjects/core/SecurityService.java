@@ -15,10 +15,12 @@ import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
 import dk.in2isoft.onlineobjects.services.SessionService;
@@ -256,10 +258,40 @@ public class SecurityService {
 		if (Strings.isBlank(secret)) {
 			return null;
 		}
-		Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
-		// TODO Should this use a privileged?
-		SearchResult<User> result = modelService.search(query);
+		UserQuery q = new UserQuery();
+		q.setSecret(secret);
+		SearchResult<User> result = modelService.search(q);
 		return result.getFirst();		
+	}
+	
+	public String getSecret(String clientId, ClientInfo info, User user) throws ModelException, SecurityException {
+		String secret;
+		Query<Client> q = Query.after(Client.class).withField("UUID", clientId).as(user).withPaging(0, 1);
+		final Client client = modelService.getFirst(q);
+		if (client!=null) {
+			secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
+			syncClientInfo(info, client);
+			modelService.updateItem(client, user);
+		} else {
+			secret = buildSecret();
+			Client newClient = new Client();
+			newClient.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
+			syncClientInfo(info, newClient);
+			newClient.setUUID(clientId);
+			modelService.createItem(newClient, user);
+			modelService.createRelation(user, newClient, user);
+		}
+		return secret;
+	}
+
+	private void syncClientInfo(ClientInfo info, Client newClient) {
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_PLATFORM, info.getPlatform());
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_PLATFORM_VERSION, info.getPlatformVersion());
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_VERSION, info.getClientVersion());
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_BUILD, info.getClientBuild());
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_HARDWARE, info.getHardware());
+		newClient.overrideFirstProperty(Property.KEY_CLIENT_HARDWARE_VERSION, info.getHardwareVersion());
+		newClient.setName(info.getNickname());
 	}
 
 	private User getInitialUser() {
@@ -326,7 +358,7 @@ public class SecurityService {
 	public boolean canChangeUsername(User user) {
 		return !SecurityService.RESERVED_USERNAMES.contains(user.getUsername());
 	}
-
+/*
 	public String getSecret(User user) throws ModelException, SecurityException {
 		User reloaded = modelService.get(User.class, user.getId(), user);
 		if (reloaded!=null) {
@@ -339,17 +371,21 @@ public class SecurityService {
 			return secret;
 		}
 		return null;
-	}
+	}*/
 
 	public String generateNewSecret(User user) throws ModelException, SecurityException {
 		User reloaded = modelService.get(User.class, user.getId(), user);
 		if (reloaded!=null) {
-			String secret = Strings.generateRandomString(50);
+			String secret = buildSecret();
 			reloaded.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
 			modelService.updateItem(reloaded, user);
 			return secret;
 		}
 		return null;
+	}
+	
+	public String buildSecret() {
+		return Strings.generateRandomString(50);
 	}
 	
 	

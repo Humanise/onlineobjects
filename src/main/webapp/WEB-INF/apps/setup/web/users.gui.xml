@@ -34,7 +34,9 @@
           </selection>
 
           <selection name="typeSelection">
+            <title>Stuff</title>
             <option icon="common/info" text="Info" value="info"/>
+            <option icon="common/info" text="Clients" value="clients"/>
             <options name="classes" source="classSource" title="Types"/>
           </selection>
         </overflow>

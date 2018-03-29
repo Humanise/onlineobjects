@@ -8,7 +8,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserQuery;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -42,7 +42,7 @@ public class PhotosUserView extends AbstractManagedBean implements InitializingB
 		Request request = getRequest();
 		String[] path = request.getLocalPath();
 		username = path[2];
-		UserQuery query = new UserQuery().withUsername(username);
+		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
 		Pair<User, Person> pair = modelService.searchPairs(query).getFirst();
 		if (pair == null) {
 			throw new ContentNotFoundException("User not found");

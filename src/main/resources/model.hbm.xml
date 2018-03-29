@@ -233,6 +233,11 @@
 		        <property name="text" length="10000"/>
 		    </joined-subclass>
 
+		    <joined-subclass name="dk.in2isoft.onlineobjects.model.Client" table="client">
+		        <key column="id"/>
+		        <property name="UUID" length="255" column="uuid"/>
+		    </joined-subclass>
+
 	    </joined-subclass>
 	    
 	    <joined-subclass name="dk.in2isoft.onlineobjects.model.Relation" table="relation">

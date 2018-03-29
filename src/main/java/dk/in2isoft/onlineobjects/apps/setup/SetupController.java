@@ -38,6 +38,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -177,34 +178,33 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void listUsersObjects(Request request) throws IOException,EndUserException {
 		long id = request.getLong("userId");
-		int page = request.getInt("page");
 		String type = request.getString("type");
 		
-		User publicUser = securityService.getPublicUser();
 		User user = modelService.get(User.class, id, request.getSession());
 		if (user==null) {
 			return;
 		}
 		if ("info".equals(type)) {
-			ListWriter writer = new ListWriter(request);
-			
-			writer.startList();
-			writer.startHeaders();
-			writer.header("Key",40);
-			writer.header("Value");
-			writer.endHeaders();
-			writer.startRow().cell("ID").cell(user.getId()).endRow();
-			writer.startRow().cell("Password").cell((Strings.isNotBlank(user.getPassword()) ? "Yes" : "No")).endRow();
-			writer.startRow().cell("Secret").cell(user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
-			writer.endList();
+			listUserInfo(request, user);
 			return;
+		} else if ("clients".equals(type)) {
+			listUsersClients(request, user);
+			return;
+		} else {
+			listUsersObjects(request, type, user);
 		}
+	}
+
+	private void listUsersObjects(Request request, String type, User user) throws IOException {
 		Class<? extends Entity> typeClass = modelService.getEntityClass(type);
 		if (typeClass==null) {
 			return;
 		}
+		int page = request.getInt("page");
 		Query<? extends Entity> query = Query.of(typeClass).as(user).withPaging(page, 30);
 		SearchResult<? extends Entity> result = modelService.search(query);
+
+		User publicUser = securityService.getPublicUser();
 
 		ListWriter writer = new ListWriter(request);
 		
@@ -252,7 +252,55 @@ public class SetupController extends SetupControllerBase {
 		}
 		writer.endList();
 	}
-	
+
+	private void listUserInfo(Request request, User user) throws IOException, ModelException {
+		ListWriter writer = new ListWriter(request);
+		
+		writer.startList();
+		writer.startHeaders();
+		writer.header("Key",40);
+		writer.header("Value");
+		writer.endHeaders();
+		writer.startRow().cell("ID").cell(user.getId()).endRow();
+		writer.startRow().cell("Password").cell((Strings.isNotBlank(user.getPassword()) ? "Yes" : "No")).endRow();
+		writer.startRow().cell("Secret").cell(user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
+		modelService.getChildren(user, Client.class, user).forEach(client -> {
+			writer.startRow().cell("Client: "+client.getName()).cell(client.getUUID() + " / " + client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
+		});
+		writer.endList();
+	}
+
+	private void listUsersClients(Request request, User user) throws IOException, ModelException {
+		ListWriter writer = new ListWriter(request);
+		
+		writer.startList();
+		writer.startHeaders();
+		writer.header("Name");
+		writer.header("ID");
+		writer.header("Secret");
+		writer.header("Version");
+		writer.endHeaders();
+		modelService.getChildren(user, Client.class, user).forEach(client -> {
+			String secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
+			String version = client.getPropertyValue(Property.KEY_CLIENT_VERSION);
+			String build = client.getPropertyValue(Property.KEY_CLIENT_BUILD);
+			String platform = client.getPropertyValue(Property.KEY_CLIENT_PLATFORM);
+			String platformVersion = client.getPropertyValue(Property.KEY_CLIENT_PLATFORM_VERSION);
+			String hardwareVersion = client.getPropertyValue(Property.KEY_CLIENT_HARDWARE_VERSION);
+			String hardware = client.getPropertyValue(Property.KEY_CLIENT_HARDWARE);
+			writer.startRow();
+			writer.cell(client.getName());
+			writer.startCell().startWrap().text(client.getUUID()).endWrap().endCell();
+			writer.startCell().startWrap().text(secret).endWrap().endCell();
+			writer.startCell().text("Version: " + version + " (" + build + ")");
+			writer.lineBreak().text("Platform: " + platform + " / " + platformVersion);
+			writer.lineBreak().text("Hardware: " + hardware + " / " + hardwareVersion);
+			writer.endCell();
+			writer.endRow();
+		});
+		writer.endList();
+	}
+
 	@Path
 	public void loadUser(Request request) throws IOException,EndUserException {
 		try {Thread.sleep(1000);} catch (InterruptedException e) {}

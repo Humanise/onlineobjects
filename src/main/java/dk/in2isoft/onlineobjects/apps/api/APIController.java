@@ -40,6 +40,7 @@ import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.QuestionApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.StatementApiPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
+import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
 
@@ -98,10 +99,19 @@ public class APIController extends APIControllerBase {
 	}
 
 	@Path(start={"v1.0","authentication"})
-	public ClientKeyResponse getSecret(Request request) throws IOException, EndUserException {
+	public ClientKeyResponse authentication(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
-		//String clientId = request.getString("client");
+		String clientId = request.getString("id", "shared");
+		
+		ClientInfo info = new ClientInfo();
+		info.setNickname(request.getString("nickname", "Unknown"));
+		info.setHardware(request.getString("hardware"));
+		info.setHardwareVersion(request.getString("hardwareVersion"));
+		info.setPlatform(request.getString("platform"));
+		info.setPlatformVersion(request.getString("platformVersion"));
+		info.setClientVersion(request.getString("clientVersion"));
+		info.setClientBuild(request.getString("clientBuild"));
 		
 		User user = securityService.getUser(username, password);
 		if (user==null) {
@@ -110,7 +120,7 @@ public class APIController extends APIControllerBase {
 			} catch (InterruptedException e) {}
 			throw new SecurityException("User not found");
 		}
-		String secret = securityService.getSecret(user);
+		String secret = securityService.getSecret(clientId, info, user);
 		if (Strings.isBlank(secret)) {
 			throw new SecurityException("Unable to perform request");
 		}
@@ -123,7 +133,7 @@ public class APIController extends APIControllerBase {
 	@Path(start={"v1.0","validateClient"})
 	public void validateClient(Request request) throws IOException, EndUserException {
 		String clientId = request.getString("client");
-		
+		// TODO (jm) This makes no sense
 		User user = securityService.getUserBySecret(clientId);
 		if (user==null) {
 			throw new SecurityException("User not found");
