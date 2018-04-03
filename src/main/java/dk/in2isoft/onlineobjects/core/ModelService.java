@@ -53,7 +53,6 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.util.ModelClassInfo;
 import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
 import dk.in2isoft.onlineobjects.model.validation.UserValidator;
-import dk.in2isoft.onlineobjects.util.ValidationUtil;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;

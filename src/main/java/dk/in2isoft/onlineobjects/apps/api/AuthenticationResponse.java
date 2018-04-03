@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.apps.api;
 
-public class ClientKeyResponse {
+public class AuthenticationResponse {
 
 	private String secret;
 

@@ -4,12 +4,6 @@ package dk.in2isoft.commons.parsing;
 import java.util.ArrayList;
 import java.util.List;
 
-import nu.xom.Attribute;
-import nu.xom.Element;
-import nu.xom.Nodes;
-import nu.xom.XPathContext;
-
-import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -17,18 +11,17 @@ import org.w3c.dom.NodeList;
 
 import com.google.common.collect.Lists;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
-import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DocumentToText;
-import dk.in2isoft.onlineobjects.modules.information.Boilerpipe;
-import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
-import dk.in2isoft.onlineobjects.modules.information.Readability;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
+import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Nodes;
+import nu.xom.XPathContext;
 
 public class HTMLDocument extends XMLDocument {
 	
-	private static Logger log = Logger.getLogger(HTMLDocument.class);
+	//private static Logger log = Logger.getLogger(HTMLDocument.class);
 
 	private String title;
     private String contentType;

@@ -22,7 +22,6 @@ import dk.in2isoft.in2igui.jsf.ListComponent;
 import dk.in2isoft.in2igui.jsf.MessageComponent;
 import dk.in2isoft.in2igui.jsf.SourceComponent;
 import dk.in2isoft.in2igui.jsf.TextInputComponent;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;

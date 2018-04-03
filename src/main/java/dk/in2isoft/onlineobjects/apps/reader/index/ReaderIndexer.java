@@ -9,7 +9,6 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
-import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.DummyPrivileged;
@@ -33,7 +32,6 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.index.IndexDescription;
 import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;

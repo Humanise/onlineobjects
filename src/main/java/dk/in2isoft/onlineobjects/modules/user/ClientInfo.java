@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.modules.user;
 
 public class ClientInfo {
 
+	private String UUID;
 	private String nickname;
 	private String platform;
 	private String platformVersion;
@@ -70,6 +71,14 @@ public class ClientInfo {
 
 	public void setHardwareVersion(String hardwareVersion) {
 		this.hardwareVersion = hardwareVersion;
+	}
+
+	public String getUUID() {
+		return UUID;
+	}
+
+	public void setUUID(String uUID) {
+		UUID = uUID;
 	}
 
 }

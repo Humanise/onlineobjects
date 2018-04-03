@@ -15,7 +15,7 @@ public class ValidationUtil {
 		if (email==null || !email.equals(email.trim())) {
 			return false;
 		}
-		return EmailValidator.getInstance(false, true).isValid(email);
+		return EmailValidator.getInstance(false, false).isValid(email);
 	}
 	
 	public static boolean isValidUsername(String username) {

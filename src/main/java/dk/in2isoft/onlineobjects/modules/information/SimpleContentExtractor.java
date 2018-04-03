@@ -1,20 +1,9 @@
 package dk.in2isoft.onlineobjects.modules.information;
 
-import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import nu.xom.Comment;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.ParentNode;
-import nu.xom.Text;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +19,14 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.HTML;
 import dk.in2isoft.onlineobjects.core.Pair;
+import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
+import nu.xom.Comment;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.ParentNode;
+import nu.xom.Text;
 
 public class SimpleContentExtractor implements ContentExtractor {
 	

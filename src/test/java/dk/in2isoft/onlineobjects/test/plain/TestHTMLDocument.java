@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.StopWatch;

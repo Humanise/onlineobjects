@@ -31,6 +31,7 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.dk       "));
 		assertFalse(ValidationUtil.isWellFormedEmail("       xx.jb_0m@atira.dk       "));
 
+		assertFalse(ValidationUtil.isWellFormedEmail("jonasmunk@ma"));
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira"));
 		assertFalse(ValidationUtil.isWellFormedEmail(null));
 		assertFalse(ValidationUtil.isWellFormedEmail(""));
@@ -72,6 +73,7 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertTrue(ValidationUtil.isValidPassword("abcABC123-+&"));
 		assertTrue(ValidationUtil.isValidPassword("new$ecr8p4$s"));
 		assertTrue(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
+		assertTrue(ValidationUtil.isValidPassword("abcdefgh"));
 		
 		// TODO
 		

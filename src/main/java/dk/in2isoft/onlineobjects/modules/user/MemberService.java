@@ -39,28 +39,43 @@ public class MemberService {
 		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalRequestException("Username is not provided","noUsername");
 		}
-		if (!ValidationUtil.isValidUsername(username)) {
+		if (!isValidUsername(username)) {
 			throw new IllegalRequestException("Username contains invalid characters","invalidUsername");
 		}
 		if (!Strings.isNotBlank(password)) {
 			throw new IllegalRequestException("Password is not provided","noPassword");
 		}
-		if (!ValidationUtil.isValidPassword(password)) {
+		if (!isValidPassword(password)) {
 			throw new IllegalRequestException("Password is not valid","invalidPassword");
 		}
 	}
 
-	public void validateNewMember(String username, String password, String fullName, String email) throws IllegalRequestException {
+	public boolean isValidPassword(String password) {
+		return ValidationUtil.isValidPassword(password);
+	}
+
+	public boolean isValidUsername(String username) {
+		return ValidationUtil.isValidUsername(username);
+	}
+
+	public void validateNewMember(String username, String password, String email) throws IllegalRequestException, ModelException {
 		validateNewMember(username, password);
-		if (!Strings.isNotBlank(fullName)) {
-			throw new IllegalRequestException("Name is not provided","noName");
-		}
 		if (!Strings.isNotBlank(email)) {
 			throw new IllegalRequestException("Email is not provided","noEmail");
 		}
-		if (!ValidationUtil.isWellFormedEmail(email)) {
+		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException("The email address is invalid","invalidEmail");
 		}
+		if (isUsernameTaken(username)) {
+			throw new IllegalRequestException("The user allready exists","userExists");
+		}
+		if (isPrimaryEmailTaken(email)) {
+			throw new IllegalRequestException("The e-mail is already in use", "emailExists");
+		}
+	}
+
+	public boolean isWellFormedEmail(String email) {
+		return ValidationUtil.isWellFormedEmail(email);
 	}
 
 	public Image getUsersProfilePhoto(User user, Privileged privileged) throws ModelException {
@@ -87,63 +102,61 @@ public class MemberService {
 		if (creator==null) {
 			throw new IllegalRequestException("Cannot create user without a creator");
 		}
-		
-		// TODO: Move this to the core
-		validateNewMember(username, password, fullName, email);
-		
-		User existing = modelService.getUser(username);
-		if (existing != null) {
-			throw new IllegalRequestException("The user allready exists","userExists");
+		// TODO: Figure out how to synch both username + email
+		synchronized(email.intern()) {
+			// TODO: Move this to the core
+			validateNewMember(username, password, email);
+			
+			// Create a user
+			User user = new User();
+			user.setUsername(username);
+			securityService.setPassword(user, password);
+			modelService.createItem(user, creator);
+	
+			// Make sure only the user has access to itself
+			modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
+			securityService.grantFullPrivileges(user, user, securityService.getAdminPrivileged());
+			
+			// Make sure we do not accidentally use it agin
+			creator = null;
+	
+			// Create a person
+			Person person = new Person();
+			person.setFullName(fullName);
+			modelService.createItem(person, user);
+			
+			// Create email
+			EmailAddress emailAddress = new EmailAddress();
+			emailAddress.setAddress(email);
+			modelService.createItem(emailAddress, user);
+			
+			// Create relation between person and email
+			modelService.createRelation(person, emailAddress, user);
+	
+			// Create relation between person and email
+			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, user);
+	
+			// Create relation between user and person
+			modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, user);
+			/*
+			TODO Disabled web site creation for now
+			// Create a web site
+			WebSite site = new WebSite();
+			site.setName(buildWebSiteTitle(fullName));
+			modelService.createItem(site, user);
+			securityService.makePublicVisible(site, user);
+	
+			// Create relation between user and web site
+			modelService.createRelation(user, site,user);
+	
+			webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
+			*/
+			return user;
 		}
-		if (isPrimaryEmailTaken(email)) {
-			throw new IllegalRequestException("The e-mail is already in use", "emailExists");
-		}
+	}
 
-		// Create a user
-		User user = new User();
-		user.setUsername(username);
-		securityService.setPassword(user, password);
-		modelService.createItem(user, creator);
-
-		// Make sure only the user has access to itself
-		modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
-		securityService.grantFullPrivileges(user, user, securityService.getAdminPrivileged());
-		
-		// Make sure we do not accidentally use it agin
-		creator = null;
-
-		// Create a person
-		Person person = new Person();
-		person.setFullName(fullName);
-		modelService.createItem(person, user);
-		
-		// Create email
-		EmailAddress emailAddress = new EmailAddress();
-		emailAddress.setAddress(email);
-		modelService.createItem(emailAddress, user);
-		
-		// Create relation between person and email
-		modelService.createRelation(person, emailAddress, user);
-
-		// Create relation between person and email
-		modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, user);
-
-		// Create relation between user and person
-		modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, user);
-		/*
-		TODO Disabled web site creation for now
-		// Create a web site
-		WebSite site = new WebSite();
-		site.setName(buildWebSiteTitle(fullName));
-		modelService.createItem(site, user);
-		securityService.makePublicVisible(site, user);
-
-		// Create relation between user and web site
-		modelService.createRelation(user, site,user);
-
-		webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
-		*/
-		return user;
+	public boolean isUsernameTaken(String username) {
+		return modelService.getUser(username) != null;
 	}
 
 	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
@@ -168,7 +181,7 @@ public class MemberService {
 	 */
 	public void changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
 		email = email.trim();
-		if (!ValidationUtil.isWellFormedEmail(email)) {
+		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException("The email is not well formed: "+email);
 		}
 		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
@@ -195,7 +208,7 @@ public class MemberService {
 		}
 	}
 	
-	private boolean isPrimaryEmailTaken(String email) throws ModelException {
+	public boolean isPrimaryEmailTaken(String email) throws ModelException {
 		return getUserByPrimaryEmail(email, securityService.getAdminPrivileged()) != null;
 	}
 

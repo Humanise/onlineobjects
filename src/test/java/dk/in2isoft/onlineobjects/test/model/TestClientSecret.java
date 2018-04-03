@@ -36,11 +36,15 @@ public class TestClientSecret extends AbstractSpringTestCase {
 		User user = createMemeber();
 		
 		String clientId = UUID.randomUUID().toString();
-		String secret = securityService.getSecret(clientId, new ClientInfo("Test client"), user);
+		ClientInfo clientInfo = new ClientInfo("Test client");
+		clientInfo.setUUID(clientId);
+		String secret = securityService.getSecret(clientInfo, user);
 		assertNotNull(secret);
 
 		String altClientId = UUID.randomUUID().toString();
-		String altSecret = securityService.getSecret(altClientId, new ClientInfo("Test client"), user);
+		ClientInfo altClientInfo = new ClientInfo("Test client");
+		altClientInfo.setUUID(altClientId);
+		String altSecret = securityService.getSecret(altClientInfo, user);
 		assertNotNull(altSecret);
 		
 		UserQuery q = new UserQuery();
@@ -53,13 +57,14 @@ public class TestClientSecret extends AbstractSpringTestCase {
 			List<Client> clients = modelService.getChildren(user, Client.class, user);
 			assertEquals(clients.size(), 2);
 		}
-		String secretAgain = securityService.getSecret(clientId, new ClientInfo("Test client"), user);
+		String secretAgain = securityService.getSecret(clientInfo, user);
 
 		assertEquals(secret, secretAgain);
 
 		User otherUser = createMemeber();
-		String otherClientId = UUID.randomUUID().toString();
-		String otherSecret = securityService.getSecret(otherClientId, new ClientInfo("Test client"), otherUser);
+		ClientInfo otherClientInfo = new ClientInfo("Test client");
+		otherClientInfo.setUUID(UUID.randomUUID().toString());
+		String otherSecret = securityService.getSecret(otherClientInfo, otherUser);
 
 		assertNotEquals(secret, otherSecret);
 

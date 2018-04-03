@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.NumberUtils;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

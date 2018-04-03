@@ -24,6 +24,7 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -72,14 +73,40 @@ public class APIController extends APIControllerBase {
 		PrintWriter writer = response.getWriter();
 		writer.write(extractText(url));
 	}
+	
+	@Path(exactly={"v1.0","signup","check"})
+	public MemberCheckResponse checkNewMember(Request request) throws ModelException {
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {}
+		String username = request.getString("username");
+		String password = request.getString("password");
+		String email = request.getString("email");
+		MemberCheckResponse response = new MemberCheckResponse();
+		response.setEmailTaken(memberService.isPrimaryEmailTaken(email));
+		response.setEmailValid(memberService.isWellFormedEmail(email));
+		response.setUsernameTaken(memberService.isUsernameTaken(username));
+		response.setUsernameValid(memberService.isValidUsername(username));
+		response.setPasswordValid(memberService.isValidPassword(password));
+		return response;
+	}
 
-	@Path(start={"v1.0","signup"})
-	public void signup(Request request) throws IOException, EndUserException {
-		String username = request.getString("username", "No username");
-		String password = request.getString("password", "No password");
+	@Path(exactly={"v1.0","signup"})
+	public AuthenticationResponse signup(Request request) throws IOException, EndUserException {
+		String username = request.getString("username");
+		String password = request.getString("password");
 		String fullName = request.getString("fullName");
 		String email = request.getString("email");
-		memberService.signUp(request.getSession(), username, password, fullName, email);
+		ClientInfo info = getClientInfo(request);
+		User user = memberService.signUp(request.getSession(), username, password, fullName, email);
+		String secret = securityService.getSecret(info, user);
+		if (Strings.isBlank(secret)) {
+			throw new SecurityException("Unable to perform request");
+		}
+
+		AuthenticationResponse response = new AuthenticationResponse();
+		response.setSecret(secret);
+		return response;
 	}
 
 	@Path(start={"v1.0","changePassword"})
@@ -99,19 +126,11 @@ public class APIController extends APIControllerBase {
 	}
 
 	@Path(start={"v1.0","authentication"})
-	public ClientKeyResponse authentication(Request request) throws IOException, EndUserException {
+	public AuthenticationResponse authentication(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
-		String clientId = request.getString("id", "shared");
 		
-		ClientInfo info = new ClientInfo();
-		info.setNickname(request.getString("nickname", "Unknown"));
-		info.setHardware(request.getString("hardware"));
-		info.setHardwareVersion(request.getString("hardwareVersion"));
-		info.setPlatform(request.getString("platform"));
-		info.setPlatformVersion(request.getString("platformVersion"));
-		info.setClientVersion(request.getString("clientVersion"));
-		info.setClientBuild(request.getString("clientBuild"));
+		ClientInfo info = getClientInfo(request);
 		
 		User user = securityService.getUser(username, password);
 		if (user==null) {
@@ -120,14 +139,27 @@ public class APIController extends APIControllerBase {
 			} catch (InterruptedException e) {}
 			throw new SecurityException("User not found");
 		}
-		String secret = securityService.getSecret(clientId, info, user);
+		String secret = securityService.getSecret(info, user);
 		if (Strings.isBlank(secret)) {
 			throw new SecurityException("Unable to perform request");
 		}
 
-		ClientKeyResponse response = new ClientKeyResponse();
+		AuthenticationResponse response = new AuthenticationResponse();
 		response.setSecret(secret);
 		return response;
+	}
+
+	private ClientInfo getClientInfo(Request request) throws IllegalRequestException {
+		ClientInfo info = new ClientInfo();
+		info.setUUID(request.getString("id"));
+		info.setNickname(request.getString("nickname"));
+		info.setHardware(request.getString("hardware"));
+		info.setHardwareVersion(request.getString("hardwareVersion"));
+		info.setPlatform(request.getString("platform"));
+		info.setPlatformVersion(request.getString("platformVersion"));
+		info.setClientVersion(request.getString("clientVersion"));
+		info.setClientBuild(request.getString("clientBuild"));
+		return info;
 	}
 	
 	@Path(start={"v1.0","validateClient"})

@@ -59,7 +59,7 @@
     <bottom/>
   </structure>
 
-  <window name="userEditor" title="User" padding="5" width="300">
+  <window name="userEditor" title="User" padding="10" width="300">
     <formula name="userFormula">
       <fields>
         <field label="Name:">
@@ -85,7 +85,7 @@
     </formula>
   </window>
 
-  <window name="memberWindow" title="New member" padding="5" width="300">
+  <window name="memberWindow" title="New member" padding="10" width="300">
     <formula name="memberFormula">
       <fields>
         <field label="Name:">

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,11 +19,13 @@ import org.apache.log4j.Logger;
 import org.springframework.util.StopWatch;
 
 import dk.in2isoft.commons.http.HeaderUtil;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.XSLTUtil;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.modules.dispatch.Responder;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
@@ -137,17 +141,33 @@ public class DispatchingService {
 			} else {
 				log.error(ex.toString(), ex);				
 			}
+			HttpServletResponse response = request.getResponse();
 			if (ex instanceof SecurityException) {
-				request.getResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				renderer.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			} else if (ex instanceof ContentNotFoundException) {
-				request.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				renderer.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			} else if (ex instanceof IllegalRequestException) {
+				response.addHeader("Reason", ((IllegalRequestException) ex).getCode());
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				renderer.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			} else {
-				request.getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				renderer.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
-			XSLTUtil.applyXSLT(renderer, request);
+			String accept = request.getRequest().getHeader("Accept");
+			if (accept != null && accept.contains("application/json") && !accept.contains("text/html")) {
+				response.setContentType("application/json");
+				Map<String, String> resp = new HashMap<>();
+				resp.put("message", ex.getMessage());
+				if (ex instanceof EndUserException) {
+					resp.put("code", ((EndUserException) ex).getCode());
+				}
+				response.getWriter().write(Strings.toJSON(resp));
+			} else {
+				XSLTUtil.applyXSLT(renderer, request);
+			}
 		} catch (EndUserException e) {
 			log.error(e.toString(), e);
 		} catch (IOException e) {

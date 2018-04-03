@@ -264,9 +264,9 @@ public class SecurityService {
 		return result.getFirst();		
 	}
 	
-	public String getSecret(String clientId, ClientInfo info, User user) throws ModelException, SecurityException {
+	public String getSecret(ClientInfo info, User user) throws ModelException, SecurityException {
 		String secret;
-		Query<Client> q = Query.after(Client.class).withField("UUID", clientId).as(user).withPaging(0, 1);
+		Query<Client> q = Query.after(Client.class).withField("UUID", info.getUUID()).as(user).withPaging(0, 1);
 		final Client client = modelService.getFirst(q);
 		if (client!=null) {
 			secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
@@ -277,7 +277,7 @@ public class SecurityService {
 			Client newClient = new Client();
 			newClient.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
 			syncClientInfo(info, newClient);
-			newClient.setUUID(clientId);
+			newClient.setUUID(info.getUUID());
 			modelService.createItem(newClient, user);
 			modelService.createRelation(user, newClient, user);
 		}

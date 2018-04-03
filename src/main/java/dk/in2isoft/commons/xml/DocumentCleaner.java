@@ -2,10 +2,7 @@ package dk.in2isoft.commons.xml;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -19,7 +16,6 @@ import dk.in2isoft.commons.lang.Strings;
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
-import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
