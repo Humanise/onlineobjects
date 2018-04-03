@@ -76,9 +76,6 @@ public class APIController extends APIControllerBase {
 	
 	@Path(exactly={"v1.0","signup","check"})
 	public MemberCheckResponse checkNewMember(Request request) throws ModelException {
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {}
 		String username = request.getString("username");
 		String password = request.getString("password");
 		String email = request.getString("email");
