@@ -17,6 +17,8 @@ oo.View.prototype = {
     this.spinner = hui.get.firstByClass(this.element,'oo_spinner');
     if (this.options.source) {
       this.options.source.listen(this);
+    } else {
+      hui.log("No source")
     }
     var self = this;
     hui.on(this.element, 'tap', function(e) {
@@ -120,3 +122,5 @@ oo.View.prototype = {
     }
   }
 };
+
+hui.define('oo.View', oo.View);

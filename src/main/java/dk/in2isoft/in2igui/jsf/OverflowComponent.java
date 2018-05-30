@@ -46,22 +46,22 @@ public class OverflowComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
 		String cls = "hui_overflow";
-		if (shadowVariant!=null) {
-			cls+= " hui_overflow_shadow_"+shadowVariant;
+		if (shadowVariant != null) {
+			cls+= " hui_overflow_shadow_" + shadowVariant;
 		}
 		out.startDiv().withClass(cls).withId(id);
 		if (full) {
 			out.withStyle("height: 100%;");
 		}
-		else if (height>0) {
+		else if (height > 0) {
 			out.withStyle("height: "+height+"px;");
 		}
-		out.startDiv("hui_overflow_top").endDiv();
+		out.startDiv("hui_overflow_body");
 	}
 	
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
-		out.startDiv("hui_overflow_bottom").endDiv();
+		out.endDiv();
 		out.endDiv();
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.Overflow");

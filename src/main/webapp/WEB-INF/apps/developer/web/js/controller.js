@@ -1,4 +1,4 @@
-require(['all'],function() {
+hui.on(['hui.ui'],function() {
 
   hui.ui.listen({
     $ready : function() {

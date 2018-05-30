@@ -52,6 +52,6 @@
 
   hui.extend(oo.Filters, _super);
 
-  window.define && define('oo.Filters',oo.Filters);
+  hui.define('oo.Filters',oo.Filters);
 
 })(hui.ui.Component);

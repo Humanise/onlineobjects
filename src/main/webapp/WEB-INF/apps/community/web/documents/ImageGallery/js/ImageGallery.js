@@ -68,6 +68,6 @@ OO.ImageGallery.prototype = {
 	}
 }
 
-hui.onReady(function() {
+hui.on(function() {
 	OO.ImageGallery.getInstance().ignite();
 });

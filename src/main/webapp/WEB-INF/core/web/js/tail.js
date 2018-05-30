@@ -1,1 +1,1 @@
-window.define && define('all',function() {});
+//window.define && define('all',function() {});

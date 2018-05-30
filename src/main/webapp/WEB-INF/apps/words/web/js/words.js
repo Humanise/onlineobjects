@@ -1,7 +1,7 @@
-require(['all'],function() {
+hui.on(['hui.ui'], function() {
 
 
-var wordsApp = {
+hui.ui.listen({
   $ready : function() {
     hui.drag.listen({
       element : document.body,
@@ -78,9 +78,6 @@ var wordsApp = {
     var url = oo.appContext+'/'+oo.language+'/search/?text='+field.getValue();
     document.location = url;
   }
-}
-
-hui.ui.listen(wordsApp);
-
+})
 
 })

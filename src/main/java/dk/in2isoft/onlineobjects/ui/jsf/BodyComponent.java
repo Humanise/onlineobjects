@@ -84,7 +84,7 @@ public class BodyComponent extends HtmlBody {
 		}
 		String js = writer.toString();
 		if (Strings.isNotBlank(js)) {
-			out.startScopedScript().write("require(['all'],function() {").write(js).write("});").endScopedScript();
+			out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
 		}
 		out.flush();
 		
