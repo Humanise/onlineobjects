@@ -93,9 +93,10 @@ public class ModelService implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		try {
 			Configuration configuration = new Configuration();
+			configuration.configure("hibernate.cfg.xml");
 			PostDeleteEventListener[] postDeleteEventListener = {eventService};
 			configuration.getEventListeners().setPostCommitDeleteEventListeners(postDeleteEventListener);
-			sessionFactory = configuration.configure().buildSessionFactory();
+			sessionFactory = configuration.buildSessionFactory();
 		} catch (Throwable t) {
 			log.fatal("Could not create session factory", t);
 			throw new ExceptionInInitializerError(t);
