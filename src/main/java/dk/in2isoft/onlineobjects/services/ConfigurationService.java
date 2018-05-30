@@ -53,6 +53,9 @@ public class ConfigurationService implements InitializingBean {
 
 
 	public void afterPropertiesSet() throws Exception {
+		if (!new File(basePath).isDirectory()) {
+			throw new ConfigurationException("The base path is not a dir: " + basePath);
+		}
 		storageDir = new File(storagePath);
 		if (!storageDir.canWrite()) {
 			throw new ConfigurationException("Unable to write to storage directory on path: "+storageDir);
