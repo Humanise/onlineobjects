@@ -71,7 +71,7 @@
           <groups>${testcase.groups}</groups>
         </configuration>
       </plugin>
-<!-- 
+<!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jdeps-plugin</artifactId>
@@ -108,10 +108,6 @@
     <repository>
       <id>caucho</id>
       <url>http://caucho.com/m2/</url>
-    </repository>
-    <repository>
-      <id>boilerpipe</id>
-      <url>https://boilerpipe.googlecode.com/svn/repo/</url>
     </repository>
     <repository>
       <id>clojars.org</id>
@@ -692,16 +688,16 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>de.l3s.boilerpipe</groupId>
+      <groupId>com.robbypond</groupId>
       <artifactId>boilerpipe</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.3</version>
     </dependency>
     <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
       <version>1.9.17</version>
     </dependency>
-    
+
     <dependency>
       <groupId>com.github.chimbori</groupId>
       <artifactId>crux</artifactId>

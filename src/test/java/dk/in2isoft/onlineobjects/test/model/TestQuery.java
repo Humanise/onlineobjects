@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.hibernate.classic.Session;
 import org.junit.Test;
 
-import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
