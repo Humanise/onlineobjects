@@ -83,7 +83,7 @@ public class SetupController extends SetupControllerBase {
 		int pageSize = 40;
 		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
 		SearchResult<User> result = modelService.search(query);
-
+		
 		ListWriter writer = new ListWriter(request);
 		
 		writer.startList();
@@ -91,8 +91,8 @@ public class SetupController extends SetupControllerBase {
 		writer.startHeaders();
 		writer.header("Name");
 		writer.header("Username");
-		writer.header("E-mail");
 		writer.header("Person");
+		writer.header("E-mail");
 		writer.header("E-mails");
 		writer.header("Image");
 		writer.header("Images");
@@ -327,6 +327,13 @@ public class SetupController extends SetupControllerBase {
 		Long id = request.getId();
 		User user = modelService.getRequired(User.class, id, privileged);
 		memberService.deleteMember(user, privileged);
+	}
+	
+	@Path
+	public void sendPasswordReset(Request request) throws EndUserException {
+		Long id = request.getId();
+		User user = modelService.getRequired(User.class, id, request.getSession());
+		passwordRecoveryService.sendRecoveryMail(user);
 	}
 	
 	@Path

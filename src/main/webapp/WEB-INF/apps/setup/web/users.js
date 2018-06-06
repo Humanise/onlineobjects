@@ -9,6 +9,32 @@ hui.ui.listen({
       this.loadUser(row);
     }
   },
+  $select$list : function(selection) {
+    infoIcon.setEnabled(!!selection);
+    passwordResetIcon.setEnabled(!!selection);
+  },
+  $click$infoIcon : function() {
+    var row = list.getFirstSelection();
+    if (row) {
+      this.loadUser(row);
+    }
+  },
+  $click$passwordResetIcon : function() {
+    var row = list.getFirstSelection();
+    if (row) {
+      hui.ui.msg({busy:true, text: 'Sending...'});
+      hui.ui.request({
+        url : 'sendPasswordReset',
+        parameters :{id : row.id},
+        $success : function(user) {
+          hui.ui.msg.success({text:'It is on its way'})
+        },
+        $failure : function() {
+          hui.ui.msg.fail({text:'It failed'})
+        }
+      });
+    }
+  },
   loadUser : function(row) {
     userFormula.reset();
     userEditor.show();

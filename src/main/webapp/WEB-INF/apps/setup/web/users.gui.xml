@@ -19,6 +19,8 @@
     <top>
       <toolbar>
         <icon icon="common/new" text="Add member" name="newMember"/>
+        <icon icon="common/info" text="Info" name="infoIcon" disabled="true"/>
+        <icon icon="common/letter" text="Send password reset" name="passwordResetIcon" disabled="true"/>
         <right>
           <item label="Search">
             <searchfield name="search" expanded-width="200"/>

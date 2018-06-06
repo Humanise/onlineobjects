@@ -11,6 +11,7 @@ import dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherService;
 import dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
+import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class SetupControllerBase extends ApplicationController {
@@ -22,6 +23,7 @@ public abstract class SetupControllerBase extends ApplicationController {
 	protected OnlinePublisherService onlinePublisherService;
 	protected MemberService memberService;
 	protected IndexService indexService;
+	protected PasswordRecoveryService passwordRecoveryService;
 
 	public SetupControllerBase() {
 		super("setup");
@@ -67,5 +69,9 @@ public abstract class SetupControllerBase extends ApplicationController {
 	
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
+	}
+	
+	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
+		this.passwordRecoveryService = passwordRecoveryService;
 	}
 }
