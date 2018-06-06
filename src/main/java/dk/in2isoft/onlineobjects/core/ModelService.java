@@ -763,9 +763,10 @@ public class ModelService implements InitializingBean {
 	public <T> @Nullable T getFirst(ItemQuery<T> query) {
 		Query q = query.createItemQuery(getSession());
 		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Object result = q.uniqueResult();
-		if (result!=null) {
-			return (T) getSubject(result);
+		q.setFetchSize(1);
+		ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
+		if (results.next()) {
+			return (T) getSubject(results.get(0));
 		}
 		return null;
 	}
