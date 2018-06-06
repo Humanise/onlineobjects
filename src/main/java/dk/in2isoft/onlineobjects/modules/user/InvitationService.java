@@ -41,6 +41,7 @@ public class InvitationService {
 	}
 
 	public Invitation createAndSendInvitation(String name, String emailAddress, String message, User sender) throws EndUserException {
+		// TODO: Maybe check if a user with the primary e-mail already exists
 		Person person = new Person();
 		person.setFullName(name);
 		modelService.createItem(person, sender);
