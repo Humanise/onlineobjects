@@ -167,6 +167,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 	}
 
 	public Query<T> as(Privileged... privileged) {
+		// TODO (Admin) should be ignored
 		if (privileged==null || privileged.length==1 && privileged[0]==null) {
 			this.privileged = null;
 		}
@@ -379,13 +380,6 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 				hql.append(" and childrel_").append(i).append(".kind=:childKind_").append(i);
 			}
 		}
-		/*
-		if (parent != null) {
-			hql.append(" and parentrel.from=:parent and parentrel.to=obj");
-			if (parentKind != null) {
-				hql.append(" and parentrel.kind=:parentKind");
-			}
-		}*/
 		if (toEntity != null) {
 			hql.append(" and childSuper.id=obj.id and childSub.id=:child");
 			if (toKind != null) {
