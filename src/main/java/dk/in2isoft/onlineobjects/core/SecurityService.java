@@ -90,9 +90,6 @@ public class SecurityService {
 		if (user==null) {
 			throw new IllegalRequestException("The user with username: "+username+" was not found");
 		}
-		if (!ValidationUtil.isValidPassword(newPassword)) {
-			throw new IllegalRequestException("The new password is not valid");
-		}
 		changePassword(user, newPassword, privileged);
 	}
 
