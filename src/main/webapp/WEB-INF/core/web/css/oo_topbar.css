@@ -187,7 +187,8 @@
     width: 60px;
     height: 60px;
     float: left;
-    font-size: 0; }
+    font-size: 0;
+    background: #eee; }
     .oo_topbar_info_photo_img {
       width: 60px;
       height: 60px;
