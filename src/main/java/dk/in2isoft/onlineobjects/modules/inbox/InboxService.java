@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.events.AnyModelChangeListener;
 import dk.in2isoft.onlineobjects.core.events.EventService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -25,6 +26,7 @@ public class InboxService implements InitializingBean {
 	private static Logger log = Logger.getLogger(InboxService.class);
 	
 	private ModelService modelService;
+	private SecurityService securityService;
 
 	private EventService eventService;
 	
@@ -46,7 +48,10 @@ public class InboxService implements InitializingBean {
 	}
 
 	public Pile getOrCreateInbox(User privileged) throws ModelException, SecurityException {
-		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX).as(privileged);
+		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX);
+		if (!securityService.isAdminUser(privileged)) {
+			query.as(privileged);
+		}
 		Pile inbox = modelService.getFirst(query);
 		if (inbox==null) {
 			inbox = new Pile();
@@ -108,5 +113,9 @@ public class InboxService implements InitializingBean {
 
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }
