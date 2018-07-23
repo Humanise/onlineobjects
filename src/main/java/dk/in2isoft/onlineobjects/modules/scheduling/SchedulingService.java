@@ -11,6 +11,7 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
@@ -282,12 +283,16 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	}
 	
 	public void runJob(String name, String group) {
+		runJob(name, group, null);
+	}
+
+	public void runJob(String name, String group, JobDataMap data) {
 		try {
 			JobKey key = JobKey.jobKey(name, group);
 			JobDetail jobDetail = scheduler.getJobDetail(key);
 			if (jobDetail!=null) {
 				log("Running job",key);
-				scheduler.triggerJob(key);
+				scheduler.triggerJob(key, data);
 			}
 		} catch (SchedulerException e) {
 			log.error("Exception while running job", e);

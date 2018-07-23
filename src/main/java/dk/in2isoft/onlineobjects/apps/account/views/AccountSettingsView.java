@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -10,8 +8,9 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 
-public class AccountSettingsView extends AbstractManagedBean implements InitializingBean {
+public class AccountSettingsView extends AbstractManagedBean {
 
 	private ModelService modelService;
 	
@@ -25,8 +24,10 @@ public class AccountSettingsView extends AbstractManagedBean implements Initiali
 	
 	private boolean allowed;
 	
-	public void afterPropertiesSet() throws Exception {
-		user = getRequest().getSession().getUser();
+	private String language;
+	
+	public void before(Request request) throws Exception {
+		user = request.getSession().getUser();
 		if (user.getUsername().equals(SecurityService.PUBLIC_USERNAME)) {
 			return;
 		}
@@ -42,6 +43,7 @@ public class AccountSettingsView extends AbstractManagedBean implements Initiali
 		if (email!=null) {
 			primaryEmail = email.getAddress();
 		}
+		language = request.getLanguage(); 
 	}
 	
 	public String getSecret() {
@@ -62,6 +64,10 @@ public class AccountSettingsView extends AbstractManagedBean implements Initiali
 	
 	public String getPrimaryEmail() {
 		return primaryEmail;
+	}
+
+	public String getLanguage() {
+		return language;
 	}
 	
 	// Wiring...

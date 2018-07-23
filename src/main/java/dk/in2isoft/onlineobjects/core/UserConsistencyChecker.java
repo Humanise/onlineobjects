@@ -41,7 +41,7 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 			modelService.commit();
 			log.info("Administrator created!");
 		}
-
+		modelService.commit();
 	}
 
 	public void setModelService(ModelService modelService) {

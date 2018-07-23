@@ -2,8 +2,6 @@ package dk.in2isoft.onlineobjects.apps.photos.views;
 
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -23,7 +21,7 @@ import dk.in2isoft.onlineobjects.ui.data.CloudItem;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
-public class PhotosUserView extends AbstractManagedBean implements InitializingBean {
+public class PhotosUserView extends AbstractManagedBean {
 
 	private ModelService modelService;
 	private PhotoService photoService; 
@@ -38,8 +36,7 @@ public class PhotosUserView extends AbstractManagedBean implements InitializingB
 	private List<CloudItem<Word>> cloud;
 	private String root;
 	
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
+	public void before(Request request) throws Exception {
 		String[] path = request.getLocalPath();
 		username = path[2];
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
@@ -72,6 +69,22 @@ public class PhotosUserView extends AbstractManagedBean implements InitializingB
 			item.setFraction(fraction);
 			item.setLevel(Math.round(fraction * 10f));
 		}
+		
+		listModel = new ListModel<Image>() {
+
+			@Override
+			public ListModelResult<Image> getResult() {
+				PhotoIndexQuery query = new PhotoIndexQuery().withPage(getPage()).withPageSize(getPageSize()).withOwner(user).withViewer(request.getSession());
+				query.withText(text);
+				if (wordId!=null) {
+					query.withWordId(wordId);
+				}
+				SearchResult<Image> searchResult = photoService.search(query);
+				return new ListModelResult<Image>(searchResult.getList(),searchResult.getTotalCount());
+			}
+			
+		};
+		listModel.setPageSize(42);
 	}
 	
 	public String getUsername() {
@@ -95,24 +108,7 @@ public class PhotosUserView extends AbstractManagedBean implements InitializingB
 	}
 	
 	public ListModel<Image> getImageList() {
-		if (listModel!=null) return listModel;
-		ListModel<Image> model = new ListModel<Image>() {
-
-			@Override
-			public ListModelResult<Image> getResult() {
-				PhotoIndexQuery query = new PhotoIndexQuery().withPage(getPage()).withPageSize(getPageSize()).withOwner(user).withViewer(getRequest().getSession());
-				query.withText(text);
-				if (wordId!=null) {
-					query.withWordId(wordId);
-				}
-				SearchResult<Image> searchResult = photoService.search(query);
-				return new ListModelResult<Image>(searchResult.getList(),searchResult.getTotalCount());
-			}
-			
-		};
-		model.setPageSize(42);
-		listModel = model;
-		return model;
+		return listModel;
 	}
 	
 	// Wiring...

@@ -15,17 +15,18 @@ import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
-public class PeopleListView extends AbstractManagedBean implements InitializingBean {
+public class PeopleListView extends AbstractManagedBean {
 
 	private ModelService modelService;
 
 	private ListModel<UserInfo> model;
 
-	public void afterPropertiesSet() throws Exception {
-		Privileged privileged = getRequest().getSession();
+	public void before(Request request) throws Exception {
+		Privileged privileged = request.getSession();
 		model = new ListModel<UserInfo>() {
 			@Override
 			public ListModelResult<UserInfo> getResult() {

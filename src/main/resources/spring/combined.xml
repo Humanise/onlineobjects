@@ -161,7 +161,26 @@
 	
 	<bean id="invitationService" class="dk.in2isoft.onlineobjects.modules.user.InvitationService" autowire="byType"/>
 	
-	<bean id="memberService" class="dk.in2isoft.onlineobjects.modules.user.MemberService" autowire="byType"/>
+	<bean id="memberService" class="dk.in2isoft.onlineobjects.modules.user.MemberService" autowire="byType">
+      <property name="agreementConfigs">
+      <util:map>
+        <entry>
+          <key><value>terms</value></key>
+          <util:list>
+            <value>2018-07-06</value>
+          </util:list>
+        </entry>
+        <entry>
+          <key><value>privacy</value></key>
+          <util:list>
+            <value>1984-07-01</value>
+            <value>2018-07-01</value>
+            <value>2018-07-06</value>
+          </util:list>
+        </entry>
+      </util:map>
+      </property>
+    </bean>
 
 	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService">
 		<property name="configurationService" ref="configurationService"/>

@@ -3,8 +3,6 @@ package dk.in2isoft.onlineobjects.apps.photos.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -18,22 +16,24 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.photos.SimplePhotoPerspective;
 import dk.in2isoft.onlineobjects.modules.photos.SimplePhotoQuery;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 import dk.in2isoft.onlineobjects.ui.jsf.model.GalleryItem;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 
-public class PhotosFrontView extends AbstractManagedBean implements InitializingBean {
+public class PhotosFrontView extends AbstractManagedBean {
 
 	private ModelService modelService;
 	private SecurityService securityService;
 	private List<MasonryItem> masonryList;
+	private ListModel<GalleryItem> model;
 	
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void before(Request request) throws Exception {
 		SimplePhotoQuery simplePhotoQuery = new SimplePhotoQuery(securityService.getPublicUser());
 		List<SimplePhotoPerspective> list = modelService.list(simplePhotoQuery);
-		String language = getRequest().getLanguage();
+		String language = request.getLanguage();
 		
 		
 		masonryList = Lists.newArrayList();
@@ -52,22 +52,24 @@ public class PhotosFrontView extends AbstractManagedBean implements Initializing
 			item.colors = image.getColors();
 			masonryList.add(item);
 		}
-	}
-	
-	public ListModel<GalleryItem> getImageList() {
+
 		ListModel<GalleryItem> model = new ListModel<GalleryItem>() {
 
 			@Override
 			public ListModelResult<GalleryItem> getResult() {
 				Query<Image> query = Query.of(Image.class).orderByCreated().withPaging(getPage(), getPageSize()).as(securityService.getPublicUser()).descending();
 				SearchResult<Image> result = modelService.search(query);
-				List<GalleryItem> list = convert(result.getList(), getRequest().getSession());
+				List<GalleryItem> list = convert(result.getList(), request.getSession());
 				return new ListModelResult<GalleryItem>(list,result.getTotalCount());
 			}
 			
 		};
 		model.setPageSize(40);
-		return model;
+		this.model = model;
+}
+	
+	public ListModel<GalleryItem> getImageList() {
+		return this.model;
 	}
 	
 	private List<GalleryItem> convert(List<Image> images, Privileged privileged) {

@@ -35,7 +35,7 @@ public class ApplicationConsistencyChecker implements ConsistencyChecker {
 			modelService.commit();
 			log.info("Created setup application");
 		}
-
+		modelService.commit();
 	}
 
 	public void setModelService(ModelService modelService) {

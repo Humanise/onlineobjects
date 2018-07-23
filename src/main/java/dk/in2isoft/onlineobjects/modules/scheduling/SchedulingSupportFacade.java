@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherService;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.synchronization.MailWatchingService;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
@@ -31,6 +32,7 @@ public class SchedulingSupportFacade {
 	private WordService wordService;
 	private Collection<ConfigurableIndexer<? extends Entity>> configurableIndexers;
 	private LanguageService languageService;
+	private MemberService memberService;
 
 	public InformationService getInformationService() {
 		return informationService;
@@ -139,5 +141,13 @@ public class SchedulingSupportFacade {
 	
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
+	}
+	
+	public MemberService getMemberService() {
+		return memberService;
+	}
+	
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 }

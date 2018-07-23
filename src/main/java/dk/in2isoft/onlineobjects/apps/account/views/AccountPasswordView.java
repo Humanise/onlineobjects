@@ -6,8 +6,9 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 
-public class AccountPasswordView extends AbstractManagedBean implements InitializingBean {
+public class AccountPasswordView extends AbstractManagedBean {
 
 	private PasswordRecoveryService passwordRecoveryService;
 
@@ -17,9 +18,9 @@ public class AccountPasswordView extends AbstractManagedBean implements Initiali
 	
 	private boolean found;
 	
-	public void afterPropertiesSet() throws Exception {
+	public void before(Request request) throws Exception {
 		
-		key = getRequest().getString("key");
+		key = request.getString("key");
 		if (Strings.isNotBlank(key)) {
 			user = passwordRecoveryService.getUserByRecoveryKey(key);
 			found = user!=null;

@@ -151,9 +151,10 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 			if (!relation.isPresent()) {
 				log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");		
 				modelService.createRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
-				modelService.commit(); 				
+				modelService.commit();
 			}
 		}		
+		modelService.commit();
 	}
 
 	public void setModelService(ModelService modelService) {

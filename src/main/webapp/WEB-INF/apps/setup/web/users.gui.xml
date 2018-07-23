@@ -21,6 +21,8 @@
         <icon icon="common/new" text="Add member" name="newMember"/>
         <icon icon="common/info" text="Info" name="infoIcon" disabled="true"/>
         <icon icon="common/letter" text="Send password reset" name="passwordResetIcon" disabled="true"/>
+        <icon icon="common/letter" text="Send e-mail confirmation" name="emailConfirmationIcon" disabled="true"/>
+        <icon icon="common/letter" text="Check health" name="checkHealth" disabled="true"/>
         <right>
           <item label="Search">
             <searchfield name="search" expanded-width="200"/>
@@ -35,7 +37,7 @@
             <option icon="common/user" text="All users" value="users"/>
           </selection>
 
-          <selection name="typeSelection">
+          <selection name="typeSelection" value="info">
             <title>Stuff</title>
             <option icon="common/info" text="Info" value="info"/>
             <option icon="common/info" text="Clients" value="clients"/>

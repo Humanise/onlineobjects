@@ -6,7 +6,6 @@ import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 @Appearance(icon="common/user")
 public class User extends Entity implements Privileged {
 
-	public static final String PASSWORD_RECOVERY_CODE_PROPERTY = "item.enity.user.passwordrecoverycode";
 	public static String TYPE = Entity.TYPE+"/User";
 	public static String NAMESPACE = Entity.NAMESPACE+"User/";
 	public static final String FIELD_USERNAME = "username";

@@ -6,7 +6,6 @@ import java.util.Locale;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
@@ -18,8 +17,8 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Location;
@@ -29,13 +28,14 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.services.PersonService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MapPoint;
 import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
 import dk.in2isoft.onlineobjects.util.images.ImageInfo;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
-public class PhotosPhotoView extends AbstractManagedBean implements InitializingBean {
+public class PhotosPhotoView extends AbstractManagedBean {
 
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -60,9 +60,16 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 	private List<ImageGallery> galleries;
 	
 	private String fullPersonName;
+	private Long imageId;
 	
-	public void afterPropertiesSet() throws Exception {
-		UserSession session = getRequest().getSession();
+	public void before(Request request) throws Exception {
+		UserSession session = request.getSession();
+		{
+			String[] path = request.getLocalPath();
+			String string = path[path.length-1];
+			String[] split = string.split("\\.");
+			imageId = Long.valueOf(split[0]);
+		}
 		image = modelService.get(Image.class, getImageId(), session);
 		if (image!=null) {
 			Messages msg = new Messages(PhotosController.class);
@@ -110,7 +117,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 			nextId = ids.get(next);
 			previousId = ids.get(previous);
 			
-			Locale locale = getRequest().getLocale();
+			Locale locale = request.getLocale();
 			properties = Lists.newArrayList();
 			properties.add(new SelectItem(image.getWidth()+" x "+image.getHeight()+" - "+getMegaPixels()+" Megapixel",msg.get("size", locale)));
 			properties.add(new SelectItem(Files.formatFileSize(image.getFileSize())+", "+image.getContentType(),msg.get("file", locale)));
@@ -143,7 +150,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 				words.add(Pair.of(word, link));
 			}
 
-			String[] path = getRequest().getLocalPath();
+			String[] path = request.getLocalPath();
 			language = path[0];
 			
 			galleries = modelService.getParents(image, ImageGallery.class,session);
@@ -222,10 +229,7 @@ public class PhotosPhotoView extends AbstractManagedBean implements Initializing
 	}
 	
 	public Long getImageId() {
-		String[] path = getRequest().getLocalPath();
-		String string = path[path.length-1];
-		String[] split = string.split("\\.");
-		return Long.valueOf(split[0]);
+		return imageId;
 	}
 	
 	public String getLanguage() {

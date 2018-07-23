@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Person;
+import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 
@@ -46,7 +47,7 @@ public class PasswordRecoveryService {
 	
 	public boolean sendRecoveryMail(User user, Person person, EmailAddress email) throws EndUserException {
 		String random = Strings.generateRandomString(30);
-		user.overrideFirstProperty(User.PASSWORD_RECOVERY_CODE_PROPERTY, random);
+		user.overrideFirstProperty(Property.KEY_PASSWORD_RECOVERY_CODE, random);
 		modelService.updateItem(user, securityService.getAdminPrivileged());
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
@@ -66,7 +67,7 @@ public class PasswordRecoveryService {
 
 	public User getUserByRecoveryKey(String key) {
 
-		SearchResult<User> result = modelService.search(Query.of(User.class).withCustomProperty(User.PASSWORD_RECOVERY_CODE_PROPERTY, key));
+		SearchResult<User> result = modelService.search(Query.of(User.class).withCustomProperty(Property.KEY_PASSWORD_RECOVERY_CODE, key));
 		return result.getFirst();
 	}
 	

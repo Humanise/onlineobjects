@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.QuestionApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.StatementApiPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
+import dk.in2isoft.onlineobjects.modules.user.Agreement;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -403,6 +405,13 @@ public class APIController extends APIControllerBase {
 		}
 		return knowledgeService.getAddressPerspective(internetAddress, new UserSession(user));
 	}
+
+	@Path(exactly = { "v1.0", "knowledge", "agreements" })
+	public List<Agreement> agreements(Request request) throws IOException, EndUserException {
+		Locale locale = new Locale(request.getString("locale", "No locale supplied"));
+		User user = request.getSession().getUser();
+		return memberService.getAgreements(user, locale);
+	}	
 
 	private User getUserForSecretKey(Request request) throws SecurityException {
 		String secret = request.getString("secret");

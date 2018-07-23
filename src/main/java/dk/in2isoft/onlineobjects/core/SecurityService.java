@@ -101,7 +101,7 @@ public class SecurityService {
 		String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
 		user.setPassword(encryptedPassword);
 		user.setSalt(salt);
-		user.removeProperties(User.PASSWORD_RECOVERY_CODE_PROPERTY);
+		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
 		modelService.updateItem(user, privileged);
 	}
 
@@ -369,7 +369,7 @@ public class SecurityService {
 		}
 		return null;
 	}*/
-
+/*
 	public String generateNewSecret(User user) throws ModelException, SecurityException {
 		User reloaded = modelService.get(User.class, user.getId(), user);
 		if (reloaded!=null) {
@@ -380,7 +380,7 @@ public class SecurityService {
 		}
 		return null;
 	}
-	
+*/	
 	public String buildSecret() {
 		return Strings.generateRandomString(50);
 	}

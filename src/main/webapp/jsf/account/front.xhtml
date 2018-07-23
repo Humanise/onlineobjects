@@ -13,6 +13,7 @@
       <o:box>
         <o:header>#{msg.account}</o:header>
         <p class="account_user"><strong class="account_user_label">#{msg.username}:</strong> #{accountSettingsView.user.username}</p>
+        <p><o:link href="/${accountSettingsView.language}/agreements">#{msg.agreements_title}</o:link></p>
 
         <c:choose>
           <c:when test="#{accountSettingsView.allowed}">
@@ -35,8 +36,6 @@
                 <gui:button text="#{msg.change_password}" submit="true" variant="light"/>
               </div>
             </gui:formula>
-            <p><textarea id="secret" class="account_secret">#{accountSettingsView.secret}</textarea></p>
-            <p><gui:button text="#{msg.new_secret}" name="newSecret" variant="light"/></p>
           </c:when>
           <c:otherwise>
             <p>Not allowed</p>

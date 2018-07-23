@@ -12,6 +12,8 @@ hui.ui.listen({
   $select$list : function(selection) {
     infoIcon.setEnabled(!!selection);
     passwordResetIcon.setEnabled(!!selection);
+    emailConfirmationIcon.setEnabled(!!selection);
+    checkHealth.setEnabled(!!selection);
   },
   $click$infoIcon : function() {
     var row = list.getFirstSelection();
@@ -29,6 +31,35 @@ hui.ui.listen({
         $success : function(user) {
           hui.ui.msg.success({text:'It is on its way'})
         },
+        $failure : function() {
+          hui.ui.msg.fail({text:'It failed'})
+        }
+      });
+    }
+  },
+  $click$emailConfirmationIcon : function() {
+    var row = list.getFirstSelection();
+    if (row) {
+      hui.ui.msg({busy:true, text: 'Sending...'});
+      hui.ui.request({
+        url : 'sendEmailConfirmation',
+        parameters :{id : row.id},
+        $success : function(user) {
+          hui.ui.msg.success({text:'It is on its way'})
+        },
+        $failure : function() {
+          hui.ui.msg.fail({text:'It failed'})
+        }
+      });
+    }
+  },
+  $click$checkHealth : function() {
+    var row = list.getFirstSelection();
+    if (row) {
+      hui.ui.request({
+        message: {start:'Sending...', success: 'Scheduled!'},
+        url : 'checkHealth',
+        parameters :{id : row.id},
         $failure : function() {
           hui.ui.msg.fail({text:'It failed'})
         }

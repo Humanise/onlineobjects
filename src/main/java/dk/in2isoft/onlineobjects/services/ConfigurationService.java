@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.services;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -116,6 +117,9 @@ public class ConfigurationService implements InitializingBean {
 		return String.valueOf(lifeCycleService.getStartTime().getTime());
 	}
 	
+	public Date getDeploymentTime() {
+		return lifeCycleService.getStartTime();
+	}
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;

@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Synchronization;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -28,7 +30,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.event.EventListeners;
 import org.hibernate.event.PostDeleteEventListener;
+import org.hibernate.event.PostInsertEventListener;
+import org.hibernate.event.PostUpdateEventListener;
 import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
@@ -93,8 +98,12 @@ public class ModelService implements InitializingBean {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure("hibernate.cfg.xml");
-			PostDeleteEventListener[] postDeleteEventListener = {eventService};
-			configuration.getEventListeners().setPostCommitDeleteEventListeners(postDeleteEventListener);
+			//configuration.getEventListeners().setPostDeleteEventListeners(postDeleteEventListener);
+			//PostDeleteEventListener[] postDeleteEventListener = ;
+			EventListeners events = configuration.getEventListeners();
+			events.setPostCommitDeleteEventListeners(new PostDeleteEventListener[] {eventService});
+			events.setPostCommitInsertEventListeners(new PostInsertEventListener[] {eventService});
+			events.setPostCommitUpdateEventListeners(new PostUpdateEventListener[] {eventService});
 			sessionFactory = configuration.buildSessionFactory();
 		} catch (Throwable t) {
 			log.fatal("Could not create session factory", t);
@@ -200,7 +209,21 @@ public class ModelService implements InitializingBean {
 		Session session = sessionFactory.getCurrentSession();
 		if (!session.getTransaction().isActive()) {
 			try {
-				session.beginTransaction();
+				final Transaction tx = session.beginTransaction();
+				tx.registerSynchronization(new Synchronization() {
+					
+					@Override
+					public void beforeCompletion() {
+						// TODO Auto-generated method stub
+						log.info("before transaction completion");
+					}
+					
+					@Override
+					public void afterCompletion(int status) {
+						log.info("after transaction completion: " + status + ", "+ tx.hashCode());
+					}
+				});
+				log.info("New transaction: " + tx.hashCode()); 
 			} catch (JDBCConnectionException e) {
 				// TODO Handle this somehow
 			}
@@ -327,6 +350,7 @@ public class ModelService implements InitializingBean {
 
 	@Deprecated
 	private void removeAllRelations(Entity entity) {
+		
 		Session session = getSession();
 		{
 			String hql = "delete Privilege p where p.object in (select relation.id from Relation relation where relation.from=:entity or relation.to=:entity)";
@@ -336,11 +360,15 @@ public class ModelService implements InitializingBean {
 			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
-			String hql = "delete Relation relation where relation.from=:entity or relation.to=:entity)";
+			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity)";
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
-			int count = q.executeUpdate();
-			log.info("Deleting relations for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
+			ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
+			while (results.next()) {
+				Relation rel = (Relation) results.get(0);
+				session.delete(rel);
+				eventService.fireItemWasDeleted(rel);
+			}
 		}
 	}
 

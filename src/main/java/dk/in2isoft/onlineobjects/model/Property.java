@@ -49,6 +49,12 @@ public class Property {
 	public static final String KEY_CLIENT_HARDWARE = "client.hardware";
 	public static final String KEY_CLIENT_HARDWARE_VERSION = "client.hardware.version";
 
+	public static final String KEY_PASSWORD_RECOVERY_CODE = "user.passwordrecoverycode";
+	public static final String KEY_TERMS_ACCEPTANCE_TIME = "user.termsacceptancetime";
+	public static final String KEY_EMAIL_CONFIRMATION_CODE = "emailaddress.confirmationcode";
+	public static final String KEY_EMAIL_CONFIRMATION_REQUEST_TIME = "emailaddress.confirmationrequesttime";
+
+	public static final String KEY_CONFIRMATION_TIME = "common.confirmationtime";
 
 	private long id;
 

@@ -4,7 +4,10 @@ var passwordView = {
 
   $ready : function() {
     this.key = hui.get('js-account-data').getAttribute('data-key');
-    hui.ui.get('resetPasswordForm').focus();
+    var form = hui.ui.get('resetPasswordForm');
+    if (form) {
+      form.focus();
+    }
   },
   $submit$resetPasswordForm : function(form) {
     var values = form.getValues();

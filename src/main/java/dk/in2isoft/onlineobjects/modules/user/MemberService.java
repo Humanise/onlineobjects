@@ -1,18 +1,39 @@
 package dk.in2isoft.onlineobjects.modules.user;
 
+import java.io.File;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.quartz.JobDataMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.apps.account.AccountController;
 import dk.in2isoft.onlineobjects.core.EntitylistSynchronizer;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -26,14 +47,26 @@ import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import dk.in2isoft.onlineobjects.services.EmailService;
 import dk.in2isoft.onlineobjects.services.WebModelService;
+import dk.in2isoft.onlineobjects.util.Messages;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class MemberService {
 	
+	private static final Logger log = LoggerFactory.getLogger(MemberService.class);
+	
 	private ModelService modelService;
 	private WebModelService webModelService;
 	private SecurityService securityService;
+	private ConfigurationService configurationService;
+	private EmailService emailService;
+	private SchedulingService schedulingService;
+	
+	private List<Agreement> agreements;
+	private Multimap<String,Date> agreementConfigs = HashMultimap.create();
 
 	public void validateNewMember(String username, String password) throws IllegalRequestException {
 		if (!StringUtils.isNotBlank(username)) {
@@ -93,6 +126,8 @@ public class MemberService {
 
 		securityService.changeUser(session, username, password);
 
+		markTermsAcceptance(user, user);
+		
 		return user;
 	}
 
@@ -151,6 +186,9 @@ public class MemberService {
 	
 			webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
 			*/
+			modelService.commit();
+			scheduleHealthCheck(user);
+			
 			return user;
 		}
 	}
@@ -234,6 +272,10 @@ public class MemberService {
 	
 	public EmailAddress getUsersPrimaryEmail(User user, Privileged privileged) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
+	}
+	
+	public User getUserOfPrimaryEmail(EmailAddress email, Privileged privileged) throws ModelException {
+		return modelService.getParent(email, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
 	}
 
 	/*
@@ -370,7 +412,134 @@ public class MemberService {
 			modelService.deleteEntity(number, priviledged);
 		}
 	}
+	
+	public void scheduleHealthCheck(User user) {
+		JobDataMap data = new JobDataMap();
+		data.put(UserHealthCheckJob.USER_ID, user.getId());
+		schedulingService.runJob(UserHealthCheckJob.NAME, UserHealthCheckJob.GROUP, data);
+	}
 
+	public void checkUserHealth(long userId) throws EndUserException {
+		Privileged privileged = securityService.getAdminPrivileged();
+		@NonNull
+		User user = modelService.getRequired(User.class, userId, privileged);
+		EmailAddress primaryEmail = getUsersPrimaryEmail(user, privileged);
+		if (primaryEmail != null) {
+			Date time = user.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
+			if (time == null) {
+				sendEmailConfirmation(user, privileged);
+			}
+		}
+	}
+
+	public void sendEmailConfirmation(User user, Privileged privileged) throws EndUserException {
+		Person person = getUsersPerson(user, privileged);
+		EmailAddress email = getUsersPrimaryEmail(user, privileged);
+		String random = Strings.generateRandomString(30);
+		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, random);
+		modelService.updateItem(email, user);
+		StringBuilder url = new StringBuilder();
+		String context = configurationService.getApplicationContext("account");
+		url.append(context);
+		// TODO: Get users preferred language
+		url.append("/en/" + AccountController.EMAIL_CONFIRM_PATH + "?key=");
+		url.append(random);
+		url.append("&email=").append(email.getAddress());
+
+		Map<String,Object> parms = new HashMap<>();
+		parms.put("name", person.getFullName());
+		parms.put("url", url.toString());
+		parms.put("base-url", "http://" + configurationService.getBaseUrl());
+		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailconfirmation-template.html", parms);
+		
+		try {
+			emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),person.getName());
+			email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME, new Date());
+		} catch (EndUserException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key) throws ContentNotFoundException, ModelException, SecurityException {
+		Privileged privileged = securityService.getAdminPrivileged();
+		Query<EmailAddress> query = Query.after(EmailAddress.class).withCustomProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, key);
+		@Nullable
+		EmailAddress email = modelService.getFirst(query);
+		if (email == null) {
+			throw new ContentNotFoundException("Could not find the email with the confirmation code: "+key);
+		}
+		User user = getUserOfPrimaryEmail(email, privileged);
+		if (user == null) {
+			throw new ContentNotFoundException("Could not find the user for the email with the confirmation code: "+key);
+		}
+		String name = user.getUsername();
+		Person person = getUsersPerson(user, privileged);
+		if (person != null) {
+			name = person.getFullName();
+		}
+		return Pair.of(email, name);
+	}
+
+	public void markCondifirmed(EmailAddress email, Privileged privileged) throws SecurityException, ModelException {
+		// TODO: Use key to make sure this is legal
+		Privileged admin = securityService.getAdminPrivileged();
+		email.overrideFirstProperty(Property.KEY_CONFIRMATION_TIME, new Date());
+		modelService.updateItem(email, admin);
+	}
+
+	public void markTermsAcceptance(User user, Privileged privileged) throws SecurityException, ModelException {
+		user.overrideFirstProperty(Property.KEY_TERMS_ACCEPTANCE_TIME, new Date());
+		modelService.updateItem(user, privileged);
+	}
+
+	public boolean hasAcceptedTerms(User user, Privileged privileged) throws SecurityException, ModelException, ContentNotFoundException {
+		Date accepted = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
+		Optional<Date> latestAgreementDate = getLatestAgreementDate();
+		if (accepted == null || !latestAgreementDate.isPresent()) return false;
+		Instant latestTerms = latestAgreementDate.get().toInstant();
+		return accepted!=null && latestTerms.isBefore(accepted.toInstant());
+	}
+
+	public List<Agreement> getAgreements(User user, Locale locale) {
+		Messages msg = new Messages(Agreement.class);
+		List<Agreement> agreements = new ArrayList<>();
+		for (String key : agreementConfigs.keySet()) {
+			Date date = agreementConfigs.get(key).stream().sorted((a,b) -> b.compareTo(a)).findFirst().orElse(null);
+			Agreement agreement = new Agreement();
+			agreement.setKey(key);
+			agreement.setTitle(msg.get(key, locale));
+			agreement.setDate(date.getTime());
+			String fileName = key + "-" + DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
+			File file = configurationService.getFile("WEB-INF","core","agreements", fileName);
+
+			agreement.setContent(Files.readString(file, Strings.UTF8));
+			agreements.add(agreement);
+		}
+		return agreements;
+	}
+	
+	private Optional<Date> getLatestAgreementDate() {
+		return agreementConfigs.values().stream().sorted((a,b) -> b.compareTo(a)).findFirst();
+	}
+	
+	public void setAgreementConfigs(Map<String,List<String>> configs) {
+		
+		for (Entry<String, List<String>> entry : configs.entrySet()) {
+			for (String dateStr : entry.getValue()) {
+				try {
+					agreementConfigs.put(entry.getKey(),org.apache.commons.lang3.time.DateUtils.parseDate(dateStr,"yyyy-MM-dd"));
+				} catch (Exception e) {
+					log.error("Error parsing date",e);
+				}
+
+			}
+		}
+		
+	}
+
+	// Wiring...
+	
+	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -395,5 +564,16 @@ public class MemberService {
 		return securityService;
 	}
 
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
+	
+	public void setSchedulingService(SchedulingService schedulingService) {
+		this.schedulingService = schedulingService;
+	}
 
 }

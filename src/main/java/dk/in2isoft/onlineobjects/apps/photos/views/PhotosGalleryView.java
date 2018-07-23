@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Numbers;
@@ -25,7 +23,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 import dk.in2isoft.onlineobjects.util.Dates;
 
-public class PhotosGalleryView extends AbstractManagedBean implements InitializingBean {
+public class PhotosGalleryView extends AbstractManagedBean {
 	
 	private ModelService modelService;
 	
@@ -45,11 +43,11 @@ public class PhotosGalleryView extends AbstractManagedBean implements Initializi
 	private Date to;
 	private String info;
 	private String view;
-	
+	private String language;
 
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
+	public void before(Request request) throws Exception {
 		Locale locale = request.getLocale();
+		language = locale.getLanguage();
 		String[] path = request.getLocalPath();
 		long id = Numbers.parseLong(path[2]);
 		final UserSession session = request.getSession();
@@ -112,7 +110,6 @@ public class PhotosGalleryView extends AbstractManagedBean implements Initializi
 	public List<MasonryItem> getMasonryList() {
 		if (masonryList==null) {
 			masonryList = Lists.newArrayList();
-			String language = getRequest().getLanguage();
 			masonryList = Lists.newArrayList();
 			for (Image image : images) {
 				MasonryItem item = new MasonryItem();

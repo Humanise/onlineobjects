@@ -24,11 +24,12 @@ import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 import dk.in2isoft.onlineobjects.services.PersonService;
 import dk.in2isoft.onlineobjects.services.RemoteDataService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 import dk.in2isoft.onlineobjects.util.remote.RemoteAccountInfo;
 
-public class PeoplePersonView extends AbstractManagedBean implements InitializingBean {
+public class PeoplePersonView extends AbstractManagedBean {
 	
 	private PersonService personService;
 	private ModelService modelService;
@@ -43,8 +44,9 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 	private ListModel<Image> latestImages;
 	private List<RemoteAccountInfo> remoteAccountInfo;
 	private boolean canModify;
+	private String usersName;
 	
-	public void afterPropertiesSet() throws Exception {
+	public void before(Request request) throws Exception {
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
 		PairSearchResult<User,Person> result = modelService.searchPairs(query);
 		if (result.getTotalCount()==0) {
@@ -53,13 +55,16 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 		Pair<User, Person> next = result.iterator().next();
 		user = next.getKey();
 		person = next.getValue();
-		Privileged privileged = getRequest().getSession();
+		Privileged privileged = request.getSession();
 		canModify = securityService.canModify(person, privileged);
 		try {
 			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class,  privileged);
 		} catch (ModelException e) {
 			// TODO: Do something usefull
 		}
+		this.profileInfo = personService.getProfileInfo(getPerson(),request.getSession());
+		String[] path = request.getLocalPath();
+		usersName = path.length==2 ? path[1] : path[0];
 	}
 	
 	public ListModel<Image> getLatestImages() {
@@ -107,11 +112,7 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 	}
 	
 	private String getUsersName() {
-		String[] path = getRequest().getLocalPath();
-		if (path.length==2) {
-			return path[1];
-		}
-		return path[0];
+		return this.usersName;
 	}
 	
 	public User getUser() {
@@ -119,9 +120,6 @@ public class PeoplePersonView extends AbstractManagedBean implements Initializin
 	}
 	
 	public UserProfileInfo getInfo() throws ModelException {
-		if (profileInfo==null) {
-			this.profileInfo = personService.getProfileInfo(getPerson(),getRequest().getSession());
-		}
 		return this.profileInfo;
 	}
 	

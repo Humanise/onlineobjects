@@ -2,8 +2,6 @@ package dk.in2isoft.onlineobjects.apps.photos.views;
 
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -18,9 +16,10 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PersonService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class PhotosLayoutView extends AbstractManagedBean implements InitializingBean {
+public class PhotosLayoutView extends AbstractManagedBean {
 
 	private ModelService modelService;
 	private PhotosGalleryView photosGalleryView;
@@ -39,8 +38,8 @@ public class PhotosLayoutView extends AbstractManagedBean implements Initializin
 
 	private Image userImage;
 	
-	public void afterPropertiesSet() throws Exception {
-		String[] path = getRequest().getLocalPath();
+	public void before(Request request) throws Exception {
+		String[] path = request.getLocalPath();
 		String type = path[1];
 		long selected = 0l;
 		if ("users".equals(type)) {
@@ -61,7 +60,7 @@ public class PhotosLayoutView extends AbstractManagedBean implements Initializin
 		fullPersonName = personService.getFullPersonName(person, 14);
 		if (user!=null) {
 			Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
-			if (user.getId()!=getRequest().getSession().getIdentity()) {
+			if (user.getId() != request.getSession().getIdentity()) {
 				galleryQuery.withPublicView();
 			}
 			List<ImageGallery> imageGalleries = modelService.list(galleryQuery);
@@ -70,8 +69,8 @@ public class PhotosLayoutView extends AbstractManagedBean implements Initializin
 				option.setSelected(gallery.getId()==selected);
 				galleries.add(option);
 			}
-			modifiable = this.user.getId() == getRequest().getSession().getUser().getId();
-			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, getRequest().getSession());
+			modifiable = this.user.getId() == request.getSession().getUser().getId();
+			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request.getSession());
 		}
 	}
 	

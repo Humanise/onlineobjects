@@ -3,8 +3,6 @@ package dk.in2isoft.onlineobjects.apps.developer.views;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -16,15 +14,11 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 
-public class DeveloperView extends AbstractManagedBean implements InitializingBean {
+public class DeveloperView extends AbstractManagedBean {
 	
 	private ModelService modelService;
 	private SecurityService securityService;
-	
-	public void afterPropertiesSet() throws Exception {
 		
-	}
-	
 	public List<Item> getUsers() {
 		PairSearchResult<User,Person> result = modelService.searchPairs(new UsersPersonQuery());
 		List<Item> list = Lists.newArrayList();

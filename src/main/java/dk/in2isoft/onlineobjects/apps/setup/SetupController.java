@@ -1,8 +1,10 @@
 package dk.in2isoft.onlineobjects.apps.setup;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
+import org.joda.time.Instant;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
@@ -93,17 +96,13 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Username");
 		writer.header("Person");
 		writer.header("E-mail");
-		writer.header("E-mails");
-		writer.header("Image");
-		writer.header("Images");
+		writer.header("Status");
+		writer.header("Access");
 		writer.header("Public",1);
 		writer.header("Self",1);
 		writer.header("Admin",1);
 		writer.endHeaders();
 		for (User user : result.getList()) {
-			Query<Image> imgQuery = Query.after(Image.class).as(user);
-			Long imageCount = modelService.count(imgQuery);
-			Image image = modelService.getChild(user, Image.class, privileged);
 			Person person = modelService.getChild(user, Person.class, privileged);
 			EmailAddress email = memberService.getUsersPrimaryEmail(user, privileged);
 			writer.startRow().withId(user.getId()).withKind("user");
@@ -121,22 +120,9 @@ public class SetupController extends SetupControllerBase {
 			}
 			writer.endCell();
 			writer.startCell();
-			if (person!=null) {
-				List<EmailAddress> emails = modelService.getChildren(person, EmailAddress.class, privileged);
-				for (Iterator<EmailAddress> i = emails.iterator(); i.hasNext();) {
-					EmailAddress mail = i.next();
-					writer.text(mail.getAddress());
-					if (i.hasNext()) writer.text(", ");
-				}
-			}
+			// Status
 			writer.endCell();
-			writer.startCell();
-			if (image!=null) {
-				writer.withIcon(image.getIcon());
-				writer.text(StringUtils.abbreviateMiddle(image.getName(), "...", 20));
-			}
-			writer.endCell();
-			writer.cell(imageCount);
+			writer.cell(user.getUpdated().toString());
 			writer.startCell().startIcons();
 			if (securityService.canView(user, publicUser)) {
 				writer.icon("monochrome/view");
@@ -254,6 +240,10 @@ public class SetupController extends SetupControllerBase {
 	}
 
 	private void listUserInfo(Request request, User user) throws IOException, ModelException {
+		
+		UserSession privileged = request.getSession();
+		Person person = memberService.getUsersPerson(user, privileged);
+		EmailAddress email = memberService.getUsersPrimaryEmail(user, privileged);
 		ListWriter writer = new ListWriter(request);
 		
 		writer.startList();
@@ -267,6 +257,49 @@ public class SetupController extends SetupControllerBase {
 		modelService.getChildren(user, Client.class, user).forEach(client -> {
 			writer.startRow().cell("Client: "+client.getName()).cell(client.getUUID() + " / " + client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
 		});
+		if (email != null) {
+			writer.startRow().cell("Primary email").cell(email.getAddress()).endRow();
+			Date emailRequestTime = email.getPropertyDateValue(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME);
+			writer.startRow().cell("Confirmation sent:").startCell();
+			if (emailRequestTime != null) {
+				writer.text(emailRequestTime).text(" ~ ").text(Dates.formatDurationFromNow(emailRequestTime));				
+			} else {
+				writer.text("Unknown");
+			}
+			writer.endCell().endRow();
+			Date confirmationTime = email.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
+			if (confirmationTime!=null) {
+				writer.startRow().cell("Primary email confirmed").startCell();
+				writer.text(confirmationTime.toString());				
+				writer.text(" ~ ").text(Dates.formatDurationFromNow(confirmationTime));
+				writer.endCell().endRow();
+				
+			}
+
+		}
+		if (person!=null) {
+			writer.startRow().cell("Person").cell(person.getFullName()).endRow();
+			List<EmailAddress> emails = modelService.getChildren(person, EmailAddress.class, privileged);
+			if (!emails.isEmpty()) {
+				writer.startRow().cell("E-mails").startCell();
+				for (Iterator<EmailAddress> i = emails.iterator(); i.hasNext();) {
+					EmailAddress mail = i.next();
+					writer.text(mail.getAddress());
+					if (i.hasNext()) writer.text(", ");
+				}
+				writer.endCell().endRow();
+			}
+		}
+		Image image = modelService.getChild(user, Image.class, privileged);
+		if (image != null) {
+			writer.startRow().cell("Profile image").cell(image.getName()).endRow();
+		}
+		writer.startRow().cell("Terms acceptance").startCell();
+		Date termsAcceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
+		if (termsAcceptanceTime != null) {
+			writer.text(termsAcceptanceTime).text(" ~ ").text(Dates.formatDurationFromNow(termsAcceptanceTime));
+		}
+		writer.endCell().endRow();
 		writer.endList();
 	}
 
@@ -336,6 +369,20 @@ public class SetupController extends SetupControllerBase {
 		passwordRecoveryService.sendRecoveryMail(user);
 	}
 	
+	@Path
+	public void sendEmailConfirmation(Request request) throws EndUserException {
+		Long id = request.getId();
+		User user = modelService.getRequired(User.class, id, request.getSession());
+		memberService.sendEmailConfirmation(user, request.getSession());
+	}
+
+	@Path
+	public void checkHealth(Request request) throws EndUserException {
+		Long id = request.getId();
+		User user = modelService.getRequired(User.class, id, request.getSession());
+		memberService.scheduleHealthCheck(user);
+	}
+
 	@Path
 	public void saveUser(Request request) throws IOException,EndUserException {
 		UserPerspective perspective = request.getObject("user", UserPerspective.class);

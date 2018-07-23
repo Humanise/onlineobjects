@@ -9,7 +9,7 @@
 
 	<bean id="developerController" class="dk.in2isoft.onlineobjects.apps.developer.DeveloperController" autowire="byType"/>
 
-	<bean id="developerComponentTestView" class="dk.in2isoft.onlineobjects.apps.developer.views.ComponentTestView" autowire="byType"/>
-	<bean id="developerView" class="dk.in2isoft.onlineobjects.apps.developer.views.DeveloperView" autowire="byType"/>
+	<bean id="developerComponentTestView" class="dk.in2isoft.onlineobjects.apps.developer.views.ComponentTestView" autowire="byType" scope="request"/>
+	<bean id="developerView" class="dk.in2isoft.onlineobjects.apps.developer.views.DeveloperView" autowire="byType" scope="request"/>
 
 </beans>

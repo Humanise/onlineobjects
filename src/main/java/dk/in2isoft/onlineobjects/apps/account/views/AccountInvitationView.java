@@ -12,9 +12,10 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.InvitationService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.onlineobjects.ui.Request;
 
 
-public class AccountInvitationView extends AbstractManagedBean implements InitializingBean {
+public class AccountInvitationView extends AbstractManagedBean {
 	
 	private ModelService modelService;
 	private InvitationService invitationService;
@@ -25,8 +26,9 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 	private Person inviterPerson;
 	private Person person;
 	private EmailAddress email;
+	private String code;
 
-	public void afterPropertiesSet() throws Exception {
+	public void before(Request request) throws Exception {
 		// TODO: Use a more safe perspective 
 		Privileged admin = securityService.getAdminPrivileged();
 		invitation = invitationService.getInvitation(getCode());
@@ -36,6 +38,7 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 			person = modelService.getChild(invitation, Person.class, admin);
 			email = modelService.getChild(person, EmailAddress.class, admin);
 		}
+		code = request.getString("code");
 	}
 	
 	public String getFormattedMessage() {
@@ -74,7 +77,7 @@ public class AccountInvitationView extends AbstractManagedBean implements Initia
 	}
 	
 	public String getCode() {
-		return getRequest().getString("code");
+		return code;
 	}
 
 	public void setModelService(ModelService modelService) {

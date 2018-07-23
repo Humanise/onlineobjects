@@ -12,9 +12,18 @@
    	<bean id="accountSettingsView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountSettingsView" scope="request">
    		<property name="modelService" ref="modelService"/>
    	</bean>
+
+   	<bean id="accountAgreementsView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountAgreementsView" scope="request">
+   		<property name="memberService" ref="memberService"/>
+	    <property name="modelService" ref="modelService"/>
+   	</bean>
    	
    	<bean id="accountPasswordView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountPasswordView" scope="request">
    		<property name="passwordRecoveryService" ref="passwordRecoveryService"/>
+   	</bean>
+   	
+   	<bean id="accountEmailConfirmationView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountEmailConfirmationView" scope="request">
+   		<property name="memberService" ref="memberService"/>
    	</bean>
    	
    	<bean id="accountInvitationView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountInvitationView" scope="request">

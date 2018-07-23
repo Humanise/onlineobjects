@@ -140,7 +140,7 @@ oo.TopBar.prototype = {
       p.add(form);
       var login = hui.ui.Button.create({text:'Log in',variant:'paper',name:'topBarLoginButton'});
       p.add(login);
-      var forgot = hui.build('div',{className:'oo_topbar_forgot',html:'<a class="oo_link" href="javascript://"><span>Forgot password?</span></a>'});
+      var forgot = hui.build('div.oo_topbar_forgot',{html:'<a class="oo_link" href="javascript://"><span>Forgot password?</span></a>'});
       p.add(forgot);
       hui.listen(forgot,'click',this._showPasswordRecovery.bind(this));
     }
@@ -189,7 +189,7 @@ oo.TopBar.prototype = {
   _showPasswordRecovery : function() {
     if (!this._passwordRecoveryBox) {
       var box = this._passwordRecoveryBox = hui.ui.Box.create({modal:true,title:'I forgot my password',closable:true,absolute:true,width:400,padding:10});
-      box.add(hui.build('div',{'class':'op_topbar_forgot_intro',text:'Please provide either your username or your e-mail. We will then mail you instructions on how to change your password.'}))
+      box.add(hui.build('div.oo_topbar_forgot_intro',{text:'Please provide either your username or your e-mail. We will then mail you instructions on how to change your password.'}))
       var form = this._passwordRecoveryForm = hui.ui.Formula.create();
       var group = form.buildGroup(null,[
         {type:'TextInput',label:'Username or e-mail:',options:{key:'usernameOrMail',name:'ooTopBarUsernameOrMail'}}

@@ -2,47 +2,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-	xmlns:o="http://www.onlineobjects.com/jsf"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:gui="http://www.in2isoft.dk/in2igui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<f:loadBundle basename="dk.in2isoft.onlineobjects.service.authentication.views.msg.AuthenticationLoginView" var="msg"/>
+  <f:loadBundle basename="dk.in2isoft.onlineobjects.service.authentication.views.msg.AuthenticationLoginView" var="msg"/>
 
-	<o:head>
-		<o:metatags/>
-		<title>Authentication - OnlineObjects</title>
-    	<o:fonts/>
-	</o:head>
+  <o:head>
+    <o:metatags/>
+    <title>Authentication - OnlineObjects</title>
+    <o:fonts/>
+  </o:head>
 
-	<o:body>
+  <o:body>
 
-		<o:box>
-			<o:header>#{msg.access_control}</o:header>
-			<p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName}</p>
-			<c:if test="#{not empty authenticationLoginView.message}">
-				<p class="message">#{authenticationLoginView.message}</p>
-			</c:if>
-			<gui:formula action="authenticate" name="formula">
-				<p class="label">
-					<label>#{msg.username}</label>
-				</p>
-				<gui:textInput inputName="username" name="username"/>
-				<p class="label">
-					<label>#{msg.password}</label>
-				</p>
-				<gui:textInput inputName="password" name="password" secret="true"/>
-				<p class="buttons">
-					<input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
-					<o:link href="/logout">#{msg.log_out}</o:link>
-					<gui:button text="#{msg.log_in}" submit="true"/>
-				</p>
-			</gui:formula>
-		</o:box>
+    <o:box>
+      <o:header>#{msg.access_control}</o:header>
+      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName}</p>
+      <c:if test="#{not empty authenticationLoginView.message}">
+        <p class="message">#{authenticationLoginView.message}</p>
+      </c:if>
+      <gui:formula action="authenticate" name="formula">
+        <p class="label">
+          <label>#{msg.username}</label>
+        </p>
+        <gui:textInput inputName="username" name="username"/>
+        <p class="label">
+          <label>#{msg.password}</label>
+        </p>
+        <gui:textInput inputName="password" name="password" secret="true"/>
+        <p class="buttons">
+          <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
+          <o:link href="/logout">#{msg.log_out}</o:link>
+          <gui:button text="#{msg.log_in}" submit="true"/>
+        </p>
+      </gui:formula>
+    </o:box>
     <o:dependency src="/WEB-INF/services/authentication/web/css/style.css"/>
     <o:dependency src="/WEB-INF/services/authentication/web/js/login.js"/>
-	</o:body>
+  </o:body>
 
 </html>

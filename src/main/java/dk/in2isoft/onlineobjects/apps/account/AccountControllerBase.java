@@ -8,12 +8,16 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.user.InvitationService;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class AccountControllerBase extends ApplicationController {
 
+	public static final String EMAIL_CONFIRM_PATH = "confirm";
+
 	protected SecurityService securityService;
 	protected InvitationService invitationService;
+	protected MemberService memberService;
 	
 	public AccountControllerBase() {
 		super(AccountController.MOUNT);
@@ -21,6 +25,9 @@ public abstract class AccountControllerBase extends ApplicationController {
 		addJsfMatcher("/invitation", "invitation.xhtml");
 		addJsfMatcher("/<language>", "front.xhtml");
 		addJsfMatcher("/<language>/password", "password.xhtml");
+		addJsfMatcher("/<language>/signup", "signup.xhtml");
+		addJsfMatcher("/<language>/agreements", "agreements.xhtml");
+		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_PATH, "confirm.xhtml");
 	}
 	
 
@@ -47,4 +54,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 		this.invitationService = invitationService;
 	}
 
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
+	}
 }

@@ -65,6 +65,11 @@
 		<property name="group" value="core"/>
 	</bean>
 	
+	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.user.UserHealthCheckJob"/>
+		<property name="name" value="user-health-check"/>
+		<property name="group" value="core"/>
+	</bean>
 	
 
 </beans>

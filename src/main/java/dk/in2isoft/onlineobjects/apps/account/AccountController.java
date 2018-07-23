@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -19,6 +20,7 @@ public class AccountController extends AccountControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 	
 	public static final String MOUNT = "account";
+
 
 	@Override
 	public boolean isAllowed(Request request) {
@@ -39,13 +41,13 @@ public class AccountController extends AccountControllerBase {
 		String password = request.getString("password", "Password must be provided");
 		securityService.changePasswordUsingKey(key, password, request.getSession());
 	}
-	
+
 	@Path
-	public String generateNewSecret(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
-		User user = request.getSession().getUser();
-		return securityService.generateNewSecret(user);
+	public void acceptTerms(Request request) throws ContentNotFoundException, ModelException, SecurityException {
+		User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
+		memberService.markTermsAcceptance(user, request.getSession());
 	}
-	
+
 	@Path
 	public Response signUp(Request request) {
 		Response response = new Response();

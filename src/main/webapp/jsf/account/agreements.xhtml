@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+
+  <f:loadBundle basename="dk.in2isoft.onlineobjects.apps.account.msg.AccountController" var="msg"/>
+
+  <ui:composition template="templates/plain.xhtml">
+
+    <ui:define name="body">
+      <o:box>
+        <o:header>${msg.agreements_title}</o:header>
+        <div class="oo_text" id="${agreement.key}">
+          <p>${msg.agreements_intro}</p>
+          <c:choose>
+            <c:when test="${not accountAgreementsView.accepted}">
+              <div>
+                <gui:button name="accept" text="${msg.agreements_accept}"/>
+              </div>
+            </c:when>
+            <c:otherwise>
+              <p>${msg.agreements_accepted}
+                <h:outputText value="#{accountAgreementsView.acceptanceTime}" >
+                  <f:convertDateTime dateStyle="medium" />
+                </h:outputText>
+              </p>
+            </c:otherwise>
+          </c:choose>
+          <ul>
+            <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
+            <li><a href="#${agreement.key}">${agreement.title}</a></li>
+            </c:forEach>
+          </ul>
+          <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
+            <hr/>
+            <article id="${agreement.key}">
+              <h1>${agreement.title}</h1>
+              <o:out value="${agreement.content}" escape="false"/>
+            </article>
+          </c:forEach>
+        </div>
+      </o:box>
+
+      <o:dependency src="/WEB-INF/apps/account/web/js/agreements.js"/>
+      <o:dependency src="/css/oo_text.css" from="core"/>
+    </ui:define>
+
+  </ui:composition>
+
+</html>

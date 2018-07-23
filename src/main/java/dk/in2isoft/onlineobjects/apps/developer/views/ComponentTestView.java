@@ -3,18 +3,13 @@ package dk.in2isoft.onlineobjects.apps.developer.views;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
-public class ComponentTestView extends AbstractManagedBean implements InitializingBean {
+public class ComponentTestView extends AbstractManagedBean {
 	
-
-	public void afterPropertiesSet() throws Exception {
-	}
 
 	public Date getDate() {
 		return new Date();

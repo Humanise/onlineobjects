@@ -210,6 +210,11 @@ public class ListWriter extends MarkupWriter {
 		return this;
 	}
 
+	public ListWriter cell(Object text, String ifBlank) {
+		cell(text==null || Strings.isBlank(text.toString()) ? ifBlank : text);
+		return this;
+	}
+
 	public ListWriter cell(Object text) {
 		startCell();
 		if (text!=null) {
