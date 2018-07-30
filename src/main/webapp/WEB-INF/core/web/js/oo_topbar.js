@@ -16,8 +16,10 @@ oo.TopBar.prototype = {
     if (a) {
       var data = a.getAttribute('data');
       if (hui.cls.has(a,'is-selected')) {
-        e.stop();
-        this._showMenu();
+        if (hui.window.getViewWidth() < 700) {
+          e.stop();
+          this._showMenu();
+        }
       }
       else if (data=='user') {
         e.stop();
@@ -97,9 +99,13 @@ oo.TopBar.prototype = {
       $object : function(info) {
         hui.cls.remove(node,'oo_topbar_info_busy')
         var html = '<div class="oo_topbar_info_photo">';
+        html+='<div class="oo_topbar_info_photo_img"'
         if (info.photoId) {
-          html+='<div class="oo_topbar_info_photo_img" style="background-image: url('+oo.baseContext+'/service/image/id'+info.photoId+'width60height60sharpen0.7cropped.jpg)"></div>';
+          var ratio = window.devicePixelRatio > 1 ? 2 : 1;
+          var size = 60 * ratio;
+          html += ' style="background-image: url('+oo.baseContext+'/service/image/id'+info.photoId+'width' + size + 'height' + size + 'sharpen0.7cropped.jpg)"';
         }
+        html+='></div>';
         html+='</div><div class="oo_topbar_info_content">'+
           '<p class="oo_topbar_info_name">'+hui.string.escape(info.fullName)+'</p>'+
         '<p class="oo_topbar_info_username">'+hui.string.escape(info.username)+'</p>';
