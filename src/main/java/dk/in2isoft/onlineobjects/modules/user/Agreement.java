@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.modules.user;
 
-import java.util.Date;
-
 public class Agreement {
 
 	private String key;

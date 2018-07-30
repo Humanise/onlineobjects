@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;

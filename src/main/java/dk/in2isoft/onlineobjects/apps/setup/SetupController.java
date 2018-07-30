@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.apps.setup;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -13,7 +12,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
-import org.joda.time.Instant;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
@@ -366,7 +364,9 @@ public class SetupController extends SetupControllerBase {
 	public void sendPasswordReset(Request request) throws EndUserException {
 		Long id = request.getId();
 		User user = modelService.getRequired(User.class, id, request.getSession());
-		passwordRecoveryService.sendRecoveryMail(user);
+		if (!passwordRecoveryService.sendRecoveryMail(user)) {
+			throw new EndUserException("Unable to send recovery mail");
+		}
 	}
 	
 	@Path
@@ -396,7 +396,9 @@ public class SetupController extends SetupControllerBase {
 		if (securityService.canChangeUsername(user)) {
 			user.setUsername(perspective.getUsername());			
 		}
-		memberService.changePrimaryEmail(user, perspective.getEmail(), request.getSession());
+		if (Strings.isNotBlank(perspective.getEmail())) {
+			memberService.changePrimaryEmail(user, perspective.getEmail(), request.getSession());
+		}
 		user.setName(perspective.getName());
 		modelService.updateItem(user, request.getSession());
 		if (securityService.isAdminUser(user)) {

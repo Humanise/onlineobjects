@@ -40,6 +40,7 @@ public class UsersPersonQuery implements PairQuery<User, Person> {
 		}
 		hql.where("rel.to=person");
 		hql.where("rel.from=user");
+		hql.where("rel.kind='" + Relation.KIND_SYSTEM_USER_SELF + "'");
 		
 		if (username!=null) {
 			hql.where("user.username=:username");

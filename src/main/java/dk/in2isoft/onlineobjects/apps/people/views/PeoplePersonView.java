@@ -2,8 +2,6 @@ package dk.in2isoft.onlineobjects.apps.people.views;
 
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -47,6 +45,8 @@ public class PeoplePersonView extends AbstractManagedBean {
 	private String usersName;
 	
 	public void before(Request request) throws Exception {
+		String[] path = request.getLocalPath();
+		usersName = path.length==2 ? path[1] : path[0];
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
 		PairSearchResult<User,Person> result = modelService.searchPairs(query);
 		if (result.getTotalCount()==0) {
@@ -63,8 +63,6 @@ public class PeoplePersonView extends AbstractManagedBean {
 			// TODO: Do something usefull
 		}
 		this.profileInfo = personService.getProfileInfo(getPerson(),request.getSession());
-		String[] path = request.getLocalPath();
-		usersName = path.length==2 ? path[1] : path[0];
 	}
 	
 	public ListModel<Image> getLatestImages() {

@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;

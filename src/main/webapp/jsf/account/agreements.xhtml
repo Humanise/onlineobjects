@@ -33,7 +33,7 @@
           </c:choose>
           <ul>
             <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
-            <li><a href="#${agreement.key}">${agreement.title}</a></li>
+            <li><o:link href="#${agreement.key}">${agreement.title}</o:link></li>
             </c:forEach>
           </ul>
           <c:forEach items="${accountAgreementsView.agreements}" var="agreement">

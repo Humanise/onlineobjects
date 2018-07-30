@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
