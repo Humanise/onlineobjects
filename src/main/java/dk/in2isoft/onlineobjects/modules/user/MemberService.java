@@ -123,10 +123,10 @@ public class MemberService {
 	public User signUp(UserSession session, String username, String password, String fullName, String email) throws EndUserException {
 
 		User user = createMember(session, username, password, fullName, email);
+		
+		markTermsAcceptance(user, user);
 
 		securityService.changeUser(session, username, password);
-
-		markTermsAcceptance(user, user);
 		
 		return user;
 	}
@@ -188,7 +188,7 @@ public class MemberService {
 			*/
 			modelService.commit();
 			scheduleHealthCheck(user);
-			
+			user = modelService.get(User.class, user.getId(), user);
 			return user;
 		}
 	}
