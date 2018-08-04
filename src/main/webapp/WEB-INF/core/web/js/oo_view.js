@@ -1,4 +1,5 @@
 oo.View = function(options) {
+  this.name = options.name;
   this.options = {emptyHtml:'',pageSize:10};
   hui.ui.extend(this,options);
   this.items = [];
@@ -15,11 +16,6 @@ oo.View = function(options) {
 oo.View.prototype = {
   _attach : function() {
     this.spinner = hui.get.firstByClass(this.element,'oo_spinner');
-    if (this.options.source) {
-      this.options.source.listen(this);
-    } else {
-      hui.log("No source")
-    }
     var self = this;
     hui.on(this.element, 'tap', function(e) {
       e = hui.event(e);
@@ -32,6 +28,9 @@ oo.View.prototype = {
     this._initScrolling();
     this._setBusy(true);
   },
+  setSource : function(source) {
+    source.listen(this);
+  },
   _setBusy : function(busy) {
     hui.cls.set(this.spinner,'oo_spinner_visible',busy);
     if (busy) {
@@ -43,14 +42,11 @@ oo.View.prototype = {
     }
   },
   _initScrolling : function() {
-    var parent = this.element.parentNode;
-    if (parent && hui.cls.has(parent,'hui_overflow')) {
-      this.container = parent;
-      hui.listen(parent,'scroll',this._reveal.bind(this));
-    }
+    this.container = hui.closest('.hui_overflow_body', this.element);
+    hui.listen(this.container,'scroll',this._reveal.bind(this));
   },
   _reveal : function() {
-    var limit = this.container.scrollTop + this.container.clientHeight;
+    var limit = this.container.scrollTop + this.container.parentNode.clientHeight;
     if (limit <= this.maxRevealed) {
       return;
     }

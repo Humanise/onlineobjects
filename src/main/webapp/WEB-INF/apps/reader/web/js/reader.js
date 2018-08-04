@@ -1,16 +1,18 @@
-hui.ui.listen({
-  $ready : function() {
-    new oo.View({
-      name : 'listView',
-	  element : 'my_view',
-	  pageSize : 20,
-	  source : hui.ui.get('listSource'),
-	  emptyHtml : '<div class="reader_list_pending"></div>',
-	  $render : function(info) {
-	    return info.html;
-	  }
-	});
-  }
+hui.on(['oo.View'], function() {
+  var view = new oo.View({
+    name : 'listView',
+    element : 'my_view',
+    pageSize : 20,
+    emptyHtml : '<div class="reader_list_pending"></div>',
+    $render : function(info) {
+      return info.html;
+    }
+  });
+  hui.ui.listen({
+    $ready : function() {
+      view.setSource(hui.ui.get('listSource'))
+    }
+  })
 });
 
 var reader = {
