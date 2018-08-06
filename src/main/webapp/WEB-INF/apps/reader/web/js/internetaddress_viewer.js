@@ -280,6 +280,7 @@ var internetAddressViewer = {
     this.nodes.text.innerHTML = this._formatText(article.text);
     hui.dom.setText(this.nodes.title, article.title);
     hui.dom.setText(this.nodes.link, article.urlText);
+    this.nodes.link.setAttribute('data',hui.string.toJSON({action:'openUrl',url:article.url}))
     this.nodes.link.setAttribute('href', article.url);
     this.nodes.meta.innerHTML = article.info;
     this._markInbox(article.inbox);
@@ -303,7 +304,7 @@ var internetAddressViewer = {
     var mark = marks[0];
     var content = this.nodes.content;
     var top = content.clientHeight / -2;
-    var parent = mark.parentNode;
+    var parent = mark;
     while (parent && parent!==content) {
       top += parent.offsetTop;
       parent = parent.offsetParent;

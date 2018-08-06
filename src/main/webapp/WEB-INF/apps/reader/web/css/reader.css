@@ -204,6 +204,8 @@ html, body {
     .reader_head_url > a {
       text-decoration: none;
       color: #B3B09D; }
+      .reader_head_url > a:hover {
+        text-decoration: underline; }
 
 .reader_head_info:hover p > a {
   color: #8C876C;

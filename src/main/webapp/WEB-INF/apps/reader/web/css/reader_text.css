@@ -43,7 +43,7 @@
     background: rgba(255, 203, 0, 0.5);
     font-style: normal;
     border-radius: 6px;
-    padding: 0 3px;
+    padding: 2px 3px;
     margin: 0 -3px;
     transition: background-color .3s; }
     .reader_text_statement.is-highlighted {

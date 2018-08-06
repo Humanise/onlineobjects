@@ -34,7 +34,7 @@ var reader = {
     }
     hui.listen(window,'popstate',function(e) {
       hui.log(e);
-      this.view(e.state);
+      this.view(e.state, false);
     }.bind(this))
   },
 
@@ -55,7 +55,7 @@ var reader = {
 
   _activeViewer : null,
 
-  view : function(options) {
+  view : function(options, push) {
     hui.ui.get('foundation').disposeOverlay();
     if (options.type == 'Statement' && options.addressId) {
       options.id = options.addressId;
@@ -73,7 +73,9 @@ var reader = {
     this._activeViewer = newViewer;
     if (this._activeViewer) {
       this._activeViewer.show(options);
-      history.pushState(options,'TODO',document.location.pathname + '?type='+options.type+'&id='+options.id);
+      if (push !== false) {
+        history.pushState(options,'TODO',document.location.pathname + '?type='+options.type+'&id='+options.id);
+      }
     }
   },
   edit : function(options) {

@@ -28,6 +28,10 @@
     > a {
       text-decoration: none;
       color: $view-dark-dimmed-color;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
