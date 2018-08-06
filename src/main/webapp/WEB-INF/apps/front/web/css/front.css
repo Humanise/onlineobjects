@@ -32,12 +32,6 @@ body
   color: #ddd;
 }
 
-#logo .hui_drawing {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -170px 0 0 -170px;
-}
 
 h1
 {
@@ -261,6 +255,12 @@ ul a:hover
   {
     width: 200px;
     height: 200px;
+  }
+
+  #logo .hui_drawing {
+    margin: 0;
+    top: 0;
+    left: 0;
   }
 
   #logo span.oo_icon

@@ -32,7 +32,7 @@ public class BodyComponent extends HtmlBody {
 		}
 		String styleClass = super.getStyleClass();
 		Map<String, String> map = getFacesContext().getExternalContext().getRequestHeaderMap();
-		String cls = "oo";
+		String cls = "oo_body";
 		if (map.containsKey("User-Agent")) {
 			String agent = map.get("User-Agent");
 			if (!agent.contains("Opera")) {

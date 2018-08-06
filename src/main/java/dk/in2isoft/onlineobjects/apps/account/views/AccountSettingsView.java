@@ -7,6 +7,7 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 
@@ -25,6 +26,10 @@ public class AccountSettingsView extends AbstractManagedBean {
 	private boolean allowed;
 	
 	private String language;
+
+	private MemberService memberService;
+
+	private boolean hasAcceptedTerms;
 	
 	public void before(Request request) throws Exception {
 		user = request.getSession().getUser();
@@ -43,7 +48,12 @@ public class AccountSettingsView extends AbstractManagedBean {
 		if (email!=null) {
 			primaryEmail = email.getAddress();
 		}
-		language = request.getLanguage(); 
+		language = request.getLanguage();
+		this.hasAcceptedTerms = memberService.hasAcceptedTerms(user, user);
+	}
+	
+	public boolean isHasAcceptedTerms() {
+		return hasAcceptedTerms;
 	}
 	
 	public String getSecret() {
@@ -72,6 +82,10 @@ public class AccountSettingsView extends AbstractManagedBean {
 	
 	// Wiring...
 
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
+	}
+	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

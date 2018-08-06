@@ -1,11 +1,13 @@
 package dk.in2isoft.in2igui.jsf;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
+import dk.in2isoft.commons.jsf.ClassBuilder;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
@@ -42,7 +44,8 @@ public class FormulaComponent extends AbstractComponent {
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
-		writer.startElement("form").withClass("hui_formula").withId(id);
+		ClassBuilder cls = new ClassBuilder("hui_formula").add(getAttribute("styleClass"));
+		writer.startElement("form").withClass(cls).withId(id);
 		if (Strings.isNotBlank(action)) {
 			writer.withAttribute("action", action);
 		}

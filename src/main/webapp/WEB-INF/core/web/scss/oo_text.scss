@@ -2,15 +2,28 @@
 
 @include if {
   .oo_text {
-    margin: 0;
     font-size: 16px;
 
     > p {
       margin: 5px 0;
     }
 
+    > h1 {
+      margin: 0 0 10px;
+    }
+
+    > h2 {
+      margin: 20px 0 10px;
+    }
+
     > blockquote {
       margin: 5px 20px;
+    }
+
+    > hr {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #ddd;
     }
 
     > *:first-child {

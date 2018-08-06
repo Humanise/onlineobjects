@@ -165,4 +165,8 @@ public abstract class AbstractComponent extends UIComponentBase {
 		context.getViewRoot().addComponentResource(context, css, "head");
 	}
 
+	protected String getAttribute(String name) {
+		Object value = getAttributes().get(name);
+		return value instanceof String ? (String) value : null;
+	}
 }

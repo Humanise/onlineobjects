@@ -2,6 +2,7 @@ hui.on(function() {
   //return;
   var logo = hui.get('logo');
   var size = logo.clientWidth;
+  console.log(size)
 
   if (isMobile() || hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
     return;
@@ -120,7 +121,7 @@ hui.on(function() {
             startDegrees : (start + 3) * pos + 360 * turns * pos + skew,
             endDegrees : (end +- 3) + 360 * turns * pos + skew,
             innerRadius : 121 + pos * -60,
-            outerRadius : 120 + pos * -60 + pos * ((70/340)*size + extra)
+            outerRadius : 120 + pos * -60 + pos * ((70/340) * size + extra)
           })
         },
         $complete : function() {
@@ -145,9 +146,9 @@ hui.on(function() {
         $render : function(node,pos) {
           arc.update({
             startDegrees : start+3 + 360 * pos * turns * dir + skew,
-            endDegrees : end-3 + 360 * pos * turns * dir + skew + 30*turns*Math.sin(pos*Math.PI),
-            innerRadius : 61 + Math.sin(pos*Math.PI) * innerBulge + 45*Math.sin(pos*Math.PI),
-            outerRadius : (130+extra) + Math.sin(pos*Math.PI) * radiusBulge
+            endDegrees : end - 3 + 360 * pos * turns * dir + skew + 30 * turns * Math.sin(pos * Math.PI),
+            innerRadius : 61 + Math.sin(pos * Math.PI) * innerBulge + 45 * Math.sin(pos * Math.PI),
+            outerRadius : (130 + extra) + Math.sin(pos * Math.PI) * radiusBulge
           })
         },
         $complete : function() { loopArc(arc,start,end,extra);}
