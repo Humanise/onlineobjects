@@ -18,7 +18,7 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.in2igui.FileBasedInterface;
-import dk.in2isoft.onlineobjects.apps.reader.index.ReaderQuery;
+import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -233,7 +233,7 @@ public class APIController extends APIControllerBase {
 			types = Lists.newArrayList("any");
 		}
 
-		ReaderQuery query = new ReaderQuery();
+		KnowledgeQuery query = new KnowledgeQuery();
 		query.setPage(page);
 		query.setPageSize(pageSize);
 		query.setSubset("everything");

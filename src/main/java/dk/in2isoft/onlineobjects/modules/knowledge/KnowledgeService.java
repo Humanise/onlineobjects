@@ -9,11 +9,11 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
-import dk.in2isoft.onlineobjects.apps.reader.ReaderSearcher;
-import dk.in2isoft.onlineobjects.apps.reader.index.ReaderQuery;
-import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspective;
-import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspectiveBuilder;
-import dk.in2isoft.onlineobjects.apps.reader.perspective.InternetAddressViewPerspectiveBuilder.Settings;
+import dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeSearcher;
+import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -39,7 +39,7 @@ import dk.in2isoft.onlineobjects.modules.user.MemberService;
 
 public class KnowledgeService {
 	private ModelService modelService;
-	private ReaderSearcher readerSearcher;
+	private KnowledgeSearcher readerSearcher;
 	private InternetAddressService internetAddressService;
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
@@ -259,7 +259,7 @@ public class KnowledgeService {
 		return profile;
 	}
 
-	public SearchResult<KnowledgeListRow> search(ReaderQuery query, User user) throws ExplodingClusterFuckException, SecurityException {
+	public SearchResult<KnowledgeListRow> search(KnowledgeQuery query, User user) throws ExplodingClusterFuckException, SecurityException {
 		SearchResult<Entity> searchResult = readerSearcher.search(query, user);
 		
 		List<KnowledgeListRow> list = new ArrayList<>();
@@ -297,7 +297,7 @@ public class KnowledgeService {
 		this.modelService = modelService;
 	}
 	
-	public void setReaderSearcher(ReaderSearcher readerSearcher) {
+	public void setReaderSearcher(KnowledgeSearcher readerSearcher) {
 		this.readerSearcher = readerSearcher;
 	}
 	

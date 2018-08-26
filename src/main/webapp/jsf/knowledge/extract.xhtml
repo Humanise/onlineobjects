@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:o="http://www.onlineobjects.com/jsf"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:gui="http://www.in2isoft.dk/in2igui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+	<ui:composition template="templates/plain.xhtml">
+
+		<ui:define name="body">
+    <style>
+    iframe {
+      width: 100%; resize: both;
+      border: 1px solid #aaa;
+    }
+    </style>
+      <iframe srcdoc="#{knowldgeExtractionView.rawHtml}"/>
+      <iframe srcdoc="#{knowldgeExtractionView.cleaned}"/>
+      <iframe srcdoc="#{knowldgeExtractionView.extracted}"/>
+      <pre>
+        #{knowldgeExtractionView.extracted}
+      </pre>
+
+      <o:dependency from="local" src="/css/reader_analyze.css"/>
+		</ui:define>
+
+	</ui:composition>
+
+
+</html>
