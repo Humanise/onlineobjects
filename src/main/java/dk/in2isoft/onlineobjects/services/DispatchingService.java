@@ -64,9 +64,6 @@ public class DispatchingService {
 		Request request = Request.get(servletRequest, servletResponse);
 		Boolean shouldCommit = null;		
 
-		if (request.isSet("username") && request.isSet("password")) {
-			securityService.changeUser(request.getSession(), request.getString("username"),request.getString("password"));
-		}
 		securityService.ensureUserSession(servletRequest.getSession());
 		String url = servletRequest.getRequestURL().toString();
 				

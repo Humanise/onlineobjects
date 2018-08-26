@@ -4,7 +4,7 @@
     _super.call(this, options);
     this._attach();
   }
-  
+
   oo.Icon.prototype = {
     _attach : function() {
       hui.listen(this.element,'click',this._click,this)

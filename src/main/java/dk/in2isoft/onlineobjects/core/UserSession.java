@@ -48,6 +48,7 @@ public class UserSession implements Privileged {
 		this.user = user;
 	}
 
+	@Deprecated
 	public User getUser() {
 		return user;
 	}

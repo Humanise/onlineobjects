@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public abstract class AccountControllerBase extends ApplicationController {
 
 	public static final String EMAIL_CONFIRM_PATH = "confirm";
+	public static final String EMAIL_CONFIRM_CHANGE_PATH = "confirm-email-change";
 
 	protected SecurityService securityService;
 	protected InvitationService invitationService;
@@ -28,6 +29,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 		addJsfMatcher("/<language>/signup", "signup.xhtml");
 		addJsfMatcher("/<language>/agreements", "agreements.xhtml");
 		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_PATH, "confirm.xhtml");
+		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_CHANGE_PATH, "confirm-change-email.xhtml");
 	}
 	
 

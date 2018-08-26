@@ -134,12 +134,6 @@ public class ModelController extends ModelControllerBase {
 		Word word = wordService.createWord(language, category, text, request.getSession());
 		request.sendObject(word);
 	}
-
-	@Path
-	public void changePrimaryEmail(Request request) throws IOException, EndUserException {
-		String email = request.getString("email");
-		memberService.changePrimaryEmail(request.getSession().getUser(),email,request.getSession());
-	}
 	
 	@Path(start="listInbox")
 	public void listInbox(Request request) throws IOException, EndUserException {

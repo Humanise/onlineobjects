@@ -4,6 +4,29 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
+    <class name="dk.in2isoft.onlineobjects.model.LogEntry" table="log">
+        <id name="id" column="id">
+            <generator class="sequence">
+            	<param name="sequence">log_id_sequence</param>
+             </generator>
+        </id>
+		<property name="time"/>
+		<property name="level">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">dk.in2isoft.onlineobjects.model.LogLevel</param>
+                <param name="useNamed">false</param>
+            </type>
+        </property>
+		<property name="type" >
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">dk.in2isoft.onlineobjects.model.LogType</param>
+                <param name="useNamed">false</param>
+            </type>
+		</property>
+		<property name="subject"/>
+		<property name="object"/>
+		<property name="data"/>
+	</class>
     <class name="dk.in2isoft.onlineobjects.model.Property" table="property">
         <id name="id" column="id">
             <generator class="sequence">

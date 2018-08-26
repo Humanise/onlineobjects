@@ -15,13 +15,16 @@
     <ui:define name="body">
       <o:box>
         <o:header>${msg.agreements_title}</o:header>
-        <div id="${agreement.key}">
-          <div class="oo_text oo_util_top">
+        <p class="oo_space_top">
+          <o:link href="/${accountSettingsView.language}/">#{msg.back_to_account}</o:link>
+        </p>
+        <div id="${agreement.key}" class="account_agreements">
+          <div class="oo_text oo_space_top">
           <p>${msg.agreements_intro}</p>
           </div>
           <c:choose>
             <c:when test="${not accountAgreementsView.accepted}">
-              <div class="oo_util_top">
+              <div class="oo_space_top">
                 <gui:button name="accept" text="${msg.agreements_accept}"/>
               </div>
             </c:when>
@@ -38,7 +41,7 @@
             <li><o:link href="#${agreement.key}">${agreement.title}</o:link></li>
             </c:forEach>
           </ul>
-          <article class="oo_text oo_util_top-2">
+          <article class="oo_text oo_space_top-2">
             <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
               <hr/>
               <h1 id="${agreement.key}">${agreement.title}</h1>

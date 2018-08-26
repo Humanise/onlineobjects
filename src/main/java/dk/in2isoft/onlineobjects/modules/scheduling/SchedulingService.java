@@ -37,14 +37,14 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.modules.surveillance.LogEntry;
+import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class SchedulingService implements ApplicationListener<ApplicationContextEvent>, InitializingBean {
 
 	private final static Logger log = Logger.getLogger(SchedulingService.class);
 	
-	private Queue<LogEntry> liveLog = Queues.synchronizedQueue(new CircularFifoQueue<LogEntry>(200));
+	private Queue<LiveLogEntry> liveLog = Queues.synchronizedQueue(new CircularFifoQueue<LiveLogEntry>(200));
 	
 	private SchedulingSupportFacade schedulingSupportFacade;
 	
@@ -118,35 +118,35 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	}
 	
 	public void log(String text) {
-		liveLog.add(new LogEntry(text));
+		liveLog.add(new LiveLogEntry(text));
 	}
 	
 	public void log(String text, Key<?> key) {
 		if (key==null) {
 			log(text);
 		} else {
-			liveLog.add(new LogEntry(text,key.getName(),key.getGroup()));			
+			liveLog.add(new LiveLogEntry(text,key.getName(),key.getGroup()));			
 		}
 	}
 
 	public void warn(String text, Key<?> key) {
-		LogEntry entry;
+		LiveLogEntry entry;
 		if (key!=null) {
-			entry = new LogEntry(text,key.getName(),key.getGroup());			
+			entry = new LiveLogEntry(text,key.getName(),key.getGroup());			
 		} else {
-			entry = new LogEntry(text);
+			entry = new LiveLogEntry(text);
 		}
-		entry.setLevel(LogEntry.Level.warn);
+		entry.setLevel(LiveLogEntry.Level.warn);
 		liveLog.add(entry);
 	}
 
 	public void error(String text, Key<?> key) {
-		LogEntry entry = new LogEntry(text);
+		LiveLogEntry entry = new LiveLogEntry(text);
 		if (key!=null) {
 			entry.setName(key.getName());
 			entry.setGroup(key.getName());			
 		}
-		entry.setLevel(LogEntry.Level.error);
+		entry.setLevel(LiveLogEntry.Level.error);
 		liveLog.add(entry);
 	}
 
@@ -369,11 +369,11 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		
 	}
 
-	public List<LogEntry> getLiveLog() {
-		List<LogEntry> entries = Lists.newArrayList();
+	public List<LiveLogEntry> getLiveLog() {
+		List<LiveLogEntry> entries = Lists.newArrayList();
 		for (Object object : liveLog) {
-			if (object instanceof LogEntry) {
-				entries.add((LogEntry) object);
+			if (object instanceof LiveLogEntry) {
+				entries.add((LiveLogEntry) object);
 			}
 		}
 		Collections.reverse(entries);

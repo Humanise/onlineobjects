@@ -409,7 +409,7 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "agreements" })
 	public List<Agreement> agreements(Request request) throws IOException, EndUserException {
 		Locale locale = new Locale(request.getString("locale", "No locale supplied"));
-		User user = request.getSession().getUser();
+		User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
 		return memberService.getAgreements(user, locale);
 	}	
 

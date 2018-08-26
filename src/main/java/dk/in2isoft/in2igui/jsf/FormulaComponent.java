@@ -1,7 +1,6 @@
 package dk.in2isoft.in2igui.jsf;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;

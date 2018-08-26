@@ -15,22 +15,22 @@ import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 import org.quartz.utils.Key;
 
-import dk.in2isoft.onlineobjects.modules.surveillance.LogEntry;
+import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 
 public class LoggingSchedulerListener implements SchedulerListener, JobListener, TriggerListener {
 	
-	private Queue<LogEntry> log;
+	private Queue<LiveLogEntry> log;
 
-	public LoggingSchedulerListener(Queue<LogEntry> log) {
+	public LoggingSchedulerListener(Queue<LiveLogEntry> log) {
 		this.log = log;
 	}
 	
 	private void log(String text, Key<?> key) {
-		log.add(new LogEntry("- "+text,key.getName(),key.getGroup()));
+		log.add(new LiveLogEntry("- "+text,key.getName(),key.getGroup()));
 	}
 
 	private void log(String text) {
-		log.add(new LogEntry("- "+text));
+		log.add(new LiveLogEntry("- "+text));
 	}
 
 	public void jobScheduled(Trigger trigger) {

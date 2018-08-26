@@ -12,33 +12,114 @@
     <ui:define name="body">
       <o:box>
         <o:header>#{msg.account}</o:header>
-        <p class="account_user oo_util_top"><strong class="account_user_label">#{msg.username}:</strong> #{accountSettingsView.user.username}</p>
-        <p class="oo_util_top"><o:link href="/${accountSettingsView.language}/agreements">#{msg.agreements_title}</o:link><c:if test="${!accountSettingsView.hasAcceptedTerms}"> - TODO</c:if></p>
+        <div class="account_segment oo_space_top-2">
+          <div class="account_segment_title">#{msg.account}</div>
+          <div class="account_segment_body">
+            <p class="account_property oo_space_bottom">
+              <strong class="account_property_label">#{msg.username}:</strong>
+              #{accountSettingsView.username}
+            </p>
+            <div class="oo_space_bottom">
+              <gui:pages name="namePages">
+                <gui:page>
+                  <p class="account_property">
+                    <strong class="account_property_label">#{msg.full_name}:</strong>
+                    #{accountSettingsView.fullName}
+                    <gui:button name="changeName" text="#{msg.change}" small="true" variant="light"/>
+                  </p>
+                </gui:page>
+                <gui:page>
+                  <gui:formula name="nameForm">
+                    <gui:field label="#{msg.first_name}">
+                      <gui:textInput key="first" value="#{accountSettingsView.firstName}"/>
+                    </gui:field>
+                    <gui:field label="#{msg.middle_name}">
+                      <gui:textInput key="middle" value="#{accountSettingsView.middleName}"/>
+                    </gui:field>
+                    <gui:field label="#{msg.last_name}">
+                      <gui:textInput key="last" value="#{accountSettingsView.lastName}"/>
+                    </gui:field>
+                    <gui:buttons>
+                      <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeName"/>
+                      <gui:button text="#{msg.change}" submit="true" variant="light"/>
+                    </gui:buttons>
+                  </gui:formula>
+                </gui:page>
+              </gui:pages>
+            </div>
+            <div class="oo_space_bottom">
+              <gui:pages name="emailPages">
+                <gui:page>
+                  <p class="account_property">
+                    <strong class="account_property_label">#{msg.primary_email}:</strong>
+                    #{accountSettingsView.primaryEmail}
+                    <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light"/>
+                    <br/><span class="account_property_minor">(#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate})</span>
+                    <c:if test="#{!accountSettingsView.emailConfirmed}">
+                      <div class="oo_space_top">
+                      <gui:button name="confirmEmail" text="#{msg.send_email_confirm}" variant="light"/>
+                      </div>
+                    </c:if>
+                  </p>
+                </gui:page>
+                <gui:page>
+                  <div class="oo_text oo_text-small oo_space_bottom">
+                    <p>Changing your e-mail requires you to validate that you have access to read messages sent to the new e-mail</p>
+                  </div>
+                  <gui:formula name="mailForm">
+                    <gui:field label="#{msg.primary_email}">
+                      <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}"/>
+                    </gui:field>
+                    <gui:buttons>
+                      <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeEmail"/>
+                      <gui:button text="#{msg.change}" submit="true" variant="light"/>
+                    </gui:buttons>
+                  </gui:formula>
+                </gui:page>
+              </gui:pages>
+            </div>
+          </div>
+        </div>
+        <div class="account_segment">
+          <div class="account_segment_title">Agreements</div>
+          <div class="account_segment_body">
+            <p>
+              <o:link href="/${accountSettingsView.language}/agreements">#{msg.agreements_title}</o:link>
+              <c:if test="${!accountSettingsView.hasAcceptedTerms}"> - #{msg.agreements_todo}</c:if>
+            </p>
+          </div>
+        </div>
+
+        <div class="account_segment">
+          <div class="account_segment_title">Security</div>
+          <div class="account_segment_body">
+            <gui:pages name="passwordPages">
+              <gui:page>
+                <gui:button name="changePassword" text="#{msg.change_password}" variant="light" small="true"></gui:button>
+              </gui:page>
+              <gui:page>
+                <gui:formula name="passwordForm">
+                  <gui:field label="#{msg.current_password}">
+                    <gui:textInput key="currentPassword" secret="true"/>
+                  </gui:field>
+                  <gui:field label="#{msg.new_password}">
+                    <gui:textInput key="newPassword" secret="true"/>
+                  </gui:field>
+                  <gui:buttons>
+                    <gui:button text="#{msg.cancel}" name="cancelPassword" variant="light"/>
+                    <gui:button text="#{msg.change_password}" submit="true" variant="light"/>
+                  </gui:buttons>
+                </gui:formula>
+              </gui:page>
+            </gui:pages>
+          </div>
+        </div>
 
         <c:choose>
           <c:when test="#{accountSettingsView.allowed}">
-            <div class="oo_util_top">
-              <gui:formula name="mailForm">
-                <gui:field label="#{msg.primary_email}">
-                  <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}"/>
-                </gui:field>
-                <div class="oo_util_top">
-                  <gui:button text="#{msg.change}" submit="true" variant="light"/>
-                </div>
-              </gui:formula>
+            <div class="oo_space_top">
             </div>
-            <div class="oo_util_top-2">
-              <gui:formula name="passwordForm">
-                <gui:field label="#{msg.current_password}">
-                  <gui:textInput key="currentPassword" secret="true"/>
-                </gui:field>
-                <gui:field label="#{msg.new_password}">
-                  <gui:textInput key="newPassword" secret="true"/>
-                </gui:field>
-                <div class="oo_util_top">
-                  <gui:button text="#{msg.change_password}" submit="true" variant="light"/>
-                </div>
-              </gui:formula>
+            <div class="oo_space_top-2">
             </div>
           </c:when>
           <c:otherwise>

@@ -53,7 +53,7 @@ import dk.in2isoft.onlineobjects.modules.index.IndexDescription;
 import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.PublisherPerspective;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobInfo;
-import dk.in2isoft.onlineobjects.modules.surveillance.LogEntry;
+import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 import dk.in2isoft.onlineobjects.modules.surveillance.RequestInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
@@ -421,8 +421,8 @@ public class SetupController extends SetupControllerBase {
 		writer.startHeaders();
 		writer.header("Time",10).header("Text").header("Name").header("Group");
 		writer.endHeaders();
-		List<LogEntry> liveLog = schedulingService.getLiveLog();
-		for (LogEntry entry : liveLog) {
+		List<LiveLogEntry> liveLog = schedulingService.getLiveLog();
+		for (LiveLogEntry entry : liveLog) {
 			writer.startRow();
 			writer.startCell().text(Dates.formatTime(entry.getDate(), request.getLocale())).endCell();
 			writer.startCell().text(entry.getTitle()).endCell();
@@ -563,9 +563,9 @@ public class SetupController extends SetupControllerBase {
 			writer.startHeaders().header("Time").header("Title").header("Details").endHeaders();
 			
 			Locale locale = request.getLocale();
-			List<dk.in2isoft.onlineobjects.modules.surveillance.LogEntry> entries = surveillanceService.getLogEntries();
+			List<dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry> entries = surveillanceService.getLogEntries();
 			Collections.reverse(entries);
-			for (dk.in2isoft.onlineobjects.modules.surveillance.LogEntry entry : entries) {
+			for (dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry entry : entries) {
 				writer.startRow();
 				writer.startCell().text(Dates.formatTime(entry.getDate(), locale)).endCell();
 				writer.startCell().text(entry.getTitle()).endCell();

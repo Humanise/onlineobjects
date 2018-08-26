@@ -52,6 +52,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
+import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
@@ -291,6 +292,10 @@ public class ModelService implements InitializingBean {
 		} else {
 			updateItem(item, privileged);
 		}
+	}
+
+	public void create(LogEntry entry) {
+		getSession().save(entry);
 	}
 
 	public void createItem(Item item, Privileged privileged) throws ModelException, SecurityException {
@@ -1063,4 +1068,5 @@ public class ModelService implements InitializingBean {
 			return new RelationQuery(modelService, securityService).as(privileged);
 		}
 	}
+
 }

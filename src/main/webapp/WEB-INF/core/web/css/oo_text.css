@@ -1,5 +1,7 @@
 .oo_text {
   font-size: 16px; }
+  .oo_text-small {
+    font-size: 14px; }
   .oo_text > p {
     margin: 5px 0; }
   .oo_text > h1 {

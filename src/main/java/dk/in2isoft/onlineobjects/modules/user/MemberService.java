@@ -65,7 +65,6 @@ public class MemberService {
 	private EmailService emailService;
 	private SchedulingService schedulingService;
 	
-	private List<Agreement> agreements;
 	private Multimap<String,Date> agreementConfigs = HashMultimap.create();
 
 	public void validateNewMember(String username, String password) throws IllegalRequestException {
@@ -425,7 +424,7 @@ public class MemberService {
 		User user = modelService.getRequired(User.class, userId, privileged);
 		EmailAddress primaryEmail = getUsersPrimaryEmail(user, privileged);
 		if (primaryEmail != null) {
-			Date time = user.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
+			Date time = primaryEmail.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
 			if (time == null) {
 				sendEmailConfirmation(user, privileged);
 			}
@@ -452,14 +451,41 @@ public class MemberService {
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailconfirmation-template.html", parms);
 		
-		try {
-			emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),person.getName());
-			email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME, new Date());
-		} catch (EndUserException e) {
-			log.error(e.getMessage(), e);
-		}
+		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),person.getName());
+		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME, new Date());
 	}
-	
+
+	public void sendEmailChangeRequest(User user, String newEmail, Privileged privileged) throws EndUserException {
+		if (!ValidationUtil.isWellFormedEmail(newEmail)) {
+			throw new IllegalRequestException("The new e-mail is invalid");
+		}
+		if (isPrimaryEmailTaken(newEmail)) {
+			throw new IllegalRequestException("The email is taken");
+		}
+		Person person = getUsersPerson(user, privileged);
+		EmailAddress email = getUsersPrimaryEmail(user, privileged);
+		if (newEmail.equals(email.getAddress())) {
+			throw new IllegalRequestException("The new email is the same as the current");
+		}
+		String key = Strings.generateRandomString(30) + "|" + newEmail;
+		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
+		modelService.updateItem(user, user);
+		StringBuilder url = new StringBuilder();
+		String context = configurationService.getApplicationContext("account");
+		url.append(context);
+		// TODO: Get users preferred language
+		url.append("/en/" + AccountController.EMAIL_CONFIRM_CHANGE_PATH + "?key=");
+		url.append(key);
+
+		Map<String,Object> parms = new HashMap<>();
+		parms.put("name", person.getFullName());
+		parms.put("url", url.toString());
+		parms.put("base-url", "http://" + configurationService.getBaseUrl());
+		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
+		
+		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail ,person.getName());
+	}
+
 	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key) throws ContentNotFoundException, ModelException, SecurityException {
 		Privileged privileged = securityService.getAdminPrivileged();
 		Query<EmailAddress> query = Query.after(EmailAddress.class).withCustomProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, key);
@@ -509,13 +535,20 @@ public class MemberService {
 			agreement.setKey(key);
 			agreement.setTitle(msg.get(key, locale));
 			agreement.setDate(date.getTime());
-			String fileName = key + "-" + DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
-			File file = configurationService.getFile("WEB-INF","core","agreements", fileName);
-
+			File file = getAgreement(locale, key, date);
+			if (!file.exists()) {
+				file = getAgreement(Locale.ENGLISH, key, date);
+			}
 			agreement.setContent(Files.readString(file, Strings.UTF8));
 			agreements.add(agreement);
 		}
 		return agreements;
+	}
+
+	private File getAgreement(Locale locale, String key, Date date) {
+		String fileName = key + "-" + DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
+		File file = configurationService.getFile("WEB-INF","core","agreements", fileName);
+		return file;
 	}
 	
 	private Optional<Date> getLatestAgreementDate() {

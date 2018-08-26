@@ -1,41 +1,47 @@
 .account {
-  padding: 20px 20px 20px;
-}
+  padding: 20px 20px 20px; }
 
-.account_title {
-  margin: -3px -10px 10px;
-  font-family: 'Lato','Hevetica',Arial,sans-serif;
-  font-weight: 100;
-  line-height: 24px;
-  border-bottom: 1px solid #eee;
-  padding: 0 10px 12px;
-}
-
-.account_user {
-  font-size: 11pt;
-  font-weight: 200;
-}
-
-.account_user_label {
-  font-weight: 200;
+.account_property_label {
   color: #999;
-}
-
-.account_secret {
-  -webkit-appearance: none;
+  font-weight: inherit;
   display: block;
-  font-family: monospace;
-  width: 100%;
-  font-size: 14px;
-  border: 1px solid #eee;
-  box-sizing: border-box;
-  padding: 5px;
-}
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px; }
+.account_property_action {
+  font-size: 12px;
+  margin-left: 10px; }
+.account_property_minor {
+  font-size: 12px; }
 
+.account_segment_title {
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  padding-bottom: 5px; }
+.account_segment_body {
+  padding: 15px 0 30px 20px; }
+
+@media screen and (min-width: 700px) {
+  .account_segment {
+    display: flex; }
+    .account_segment_title {
+      flex-basis: 30%;
+      padding: 0;
+      border: none;
+      font-size: inherit; }
+    .account_segment_body {
+      flex-basis: 70%;
+      padding: 0; }
+
+  .account_segment + .account_segment {
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+    padding-top: 15px; } }
 .account_invitation_form {
-  margin-top: 20px;
-}
+  margin-top: 20px; }
 
 .account_invitation_text {
-  margin: 20px 0;
-}
+  margin: 20px 0; }
+
+.account_agreements h2 {
+  color: red; }

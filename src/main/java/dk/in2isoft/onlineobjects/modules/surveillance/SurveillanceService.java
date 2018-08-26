@@ -16,7 +16,7 @@ public class SurveillanceService {
 	
 	private RequestList longestRunningRequests;
 	private ConcurrentLinkedQueue<String> exceptions;
-	private ConcurrentLinkedQueue<LogEntry> logEntries;
+	private ConcurrentLinkedQueue<LiveLogEntry> logEntries;
 	private RequestList requestsNotFound;
 
 
@@ -24,11 +24,11 @@ public class SurveillanceService {
 		longestRunningRequests = new RequestList();
 		requestsNotFound = new RequestList();
 		exceptions = new ConcurrentLinkedQueue<String>();
-		logEntries = new ConcurrentLinkedQueue<LogEntry>();
+		logEntries = new ConcurrentLinkedQueue<LiveLogEntry>();
 	}
 	
 	public void logInfo(String title,String details) {
-		LogEntry entry = new LogEntry();
+		LiveLogEntry entry = new LiveLogEntry();
 		entry.setTitle(title);
 		entry.setDetails(details);
 		logEntries.add(entry);
@@ -77,7 +77,7 @@ public class SurveillanceService {
 		return exceptions;
 	}
 	
-	public List<LogEntry> getLogEntries() {
+	public List<LiveLogEntry> getLogEntries() {
 		return Lists.newArrayList(logEntries);
 	}
 }

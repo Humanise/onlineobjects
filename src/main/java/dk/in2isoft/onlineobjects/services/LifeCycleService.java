@@ -7,12 +7,17 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.LogEntry;
+import dk.in2isoft.onlineobjects.model.LogLevel;
+import dk.in2isoft.onlineobjects.model.LogType;
 
 public class LifeCycleService implements ApplicationListener<ApplicationContextEvent> {
 
 	private static Logger log = Logger.getLogger(LifeCycleService.class);
 	private ConsistencyService consistencyService;
+	private ModelService modelService;
 
 	private Date startTime;
 	
@@ -29,6 +34,12 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 			} catch (EndUserException e) {
 				log.error("Failed checking consistency", e);
 			}
+			LogEntry entry = new LogEntry();
+			entry.setLevel(LogLevel.info);
+			entry.setTime(new Date());
+			entry.setType(LogType.startUp);
+			modelService.create(entry);
+			modelService.commit();
 		}
 	}
 	
@@ -38,5 +49,9 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	
 	public void setConsistencyService(ConsistencyService consistencyService) {
 		this.consistencyService = consistencyService;
+	}
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
 	}
 }

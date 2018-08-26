@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Confirma your email for OnlineObjects</title>
+		<style>
+      body {
+        background: #f6f6f6;
+        padding: 10px 30px;
+        font-family: Arial,Helvetica,sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0 0 20px;
+        font-size: 32px;
+        font-weight: normal;
+        color: #234;
+      }
+
+      p {
+        font-size: 16px;
+        color: #234;
+        margin: 10px 0;
+        line-height: 1.4;
+      }
+
+      a {
+        color: #ddd;
+      }
+
+      a span {
+        color: #3366FF;
+      }
+
+      a:hover, a:hover span {
+        color: #0033AA;
+      }
+
+      .logo {
+        color: #999;
+      }
+
+      .logo span {
+        color: #000;
+      }
+
+      .info {
+        margin-top: 30px;
+      }
+
+      .info p {
+        color: #789;
+        font-size: 12px;
+      }
+
+      .body {
+        border: 1px solid #eee;
+        background: #fff;
+        border-radius: 5px;
+        padding: 30px 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+		</style>
+	</head>
+	<body>
+		<div class="body">
+			<h1>Confirm your change of e-mail for <span class="logo">Online<span>Objects</span></span></h1>
+			<p>Hi ${name}</p>
+			<p>In order for us to trust that your are the owner of this e-mail address we need you to confirm it by clicking the following link....</p>
+			<p><a href="${url}"><span>${url}</span></a>.</p>
+			<div class="info">
+				<p><em>This e-mail has been sent by the system <a href="http://www.onlineobjects.com/"><span>OnlineObjects</span></a> on behalf of a user. If you did not request this e-mail you should ignore it.</em></p>
+			</div>
+		</div>
+	</body>
+</html>

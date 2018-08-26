@@ -1,17 +1,75 @@
 var accountView = {
+
+  // E-mail...
   $submit$mailForm : function() {
     var values = hui.ui.get('mailForm').getValues();
     hui.ui.request({
-      url : oo.baseContext+'/service/model/changePrimaryEmail',
+      url : oo.baseContext+'/changePrimaryEmail',
       parameters : {email:values.mail},
       $success : function() {
         hui.ui.msg({text:'The e-mail address is changed',icon:'common/success',duration:3000});
       },
-      $failure : function() {
+      $failure : function(e) {
+        hui.log(e);
         hui.ui.msg({text:'The e-mail address was not changed',icon:'common/warning',duration:3000});
       }
     })
   },
+  $click$cancelChangeEmail : function() {
+    hui.ui.get('emailPages').next();
+  },
+  $click$changeEmail : function() {
+    hui.ui.get('emailPages').next();
+  },
+  $click$confirmEmail : function() {
+    hui.ui.request({
+      url : oo.baseContext+'/confirmEmail',
+      message : {
+        start: 'Sending confirmation...',
+        success: 'Check your inbox'
+      },
+      $failure : function() {
+        hui.ui.msg.fail({text:'Unable to send mail'})
+      }
+    })
+  },
+
+  // Name...
+
+  $click$changeName : function() {
+    hui.ui.get('namePages').next();
+    hui.ui.get('nameForm').focus();
+  },
+  $click$cancelChangeName : function() {
+    hui.ui.get('namePages').next();
+  },
+  $submit$nameForm : function() {
+    var values = hui.ui.get('nameForm').getValues();
+    hui.ui.request({
+      url : oo.baseContext+'/changeName',
+      parameters : {
+        first: values.first,
+        middle: values.middle,
+        last: values.last
+      },
+      $success : function() {
+        document.location.reload();
+      },
+      $failure : function() {
+        hui.ui.msg.fail({text:'Unable to change name'})
+      }
+    })
+  },
+
+  $click$changePassword : function() {
+    hui.ui.get('passwordPages').next();
+  },
+
+  $click$cancelPassword : function() {
+    hui.ui.get('passwordPages').next();
+  },
+
+  // Password...
   $submit$passwordForm : function(form) {
     var values = form.getValues();
     hui.ui.request({
@@ -30,6 +88,6 @@ var accountView = {
         form.focus();
       }
     })
-  }
+  },
 };
 hui.ui.listen(accountView);

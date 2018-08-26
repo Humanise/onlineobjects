@@ -2,7 +2,7 @@ package dk.in2isoft.onlineobjects.modules.surveillance;
 
 import java.util.Date;
 
-public class LogEntry {
+public class LiveLogEntry {
 
 	public enum Level {info,warn,error}
 	
@@ -13,17 +13,17 @@ public class LogEntry {
 	private String name;
 	private String group;
 
-	public LogEntry() {
+	public LiveLogEntry() {
 		this.date = new Date();
 		this.level = Level.info;
 	}
 	
-	public LogEntry(String text) {
+	public LiveLogEntry(String text) {
 		this();
 		this.title = text;
 	}
 
-	public LogEntry(String text, String name, String group) {
+	public LiveLogEntry(String text, String name, String group) {
 		this();
 		this.title = text;
 		this.name = name;

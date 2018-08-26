@@ -3,6 +3,9 @@
 @include if {
   .oo_text {
     font-size: 16px;
+    &-small {
+      font-size: 14px;
+    }
 
     > p {
       margin: 5px 0;

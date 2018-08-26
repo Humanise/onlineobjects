@@ -27,6 +27,13 @@ module.exports = function(grunt) {
         options: {
           spawn: false,
         }
+      },
+      account: {
+        files: ['src/main/webapp/WEB-INF/apps/account/web/scss/**/*.scss'],
+        tasks: ['sass:account'],
+        options: {
+          spawn: false,
+        }
       }
     },
     sass: {
@@ -57,6 +64,16 @@ module.exports = function(grunt) {
           cwd: 'src/main/webapp/WEB-INF/apps/words/web/scss/',
           src: ['*.scss'],
           dest: 'src/main/webapp/WEB-INF/apps/words/web/css',
+          ext: '.css'
+        }]
+      },
+      account: {
+        options : {sourcemap:'none'},
+        files: [{
+          expand: true,
+          cwd: 'src/main/webapp/WEB-INF/apps/account/web/scss/',
+          src: ['*.scss'],
+          dest: 'src/main/webapp/WEB-INF/apps/account/web/css',
           ext: '.css'
         }]
       }
