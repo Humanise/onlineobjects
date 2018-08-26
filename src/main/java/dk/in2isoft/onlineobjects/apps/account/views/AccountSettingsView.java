@@ -41,6 +41,8 @@ public class AccountSettingsView extends AbstractManagedBean {
 	private boolean emailConfirmed;
 
 	private String emailConfirmationDate;
+
+	private Date agreementAcceptanceTime;
 	
 	public void before(Request request) throws Exception {
 		Messages msg = new Messages(AccountController.class);
@@ -64,6 +66,7 @@ public class AccountSettingsView extends AbstractManagedBean {
 		emailConfirmationDate = emailConfirmationTime==null ? msg.get("email_unconfirmed", locale) : Dates.formatDurationFromNow(emailConfirmationTime);
 		language = request.getLanguage();
 		this.hasAcceptedTerms = memberService.hasAcceptedTerms(user, user);
+		agreementAcceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
 	}
 	
 	public boolean isHasAcceptedTerms() {
@@ -112,6 +115,10 @@ public class AccountSettingsView extends AbstractManagedBean {
 
 	public String getLanguage() {
 		return language;
+	}
+	
+	public Date getAgreementAcceptanceTime() {
+		return agreementAcceptanceTime;
 	}
 	
 	// Wiring...

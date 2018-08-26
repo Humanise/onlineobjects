@@ -43,5 +43,9 @@
 .account_invitation_text {
   margin: 20px 0; }
 
+.account_agreements h1 {
+  font-size: 2em; }
 .account_agreements h2 {
-  color: red; }
+  font-size: 1.2em; }
+.account_agreements h3 {
+  font-size: 1em; }

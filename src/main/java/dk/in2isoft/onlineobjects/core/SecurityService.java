@@ -63,7 +63,7 @@ public class SecurityService {
 		User user = getUser(username, password);
 		if (user!=null) {
 			userSession.setUser(user);
-			log(user, LogType.authentication);
+			log(user, LogType.logIn);
 			return true;
 		}
 		return false;
@@ -74,7 +74,7 @@ public class SecurityService {
 		if (user==null) {
 			throw new SecurityException("No user found with the secret");
 		}
-		log(user, LogType.authentication);
+		log(user, LogType.logIn);
 		userSession.setUser(user);
 	}
 	

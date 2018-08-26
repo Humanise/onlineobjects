@@ -1,5 +1,6 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,7 +28,10 @@ public class Functions {
 
 	public static String formatDate(Object value, String format) {
 		Date date = null;
-		if (value instanceof Number) {
+		if (value instanceof Date) {
+			date = (Date) value;
+		}
+		else if (value instanceof Number) {
 			Number number = (Number) value;
 			date = new Date(number.longValue());
 		}
