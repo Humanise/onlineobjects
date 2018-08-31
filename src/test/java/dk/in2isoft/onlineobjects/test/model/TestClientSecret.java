@@ -33,6 +33,7 @@ public class TestClientSecret extends AbstractSpringTestCase {
 	
 	@Test
 	public void testGettingSecret() throws EndUserException {
+		try {
 		User user = createMemeber();
 		
 		String clientId = UUID.randomUUID().toString();
@@ -78,6 +79,9 @@ public class TestClientSecret extends AbstractSpringTestCase {
 
 		modelService.deleteEntity(user, getAdminUser());
 		modelService.deleteEntity(otherUser, getAdminUser());
+		} catch (Exception e) {
+			modelService.rollBack();
+		}
 	}
 
 	@Test

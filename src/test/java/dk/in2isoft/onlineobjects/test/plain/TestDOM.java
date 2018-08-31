@@ -4,20 +4,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
 
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.Serializing;
-import dk.in2isoft.onlineobjects.test.FastTests;
+import junit.framework.TestCase;
 
-@Category(FastTests.class)
 public class TestDOM extends TestCase {
 
 	@Test

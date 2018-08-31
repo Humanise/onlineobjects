@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
@@ -45,6 +46,7 @@ import nu.xom.Elements;
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations="classpath:applicationContext.test.xml")
 @PrepareForTest({ FacesContext.class })
+@Ignore
 public class TestComponent extends AbstractSpringTestCase {
 
 	private static final Logger log = LoggerFactory.getLogger(TestComponent.class);

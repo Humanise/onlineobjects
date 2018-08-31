@@ -355,7 +355,6 @@ public class ImageService extends AbstractCommandLineInterface {
 			changeImageFile(image, file, properties.getMimeType());
 			synchronizeMetaData(image, privileged);
 			modelService.updateItem(image, privileged);
-			modelService.commit();
 			return image;
 		} catch (EndUserException e) {
 			log.error("Unable to create image from file",e);

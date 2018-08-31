@@ -9,6 +9,7 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
+import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
@@ -22,7 +23,7 @@ public class TestUsersPersonQuery extends AbstractSpringTestCase {
 		modelService.createItem(user, getAdminUser());
 		Privileged priviledged = user;
 		modelService.createItem(person, priviledged);
-		modelService.createRelation(user, person, priviledged);
+		modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, priviledged);
 		{
 			UsersPersonQuery query = new UsersPersonQuery().withUsername(user.getUsername());
 			PairSearchResult<User,Person> pairs = modelService.searchPairs(query);

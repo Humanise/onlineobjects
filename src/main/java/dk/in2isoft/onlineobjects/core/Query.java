@@ -422,7 +422,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}
 		//log.info(hql);
-		org.hibernate.Query q = session.createQuery(hql.toString());
+		org.hibernate.query.Query<T> q = session.createQuery(hql.toString());
 		if (pageSize > 0 && !ignorePaging) {
 			q.setMaxResults(pageSize);
 			q.setFetchSize(pageSize);

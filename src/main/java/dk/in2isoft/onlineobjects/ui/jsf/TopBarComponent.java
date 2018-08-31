@@ -36,7 +36,7 @@ public class TopBarComponent extends AbstractComponent {
 	public static final String FAMILY = "onlineobjects.topBar";
 
 	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
-	private static List<String> privateApps = Lists.newArrayList("reader", "desktop", "tools");
+	private static List<String> privateApps = Lists.newArrayList("knowledge", "desktop", "tools");
 	private static Map<String,String> icons = new HashMap<String, String>();
 	
 	static {

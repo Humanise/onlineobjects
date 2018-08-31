@@ -12,6 +12,7 @@ public class TestExportSchema extends AbstractSpringTask {
 	
 	@Test
 	public void run() throws ModelException {
+		/*
 		Configuration cfg = new Configuration().configure();
 		SchemaExport export = new SchemaExport(cfg);
 		export.setOutputFile(getProperty("schema.file"));
@@ -20,5 +21,6 @@ public class TestExportSchema extends AbstractSpringTask {
 		SchemaUpdate update = new SchemaUpdate(cfg);
 		update.setOutputFile(getProperty("schema.update.file"));
 		update.execute(false, false);
+		*/
 	}
 }

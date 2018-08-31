@@ -136,6 +136,9 @@ public class MemberService {
 		if (creator==null) {
 			throw new IllegalRequestException("Cannot create user without a creator");
 		}
+		if (email==null) {
+			throw new IllegalRequestException("Cannot create member without an email");
+		}
 		// TODO: Figure out how to synch both username + email
 		synchronized(email.intern()) {
 			// TODO: Move this to the core

@@ -56,6 +56,7 @@ public class TestMemberService extends AbstractSpringTestCase {
 
 	@Test
 	public void testCreateMember() throws EndUserException {
+		try {
 		String username = "test"+System.currentTimeMillis();
 		String password = "zup4$seKr8";
 		String fullName = "Dummy Test User";
@@ -111,6 +112,9 @@ public class TestMemberService extends AbstractSpringTestCase {
 		
 		assertNull(modelService.get(User.class, user.getId(), getAdminUser()));
 		modelService.commit();
+		} catch (Exception e) {
+			modelService.rollBack();
+		}
 	}
 
 	private void assertThatOnlyUserHasAccess(Entity entity, User user) {

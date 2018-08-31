@@ -2,7 +2,8 @@ package dk.in2isoft.onlineobjects.test.model;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Test;
 
 import dk.in2isoft.onlineobjects.core.Query;
@@ -31,9 +32,10 @@ public class TestQuery extends AbstractSpringTestCase {
 
 	private String queryToHql(Query<?> query) {
 		Session session = modelService.getSessionfactory().getCurrentSession();
-		session.beginTransaction();
+		Transaction transaction = session.beginTransaction();
 		org.hibernate.Query hibernateQuery = query.createItemQuery(session);
 		String string = hibernateQuery.getQueryString();
+		transaction.commit();
 		return string;
 	}
 }

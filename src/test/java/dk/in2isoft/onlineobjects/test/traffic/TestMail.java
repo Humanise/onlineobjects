@@ -148,6 +148,7 @@ public class TestMail extends AbstractSpringTestCase {
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(inputStream);
+			modelService.commit();
 		}
 	}
 	

@@ -7,13 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.metamodel.EntityType;
 import javax.transaction.Synchronization;
 
 import org.apache.log4j.Logger;
@@ -29,16 +32,18 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.event.EventListeners;
-import org.hibernate.event.PostDeleteEventListener;
-import org.hibernate.event.PostInsertEventListener;
-import org.hibernate.event.PostUpdateEventListener;
 import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.schema.TargetType;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -70,6 +75,7 @@ public class ModelService implements InitializingBean {
 
 	private static Logger log = Logger.getLogger(ModelService.class);
 
+	private StandardServiceRegistry registry;
 	private SessionFactory sessionFactory;
 
 	private EventService eventService;
@@ -101,11 +107,12 @@ public class ModelService implements InitializingBean {
 			configuration.configure("hibernate.cfg.xml");
 			//configuration.getEventListeners().setPostDeleteEventListeners(postDeleteEventListener);
 			//PostDeleteEventListener[] postDeleteEventListener = ;
+			/*
 			EventListeners events = configuration.getEventListeners();
 			events.setPostCommitDeleteEventListeners(new PostDeleteEventListener[] {eventService});
 			events.setPostCommitInsertEventListeners(new PostInsertEventListener[] {eventService});
-			events.setPostCommitUpdateEventListeners(new PostUpdateEventListener[] {eventService});
-			sessionFactory = configuration.buildSessionFactory();
+			events.setPostCommitUpdateEventListeners(new PostUpdateEventListener[] {eventService});*/
+			sessionFactory = getSessionFactory();
 		} catch (Throwable t) {
 			log.fatal("Could not create session factory", t);
 			throw new ExceptionInInitializerError(t);
@@ -114,7 +121,36 @@ public class ModelService implements InitializingBean {
 		loadModelInfo();
 	}
 
-	@SuppressWarnings("unchecked")
+	public SessionFactory getSessionFactory() {
+		if (sessionFactory == null) {
+			try {
+				// Create registry
+				registry = new StandardServiceRegistryBuilder().configure().build();
+
+				// Create MetadataSources
+				MetadataSources sources = new MetadataSources(registry);
+
+				// Create Metadata
+				Metadata metadata = sources.getMetadataBuilder().build();
+				/*
+				 * new SchemaExport() // .setOutputFile("db-schema.hibernate5.ddl") //
+				 * .create(EnumSet.of(TargetType.SCRIPT), metadata);
+				 */
+
+				// Create SessionFactory
+				sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+			} catch (Exception e) {
+				log.error(e);
+				if (registry != null) {
+					StandardServiceRegistryBuilder.destroy(registry);
+				}
+			}
+		}
+		return sessionFactory;
+	}
+
+	@SuppressWarnings("deprecation")
 	private void loadModelInfo() {
 		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("model.xml");
 		Builder parser = new Builder();
@@ -142,21 +178,15 @@ public class ModelService implements InitializingBean {
 			log.error("Could not load model info", e);
 		}
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-		Map<String, ClassMetadata> metadata = sessionFactory.getAllClassMetadata();
-		for (Iterator<ClassMetadata> i = metadata.values().iterator(); i.hasNext();) {
-			ClassMetadata metaData = i.next();
-			String className = metaData.getEntityName();
-			Class<?> clazz;
-			try {
-				clazz = Class.forName(className);
-				log.debug(clazz + " with super " + clazz.getSuperclass());
-				if (clazz.getSuperclass().equals(Entity.class)) {
-					entityClasses.add((Class<? extends Entity>) clazz);
-				}
-				classes.add(clazz);
-			} catch (ClassNotFoundException e) {
-				log.error("Could not find model class: "+className);
+		Set<EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();
+		for (EntityType<?> entityType : entities) {
+			Class<?> clazz = entityType.getJavaType();
+
+			log.debug(clazz + " with super " + clazz.getSuperclass());
+			if (clazz.getSuperclass().equals(Entity.class)) {
+				entityClasses.add((Class<? extends Entity>) clazz);
 			}
+			classes.add(clazz);
 		}
 
 	}
@@ -365,7 +395,7 @@ public class ModelService implements InitializingBean {
 			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
-			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity)";
+			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity";
 			Query q = session.createQuery(hql);
 			q.setEntity("entity", entity);
 			ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
@@ -579,8 +609,8 @@ public class ModelService implements InitializingBean {
 			} else {
 				session = getSession();
 				
-				Query q = session.createQuery("from User as user left join fetch user.properties where lower(user.username)=lower(?)");
-				q.setString(0, username);
+				Query q = session.createQuery("from User as user left join fetch user.properties where lower(user.username)=lower(:username)");
+				q.setString("username", username);
 				List<?> list = q.list();
 				for (Object object : list) {
 					User user = (User) object;

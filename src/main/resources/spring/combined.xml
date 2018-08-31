@@ -56,6 +56,7 @@
 		<property name="graphvizPath" value="${graphviz.path}"/>
 		<property name="analyticsCode" value="${analytics.code}"/>
 		<property name="startScheduling" value="${startScheduling}"/>
+        <property name="simulateHttps" value="${development.simulateHttps}"/>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">

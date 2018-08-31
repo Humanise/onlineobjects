@@ -1,7 +1,10 @@
 package dk.in2isoft.commons.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -10,6 +13,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.input.DOMBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import dk.in2isoft.commons.lang.Strings;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Element;
@@ -21,16 +32,6 @@ import nu.xom.ValidityException;
 import nu.xom.XMLException;
 import nu.xom.XPathContext;
 import nu.xom.converters.DOMConverter;
-
-import org.apache.tools.ant.filters.StringInputStream;
-import org.eclipse.jdt.annotation.Nullable;
-import org.jdom2.input.DOMBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import dk.in2isoft.commons.lang.Strings;
 
 public class DOM {
 	
@@ -102,7 +103,7 @@ public class DOM {
 		if (Strings.isNotBlank(string)) {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			try {
-				StringInputStream input = new StringInputStream(string);
+				InputStream input = new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				return db.parse(input);
 			} catch (ParserConfigurationException e) {

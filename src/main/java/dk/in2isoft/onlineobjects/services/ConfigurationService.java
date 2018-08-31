@@ -52,6 +52,8 @@ public class ConfigurationService implements InitializingBean {
 
 	private boolean optimizeResources;
 
+	private boolean simulateHttps;
+
 
 	public void afterPropertiesSet() throws Exception {
 		if (!new File(basePath).isDirectory()) {
@@ -223,8 +225,12 @@ public class ConfigurationService implements InitializingBean {
 		HttpServletRequest servletRequest = request.getRequest();
 		StringBuilder url = new StringBuilder();
 		String scheme = servletRequest.getScheme();
-		url.append(scheme).append("://").append(appMountPoints.get(app)).append(".").append(rootDomain);
 		int port = servletRequest.getServerPort();
+		if (simulateHttps) {
+			scheme = "https";
+			port = 443;
+		}
+		url.append(scheme).append("://").append(appMountPoints.get(app)).append(".").append(rootDomain);
 		if (port!=80 && port!=443) {
 			url.append(":").append(port);
 		}
@@ -288,5 +294,9 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setSimulateSlowRequest(boolean simulateSlowRequest) {
 		this.simulateSlowRequest = simulateSlowRequest;
+	}
+	
+	public void setSimulateHttps(boolean simulateHttps) {
+		this.simulateHttps = simulateHttps;
 	}
 }
