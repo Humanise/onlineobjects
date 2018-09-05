@@ -14,6 +14,9 @@
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ddd; }
+  .oo_text > ul {
+    padding-left: 25px;
+    margin: 5px 0; }
   .oo_text > *:first-child {
     margin-top: 0; }
   .oo_text > *:last-child {

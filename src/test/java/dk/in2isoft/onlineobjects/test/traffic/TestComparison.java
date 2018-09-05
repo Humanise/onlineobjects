@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.test.traffic;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,29 +9,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.syndication.feed.WireFeed;
-import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.feed.atom.Link;
-import com.sun.syndication.feed.rss.Channel;
-import com.sun.syndication.feed.rss.Item;
-import com.sun.syndication.io.WireFeedInput;
-import com.sun.syndication.io.XmlReader;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
-import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Matrix;
 import dk.in2isoft.commons.lang.MatrixEntry;
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
-import dk.in2isoft.onlineobjects.util.semantics.Danish;
 import dk.in2isoft.onlineobjects.util.semantics.English;
 import dk.in2isoft.onlineobjects.util.semantics.Language;
 
@@ -49,86 +37,21 @@ public class TestComparison extends AbstractSpringTestCase {
 	@Test
 	public void testWikipedia() throws Exception {
 		
-		List<String> urls = Lists.newArrayList(
-				"http://en.wikipedia.org/wiki/Whale",
-				"http://en.wikipedia.org/wiki/List_of_whale_species",
-				"http://en.wikipedia.org/wiki/Humpback_Whale",
-				"http://en.wikipedia.org/wiki/American_Revolutionary_War",
-				"http://en.wikipedia.org/wiki/Rafael_Correa",
-				"http://en.wikipedia.org/wiki/President_of_Ecuador",
-				"http://en.wikipedia.org/wiki/Ecuador",
-				"http://en.wikipedia.org/wiki/Inca_Empire",
-				"http://en.wikipedia.org/wiki/South_America",
-				"http://en.wikipedia.org/wiki/Argentina",
-				"http://en.wikipedia.org/wiki/Mexico",
-				"http://en.wikipedia.org/wiki/Apple_Inc.",
-				"http://en.wikipedia.org/wiki/Steve_Jobs",
-				"http://en.wikipedia.org/wiki/Buddhism"
-		);
-		compareUrls(urls, new English());
-	}
-	
-	private List<String> getUrlsInFeed(String url) {
-		List<String> urls = Lists.newArrayList();
-		URL feedUrl;
-		try {
-			feedUrl = new URL(url);
-		} catch (MalformedURLException e) {
-			log.error("Malformed url: "+url, e);
-			return null;
-		}
-
-        WireFeedInput input = new WireFeedInput();
-        WireFeed wireFeed;
-		try {
-			wireFeed = input.build(new XmlReader(feedUrl));
-		} catch (Exception e) {
-			log.error("Unable to parse url: "+url, e);
-			return null;
-		}
-        if (wireFeed instanceof Channel) {
-        	Channel channel = (Channel) wireFeed;
-        	List<Item> items = Code.castList(channel.getItems());
-        	for (Item item : items) {
-				urls.add(item.getLink());
-			}
-        }
-        else if (wireFeed instanceof Feed) {
-        	Feed feed = (Feed) wireFeed;
-        	List<com.sun.syndication.feed.atom.Entry> entries = Code.castList(feed.getEntries());
-        	for (com.sun.syndication.feed.atom.Entry entry : entries) {
-        		List<Link> alternateLinks = Code.castList(entry.getAlternateLinks());
-        		for (Link link : alternateLinks) {
-        			urls.add(link.getHrefResolved());
-				}
-			}
-        }
-		return urls;
-	}
-	
-	@Ignore
-	@Test
-	public void testFeed() throws Exception {
+		File folder = getTestFile("wikipedia");
+		File[] files = folder.listFiles();
+		compareUrls(files, new English());
 		
-		List<String> feeds = Lists.newArrayList("http://politiken.dk/rss/senestenyt.rss","http://www.dr.dk/nyheder/service/feeds/allenyheder","http://www.b.dk/feeds/rss/Kronikker");
-		
-		List<String> urls = Lists.newArrayList();
-		
-		for (String feed : feeds) {
-			List<String> urlsInFeed = getUrlsInFeed(feed);
-			if (urlsInFeed!=null) {
-				urls.addAll(urlsInFeed);
-			}
-		}		
-		compareUrls(urls, new Danish());
 	}
 
-	private void compareUrls(List<String> urls, Language language) throws MalformedURLException, BoilerpipeProcessingException {
+	private void compareUrls(File[] urls, Language language) {
 		Map<String,String> docs = Maps.newHashMap();
-		for (String url : urls) {
-			HTMLDocument document = htmlService.getDocumentSilently(url);
+		for (File url : urls) {
+			HTMLDocument document = htmlService.getDocumentSilently(url, Strings.UTF8);
 			if (document!=null) {
 				String text = document.getExtractedText();
+				if (text == null) {
+					throw new IllegalStateException("No text for "+url);
+				}
 				docs.put(document.getTitle()+" : "+url, text);
 			}
 		}

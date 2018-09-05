@@ -5,7 +5,7 @@ public class EndUserException extends Exception {
 	private static final long serialVersionUID = 1449397281498175390L;
 	
 	private String code;
-	
+		
 	private boolean log = true;
 
 	public EndUserException() {
@@ -15,6 +15,11 @@ public class EndUserException extends Exception {
 	public EndUserException(String message, String code) {
 		super(message);
 		this.code = code;
+	}
+
+	public EndUserException(Error error) {
+		super(error.name());
+		this.code = error.name();
 	}
 
 	public EndUserException(String message) {
@@ -31,10 +36,6 @@ public class EndUserException extends Exception {
 	
 	public String getCode() {
 		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public boolean isLog() {

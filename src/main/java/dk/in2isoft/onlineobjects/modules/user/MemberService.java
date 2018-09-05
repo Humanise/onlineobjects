@@ -35,6 +35,7 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -460,15 +461,15 @@ public class MemberService {
 
 	public void sendEmailChangeRequest(User user, String newEmail, Privileged privileged) throws EndUserException {
 		if (!ValidationUtil.isWellFormedEmail(newEmail)) {
-			throw new IllegalRequestException("The new e-mail is invalid");
-		}
-		if (isPrimaryEmailTaken(newEmail)) {
-			throw new IllegalRequestException("The email is taken");
+			throw new IllegalRequestException(Error.invalidEmail);
 		}
 		Person person = getUsersPerson(user, privileged);
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
 		if (newEmail.equals(email.getAddress())) {
-			throw new IllegalRequestException("The new email is the same as the current");
+			throw new IllegalRequestException(Error.emailSameAsCurrent);
+		}
+		if (isPrimaryEmailTaken(newEmail)) {
+			throw new IllegalRequestException(Error.emailTaken);
 		}
 		String key = Strings.generateRandomString(30) + "|" + newEmail;
 		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);

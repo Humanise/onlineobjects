@@ -1,6 +1,7 @@
 var accountView = {
 
   // E-mail...
+
   $submit$mailForm : function() {
     var values = hui.ui.get('mailForm').getValues();
     hui.ui.request({
@@ -9,9 +10,9 @@ var accountView = {
       $success : function() {
         hui.ui.msg({text:'The e-mail address is changed',icon:'common/success',duration:3000});
       },
-      $failure : function(e) {
-        hui.log(e);
-        hui.ui.msg({text:'The e-mail address was not changed',icon:'common/warning',duration:3000});
+      $failure : function(t) {
+        var obj = hui.string.fromJSON(t.responseText);
+        hui.ui.msg({text:obj ? obj.message : 'Something bad happened',icon:'common/warning',duration:3000});
       }
     })
   },
@@ -20,6 +21,9 @@ var accountView = {
   },
   $click$changeEmail : function() {
     hui.ui.get('emailPages').next();
+    setTimeout(function() {
+      hui.ui.get('mailForm').focus();
+    },200)
   },
   $click$confirmEmail : function() {
     hui.ui.request({
@@ -38,7 +42,9 @@ var accountView = {
 
   $click$changeName : function() {
     hui.ui.get('namePages').next();
-    hui.ui.get('nameForm').focus();
+    setTimeout(function() {
+      hui.ui.get('nameForm').focus();
+    },200)
   },
   $click$cancelChangeName : function() {
     hui.ui.get('namePages').next();
@@ -61,15 +67,19 @@ var accountView = {
     })
   },
 
+  // Password...
+
   $click$changePassword : function() {
     hui.ui.get('passwordPages').next();
+    setTimeout(function() {
+      hui.ui.get('passwordForm').focus();
+    },200)
   },
 
   $click$cancelPassword : function() {
     hui.ui.get('passwordPages').next();
   },
 
-  // Password...
   $submit$passwordForm : function(form) {
     var values = form.getValues();
     hui.ui.request({

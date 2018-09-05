@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:_="http://uri.humanise.dk/template">
+
+  <head>
+    <title>Hello</title>
+  </head>
+
+<body>
+  <_:class add="msie" if="browser.msie"/>
+  <div _:each="groups as group" _:if="group.items is not empty">
+    <h2 _:text="page.title">Example</h2>
+    <p><strong>Name</strong>: <span _:text="user.name">username</span></p>
+    <ul _:if="group.items">
+      <li _:each="group.items">
+        <strong><_:text value="item.title">Placeholder</_:text> {item.badge}</strong>
+        <_:if test="language is english">
+          <p>This is the english</p>
+          <_:else>
+            <p>Exceptional language</p>
+          </_:else>
+        </_:if>
+        <_:include partial="partial.xml"/>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

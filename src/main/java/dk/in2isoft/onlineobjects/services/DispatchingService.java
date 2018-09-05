@@ -31,6 +31,7 @@ import dk.in2isoft.onlineobjects.modules.dispatch.Responder;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.ui.ErrorRenderer;
 import dk.in2isoft.onlineobjects.ui.Request;
+import dk.in2isoft.onlineobjects.util.Messages;
 
 public class DispatchingService {
 
@@ -157,9 +158,13 @@ public class DispatchingService {
 			if (accept != null && accept.contains("application/json") && !accept.contains("text/html")) {
 				response.setContentType("application/json");
 				Map<String, String> resp = new HashMap<>();
-				resp.put("message", ex.getMessage());
 				if (ex instanceof EndUserException) {
-					resp.put("code", ((EndUserException) ex).getCode());
+					Messages msg = new Messages(EndUserException.class);
+					String code = ((EndUserException) ex).getCode();
+					resp.put("code", code);
+					resp.put("message", msg.get(code, request.getLocale()));
+				} else {
+					resp.put("message", ex.getMessage());
 				}
 				response.getWriter().write(Strings.toJSON(resp));
 			} else {

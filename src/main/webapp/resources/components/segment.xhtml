@@ -1,0 +1,20 @@
+<html xmlns = "http://www.w3.org/1999/xhtml"
+ xmlns:h = "http://java.sun.com/jsf/html"
+ xmlns:f = "http://java.sun.com/jsf/core"
+ xmlns:o="http://www.onlineobjects.com/jsf"
+ xmlns:composite = "http://java.sun.com/jsf/composite"
+>
+  <composite:interface>
+    <composite:attribute name = "title" />
+  </composite:interface>
+
+  <composite:implementation>
+    <div class="oo_segment">
+      <div class="oo_segment_title">#{cc.attrs.title}</div>
+      <div class="oo_segment_body">
+        <composite:insertChildren/>
+      </div>
+    </div>
+    <o:dependency src="/WEB-INF/core/web/css/oo_segment.css"/>
+  </composite:implementation>
+</html>

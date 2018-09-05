@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.apps.account;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import com.google.common.collect.Lists;
 
@@ -26,12 +27,20 @@ public abstract class AccountControllerBase extends ApplicationController {
 		addJsfMatcher("/invitation", "invitation.xhtml");
 		addJsfMatcher("/<language>", "front.xhtml");
 		addJsfMatcher("/<language>/password", "password.xhtml");
+		addJsfMatcher("/<language>/delete", "delete.xhtml");
 		addJsfMatcher("/<language>/signup", "signup.xhtml");
 		addJsfMatcher("/<language>/agreements", "agreements.xhtml");
 		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_PATH, "confirm.xhtml");
-		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_CHANGE_PATH, "confirm-change-email.xhtml");
+		addJsfMatcher("/<language>/confirm\\-email\\-change", "confirm-email-change.xhtml");
 	}
 	
+	@Override
+	public boolean isAllowed(Request request) {
+		if (Pattern.matches("^/(da|en)/(signup|confirm|confirm\\-email\\-change$)", request.getLocalPathAsString())) {
+			return true;
+		}
+		return securityService.getPublicUser().getId() != request.getSession().getIdentity();
+	}
 
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
@@ -40,7 +49,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 	@Override
 	public String getLanguage(Request request) {
 		String[] path = request.getLocalPath();
-		if (path.length>0) {
+		if (path.length>0 && ("da".equals(path[0]) || "en".equals(path[0]))) {
 			return path[0];
 		}
 		return super.getLanguage(request);

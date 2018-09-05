@@ -55,8 +55,8 @@ public class TagWriter {
 		return withAttribute("id", id);
 	}
 	
-	public TagWriter withHref(Object id) throws IOException {
-		return withAttribute("href", id);
+	public TagWriter withHref(Object href) throws IOException {
+		return withAttribute("href", href);
 	}
 	
 	public TagWriter withSrc(Object src) throws IOException {

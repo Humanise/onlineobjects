@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:oc = "http://java.sun.com/jsf/composite/components"
+>
+
+  <f:loadBundle basename="dk.in2isoft.onlineobjects.apps.account.msg.AccountController" var="msg"/>
+
+  <ui:composition template="templates/plain.xhtml">
+
+    <ui:define name="body">
+      <o:box>
+        <o:header>Deletion of account</o:header>
+        <oc:text styleClass="oo_space_top-2 oo_space_bottom-2">
+          <p>By deleting your account you agree to the following...</p>
+          <ul>
+            <li>You will not be able to get back the data stored in the system</li>
+            <li>Your username will be available to others</li>
+            <li>Some technical data will remain in the system but will be anonymized</li>
+            <li>Your data may be stored on backups for some time</li>
+          </ul>
+          <p>Please confirm this by providing your username and password...</p>
+        </oc:text>
+        <gui:formula name="confirmationForm">
+          <gui:field label="#{msg.username}">
+            <gui:textInput key="username"/>
+          </gui:field>
+          <gui:field label="#{msg.password}">
+            <gui:textInput key="password" secret="true"/>
+          </gui:field>
+          <gui:buttons>
+            <gui:button text="#{msg.cancel}" href="/${accountSettingsView.language}/" highlighted="true" variant="light"/>
+            <gui:button text="Yes, I want to delete my account" variant="light" submit="true"/>
+          </gui:buttons>
+        </gui:formula>
+      </o:box>
+
+      <o:dependency src="/WEB-INF/apps/account/web/js/delete.js"/>
+    </ui:define>
+
+  </ui:composition>
+
+</html>

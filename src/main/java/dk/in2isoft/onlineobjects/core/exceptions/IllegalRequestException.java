@@ -24,4 +24,8 @@ public class IllegalRequestException extends EndUserException {
 		super(throwable);
 	}
 
+	public IllegalRequestException(Error error) {
+		super(error);
+	}
+
 }

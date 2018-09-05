@@ -16,7 +16,6 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Response;
-import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 
 public class AccountController extends AccountControllerBase {
@@ -24,12 +23,6 @@ public class AccountController extends AccountControllerBase {
 	private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 	
 	public static final String MOUNT = "account";
-
-
-	@Override
-	public boolean isAllowed(Request request) {
-		return true;
-	}
 	
 	@Path
 	public void changePassword(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException, ContentNotFoundException {
@@ -100,5 +93,19 @@ public class AccountController extends AccountControllerBase {
 		return response;
 	}
 	
+	@Path
+	public void deleteAccount(Request request) throws ModelException, SecurityException, IllegalRequestException {
+		String username = request.getString("username", "No username");
+		String password = request.getString("password", "No password");
+		UserSession session = request.getSession();
+		User user = modelService.get(User.class, session.getIdentity(), session);
+		if (!username.equals(user.getUsername())) {
+			throw new IllegalRequestException("Username does not match the current user");
+		}
+		securityService.changeUser(session, username, password);
+		
+		memberService.deleteMember(user, session);
+		securityService.logOut(session);
+	}
 	
 }

@@ -47,8 +47,6 @@ public class TestMemberService extends AbstractSpringTestCase {
 
 		assertFails(() -> memberService.createMember(getPublicUser(), username, "x", fullName, email));
 
-		assertFails(() -> memberService.createMember(getPublicUser(), username, password, "", email));
-
 		for (String invalidMail : new String[] {null, "invalid email"}) {
 			assertFails(() -> memberService.createMember(getPublicUser(), username, password, fullName, invalidMail));
 		}
@@ -57,62 +55,63 @@ public class TestMemberService extends AbstractSpringTestCase {
 	@Test
 	public void testCreateMember() throws EndUserException {
 		try {
-		String username = "test"+System.currentTimeMillis();
-		String password = "zup4$seKr8";
-		String fullName = "Dummy Test User";
-		String email = Strings.generateRandomString(5)+"@domain.com";
-
-		User user = memberService.createMember(getPublicUser(), username, password, fullName, email);
-		assertNotEquals(password, user.getPassword());
-		
-		assertThatOnlyUserHasAccess(user, user);
-
-		Person person = memberService.getUsersPerson(user, user);
-		assertEquals(fullName, person.getFullName());
-		assertThatOnlyUserHasAccess(person, user);
-		
-		// Check that the email is the users primary
-		EmailAddress primaryEmail = memberService.getUsersPrimaryEmail(user, user);
-		assertEquals(email, primaryEmail.getAddress());
-		assertEquals(email, primaryEmail.getName());
-		assertThatOnlyUserHasAccess(primaryEmail, user);
-		
-		// Check that the same e-mail is attached to the person
-		List<EmailAddress> mailsOfPerson = modelService.getChildren(person, EmailAddress.class, user);
-		assertEquals(1, mailsOfPerson.size());
-		assertEquals(primaryEmail, mailsOfPerson.get(0));
-
-		// Find the user by the e-mail
-		User foundByEmail = memberService.getUserByPrimaryEmail(email, user);
-		assertEquals(user, foundByEmail);
-		
-		try {
-			memberService.createMember(getPublicUser(), username+"2", password, fullName, email);
-			fail("It should not be possible to use the same e-mail again");
-		} catch (IllegalRequestException e) {
-			assertEquals("emailExists",e.getCode());
-		}
-
-		// Try logging in with the user
-		UserSession session = new UserSession(getPublicUser());
-		securityService.changeUser(session, username, password);
-		assertEquals(user, session.getUser());
-		
-		String newPassword = "new$ecr8p4$s";
-		// TODO Maybe test that public cannot do this
-		securityService.changePassword(username, password, newPassword, user);
-		
-		assertFalse(securityService.changeUser(session, username, password));
-		assertEquals(user, session.getUser());
-		
-		
-		
-		// Clean up
-		memberService.deleteMember(user, getAdminUser());
-		
-		assertNull(modelService.get(User.class, user.getId(), getAdminUser()));
-		modelService.commit();
+			String username = "test"+System.currentTimeMillis();
+			String password = "zup4$seKr8";
+			String fullName = "Dummy Test User";
+			String email = Strings.generateRandomString(5)+"@domain.com";
+	
+			User user = memberService.createMember(getPublicUser(), username, password, fullName, email);
+			assertNotEquals(password, user.getPassword());
+			
+			assertThatOnlyUserHasAccess(user, user);
+	
+			Person person = memberService.getUsersPerson(user, user);
+			assertEquals(fullName, person.getFullName());
+			assertThatOnlyUserHasAccess(person, user);
+			
+			// Check that the email is the users primary
+			EmailAddress primaryEmail = memberService.getUsersPrimaryEmail(user, user);
+			assertEquals(email, primaryEmail.getAddress());
+			assertEquals(email, primaryEmail.getName());
+			assertThatOnlyUserHasAccess(primaryEmail, user);
+			
+			// Check that the same e-mail is attached to the person
+			List<EmailAddress> mailsOfPerson = modelService.getChildren(person, EmailAddress.class, user);
+			assertEquals(1, mailsOfPerson.size());
+			assertEquals(primaryEmail, mailsOfPerson.get(0));
+	
+			// Find the user by the e-mail
+			User foundByEmail = memberService.getUserByPrimaryEmail(email, user);
+			assertEquals(user, foundByEmail);
+			
+			try {
+				memberService.createMember(getPublicUser(), username+"2", password, fullName, email);
+				fail("It should not be possible to use the same e-mail again");
+			} catch (IllegalRequestException e) {
+				assertEquals("emailExists",e.getCode());
+			}
+	
+			// Try logging in with the user
+			UserSession session = new UserSession(getPublicUser());
+			securityService.changeUser(session, username, password);
+			assertEquals(user.getIdentity(), session.getIdentity());
+			
+			String newPassword = "new$ecr8p4$s";
+			// TODO Maybe test that public cannot do this
+			securityService.changePassword(username, password, newPassword, user);
+			
+			assertFalse(securityService.changeUser(session, username, password));
+			assertEquals(user.getIdentity(), session.getIdentity());
+			
+			
+			
+			// Clean up
+			memberService.deleteMember(user, getAdminUser());
+			
+			assertNull(modelService.get(User.class, user.getId(), getAdminUser()));
+			modelService.commit();
 		} catch (Exception e) {
+			e.printStackTrace(System.err);
 			modelService.rollBack();
 		}
 	}

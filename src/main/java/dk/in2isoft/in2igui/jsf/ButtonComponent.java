@@ -35,7 +35,8 @@ public class ButtonComponent extends AbstractComponent {
 	private String variant;
 	private Integer left;
 	private Integer right;
-
+	private String href;
+	
 	public ButtonComponent() {
 		super(TYPE);
 	}
@@ -65,19 +66,21 @@ public class ButtonComponent extends AbstractComponent {
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		encodeMarkup(context, out);
+		ConfirmComponent confirm = Components.getChild(this, ConfirmComponent.class);
+		String name = getName(context);
+		String click = getClick(context);
+		if (confirm==null && Strings.isBlank(name) && Strings.isBlank(click) && !submit) return;
 		String id = getClientId();
 		ScriptWriter js = out.getScriptWriter();
 		js.startScript();
 		js.startNewObject(id, "hui.ui.Button").property("element", id);
 		js.comma().property("submit", submit);
-		String name = getName(context);
 		if (name != null) {
 			js.comma().property("name", name);
 		}
 		if (styleClass != null) {
 			js.comma().property("class", styleClass);
 		}
-		ConfirmComponent confirm = Components.getChild(this, ConfirmComponent.class);
 		if (confirm != null) {
 			String confirmation = Strings.asNonBlank(confirm.getText(context), "Are you sure?");
 			String okText = Strings.asNonBlank(confirm.getOkText(context), "OK");
@@ -85,7 +88,6 @@ public class ButtonComponent extends AbstractComponent {
 			js.write(",confirm:{text:'").writeScriptString(confirmation).write("',okText:'").writeScriptString(okText).write("',cancelText:'").writeScriptString(canceltext)
 					.write("'}");
 		}
-		String click = getClick(context);
 		if (StringUtils.isNotBlank(click)) {
 			js.comma().write("listener : {$click:function(widget) {").write(click).write("}}");
 		}
@@ -109,8 +111,12 @@ public class ButtonComponent extends AbstractComponent {
 		if (disabled) {
 			cls.add("hui_is_disabled");
 		}
-		
-		writer.startVoidA(cls);
+		String href = getExpression("href", this.href, context);
+		if (Strings.isNotBlank(href)) {
+			writer.startA(cls).withHref(href);
+		} else {
+			writer.startVoidA(cls);
+		}
 		writer.withId(id);
 		if (left != null || right != null) {
 			StyleBuilder css = new StyleBuilder();
@@ -237,4 +243,13 @@ public class ButtonComponent extends AbstractComponent {
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
 }
