@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration strict="true" packages="dk.in2isoft">
+  
+  <Properties>
+    <Property name="filename">/Users/jobm/Code/temp/onlineobjects2.log</Property>
+  </Properties>
+
+  <Filter type="ThresholdFilter" level="trace"/>
+ 
+  <Appenders>
+
+    <Appender type="Console" name="FLOW">
+      <Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %C{1.} · · · %m%n"/>
+    </Appender>
+
+    <Appender type="File" name="File" fileName="${filename}">
+      <Layout type="PatternLayout">
+        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+      </Layout>
+    </Appender>
+  </Appenders>
+ 
+  <Loggers>
+    <Logger name="dk.in2isoft" level="debug" additivity="false">
+      <AppenderRef ref="FLOW"/>
+    </Logger>
+ <!--
+    <Logger name="dk.in2isoft" level="debug" additivity="false">
+      <AppenderRef ref="File"/>
+    </Logger>
+ -->
+    <Root level="WARN">
+      <AppenderRef ref="FLOW"/>
+    </Root>
+  </Loggers>
+ 
+</Configuration>

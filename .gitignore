@@ -19,3 +19,4 @@ node_modules
 src/main/webapp/hui
 tmp
 Makefile.config
+log4j2.xml

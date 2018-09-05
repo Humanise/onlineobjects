@@ -7,22 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+
+import dk.in2isoft.commons.xml.DecoratedDocument;
+import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import dk.in2isoft.commons.xml.DecoratedDocument;
-import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
-
 public class TestDecoratedDocument extends AbstractSpringTestCase {
 
-	private Logger log = LoggerFactory.getLogger(TestDecoratedDocument.class);
+	private Logger log = LogManager.getLogger(TestDecoratedDocument.class);
 
 	@Test
 	public void testMultiLine() throws MalformedURLException, IOException,

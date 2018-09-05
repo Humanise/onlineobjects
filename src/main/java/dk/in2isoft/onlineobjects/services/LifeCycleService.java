@@ -2,7 +2,8 @@ package dk.in2isoft.onlineobjects.services;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -15,7 +16,7 @@ import dk.in2isoft.onlineobjects.model.LogType;
 
 public class LifeCycleService implements ApplicationListener<ApplicationContextEvent> {
 
-	private static Logger log = Logger.getLogger(LifeCycleService.class);
+	private static Logger log = LogManager.getLogger(LifeCycleService.class);
 	private ConsistencyService consistencyService;
 	private ModelService modelService;
 

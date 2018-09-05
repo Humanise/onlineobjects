@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -26,7 +27,7 @@ import dk.in2isoft.onlineobjects.model.User;
 
 public class LanguageConsistencyChecker implements ConsistencyChecker {
 
-	private static Logger log = Logger.getLogger(LanguageConsistencyChecker.class);
+	private static Logger log = LogManager.getLogger(LanguageConsistencyChecker.class);
 
 	private ModelService modelService;
 	private SecurityService securityService;
