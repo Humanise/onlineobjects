@@ -13,15 +13,18 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box>
+      <o:box width="800">
         <o:header>${msg.agreements_title}</o:header>
+        <c:if test="${!accountSettingsView.publicUser}">
         <p class="oo_space_top">
           <o:link href="/${accountSettingsView.language}/">#{msg.back_to_account}</o:link>
         </p>
+        </c:if>
         <div id="${agreement.key}" class="account_agreements">
           <div class="oo_text oo_space_top">
           <p>${msg.agreements_intro}</p>
           </div>
+          <c:if test="${!accountSettingsView.publicUser}">
           <c:choose>
             <c:when test="${not accountAgreementsView.accepted}">
               <div class="oo_space_top">
@@ -36,6 +39,7 @@
               </p>
             </c:otherwise>
           </c:choose>
+          </c:if>
           <ul>
             <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
             <li><o:link href="#${agreement.key}">${agreement.title}</o:link></li>

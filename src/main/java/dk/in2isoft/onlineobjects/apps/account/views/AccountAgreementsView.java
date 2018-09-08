@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.Agreement;
@@ -21,8 +22,8 @@ public class AccountAgreementsView extends AbstractManagedBean {
 	private Date acceptanceTime;
 	
 	public void before(Request request) throws Exception {
-		User user = request.getSession().getUser();
-		user = modelService.getRequired(User.class, user.getId(), user);
+		Privileged privileged = request.getSession();
+		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
 		accepted = memberService.hasAcceptedTerms(user, user);
 		agreements = memberService.getAgreements(user, request.getLocale());
 		acceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);

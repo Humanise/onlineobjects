@@ -70,16 +70,16 @@ public class MemberService {
 
 	public void validateNewMember(String username, String password) throws IllegalRequestException {
 		if (!StringUtils.isNotBlank(username)) {
-			throw new IllegalRequestException("Username is not provided","noUsername");
+			throw new IllegalRequestException(Error.noUsername);
 		}
 		if (!isValidUsername(username)) {
-			throw new IllegalRequestException("Username contains invalid characters","invalidUsername");
+			throw new IllegalRequestException(Error.invalidUsername);
 		}
 		if (!Strings.isNotBlank(password)) {
-			throw new IllegalRequestException("Password is not provided","noPassword");
+			throw new IllegalRequestException(Error.noPassword);
 		}
 		if (!isValidPassword(password)) {
-			throw new IllegalRequestException("Password is not valid","invalidPassword");
+			throw new IllegalRequestException(Error.invalidPassword);
 		}
 	}
 

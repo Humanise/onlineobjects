@@ -38,7 +38,8 @@
             options: {key:'terms', testName: 'signupAccept'}
           }
         ]);
-        group.add(oo.Link.create({text: 'Read the terms'}), 'Terms')
+        var termsLink = oo.Link.create({text: 'Read the terms'});
+        group.add(termsLink)
         var buttons = group.createButtons();
         var cancel = hui.ui.Button.create({text:'Cancel'});
         buttons.add(cancel);
@@ -52,6 +53,11 @@
           $click : function() {
             form.reset();
             box.hide();
+          }
+        })
+        termsLink.listen({
+          $click : function() {
+            window.open(hui.find('.js-agreements').href);
           }
         })
       }
@@ -71,6 +77,9 @@
       }
       else if (hui.isBlank(values.password)) {
         failure = "A password is reqired"
+      }
+      else if (!values.terms) {
+        failure = "Please accept the terms"
       }
       if (failure) {
         hui.ui.msg.fail({text: failure});

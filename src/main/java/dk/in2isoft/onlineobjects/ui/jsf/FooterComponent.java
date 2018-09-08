@@ -12,6 +12,7 @@ import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
+import dk.in2isoft.onlineobjects.apps.account.AccountController;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
@@ -38,8 +39,8 @@ public class FooterComponent extends AbstractComponent {
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		
-		ConfigurationService bean = getBean(ConfigurationService.class);
-		Collection<Locale> locales = bean.getApplicationLocales(getRequest().getApplication());
+		ConfigurationService configurationService = getBean(ConfigurationService.class);
+		Collection<Locale> locales = configurationService.getApplicationLocales(getRequest().getApplication());
 		Request request = getRequest();
 		writer.startDiv("oo_footer");
 		Messages msg = getMessages();
@@ -53,16 +54,20 @@ public class FooterComponent extends AbstractComponent {
 					writer.text(msg.get(locale.getLanguage(), locale));
 					writer.endStrong();
 				} else {
-					writer.startA().withHref(Components.buildLanguageUrl(request, locale)).startSpan();
+					writer.startA("oo_link").withHref(Components.buildLanguageUrl(request, locale)).startSpan();
 					writer.text(msg.get(locale.getLanguage(), locale));
 					writer.endSpan().endA();
 				}
 				if (i.hasNext()) {
-					writer.text(" \u00B7 ");
+					writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
 				}
 			}
 		}
-		writer.text(" - ").startVoidA().withTestName("commonSignup").withClass("js-signup").startSpan().text("Sign up").endSpan().endA();
+		String agreementsUrl = configurationService.getApplicationContext(AccountController.MOUNT, "agreements", request);
+		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
+		writer.startVoidA("oo_link js-signup").withTestName("footerSignup").startSpan().text("Sign up").endSpan().endA();
+		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
+		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text("Terms and privacy policy").endSpan().endA();
 		writer.endP();
 		writer.startP("oo_footer_logo").startA().withHref("http://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();
