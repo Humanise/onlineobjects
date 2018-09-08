@@ -245,16 +245,15 @@ public class ModelService implements InitializingBean {
 					
 					@Override
 					public void beforeCompletion() {
-						// TODO Auto-generated method stub
-						log.info("before transaction completion");
+						log.debug("before transaction completion");
 					}
 					
 					@Override
 					public void afterCompletion(int status) {
-						log.info("after transaction completion: " + status + ", "+ tx.hashCode());
+						log.debug("after transaction completion: " + status + ", "+ tx.hashCode());
 					}
 				});
-				log.info("New transaction: " + tx.hashCode()); 
+				log.debug("New transaction: " + tx.hashCode()); 
 			} catch (JDBCConnectionException e) {
 				// TODO Handle this somehow
 			}

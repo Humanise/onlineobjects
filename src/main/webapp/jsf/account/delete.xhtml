@@ -28,10 +28,10 @@
         </oc:text>
         <gui:formula name="confirmationForm">
           <gui:field label="#{msg.username}">
-            <gui:textInput key="username"/>
+            <gui:textInput key="username" testName="username"/>
           </gui:field>
           <gui:field label="#{msg.password}">
-            <gui:textInput key="password" secret="true"/>
+            <gui:textInput key="password" secret="true" testName="password"/>
           </gui:field>
           <gui:buttons>
             <gui:button text="#{msg.cancel}" href="/${accountSettingsView.language}/" highlighted="true" variant="light"/>

@@ -42,9 +42,9 @@ public class FooterComponent extends AbstractComponent {
 		Collection<Locale> locales = bean.getApplicationLocales(getRequest().getApplication());
 		Request request = getRequest();
 		writer.startDiv("oo_footer");
+		Messages msg = getMessages();
+		writer.startP("oo_footer");
 		if (locales!=null) {
-			Messages msg = getMessages();
-			writer.startP("oo_footer");
 			for (Iterator<Locale> i = locales.iterator(); i.hasNext();) {
 				Locale locale = i.next();
 				boolean selected = (locale.equals(request.getLocale()));
@@ -61,8 +61,9 @@ public class FooterComponent extends AbstractComponent {
 					writer.text(" \u00B7 ");
 				}
 			}
-			writer.endP();
 		}
+		writer.text(" - ").startVoidA().withTestName("commonSignup").withClass("js-signup").startSpan().text("Sign up").endSpan().endA();
+		writer.endP();
 		writer.startP("oo_footer_logo").startA().withHref("http://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();
 	}

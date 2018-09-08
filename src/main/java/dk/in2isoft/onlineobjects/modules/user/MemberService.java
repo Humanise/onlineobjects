@@ -94,16 +94,16 @@ public class MemberService {
 	public void validateNewMember(String username, String password, String email) throws IllegalRequestException, ModelException {
 		validateNewMember(username, password);
 		if (!Strings.isNotBlank(email)) {
-			throw new IllegalRequestException("Email is not provided","noEmail");
+			throw new IllegalRequestException(Error.noEmail);
 		}
 		if (!isWellFormedEmail(email)) {
-			throw new IllegalRequestException("The email address is invalid","invalidEmail");
+			throw new IllegalRequestException(Error.invalidEmail);
 		}
 		if (isUsernameTaken(username)) {
-			throw new IllegalRequestException("The user allready exists","userExists");
+			throw new IllegalRequestException(Error.userExists);
 		}
 		if (isPrimaryEmailTaken(email)) {
-			throw new IllegalRequestException("The e-mail is already in use", "emailExists");
+			throw new IllegalRequestException(Error.emailExists);
 		}
 	}
 
@@ -216,37 +216,36 @@ public class MemberService {
 	 * @param user
 	 * @param email
 	 * @param privileged
+	 * @return 
 	 * @throws ModelException
 	 * @throws SecurityException
 	 * @throws IllegalRequestException 
 	 */
-	public void changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
+	public EmailAddress changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
 		email = email.trim();
 		if (!isWellFormedEmail(email)) {
-			throw new IllegalRequestException("The email is not well formed: "+email);
+			throw new IllegalRequestException(Error.invalidEmail);
+		}
+		if (isPrimaryEmailTaken(email)) {
+			throw new IllegalRequestException(Error.emailExists);
 		}
 		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 		if (emailAddress!=null) {
 			if (email.equals(emailAddress.getAddress())) {
-				return;
+				return emailAddress;
 				//throw new IllegalRequestException("The email is the same");
-			}
-			if (isPrimaryEmailTaken(email)) {
-				throw new IllegalRequestException("The email is taken");
 			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.updateItem(emailAddress, privileged);
 		} else {
-			if (isPrimaryEmailTaken(email)) {
-				throw new IllegalRequestException("The email is taken");
-			}
 			emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.createItem(emailAddress, privileged);
 			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, privileged);
 		}
+		return emailAddress;
 	}
 	
 	public boolean isPrimaryEmailTaken(String email) throws ModelException {
@@ -460,7 +459,7 @@ public class MemberService {
 	}
 
 	public void sendEmailChangeRequest(User user, String newEmail, Privileged privileged) throws EndUserException {
-		if (!ValidationUtil.isWellFormedEmail(newEmail)) {
+		if (!isWellFormedEmail(newEmail)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
 		Person person = getUsersPerson(user, privileged);
@@ -469,7 +468,7 @@ public class MemberService {
 			throw new IllegalRequestException(Error.emailSameAsCurrent);
 		}
 		if (isPrimaryEmailTaken(newEmail)) {
-			throw new IllegalRequestException(Error.emailTaken);
+			throw new IllegalRequestException(Error.emailExists);
 		}
 		String key = Strings.generateRandomString(30) + "|" + newEmail;
 		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
@@ -488,6 +487,30 @@ public class MemberService {
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
 		
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail ,person.getName());
+	}
+
+	public User performEmailChangeByKey(String key) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
+		String[] parts = key.split("\\|");
+		if (parts.length != 2) {
+			throw new IllegalRequestException();
+		}
+		String email = parts[1];
+		if (!isWellFormedEmail(email)) {
+			throw new IllegalRequestException(Error.invalidEmail);
+		}
+		Privileged admin = securityService.getAdminPrivileged();
+		Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
+		User user = modelService.getFirst(query);
+		EmailAddress currentEmail = getUsersPrimaryEmail(user, admin);
+		if (currentEmail != null && email.equals(currentEmail.getAddress())) {
+			throw new IllegalRequestException("The e-mail was already changed");
+		}
+		if (user==null) {
+			throw new ContentNotFoundException("A user with the key could not be found");
+		}
+		EmailAddress emailAddress = changePrimaryEmail(user, email, admin);
+		markCondifirmed(emailAddress, user);
+		return user;
 	}
 
 	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key) throws ContentNotFoundException, ModelException, SecurityException {
@@ -612,5 +635,6 @@ public class MemberService {
 	public void setSchedulingService(SchedulingService schedulingService) {
 		this.schedulingService = schedulingService;
 	}
+
 
 }

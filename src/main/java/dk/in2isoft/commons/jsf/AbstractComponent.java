@@ -26,6 +26,8 @@ public abstract class AbstractComponent extends UIComponentBase {
 	
 	private String family;
 	
+	protected String testName;
+	
 	public AbstractComponent(String family) {
 		this.family = family;
 	}
@@ -168,5 +170,13 @@ public abstract class AbstractComponent extends UIComponentBase {
 	protected String getAttribute(String name) {
 		Object value = getAttributes().get(name);
 		return value instanceof String ? (String) value : null;
+	}
+
+	public String getTestName() {
+		return testName;
+	}
+
+	public void setTestName(String testName) {
+		this.testName = testName;
 	}
 }

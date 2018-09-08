@@ -38,6 +38,7 @@ public class ConfigurationService implements InitializingBean {
 	private Integer port;
 	private boolean startScheduling;
 	private boolean simulateSlowRequest;
+	private boolean testMode;
 	
 	private File tempDir;
 
@@ -209,11 +210,8 @@ public class ConfigurationService implements InitializingBean {
 
 	public String getApplicationContext(String app) {
 		StringBuilder url = new StringBuilder();
-		url.append("http://");
+		url.append("https://");
 		url.append(appMountPoints.get(app)).append(".").append(rootDomain);
-		if (port!=null) {
-			url.append(":").append(port.intValue());
-		}
 		return url.toString();
 	}
 	
@@ -298,5 +296,13 @@ public class ConfigurationService implements InitializingBean {
 	
 	public void setSimulateHttps(boolean simulateHttps) {
 		this.simulateHttps = simulateHttps;
+	}
+
+	public boolean isTestMode() {
+		return testMode;
+	}
+
+	public void setTestMode(boolean testMode) {
+		this.testMode = testMode;
 	}
 }

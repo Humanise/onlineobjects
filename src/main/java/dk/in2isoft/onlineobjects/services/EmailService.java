@@ -1,5 +1,6 @@
 package dk.in2isoft.onlineobjects.services;
 
+import java.io.File;
 import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
@@ -8,12 +9,14 @@ import org.apache.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 
 public class EmailService {
 
 	private static final Logger log = Logger.getLogger(EmailService.class); 
+	private ConfigurationService configurationService;
 	
 	private VelocityEngine velocityEngine;
 	
@@ -40,6 +43,11 @@ public class EmailService {
 	}
 
 	private void sendMessage(String subject, String textBody, String htmlBody, String address, String name) throws EndUserException {
+		if (configurationService.isTestMode()) {
+			File file = new File(configurationService.getTempDir(), address+".html");
+			Files.overwriteTextFile(htmlBody, file);
+			return;
+		}
 		try {
 			HtmlEmail email = new HtmlEmail();
 			email.setCharset("UTF-8");
@@ -56,7 +64,7 @@ public class EmailService {
 			if (textBody!=null) {
 				email.setMsg(textBody);
 			}
-			email.setDebug(true);
+			//email.setDebug(config);
 			log.info("Sending email to: "+address);
 			email.send();
 			log.info("Sent email to: "+address);
@@ -110,8 +118,7 @@ public class EmailService {
 		this.velocityEngine = velocityEngine;
 	}
 
-	public VelocityEngine getVelocityEngine() {
-		return velocityEngine;
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
 	}
-	
 }

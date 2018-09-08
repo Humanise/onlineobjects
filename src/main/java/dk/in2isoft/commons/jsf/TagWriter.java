@@ -374,4 +374,9 @@ public class TagWriter {
 		return withHref(url);
 	}
 
+	public TagWriter withTestName(String testName) throws IOException {
+		withAttribute("data-test", testName);
+		return this;
+	}
+
 }

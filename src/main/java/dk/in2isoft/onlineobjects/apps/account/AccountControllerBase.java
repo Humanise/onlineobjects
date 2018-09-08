@@ -36,7 +36,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 	
 	@Override
 	public boolean isAllowed(Request request) {
-		if (Pattern.matches("^/(da|en)/(signup|confirm|confirm\\-email\\-change$)", request.getLocalPathAsString())) {
+		if (Pattern.matches("^/(da|en)/(signup|confirm|confirm\\-email\\-change$|password|terms)", request.getLocalPathAsString())) {
 			return true;
 		}
 		return securityService.getPublicUser().getId() != request.getSession().getIdentity();

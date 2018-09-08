@@ -19,7 +19,7 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 @FacesComponent(value = LinkComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_link.css"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/WEB-INF/core/web/css/oo_link.css"}, js={"/WEB-INF/core/web/js/oo_link.js"}, requires={OnlineObjectsComponent.class})
 public class LinkComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.link";
@@ -69,6 +69,7 @@ public class LinkComponent extends AbstractComponent {
 		} else {
 			writer.startA(ClassBuilder.with("oo_link").add("oo_link",variant).add(styleClass));
 		}
+		writer.withTestName(testName);
 		String id = getId();
 		if (StringUtils.isNotBlank(id)) {
 			writer.withId(id);

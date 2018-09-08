@@ -123,6 +123,7 @@ public class ButtonComponent extends AbstractComponent {
 			css.withMarginLeft(left).withMarginRight(right);
 			writer.withStyle(css);
 		}
+		writer.withTestName(testName);
 		String text = getText(context);
 		writer.write(text);
 		writer.endA();

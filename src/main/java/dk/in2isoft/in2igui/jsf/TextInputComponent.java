@@ -57,7 +57,7 @@ public class TextInputComponent extends AbstractComponent {
 		String id = getClientId();
 		String value = Components.getBindingAsString(this, "value", this.value, context);
 		if (multiline) {
-			writer.startElement("textarea").withClass("hui_textinput");
+			writer.startElement("textarea").withClass("hui_textinput").withTestName(testName);
 			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");
@@ -67,7 +67,7 @@ public class TextInputComponent extends AbstractComponent {
 			}
 			writer.write(value).endElement("textarea");
 		} else {
-			writer.startElement("input").withClass("hui_textinput");
+			writer.startElement("input").withClass("hui_textinput").withTestName(testName);
 			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");

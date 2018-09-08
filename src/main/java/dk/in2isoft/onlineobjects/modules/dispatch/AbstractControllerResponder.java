@@ -117,7 +117,10 @@ public class AbstractControllerResponder {
 			throw new EndUserException(e);
 		} catch (InvocationTargetException e) {
 			Throwable cause = e.getCause();
-			if (cause!=null) {
+			if (cause instanceof EndUserException) {
+				throw (EndUserException) cause;
+			}
+			else if (cause!=null) {
 				throw new EndUserException(cause);
 			} else {
 				throw new EndUserException(e);

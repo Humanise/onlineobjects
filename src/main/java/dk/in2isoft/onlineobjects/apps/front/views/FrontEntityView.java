@@ -12,6 +12,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Privilege;
@@ -34,6 +35,10 @@ public class FrontEntityView extends AbstractView implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Request request = getRequest();
+		UserSession privileged = request.getSession();
+		if (!securityService.isAdminUser(privileged)) {
+			throw new ContentNotFoundException();
+		}
 		String[] path = request.getLocalPath();
 		String type = path[1];
 		Long id = Long.parseLong(path[2]);
@@ -41,7 +46,6 @@ public class FrontEntityView extends AbstractView implements InitializingBean {
 		if (typeClass==null) {
 			throw new IllegalRequestException("Unknown type: "+type);
 		}
-		UserSession privileged = request.getSession();
 		Entity entity = modelService.getRequired(typeClass, id, privileged);
 		Locale locale = getLocale();
 		this.title = entity.getName();

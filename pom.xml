@@ -40,6 +40,9 @@
         <version>9.3.8.RC0</version>
         <configuration>
           <contextPath>/</contextPath>
+          <webApp>
+            <defaultsDescriptor>src/main/webapp/WEB-INF/jetty-defaults.xml</defaultsDescriptor>
+          </webApp>
           <jettyXml>src/main/webapp/WEB-INF/jetty.xml</jettyXml>
         </configuration>
       </plugin>

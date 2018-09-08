@@ -7,8 +7,12 @@ var accountView = {
     hui.ui.request({
       url : oo.baseContext+'/changePrimaryEmail',
       parameters : {email:values.mail},
+      message : {
+        start: 'Sending confirmation...',
+        success: 'Check your inbox'
+      },
       $success : function() {
-        hui.ui.msg({text:'The e-mail address is changed',icon:'common/success',duration:3000});
+        hui.ui.get('emailPages').next();
       },
       $failure : function(t) {
         var obj = hui.string.fromJSON(t.responseText);

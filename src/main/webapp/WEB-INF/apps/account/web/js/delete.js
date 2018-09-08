@@ -1,5 +1,7 @@
 hui.ui.listen({
+  busy : false,
   $submit$confirmationForm : function(form) {
+    if (this.busy) return;
     var values = form.getValues();
     if (hui.isBlank(values.username)) {
       form.focus();
@@ -9,6 +11,8 @@ hui.ui.listen({
       form.focus();
       return;
     }
+    this.busy = true;
+    hui.ui.msg({busy: true, text: 'Deleting account...'})
     hui.ui.request({
       url : '/deleteAccount',
       parameters : {
@@ -20,7 +24,10 @@ hui.ui.listen({
       },
       $failure : function() {
         hui.ui.msg.fail({text:'It failed!'});
-      }
+      },
+      $finally : function() {
+        this.busy = false;
+      }.bind(this)
     })
 
   }

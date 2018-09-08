@@ -27,6 +27,10 @@
    		<property name="memberService" ref="memberService"/>
    	</bean>
    	
+    <bean id="accountEmailChangeView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountEmailChangeView" scope="request">
+      <property name="memberService" ref="memberService"/>
+    </bean>
+
    	<bean id="accountInvitationView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountInvitationView" scope="request">
    		<property name="modelService" ref="modelService"/>
    		<property name="invitationService" ref="invitationService"/>

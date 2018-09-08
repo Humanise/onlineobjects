@@ -11,13 +11,17 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.apps.api.AuthenticationResponse;
+import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.service.authentication.perspectives.UserInfoPerspective;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Option;
@@ -74,6 +78,14 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		}
 	}
 	
+	@Path(exactly={"signup"})
+	public void signup(Request request) throws IOException, EndUserException {
+		String username = request.getString("username");
+		String password = request.getString("password");
+		String fullName = request.getString("fullName");
+		String email = request.getString("email");
+		memberService.signUp(request.getSession(), username, password, fullName, email);
+	}
 
 	public void getUserInfo(Request request) throws ModelException, IOException {
 		UserSession session = request.getSession();

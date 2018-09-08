@@ -48,7 +48,7 @@
               <gui:pages name="emailPages">
                 <gui:page>
                   <p>#{accountSettingsView.primaryEmail}
-                  <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light"/></p>
+                  <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light" testName="changeMailButton"/></p>
                   <oc:text small="true">
                   <p>(#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate})</p>
                   </oc:text>
@@ -64,11 +64,11 @@
                   </oc:text>
                   <gui:formula name="mailForm">
                     <gui:field label="#{msg.primary_email}">
-                      <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}"/>
+                      <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}" testName="changeMailInput"/>
                     </gui:field>
                     <gui:buttons>
                       <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeEmail"/>
-                      <gui:button text="#{msg.change}" submit="true" variant="light" highlighted="true"/>
+                      <gui:button text="#{msg.change}" submit="true" variant="light" highlighted="true" testName="changeMailSubmit"/>
                     </gui:buttons>
                   </gui:formula>
                 </gui:page>

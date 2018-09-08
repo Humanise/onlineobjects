@@ -57,10 +57,11 @@
 		<property name="analyticsCode" value="${analytics.code}"/>
 		<property name="startScheduling" value="${startScheduling}"/>
         <property name="simulateHttps" value="${development.simulateHttps}"/>
+        <property name="testMode" value="${testMode}"/>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
-
+        <property name="configurationService" ref="configurationService"/>
 		<property name="host" value="${email.host}" />
 		<property name="username" value="${email.username}" />
 		<property name="password" value="${email.password}" />
