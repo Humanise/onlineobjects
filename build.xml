@@ -39,6 +39,9 @@
 		<copy todir="${dest}/OnlineObjects/onlineobjects/jsf">
 			<fileset dir="${basedir}/src/main/webapp/jsf" />
 		</copy>
+		<copy todir="${dest}/OnlineObjects/onlineobjects/resources">
+			<fileset dir="${basedir}/src/main/webapp/resources" />
+		</copy>
 
 		<javac destdir="${dest}/OnlineObjects_temp/classes" debug="on">
 			<classpath>
