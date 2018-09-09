@@ -103,7 +103,10 @@ public class TestMemberService extends AbstractSpringTestCase {
 			assertFalse(securityService.changeUser(session, username, password));
 			assertEquals(user.getIdentity(), session.getIdentity());
 			
+			modelService.commit();
+			Thread.sleep(5000);
 			
+			user = modelService.get(User.class, user.getId(), user);
 			
 			// Clean up
 			memberService.deleteMember(user, getAdminUser());
@@ -113,6 +116,7 @@ public class TestMemberService extends AbstractSpringTestCase {
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			modelService.rollBack();
+			assertNull(e);
 		}
 	}
 
