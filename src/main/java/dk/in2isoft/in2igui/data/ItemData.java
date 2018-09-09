@@ -20,13 +20,9 @@ public class ItemData implements Option {
 		this.value = value;
 	}
 
-	public String getTitle() {
-		return text;
-	}
-
-	@Deprecated
-	public void setTitle(String text) {
+	public ItemData(String text, Object value) {
 		this.text = text;
+		this.value = value;
 	}
 
 	@Override

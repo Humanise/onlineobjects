@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.photos.PhotosController;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
@@ -80,7 +81,7 @@ public class PhotosPhotoView extends AbstractManagedBean {
 			}
 			vertical = ((float)image.getHeight())/((float)image.getWidth()) > 0.8;
 			
-			canModify = securityService.canModify(image, session);
+			canModify = securityService.canModify(image, session) && session.has(Ability.usePhotosApp);
 			if (canModify) {
 				secret = !securityService.canView(image, securityService.getPublicUser());
 			}

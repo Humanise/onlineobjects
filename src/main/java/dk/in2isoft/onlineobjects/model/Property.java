@@ -57,6 +57,8 @@ public class Property {
 
 	public static final String KEY_CONFIRMATION_TIME = "common.confirmationtime";
 
+	public static final String KEY_ABILITY = "user.ability";
+
 	private long id;
 
 	private String key;

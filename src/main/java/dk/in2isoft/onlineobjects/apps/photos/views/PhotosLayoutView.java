@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -60,7 +62,8 @@ public class PhotosLayoutView extends AbstractManagedBean {
 		fullPersonName = personService.getFullPersonName(person, 14);
 		if (user!=null) {
 			Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
-			if (user.getId() != request.getSession().getIdentity()) {
+			UserSession session = request.getSession();
+			if (user.getId() != session.getIdentity()) {
 				galleryQuery.withPublicView();
 			}
 			List<ImageGallery> imageGalleries = modelService.list(galleryQuery);
@@ -69,8 +72,8 @@ public class PhotosLayoutView extends AbstractManagedBean {
 				option.setSelected(gallery.getId()==selected);
 				galleries.add(option);
 			}
-			modifiable = this.user.getId() == request.getSession().getUser().getId();
-			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request.getSession());
+			modifiable = this.user.getId() == session.getIdentity() && session.has(Ability.usePhotosApp);
+			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, session);
 		}
 	}
 	

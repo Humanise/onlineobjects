@@ -75,13 +75,13 @@
                     </c:if>
                     <gui:button variant="light" name="delete#{word.word.id}" mini="true" text="#{msg.remove}" left="10"
                       click="wordView.deleteWord({id:#{word.word.id}})"
-                      rendered="#{wordsLayoutView.loggedIn}"
+                      rendered="#{wordsLayoutView.canModify}"
                     />
                     <gui:button variant="light" name="relate#{word.word.id}" mini="true" text="#{msg.add_relation}" left="10"
                       click="wordView.addRelation({id:#{word.word.id}})"
-                      rendered="#{wordsLayoutView.loggedIn}"
+                      rendered="#{wordsLayoutView.canModify}"
                     />
-                    <o:link rendered="#{wordsLayoutView.loggedIn}" app="front" href="/word/#{word.word.id}">Info</o:link>
+                    <o:link rendered="#{wordsLayoutView.canModify}" app="front" href="/word/#{word.word.id}">Info</o:link>
                   </p>
                   <c:if test="#{not empty word.glossary}">
                     <p class="words_word_glossary">
@@ -120,10 +120,10 @@
             </ul>
           </ui:fragment>
           <p>
-            <gui:button variant="light" name="addVariant" small="true" text="#{msg.add_variant}" rendered="#{wordsLayoutView.loggedIn}"/>
+            <gui:button variant="light" name="addVariant" small="true" text="#{msg.add_variant}" rendered="#{wordsLayoutView.canModify}"/>
           </p>
           <gui:diagram name="diagram"/>
-          <c:if test="#{wordsLayoutView.loggedIn}">
+          <c:if test="#{wordsLayoutView.canModify}">
             <gui:boundPanel name="wordEditor" hideOnClick="true" width="400" variant="light">
               <div class="panel_body">
                 <h2>#{msg.lexical_categories}</h2>
@@ -180,13 +180,13 @@
           <gui:boundPanel name="relationInfoPanel" modal="transparent" variant="light" width="250" padding="5">
             <gui:fragment name="relationFragment"/>
             <gui:buttons align="right">
-              <gui:button text="#{msg.remove}" name="removeRelationButton" small="true" rendered="#{wordsLayoutView.loggedIn}"/>
+              <gui:button text="#{msg.remove}" name="removeRelationButton" small="true" rendered="#{wordsLayoutView.canModify}"/>
               <gui:button text="#{msg.view}" name="visitRelationButton" small="true" highlighted="true"/>
             </gui:buttons>
           </gui:boundPanel>
         </div>
       </div>
-      <c:if test="#{wordsLayoutView.loggedIn}">
+      <c:if test="#{wordsLayoutView.canModify}">
         <ui:include src="../shared/wordfinder.xhtml"/>
       </c:if>
     </ui:define>

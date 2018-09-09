@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
@@ -75,7 +76,11 @@ public class WordsLayoutView extends AbstractView implements InitializingBean {
 	public List<Option> getAlphabeth() {
 		return wordsInterfaceHelper.getLetterOptions(getLocale());
 	}
-	
+
+	public boolean isCanModify() {
+		return getRequest().getSession().has(Ability.modifyWords);
+	}
+
 	public boolean isLoggedIn() {
 		return !isPublicUser();
 	}

@@ -66,16 +66,6 @@ public class DispatchingService {
 		Boolean shouldCommit = null;		
 
 		securityService.ensureUserSession(servletRequest.getSession());
-		String url = servletRequest.getRequestURL().toString();
-				
-		if (request.isSet("_sessionId")) {
-			String sessionId = request.getString("_sessionId");
-			securityService.transferLogin(request, sessionId);
-			
-				String newUrl = url;
-				servletResponse.sendRedirect(newUrl);
-				return true;
-		}
 		
 		for (Responder responder : responders) {
 			if (!handled && responder.applies(request)) {

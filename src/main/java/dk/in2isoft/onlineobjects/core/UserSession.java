@@ -1,7 +1,9 @@
 package dk.in2isoft.onlineobjects.core;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,11 +21,14 @@ public class UserSession implements Privileged {
 	private User user;
 	
 	private String id;
+	
+	private Set<Ability> abilities;
 
 	public UserSession(User user) {
 		this.id = Strings.generateRandomString(50);
 		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
 		this.user = user;
+		this.abilities = new HashSet<>();
 	}
 	
 	public String getId() {
@@ -38,7 +43,7 @@ public class UserSession implements Privileged {
 		return null;
 	}
 	
-	protected void setUser(User user) {
+	protected void setUser(User user, Set<Ability> abilities) {
 		if (user==null) {
 			throw new IllegalArgumentException("Cannot set the user to null");
 		}
@@ -46,11 +51,16 @@ public class UserSession implements Privileged {
 			throw new IllegalArgumentException("Cannot set a user that is not persistent");
 		}
 		this.user = user;
+		this.abilities = abilities;
 	}
 
 	@Deprecated
 	public User getUser() {
 		return user;
+	}
+	
+	public boolean has(Ability ability) {
+		return abilities.contains(ability);
 	}
 	
 	public long getIdentity() {

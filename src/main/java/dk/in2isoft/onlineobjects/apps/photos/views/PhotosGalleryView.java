@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Numbers;
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -59,7 +60,7 @@ public class PhotosGalleryView extends AbstractManagedBean {
 			title = imageGallery.getName();
 			user = modelService.getOwner(imageGallery, session);
 			username = user.getUsername();
-			modifiable = user!=null && user.getId()==session.getIdentity();
+			modifiable = user!=null && user.getId()==session.getIdentity() && session.has(Ability.usePhotosApp);
 			List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, session);
 			images = Lists.newArrayList();
 			for (Relation relation : childRelations) {

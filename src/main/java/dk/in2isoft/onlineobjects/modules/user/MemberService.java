@@ -226,19 +226,22 @@ public class MemberService {
 		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
-		if (isPrimaryEmailTaken(email)) {
-			throw new IllegalRequestException(Error.emailExists);
-		}
 		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 		if (emailAddress!=null) {
 			if (email.equals(emailAddress.getAddress())) {
 				return emailAddress;
 				//throw new IllegalRequestException("The email is the same");
 			}
+			if (isPrimaryEmailTaken(email)) {
+				throw new IllegalRequestException(Error.emailExists);
+			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.updateItem(emailAddress, privileged);
 		} else {
+			if (isPrimaryEmailTaken(email)) {
+				throw new IllegalRequestException(Error.emailExists);
+			}
 			emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);

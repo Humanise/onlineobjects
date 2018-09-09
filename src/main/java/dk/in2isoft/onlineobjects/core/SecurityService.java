@@ -1,8 +1,11 @@
 package dk.in2isoft.onlineobjects.core;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,7 +31,6 @@ import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
 import dk.in2isoft.onlineobjects.services.SessionService;
-import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class SecurityService {
@@ -62,20 +64,26 @@ public class SecurityService {
 		}
 		User user = getUser(username, password);
 		if (user!=null) {
-			userSession.setUser(user);
+			Set<Ability> abilities = getAbilities(user);
+			userSession.setUser(user, abilities);
 			log(user, LogType.logIn);
 			return true;
 		}
 		return false;
 	}
 	
+	private Set<Ability> getAbilities(User user) {
+		Collection<String> properties = user.getPropertyValues(Property.KEY_ABILITY);
+		return Ability.convert(properties);
+	}
+
 	public void changeUserBySecret(UserSession userSession, String secret) throws SecurityException {
 		User user = getUserBySecret(secret);
 		if (user==null) {
 			throw new SecurityException("No user found with the secret");
 		}
 		log(user, LogType.logIn);
-		userSession.setUser(user);
+		userSession.setUser(user, getAbilities(user));
 	}
 	
 	private void log(User user, LogType type) {
@@ -134,7 +142,7 @@ public class SecurityService {
 		if (user==null) {
 			return false;
 		} else {
-			userSession.setUser(user);
+			userSession.setUser(user, new HashSet<>());
 			return true;
 		}
 	}
@@ -347,25 +355,6 @@ public class SecurityService {
 		return UserSession.get(session);
 	}
 
-	public boolean transferLogin(Request request, String sessionId) {
-		Long userId = sessionService.getUserIdForSession(sessionId);
-		if (userId==null) {
-			log.error("User id not found");
-			return false;
-		}
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
-		try {
-			UserSession session = request.getSession();
-			if (session!=null && session.getIdentity()!=userId) {
-				User user = modelService.get(User.class, userId, admin);
-				session.setUser(user);
-				return true;
-			}
-		} catch (ModelException e) {
-			log.error("Unable to change session",e);
-		}
-		return false;
-	}
 
 	public boolean canChangeUsername(User user) {
 		return !SecurityService.RESERVED_USERNAMES.contains(user.getUsername());

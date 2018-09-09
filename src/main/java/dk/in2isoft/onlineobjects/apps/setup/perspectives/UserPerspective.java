@@ -1,5 +1,9 @@
 package dk.in2isoft.onlineobjects.apps.setup.perspectives;
 
+import java.util.Set;
+
+import dk.in2isoft.onlineobjects.core.Ability;
+
 public class UserPerspective {
 
 	private long id;
@@ -7,6 +11,7 @@ public class UserPerspective {
 	private String username;
 	private String email;
 	private boolean publicView;
+	private Set<Ability> abilities;
 
 	public void setId(long id) {
 		this.id = id;
@@ -46,5 +51,13 @@ public class UserPerspective {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Set<Ability> getAbilities() {
+		return abilities;
+	}
+
+	public void setAbilities(Set<Ability> abilities) {
+		this.abilities = abilities;
 	}
 }

@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.setup;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
@@ -24,9 +26,11 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.in2igui.data.ListData;
 import dk.in2isoft.in2igui.data.ListWriter;
+import dk.in2isoft.in2igui.data.Option;
 import dk.in2isoft.onlineobjects.apps.setup.perspectives.InternetAddressPerspective;
 import dk.in2isoft.onlineobjects.apps.setup.perspectives.SchedulerStatusPerspective;
 import dk.in2isoft.onlineobjects.apps.setup.perspectives.UserPerspective;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -333,7 +337,7 @@ public class SetupController extends SetupControllerBase {
 	}
 
 	@Path
-	public void loadUser(Request request) throws IOException,EndUserException {
+	public UserPerspective loadUser(Request request) throws IOException,EndUserException {
 		try {Thread.sleep(1000);} catch (InterruptedException e) {}
 		Long id = request.getLong("id");
 		User user = modelService.get(User.class, id, request.getSession());
@@ -349,7 +353,8 @@ public class SetupController extends SetupControllerBase {
 			perspective.setEmail(usersPrimaryEmail.getAddress());
 		}
 		perspective.setPublicView(securityService.canView(user, publicUser));
-		request.sendObject(perspective);
+		perspective.setAbilities(Ability.convert(user.getPropertyValues(Property.KEY_ABILITY)));
+		return perspective;
 	}
 	
 	@Path
@@ -398,6 +403,13 @@ public class SetupController extends SetupControllerBase {
 		}
 		if (Strings.isNotBlank(perspective.getEmail())) {
 			memberService.changePrimaryEmail(user, perspective.getEmail(), request.getSession());
+		}
+		Set<Ability> abilities = perspective.getAbilities();
+		user.removeProperties(Property.KEY_ABILITY);
+		if (abilities!=null) {
+			for (Ability ability : abilities) {
+				user.addProperty(Property.KEY_ABILITY, ability.name());
+			}
 		}
 		user.setName(perspective.getName());
 		modelService.updateItem(user, request.getSession());
@@ -858,5 +870,14 @@ public class SetupController extends SetupControllerBase {
 		String fullName = request.getString("name", "No full name");
 		String email = request.getString("email", "No e-mail");
 		memberService.createMember(session, username, password, fullName, email);
+	}
+	
+	@Path
+	public List<Option> abilityOptions(Request request) {
+		List<Option> options = new ArrayList<>();
+		for (Ability ability : Ability.values()) {
+			options.add(new ItemData(ability.name(), ability.name()));
+		}
+		return options;
 	}
 }
