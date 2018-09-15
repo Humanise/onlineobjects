@@ -44,7 +44,7 @@ public class TopBarComponent extends AbstractComponent {
 		icons.put("words", "book");
 		icons.put("people", "user");
 		icons.put("photos", "camera");
-		icons.put("reader", "star_line_selected");
+		icons.put("knowledge", "star_line_selected");
 		icons.put("desktop", "view_grid");
 		icons.put("tools", "archive_line_selected");
 	}
