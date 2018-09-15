@@ -504,12 +504,12 @@ public class MemberService {
 		Privileged admin = securityService.getAdminPrivileged();
 		Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
 		User user = modelService.getFirst(query);
+		if (user==null) {
+			throw new ContentNotFoundException("A user with the key could not be found");
+		}
 		EmailAddress currentEmail = getUsersPrimaryEmail(user, admin);
 		if (currentEmail != null && email.equals(currentEmail.getAddress())) {
 			throw new IllegalRequestException("The e-mail was already changed");
-		}
-		if (user==null) {
-			throw new ContentNotFoundException("A user with the key could not be found");
 		}
 		EmailAddress emailAddress = changePrimaryEmail(user, email, admin);
 		markCondifirmed(emailAddress, user);
