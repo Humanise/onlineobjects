@@ -80,7 +80,7 @@ oo.TopBar.prototype = {
       p.add(this._userInfoBlock);
       var buttons = hui.build('div',{'class':'oo_topbar_info_buttons'});
       p.add(buttons);
-      var logout = hui.ui.Button.create({text:'Log out',variant:'paper',small:true, listener: {
+      var logout = hui.ui.Button.create({text:'Log out',variant:'paper',small:true, testName: 'topbarLogOut', listener: {
         $click : this._doLogout.bind(this)
       }});
       buttons.appendChild(logout.element);
