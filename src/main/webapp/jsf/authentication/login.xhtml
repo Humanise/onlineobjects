@@ -18,25 +18,22 @@
   </o:head>
 
   <o:body>
-
-    <o:box>
+    <o:topBar/>
+    <o:box width="600">
       <o:header>#{msg.access_control}</o:header>
-      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName}</p>
+      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName} <o:link href="/logout">#{msg.log_out}</o:link></p>
       <c:if test="#{not empty authenticationLoginView.message}">
         <p class="message">#{authenticationLoginView.message}</p>
       </c:if>
       <gui:formula action="authenticate" name="formula">
-        <p class="label">
-          <label>#{msg.username}</label>
-        </p>
-        <gui:textInput inputName="username" name="username"/>
-        <p class="label">
-          <label>#{msg.password}</label>
-        </p>
-        <gui:textInput inputName="password" name="password" secret="true"/>
+        <gui:field label="#{msg.username}">
+          <gui:textInput inputName="username" name="username"/>
+        </gui:field>
+        <gui:field label="#{msg.password}">
+          <gui:textInput inputName="password" name="password" secret="true"/>
+        </gui:field>
         <p class="buttons">
           <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
-          <o:link href="/logout">#{msg.log_out}</o:link>
           <gui:button text="#{msg.log_in}" submit="true"/>
         </p>
       </gui:formula>
