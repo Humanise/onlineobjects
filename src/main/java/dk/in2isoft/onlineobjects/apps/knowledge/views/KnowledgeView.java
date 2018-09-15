@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
@@ -20,6 +21,8 @@ public class KnowledgeView extends AbstractView implements InitializingBean {
 
 	private List<Option> extractionOptions;
 	
+	private boolean debug;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		extractionOptions = Lists.newArrayList();
@@ -30,7 +33,7 @@ public class KnowledgeView extends AbstractView implements InitializingBean {
 			}
 			extractionOptions.add(new Option(value,value));
 		}
-
+		debug = getRequest().getSession().has(Ability.viewDebuggingInfo);
 	}
 	
 	public String getExtractionAlgorithm() {
@@ -43,5 +46,9 @@ public class KnowledgeView extends AbstractView implements InitializingBean {
 	
 	public void setBuilder(InternetAddressViewPerspectiveBuilder builder) {
 		this.builder = builder;
+	}
+	
+	public boolean isDebug() {
+		return debug;
 	}
 }

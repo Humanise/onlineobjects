@@ -9,7 +9,9 @@
 >
   <ui:composition template="templates/layout.xhtml">
     <ui:define name="body">
+
     <gui:foundation name="foundation">
+
       <f:facet name="navigation">
         <div class="reader_sidebar">
           <gui:rows>
@@ -27,9 +29,9 @@
               </div>
               <div class="reader_sidebar_block reader_sidebar_feeds">
                 <h3 class="reader_sidebar_title">Feeds</h3>
-                  <o:link name="addFeed" plain="true" styleClass="reader_sidebar_feeds_add">
-                    <o:icon icon="add_line"/>
-                  </o:link>
+                <o:link name="addFeed" plain="true" styleClass="reader_sidebar_feeds_add">
+                  <o:icon icon="add_line"/>
+                </o:link>
                 <o:selection name="feeds">
                   <gui:source name="feedSource" url="#{knowledgeView.baseContext}/getFeeds"/>
                 </o:selection>
@@ -52,6 +54,7 @@
           </gui:rows>
         </div>
       </f:facet>
+
       <f:facet name="results">
         <gui:source name="listSource" url="#{knowledgeView.baseContext}/list">
           <gui:parameter key="page" value="@listView.page"/>
@@ -61,7 +64,6 @@
           <gui:parameter key="subset" value="@subsets.value"/>
           <gui:parameter key="type" value="@types.value"/>
         </gui:source>
-
 
         <div class="reader_list_top">
           <gui:searchfield name="search" placeholder="Search" adaptive="true"/>
@@ -81,7 +83,7 @@
             <o:icon icon="add_line" size="16"/>
             <span class="reader_bar_item_text">Add page</span>
           </o:link>
-          <o:link name="settingsIcon" plain="true" styleClass="reader_bar_item">
+          <o:link name="settingsIcon" plain="true" styleClass="reader_bar_item" rendered="${knowledgeView.debug}">
             <o:icon icon="gear_line" size="16"/>
           </o:link>
         </gui:bar>
