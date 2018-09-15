@@ -39,6 +39,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean startScheduling;
 	private boolean simulateSlowRequest;
 	private boolean testMode;
+	private String appleAppSiteAssociation;
 	
 	private File tempDir;
 
@@ -304,5 +305,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setTestMode(boolean testMode) {
 		this.testMode = testMode;
+	}
+
+	public String getAppleAppSiteAssociation() {
+		return appleAppSiteAssociation;
+	}
+
+	public void setAppleAppSiteAssociation(String appleAppSiteAssociation) {
+		this.appleAppSiteAssociation = appleAppSiteAssociation;
 	}
 }

@@ -58,6 +58,7 @@
 		<property name="startScheduling" value="${startScheduling}"/>
         <property name="simulateHttps" value="${development.simulateHttps}"/>
         <property name="testMode" value="${testMode}"/>
+        <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
@@ -118,6 +119,7 @@
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.DWRResponder" autowire="byType"/>
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.FacesResponder" autowire="byType"/>
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.CoreFilesResponder" autowire="byType"/>
+                <bean class="dk.in2isoft.onlineobjects.modules.dispatch.RobotsResponder" autowire="byType"/>
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.In2iGuiResponder" autowire="byType"/>
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.ServicesResponder" autowire="byType"/>
 				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.ApplicationResponder" autowire="byType"/>
