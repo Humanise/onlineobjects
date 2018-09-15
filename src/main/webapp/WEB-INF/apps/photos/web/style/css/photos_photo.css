@@ -50,8 +50,7 @@ h1.photos_photo_not_found
 
 div.photos_photo h1
 {
-	font-weight: 100;
-	font-family: 'Lato','HelveticaNeue-UltraLight','Helvetica Neue','Helvetica','Arial',sans-serif;
+	font-weight: 300;
 	margin: 0 0 10px;
 	line-height: 1;
 	text-indent: -2px;

@@ -1,5 +1,7 @@
+@import 'shared';
+
 .oo_body {
-  font-family: 'Nunito Sans','Helvetica Neue','Helvetica',Arial,sans-serif;
+  font-family: $default-font-family;
   background: #fafafa;
   margin: 0;
   padding: 0;

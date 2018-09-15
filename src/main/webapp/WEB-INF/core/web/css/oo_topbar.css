@@ -1,5 +1,5 @@
 .oo_topbar {
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-family: "Nunito Sans", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   overflow: hidden;
   border-bottom: 1px solid #fafafa;
   height: 30px;
@@ -179,7 +179,7 @@
 /** Info panel **/
 .oo_topbar_info {
   overflow: hidden;
-  font-family: "Open Sans", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
+  font-family: "Nunito Sans", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
   .oo_topbar_info_busy {
     height: 60px;
     background: url("../../../hui/gfx/progress/spinner_white_24.gif") center center no-repeat; }

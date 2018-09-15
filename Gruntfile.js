@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
   // Project configuration.
-  grunt.initConfig({
+  config = {
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
         all: ['js/*.js']
@@ -10,27 +10,6 @@ module.exports = function(grunt) {
       core: {
         files: ['src/main/webapp/WEB-INF/core/web/scss/**/*.scss'],
         tasks: ['sass'],
-        options: {
-          spawn: false,
-        }
-      },
-      reader: {
-        files: ['src/main/webapp/WEB-INF/apps/reader/web/scss/**/*.scss'],
-        tasks: ['sass:reader'],
-        options: {
-          spawn: false,
-        }
-      },
-      words: {
-        files: ['src/main/webapp/WEB-INF/apps/words/web/scss/**/*.scss'],
-        tasks: ['sass:words'],
-        options: {
-          spawn: false,
-        }
-      },
-      account: {
-        files: ['src/main/webapp/WEB-INF/apps/account/web/scss/**/*.scss'],
-        tasks: ['sass:account'],
         options: {
           spawn: false,
         }
@@ -46,39 +25,30 @@ module.exports = function(grunt) {
           dest: 'src/main/webapp/WEB-INF/core/web/css',
           ext: '.css'
         }]
-      },
-      reader: {
-        options : {sourcemap:'none'},
-        files: [{
-          expand: true,
-          cwd: 'src/main/webapp/WEB-INF/apps/reader/web/scss/',
-          src: ['*.scss'],
-          dest: 'src/main/webapp/WEB-INF/apps/reader/web/css',
-          ext: '.css'
-        }]
-      },
-      words: {
-        options : {sourcemap:'none'},
-        files: [{
-          expand: true,
-          cwd: 'src/main/webapp/WEB-INF/apps/words/web/scss/',
-          src: ['*.scss'],
-          dest: 'src/main/webapp/WEB-INF/apps/words/web/css',
-          ext: '.css'
-        }]
-      },
-      account: {
-        options : {sourcemap:'none'},
-        files: [{
-          expand: true,
-          cwd: 'src/main/webapp/WEB-INF/apps/account/web/scss/',
-          src: ['*.scss'],
-          dest: 'src/main/webapp/WEB-INF/apps/account/web/css',
-          ext: '.css'
-        }]
       }
     }
-  });
+  };
+
+  ['account','words','knowledge','photos','people','front'].forEach((app) => {
+    config.watch[app] = {
+      files: ['src/main/webapp/WEB-INF/apps/'+app+'/web/scss/**/*.scss'],
+      tasks: ['sass:'+app],
+      options: {
+        spawn: false,
+      }
+    }
+    config.sass[app] = {
+      options : {sourcemap:'none'},
+      files: [{
+        expand: true,
+        cwd: 'src/main/webapp/WEB-INF/apps/' + app + '/web/scss/',
+        src: ['*.scss'],
+        dest: 'src/main/webapp/WEB-INF/apps/' + app + '/web/css',
+        ext: '.css'
+      }]
+    }
+  })
+  grunt.initConfig(config);
 
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-jshint');

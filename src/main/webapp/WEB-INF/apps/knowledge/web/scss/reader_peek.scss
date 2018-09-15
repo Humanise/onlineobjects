@@ -1,7 +1,7 @@
 @import 'shared';
 
 .reader_peek_selector {
-  
+
   &_item {
     font-size: 12px;
     display: block;
@@ -17,11 +17,11 @@
   h2 {
     line-height: 1.2;
     font-size: 14px;
-    font-family: 'Open Sans';
+    font-family: $default-font-family;
     font-weight: 600;
     margin: 0;
   }
-  
+
   p {
     margin: 0;
     color: #666;
