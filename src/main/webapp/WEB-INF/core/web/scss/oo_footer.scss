@@ -1,17 +1,21 @@
 .oo_footer {
-  font-size: 10pt;
-  font-weight: 200;
   text-align: center;
   margin: 0;
   padding-top: 20px;
   color: #666;
 
-  strong {
-    font-weight: 600;
-  }
 
   &_separator {
     margin: 0 5px;
+  }
+
+  &_links {
+    font-size: 14px;
+
+    strong {
+      font-weight: 500;
+      color: #333;
+    }
   }
 
   .oo_link span {
@@ -34,6 +38,7 @@
     span {
       font-family: 'OnlineObjects';
       font-size: 128px;
+      line-height: 1;
       color: #f0f0f0;
       text-shadow: 0 0 10px #fff;
       transition: color 2s, transform 1s;
@@ -44,12 +49,13 @@
     strong {
       display: block;
       text-align: center;
-      font-size: 32px;
-      margin: 0;
+      font-size: 36px;
+      letter-spacing: 1px;
+      margin: 5px 0 0;
       padding-bottom: 30px;
       color: #eee;
       text-shadow: 0 0 10px #fff;
-      font-weight: 600;
+      font-weight: 500;
       transition: color 2s;
     }
 

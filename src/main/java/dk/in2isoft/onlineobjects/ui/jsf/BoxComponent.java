@@ -18,6 +18,7 @@ public class BoxComponent extends AbstractComponent {
 	private String width;
 	private String padding;
 	private String margin;
+	private boolean spacious;
 
 	public BoxComponent() {
 		super(FAMILY);
@@ -28,11 +29,12 @@ public class BoxComponent extends AbstractComponent {
 		width = (String) state[0];
 		padding = (String) state[1];
 		margin = (String) state[2];
+		spacious = (boolean) state[3];
 	}
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] {width, padding, margin};
+		return new Object[] {width, padding, margin, spacious};
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class BoxComponent extends AbstractComponent {
 		if (isNotBlank(margin)) {
 			out.startDiv().withStyle("margin:"+toLength(margin));
 		}
-		out.startDiv("oo_box");
+		out.startDiv("oo_box" + (spacious ? " oo_box-spacious" : ""));
 		StyleBuilder css = new StyleBuilder();
 		if (isNotBlank(width)) {
 			css.withMaxWidth(toLength(width));
@@ -88,5 +90,13 @@ public class BoxComponent extends AbstractComponent {
 	
 	public void setMargin(String margin) {
 		this.margin = margin;
+	}
+
+	public boolean isSpacious() {
+		return spacious;
+	}
+
+	public void setSpacious(boolean spacious) {
+		this.spacious = spacious;
 	}
 }

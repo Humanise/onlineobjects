@@ -31,8 +31,7 @@ public class FontsComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
-		//String text = "Open+Sans:300italic,400italic,600italic,400,600,800,300,100|Lato:100";
-		String text = "Lato:100|Nunito+Sans:300,400,500,600,700";
+		String text = "Hind+Vadodara:300,400,500,600,700";
 		if (Strings.isNotBlank(additional)) {
 			text+="|"+additional;
 		}

@@ -13,8 +13,22 @@
 }
 
 .account_agreements {
+
+  &_toc {
+    list-style: none;
+    padding: 0;
+
+    > li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+  hr {
+    margin: 40px 0;
+  }
   h1 {
     font-size: 2em;
+    line-height: 1;
   }
   h2 {
     font-size: 1.2em;

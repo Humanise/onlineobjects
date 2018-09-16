@@ -1,14 +1,15 @@
 .oo_footer {
-  font-size: 10pt;
-  font-weight: 200;
   text-align: center;
   margin: 0;
   padding-top: 20px;
   color: #666; }
-  .oo_footer strong {
-    font-weight: 600; }
   .oo_footer_separator {
     margin: 0 5px; }
+  .oo_footer_links {
+    font-size: 14px; }
+    .oo_footer_links strong {
+      font-weight: 500;
+      color: #333; }
   .oo_footer .oo_link span {
     color: #666; }
   .oo_footer_logo {
@@ -23,6 +24,7 @@
     .oo_footer_logo span {
       font-family: 'OnlineObjects';
       font-size: 128px;
+      line-height: 1;
       color: #f0f0f0;
       text-shadow: 0 0 10px #fff;
       transition: color 2s, transform 1s;
@@ -31,12 +33,13 @@
     .oo_footer_logo strong {
       display: block;
       text-align: center;
-      font-size: 32px;
-      margin: 0;
+      font-size: 36px;
+      letter-spacing: 1px;
+      margin: 5px 0 0;
       padding-bottom: 30px;
       color: #eee;
       text-shadow: 0 0 10px #fff;
-      font-weight: 600;
+      font-weight: 500;
       transition: color 2s; }
   .oo_footer:hover .oo_footer_logo span, .oo_footer:hover .oo_footer_logo strong {
     color: #ddd; }

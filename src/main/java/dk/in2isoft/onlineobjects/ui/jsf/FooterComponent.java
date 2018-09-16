@@ -44,7 +44,7 @@ public class FooterComponent extends AbstractComponent {
 		Request request = getRequest();
 		writer.startDiv("oo_footer");
 		Messages msg = getMessages();
-		writer.startP("oo_footer");
+		writer.startP("oo_footer_links");
 		if (locales!=null) {
 			for (Iterator<Locale> i = locales.iterator(); i.hasNext();) {
 				Locale locale = i.next();

@@ -197,7 +197,7 @@ var internetAddressViewer = {
     addressInfoController.clear();
     this._viewedItem = {id : object.id};
     this._lockViewer();
-    hui.dom.setText(this.nodes.title, hui.string.escape(object.title || 'Loading...'));
+    hui.dom.setText(this.nodes.title, object.title || 'Loading...');
     this.nodes.viewer.style.display = 'block';
     this.viewerVisible = true;
     hui.cls.add(this.viewerSpinner, 'oo_spinner_visible');
