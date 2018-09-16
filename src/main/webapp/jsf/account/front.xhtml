@@ -11,8 +11,18 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box>
-        <o:header styleClass="oo_space_bottom-2">#{msg.account}</o:header>
+      <o:box spacious="true">
+        <o:header styleClass="oo_space_bottom-2 account_heading" level="0">#{msg.account}</o:header>
+        <c:if test="#{!accountSettingsView.emailConfirmed}">
+          <div class="oo_message account_message oo_space_bottom-2">
+            <p>${msg.email_confirmation_warning} <o:link name="confirmEmail">#{msg.send_email_confirm}</o:link></p>
+          </div>
+        </c:if>
+        <c:if test="${!accountSettingsView.hasAcceptedTerms}">
+          <div class="oo_message account_message oo_space_bottom-2">
+            <p>#{msg.agreements_todo} <o:link href="/${accountSettingsView.language}/agreements">#{msg.review_agreements}</o:link></p>
+          </div>
+        </c:if>
         <oc:segment title="#{msg.account}">
           <oc:property label="#{msg.username}:" styleClass="oo_space_bottom">#{accountSettingsView.username}</oc:property>
           <div class="oo_space_bottom">
@@ -20,7 +30,7 @@
               <gui:pages name="namePages">
                 <gui:page>
                   <p>#{accountSettingsView.fullName}
-                    <gui:button name="changeName" text="#{msg.change}" small="true" variant="light"/>
+                    <gui:button name="changeName" text="#{msg.change}" small="true" variant="light" styleClass="account_change"/>
                   </p>
                 </gui:page>
                 <gui:page>
@@ -47,20 +57,20 @@
             <oc:property label="#{msg.primary_email}:">
               <gui:pages name="emailPages">
                 <gui:page>
-                  <p><o:out value="#{accountSettingsView.primaryEmail}" emptyText="None"/>${' '}
-                  <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light" testName="changeMailButton"/></p>
+                  <p>
+                    <o:out value="#{accountSettingsView.primaryEmail}" emptyText="None"/>${' '}
+                    <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light"
+                      testName="changeMailButton" styleClass="account_change"/>
+                  </p>
                   <oc:text small="true">
-                  <p>(#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate})</p>
+                    <c:if test="${accountSettingsView.emailConfirmed}">
+                      <p>#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate}</p>
+                    </c:if>
                   </oc:text>
-                  <c:if test="#{!accountSettingsView.emailConfirmed}">
-                    <div class="oo_space_top">
-                    <gui:button name="confirmEmail" text="#{msg.send_email_confirm}" variant="light"/>
-                    </div>
-                  </c:if>
                 </gui:page>
                 <gui:page>
                   <oc:text small="true" styleClass="oo_space_bottom">
-                    <p>Changing your e-mail requires you to validate that you have access to read messages sent to the new e-mail</p>
+                    <p>${msg.email_change_info}</p>
                   </oc:text>
                   <gui:formula name="mailForm">
                     <gui:field label="#{msg.primary_email}">
@@ -77,15 +87,14 @@
           </div>
         </oc:segment>
 
-        <oc:segment title="Privacy">
+        <oc:segment title="#{msg.privacy}">
           <p>
             <o:link href="/${accountSettingsView.language}/agreements">#{msg.agreements_title}</o:link>
-            <c:if test="${accountSettingsView.agreementAcceptanceTime != null}"> - ${o:formatDate(accountSettingsView.agreementAcceptanceTime, 'short')}</c:if>
-            <c:if test="${!accountSettingsView.hasAcceptedTerms}"> - #{msg.agreements_todo}</c:if>
+            <c:if test="${accountSettingsView.agreementAcceptanceTime != null}"> - ${msg.accepted}: ${o:formatDate(accountSettingsView.agreementAcceptanceTime, 'short')}</c:if>
           </p>
         </oc:segment>
 
-        <oc:segment title="Security">
+        <oc:segment title="#{msg.security}">
           <gui:pages name="passwordPages">
             <gui:page>
               <gui:button name="changePassword" text="#{msg.change_password}" variant="light"></gui:button>
@@ -106,12 +115,15 @@
             </gui:page>
           </gui:pages>
         </oc:segment>
-        <oc:segment title="Privacy">
-          <gui:button text="Delete account..." variant="light" passive="true" href="/${accountSettingsView.language}/delete/"/>
+
+        <oc:segment title="Data">
+          <gui:button text="#{msg.delete_account}..." variant="light" passive="true" href="/${accountSettingsView.language}/delete/"/>
         </oc:segment>
+
       </o:box>
 
       <o:dependency src="/WEB-INF/apps/account/web/js/account.js"/>
+      <o:dependency src="/WEB-INF/core/web/css/oo_message.css"/>
     </ui:define>
 
   </ui:composition>

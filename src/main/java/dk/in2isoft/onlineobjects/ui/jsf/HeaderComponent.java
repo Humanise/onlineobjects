@@ -46,12 +46,12 @@ public class HeaderComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
-		writer.startElement("h"+level).withClass(new ClassBuilder("oo_header").add("oo_header-"+level).add("oo_header", variant).add(styleClass)).withId(getId());
+		writer.startElement("h"+Math.max(1, level)).withClass(new ClassBuilder("oo_header").add("oo_header-"+level).add("oo_header", variant).add(styleClass)).withId(getId());
 	}
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
-		writer.endElement("h"+level);
+		writer.endElement("h"+Math.max(1, level));
 	}
 
 	public void setStyleClass(String styleClass) {

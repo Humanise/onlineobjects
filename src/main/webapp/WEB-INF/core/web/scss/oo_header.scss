@@ -4,6 +4,13 @@
   .oo_header {
     margin: 0;
 
+    &-0 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+    }
+
     &-1 {
       font-size: 28px;
       font-weight: 300;
@@ -28,6 +35,11 @@
 @include if(( width: 600px )) {
 
   .oo_header {
+
+    &-0 {
+      font-size: 42px;
+      line-height: 40px;
+    }
 
     &-1 {
       font-size: 36px;

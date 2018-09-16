@@ -12,6 +12,21 @@
   margin: 20px 0;
 }
 
+@include if ((width: 620px)) {
+  .account_message {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+  .account_heading {
+    margin-top: -10px;
+  }
+}
+
+.account_change {
+  margin-left: 10px;
+}
+
+
 .account_agreements {
 
   &_toc {

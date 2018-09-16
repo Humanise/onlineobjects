@@ -1,5 +1,10 @@
 .oo_header {
   margin: 0; }
+  .oo_header-0 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center; }
   .oo_header-1 {
     font-size: 28px;
     font-weight: 300;
@@ -14,6 +19,9 @@
     line-height: 18px; }
 
 @media screen and (min-width: 600px) {
+  .oo_header-0 {
+    font-size: 42px;
+    line-height: 40px; }
   .oo_header-1 {
     font-size: 36px;
     line-height: 40px; }
