@@ -201,6 +201,9 @@ public class MemberService {
 	}
 
 	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
+		if (securityService.isCoreUser(user)) {
+			throw new SecurityException("This type of member cannot be deleted");
+		}
 		List<Entity> list = modelService.list(Query.of(Entity.class).as(user));
 		// TODO check that an item is not shared with others
 		for (Entity entity : list) {
@@ -467,7 +470,7 @@ public class MemberService {
 		}
 		Person person = getUsersPerson(user, privileged);
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
-		if (newEmail.equals(email.getAddress())) {
+		if (email!=null && newEmail.equals(email.getAddress())) {
 			throw new IllegalRequestException(Error.emailSameAsCurrent);
 		}
 		if (isPrimaryEmailTaken(newEmail)) {
@@ -484,12 +487,13 @@ public class MemberService {
 		url.append(key);
 
 		Map<String,Object> parms = new HashMap<>();
-		parms.put("name", person.getFullName());
+		String fullName = person!=null ? person.getFullName() : user.getUsername();
+		parms.put("name", fullName);
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
 		
-		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail ,person.getName());
+		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail, fullName);
 	}
 
 	public User performEmailChangeByKey(String key) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {

@@ -81,10 +81,11 @@ html, body {
     padding: 10px 10px 10px 15px; }
   .reader_sidebar_title {
     text-transform: uppercase;
-    color: #999;
+    color: #ccc;
     margin: 0 0 3px;
-    font-weight: 400;
-    font-size: 12px; }
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 1px; }
   .reader_sidebar_feeds {
     position: relative; }
     .reader_sidebar_feeds_add {
@@ -242,7 +243,7 @@ html, body {
     text-transform: uppercase;
     text-decoration: none;
     color: #A79F89;
-    font-size: 12px;
+    font-size: 14px;
     padding: 0 3px;
     letter-spacing: 0.5px; }
     .reader_segmented_item:hover {

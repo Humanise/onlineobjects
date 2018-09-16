@@ -86,19 +86,19 @@ public class AccountSettingsView extends AbstractManagedBean {
 	}
 
 	public String getFullName() {
-		return Strings.isBlank(person.getFullName()) ? "None" : person.getFullName();
+		return person == null || Strings.isBlank(person.getFullName()) ? "None" : person.getFullName();
 	}
 
 	public String getFirstName() {
-		return person.getGivenName();
+		return person == null ? "" : person.getGivenName();
 	}
 
 	public String getMiddleName() {
-		return person.getAdditionalName();
+		return person == null ? "" : person.getAdditionalName();
 	}
 
 	public String getLastName() {
-		return person.getFamilyName();
+		return person == null ? "" : person.getFamilyName();
 	}
 
 	public String getPrimaryEmail() {

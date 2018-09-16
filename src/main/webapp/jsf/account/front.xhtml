@@ -47,7 +47,7 @@
             <oc:property label="#{msg.primary_email}:">
               <gui:pages name="emailPages">
                 <gui:page>
-                  <p>#{accountSettingsView.primaryEmail}
+                  <p><o:out value="#{accountSettingsView.primaryEmail}" emptyText="None"/>${' '}
                   <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light" testName="changeMailButton"/></p>
                   <oc:text small="true">
                   <p>(#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate})</p>
