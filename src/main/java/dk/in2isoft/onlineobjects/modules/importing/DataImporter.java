@@ -12,7 +12,8 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
 
@@ -27,7 +28,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DataImporter {
 	
-	private static Logger log = Logger.getLogger(DataImporter.class);
+	private static Logger log = LogManager.getLogger(DataImporter.class);
 	private ImportListener<?> listener;
 	private FileService fileService;
 	private String successResponse = "SUCCESS";

@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -9,7 +10,7 @@ import dk.in2isoft.onlineobjects.model.User;
 
 public class UserConsistencyChecker implements ConsistencyChecker {
 	
-	private static Logger log = Logger.getLogger(UserConsistencyChecker.class);
+	private static Logger log = LogManager.getLogger(UserConsistencyChecker.class);
 
 	private ModelService modelService;
 	private PasswordEncryptionService passwordEncryptionService;

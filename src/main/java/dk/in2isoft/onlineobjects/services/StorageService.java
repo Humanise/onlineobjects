@@ -3,7 +3,8 @@ package dk.in2isoft.onlineobjects.services;
 import java.io.File;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -12,7 +13,7 @@ import dk.in2isoft.onlineobjects.model.Item;
 
 public class StorageService implements InitializingBean,ApplicationListener<ContextRefreshedEvent> {
 
-	private static Logger log = Logger.getLogger(StorageService.class);
+	private static Logger log = LogManager.getLogger(StorageService.class);
 	
 	private ConfigurationService configurationService;
 	private File storage;

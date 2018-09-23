@@ -8,7 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
@@ -47,7 +48,7 @@ import dk.in2isoft.onlineobjects.services.SemanticService;
 
 public class InformationService {
 
-	private static final Logger log = Logger.getLogger(InformationService.class);
+	private static final Logger log = LogManager.getLogger(InformationService.class);
 
 	private FeedService feedService;
 	private SemanticService semanticService;

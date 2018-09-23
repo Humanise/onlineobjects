@@ -9,7 +9,7 @@ import dk.in2isoft.onlineobjects.ui.HUIService;
 
 public class TestRendering extends AbstractSpringTestCase {
 	
-	//private static Logger log = Logger.getLogger(TestRendering.class);
+	//private static Logger log = LogManager.getLogger(TestRendering.class);
 	
 	@Autowired
 	private HUIService huiService;

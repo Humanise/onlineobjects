@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 
@@ -29,7 +30,7 @@ public class StylesheetWriter {
 	private ConfigurationService configurationService;
 	private PrintWriter writer;
 	private String context;
-	private Logger log = Logger.getLogger(StylesheetWriter.class);
+	private Logger log = LogManager.getLogger(StylesheetWriter.class);
 	
 	public StylesheetWriter(Request request, ConfigurationService configurationService) throws IOException {
 		HttpServletResponse response = request.getResponse();

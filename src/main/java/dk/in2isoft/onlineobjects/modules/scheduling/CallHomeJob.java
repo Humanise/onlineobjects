@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.scheduling;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -11,7 +12,7 @@ import dk.in2isoft.onlineobjects.services.EmailService;
 
 public class CallHomeJob implements Job {
 
-	private static Logger log = Logger.getLogger(CallHomeJob.class);
+	private static Logger log = LogManager.getLogger(CallHomeJob.class);
 	private EmailService emailService;
 	private ConfigurationService configurationService;
 

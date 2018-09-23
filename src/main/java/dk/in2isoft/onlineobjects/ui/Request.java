@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.springframework.web.context.WebApplicationContext;
@@ -33,7 +34,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordModification;
 
 public class Request {
 
-	private static Logger log = Logger.getLogger(Request.class);
+	private static Logger log = LogManager.getLogger(Request.class);
 
 	private HttpServletRequest request;
 

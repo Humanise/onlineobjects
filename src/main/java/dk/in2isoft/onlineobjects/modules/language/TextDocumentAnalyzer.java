@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -38,7 +38,7 @@ public class TextDocumentAnalyzer {
 	private SemanticService semanticService;
 	private LanguageService languageService;
 	private CacheService cacheService;
-	private static final Logger log = LoggerFactory.getLogger(TextDocumentAnalyzer.class);
+	private static final Logger log = LogManager.getLogger(TextDocumentAnalyzer.class);
 
 	private Document extract(HTMLDocument htmlDocument) {
 		Document xom = htmlDocument.getXOMDocument();

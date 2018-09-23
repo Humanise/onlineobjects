@@ -2,16 +2,16 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import java.util.Arrays;
 
-import junit.framework.TestCase;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import dk.in2isoft.commons.lang.Strings;
+import junit.framework.TestCase;
 
 public class TestStrings extends TestCase {
 	
-	private static Logger log = Logger.getLogger(TestStrings.class);
+	private static Logger log = LogManager.getLogger(TestStrings.class);
 	
 	@Test
 	public void testRandomStringGenerator() {

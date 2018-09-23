@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestLanguageService extends AbstractSpringTestCase {
 	
-	//private static Logger log = Logger.getLogger(TestLanguageService.class);
+	//private static Logger log = LogManager.getLogger(TestLanguageService.class);
 	
 	@Autowired
 	private LanguageService languageService;

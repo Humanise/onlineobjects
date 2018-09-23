@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
@@ -37,7 +37,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 	@Autowired
 	private HTMLService htmlService;
 
-	private static final Logger log = LoggerFactory.getLogger(TestExtractionComparison.class);
+	private static final Logger log = LogManager.getLogger(TestExtractionComparison.class);
 	
 	@Test
 	public void testArticleExtraction() throws Exception {

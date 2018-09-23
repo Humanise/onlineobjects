@@ -9,14 +9,15 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 
 public class PasswordEncryptionService {
 	
-	private static Logger log = Logger.getLogger(PasswordEncryptionService.class);
+	private static Logger log = LogManager.getLogger(PasswordEncryptionService.class);
 	
 	public boolean authenticate(String attemptedPassword, String encryptedPassword, String salt) {
 		try {

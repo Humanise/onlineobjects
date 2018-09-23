@@ -15,7 +15,7 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 public class FileDownload {
 	
-	//private static Logger log = Logger.getLogger(FileDownload.class);
+	//private static Logger log = LogManager.getLogger(FileDownload.class);
 	
 	private String contentType;
 	

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
@@ -30,7 +30,7 @@ import nu.xom.Text;
 
 public class SimpleContentExtractor implements ContentExtractor {
 	
-	private static final Logger log = LoggerFactory.getLogger(SimpleContentExtractor.class);
+	private static final Logger log = LogManager.getLogger(SimpleContentExtractor.class);
 	
 	private Set<String> illegals = Sets.newHashSet("script","style","noscript");
 

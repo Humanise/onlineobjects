@@ -6,7 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
@@ -17,7 +18,7 @@ import dk.in2isoft.onlineobjects.core.UserSession;
 
 public class SessionService {
 
-	private static final Logger log = Logger.getLogger(SessionService.class);
+	private static final Logger log = LogManager.getLogger(SessionService.class);
 	
 	
 	private List<SubSession> subSessions = Lists.newArrayList();

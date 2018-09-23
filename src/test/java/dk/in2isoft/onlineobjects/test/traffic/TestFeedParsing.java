@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestFeedParsing extends AbstractSpringTestCase {
 	
-	private static Logger log = Logger.getLogger(TestFeedParsing.class);
+	private static Logger log = LogManager.getLogger(TestFeedParsing.class);
 	
 	@Autowired
 	private SemanticService semanticService;

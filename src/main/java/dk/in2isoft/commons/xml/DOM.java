@@ -15,8 +15,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.input.DOMBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -35,7 +35,7 @@ import nu.xom.converters.DOMConverter;
 
 public class DOM {
 	
-	private static final Logger log = LoggerFactory.getLogger(DOM.class);
+	private static final Logger log = LogManager.getLogger(DOM.class);
 
 	public static List<Element> getAncestors(Node node) {
 		List<Element> ancestors = new ArrayList<Element>();

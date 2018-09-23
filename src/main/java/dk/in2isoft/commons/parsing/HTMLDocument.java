@@ -21,7 +21,7 @@ import nu.xom.XPathContext;
 
 public class HTMLDocument extends XMLDocument {
 	
-	//private static Logger log = Logger.getLogger(HTMLDocument.class);
+	//private static Logger log = LogManager.getLogger(HTMLDocument.class);
 
 	private String title;
     private String contentType;

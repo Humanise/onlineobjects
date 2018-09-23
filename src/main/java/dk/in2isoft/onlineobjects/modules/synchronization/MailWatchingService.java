@@ -13,7 +13,8 @@ import javax.mail.search.ComparisonTerm;
 import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
@@ -21,7 +22,7 @@ import dk.in2isoft.onlineobjects.services.EmailService;
 
 public class MailWatchingService {
 	
-	private static Logger log = Logger.getLogger(MailWatchingService.class);
+	private static Logger log = LogManager.getLogger(MailWatchingService.class);
 
 	private Date latest = new Date();
 	

@@ -2,7 +2,8 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +12,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestPasswordEncryptionService extends AbstractSpringTestCase {
 	
-	private static Logger log = Logger.getLogger(TestPasswordEncryptionService.class);
+	private static Logger log = LogManager.getLogger(TestPasswordEncryptionService.class);
 	
 	@Autowired
 	private PasswordEncryptionService passwordEncryptionService;

@@ -2,8 +2,8 @@ package dk.in2isoft.onlineobjects.modules.information;
 
 import nu.xom.Document;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -17,7 +17,7 @@ import dk.in2isoft.commons.lang.Strings;
 
 public class Boilerpipe implements ContentExtractor {
 
-	private static final Logger log = LoggerFactory.getLogger(Boilerpipe.class);
+	private static final Logger log = LogManager.getLogger(Boilerpipe.class);
 
     public String extract(String rawString) {
     	

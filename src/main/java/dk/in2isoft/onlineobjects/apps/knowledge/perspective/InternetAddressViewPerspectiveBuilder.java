@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.Lists;
 
@@ -66,7 +66,7 @@ import opennlp.tools.util.Span;
 
 public class InternetAddressViewPerspectiveBuilder {
 
-	private static final Logger log = LoggerFactory.getLogger(InternetAddressViewPerspectiveBuilder.class);
+	private static final Logger log = LogManager.getLogger(InternetAddressViewPerspectiveBuilder.class);
 
 	private ModelService modelService;
 	private LanguageService languageService;

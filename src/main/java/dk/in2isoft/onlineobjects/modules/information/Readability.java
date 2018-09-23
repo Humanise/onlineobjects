@@ -11,8 +11,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import dk.in2isoft.commons.parsing.HTMLDocument;
 
@@ -20,7 +20,7 @@ public class Readability {
 
     private static final String CONTENT_SCORE = "readabilityContentScore";
     
-    final Logger log = LoggerFactory.getLogger(Readability.class);
+    final Logger log = LogManager.getLogger(Readability.class);
 
     private final Document mDocument;
     private String mBodyCache;

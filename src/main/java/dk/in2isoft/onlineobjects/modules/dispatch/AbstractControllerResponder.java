@@ -1,5 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.dispatch;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -98,6 +100,10 @@ public class AbstractControllerResponder {
 		} catch (IllegalAccessException e) {
 			throw new EndUserException(e);
 		} catch (InvocationTargetException e) {
+			Throwable targetException = e.getTargetException();
+			if (targetException instanceof EndUserException) {
+				throw (EndUserException) targetException;
+			}
 			throw new EndUserException(e);
 		}
 		return false;

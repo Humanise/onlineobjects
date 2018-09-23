@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class In2iGuiResponder implements Responder, InitializingBean {
 
-	//private static Logger log = Logger.getLogger(In2iGuiResponder.class);
+	//private static Logger log = LogManager.getLogger(In2iGuiResponder.class);
 	private ConfigurationService configurationService;
 	private String huiPath;
 	

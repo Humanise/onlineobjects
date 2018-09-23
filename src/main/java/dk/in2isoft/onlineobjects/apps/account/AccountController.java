@@ -1,8 +1,8 @@
 package dk.in2isoft.onlineobjects.apps.account;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
@@ -20,7 +20,7 @@ import dk.in2isoft.onlineobjects.ui.data.Response;
 
 public class AccountController extends AccountControllerBase {
 	
-	private static final Logger log = LoggerFactory.getLogger(AccountController.class);
+	private static final Logger log = LogManager.getLogger(AccountController.class);
 	
 	public static final String MOUNT = "account";
 	

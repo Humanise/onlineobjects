@@ -21,8 +21,8 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -49,7 +49,7 @@ import nu.xom.Elements;
 @Ignore
 public class TestComponent extends AbstractSpringTestCase {
 
-	private static final Logger log = LoggerFactory.getLogger(TestComponent.class);
+	private static final Logger log = LogManager.getLogger(TestComponent.class);
 	
 	@Autowired
 	private HUIService HUIService;

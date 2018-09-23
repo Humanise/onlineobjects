@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class RobotsResponder implements Responder {
 
-	// private static Logger log = Logger.getLogger(RobotsResponder.class);
+	// private static Logger log = LogManager.getLogger(RobotsResponder.class);
 
 	private ConfigurationService configurationService;
 

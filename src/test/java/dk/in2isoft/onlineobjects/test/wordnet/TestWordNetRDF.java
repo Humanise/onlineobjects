@@ -3,8 +3,10 @@ package dk.in2isoft.onlineobjects.test.wordnet;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.Duration;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +26,7 @@ import dk.in2isoft.onlineobjects.test.AbstractTestCase;
 
 public class TestWordNetRDF extends AbstractTestCase {
 
-	private static final Logger log = Logger.getLogger(TestWordNetRDF.class);
+	private static final Logger log = LogManager.getLogger(TestWordNetRDF.class);
 	private static Model model;
 	private static Graph graph;
 	private static QueryHandler query;

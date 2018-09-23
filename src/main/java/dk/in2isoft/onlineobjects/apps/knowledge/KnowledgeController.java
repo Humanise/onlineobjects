@@ -12,7 +12,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
@@ -27,12 +28,12 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspe
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.ListItemPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.PeekPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementEditPerspective;
-import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -69,7 +70,7 @@ import dk.in2isoft.onlineobjects.ui.data.ViewResult;
 
 public class KnowledgeController extends KnowledgeControllerBase {
 
-	private static Logger log = Logger.getLogger(KnowledgeController.class);
+	private static Logger log = LogManager.getLogger(KnowledgeController.class);
 
 	@Path
 	public ViewResult list(Request request) throws IOException, ModelException, ExplodingClusterFuckException, SecurityException {

@@ -11,7 +11,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -29,7 +30,7 @@ import dk.in2isoft.onlineobjects.ui.AbstractRemotingFacade;
 public class CommonRemotingFacade extends AbstractRemotingFacade {
 
 	private SecurityService securityService;
-	private static Logger log = Logger.getLogger(CommonRemotingFacade.class);
+	private static Logger log = LogManager.getLogger(CommonRemotingFacade.class);
 	
 	public Entity getEntity(long id) throws ModelException {
 		return modelService.get(Entity.class, id, getUserSession());

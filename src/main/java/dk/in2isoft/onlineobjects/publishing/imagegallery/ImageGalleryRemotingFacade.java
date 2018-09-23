@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.ui.AbstractRemotingFacade;
 public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 
 	// private static Logger log =
-	// Logger.getLogger(ImageGalleryRemotingFacade.class);
+	// LogManager.getLogger(ImageGalleryRemotingFacade.class);
 
 	public List<Image> listImages(long galleryId) throws EndUserException {
 		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId,getUserSession());

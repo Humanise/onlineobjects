@@ -3,7 +3,8 @@ package dk.in2isoft.onlineobjects.modules.index;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 
 import com.google.common.collect.Lists;
@@ -26,7 +27,7 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 
 	private IndexDocumentBuilder<E> documentBuilder;
 	
-	private static final Logger log = Logger.getLogger(ConfigurableIndexer.class);
+	private static final Logger log = LogManager.getLogger(ConfigurableIndexer.class);
 
 	public Class<E> getType() {
 		return type;

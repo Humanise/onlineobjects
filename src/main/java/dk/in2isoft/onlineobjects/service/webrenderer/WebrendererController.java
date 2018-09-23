@@ -13,7 +13,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class WebrendererController extends ServiceController {
 
-	//private static Logger log = Logger.getLogger(WebrendererController.class);
+	//private static Logger log = LogManager.getLogger(WebrendererController.class);
 	
 	private ConfigurationService configurationService;
 	

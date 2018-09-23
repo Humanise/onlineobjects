@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.util.StopWatch;
 
 import dk.in2isoft.commons.http.HeaderUtil;
@@ -35,7 +36,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 public class DispatchingService {
 
-	private static Logger log = Logger.getLogger(DispatchingService.class);
+	private static Logger log = LogManager.getLogger(DispatchingService.class);
 	
 	private ModelService modelService;
 	private SecurityService securityService;

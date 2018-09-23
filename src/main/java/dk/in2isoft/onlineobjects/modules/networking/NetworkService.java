@@ -28,7 +28,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Sets;
 
@@ -39,7 +40,7 @@ import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse.State;
 
 public class NetworkService {
 	
-	private static final Logger log = Logger.getLogger(NetworkService.class);
+	private static final Logger log = LogManager.getLogger(NetworkService.class);
 	
 	private static final Set<String> TRACKING_PARAMS = Sets.newHashSet("utm_source","utm_medium","utm_campaign","utm_term","utm_content"); 
 	

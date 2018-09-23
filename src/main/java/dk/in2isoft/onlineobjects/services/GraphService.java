@@ -7,7 +7,8 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 
@@ -17,7 +18,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 
 public class GraphService extends AbstractCommandLineInterface {
 
-	private static Logger log = Logger.getLogger(GraphService.class);
+	private static Logger log = LogManager.getLogger(GraphService.class);
 	private static final ImmutableList<String> formats = ImmutableList.of("png","jpg","xdot","svg");
 	private static final ImmutableList<String> algorithms = ImmutableList.of("circo","dot","fdp","neato","twopi");
 	

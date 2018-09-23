@@ -25,7 +25,7 @@ import dk.in2isoft.commons.lang.Strings;
 
 public class DecoratedDocument {
 
-	//private Logger log = LoggerFactory.getLogger(DecoratedDocument.class);
+	//private Logger log = LogManager.getLogger(DecoratedDocument.class);
 	
 	private static final Set<String> INLINES = Sets.newHashSet("b", "big", "i", "small", "tt","abbr", "acronym", "cite", "code", "dfn", "em", "kbd", "strong", "samp", "var","a", "bdo", "br", "img", "map", "object", "q", "script", "span", "sub", "sup");
 

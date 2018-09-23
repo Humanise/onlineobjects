@@ -3,14 +3,15 @@ package dk.in2isoft.onlineobjects.modules.pipes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
 
 public class Pipeline {
 	private List<PipelineStage> stages = new ArrayList<PipelineStage>();
 	
-	private static Logger log = Logger.getLogger(Pipeline.class);
+	private static Logger log = LogManager.getLogger(Pipeline.class);
 	
 	public void addStage(PipelineStage stage) {
 		stage.setContext(new PipelineContext(this,stages.size()));

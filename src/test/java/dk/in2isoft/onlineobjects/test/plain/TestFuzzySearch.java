@@ -16,7 +16,7 @@ import dk.in2isoft.commons.lang.StringSearcher.Result;
 
 public class TestFuzzySearch extends TestCase {
 
-	//private Logger log = LoggerFactory.getLogger(TestFuzzySearch.class);
+	//private Logger log = LogManager.getLogger(TestFuzzySearch.class);
 
 	@Test
 	public void testGettingText() throws MalformedURLException, IOException, ValidityException, ParsingException {

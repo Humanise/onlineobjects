@@ -10,7 +10,7 @@ import dk.in2isoft.onlineobjects.test.AbstractTestCase;
 
 public class TestDanNetUtil extends AbstractTestCase {
 
-	//private static final Logger log = Logger.getLogger(TestDanNetUtil.class);
+	//private static final Logger log = LogManager.getLogger(TestDanNetUtil.class);
 
 	@Test
 	public void testParseGlossary() {

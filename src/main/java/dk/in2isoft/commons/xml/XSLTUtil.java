@@ -24,7 +24,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -36,7 +37,7 @@ import nu.xom.Serializer;
 
 public class XSLTUtil {
 	
-	private static Logger log = Logger.getLogger(XSLTUtil.class);
+	private static Logger log = LogManager.getLogger(XSLTUtil.class);
 
 	private static void applyXSLT(Source xml, Source xslt, Result output, Map<String, String> parameters)
 			throws EndUserException {

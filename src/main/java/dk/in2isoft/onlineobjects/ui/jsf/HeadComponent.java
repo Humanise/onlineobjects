@@ -25,7 +25,7 @@ public class HeadComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.head";
 	
-	//private static final Logger log = LoggerFactory.getLogger(HeadComponent.class);
+	//private static final Logger log = LogManager.getLogger(HeadComponent.class);
 
 	public HeadComponent() {
 		super(FAMILY);

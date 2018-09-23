@@ -1,13 +1,14 @@
 package dk.in2isoft.onlineobjects.modules.scheduling;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 
 public class HelloWorldJob extends ServiceBackedJob {
 	
-	private static final Logger log = Logger.getLogger(HelloWorldJob.class);
+	private static final Logger log = LogManager.getLogger(HelloWorldJob.class);
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		log.info("Starting");

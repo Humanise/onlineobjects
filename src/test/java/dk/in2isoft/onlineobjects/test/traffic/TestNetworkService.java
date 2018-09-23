@@ -19,7 +19,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestNetworkService extends AbstractSpringTestCase {
 	
-	//private static Logger log = Logger.getLogger(TestNetworkService.class);
+	//private static Logger log = LogManager.getLogger(TestNetworkService.class);
 	
 	@Autowired
 	private NetworkService networkService;

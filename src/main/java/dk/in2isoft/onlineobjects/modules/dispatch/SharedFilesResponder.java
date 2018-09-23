@@ -7,7 +7,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
@@ -15,7 +16,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class SharedFilesResponder implements Responder {
 
-	private static Logger log = Logger.getLogger(SharedFilesResponder.class);
+	private static Logger log = LogManager.getLogger(SharedFilesResponder.class);
 	
 	private ConfigurationService configurationService;
 	

@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class TestValidationUtil extends AbstractSpringTestCase {
 	
-	//private static Logger log = Logger.getLogger(TestLangUtil.class);
+	//private static Logger log = LogManager.getLogger(TestLangUtil.class);
 	
 	
 	@Test

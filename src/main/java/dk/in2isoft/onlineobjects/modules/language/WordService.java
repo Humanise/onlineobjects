@@ -10,8 +10,8 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.flexible.standard.QueryParserUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.hibernate.SQLQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.Lists;
 
@@ -43,7 +43,7 @@ import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class WordService {
 	
-	private static final Logger log = LoggerFactory.getLogger(WordService.class);
+	private static final Logger log = LogManager.getLogger(WordService.class);
 
 	private IndexManager index;
 	private ModelService modelService;

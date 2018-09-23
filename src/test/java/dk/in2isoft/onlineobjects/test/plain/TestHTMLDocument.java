@@ -13,8 +13,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Assert;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -30,7 +30,7 @@ import nu.xom.Node;
 
 public class TestHTMLDocument extends AbstractSpringTestCase {
 	
-	private static Logger log = LoggerFactory.getLogger(TestHTMLDocument.class);
+	private static Logger log = LogManager.getLogger(TestHTMLDocument.class);
 	
 	@Autowired
 	private HTMLService htmlService;

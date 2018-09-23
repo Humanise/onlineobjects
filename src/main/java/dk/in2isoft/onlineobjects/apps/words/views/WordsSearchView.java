@@ -35,7 +35,7 @@ public class WordsSearchView extends AbstractView implements InitializingBean {
 	private WordService wordService;
 	private WordsInterfaceHelper wordsInterfaceHelper;
 	
-	//private static final Logger log = LoggerFactory.getLogger(WordsSearchView.class);
+	//private static final Logger log = LogManager.getLogger(WordsSearchView.class);
 		
 	private List<WordListPerspective> list;
 	private int count;

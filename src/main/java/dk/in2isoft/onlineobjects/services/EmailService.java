@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
@@ -15,7 +16,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 
 public class EmailService {
 
-	private static final Logger log = Logger.getLogger(EmailService.class); 
+	private static final Logger log = LogManager.getLogger(EmailService.class); 
 	private ConfigurationService configurationService;
 	
 	private VelocityEngine velocityEngine;

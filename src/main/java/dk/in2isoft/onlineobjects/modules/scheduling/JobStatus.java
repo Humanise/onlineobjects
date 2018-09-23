@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.scheduling;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.utils.Key;
 
@@ -72,7 +73,7 @@ public class JobStatus {
 		if (jobStatus==null) {
 			jobStatus = new JobStatus();
 			jobStatus.schedulingService = schedulingService;
-			jobStatus.log = Logger.getLogger(initiator.getClass());
+			jobStatus.log = LogManager.getLogger(initiator.getClass());
 			jobStatus.key = context.getJobDetail().getKey();
 			context.put("status", jobStatus);
 		}

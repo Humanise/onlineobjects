@@ -7,8 +7,8 @@ import junit.framework.TestCase;
 
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 
 import dk.in2isoft.commons.lang.StringSearcher;
@@ -16,7 +16,7 @@ import dk.in2isoft.commons.lang.StringSearcher.Result;
 
 public class TestStringSearcher extends TestCase {
 	
-	private static final Logger log = LoggerFactory.getLogger(TestStringSearcher.class);
+	private static final Logger log = LogManager.getLogger(TestStringSearcher.class);
 	
 	@Test
 	public void testStringSearcher() {

@@ -1,10 +1,11 @@
 package dk.in2isoft.onlineobjects.modules.organic;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class Cell implements HeartBeating {
 	
-	protected static final Logger log = Logger.getLogger(Cell.class); 
+	protected static final Logger log = LogManager.getLogger(Cell.class); 
 
 	private String id;
 	

@@ -26,7 +26,7 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 	private ConversionService conversionService;
 	private ConfigurationService configurationService;
 
-	// private static Logger log = Logger.getLogger(ImageGalleryBuilder.class);
+	// private static Logger log = LogManager.getLogger(ImageGalleryBuilder.class);
 
 	public ImageGalleryBuilder() {
 		super();

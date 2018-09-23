@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.commons.http.HeaderUtil;
 import dk.in2isoft.commons.lang.Files;
@@ -23,7 +24,7 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class ScriptWriter {
 
-	private static final Logger log = Logger.getLogger(ScriptWriter.class);
+	private static final Logger log = LogManager.getLogger(ScriptWriter.class);
 
 	private ConfigurationService configurationService;
 	private PrintWriter writer;

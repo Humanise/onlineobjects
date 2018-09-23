@@ -15,7 +15,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.LinkedHashMultimap;
@@ -31,7 +32,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ApplicationResponder extends AbstractControllerResponder implements Responder, InitializingBean {
 
-	static Logger log = Logger.getLogger(ApplicationResponder.class);
+	static Logger log = LogManager.getLogger(ApplicationResponder.class);
 	private static final Class<?>[] args = { Request.class };
 	private Multimap<String, Pattern> mappings;
 	

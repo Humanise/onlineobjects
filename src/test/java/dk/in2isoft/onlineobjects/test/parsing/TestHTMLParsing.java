@@ -8,7 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +35,7 @@ import nu.xom.XPathContext;
 
 public class TestHTMLParsing extends AbstractSpringTestCase {
 	
-	private static Logger log = Logger.getLogger(TestHTMLParsing.class);
+	private static Logger log = LogManager.getLogger(TestHTMLParsing.class);
 			
 	@Autowired
 	private HTMLService htmlService;

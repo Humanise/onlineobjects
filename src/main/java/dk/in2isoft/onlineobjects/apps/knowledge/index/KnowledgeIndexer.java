@@ -3,7 +3,8 @@ package dk.in2isoft.onlineobjects.apps.knowledge.index;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.LongField;
@@ -49,7 +50,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	private PileService pileService;
 	private SecurityService securityService;
 	
-	private static final Logger log = Logger.getLogger(KnowledgeIndexer.class);
+	private static final Logger log = LogManager.getLogger(KnowledgeIndexer.class);
 	
 	public void clear(Privileged privileged) throws EndUserException {
 		getIndexManager(privileged).clear();

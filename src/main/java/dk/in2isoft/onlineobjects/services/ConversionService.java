@@ -14,7 +14,7 @@ public class ConversionService {
 	
 	private List<EntityConverter> converters;
 
-	//private static Logger log = Logger.getLogger(ConversionFacade.class);
+	//private static Logger log = LogManager.getLogger(ConversionFacade.class);
 		
 	public EntityConverter getConverter(Class<? extends Entity> classObj) {
 		for (EntityConverter converter : converters) {

@@ -19,7 +19,7 @@ import dk.in2isoft.onlineobjects.model.User;
 
 public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuery<T>, PrivilegedQuery {
 
-	//private static Logger log = Logger.getLogger(Query.class);
+	//private static Logger log = LogManager.getLogger(Query.class);
 
 	private boolean inPosition;
 

@@ -8,14 +8,14 @@ import java.io.Writer;
 
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 public class ScriptCompressor {
 
-	private static final Logger log = LoggerFactory.getLogger(ScriptCompressor.class);
+	private static final Logger log = LogManager.getLogger(ScriptCompressor.class);
 
 	private ErrorReporter getErrorReporter() {
 		ErrorReporter errorReporter = new ErrorReporter() {

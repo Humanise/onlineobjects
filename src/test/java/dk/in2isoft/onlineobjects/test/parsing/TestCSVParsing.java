@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +29,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestCSVParsing extends AbstractSpringTestCase {
 	
-	private static Logger log = Logger.getLogger(TestCSVParsing.class);
+	private static Logger log = LogManager.getLogger(TestCSVParsing.class);
 			
 	@Autowired
 	private WordsModelService wordsModelService;

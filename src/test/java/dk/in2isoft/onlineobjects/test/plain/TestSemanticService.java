@@ -11,11 +11,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 
-import opennlp.tools.util.Span;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,11 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import opennlp.tools.util.Span;
 
 public class TestSemanticService extends AbstractSpringTestCase {
 	
-	private static Logger log = Logger.getLogger(TestSemanticService.class);
+	private static Logger log = LogManager.getLogger(TestSemanticService.class);
 	
 	@Autowired
 	private SemanticService semanticService;

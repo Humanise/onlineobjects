@@ -8,7 +8,7 @@ import nu.xom.Nodes;
 
 public class InspectingContentExtractor implements ContentExtractor {
 	
-	//private static final Logger log = LoggerFactory.getLogger(InspectingContentExtractor.class);
+	//private static final Logger log = LogManager.getLogger(InspectingContentExtractor.class);
 
 	public Document extract(Document document) {
 		document = (Document) document.copy();

@@ -17,8 +17,8 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.quartz.JobDataMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -57,7 +57,7 @@ import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class MemberService {
 	
-	private static final Logger log = LoggerFactory.getLogger(MemberService.class);
+	private static final Logger log = LogManager.getLogger(MemberService.class);
 	
 	private ModelService modelService;
 	private WebModelService webModelService;
@@ -68,7 +68,15 @@ public class MemberService {
 	
 	private Multimap<String,Date> agreementConfigs = HashMultimap.create();
 
-	public void validateNewMember(String username, String password) throws IllegalRequestException {
+	public boolean isValidPassword(String password) {
+		return ValidationUtil.isValidPassword(password);
+	}
+
+	public boolean isValidUsername(String username) {
+		return ValidationUtil.isValidUsername(username);
+	}
+
+	public void validateNewMember(String username, String password, String email) throws IllegalRequestException, ModelException {
 		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalRequestException(Error.noUsername);
 		}
@@ -81,18 +89,6 @@ public class MemberService {
 		if (!isValidPassword(password)) {
 			throw new IllegalRequestException(Error.invalidPassword);
 		}
-	}
-
-	public boolean isValidPassword(String password) {
-		return ValidationUtil.isValidPassword(password);
-	}
-
-	public boolean isValidUsername(String username) {
-		return ValidationUtil.isValidUsername(username);
-	}
-
-	public void validateNewMember(String username, String password, String email) throws IllegalRequestException, ModelException {
-		validateNewMember(username, password);
 		if (!Strings.isNotBlank(email)) {
 			throw new IllegalRequestException(Error.noEmail);
 		}
@@ -134,6 +130,7 @@ public class MemberService {
 	public User createMember(Privileged creator, String username,
 			String password, String fullName, String email)
 			throws IllegalRequestException, EndUserException, ModelException {
+		log.info("Request to create user with username={}", username);
 		if (creator==null) {
 			throw new IllegalRequestException("Cannot create user without a creator");
 		}

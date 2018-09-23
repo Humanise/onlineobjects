@@ -2,7 +2,8 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import java.io.ByteArrayOutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestGraphService extends AbstractSpringTestCase {
 
-	private static Logger log = Logger.getLogger(TestGraphService.class);
+	private static Logger log = LogManager.getLogger(TestGraphService.class);
 	@Autowired
 	private GraphService graphService;
 	

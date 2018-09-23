@@ -35,8 +35,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -55,7 +55,7 @@ public class IndexManager {
 	private String directoryName = "index";
 	private StandardAnalyzer analyzer;
 	
-	private static final Logger log = LoggerFactory.getLogger(IndexManager.class);
+	private static final Logger log = LogManager.getLogger(IndexManager.class);
 	
 	public IndexManager() {
 		analyzer = new StandardAnalyzer(Version.LUCENE_40, CharArraySet.EMPTY_SET);

@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestConversionService extends AbstractSpringTestCase {
 	
-	//private static Logger log = Logger.getLogger(TestConversionService.class);
+	//private static Logger log = LogManager.getLogger(TestConversionService.class);
 	
 	@Autowired
 	private ConversionService conversionService;

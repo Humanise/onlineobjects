@@ -15,8 +15,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
@@ -53,7 +53,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 	private POS category = POS.NOUN;
 	private String categoryCode = LexicalCategory.CODE_NOMEN;
 
-	private static final Logger log = LoggerFactory.getLogger(TestWordNetImporter.class);
+	private static final Logger log = LogManager.getLogger(TestWordNetImporter.class);
 	
 	private WordService wordService;
 	private SecurityService securityService;

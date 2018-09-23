@@ -55,7 +55,7 @@ public class Strings {
 	public static final Object RIGHTWARDS_ARROW = "\u2192";
 	public static final String MIDDLE_DOT = "\u00B7";
 	
-	// private static Logger log = Logger.getLogger(LangUtil.class);
+	// private static Logger log = LogManager.getLogger(LangUtil.class);
 
 	public static String concatWords(String first, String second) {
 		if (first == null && second == null) {

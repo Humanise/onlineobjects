@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.tasks;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.quartz.utils.Key;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
 
 public class TestImportInformation extends AbstractSpringTask {
 
-	private final static Logger log = Logger.getLogger(TestImportInformation.class);
+	private final static Logger log = LogManager.getLogger(TestImportInformation.class);
 
 	private InformationService informationService;
 	private SchedulingService schedulingService;

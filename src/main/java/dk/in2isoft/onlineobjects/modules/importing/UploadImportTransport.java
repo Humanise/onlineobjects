@@ -10,7 +10,8 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
 
@@ -26,7 +27,7 @@ public class UploadImportTransport<T> implements ImportTransport {
 	private Status status = Status.waiting;
 	private float progress;
 	private Request request;
-	private static final Logger log = Logger.getLogger(UploadImportTransport.class);
+	private static final Logger log = LogManager.getLogger(UploadImportTransport.class);
 	
 	public UploadImportTransport() {
 		

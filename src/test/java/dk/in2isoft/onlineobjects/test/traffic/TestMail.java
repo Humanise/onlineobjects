@@ -24,7 +24,8 @@ import javax.mail.search.SentDateTerm;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import dk.in2isoft.onlineobjects.util.images.ImageService;
 @Ignore
 public class TestMail extends AbstractSpringTestCase {
 	
-	private static final Logger log = Logger.getLogger(TestMail.class);
+	private static final Logger log = LogManager.getLogger(TestMail.class);
 	
 	@Autowired
 	private ImageService imageService;

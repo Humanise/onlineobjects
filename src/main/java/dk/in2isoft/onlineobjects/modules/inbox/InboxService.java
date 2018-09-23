@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -23,7 +24,7 @@ import dk.in2isoft.onlineobjects.model.User;
 
 public class InboxService implements InitializingBean {
 
-	private static Logger log = Logger.getLogger(InboxService.class);
+	private static Logger log = LogManager.getLogger(InboxService.class);
 	
 	private ModelService modelService;
 	private SecurityService securityService;

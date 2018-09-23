@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.Duration;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -54,7 +55,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
 public class TestDanNetImporter extends AbstractSpringTask {
 	
 	private static final String PATH = "/Users/jbm/Udvikling/Workspace/onlineobjects/src/test/resources/DanNet-2.1_owl/";
-	private static final Logger log = Logger.getLogger(TestDanNetImporter.class);
+	private static final Logger log = LogManager.getLogger(TestDanNetImporter.class);
 	private static Graph graph;
 	private static QueryHandler query;
 	private static StopWatch watch;

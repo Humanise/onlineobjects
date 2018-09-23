@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.test.webservices;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geonames.Toponym;
 import org.geonames.ToponymSearchCriteria;
 import org.geonames.ToponymSearchResult;
@@ -13,7 +14,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 @Ignore
 public class TestGeonames extends AbstractSpringTestCase {
 
-	private static final Logger log = Logger.getLogger(TestGeonames.class);
+	private static final Logger log = LogManager.getLogger(TestGeonames.class);
 
 	@Test
 	public void testRead() throws Exception {

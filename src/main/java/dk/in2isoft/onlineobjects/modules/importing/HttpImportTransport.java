@@ -12,7 +12,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.commons.http.HeaderUtil;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -20,7 +21,7 @@ import dk.in2isoft.onlineobjects.modules.importing.ImportSession.Status;
 
 public class HttpImportTransport<T> implements ImportTransport {
 
-	private static final Logger log = Logger.getLogger(HttpImportTransport.class);
+	private static final Logger log = LogManager.getLogger(HttpImportTransport.class);
 	
 	private String uri;
 	private Status status = Status.waiting;

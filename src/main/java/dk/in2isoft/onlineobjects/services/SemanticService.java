@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -63,7 +64,7 @@ public class SemanticService {
 	
 	private static Pattern ABBREVIATION_PATTERN = Pattern.compile("[A-Z]+");
 	
-	private static final Logger log = Logger.getLogger(SemanticService.class);
+	private static final Logger log = LogManager.getLogger(SemanticService.class);
 
 	private static final Pattern NUMBER_WITH_UNIT_PATTERN = Pattern.compile("[0-9]+[A-Za-z]+");
 

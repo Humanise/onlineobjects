@@ -9,7 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +25,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ConfigurationService implements InitializingBean {
 	
-	private static Logger log = Logger.getLogger(ConfigurationService.class);
+	private static Logger log = LogManager.getLogger(ConfigurationService.class);
 	
 	private String baseUrl;
 	private String basePath;

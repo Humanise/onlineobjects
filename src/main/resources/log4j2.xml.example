@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration strict="true" packages="dk.in2isoft">
-  
+
   <Properties>
-    <Property name="filename">/Users/jobm/Code/temp/onlineobjects2.log</Property>
+    <Property name="dir">/path/to/logs</Property>
+    <Property name="layout">%d{yyyy-MM-dd HH:mm:ss} %-5level %m  ·  %C{1.} [%t]%n</Property>
   </Properties>
 
-  <Filter type="ThresholdFilter" level="trace"/>
- 
   <Appenders>
 
     <Appender type="Console" name="FLOW">
-      <Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %C{1.} · · · %m%n"/>
+      <Layout type="PatternLayout" pattern="${layout}"/>
     </Appender>
 
-    <Appender type="File" name="File" fileName="${filename}">
-      <Layout type="PatternLayout">
-        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-      </Layout>
+    <Appender type="File" name="File" fileName="${dir}/all_info.log">
+      <Layout type="PatternLayout" pattern="${layout}"/>
+      <Filter type="ThresholdFilter" level="info"/>
+    </Appender>
+
+    <Appender type="File" name="Core" fileName="${dir}/core.log">
+      <Layout type="PatternLayout" pattern="${layout}"/>
     </Appender>
   </Appenders>
- 
+
   <Loggers>
-    <Logger name="dk.in2isoft" level="debug" additivity="false">
+
+    <Logger name="dk.in2isoft" level="info" additivity="false">
+      <AppenderRef ref="File"/>
       <AppenderRef ref="FLOW"/>
     </Logger>
- <!--
-    <Logger name="dk.in2isoft" level="debug" additivity="false">
-      <AppenderRef ref="File"/>
+
+    <Logger name="dk.in2isoft.onlineobjects.core.SecurityService" level="debug" additivity="true">
+      <AppenderRef ref="Core"/>
     </Logger>
- -->
-    <Root level="WARN">
+
+    <Logger name="dk.in2isoft.onlineobjects.modules.user.MemberService" level="debug" additivity="true">
+      <AppenderRef ref="Core"/>
+    </Logger>
+
+    <Root level="INFO">
       <AppenderRef ref="FLOW"/>
     </Root>
   </Loggers>
- 
+
 </Configuration>

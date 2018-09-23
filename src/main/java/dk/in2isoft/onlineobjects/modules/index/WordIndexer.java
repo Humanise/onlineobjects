@@ -3,7 +3,8 @@ package dk.in2isoft.onlineobjects.modules.index;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 
 import com.google.common.collect.Lists;
@@ -25,7 +26,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	
 	private IndexManager indexManager;
 	
-	private static final Logger log = Logger.getLogger(WordIndexer.class);
+	private static final Logger log = LogManager.getLogger(WordIndexer.class);
 	
 	private boolean enabled = true;
 

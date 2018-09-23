@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
@@ -57,7 +58,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	    new int[] {-90, NONE},
 	};
 
-	private static Logger log = Logger.getLogger(ImageService.class);
+	private static Logger log = LogManager.getLogger(ImageService.class);
 	private Set<String> mimes = Sets.newHashSet("image/jpeg", "image/png", "image/gif", "application/pdf");
 	private Set<String> extensions = Sets.newHashSet("jpg", "png", "gif", "pdf");
 	

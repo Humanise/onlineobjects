@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -35,7 +35,7 @@ import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class SecurityService {
 	
-	private static final Logger log = Logger.getLogger(SecurityService.class);
+	private static final Logger log = LogManager.getLogger(SecurityService.class);
 
 	public static final String ADMIN_USERNAME = "admin";
 	public static final String PUBLIC_USERNAME = "public";
@@ -64,6 +64,7 @@ public class SecurityService {
 		}
 		User user = getUser(username, password);
 		if (user!=null) {
+			log.info("Changed to user {}", username);
 			Set<Ability> abilities = getAbilities(user);
 			userSession.setUser(user, abilities);
 			log(user, LogType.logIn);
@@ -349,7 +350,7 @@ public class SecurityService {
 
 	public UserSession ensureUserSession(HttpSession session) {
 		if (session.getAttribute(UserSession.SESSION_ATTRIBUTE) == null) {
-			log.debug("Creating new user session");
+			log.trace("Creating new user session");
 			session.setAttribute(UserSession.SESSION_ATTRIBUTE, new UserSession(getInitialUser()));
 		}
 		return UserSession.get(session);

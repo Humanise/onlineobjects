@@ -3,7 +3,8 @@ package dk.in2isoft.onlineobjects.apps.desktop;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.ApplicationSession;
@@ -16,7 +17,7 @@ public abstract class DesktopControlerBase extends ApplicationController {
 	protected ImportService importService;
 	protected ImageService imageService;
 	protected HTMLService htmlService;
-	protected static final Logger log = Logger.getLogger(DesktopController.class);
+	protected static final Logger log = LogManager.getLogger(DesktopController.class);
 	
 	public DesktopControlerBase() {
 		super("desktop");

@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
@@ -31,7 +32,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 
 public class TestIndexService extends AbstractSpringTestCase {
 	
-	private static final Logger log = Logger.getLogger(TestIndexService.class);
+	private static final Logger log = LogManager.getLogger(TestIndexService.class);
 	
 	@Autowired
 	private ConfigurationService configurationService;
