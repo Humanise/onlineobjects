@@ -72,12 +72,12 @@
 	</bean>
 
 	<bean id="passwordRecoveryService" class="dk.in2isoft.onlineobjects.services.PasswordRecoveryService">
-	
 		<property name="emailService" ref="emailService" />
 		<property name="modelService" ref="modelService" />
 		<property name="configurationService" ref="configurationService"/>
 		<property name="securityService" ref="securityService"/>
 		<property name="memberService" ref="memberService"/>
+		<property name="surveillanceService" ref="surveillanceService"/>
 	</bean>
 
 	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType"/>

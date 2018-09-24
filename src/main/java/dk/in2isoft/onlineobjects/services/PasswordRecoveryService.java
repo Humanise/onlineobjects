@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 
 public class PasswordRecoveryService {
@@ -23,6 +24,7 @@ public class PasswordRecoveryService {
 	private ConfigurationService configurationService;
 	private MemberService memberService;
 	private SecurityService securityService;
+	private SurveillanceService surveillanceService;
 	
 	public boolean sendRecoveryMail(String usernameOrEmail) throws EndUserException {
 		User user = modelService.getUser(usernameOrEmail);
@@ -36,6 +38,7 @@ public class PasswordRecoveryService {
 	}
 	
 	public boolean sendRecoveryMail(User user) throws EndUserException {
+		surveillanceService.audit().info("Request to recover password for user={}", user.getUsername());
 		Privileged admin = securityService.getAdminPrivileged();
 		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, admin);
 		Person person = memberService.getUsersPerson(user, admin);
@@ -62,6 +65,7 @@ public class PasswordRecoveryService {
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/passwordrecovery-template.html", parms);
 		
 		emailService.sendHtmlMessage("Reset password for OnlineObjects", html, email.getAddress(),person.getName());
+		surveillanceService.audit().info("Did send e-mail to recover password for user={}", user.getUsername());
 		return true;
 	}
 
@@ -91,5 +95,9 @@ public class PasswordRecoveryService {
 	
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	public void setSurveillanceService(SurveillanceService surveillanceService) {
+		this.surveillanceService = surveillanceService;
 	}
 }

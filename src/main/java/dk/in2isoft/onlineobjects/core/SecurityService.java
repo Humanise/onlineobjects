@@ -27,10 +27,10 @@ import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
-import dk.in2isoft.onlineobjects.services.SessionService;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class SecurityService {
@@ -44,7 +44,7 @@ public class SecurityService {
 	
 	private ModelService modelService;
 	private ConfigurationService configurationService;
-	private SessionService sessionService;
+	private SurveillanceService surveillanceService;
 	private PasswordEncryptionService passwordEncryptionService;
 	private PasswordRecoveryService passwordRecoveryService;
 
@@ -64,7 +64,7 @@ public class SecurityService {
 		}
 		User user = getUser(username, password);
 		if (user!=null) {
-			log.info("Changed to user {}", username);
+			surveillanceService.audit().info("Changed to user={}", username);
 			Set<Ability> abilities = getAbilities(user);
 			userSession.setUser(user, abilities);
 			log(user, LogType.logIn);
@@ -84,6 +84,7 @@ public class SecurityService {
 			throw new SecurityException("No user found with the secret");
 		}
 		log(user, LogType.logIn);
+		surveillanceService.audit().info("Changed (via secret) to user={}", user.getUsername());
 		userSession.setUser(user, getAbilities(user));
 	}
 	
@@ -121,12 +122,25 @@ public class SecurityService {
 		if (!ValidationUtil.isValidPassword(password)) {
 			throw new IllegalRequestException("The password is not valid");
 		}
+		setSaltedPassword(user, password);
+		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
+		modelService.updateItem(user, privileged);
+		surveillanceService.audit().info("Changed password of user={}", user.getUsername());
+	}
+
+	public void setPassword(User user, String password) throws ExplodingClusterFuckException, SecurityException {
+		if (!user.isNew()) {
+			throw new SecurityException("Cannot set password of persistent user");
+		}
+		setSaltedPassword(user, password);
+		surveillanceService.audit().info("Set initial password on user={}", user.getId());
+	}
+
+	private void setSaltedPassword(User user, String password) throws ExplodingClusterFuckException {
 		String salt = passwordEncryptionService.generateSalt();
 		String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
 		user.setPassword(encryptedPassword);
 		user.setSalt(salt);
-		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
-		modelService.updateItem(user, privileged);
 	}
 
 	public void changePasswordUsingKey(String key, String password, UserSession session) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
@@ -391,6 +405,11 @@ public class SecurityService {
 	}
 	
 	
+
+	public boolean isCoreUser(User user) {
+		return SecurityService.ADMIN_USERNAME.equals(user.getUsername()) || SecurityService.PUBLIC_USERNAME.equals(user.getUsername());
+	}
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -401,8 +420,8 @@ public class SecurityService {
 		this.configurationService = configurationService;
 	}
 	
-	public void setSessionService(SessionService sessionService) {
-		this.sessionService = sessionService;
+	public void setSurveillanceService(SurveillanceService surveillanceService) {
+		this.surveillanceService = surveillanceService;
 	}
 	
 	public void setPasswordEncryptionService(PasswordEncryptionService passwordEncryptionService) {
@@ -413,18 +432,5 @@ public class SecurityService {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
 
-	public void setPassword(User user, String password) throws ExplodingClusterFuckException, SecurityException {
-		if (!user.isNew()) {
-			throw new SecurityException("Cannot set password of persistent user");
-		}
-		String salt = passwordEncryptionService.generateSalt();
-		String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
-		user.setPassword(encryptedPassword);
-		user.setSalt(salt);
-	}
-
-	public boolean isCoreUser(User user) {
-		return SecurityService.ADMIN_USERNAME.equals(user.getUsername()) || SecurityService.PUBLIC_USERNAME.equals(user.getUsername());
-	}
 
 }

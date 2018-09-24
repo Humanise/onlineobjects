@@ -118,7 +118,6 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 					return;
 				} else {
 					dk.in2isoft.onlineobjects.core.exceptions.SecurityException exception = new dk.in2isoft.onlineobjects.core.exceptions.SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getUser().getUsername()+"'");
-					exception.setLog(controller.logAccessExceptions());
 					throw exception;
 				}
 			}

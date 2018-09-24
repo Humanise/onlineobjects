@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -18,7 +20,7 @@ public class SurveillanceService {
 	private ConcurrentLinkedQueue<String> exceptions;
 	private ConcurrentLinkedQueue<LiveLogEntry> logEntries;
 	private RequestList requestsNotFound;
-
+	private final Logger auditLog = LogManager.getLogger("audit");
 
 	public SurveillanceService() {
 		longestRunningRequests = new RequestList();
@@ -79,5 +81,13 @@ public class SurveillanceService {
 	
 	public List<LiveLogEntry> getLogEntries() {
 		return Lists.newArrayList(logEntries);
+	}
+
+	public void audit(String msg) {
+		auditLog.info(msg);
+	}
+
+	public Logger audit() {
+		return auditLog;
 	}
 }

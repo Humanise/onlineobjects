@@ -14,11 +14,11 @@ import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.quartz.JobDataMap;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -49,6 +49,7 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService;
+import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.EmailService;
 import dk.in2isoft.onlineobjects.services.WebModelService;
@@ -65,6 +66,7 @@ public class MemberService {
 	private ConfigurationService configurationService;
 	private EmailService emailService;
 	private SchedulingService schedulingService;
+	private SurveillanceService surveillanceService;
 	
 	private Multimap<String,Date> agreementConfigs = HashMultimap.create();
 
@@ -117,7 +119,7 @@ public class MemberService {
 
 
 	public User signUp(UserSession session, String username, String password, String fullName, String email) throws EndUserException {
-
+		
 		User user = createMember(session, username, password, fullName, email);
 		
 		markTermsAcceptance(user, user);
@@ -130,7 +132,7 @@ public class MemberService {
 	public User createMember(Privileged creator, String username,
 			String password, String fullName, String email)
 			throws IllegalRequestException, EndUserException, ModelException {
-		log.info("Request to create user with username={}", username);
+		surveillanceService.audit().info("Request to create user with username={}", username);
 		if (creator==null) {
 			throw new IllegalRequestException("Cannot create user without a creator");
 		}
@@ -189,6 +191,7 @@ public class MemberService {
 			modelService.commit();
 			scheduleHealthCheck(user);
 			user = modelService.get(User.class, user.getId(), user);
+			surveillanceService.audit().info("New member created with username={}", username);
 			return user;
 		}
 	}
@@ -198,9 +201,17 @@ public class MemberService {
 	}
 
 	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
+		if (user==null) {
+			throw new SecurityException("Tried to delete null user");
+		}
+		surveillanceService.audit().info("Request to delete user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 		if (securityService.isCoreUser(user)) {
 			throw new SecurityException("This type of member cannot be deleted");
 		}
+		if (!securityService.canDelete(user, privileged)) {
+			throw new SecurityException("Deletion of user not allowed");
+		}
+		surveillanceService.audit().info("Starting to delete user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 		List<Entity> list = modelService.list(Query.of(Entity.class).as(user));
 		// TODO check that an item is not shared with others
 		for (Entity entity : list) {
@@ -209,6 +220,7 @@ public class MemberService {
 			}
 		}
 		modelService.deleteEntity(user, privileged);
+		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 	}
 
 	/**
@@ -222,6 +234,7 @@ public class MemberService {
 	 * @throws IllegalRequestException 
 	 */
 	public EmailAddress changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
+		surveillanceService.audit().info("Request to change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
 		email = email.trim();
 		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException(Error.invalidEmail);
@@ -248,6 +261,7 @@ public class MemberService {
 			modelService.createItem(emailAddress, privileged);
 			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, privileged);
 		}
+		surveillanceService.audit().info("Completed change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
 		return emailAddress;
 	}
 	
@@ -438,8 +452,12 @@ public class MemberService {
 	}
 
 	public void sendEmailConfirmation(User user, Privileged privileged) throws EndUserException {
-		Person person = getUsersPerson(user, privileged);
+		surveillanceService.audit().info("Request to send email confirmation to user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
+		if (email==null) {
+			throw new IllegalRequestException("Tried sending email confirmation to user ("+user.getUsername()+") with no primary e-mail");
+		}
+		String name = getFullName(user, privileged);
 		String random = Strings.generateRandomString(30);
 		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, random);
 		modelService.updateItem(email, user);
@@ -452,20 +470,30 @@ public class MemberService {
 		url.append("&email=").append(email.getAddress());
 
 		Map<String,Object> parms = new HashMap<>();
-		parms.put("name", person.getFullName());
+		parms.put("name", name);
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailconfirmation-template.html", parms);
 		
-		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),person.getName());
+		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),name);
 		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME, new Date());
+		surveillanceService.audit().info("Did send email confirmation to user={} via mail={}", user.getUsername(), email.getAddress());
+	}
+
+	private String getFullName(User user, Privileged privileged) throws ModelException {
+		Person person = getUsersPerson(user, privileged);
+		String name = user.getUsername();
+		if (person != null && Strings.isNotBlank(person.getFullName())) {
+			name = person.getFullName();
+		}
+		return name;
 	}
 
 	public void sendEmailChangeRequest(User user, String newEmail, Privileged privileged) throws EndUserException {
+		surveillanceService.audit().info("Request to send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, privileged.getIdentity());
 		if (!isWellFormedEmail(newEmail)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
-		Person person = getUsersPerson(user, privileged);
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
 		if (email!=null && newEmail.equals(email.getAddress())) {
 			throw new IllegalRequestException(Error.emailSameAsCurrent);
@@ -484,13 +512,14 @@ public class MemberService {
 		url.append(key);
 
 		Map<String,Object> parms = new HashMap<>();
-		String fullName = person!=null ? person.getFullName() : user.getUsername();
+		String fullName = getFullName(user, privileged);
 		parms.put("name", fullName);
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
 		
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail, fullName);
+		surveillanceService.audit().info("Did send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, privileged.getIdentity());
 	}
 
 	public User performEmailChangeByKey(String key) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
@@ -514,6 +543,7 @@ public class MemberService {
 		}
 		EmailAddress emailAddress = changePrimaryEmail(user, email, admin);
 		markCondifirmed(emailAddress, user);
+		surveillanceService.audit().info("Changed email for user={} to email={} via key", user.getUsername(), email);
 		return user;
 	}
 
@@ -542,11 +572,13 @@ public class MemberService {
 		Privileged admin = securityService.getAdminPrivileged();
 		email.overrideFirstProperty(Property.KEY_CONFIRMATION_TIME, new Date());
 		modelService.updateItem(email, admin);
+		surveillanceService.audit().info("Marked email={} confirmed for privileged={}", email, privileged.getIdentity());
 	}
 
 	public void markTermsAcceptance(User user, Privileged privileged) throws SecurityException, ModelException {
 		user.overrideFirstProperty(Property.KEY_TERMS_ACCEPTANCE_TIME, new Date());
 		modelService.updateItem(user, privileged);
+		surveillanceService.audit().info("Marked terms accepted for user={}", user.getUsername());
 	}
 
 	public boolean hasAcceptedTerms(User user, Privileged privileged) throws SecurityException, ModelException, ContentNotFoundException {
@@ -640,5 +672,8 @@ public class MemberService {
 		this.schedulingService = schedulingService;
 	}
 
+	public void setSurveillanceService(SurveillanceService surveillanceService) {
+		this.surveillanceService = surveillanceService;
+	}
 
 }

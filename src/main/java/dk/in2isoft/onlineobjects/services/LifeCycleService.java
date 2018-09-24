@@ -13,12 +13,14 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.LogLevel;
 import dk.in2isoft.onlineobjects.model.LogType;
+import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 
 public class LifeCycleService implements ApplicationListener<ApplicationContextEvent> {
 
 	private static Logger log = LogManager.getLogger(LifeCycleService.class);
 	private ConsistencyService consistencyService;
 	private ModelService modelService;
+	private SurveillanceService surveillanceService;
 
 	private Date startTime;
 	
@@ -29,6 +31,7 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	@Override
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
+			surveillanceService.audit().info("Application launched");
 			log.info("The context has started!");
 			try {
 				consistencyService.check();
@@ -41,6 +44,8 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 			entry.setType(LogType.startUp);
 			modelService.create(entry);
 			modelService.commit();
+		} else {
+			surveillanceService.audit().info("Event: {}", event.getClass().getSimpleName());
 		}
 	}
 	
@@ -54,5 +59,9 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	public void setSurveillanceService(SurveillanceService surveillanceService) {
+		this.surveillanceService = surveillanceService;
 	}
 }

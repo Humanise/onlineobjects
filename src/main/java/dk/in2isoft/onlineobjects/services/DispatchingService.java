@@ -121,14 +121,10 @@ public class DispatchingService {
 		ErrorRenderer renderer = new ErrorRenderer(ex,request,configurationService, conversionService);
 		try {
 			if (ex instanceof ContentNotFoundException) {
-				log.error(ex.getMessage()+" : "+request.getRequest().getRequestURL().toString());
+				logError(request, ex);
 				surveillanceService.surveyNotFound(request);
-			} else if (ex instanceof EndUserException) {
-				if (((EndUserException) ex).isLog()) {
-					log.error(ex.toString(), ex);				
-				}
 			} else {
-				log.error(ex.toString(), ex);				
+				logError(request, ex);
 			}
 			HttpServletResponse response = request.getResponse();
 			if (ex instanceof SecurityException) {
@@ -162,10 +158,15 @@ public class DispatchingService {
 				XSLTUtil.applyXSLT(renderer, request);
 			}
 		} catch (EndUserException e) {
-			log.error(e.toString(), e);
+			logError(request, e);
 		} catch (IOException e) {
-			log.error(e.toString(), e);
+			logError(request, e);
 		}
+	}
+
+
+	private void logError(Request request, Exception ex) {
+		log.error(ex.getMessage() + " - " + request.getRequest().getRequestURL().toString(), ex);
 	}
 	
 	private static Exception findUserException(Exception ex) {

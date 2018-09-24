@@ -201,7 +201,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			}
 			ContentExtractor extractor = contentExtractors.get(settings.getExtractionAlgorithm());
 			if (extractor==null) {
-				log.warn("Unknown extrator: " + settings.getExtractionAlgorithm());
+				log.debug("Unknown extrator: " + settings.getExtractionAlgorithm());
 				extractor = new SimpleContentExtractor();
 			}
 			Document extracted = extractor.extract(xom);
