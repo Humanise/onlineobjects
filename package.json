@@ -1,6 +1,9 @@
 {
   "name": "onlineobjects",
+  "description" : "Web framework",
   "version": "1.0.0",
+  "license": "UNLICENSED",
+  "repository": "https://github.com/Humanise/editor",
   "devDependencies": {
     "grunt": "^1.0.2",
     "grunt-contrib-jshint": "^1.1.0",
