@@ -70,6 +70,12 @@
 		<property name="name" value="user-health-check"/>
 		<property name="group" value="core"/>
 	</bean>
+
+	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexJob"/>
+		<property name="name" value="index-knowledge"/>
+		<property name="group" value="core"/>
+	</bean>
 	
 
 </beans>
