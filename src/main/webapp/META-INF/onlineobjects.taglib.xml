@@ -32,6 +32,13 @@
 	</function>
 
 	<tag>
+		<tag-name>html</tag-name>
+		<component>
+			<component-type>onlineobjects.html</component-type>
+			<renderer-type>onlineobjects.html</renderer-type>
+		</component>
+	</tag>
+	<tag>
 		<tag-name>body</tag-name>
 		<component>
 			<component-type>onlineobjects.body</component-type>

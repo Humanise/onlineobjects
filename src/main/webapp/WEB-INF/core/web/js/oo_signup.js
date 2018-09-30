@@ -89,7 +89,7 @@
 
       hui.ui.msg({text:'Signing up...',busy:true});
       hui.ui.request({
-        url : oo.baseContext+'/service/authentication/signup',
+        url : '/service/authentication/signup',
         parameters : {
           email: values.email,
           username: values.username,

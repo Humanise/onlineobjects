@@ -43,6 +43,8 @@ public class AccountSettingsView extends AbstractManagedBean {
 	private String emailConfirmationDate;
 
 	private Date agreementAcceptanceTime;
+
+	private String fullName;
 	
 	public void before(Request request) throws Exception {
 		Messages msg = new Messages(AccountController.class);
@@ -56,6 +58,12 @@ public class AccountSettingsView extends AbstractManagedBean {
 		Locale locale = request.getLocale();
 		allowed = true;
 		person = modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, user);
+		if (person!=null && Strings.isNotBlank(person.getFullName())) {
+			fullName = person.getFullName();
+		} else {
+			fullName = msg.get("no_name", locale);
+		}
+		
 		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, user);
 		Date emailConfirmationTime = null;
 		if (email!=null) {
@@ -86,7 +94,7 @@ public class AccountSettingsView extends AbstractManagedBean {
 	}
 
 	public String getFullName() {
-		return person == null || Strings.isBlank(person.getFullName()) ? "None" : person.getFullName();
+		return fullName;
 	}
 
 	public String getFirstName() {

@@ -15,6 +15,11 @@ public class EndUserException extends Exception {
 		this.code = code;
 	}
 
+	public EndUserException(Error error, Throwable e) {
+		super(error.name(), e);
+		this.code = error.name();
+	}
+
 	public EndUserException(Error error) {
 		super(error.name());
 		this.code = error.name();

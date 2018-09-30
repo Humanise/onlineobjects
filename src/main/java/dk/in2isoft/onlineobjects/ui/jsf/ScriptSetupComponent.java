@@ -37,12 +37,7 @@ public class ScriptSetupComponent extends AbstractComponent {
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startScript().newLine();
 		Request request = Components.getRequest();
-		writer.write("window.oo = window.oo || {};").newLine();
-		writer.write("oo.baseContext = '").write(request.getBaseContext()).write("';").newLine();
-		writer.write("oo.baseDomainContext = '").write(request.getBaseDomainContext()).write("';").newLine();
-		writer.write("oo.appContext = '").write(request.getLocalContext()).write("';").newLine();
-		writer.write("oo.domainIsIp = '").write(request.isIP()).write("';").newLine();
-		writer.write("oo.session = '").write(request.getSession().getId()).write("';").newLine();
+		writer.write("window.oo = window.oo || {};").newLine();
 		String username = SecurityService.PUBLIC_USERNAME;
 		UserSession session = request.getSession();
 		if (session!=null) {

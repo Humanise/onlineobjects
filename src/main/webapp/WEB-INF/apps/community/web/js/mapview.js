@@ -35,7 +35,7 @@ oo.community.MapView = {
 			map: this.map,
 			draggable : true,
 			icon:new google.maps.MarkerImage(
-				oo.appContext+'/gfx/maps/pin_red.png',
+				'/gfx/maps/pin_red.png',
 				new google.maps.Size(18, 44),new google.maps.Point(0,0),new google.maps.Point(8,40)
 			)
 		});
@@ -59,7 +59,7 @@ oo.community.MapView = {
 			var ol = new Element('ol');
 			list.each(function(item) {
 				var li = new Element('li');
-				li.update('<img src="http://'+oo.baseDomainContext+'/service/image/id'+item.value.id+'width40height40cropped.jpg"/><strong>'+item.value.name+'</strong>')
+				li.update('<img src="/service/image/id'+item.value.id+'width40height40cropped.jpg"/><strong>'+item.value.name+'</strong>')
 				li.observe('click',function() {self.showMarker(item)});
 				ol.insert(li);
 			});
@@ -96,11 +96,11 @@ oo.community.MapView = {
 					map: this.map,
 					title:pos.name,
 					icon:new google.maps.MarkerImage(
-						oo.baseContext+'/service/image/id'+img.id+'width30height30cropped.jpg',
+						'/service/image/id'+img.id+'width30height30cropped.jpg',
 						new google.maps.Size(30, 30),new google.maps.Point(0,0),new google.maps.Point(15,49)
 					),
 					shadow:new google.maps.MarkerImage(
-						oo.appContext+'/gfx/maps/image_frame.png',
+						'/gfx/maps/image_frame.png',
 						new google.maps.Size(36, 52),new google.maps.Point(0, 0),new google.maps.Point(18, 52)
 					)
 				});

@@ -66,7 +66,7 @@ oo.WordFinder.prototype = {
       return;
     }
     hui.ui.request({
-      url : oo.baseContext+'/service/model/addWord',
+      url : '/service/model/addWord',
       parameters : values,
       $object : this._found.bind(this),
       $failure : function() {

@@ -183,7 +183,7 @@ oo.Gallery.prototype = {
       var v = this.imageViewer = oo.PhotoViewer.create();
       v.listen({
         $resolveImageUrl : function(image,width,height) {
-          return oo.baseContext+'/service/image/id'+image.id+'width'+Math.round(width)+'height'+Math.round(height)+'.jpg';
+          return '/service/image/id'+image.id+'width'+Math.round(width)+'height'+Math.round(height)+'.jpg';
         }
       });
       v.setImages(this.images);
@@ -208,7 +208,7 @@ oo.Gallery.prototype = {
         indicator.destroy();
         span.className='oo_gallery_photo';
         span.innerHTML = '<a><img src="'+
-          oo.baseContext+'/service/image/id'+image.id+
+          '/service/image/id'+image.id+
           'width'+width+'height'+height+
           'sharpen1.0cropped.jpg" style="width:'+width+'px;height:'+height+'px;"/></a>';
       },

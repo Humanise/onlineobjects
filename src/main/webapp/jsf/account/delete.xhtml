@@ -15,16 +15,30 @@
 
     <ui:define name="body">
       <o:box>
-        <o:header>Deletion of account</o:header>
+        <o:header>${msg.account_deletion}</o:header>
         <oc:text styleClass="oo_space_top-2 oo_space_bottom-2">
-          <p>By deleting your account you agree to the following...</p>
-          <ul>
-            <li>You will not be able to get back the data stored in the system</li>
-            <li>Your username will be available to others</li>
-            <li>Some technical data will remain in the system but will be anonymized</li>
-            <li>Your data may be stored on backups for some time</li>
-          </ul>
-          <p>Please confirm this by providing your username and password...</p>
+          <c:choose>
+          <c:when test="${accountSettingsView.language=='da'}">
+            <p>Ved at slette din konto erklærer du dig enig i følgende...</p>
+            <ul>
+              <li>Du vil ikke kunne få fat i information gemt i systemet</li>
+              <li>Dit brugernavn vil kunne anvendes af andre</li>
+              <li>Nogle data kan forblive i systemet i en anonymiseret form</li>
+              <li>Dine data kan være gemt i backups i et stykke tid</li>
+            </ul>
+            <p>Vær venlig at bekræfte dette ved at angive dit brugernavn og kodeord...</p>
+          </c:when>
+          <c:otherwise>
+            <p>By deleting your account you agree to the following...</p>
+            <ul>
+              <li>You will not be able to get back the data stored in the system</li>
+              <li>Your username will be available to others</li>
+              <li>Some technical data will remain in the system but will be anonymized</li>
+              <li>Your data may be stored on backups for some time</li>
+            </ul>
+            <p>Please confirm this by providing your username and password...</p>
+          </c:otherwise>
+        </c:choose>
         </oc:text>
         <gui:formula name="confirmationForm">
           <gui:field label="#{msg.username}">
@@ -35,7 +49,7 @@
           </gui:field>
           <gui:buttons>
             <gui:button text="#{msg.cancel}" href="/${accountSettingsView.language}/" highlighted="true" variant="light"/>
-            <gui:button text="Yes, I want to delete my account" variant="light" submit="true"/>
+            <gui:button text="#{msg.yes_delete_account}" variant="light" submit="true"/>
           </gui:buttons>
         </gui:formula>
       </o:box>

@@ -63,11 +63,12 @@ public class FooterComponent extends AbstractComponent {
 				}
 			}
 		}
+		Locale locale = request.getLocale();
 		String agreementsUrl = configurationService.getApplicationContext(AccountController.MOUNT, "agreements", request);
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
-		writer.startVoidA("oo_link js-signup").withTestName("footerSignup").startSpan().text("Sign up").endSpan().endA();
+		writer.startVoidA("oo_link js-signup").withTestName("footerSignup").startSpan().text(msg.get("sign_up", locale)).endSpan().endA();
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
-		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text("Terms and privacy policy").endSpan().endA();
+		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text(msg.get("terms", locale)).endSpan().endA();
 		writer.endP();
 		writer.startP("oo_footer_logo").startA().withHref("http://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();

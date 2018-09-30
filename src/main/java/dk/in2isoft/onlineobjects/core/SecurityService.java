@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -113,14 +114,14 @@ public class SecurityService {
 	public void changePassword(String username, String existingPassword,String newPassword, Privileged privileged) throws SecurityException, ModelException, IllegalRequestException, ExplodingClusterFuckException {
 		User user = getUser(username, existingPassword);
 		if (user==null) {
-			throw new IllegalRequestException("The user with username: "+username+" was not found");
+			throw new IllegalRequestException(Error.incorrectCurrentPassword);
 		}
 		changePassword(user, newPassword, privileged);
 	}
 
 	private void changePassword(User user, String password, Privileged privileged) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
 		if (!ValidationUtil.isValidPassword(password)) {
-			throw new IllegalRequestException("The password is not valid");
+			throw new IllegalRequestException(Error.invalidNewPassword);
 		}
 		setSaltedPassword(user, password);
 		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);

@@ -12,7 +12,7 @@ hui.ui.listen({
       return;
     }
     this.busy = true;
-    hui.ui.msg({busy: true, text: 'Deleting account...'})
+    hui.ui.msg({busy: true, text: {da:'Sletter konto...',en:'Deleting account...'}})
     hui.ui.request({
       url : '/deleteAccount',
       parameters : {
@@ -22,8 +22,10 @@ hui.ui.listen({
       $success : function(response) {
         document.location.reload();
       },
-      $failure : function() {
-        hui.ui.msg.fail({text:'It failed!'});
+      $failure : function(t) {
+        var obj = hui.string.fromJSON(t.responseText);
+        var msg = obj ? obj.message : {da:'Der skete en uventet fejl',en:'An unexpected error occured'};
+        hui.ui.msg.fail({text: msg});
       },
       $finally : function() {
         this.busy = false;

@@ -13,7 +13,7 @@ oo.buildThumbnail = function(options) {
     hui.cls.add(t,'oo_thumbnail_'+options.variant);
   }
   if (options.image) {
-    var img = hui.build('img',{'src':oo.baseContext+'/service/image/id'+options.image.id+'width'+width+'height'+height+'.jpg'});
+    var img = hui.build('img',{'src':'/service/image/id'+options.image.id+'width'+width+'height'+height+'.jpg'});
     t.appendChild(img);
     if (options.zoom) {
       hui.cls.add(t,'oo_thumbnail_zoom');
@@ -142,7 +142,7 @@ oo.getViewer = function() {
     var v = this.imageViewer = hui.ui.ImageViewer.create();
     v.listen({
       $resolveImageUrl : function(image,width,height) {
-        return oo.baseContext+'/service/image/?id='+image.id+'&width='+width+'&height='+height;
+        return '/service/image/?id='+image.id+'&width='+width+'&height='+height;
       }
     });
   }
@@ -162,7 +162,7 @@ oo.signUp = function() {
   if (this._signUpLoading) return;
   this._signUpLoading = true;
   hui.build('script',{
-    'src': oo.baseContext + '/core/js/oo_signup.js',
+    'src': '/core/js/oo_signup.js',
     parent: document.head
   });
 }

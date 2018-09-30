@@ -58,7 +58,7 @@ var galleryView = {
   _addFile : function(file,index) {
     var item = hui.ui.get('gallery').addIncoming();
     hui.ui.request({
-      url : oo.appContext+'/uploadToGallery',
+      url : '/uploadToGallery',
       parameters : {galleryId : this.galleryId, index : index},
       file : file,
       $object : function(images) {
@@ -97,7 +97,7 @@ var galleryView = {
 
   $remove$gallery : function(info) {
     hui.ui.request({
-      url : oo.appContext+'/removeImageFromGallery',
+      url : '/removeImageFromGallery',
       parameters : {galleryId : this.galleryId, imageId : info.id},
       $finally : function() {
         info.callback();
@@ -107,7 +107,7 @@ var galleryView = {
 
   $move$gallery : function(info) {
     hui.ui.request({
-      url : oo.appContext+'/changeGallerySequence',
+      url : '/changeGallerySequence',
       json : {info:{galleryId : this.galleryId, images : info.images}},
       $failure : function() {
         hui.ui.msg.fail({text:'Unable to change image sequence'});
@@ -121,7 +121,7 @@ var galleryView = {
   _removeImage : function(imageId) {
     hui.ui.request({
       message : {start:{en:'Removing image','da':'Fjerner billede'}, delay:300, success:{en:'The image is removed',da:'Billedet er fjernet'}},
-      url : oo.appContext+'/removeImageFromGallery',
+      url : '/removeImageFromGallery',
       parameters : {galleryId : this.galleryId, imageId : imageId},
       $success : function() {
         this._refreshImages();
@@ -132,10 +132,10 @@ var galleryView = {
   $click$deleteGallery : function(button) {
     hui.ui.confirmOverlay({widget:button,text:'Delete gallery?',$ok : function() {
       hui.ui.request({
-        url : oo.appContext+'/deleteGallery',
+        url : '/deleteGallery',
         parameters : {id : this.galleryId},
         $success : function() {
-          document.location = oo.appContext+'/'+oo.language+'/users/'+this.username;
+          document.location = '/'+oo.language+'/users/'+this.username;
         }.bind(this),
         $failure : function() {
           hui.ui.showMessage({text:'Unable to delete gallery',icon:'common/warning',duration:2000});
@@ -146,7 +146,7 @@ var galleryView = {
   $valueChanged$titleEditor : function(value) {
     hui.ui.request({
       message : {start:{en:'Changing title','da':'Ændrer titel'}, delay:300, success:{en:'The title is changed',da:'Titlen er ændret'}},
-      url : oo.appContext+'/updateGalleryTitle',
+      url : '/updateGalleryTitle',
       parameters : {id:this.galleryId,title:value},
       $failure : function() {
         hui.ui.showMessage({text:{en:'Unable to change title',da:'Kunne ikke ændre titlen'},icon:'common/warning',duration:2000});
@@ -161,7 +161,7 @@ var galleryView = {
   },
   $add$imageFinder : function(items) {
     hui.ui.request({
-      url : oo.appContext+'/addImagesToGallery',
+      url : '/addImagesToGallery',
       json : {
         'info' : {galleryId : this.galleryId, images : items}
       },

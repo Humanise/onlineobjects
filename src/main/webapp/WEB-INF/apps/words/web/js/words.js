@@ -13,10 +13,10 @@ hui.ui.listen({
   },
   _dropFiles : function(files) {
     var win = hui.ui.Window.create({width:300});
-    var upload = hui.ui.Upload.create({url:oo.appContext+'/upload'});
+    var upload = hui.ui.Upload.create({url:'/upload'});
     upload.listen({
       $uploadDidComplete : function(info) {
-        document.location=oo.appContext+'/en/import/'+info.request.responseText+'/';
+        document.location='/en/import/'+info.request.responseText+'/';
       }
     })
     win.add(upload);
@@ -24,7 +24,7 @@ hui.ui.listen({
     upload.uploadFiles(files);
   },
   $click$enrich : function() {
-    document.location=oo.appContext+'/'+oo.language+'/enrich/';
+    document.location='/'+oo.language+'/enrich/';
   },
   $click$import : function() {
     hui.ui.get('importWindow').show();
@@ -45,7 +45,7 @@ hui.ui.listen({
   },
 
   $uploadDidComplete$importUpload : function(info) {
-    document.location = oo.appContext+'/en/importlist/'+info.request.responseText+'/';
+    document.location = '/en/importlist/'+info.request.responseText+'/';
   },
 
   $submit$importFormula : function(form) {
@@ -60,12 +60,12 @@ hui.ui.listen({
 
     hui.ui.showMessage({text:'Fetching data...',busy:true});
     hui.ui.request({
-      url : oo.appContext+'/startImport',
+      url : '/startImport',
       parameters : {url:url},
       $object : function(id) {
         hui.ui.showMessage({text:'Complete, redirecting...'});
         hui.defer(function() {
-          document.location = oo.appContext+'/en/import/'+id+'/';
+          document.location = '/en/import/'+id+'/';
         })
       },
       $failure : function() {
@@ -75,7 +75,7 @@ hui.ui.listen({
   },
 
   $submit$wordsSidebarSearch : function(field) {
-    var url = oo.appContext+'/'+oo.language+'/search/?text='+field.getValue();
+    var url = '/'+oo.language+'/search/?text='+field.getValue();
     document.location = url;
   }
 })

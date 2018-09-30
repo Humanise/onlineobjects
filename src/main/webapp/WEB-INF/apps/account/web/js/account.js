@@ -1,23 +1,33 @@
-var accountView = {
+hui.ui.listen({
+
+  msg : {
+    sending_confirm: {en:'Sending confirmation request...', da:'Sender godkendelses-anmodning...'},
+    check_inbox: {en:'Please check your inbox', da:'Se venligst i din indbakke'},
+    unexpected_error: {en:'An unexpected error occured', da:'Der skete en uventet fejl'},
+    password_changed: {en:'Your password is changed', da:'Dit kodeord er nu ændret'}
+  },
+  _getError : function(t) {
+    var obj = hui.string.fromJSON(t.responseText);
+    return obj ? obj.message : this.msg.unexpected_error;
+  },
 
   // E-mail...
 
   $submit$mailForm : function() {
     var values = hui.ui.get('mailForm').getValues();
     hui.ui.request({
-      url : oo.baseContext+'/changePrimaryEmail',
+      url : '/changePrimaryEmail',
       parameters : {email:values.mail},
       message : {
-        start: 'Sending confirmation...',
-        success: 'Check your inbox'
+        start: this.msg.sending_confirm,
+        success: this.msg.check_inbox
       },
       $success : function() {
         hui.ui.get('emailPages').next();
       },
       $failure : function(t) {
-        var obj = hui.string.fromJSON(t.responseText);
-        hui.ui.msg({text:obj ? obj.message : 'Something bad happened',icon:'common/warning',duration:3000});
-      }
+        hui.ui.msg.fail({text: this._getError(t)});
+      }.bind(this)
     })
   },
   $click$cancelChangeEmail : function() {
@@ -29,16 +39,17 @@ var accountView = {
       hui.ui.get('mailForm').focus();
     },200)
   },
+
   $click$confirmEmail : function() {
     hui.ui.request({
-      url : oo.baseContext+'/confirmEmail',
+      url : '/confirmEmail',
       message : {
-        start: 'Sending confirmation...',
-        success: 'Check your inbox'
+        start: this.msg.sending_confirm,
+        success: this.msg.check_inbox
       },
-      $failure : function() {
-        hui.ui.msg.fail({text:'Unable to send mail'})
-      }
+      $failure : function(t) {
+        hui.ui.msg.fail({text: this._getError(t)});
+      }.bind(this)
     })
   },
 
@@ -56,7 +67,7 @@ var accountView = {
   $submit$nameForm : function() {
     var values = hui.ui.get('nameForm').getValues();
     hui.ui.request({
-      url : oo.baseContext+'/changeName',
+      url : '/changeName',
       parameters : {
         first: values.first,
         middle: values.middle,
@@ -65,9 +76,9 @@ var accountView = {
       $success : function() {
         document.location.reload();
       },
-      $failure : function() {
-        hui.ui.msg.fail({text:'Unable to change name'})
-      }
+      $failure : function(t) {
+        hui.ui.msg.fail({text: this._getError(t)});
+      }.bind(this)
     })
   },
 
@@ -87,21 +98,19 @@ var accountView = {
   $submit$passwordForm : function(form) {
     var values = form.getValues();
     hui.ui.request({
-      url : oo.baseContext+'/changePassword',
+      url : '/changePassword',
       parameters : {
         currentPassword : values.currentPassword,
         newPassword : values.newPassword
       },
       $success : function() {
-        hui.ui.msg({text:'Your password is changed',icon:'common/success',duration:3000});
+        hui.ui.msg.success({text:this.msg.password_changed});
         form.reset();
-      },
-      $failure : function(e) {
-        hui.log(e);
-        hui.ui.msg({text:'Unable to change password',icon:'common/warning',duration:3000});
+      }.bind(this),
+      $failure : function(t) {
+        hui.ui.msg.fail({text: this._getError(t)});
         form.focus();
-      }
+      }.bind(this)
     })
   },
-};
-hui.ui.listen(accountView);
+});

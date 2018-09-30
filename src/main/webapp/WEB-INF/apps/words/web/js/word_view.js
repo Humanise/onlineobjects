@@ -32,7 +32,7 @@ var wordView = window.wordView = {
 					e.stop();
 					this.activeRelationUrl = relation.href;
 					hui.ui.request({
-						url : oo.appContext+'/getRelationInfo',
+						url : '/getRelationInfo',
 						parameters : {
 							relationId : relation.getAttribute('data-relation'),
 							wordId : relation.getAttribute('data-word'),
@@ -76,7 +76,7 @@ var wordView = window.wordView = {
 				hui.ui.showMessage({text:{en:'Deleting relation',da:'Sletter relation'},busy:true,delay:300});
 
 				hui.ui.request({
-					url : oo.appContext+'/deleteRelation',
+					url : '/deleteRelation',
 					parameters : { relationId : relationId },
 					$success : function(id) {
 						this._update({en:'The relation is now deleted',da:'relationen er nu slettet'});
@@ -124,7 +124,7 @@ var wordView = window.wordView = {
 	_createRelation : function(from,kind,to) {
 		hui.ui.showMessage({text:{en:'Adding relation...',da:'Tilføjer relation...'},busy:true,delay:300});
 		hui.ui.request({
-			url : oo.appContext+'/relateWords',
+			url : '/relateWords',
 			parameters : { parentId : from, kind : kind, childId : to },
 			$success : function() {
 				this._update({text:'The relation is created'});
@@ -138,7 +138,7 @@ var wordView = window.wordView = {
 	$added$diagram : function() {
 		var diagram = hui.ui.get('diagram');
 		hui.ui.request({
-			url : oo.appContext+'/diagram.json',
+			url : '/diagram.json',
 			parameters : {word:this.getText()},
 			$object : function(data) {
 				diagram.$objectsLoaded(data);				
@@ -174,7 +174,7 @@ var wordView = window.wordView = {
 		hui.ui.showMessage({text:{en:'Adding variant...',da:'Tilføjer variant...'},busy:true,delay:300});
 		
 		hui.ui.request({
-			url : oo.appContext+'/createWord',
+			url : '/createWord',
 			parameters : {
         language : values.language,
         category : values.category, 
@@ -207,7 +207,7 @@ var wordView = window.wordView = {
 	_changeLanguage : function(language) {
 		hui.ui.showMessage({text:'Changing language...',busy:true});
 		hui.ui.request({
-			url : oo.appContext+'/changeLanguage',
+			url : '/changeLanguage',
 			parameters : { wordId : this.wordInfo.id , language : language },
 			$success : function() {
 				this._update({text:'The language is now changed'});
@@ -236,7 +236,7 @@ var wordView = window.wordView = {
 	_changeCategory : function(category) {
 		hui.ui.showMessage({text:'Changing category...',busy:true});
 		hui.ui.request({
-			url : oo.appContext+'/changeCategory',
+			url : '/changeCategory',
 			parameters : { wordId : this.wordInfo.id , category : category },
 			$success : function(id) {
 				this._update({text:'The category is now changed'});
@@ -256,7 +256,7 @@ var wordView = window.wordView = {
 			$ok : function() {
 				hui.ui.showMessage({text:{en:'Deleting word',da:'Sletter ord'},busy:true,delay:300});
 				hui.ui.request({
-					url : oo.appContext+'/deleteWord',
+					url : '/deleteWord',
 					parameters : { wordId : info.id },
 					$success : function(id) {
 						this._update({text:{en:'The word is now deleted',da:'Ordet er nu slettet'}});

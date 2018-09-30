@@ -22,7 +22,7 @@ var passwordView = {
       return;
     }
     hui.ui.request({
-      url : oo.baseContext+'/changePasswordUsingKey',
+      url : '/changePasswordUsingKey',
       parameters : {
         key : this.key,
         password : values.password
@@ -31,7 +31,7 @@ var passwordView = {
         hui.ui.msg.success({text:{da:'Din kode er ændret',en:'Your password is changed'}});
         form.reset();
         setTimeout(function() {
-          document.location = oo.baseContext+'/';
+          document.location = '/';
         },1000);
       },
       $failure : function(a,b) {

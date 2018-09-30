@@ -100,6 +100,9 @@
               <gui:button name="changePassword" text="#{msg.change_password}" variant="light"></gui:button>
             </gui:page>
             <gui:page>
+              <oc:text small="true" styleClass="oo_space_bottom">
+                <p>${msg.password_change_info}</p>
+              </oc:text>
               <gui:formula name="passwordForm">
                 <gui:field label="#{msg.current_password}">
                   <gui:textInput key="currentPassword" secret="true"/>

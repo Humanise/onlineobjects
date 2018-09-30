@@ -21,7 +21,7 @@ var importListView = {
       sessionId : this.sessionId
     }
     hui.ui.request({
-      url : oo.appContext + '/performImport',
+      url : '/performImport',
       json : {data:data},
       $object : function(log) {
         hui.get('log').value = log;
