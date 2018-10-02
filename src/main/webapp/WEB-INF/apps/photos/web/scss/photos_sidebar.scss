@@ -1,104 +1,110 @@
-div.photos_sidebar_profile
-{
-	padding: 5px 10px 5px;
+@import '../../../../core/web/scss/shared';
+
+
+.photos_sidebar {
+
+  &_profile {
+    padding: 5px 10px 5px;
+
+    &_image {
+      float: left;
+    }
+
+    &_body {
+      margin-left: 60px;
+    }
+
+    &_name {
+      margin: 0 0 3px;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 14px;
+      font-weight: 400;
+    }
+
+    &_user {
+      margin: 0;
+      font-size: 0;
+
+      span {
+        color: #aaa;
+        margin-right: 3px;  
+      }
+
+      strong {
+        display: inline-block;
+        vertical-align: middle;
+        font-weight: 400;
+        font-size: 9pt;
+        color: #999;
+      }
+    }
+
+    &_link {
+      margin: 5px 0;
+      font-size: 12px;  
+    }
+  }
+  
 }
 
-div.photos_sidebar_profile_image
-{
-	float: left;
-}
 
-div.photos_sidebar_profile_body
-{
-	margin-left: 60px;
-}
 
-p.photos_sidebar_profile_name
-{
-	margin: 0 0 3px;
-	font-size: 16px;
-	font-weight: 500;
-	line-height: 14px;
-	font-weight: 400;
-}
 
-p.photos_sidebar_profile_user
-{
-	margin: 0;
-	font-size: 0;
-}
 
-p.photos_sidebar_profile_user span
-{
-	color: #aaa;
-	margin-right: 3px;	
-}
 
-p.photos_sidebar_profile_user strong
-{
-	display: inline-block;
-	vertical-align: middle;
-	font-weight: 400;
-	font-size: 9pt;
-	color: #999;
-}
 
-p.photos_sidebar_profile_link
-{
-	margin: 5px 0;
-	font-size: 12px;	
-}
 
 .photos_sidebar_title
 {
-	border-bottom: 1px solid #eee;
-	margin: 20px -5px 10px;
-	position: relative;
+  border-bottom: 1px solid #eee;
+  margin: 20px -5px 10px;
+  position: relative;
 }
 
 .photos_sidebar_title_text
 {
-	position: absolute;
-	background: #fff;
-	margin: 0;
-	font-size: 12px;
-	line-height: 1;
-	margin-top: -6px;
-	padding: 0 4px;
-	margin-left: 16px;
-	font-weight: normal;
-	color: #999;
+  position: absolute;
+  background: #fff;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1;
+  margin-top: -8px;
+  padding: 0 4px;
+  margin-left: 20px;
+  font-weight: normal;
+  color: #999;
 }
 
 div.photos_sidebar_galleries
 {
-	border-top: 1px solid #eee;
-	padding: 10px 5px;
-	margin: 5px;
+  border-top: 1px solid #eee;
+  padding: 10px 5px;
+  margin: 5px;
 }
 
 .photos_sidebar_title_action
 {
-	position: absolute;
-	right: 5px;
-	top: -11px;
-	color: #ddd;
-	font-size: 0;
-	background: #fff;
-	padding: 3px;
+  position: absolute;
+  right: 5px;
+  top: -11px;
+  color: #ddd;
+  font-size: 0;
+  background: #fff;
+  padding: 3px;
 }
 
 div.photos_sidebar_galleries h2 a:hover
 {
-	color: #333;
+  color: #333;
 }
 
 div.photos_sidebar_galleries ul
 {
-	list-style: none;
-	margin: 0;
-	padding: 0px;
-	font-size: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0px;
+  font-size: 14px;
 }
 
 div.photos_sidebar_galleries li
@@ -107,57 +113,57 @@ div.photos_sidebar_galleries li
 
 div.photos_sidebar_galleries ul a
 {
-	text-decoration: none;
-	color: #333;
-	display: block;
-	padding: 2px 0;
+  text-decoration: none;
+  color: #333;
+  display: block;
+  padding: 2px 0;
 }
 
 div.photos_sidebar_galleries ul a:hover,
 div.photos_sidebar_galleries ul a:hover span.oo_icon
 {
-	color: #000;
+  color: #000;
 }
 
 div.photos_sidebar_galleries ul a:focus
 {
-	text-shadow: #3366ff 0px 0px 2px;
-	color: #002244;
-	outline: none;
+  text-shadow: #3366ff 0px 0px 2px;
+  color: #002244;
+  outline: none;
 }
 
 div.photos_sidebar_galleries ul a span.oo_icon
 {
-	color: #ccc;
-	margin-right: 4px;
-	font-weight: normal;
-	margin-top: -1px;
+  color: #ccc;
+  margin-right: 4px;
+  font-weight: normal;
+  margin-top: -1px;
 }
 
 a.photos_sidebar_selected
 {
-	font-weight: bold;
-	color: #000;
+  font-weight: bold;
+  color: #000;
 }
 
 div.photos_sidebar_galleries a.photos_sidebar_selected span.oo_icon
 {
-	color: #333;
+  color: #333;
 }
 
 .photos_sidebar_cloud
 {
-	text-align: center;
-	font-size: 14px;
-	padding: 0 10px 20px;
+  text-align: center;
+  font-size: 14px;
+  padding: 0 10px 20px;
 }
 
 .photos_sidebar_cloud > a
 {
-	display: inline-block;
-	vertical-align: middle;
-	line-height: 1;
-	text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  text-decoration: none;
 }
 
 .photos_sidebar_cloud_0 { font-size: 1em; color: #aaa;}
