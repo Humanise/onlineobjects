@@ -12,14 +12,14 @@
     <ui:define name="title">#{photosGalleryView.title} - </ui:define>
 
     <ui:define name="body">
-      <o:dependency src="/WEB-INF/apps/photos/web/style/css/photos_sidebar.css"/>
-      <o:dependency src="/WEB-INF/apps/photos/web/style/css/photos_gallery.css"/>
+      <o:dependency src="/WEB-INF/apps/photos/web/css/photos_sidebar.css"/>
+      <o:dependency src="/WEB-INF/apps/photos/web/css/photos_gallery.css"/>
       <o:dependency src="/WEB-INF/core/web/css/oo_photoviewer.css"/>
 
       <o:dependency src="/WEB-INF/core/web/js/oo_inlineeditor.js"/>
       <o:dependency src="/WEB-INF/core/web/js/oo_photoviewer.js"/>
       <o:dependency src="/hui/js/hui_preloader.js"/>
-      <o:dependency src="/WEB-INF/apps/photos/web/style/js/gallery_view.js"/>
+      <o:dependency src="/WEB-INF/apps/photos/web/js/gallery_view.js"/>
 
       <div class="photos_gallery js-gallery" data-id="#{photosGalleryView.imageGallery.id}" data-username="#{photosGalleryView.username}" data-editable="#{photosGalleryView.modifiable}">
         <o:header id="editableTitle">#{photosGalleryView.title}</o:header>

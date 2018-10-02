@@ -77,7 +77,6 @@
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/model.xml" file="${basedir}/src/main/resources/model.xml" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/applicationContext.xml" file="${basedir}/src/main/resources/applicationContext.xml" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/configuration.properties" file="${basedir}/src/main/resources/configuration.properties.deployed" overwrite="true"/>
-		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/log4j.properties" file="${basedir}/src/main/resources/log4j.properties.deployed" overwrite="true" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/hibernate.cfg.xml" file="${basedir}/src/main/resources/hibernate.cfg.xml.deployed" overwrite="true" />
 		<copy tofile="${dest}/OnlineObjects/onlineobjects/WEB-INF/classes/onlineobjects.cfg.xml" file="${basedir}/src/main/resources/onlineobjects.cfg.xml.deployed" overwrite="true" />
     <delete dir="${dest}/OnlineObjects_temp" />

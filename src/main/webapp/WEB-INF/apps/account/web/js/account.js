@@ -35,9 +35,7 @@ hui.ui.listen({
   },
   $click$changeEmail : function() {
     hui.ui.get('emailPages').next();
-    setTimeout(function() {
-      hui.ui.get('mailForm').focus();
-    },200)
+    hui.ui.get('mailForm').focus();
   },
 
   $click$confirmEmail : function() {
@@ -57,9 +55,7 @@ hui.ui.listen({
 
   $click$changeName : function() {
     hui.ui.get('namePages').next();
-    setTimeout(function() {
-      hui.ui.get('nameForm').focus();
-    },200)
+    hui.ui.get('nameForm').focus();
   },
   $click$cancelChangeName : function() {
     hui.ui.get('namePages').next();
@@ -86,9 +82,7 @@ hui.ui.listen({
 
   $click$changePassword : function() {
     hui.ui.get('passwordPages').next();
-    setTimeout(function() {
-      hui.ui.get('passwordForm').focus();
-    },200)
+    hui.ui.get('passwordForm').focus();
   },
 
   $click$cancelPassword : function() {
