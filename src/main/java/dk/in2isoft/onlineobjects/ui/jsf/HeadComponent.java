@@ -50,6 +50,15 @@ public class HeadComponent extends AbstractComponent {
 		out.startElement("head");
 		out.startElement("meta").withAttribute("http-equiv", "Content-Type").withAttribute("content", "text/html; charset=utf-8").endElement("meta");
 		out.startElement("meta").withAttribute("name", "viewport").withAttribute("content", "user-scalable=yes, width=device-width, initial-scale = 1, maximum-scale = 10, minimum-scale = 0.2").endElement("meta");
+		String application = Components.getRequest().getApplication();
+		String icon = "words".equals(application) ? "Words" : "OnlineObjects";
+		int[] sizes = {29,40,58,60,76,80,87,120,152,180,512,1024};
+		for (int size : sizes) {
+			out.startElement("link").withAttribute("rel", "apple-touch-icon");
+			out.withAttribute("sizes", size+"x"+size);
+			out.withHref("/core/gfx/icons/iOS/"+icon+"-" + size + ".png");
+			out.endElement("link");
+		}
 	}
 
 	@Override
@@ -63,6 +72,7 @@ public class HeadComponent extends AbstractComponent {
 		ConfigurationService configurationService = getBean(ConfigurationService.class);
 		
 		
+		Request request = Components.getRequest();
 		if (!configurationService.isOptimizeResources()) {
 			for (String url : graph.getStyles()) {
 			 	out.startElement("link").rel("stylesheet").type("text/css").href(url).endElement("link");
@@ -76,7 +86,10 @@ public class HeadComponent extends AbstractComponent {
 			
 		 	writeInlineJs(configurationService, out);
 		}
-		Request request = Components.getRequest();
+		out.write("<!--[if IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie8.css\"></link><![endif]-->");
+		out.write("<!--[if IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie7.css\"></link><![endif]-->");
+		out.write("<!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie6.css\"></link><![endif]-->");
+		out.write("<!--[if lt IE 9]><script type=\"text/javascript\" src=\"" + request.getBaseContext() + "/hui/bin/compatibility.min.js\"></script><![endif]-->");
 		out.newLine().startElement("script").withAttribute("data-hui-context", request.getBaseContext()).withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
 
 		out.startScript().newLine();
