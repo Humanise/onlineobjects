@@ -21,7 +21,6 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		newSchool(context);
-
 	}
 
 	private void newSchool(JobExecutionContext context) {

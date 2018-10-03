@@ -117,7 +117,7 @@ oo.Masonry.prototype = {
   },
   _getUrl : function(item,info) {
     var x = window.devicePixelRatio==2 ? 2 : 1;
-    var url = oo.baseContext+'/service/image/id'+item.id+'width'+(info.width*x)+'height'+(info.height * x);
+    var url = '/service/image/id'+item.id+'width'+(info.width*x)+'height'+(info.height * x);
     if (item.rotation) {
       url+='rotation' + item.rotation+'.0';
     }

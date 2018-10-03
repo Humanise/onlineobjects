@@ -131,6 +131,9 @@ public class Components {
 				url.append("/");
 			}
 		}
+		if (path.length == 0) {
+			url.append(locale.getLanguage()).append("/");
+		}
 		String queryString = request.getRequest().getQueryString();
 		if (Strings.isNotBlank(queryString)) {
 			url.append("?").append(queryString);			

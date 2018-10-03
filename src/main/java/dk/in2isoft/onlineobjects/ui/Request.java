@@ -388,6 +388,15 @@ public class Request {
 		}
 	}
 
+	public String getString(String key, dk.in2isoft.onlineobjects.core.exceptions.Error error) throws IllegalRequestException {
+		String value = request.getParameter(key);
+		if (Strings.isBlank(value)) {
+			throw new IllegalRequestException(error);
+		} else {
+			return value;
+		}
+	}
+
 	public String getParameter(String key) {
 		return request.getParameter(key);
 	}

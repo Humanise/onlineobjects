@@ -5,7 +5,7 @@ var enrichView = {
 	_next : function() {
 		hui.cls.add('rendering','words_enrich_busy')
 		hui.ui.request({
-			url : oo.appContext+'/getNextEnrichment',
+			url : '/getNextEnrichment',
 			$object : function(perspective) {
 				this._render(perspective);
 				hui.cls.remove('rendering','words_enrich_busy')
@@ -30,7 +30,7 @@ var enrichView = {
 	},
 	_do : function(obj,enrichment) {
 		hui.ui.request({
-			url : oo.appContext+'/enrich',
+			url : '/enrich',
 			$success : this._next.bind(this),
 			json : {wordId:obj.wordId,enrichment:enrichment.value}
 		});

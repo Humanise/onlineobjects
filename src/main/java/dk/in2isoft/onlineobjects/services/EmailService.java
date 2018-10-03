@@ -13,6 +13,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 
 public class EmailService {
 
@@ -71,7 +72,7 @@ public class EmailService {
 			log.info("Sent email to: "+address);
 		} catch (EmailException e) {
 			log.error("Could not send email to: "+address,e);
-			throw new EndUserException(e);
+			throw new EndUserException(Error.unableToSendMails, e);
 		}
 	}
 

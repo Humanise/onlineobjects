@@ -29,7 +29,7 @@ var personView = {
 			buttons.add(choose);
 			var up = hui.ui.Upload.create({
 				name : 'upload',
-				url : oo.appContext+'/uploadProfileImage',
+				url : '/uploadProfileImage',
 				widget : choose,
 				maxItems : 1,
 				types : "*.jpg;*.png",
@@ -54,7 +54,7 @@ var personView = {
 	editProfile : function() {
 		this.buildProfileEditor();
 		hui.ui.request({
-			url : oo.appContext+'/getUserProfile',
+			url : '/getUserProfile',
 			parameters : {userId : this.userId},
 			$object : function(data) {
 				this.profileForm.setValues(data);
@@ -97,7 +97,7 @@ var personView = {
 		var info = this.profileForm.getValues();
 		info.userId = this.userId;
 		hui.ui.request({
-			url : oo.appContext+'/updateUserProfile',
+			url : '/updateUserProfile',
 			json : {info : info},
 			$success : function() {
 				hui.ui.showMessage({text:{da:'Gemt',en:'Saved'},icon:'common/success',duration:2000});

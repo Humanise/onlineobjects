@@ -17,7 +17,7 @@ oo.Finder.prototype = {
     this.gallery.listen({
       $open : this._add.bind(this),
       $resolveImageUrl : function(image,width,height) {
-        return oo.baseContext+'/service/image/id'+image.id+'width'+Math.round(width)+'height'+Math.round(height)+'.jpg';
+        return '/service/image/id'+image.id+'width'+Math.round(width)+'height'+Math.round(height)+'.jpg';
       }
     })
   },

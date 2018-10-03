@@ -82,7 +82,7 @@ oo.community.Invitation = {
 		});
 		var button = hui.ui.Button.create({text : 'Gå til min profilside :-)'});
 		button.listen({$click:function(){
-			document.location=oo.appContext+'/'+username+'/';
+			document.location='/'+username+'/';
 		}});
 		msg.addButton(button);
 		msg.show();

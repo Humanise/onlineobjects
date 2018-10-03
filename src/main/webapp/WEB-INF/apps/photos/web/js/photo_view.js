@@ -24,7 +24,7 @@ var photoView = {
 	$valueChanged$titleEditor : function(value) {
 		hui.ui.request({
 			message : {start:'Updating title', delay:300, success:'The title is changed'},
-			url : oo.appContext+'/updateTitle',
+			url : '/updateTitle',
 			parameters : {id:this.imageId,title:value},
 			$failure : function() {
 				hui.ui.showMessage({text:'Unable to update tile',icon:'common/warning',duration:2000});
@@ -51,7 +51,7 @@ var photoView = {
 
 		hui.ui.request({
 			message : {start:'Updating location', delay:300, success:'The location is changed'},
-			url : oo.appContext+'/updateLocation',
+			url : '/updateLocation',
 			json : {id : this.imageId, location : values.location},
 			$success : function() {
 				oo.render({id:'properties'})
@@ -73,7 +73,7 @@ var photoView = {
 		var text = hui.ui.get('description').getValue();
 		hui.ui.request({
 			message : {start:'Updating description',delay:300, success:'The description is changed'},
-			url : oo.appContext+'/updateDescription',
+			url : '/updateDescription',
 			parameters : {id : this.imageId, description : text},
 			$success : function() {
 				oo.update({id:'photos_photo_description'});
@@ -87,7 +87,7 @@ var photoView = {
     button.setEnabled(false)
 		hui.ui.request({
 			message : {start:'Synchronizing',delay:300, success:'The meta data is synchronized'},
-			url : oo.appContext+'/synchronizeMetaData',
+			url : '/synchronizeMetaData',
 			parameters : {imageId : this.imageId},
 			$success : function() {
 				oo.update({id:'properties'});
@@ -108,7 +108,7 @@ var photoView = {
 		}
 		hui.ui.request({
 			message : {start:'Adding word', delay:300, success:'The word is added'},
-			url : oo.appContext+'/relateWord',
+			url : '/relateWord',
 			parameters : {image : this.imageId, word : info.id},
 			$success : info.callback,
 			$failure : function() {
@@ -121,7 +121,7 @@ var photoView = {
 	$delete$words : function(info) {
 		hui.ui.request({
 			message : {start:'Removing word', delay:300, success:'The word is removed'},
-			url : oo.appContext+'/removeWord',
+			url : '/removeWord',
 			parameters : {image : this.imageId, word : info.id},
 			$success : info.callback,
 			$failure : function() {
@@ -134,7 +134,7 @@ var photoView = {
 	$valueChanged$publicAccess : function(value) {
 		hui.ui.request({
 			message : {start:'Changing access', delay:300, success:'Access has changed'},
-			url : oo.appContext+'/changeAccess',
+			url : '/changeAccess',
 			parameters : {image : this.imageId, 'public' : value},
 			$failure : function() {
 				hui.ui.showMessage({text:'Unable to change access',icon:'common/warning',duration:2000});
@@ -145,7 +145,7 @@ var photoView = {
 	$valueChanged$theMap : function(info) {
 		hui.ui.request({
 			message : {start:'Changing location', delay:300, success:'The location is changed'},
-			url : oo.appContext+'/updateLocation',
+			url : '/updateLocation',
 			json : {id : this.imageId, location : info.location},
 			$success : info.callback,
 			$failure : function() {
@@ -159,13 +159,13 @@ var photoView = {
 		hui.ui.confirmOverlay({widget:info,text:'Delete?',$ok : function() {
 			hui.ui.request({
 				message : {start:'Deleting photo', delay:300, success:'The image is deleted'},
-				url : oo.appContext+'/deleteImage',
+				url : '/deleteImage',
 				parameters : {imageId : this.imageId},
 				$failure : function() {
 					hui.ui.showMessage({text:'Unable to delete photo',icon:'common/warning',duration:2000});
 				},
 				$success : function() {
-					document.location = oo.appContext+'/'+oo.language+'/users/'+this.username+'/'
+					document.location = '/'+oo.language+'/users/'+this.username+'/'
 				}.bind(this)
 			})
 		}.bind(this)})
@@ -173,7 +173,7 @@ var photoView = {
 
 	$click$viewMetaData : function() {
 		hui.ui.request({
-			url : oo.appContext+'/getMetaData',
+			url : '/getMetaData',
 			parameters : {imageId : this.imageId},
 			$object : function(data) {
 				var html = '';

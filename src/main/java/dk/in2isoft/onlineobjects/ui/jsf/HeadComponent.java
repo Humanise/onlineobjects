@@ -44,6 +44,7 @@ public class HeadComponent extends AbstractComponent {
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startElement("head");
 		out.startElement("meta").withAttribute("http-equiv", "Content-Type").withAttribute("content", "text/html; charset=utf-8").endElement("meta");
+		out.startElement("meta").withAttribute("name", "viewport").withAttribute("content", "user-scalable=yes, width=device-width, initial-scale = 1, maximum-scale = 10, minimum-scale = 0.2").endElement("meta");
 	}
 
 	@Override

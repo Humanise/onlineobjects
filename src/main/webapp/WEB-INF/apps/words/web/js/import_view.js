@@ -30,7 +30,7 @@ var importView = {
 		
 		var values = hui.ui.get('registrationForm').getValues();
 		hui.ui.request({
-			url : oo.appContext+'/createWord',
+			url : '/createWord',
 			parameters : { language : values.language, category : values.category, text : this.word },
 			$success : function(id) {
 				this._lowlight();

@@ -94,7 +94,7 @@ oo.TopBar.prototype = {
   _updatePanel : function() {
     var node = this._userInfoBlock;
     hui.ui.request({
-      url : oo.baseContext+'/service/authentication/getUserInfo',
+      url : '/service/authentication/getUserInfo',
       parameters : {language : oo.language},
       $object : function(info) {
         hui.cls.remove(node,'oo_topbar_info_busy')
@@ -103,7 +103,7 @@ oo.TopBar.prototype = {
         if (info.photoId) {
           var ratio = window.devicePixelRatio > 1 ? 2 : 1;
           var size = 60 * ratio;
-          html += ' style="background-image: url('+oo.baseContext+'/service/image/id'+info.photoId+'width' + size + 'height' + size + 'sharpen0.7cropped.jpg)"';
+          html += ' style="background-image: url(/service/image/id'+info.photoId+'width' + size + 'height' + size + 'sharpen0.7cropped.jpg)"';
         }
         html+='></div>';
         html+='</div><div class="oo_topbar_info_content">'+
@@ -165,7 +165,7 @@ oo.TopBar.prototype = {
       return;
     }
     hui.ui.request({
-      url : oo.baseContext+'/service/authentication/changeUser',
+      url : '/service/authentication/changeUser',
       parameters : {username:values.username,password:values.password},
       $object : function(response) {
         if (response.success===true) {
@@ -186,7 +186,7 @@ oo.TopBar.prototype = {
   },
   _doLogout : function() {
     hui.ui.request({
-      url : oo.baseContext+'/service/authentication/logout',
+      url : '/service/authentication/logout',
       $success : function() {
         document.location.reload();
       }
@@ -217,7 +217,7 @@ oo.TopBar.prototype = {
 
           hui.ui.msg({text:'Let\'s see if we can find you...',busy:true});
           hui.ui.request({
-            url : oo.baseContext+'/service/authentication/recoverPassword',
+            url : '/service/authentication/recoverPassword',
             parameters : {usernameOrMail:values.usernameOrMail},
             $success : function() {
               hui.ui.msg.success({text:'Look in your inbox :-)'});
@@ -248,7 +248,7 @@ oo.TopBar.prototype = {
       //p.add(hui.build('div',{style:'height: 300px'}));
       var list = hui.ui.List.create({
         variant : 'light',
-        source : new hui.ui.Source({url:oo.baseContext+'/service/model/listInbox'})
+        source : new hui.ui.Source({url:'/service/model/listInbox'})
       });
       list.listen({
         $select : function(info) {
@@ -256,7 +256,7 @@ oo.TopBar.prototype = {
         },
         $clickIcon : function(info) {
           hui.ui.request({
-            url : oo.baseContext+'/service/model/removeFromInbox',
+            url : '/service/model/removeFromInbox',
             parameters : {id:info.row.id},
             $success : function() {
               list.refresh();

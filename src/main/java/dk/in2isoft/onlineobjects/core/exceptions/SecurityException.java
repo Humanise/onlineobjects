@@ -20,4 +20,8 @@ public class SecurityException extends EndUserException {
 		super(arg0);
 	}
 
+	public SecurityException(Error error) {
+		super(error);
+	}
+
 }

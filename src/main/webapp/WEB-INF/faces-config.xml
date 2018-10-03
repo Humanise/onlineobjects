@@ -96,6 +96,10 @@
     	<component-class>dk.in2isoft.onlineobjects.ui.jsf.DocTypeComponent</component-class>
   	</component>
     <component>
+    	<component-type>onlineobjects.html</component-type>
+    	<component-class>dk.in2isoft.onlineobjects.ui.jsf.HtmlComponent</component-class>
+  	</component>
+    <component>
     	<component-type>onlineobjects.head</component-type>
     	<component-class>dk.in2isoft.onlineobjects.ui.jsf.HeadComponent</component-class>
   	</component>

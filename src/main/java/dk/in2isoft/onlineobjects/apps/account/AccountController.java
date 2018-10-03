@@ -8,6 +8,7 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -28,8 +29,8 @@ public class AccountController extends AccountControllerBase {
 	public void changePassword(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException, ContentNotFoundException {
 		User user = getUser(request);
 		String username = user.getUsername();
-		String currentPassword = request.getString("currentPassword", "Current password must be provided");
-		String newPassword = request.getString("newPassword", "New password must be provided");
+		String currentPassword = request.getString("currentPassword", Error.missingCurrentPassword);
+		String newPassword = request.getString("newPassword", Error.missingNewPassword);
 		securityService.changePassword(username, currentPassword, newPassword, request.getSession());
 	}
 
@@ -52,7 +53,7 @@ public class AccountController extends AccountControllerBase {
 
 	@Path
 	public void changePrimaryEmail(Request request) throws EndUserException {
-		String email = request.getString("email", "No email");
+		String email = request.getString("email", Error.invalidEmail);
 		User user = getUser(request);
 		memberService.sendEmailChangeRequest(user, email, request.getSession());
 	}
@@ -95,14 +96,17 @@ public class AccountController extends AccountControllerBase {
 	
 	@Path
 	public void deleteAccount(Request request) throws ModelException, SecurityException, IllegalRequestException {
-		String username = request.getString("username", "No username");
-		String password = request.getString("password", "No password");
+		String username = request.getString("username", Error.noUsername);
+		String password = request.getString("password", Error.noPassword);
 		UserSession session = request.getSession();
 		User user = modelService.get(User.class, session.getIdentity(), session);
 		if (!username.equals(user.getUsername())) {
-			throw new IllegalRequestException("Username does not match the current user");
+			throw new IllegalRequestException(Error.userNotCurrent);
 		}
-		securityService.changeUser(session, username, password);
+		boolean userChanged = securityService.changeUser(session, username, password);
+		if (!userChanged) {
+			throw new SecurityException(Error.userNotFound);
+		}
 		
 		memberService.deleteMember(user, session);
 		securityService.logOut(session);

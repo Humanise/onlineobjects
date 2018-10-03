@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -144,12 +145,21 @@ public class DispatchingService {
 			String accept = request.getRequest().getHeader("Accept");
 			if (accept != null && accept.contains("application/json") && !accept.contains("text/html")) {
 				response.setContentType("application/json");
+
 				Map<String, String> resp = new HashMap<>();
 				if (ex instanceof EndUserException) {
-					Messages msg = new Messages(EndUserException.class);
 					String code = ((EndUserException) ex).getCode();
-					resp.put("code", code);
-					resp.put("message", msg.get(code, request.getLocale()));
+					if (code!=null) {
+						Locale locale = request.getRequest().getLocale();
+						if (locale == null || locale.getLanguage()!="en" && locale.getLanguage()!="da") {
+							locale = new Locale("en");
+						}
+						Messages msg = new Messages(EndUserException.class);
+						resp.put("code", code);
+						resp.put("message", msg.get(code, locale));
+					} else {
+						resp.put("message", ex.getMessage());
+					}
 				} else {
 					resp.put("message", ex.getMessage());
 				}

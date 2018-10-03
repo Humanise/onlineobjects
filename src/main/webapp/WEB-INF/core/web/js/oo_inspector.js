@@ -8,7 +8,7 @@ oo.Inspector = function(options) {
   });
   win.add(diagram);
   hui.ui.request({
-    url : oo.appContext+'/service/model/diagram',
+    url : '/service/model/diagram',
     parameters : {id:options.id},
     $object : function(data) {
       diagram.$objectsLoaded(data);

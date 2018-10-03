@@ -63,7 +63,7 @@ oo.community.Home.prototype = {
 		hui.each(users,function(pair) {
 			var element = hui.build('div',{'class':'user'});
 			element.appendChild(oo.buildThumbnail({width:50,height:60,variant:'user'}));
-			element.appendChild(hui.build('p',{'class':'name',html:'<a class="oo_link" href="'+oo.appContext+'/'+pair.user.username+'/">'+
+			element.appendChild(hui.build('p',{'class':'name',html:'<a class="oo_link" href="/'+pair.user.username+'/">'+
 				'<span>'+pair.person.name+'</span></a>'}));
 			element.appendChild(hui.build('p',{'class':'username',text:pair.user.username}));
 			element.appendChild(hui.build('p',{'class':'website',html:'<a class="oo_link oo_link_dimmed" href="'+oo.community.Home.buildUserURL(pair.user.username)+'"><span>Website »</span></a>'}));
@@ -73,10 +73,7 @@ oo.community.Home.prototype = {
 }
 
 oo.community.Home.buildUserURL = function(username) {
-	return 'http://'+oo.baseDomainContext+'/'+username+'/site/';
-	return oo.domainIsIP
-		? 'http://'+oo.baseDomainContext+'/'+username+'/site/'
-		: 'http://'+username+'.'+oo.baseDomainContext+'/';
+	return '/'+username+'/site/';
 }
 
 hui.ui.onReady(function() {new oo.community.Home();});

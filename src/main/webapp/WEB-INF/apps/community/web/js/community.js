@@ -15,7 +15,7 @@ oo.community = {
 		return this.imageViewer;
 	},
 	$resolveImageUrl : function(image,width,height) {
-		return oo.baseContext+'/service/image/?id='+image.id+'&width='+width+'&height='+height;
+		return '/service/image/?id='+image.id+'&width='+width+'&height='+height;
 	},
 	checkBrowser : function() {
 		if (!hui.browser.gecko && !hui.browser.webkit && !hui.browser.msie7 && !hui.browser.msie8) {
@@ -33,16 +33,16 @@ oo.community = {
 
 hui.ui.listen({
 	$click$barPublic : function() {
-		document.location=oo.appContext+'/';
+		document.location='/';
 	},
 	$click$barWebsite : function() {
-		document.location=oo.appContext+'/'+oo.user.userName+'/site/';
+		document.location='/'+oo.user.userName+'/site/';
 	},
 	$click$barUser : function() {
-		document.location=oo.appContext+'/'+oo.user.userName+'/';
+		document.location='/'+oo.user.userName+'/';
 	},
 	$click$barTools : function() {
-		document.location=oo.appContext+'/'+oo.user.userName+'/private/';
+		document.location='/'+oo.user.userName+'/private/';
 	},
 	$click$barLogOut : function() {
 		CoreSecurity.logOut(function() {
@@ -124,14 +124,11 @@ oo.community.Chrome.prototype = {
 }
 
 oo.community.Chrome.buildUserWebsiteURL = function(username) {
-	return 'http://'+oo.baseDomainContext+'/'+username+'/site/';
-	return oo.domainIsIP
-		? 'http://'+oo.baseDomainContext+'/'+username+'/site/'
-		: 'http://'+username+'.'+oo.baseDomainContext+'/';
+	return '/'+username+'/site/';
 }
 
 oo.community.Chrome.buildUserProfileURL = function(username) {
-	return oo.appContext+'/'+username+'/';
+	return '/'+username+'/';
 }
 
 /////////////////////////////////// Search field /////////////////////////////////
@@ -149,7 +146,7 @@ oo.community.Chrome.Search = function() {
 
 oo.community.Chrome.Search.prototype = {
 	$submit$casingSearch : function(obj) {
-		document.location=oo.appContext+'/search.html?text='+obj.getValue();
+		document.location='/search.html?text='+obj.getValue();
 	},
 	$valueChanged$casingSearch : function(value) {
 		this.dirty = value.length>0;

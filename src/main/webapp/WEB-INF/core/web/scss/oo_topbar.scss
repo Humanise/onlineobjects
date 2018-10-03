@@ -18,8 +18,7 @@
       border-bottom: 1px solid #ddd;
     }
 
-    &_logo
-    {
+    &_logo {
       display: inline-block;
       font-weight: 300;
       height: 30px;
@@ -232,8 +231,7 @@
 
   /** Info panel **/
 
-  .oo_topbar_info
-  {
+  .oo_topbar_info {
     overflow: hidden;
     font-family: $default-font-family;
 
@@ -265,7 +263,7 @@
     }
 
     &_name {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 400;
       margin: -3px 0 0;
     }
@@ -273,12 +271,12 @@
     &_username {
       color: #666;
       margin: 0;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     &_account {
       margin: 3px 0 0;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     &_buttons {
