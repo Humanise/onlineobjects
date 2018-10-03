@@ -176,7 +176,10 @@ public class DispatchingService {
 
 
 	private void logError(Request request, Exception ex) {
-		log.error(ex.getMessage() + " - " + request.getRequest().getRequestURL().toString(), ex);
+		HttpServletRequest httpServletRequest = request.getRequest();
+		String query = httpServletRequest.getQueryString();
+		String url = httpServletRequest.getRequestURL().toString() + (query == null ? "" : "?" + query);
+		log.error(ex.getMessage() + " - " + url, ex);
 	}
 	
 	private static Exception findUserException(Exception ex) {

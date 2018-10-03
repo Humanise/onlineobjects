@@ -68,7 +68,7 @@ public class SetupController extends SetupControllerBase {
 	@Override
 	public void unknownRequest(Request request) throws IOException,EndUserException {
 		if (!request.isUser(SecurityService.ADMIN_USERNAME)) {
-			request.redirectFromBase("/service/authentication/?redirect=/app/setup/&action=appAccessDenied&faultyuser="+request.getSession().getUser().getUsername());
+			request.redirectFromBase("/service/authentication/?redirect=/app/setup/&action=appAccessDenied");
 		} else {
 			String path = request.getLocalPathAsString();
 			if (path.endsWith("gui") || path.endsWith("/")) {

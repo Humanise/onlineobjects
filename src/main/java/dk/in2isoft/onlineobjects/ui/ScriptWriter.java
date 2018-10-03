@@ -94,4 +94,16 @@ public class ScriptWriter {
 			IOUtils.closeQuietly(fileWriter);
 		}
 	}
+
+	public boolean writeCache(String stamp, String hash) throws IOException {
+		String name = hash + "_" + stamp + ".js";
+		File file = new File(configurationService.getTempDir(), name);
+		if (file.exists()) {
+			FileReader fileReader = new FileReader(file);
+			IOUtils.copy(fileReader, this.writer);
+			IOUtils.closeQuietly(fileReader);
+			return true;
+		}
+		return false;
+	}
 }

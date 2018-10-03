@@ -8,6 +8,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.sun.faces.component.visit.FullVisitContext;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
@@ -18,6 +20,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.DependencyService;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.ScriptCompressor;
 
 @FacesComponent(value = HeadComponent.FAMILY)
@@ -25,6 +28,8 @@ public class HeadComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.head";
 	
+	private String inlineJs;
+
 	//private static final Logger log = LogManager.getLogger(HeadComponent.class);
 
 	public HeadComponent() {
@@ -71,21 +76,40 @@ public class HeadComponent extends AbstractComponent {
 			
 		 	writeInlineJs(configurationService, out);
 		}
+		Request request = Components.getRequest();
+		out.newLine().startElement("script").withAttribute("data-hui-context", request.getBaseContext()).withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
+
+		out.startScript().newLine();
+		
+		out.write("window.oo = window.oo || {};").newLine();
+		if (StringUtils.isNotBlank(request.getLanguage())) {
+			out.write("oo.language = '").write(request.getLanguage()).write("';").newLine();
+		}
+		out.endElement("script").newLine();
 		out.endElement("head");
 	}
 	
 	private void writeInlineJs(ConfigurationService configurationService, TagWriter out) throws IOException {
+		String content = getInline(configurationService);
+		if (content!=null) {
+			out.startScript().write(content).endScript();
+		}
+	}
+
+	private String getInline(ConfigurationService configurationService) {
+		if (inlineJs!=null && !configurationService.isDevelopmentMode()) {
+			return inlineJs;
+		}
 		File file = configurationService.getFile("WEB-INF","core","web","js","inline.js");
+		String content = null;
 		if (file.exists()) {
-			String contents = Files.readString(file);
+			content = Files.readString(file);
 			if (configurationService.isOptimizeResources()) {
-				String compressed = new ScriptCompressor().compress(contents);
-				out.startScript().write(compressed).endScript();
-			} else {
-				out.startScript().write(contents).endScript();
+				content = new ScriptCompressor().compress(content);
 			}
 		}
-			
+		inlineJs = content;
+		return content;
 	}
 
 	private void visit(Class<?> componentClass, UIComponent componentInstance, DependencyGraph graph, FacesContext context) {

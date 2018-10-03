@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import dk.in2isoft.commons.jsf.DependencyGraph;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
@@ -15,6 +18,7 @@ public class DependencyService {
 	public static final String[] TAIL_PATH = new String[] {"WEB-INF","core","web","js","tail.js"};
 	private Map<String,String[]> storedScripts = new HashMap<>();
 	private Map<String,String[]> storedStyles = new HashMap<>();
+	private static final Logger log = LogManager.getLogger(DependencyService.class);
 
 	private ConfigurationService configurationService;
 
@@ -41,12 +45,17 @@ public class DependencyService {
 		return hash;
 	}
 
-	public void respondScripts(String hash, Request request) throws ContentNotFoundException, IOException {
+	public void respondScripts(String stamp, String hash, Request request) throws ContentNotFoundException, IOException {
 		String[] urls = storedScripts.get(hash);
-		if (urls==null) {
-			throw new ContentNotFoundException();
-		}
 		ScriptWriter w = new ScriptWriter(request, configurationService);
+		if (urls==null) {
+			if (w.writeCache(stamp, hash)) {
+				log.info("Served cached JS: {}.{}.js", stamp, hash);
+				return;
+			} else {
+				throw new ContentNotFoundException();
+			}
+		}
 		List<String[]> paths = new ArrayList<>();
 		for (String url : urls) {
 			paths.add(url.split("\\/"));
@@ -55,12 +64,17 @@ public class DependencyService {
 		w.write(paths, hash);
 	}
 
-	public void respondStyles(String hash, Request request) throws ContentNotFoundException, IOException {
+	public void respondStyles(String stamp, String hash, Request request) throws ContentNotFoundException, IOException {
 		String[] urls = storedStyles.get(hash);
-		if (urls==null) {
-			throw new ContentNotFoundException();
-		}
 		StylesheetWriter w = new StylesheetWriter(request, configurationService);
+		if (urls==null) {
+			if (w.writeCache(stamp, hash)) {
+				log.info("Served cached CSS: {}.{}.css", stamp, hash);
+				return;
+			} else {
+				throw new ContentNotFoundException();
+			}
+		}
 		List<String[]> paths = new ArrayList<>();
 		for (String url : urls) {
 			paths.add(url.split("\\/"));
