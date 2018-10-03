@@ -130,13 +130,6 @@
 		</component>
 	</tag>
 	<tag>
-		<tag-name>scriptSetup</tag-name>
-		<component>
-			<component-type>onlineobjects.scriptsetup</component-type>
-			<renderer-type>onlineobjects.scriptsetup</renderer-type>
-		</component>
-	</tag>
-	<tag>
 		<tag-name>splitLeft</tag-name>
 		<component>
 			<component-type>onlineobjects.splitleft</component-type>
