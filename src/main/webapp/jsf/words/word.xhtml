@@ -13,6 +13,7 @@
 
     <ui:define name="body">
       <o:dependency from="local" src="/js/word_view.js"/>
+      <o:dependency from="local" src="/js/word_modify_view.js" rendered="#{wordsLayoutView.canModify}"/>
       <gui:confirm/>
 
       <div class="words">
@@ -43,21 +44,21 @@
                     <c:if test="#{word.lexicalCategory!=null}">
                       <span class="words_word_info">
                         <span>—</span>
-                        <a href="javascript://" onclick="wordView.changeCategory({id:#{word.word.id},element:this,event:event}); return false;">
+                        <a href="/#{wordsLayoutView.language}/search?category=#{word.lexicalCategory.code}" class="js-word-category" data-id="#{word.word.id}">
                           <o:out value=" #{msgCategory[o:join('code.',word.lexicalCategory.code)]}" lower="true"/>
                         </a>
                       </span>
                     </c:if>
                     <c:if test="#{word.language!=null}">
                       <span class="words_word_info"><span>—</span>
-                        <a href="javascript://" onclick="wordView.changeLanguage({id:#{word.word.id},element:this,event:event}); return false;">
+                        <a href="/#{wordsLayoutView.language}/search?language=#{word.language.code}" class="js-word-language" data-id="#{word.word.id}">
                           <o:out value=" #{msgLanguage[o:join('code.',word.language.code)]}" lower="true"/>
                         </a>
                       </span>
                     </c:if>
                     <c:if test="#{word.language==null}">
                       <span class="words_word_info"><span>—</span>
-                        <a href="javascript://" onclick="wordView.changeLanguage({id:#{word.word.id},element:this,event:event}); return false;">
+                        <a href="/#{wordsLayoutView.language}/search?language=none" class="js-word-language" data-id="#{word.word.id}">
                           <o:out value=" #{msg.no_language}" lower="true"/>
                         </a>
                       </span>
@@ -65,7 +66,7 @@
                     <c:if test="#{word.lexicalCategory==null}">
                       <span class="words_word_info">
                         <span>—</span>
-                        <a href="javascript://" onclick="wordView.changeCategory({id:#{word.word.id},element:this,event:event}); return false;">
+                        <a href="/#{wordsLayoutView.language}/search?category=none" class="js-word-category" data-id="#{word.word.id}">
                           <o:out value="#{msg.not_categorised}"/>
                         </a>
                        </span>
@@ -74,11 +75,11 @@
                       <span class="words_word_info"><span>—</span> <span class="words_word_unvalidated">#{msg.unvalidated}</span></span>
                     </c:if>
                     <gui:button variant="light" name="delete#{word.word.id}" mini="true" text="#{msg.remove}" left="10"
-                      click="wordView.deleteWord({id:#{word.word.id}})"
+                      click="wordModifyView.deleteWord({id:#{word.word.id}})"
                       rendered="#{wordsLayoutView.canModify}"
                     />
                     <gui:button variant="light" name="relate#{word.word.id}" mini="true" text="#{msg.add_relation}" left="10"
-                      click="wordView.addRelation({id:#{word.word.id}})"
+                      click="wordModifyView.addRelation({id:#{word.word.id}})"
                       rendered="#{wordsLayoutView.canModify}"
                     />
                     <o:link rendered="#{wordsLayoutView.canModify}" app="front" href="/word/#{word.word.id}">Info</o:link>
@@ -149,7 +150,7 @@
             </gui:boundPanel>
 
             <gui:boundPanel name="relationKindPanel" modal="transparent" width="200" variant="light">
-              <div class="panel_body" onclick="wordView.selectRelationKind(event)">
+              <div class="panel_body" onclick="wordModifyView.selectRelationKind(event)">
                 <h2>#{msg.relation_kind}</h2>
                 <ul class="selection">
                   <c:forEach items="#{wordsWordView.relationOptions}" var="cat">

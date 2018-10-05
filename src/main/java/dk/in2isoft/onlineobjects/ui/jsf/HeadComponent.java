@@ -113,6 +113,9 @@ public class HeadComponent extends AbstractComponent {
 	}
 
 	private void visit(Class<?> componentClass, UIComponent componentInstance, DependencyGraph graph, FacesContext context) {
+		if (componentInstance!=null && !componentInstance.isRendered()) {
+			return;
+		}
 		if (!graph.isVisited(componentClass)) {
 			graph.markVisited(componentClass);
 			Dependencies annotation = componentClass.getAnnotation(Dependencies.class);
