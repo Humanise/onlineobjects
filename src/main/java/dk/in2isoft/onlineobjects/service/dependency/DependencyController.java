@@ -59,10 +59,11 @@ public class DependencyController extends ServiceController {
 	public void logClientError(Request request) throws IOException, ContentNotFoundException {
 		String message = request.getString("message");
 		String line = request.getString("line");
+		String column = request.getString("column");
 		String file = request.getString("file");
 		String url = request.getString("url");
 		String agent = request.getRequest().getHeader("User-Agent");
-		clientSideLog.error("Client side error: msg:{}, line:{}, file:{}, url:{}, agent:{}", message, line, file, url, agent);
+		clientSideLog.error("Client side error: msg:{}, line:{}, column:{}, file:{}, url:{}, agent:{}", message, line, column, file, url, agent);
 	}
 
 	public void setDependencyService(DependencyService dependencyService) {
