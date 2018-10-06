@@ -2,34 +2,57 @@ hui.on(function() {
   //return;
   var logo = hui.get('logo');
   var size = logo.clientWidth;
-  console.log(size)
+  var done = false;
 
   if (isMobile() || hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
     return;
   }
 
   logo.innerHTML = '';
-  /*hui.style.set(logo,{
-    position: 'absolute',
-    left: '50%',
-    top: '40%',
-    margin: '-250px 0 0 -250px'
-  })*/
-
 
   var d = hui.ui.Drawing.create({width:size,height:size,parent:logo});
-
   var center = {
     x : size / 2,
     y : size / 2
   };
+
+
   var arcSkew = 0.045;//0.005;
   var arc1 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
   var arc2 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
   var arc3 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
   var arc4 = d.addArc({center : center,fill : 'rgba(255,255,255,.7)', stroke:{color:'#888',width : '1.5px' }, skew: arcSkew});
-
+  var arcs = [arc1,arc2,arc3,arc4];
   var circle = d.addCircle({cx:center.x,cy:center.y,r:0,fill : 'none', stroke:{color:'#888',width : '1.5px'},width:0});
+
+  hui.on(window,'resize',function() {
+    hui.onDraw(function() {
+      var newSize = logo.clientWidth;
+      if (newSize !== size) {
+        size = newSize;
+        d.setSize(size,size);
+        center = {
+          x : size / 2,
+          y : size / 2
+        };
+        circle.setCenter(center);
+        arc1.update({center: center})
+        arc2.update({center: center})
+        arc3.update({center: center})
+        arc4.update({center: center})
+        if (done) {
+          circle.setRadius(size * 0.15);
+          var extra = 10;
+          for (var i = 0; i < arcs.length; i++) {
+            arcs[i].update({
+              innerRadius : (size*0.35) + 1 - 1 * (size*0.15),
+              outerRadius : (size*0.35) - 1 * (size*0.15) + 1 * (size*0.2 + (i == 1 || i == 3 ? 10 : 0))
+            })
+          }
+        }
+      }
+    })
+  });
 
 
   var title = hui.get('title');
@@ -88,7 +111,7 @@ hui.on(function() {
         duration: 2000,
         ease : hui.ease.elastic,
         $render : function(shape,pos) {
-          shape.setRadius(pos*50)
+          shape.setRadius(pos * size * 0.15)
         },
         $complete : function() {
           loopCircle(shape);
@@ -97,13 +120,13 @@ hui.on(function() {
     }
 
     var loopCircle = function(shape) {
-      var x = Math.random()*-20;
+      var x = Math.random() * size/-10;
       hui.animate({ node : shape,
         //delay : 2000 * Math.random(),
         duration: 2000 + 2000 * Math.random(),
         ease : hui.ease.slowFastSlow,
         $render : function(shape,pos) {
-          shape.setRadius(50 + Math.sin(pos * Math.PI) * x)
+          shape.setRadius(size * 0.15 + Math.sin(pos * Math.PI) * x)
         },
         $complete : function() { loopCircle(shape);}
       })
@@ -116,12 +139,12 @@ hui.on(function() {
         duration : 8000 - ran,
         delay : ran,
         ease : hui.ease.elastic,
-        $render : function(node,pos) {
-          arc.update({
+        $render : function(obj,pos) {
+          obj.update({
             startDegrees : (start + 3) * pos + 360 * turns * pos + skew,
             endDegrees : (end +- 3) + 360 * turns * pos + skew,
-            innerRadius : 121 + pos * -60,
-            outerRadius : 120 + pos * -60 + pos * ((70/340) * size + extra)
+            innerRadius : (size*0.35) + 1 - pos * (size*0.15),
+            outerRadius : (size*0.35) - pos * (size*0.15) + pos * (size*0.2 + extra)
           })
         },
         $complete : function() {
@@ -137,8 +160,8 @@ hui.on(function() {
       var delay = Math.random() * 500;
       var speed = Math.random() / turns;
       var dur = (Math.round(speed * 3) + 1) * 1500;
-      var radiusBulge = speed * 60 - 30;
-      var innerBulge = speed * 20 - 30 * speed;
+      var radiusBulge = (speed - .6) / 2;
+      var innerBulge = (speed - .2) / -2;
       hui.animate({ node : arc,
         delay : delay,
         duration : dur - delay,
@@ -147,8 +170,10 @@ hui.on(function() {
           arc.update({
             startDegrees : start+3 + 360 * pos * turns * dir + skew,
             endDegrees : end - 3 + 360 * pos * turns * dir + skew + 30 * turns * Math.sin(pos * Math.PI),
-            innerRadius : 61 + Math.sin(pos * Math.PI) * innerBulge + 45 * Math.sin(pos * Math.PI),
-            outerRadius : (130 + extra) + Math.sin(pos * Math.PI) * radiusBulge
+            innerRadiusx : (size*0.35) + 1 + Math.sin(pos * Math.PI) * innerBulge + 45 * Math.sin(pos * Math.PI),
+            innerRadius : (size*0.35) + 1 - (size*0.15) * (1 + Math.sin(pos * Math.PI) * innerBulge),
+            outerRadiusx : ((size*0.35) + extra) + Math.sin(pos * Math.PI) * radiusBulge,
+            outerRadius : (size * 0.35 - size * 0.15 + size * 0.2 + extra) * (1 + Math.sin(pos * Math.PI) * radiusBulge)
           })
         },
         $complete : function() { loopArc(arc,start,end,extra);}
@@ -165,6 +190,7 @@ hui.on(function() {
     window.setTimeout(function() {
       loopCircle = function(){};
       loopArc = function(){};
+      done = true;
     },80000)
 
   },1000);
