@@ -190,7 +190,7 @@ hui.on(function() {
       loopCircle = function(){};
       loopArc = function(){};
       done = true;
-    },8000)
+    },80000)
 
   },1000);
 
