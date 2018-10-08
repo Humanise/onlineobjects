@@ -14,16 +14,15 @@ body {
   height: 340px;
   display: inline-block;
   position: relative; }
+  #logo .oo_icon {
+    display: inline-block;
+    width: 340px;
+    height: 340px;
+    font-size: 300px;
+    line-height: 340px;
+    color: #ddd; }
 
-#logo span.oo_icon {
-  display: inline-block;
-  width: 340px;
-  height: 340px;
-  font-size: 300px;
-  line-height: 340px;
-  color: #ddd; }
-
-h1 {
+.title {
   font-size: 90px;
   font-weight: 100;
   color: #777;
@@ -61,7 +60,7 @@ ul {
   padding: 0;
   font-size: 0; }
 
-ul li {
+li {
   display: inline-block;
   text-align: center;
   width: 100px;
@@ -73,25 +72,19 @@ ul a {
   display: block;
   text-decoration: none;
   color: #aaa;
-  -webkit-transition-property: -webkit-transform, color;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-property: -moz-transform, color;
-  -moz-transition-duration: 0.5s; }
-
-ul a:focus {
-  text-shadow: 0 0 5px #46f;
-  color: #46a; }
-
-ul a strong {
-  font-weight: 400;
-  font-size: 18px;
-  display: block;
-  -webkit-font-smoothing: antialiased; }
-
-ul a:hover {
-  color: #46a;
-  -webkit-transform: scale(1.3);
-  -moz-transform: scale(1.3); }
+  transition-property: transform, color;
+  transition-duration: 0.5s; }
+  ul a:focus {
+    text-shadow: 0 0 5px #46f;
+    color: #46a; }
+  ul a:hover {
+    color: #46a;
+    transform: scale(1.3); }
+  ul a strong {
+    font-weight: 400;
+    font-size: 18px;
+    display: block;
+    -webkit-font-smoothing: antialiased; }
 
 .language {
   position: fixed;
@@ -99,19 +92,15 @@ ul a:hover {
   right: 15px;
   margin: 0;
   font-size: 0; }
-
-.language a {
-  font-size: 12px;
-  color: #eee;
-  color: rgba(0, 0, 0, 0.1);
-  padding: 7px; }
-
-.language a span {
-  color: #666; }
-
-.language a:hover,
-.language a:hover span {
-  color: #333; }
+  .language a {
+    font-size: 12px;
+    color: #eee;
+    color: rgba(0, 0, 0, 0.1);
+    padding: 7px; }
+    .language a span {
+      color: #666; }
+    .language a:hover, .language a:hover span {
+      color: #333; }
 
 @media screen and (max-height: 600px) {
   .container {
@@ -127,7 +116,7 @@ ul a:hover {
     font-size: 220px;
     line-height: 260px; }
 
-  h1 {
+  .title {
     font-size: 80px; } }
 @media screen and (max-height: 500px) {
   .container {
@@ -143,7 +132,7 @@ ul a:hover {
     font-size: 180px;
     line-height: 200px; }
 
-  h1 {
+  .title {
     font-size: 70px; } }
 @media screen and (max-height: 400px) {
   .container {
@@ -159,10 +148,10 @@ ul a:hover {
     font-size: 140px;
     line-height: 160px; }
 
-  h1 {
+  .title {
     font-size: 60px; } }
 @media screen and (max-width: 600px) {
-  h1 {
+  .title {
     font-size: 70px; }
 
   .language {
@@ -173,7 +162,7 @@ ul a:hover {
   ul {
     bottom: 7%; } }
 @media screen and (max-width: 500px) {
-  h1 {
+  .title {
     font-size: 58px; } }
 @media screen and (max-width: 400px) {
   .container {
@@ -194,7 +183,7 @@ ul a:hover {
     font-size: 180px;
     line-height: 200px; }
 
-  h1 {
+  .title {
     font-size: 42px; }
 
   ul li {

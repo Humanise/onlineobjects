@@ -11,27 +11,24 @@ body {
   text-align: center;
 }
 
-#logo
-{
+#logo {
   width: 340px;
   height: 340px;
   display: inline-block;
   position: relative;
+
+  .oo_icon {
+    display: inline-block;
+    width: 340px;
+    height: 340px;
+    font-size: 300px;
+    line-height: 340px;
+    color: #ddd;
+  }
 }
 
-#logo span.oo_icon
-{
-  display: inline-block;
-  width: 340px;
-  height: 340px;
-  font-size: 300px;
-  line-height: 340px;
-  color: #ddd;
-}
 
-
-h1
-{
+.title {
   font-size: 90px;
   font-weight: 100;
   color: #777;
@@ -45,8 +42,7 @@ h1
 }
 
 
-#slogan
-{
+#slogan {
   font-size: 24px;
   line-height: 24px;
   font-weight: 300;
@@ -61,8 +57,7 @@ h1
   background: #fff;
 }
 
-ul
-{
+ul {
   -webkit-user-select: none;
   display: block;
   list-style: none;
@@ -75,8 +70,7 @@ ul
   font-size: 0;
 }
 
-ul li
-{
+li {
   display: inline-block;
   text-align: center;
   width: 100px;
@@ -84,66 +78,61 @@ ul li
   padding: 20px 0;
 }
 
-ul a
-{
+ul a {
   outline: none;
   display: block;
   text-decoration: none;
   color: #aaa;
-  -webkit-transition-property: -webkit-transform, color;
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-property: -moz-transform, color;
-  -moz-transition-duration: 0.5s;
+  transition-property: transform, color;
+  transition-duration: 0.5s;
+
+  &:focus {
+    text-shadow: 0 0 5px #46f;
+    color: #46a;
+  }
+
+  &:hover {
+    color: #46a;
+    transform: scale(1.3);
+  }
+
+  strong {
+    font-weight: 400;
+    font-size: 18px;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
-ul a:focus
-{
-  text-shadow: 0 0 5px #46f;
-  color: #46a;
-}
 
-ul a strong
-{
-  font-weight: 400;
-  font-size: 18px;
-  display: block;
-  -webkit-font-smoothing: antialiased;
-}
 
-ul a:hover
-{
-  color: #46a;
-  -webkit-transform: scale(1.3);
-  -moz-transform: scale(1.3);
-}
 
-.language
-{
+
+
+.language {
   position: fixed;
   bottom: 10px;
   right: 15px;
   margin: 0;
   font-size: 0;
+
+  a {
+    font-size: 12px;
+    color: #eee;
+    color: rgba(0,0,0,.1);
+    padding: 7px;
+
+    span {
+      color: #666;
+    }
+
+    &:hover,
+    &:hover span {
+      color: #333;
+    }
+  }
 }
 
-.language a
-{
-  font-size: 12px;
-  color: #eee;
-  color: rgba(0,0,0,.1);
-  padding: 7px;
-}
-
-.language a span
-{
-  color: #666;
-}
-
-.language a:hover,
-.language a:hover span
-{
-  color: #333;
-}
 
 @media screen and (max-height: 600px) {
 
@@ -165,7 +154,7 @@ ul a:hover
     line-height: 260px;
   }
 
-  h1 {
+  .title {
     font-size: 80px;
   }
 }
@@ -190,7 +179,7 @@ ul a:hover
     line-height: 200px;
   }
 
-  h1 {
+  .title {
     font-size: 70px;
   }
 }
@@ -215,13 +204,13 @@ ul a:hover
     line-height: 160px;
   }
 
-  h1 {
+  .title {
     font-size: 60px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  h1 {
+  .title {
     font-size: 70px;
   }
 
@@ -237,7 +226,7 @@ ul a:hover
 
 
 @media screen and (max-width: 500px) {
-  h1 {
+  .title {
     font-size: 58px;
   }
 }
@@ -268,7 +257,7 @@ ul a:hover
     line-height: 200px;
   }
 
-  h1 {
+  .title {
     font-size: 42px;
   }
   ul li {

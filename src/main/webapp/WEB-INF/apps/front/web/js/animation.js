@@ -15,6 +15,8 @@ hui.on(function() {
     x : size / 2,
     y : size / 2
   };
+  var circleSize = 0.155;
+  var innerArcSize = 0.34;
 
 
   var arcSkew = 0.045;//0.005;
@@ -41,12 +43,11 @@ hui.on(function() {
         arc3.update({center: center})
         arc4.update({center: center})
         if (done) {
-          circle.setRadius(size * 0.15);
-          var extra = 10;
+          circle.setRadius(size * circleSize);
           for (var i = 0; i < arcs.length; i++) {
             arcs[i].update({
-              innerRadius : (size*0.35) + 1 - 1 * (size*0.15),
-              outerRadius : (size*0.35) - 1 * (size*0.15) + 1 * (size*0.2 + (i == 1 || i == 3 ? 10 : 0))
+              innerRadius : (size * innerArcSize) + 1 - 1 * (size * 0.15),
+              outerRadius : ((size * innerArcSize) - 1 * (size * 0.15) + 1 * (size * 0.2)) * (i == 1 || i == 3 ? 1.1 : 1)
             })
           }
         }
@@ -111,7 +112,7 @@ hui.on(function() {
         duration: 2000,
         ease : hui.ease.elastic,
         $render : function(shape,pos) {
-          shape.setRadius(pos * size * 0.15)
+          shape.setRadius(pos * size * circleSize)
         },
         $complete : function() {
           loopCircle(shape);
@@ -120,13 +121,13 @@ hui.on(function() {
     }
 
     var loopCircle = function(shape) {
-      var x = Math.random() * size/-10;
+      var x = Math.random() * size/-30;
       hui.animate({ node : shape,
         //delay : 2000 * Math.random(),
         duration: 2000 + 2000 * Math.random(),
         ease : hui.ease.slowFastSlow,
         $render : function(shape,pos) {
-          shape.setRadius(size * 0.15 + Math.sin(pos * Math.PI) * x)
+          shape.setRadius(size * circleSize + Math.sin(pos * Math.PI) * x)
         },
         $complete : function() { loopCircle(shape);}
       })
@@ -143,8 +144,8 @@ hui.on(function() {
           obj.update({
             startDegrees : (start + 3) * pos + 360 * turns * pos + skew,
             endDegrees : (end +- 3) + 360 * turns * pos + skew,
-            innerRadius : (size*0.35) + 1 - pos * (size*0.15),
-            outerRadius : (size*0.35) - pos * (size*0.15) + pos * (size*0.2 + extra)
+            innerRadius : (size*innerArcSize) + 1 - pos * (size*0.15),
+            outerRadius : ((size*innerArcSize) - pos * (size*0.15) + pos * (size*0.2)) * extra
           })
         },
         $complete : function() {
@@ -170,20 +171,18 @@ hui.on(function() {
           arc.update({
             startDegrees : start+3 + 360 * pos * turns * dir + skew,
             endDegrees : end - 3 + 360 * pos * turns * dir + skew + 30 * turns * Math.sin(pos * Math.PI),
-            innerRadiusx : (size*0.35) + 1 + Math.sin(pos * Math.PI) * innerBulge + 45 * Math.sin(pos * Math.PI),
-            innerRadius : (size*0.35) + 1 - (size*0.15) * (1 + Math.sin(pos * Math.PI) * innerBulge),
-            outerRadiusx : ((size*0.35) + extra) + Math.sin(pos * Math.PI) * radiusBulge,
-            outerRadius : (size * 0.35 - size * 0.15 + size * 0.2 + extra) * (1 + Math.sin(pos * Math.PI) * radiusBulge)
+            innerRadius : (size*innerArcSize) + 1 - (size*0.15) * (1 + Math.sin(pos * Math.PI) * innerBulge),
+            outerRadius : (size * innerArcSize - size * 0.15 + size * 0.2) * extra * (1 + Math.sin(pos * Math.PI) * radiusBulge)
           })
         },
         $complete : function() { loopArc(arc,start,end,extra);}
       })
     }
 
-    startArc(arc1,-90,0,0)
-    startArc(arc2,0,90,10)
-    startArc(arc3,90,180,0)
-    startArc(arc4,180,270,10)
+    startArc(arc1,-90,0,1)
+    startArc(arc2,0,90,1.1)
+    startArc(arc3,90,180,1)
+    startArc(arc4,180,270,1.1)
 
     startCircle(circle)
 
@@ -191,7 +190,7 @@ hui.on(function() {
       loopCircle = function(){};
       loopArc = function(){};
       done = true;
-    },80000)
+    },8000)
 
   },1000);
 
