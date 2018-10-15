@@ -27,6 +27,8 @@
     margin-top: 0; }
   .oo_text > *:last-child {
     margin-bottom: 0; }
+  .oo_text .oo_link {
+    font-weight: 500; }
 
 @media screen and (min-width: 700px) {
   .oo_text > h1 {

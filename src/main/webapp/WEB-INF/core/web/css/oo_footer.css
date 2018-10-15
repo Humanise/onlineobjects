@@ -6,12 +6,15 @@
   .oo_footer_separator {
     margin: 0 5px; }
   .oo_footer_links {
-    font-size: 14px; }
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0 20px; }
     .oo_footer_links strong {
       font-weight: 500;
       color: #333; }
   .oo_footer .oo_link span {
-    color: #666; }
+    color: #666;
+    white-space: nowrap; }
   .oo_footer_logo {
     text-align: center;
     margin: 30px 0;

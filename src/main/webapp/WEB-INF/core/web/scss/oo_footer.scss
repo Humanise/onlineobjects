@@ -11,6 +11,8 @@
 
   &_links {
     font-size: 14px;
+    line-height: 20px;
+    padding: 0 20px;
 
     strong {
       font-weight: 500;
@@ -20,6 +22,7 @@
 
   .oo_link span {
     color: #666;
+    white-space: nowrap;
   }
 
   &_logo {
