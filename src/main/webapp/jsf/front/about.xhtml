@@ -1,0 +1,86 @@
+<f:view contentType="text/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  locale="#{wordsLayoutView.language}"
+  xmlns:oc = "http://java.sun.com/jsf/composite/components"
+  transient="true"
+>
+<f:loadBundle basename="dk.in2isoft.onlineobjects.apps.front.msg.FrontController" var="msg"/>
+
+<o:doctype/>
+<o:html>
+  <o:head>
+    <o:metatags/>
+    <title><ui:insert name="title"/>About OnlineObjects</title>
+    <o:fonts/>
+    <ui:insert name="head"/>
+  </o:head>
+  <o:body>
+    <o:topBar/>
+    <o:layout variant="paper">
+      <f:facet name="sidebar">
+        <div></div>
+      </f:facet>
+      <div style="padding: 20px">
+      <oc:text>
+        <c:choose>
+          <c:when test="${view.locale.language=='da'}">
+            <h1>Om OnlineObjects</h1>
+            <p>OnlineObjects er en familie a tjenester udviklet af
+              <o:link href="https://www.humanise.dk/">det danske firma Humanise</o:link>.</p>
+            <p>Nogle tjenester er offentligt tilgængelige mens andre kræver en brugerkonto.</p>
+            <h2>Hvem står bag?</h2>
+            <p>System er i øjeblikket udviklet og administreret af en enkelt person
+              - <o:link href="https://www.jonasmunk.com/">Jonas Brinkmann Munk</o:link>.</p>
+            <p>Kontakt Jonas på <o:link href="mailto:jonas@humanise.dk">jonas@humanise.dk</o:link>
+              eller ring på +45 28 77 63 65.</p>
+            <h2>Hvorfor?</h2>
+            <p>Vi har følgende målsætning...</p>
+            <ul>
+              <li>Lave hjælpsomme værtøjer</li>
+              <li>Hjælpe mennesker med at håndtere information på nettet</li>
+              <li>Understøtte den videnskabelige metode</li>
+              <li>Tilskynde kritisk tankegang</li>
+            </ul>
+            <h2>Hvordan går det?</h2>
+          </c:when>
+          <c:otherwise>
+            <h1>About OnlineObjects</h1>
+            <p>OnlineObjects is a family of services developed by the
+              <o:link href="https://www.humanise.dk/">Danish company Humanise</o:link>.</p>
+            <p>Some of the services are public facing while others are private and requires
+              a user account.</p>
+            <h2>Who made it?</h2>
+            <p>The system is currently developed and maintained by a single individual
+              - <o:link href="https://www.jonasmunk.com/">Jonas Brinkmann Munk</o:link>.</p>
+            <p>Contact Jonas at <o:link href="mailto:jonas@humanise.dk">jonas@humanise.dk</o:link>
+              or call +45 28 77 63 65.</p>
+            <h2>Why make it?</h2>
+            <p>We had the following goals...</p>
+            <ul>
+              <li>Create usefull tools</li>
+              <li>Help people make sense of information online</li>
+              <li>Support the scientific method</li>
+              <li>Encourage sceptical thinking</li>
+            </ul>
+            <h2>What has changed?</h2>
+          </c:otherwise>
+        </c:choose>
+        <h3>15-oct-2018</h3>
+        <ul>
+          <li>Added this about page</li>
+          <li>Localized login-panel with better touch support</li>
+        </ul>
+      </oc:text>
+      </div>
+    </o:layout>
+    <o:footer/>
+    <o:analytics/>
+  </o:body>
+</o:html>
+
+</f:view>

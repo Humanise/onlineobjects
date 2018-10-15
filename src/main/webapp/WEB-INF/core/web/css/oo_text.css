@@ -6,7 +6,8 @@
     margin: 5px 0; }
   .oo_text > h1 {
     margin: 0 0 10px;
-    font-weight: 600; }
+    font-weight: 600;
+    font-size: 32px; }
   .oo_text > h2 {
     margin: 20px 0 10px;
     font-weight: 600; }
@@ -26,3 +27,7 @@
     margin-top: 0; }
   .oo_text > *:last-child {
     margin-bottom: 0; }
+
+@media screen and (min-width: 700px) {
+  .oo_text > h1 {
+    font-size: 42px; } }
