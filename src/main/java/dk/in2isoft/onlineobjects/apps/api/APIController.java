@@ -133,9 +133,7 @@ public class APIController extends APIControllerBase {
 		
 		User user = securityService.getUser(username, password);
 		if (user==null) {
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {}
+			securityService.randomDelay();
 			throw new SecurityException("User not found");
 		}
 		String secret = securityService.getSecret(info, user);

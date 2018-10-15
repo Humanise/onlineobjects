@@ -3,20 +3,19 @@ package dk.in2isoft.onlineobjects.service.authentication;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.Maps;
-
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
@@ -55,15 +54,16 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String username = request.getString("username");
 		String password = request.getString("password");
 		if (!StringUtils.isNotBlank(username)) {
-			throw new IllegalRequestException("Username is blank","usernameIsBlank");
+			throw new IllegalRequestException(Error.noUsername);
 		}
 		if (!StringUtils.isNotBlank(password)) {
-			throw new IllegalRequestException("Password is blank","passwordIsBlank");
+			throw new IllegalRequestException(Error.noPassword);
 		}
 		boolean success = securityService.changeUser(request.getSession(), username, password);
-		Map<String,Object> response = Maps.newHashMap();
-		response.put("success", success);
-		request.sendObject(response);
+		if (!success) {
+			securityService.randomDelay();
+			throw new SecurityException(Error.userNotFound);
+		}
 	}
 	
 
@@ -85,13 +85,16 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		memberService.signUp(request.getSession(), username, password, fullName, email);
 	}
 
-	public void getUserInfo(Request request) throws ModelException, IOException {
+	public void getUserInfo(Request request) throws ModelException, IOException, IllegalRequestException {
 		UserSession session = request.getSession();
-		User user = session.getUser();
+		User user = modelService.get(User.class, session.getIdentity(), session);
+		if (user==null) {
+			throw new IllegalRequestException();
+		}
 		Image image = memberService.getUsersProfilePhoto(user, session);
 		Person person = memberService.getUsersPerson(user, session);
-		//String language = request.getString("language");
-		
+		String language = request.getString("language");
+		request.setLanguage(language);
 		UserInfoPerspective info = new UserInfoPerspective();
 		info.setUsername(user.getUsername());
 		if (image!=null) {
@@ -103,8 +106,8 @@ public class AuthenticationController extends AuthenticationControllerBase {
 			info.setFullName(user.getName());
 		}
 		List<Option> links = new ArrayList<>();
-		links.add(Option.of("Account", configurationService.getApplicationContext("account", null, request)));
-		links.add(Option.of("Profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
+		links.add(Option.of("account", configurationService.getApplicationContext("account", null, request)));
+		links.add(Option.of("profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
 		info.setLinks(links);
 		request.sendObject(info);
 	}

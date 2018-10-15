@@ -247,16 +247,6 @@ public class ConfigurationService implements InitializingBean {
 			url.append("/");
 		}
 		String full = url.toString();
-		// Disabled since we can now do via cookies 
-/*		if (request.isLoggedIn() && app!=null && !app.equals(request.getApplication())) {
-			if (full.contains("?")) {
-				url.append("&");
-			} else {
-				url.append("?");
-			}
-			url.append("_sessionId="+request.getSession().getId());
-			full = url.toString();
-		}*/
 		return full;
 	}
 

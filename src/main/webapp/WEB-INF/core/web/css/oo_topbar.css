@@ -70,7 +70,8 @@
   font-size: 0;
   text-align: center;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-  z-index: 9999; }
+  z-index: 9999;
+  -webkit-tap-highlight-color: transparent; }
   .oo_topbar_drop.is-visible {
     top: 0%;
     background-color: rgba(255, 255, 255, 0.95);
@@ -198,18 +199,20 @@
       background-size: contain; }
   .oo_topbar_info_content {
     margin-left: 70px;
-    padding-bottom: 10px; }
+    padding-bottom: 10px;
+    font-size: 11pt; }
   .oo_topbar_info_name {
-    font-size: 16px;
-    font-weight: 400;
-    margin: -3px 0 0; }
+    font-size: 13pt;
+    font-weight: 500;
+    margin: 0 0 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
   .oo_topbar_info_username {
     color: #666;
-    margin: 0;
-    font-size: 14px; }
+    margin: 0; }
   .oo_topbar_info_account {
-    margin: 3px 0 0;
-    font-size: 14px; }
+    margin: 3px 0 0; }
   .oo_topbar_info_buttons {
     font-size: 0;
     text-align: right; }
@@ -225,7 +228,7 @@
   line-height: 50px; }
 
 .oo_topbar_forgot {
-  font-size: 9pt;
+  font-size: 11pt;
   float: right;
   margin-top: 10px; }
   .oo_topbar_forgot_intro {

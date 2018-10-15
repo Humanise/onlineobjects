@@ -2,13 +2,19 @@ oo.TopBar = function(options) {
   this.options = options;
   this.element = hui.get(options.element);
   hui.ui.extend(this);
-  this._addBehavior();
+  this._attach();
   hui.ui.listen(this);
 };
 
 oo.TopBar.prototype = {
-  _addBehavior : function() {
+  _attach : function() {
     hui.on(this.element,'tap',this._onClick.bind(this));
+  },
+  _text : function(key) {
+    if (!this._texts) {
+      this._texts = hui.string.fromJSON(this.element.getAttribute('data-texts'));
+    }
+    return this._texts[key] || key;
   },
   _onClick : function(e) {
     e = hui.event(e);
@@ -17,12 +23,12 @@ oo.TopBar.prototype = {
       var data = a.getAttribute('data');
       if (hui.cls.has(a,'is-selected')) {
         if (hui.window.getViewWidth() < 700) {
-          e.stop();
+          e.prevent();
           this._showMenu();
         }
       }
       else if (data=='user') {
-        e.stop();
+        e.prevent();
         if (this._userPanel && this._userPanel.isVisible()) {
           this._userPanel.hide();
         } else {
@@ -30,11 +36,11 @@ oo.TopBar.prototype = {
         }
       }
       else if (data=='login') {
-        e.stop();
+        e.prevent();
         this._showLoginPanel(a)
       }
       else if (data=='inbox') {
-        e.stop();
+        e.prevent();
         this._showInbox(a)
       }
     }
@@ -69,24 +75,39 @@ oo.TopBar.prototype = {
 
   _showUserPanel : function(a) {
     var panel = this._buildUserPanel();
-    panel.position(a);
-    panel.show();
+    panel.show({target: a});
     this._updatePanel();
   },
   _buildUserPanel : function() {
     if (!this._userPanel) {
-      var p = this._userPanel = hui.ui.BoundPanel.create({width:250,variant:'light',padding:10,hideOnClick:true});
+      var p = this._userPanel = hui.ui.Panel.create({
+        width: 250,
+        variant: 'light',
+        padding: 10,
+        autoHide: true
+      });
       this._userInfoBlock = hui.build('div',{'class':'oo_topbar_info oo_topbar_info_busy'});
       p.add(this._userInfoBlock);
-      var buttons = hui.build('div',{'class':'oo_topbar_info_buttons'});
+      var buttons = hui.build('div.oo_topbar_info_buttons');
       p.add(buttons);
-      var logout = hui.ui.Button.create({text:'Log out',variant:'paper',small:true, testName: 'topbarLogOut', listener: {
-        $click : this._doLogout.bind(this)
-      }});
+      var logout = hui.ui.Button.create({
+        text: this._text('log_out'),
+        variant: 'light',
+        testName: 'topbarLogOut',
+        listener: {
+          $click : this._doLogout.bind(this)
+        }
+      });
       buttons.appendChild(logout.element);
-      var changeUser = hui.ui.Button.create({text:'Change user',variant:'paper',small:true, listener: {
-        $click : this._showLoginPanel.bind(this)
-      }});
+      var changeUser = hui.ui.Button.create({
+        text: this._text('change_user'),
+        variant: 'light',
+        listener: {
+          $click : function() {
+            this._showLoginPanel(changeUser.getElement());
+          }.bind(this)
+        }
+      });
       buttons.appendChild(changeUser.element);
     }
     return this._userPanel;
@@ -103,7 +124,8 @@ oo.TopBar.prototype = {
         if (info.photoId) {
           var ratio = window.devicePixelRatio > 1 ? 2 : 1;
           var size = 60 * ratio;
-          html += ' style="background-image: url(/service/image/id'+info.photoId+'width' + size + 'height' + size + 'sharpen0.7cropped.jpg)"';
+          var url = '/service/image/id'+info.photoId+'width' + size + 'height' + size + 'sharpen0.7cropped.jpg'
+          html += ' style="background-image: url(' + url + ')"';
         }
         html+='></div>';
         html+='</div><div class="oo_topbar_info_content">'+
@@ -111,7 +133,7 @@ oo.TopBar.prototype = {
         '<p class="oo_topbar_info_username">'+hui.string.escape(info.username)+'</p>';
         for (var i = 0; i < info.links.length; i++) {
           var link = info.links[i];
-          html += '<p class="oo_topbar_info_account"><a class="oo_link" href="' + link.value + '"><span class="oo_link_text">' + hui.string.escape(link.label) + '</span></a></p>';
+          html += '<p class="oo_topbar_info_account"><a class="oo_link" href="' + link.value + '"><span class="oo_link_text">' + hui.string.escape(this._text(link.label)) + '</span></a></p>';
         }
         html += '</div>';
         node.innerHTML = html;
@@ -130,23 +152,39 @@ oo.TopBar.prototype = {
 
   _showLoginPanel : function(a) {
     var panel = this._buildLoginPanel();
-    panel.position(a);
-    panel.show();
+    if (panel.isVisible()) {
+      panel.hide();
+      return;
+    }
+    panel.show({target: a});
     this._loginForm.focus();
   },
   _buildLoginPanel : function() {
     if (!this._loginPanel) {
-      var p = this._loginPanel = hui.ui.BoundPanel.create({width:200,variant:'light',hideOnClick:true,padding:10});
+      var p = this._loginPanel = hui.ui.Panel.create({
+        width: 200,
+        variant: 'light',
+        autoHide: true,
+        padding: 10
+      });
 
       var form = this._loginForm = hui.ui.Formula.create({name:'topBarLoginForm'});
       form.buildGroup(null,[
-        {type:'TextInput',label:'Username',options:{key:'username'}},
-        {type:'TextInput',label:'Password',options:{secret:true,key:'password'}}
+        {type:'TextInput',label:this._text('username'),options:{key:'username'}},
+        {type:'TextInput',label:this._text('password'),options:{secret:true,key:'password'}}
       ]);
       p.add(form);
-      var login = hui.ui.Button.create({text:'Log in',variant:'paper',name:'topBarLoginButton'});
+      var login = hui.ui.Button.create({
+        text: this._text('log_in'),
+        variant: 'light',
+        highlighted: true,
+        name: 'topBarLoginButton'
+      });
+      login.getElement().style.marginTop = '5px';
       p.add(login);
-      var forgot = hui.build('div.oo_topbar_forgot',{html:'<a class="oo_link" href="javascript://"><span>Forgot password?</span></a>'});
+      var forgot = hui.build('div.oo_topbar_forgot',{
+        html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'
+      });
       p.add(forgot);
       hui.listen(forgot,'click',this._showPasswordRecovery.bind(this));
     }
@@ -160,31 +198,35 @@ oo.TopBar.prototype = {
   },
   _doLogin : function() {
     var values = this._loginForm.getValues();
-    if (hui.isBlank(values.username) || hui.isBlank(values.password)) {
-      this._loginForm.focus();
+    var missing = (hui.isBlank(values.username) ? 'username' : undefined) || (hui.isBlank(values.password) ? 'password' : undefined)
+    if (missing) {
+      this._loginForm.focus(missing);
       return;
     }
+    this._loginPanel.setBusy();
     hui.ui.request({
       url : '/service/authentication/changeUser',
       parameters : {username:values.username,password:values.password},
-      $object : function(response) {
-        if (response.success===true) {
-          this._loginPanel.clear();
-          this._loginPanel.add(hui.build('div',{'class':'oo_topbar_login_success',text:'You are logged in'}))
+      $success : function(response) {
+        hui.ui.msg.success({text:this._text('you_are_logged_in')});
+        setTimeout(function() {
           document.location.reload();
-        } else {
-          hui.ui.showMessage({text:'Unable to log in',icon:'common/warning',duration:2000});
-        }
+        },500);
       }.bind(this),
-      $failure : function() {
-        hui.ui.showMessage({text:'Unable to log in',icon:'common/warning',duration:2000});
-      },
+      $failure : function(t) {
+        var obj = hui.string.fromJSON(t.responseText);
+        var msg = obj ? obj.message : 'An unexpected error occured'
+
+        hui.ui.msg.fail({text: msg});
+        this._loginPanel.setBusy(false);
+      }.bind(this),
       $exception : function(e) {
         throw e;
       }
     })
   },
   _doLogout : function() {
+    this._userPanel.setBusy(true);
     hui.ui.request({
       url : '/service/authentication/logout',
       $success : function() {
@@ -244,7 +286,12 @@ oo.TopBar.prototype = {
 
   _showInbox : function(a) {
     if (!this._inboxPanel) {
-      var p = this._inboxPanel = hui.ui.BoundPanel.create({width:200,variant:'light',hideOnClick:true,padding:5});
+      var p = this._inboxPanel = hui.ui.Panel.create({
+        width: 200,
+        variant: 'light',
+        autoHide: true,
+        padding: 5
+      });
       //p.add(hui.build('div',{style:'height: 300px'}));
       var list = hui.ui.List.create({
         variant : 'light',

@@ -3,24 +3,26 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
-import dk.in2isoft.in2igui.jsf.BoundPanelComponent;
 import dk.in2isoft.in2igui.jsf.BoxComponent;
 import dk.in2isoft.in2igui.jsf.ButtonComponent;
 import dk.in2isoft.in2igui.jsf.CheckboxComponent;
 import dk.in2isoft.in2igui.jsf.FormulaComponent;
 import dk.in2isoft.in2igui.jsf.ListComponent;
 import dk.in2isoft.in2igui.jsf.MessageComponent;
+import dk.in2isoft.in2igui.jsf.PanelComponent;
 import dk.in2isoft.in2igui.jsf.SourceComponent;
 import dk.in2isoft.in2igui.jsf.TextInputComponent;
 import dk.in2isoft.onlineobjects.model.User;
@@ -31,7 +33,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value = TopBarComponent.FAMILY)
 @Dependencies(js = { "/WEB-INF/core/web/js/oo_topbar.js" }, css = { "/WEB-INF/core/web/css/oo_topbar.css" }, requires = { OnlineObjectsComponent.class, IconComponent.class }, uses = {
-		BoundPanelComponent.class, FormulaComponent.class, TextInputComponent.class, ButtonComponent.class, BoxComponent.class, ListComponent.class, SourceComponent.class, MessageComponent.class, LinkComponent.class, CheckboxComponent.class })
+		PanelComponent.class, FormulaComponent.class, TextInputComponent.class, ButtonComponent.class, BoxComponent.class, ListComponent.class, SourceComponent.class, MessageComponent.class, LinkComponent.class, CheckboxComponent.class })
 public class TopBarComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.topBar";
@@ -39,6 +41,8 @@ public class TopBarComponent extends AbstractComponent {
 	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
 	private static List<String> privateApps = Lists.newArrayList("knowledge", "desktop", "tools");
 	private static Map<String,String> icons = new HashMap<String, String>();
+
+	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;
 	
 	static {
 		icons.put("words", "book");
@@ -69,8 +73,9 @@ public class TopBarComponent extends AbstractComponent {
 		Request request = Request.get(context);
 		Messages msg = new Messages(this);
 		boolean publicUser = !request.isLoggedIn();
+		String texts = buildTexts(request.getLocale(), msg);
 
-		out.startDiv("oo_topbar oo_faded").withId(getClientId());
+		out.startDiv("oo_topbar oo_faded").withId(getClientId()).withAttribute("data-texts", texts);
 		out.startA("oo_topbar_logo").withHref(configurationService.getApplicationContext("front", null, request));
 		out.startEm("oo_topbar_logo_icon oo_icon_onlineobjects").endEm();
 		out.startSpan("oo_topbar_logo_text").startSpan("oo_topbar_logo_part").text("Online").endSpan().text("Objects").endSpan();
@@ -127,6 +132,14 @@ public class TopBarComponent extends AbstractComponent {
 			out.write(user.getName()).endA().endLi();
 		}
 		out.endUl();
+	}
+
+private String buildTexts(Locale locale, Messages msg) {
+		Map<String,String> texts = new HashMap<>();
+		for (String key : textKeys) {
+			texts.put(key, msg.get(key, locale));
+		}
+		return new Gson().toJson(texts);
 	}
 
 	@Override

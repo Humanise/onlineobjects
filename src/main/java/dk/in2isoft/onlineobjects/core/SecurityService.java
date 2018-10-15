@@ -411,6 +411,13 @@ public class SecurityService {
 		return SecurityService.ADMIN_USERNAME.equals(user.getUsername()) || SecurityService.PUBLIC_USERNAME.equals(user.getUsername());
 	}
 
+	public void randomDelay() {
+		try {
+			int time = (int) (Math.random() * 1000 + 1500);
+			Thread.sleep(time);
+		} catch (InterruptedException e) {}
+	}
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -432,6 +439,7 @@ public class SecurityService {
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
+
 
 
 }

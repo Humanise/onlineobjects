@@ -413,6 +413,7 @@ public class Request {
 		return (UserSession) session;
 	}
 
+	@Deprecated
 	public boolean isUser(String username) {
 		return username.equals(getSession().getUser().getUsername());
 	}
