@@ -248,6 +248,7 @@
     margin-left: 5px; }
   .oo_topbar_logo_part {
     font-weight: 400; } }
+
 @media screen and (min-width: 700px) {
   .oo_topbar_menu_item {
     display: inline-block; }

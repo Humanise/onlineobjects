@@ -28,14 +28,3 @@ $view-action-selected-color-hover: darken($view-action-selected-color, 10%);
 $view-dimmed-color: #D8D3B8;
 
 $font-serif: 'Merriweather';
-
-$icons : (
-  quote : '\e902',
-  hypothesis : '\e901',
-  question : '\e903'
-);
-
-@mixin icon($key) {
-  font-family: 'OnlineObjects';
-  content: map-get($icons,$key);
-}

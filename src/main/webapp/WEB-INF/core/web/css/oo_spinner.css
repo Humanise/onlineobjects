@@ -18,6 +18,7 @@
     -webkit-transform: rotate(0deg); }
   100% {
     -webkit-transform: rotate(-360deg); } }
+
 @-webkit-keyframes spin-in {
   0% {
     -webkit-transform: rotate(0deg) scale(0.5);

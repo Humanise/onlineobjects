@@ -149,6 +149,12 @@ oo.TopBar.prototype = {
 
     }.bind(this),2000)
   },
+  $showLogin : function() {
+    var user = hui.find('.oo_topbar_user, .oo_topbar_login');
+    if (user) {
+      this._showLoginPanel(user);
+    }
+  },
 
   _showLoginPanel : function(a) {
     var panel = this._buildLoginPanel();

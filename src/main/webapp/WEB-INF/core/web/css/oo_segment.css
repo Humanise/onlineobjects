@@ -2,6 +2,7 @@
   border-bottom: 1px solid #ddd;
   font-size: 18px;
   padding-bottom: 5px; }
+
 .oo_segment_body {
   padding: 15px 0 30px 20px; }
 
@@ -16,7 +17,6 @@
     .oo_segment_body {
       flex-basis: 70%;
       padding: 0; }
-
   .oo_segment + .oo_segment {
     margin-top: 15px;
     border-top: 1px solid #ddd;

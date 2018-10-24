@@ -99,92 +99,82 @@ ul a {
     padding: 7px; }
     .language a span {
       color: #666; }
-    .language a:hover, .language a:hover span {
+    .language a:hover,
+    .language a:hover span {
       color: #333; }
 
 @media screen and (max-height: 600px) {
   .container {
     margin-top: -250px; }
-
   #logo {
     width: 260px;
     height: 260px; }
-
   #logo span.oo_icon {
     width: 260px;
     height: 260px;
     font-size: 220px;
     line-height: 260px; }
-
   .title {
     font-size: 80px; } }
+
 @media screen and (max-height: 500px) {
   .container {
     margin-top: -200px; }
-
   #logo {
     width: 200px;
     height: 200px; }
-
   #logo span.oo_icon {
     width: 200px;
     height: 200px;
     font-size: 180px;
     line-height: 200px; }
-
   .title {
     font-size: 70px; } }
+
 @media screen and (max-height: 400px) {
   .container {
     margin-top: -180px; }
-
   #logo {
     width: 160px;
     height: 160px; }
-
   #logo span.oo_icon {
     width: 160px;
     height: 160px;
     font-size: 140px;
     line-height: 160px; }
-
   .title {
     font-size: 60px; } }
+
 @media screen and (max-width: 600px) {
   .title {
     font-size: 70px; }
-
   .language {
     left: 0;
     right: 0;
     text-align: center; }
-
   ul {
     bottom: 7%; } }
+
 @media screen and (max-width: 500px) {
   .title {
     font-size: 58px; } }
+
 @media screen and (max-width: 400px) {
   .container {
     margin-top: -200px; }
-
   #logo {
     width: 200px;
     height: 200px; }
-
   #logo .hui_drawing {
     margin: 0;
     top: 0;
     left: 0; }
-
   #logo span.oo_icon {
     width: 200px;
     height: 200px;
     font-size: 180px;
     line-height: 200px; }
-
   .title {
     font-size: 42px; }
-
   ul li {
     width: 90px; } }

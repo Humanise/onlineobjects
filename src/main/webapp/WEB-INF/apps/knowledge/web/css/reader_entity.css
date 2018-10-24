@@ -6,6 +6,7 @@
   line-height: 1;
   color: #3A3326;
   font-weight: 600; }
+
 .reader_entity_actions {
   text-align: center; }
   .reader_entity_actions .oo_icon {
@@ -20,11 +21,14 @@
       color: #5D583F; }
       .reader_entity_actions .oo_icon.oo_icon-selected:hover {
         color: #3f3b2a; }
+
 .reader_entity_body {
   padding: 20px;
   font-family: "Merriweather"; }
+
 .reader_entity_list {
   margin-bottom: 30px; }
+
 .reader_entity_list_empty {
   margin: 0;
   color: #D8D3B8;
@@ -32,6 +36,7 @@
   text-align: center;
   font-size: 14px;
   font-weight: 200; }
+
 .reader_entity_header {
   text-align: center;
   color: #B7B09A;
@@ -40,6 +45,7 @@
   margin: 10px 0 20px;
   text-transform: uppercase;
   letter-spacing: .5px; }
+
 .reader_entity_item {
   margin: 10px auto;
   max-width: 600px;
@@ -48,6 +54,7 @@
     color: #AD9F76; }
   .reader_entity_item .oo_icon:hover {
     color: #564e34; }
+
 .reader_entity_item_text {
   position: relative;
   margin: 0 0 0 25px;
@@ -68,6 +75,7 @@
     margin: -2px 0 0 6px;
     color: #D8D3B8;
     cursor: pointer; }
+
 .reader_entity_item_info {
   margin: 10px 0 0 20%;
   text-align: right;
@@ -75,6 +83,7 @@
   font-weight: 400;
   font-family: "Hind Vadodara", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   color: #D8D3B8; }
+
 .reader_entity_item_link {
   color: inherit;
   text-decoration: none;

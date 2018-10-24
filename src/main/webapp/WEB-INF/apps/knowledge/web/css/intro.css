@@ -1,0 +1,150 @@
+@charset "UTF-8";
+.intro {
+  background: #fff;
+  padding: 20px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  font-size: 0; }
+  .intro_title {
+    font-weight: 900;
+    text-align: center;
+    font-size: 16pt;
+    line-height: 1; }
+    .intro_title > span {
+      font-weight: normal;
+      display: block; }
+    .intro_title > strong {
+      font-size: 2em;
+      display: block;
+      text-transform: capitalize; }
+  .intro_logo {
+    background: url("/gfx/brain.svg") 50% no-repeat;
+    padding: 0;
+    height: 140px;
+    margin: 20px 0;
+    animation-name: hue;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; }
+  .intro_points {
+    display: inline-block;
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14pt;
+    text-align: center;
+    font-weight: 500; }
+  .intro_point {
+    margin: 10px 0;
+    line-height: 1; }
+    .intro_point:before {
+      content: "";
+      font-family: 'OnlineObjects';
+      display: inline-block;
+      vertical-align: middle;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1;
+      font-weight: normal;
+      display: inline-block;
+      width: 1em;
+      vertical-align: top;
+      margin-right: 0.3em;
+      text-align: center;
+      color: #c286ff;
+      font-size: 0.75em;
+      margin-top: 0.2em; }
+    .intro_point-check:before {
+      content: '\e918'; }
+  .intro_signup {
+    text-align: center;
+    margin: 20px 0; }
+  .intro_signup > .intro_button {
+    margin: 0 10px; }
+  .intro_button {
+    display: inline-block;
+    height: 42px;
+    line-height: 42px;
+    background: #eee;
+    color: #09f;
+    border-radius: 5px;
+    font-weight: 500;
+    padding: 0 20px;
+    font-size: 14pt;
+    text-decoration: none; }
+    .intro_button-highlighted {
+      background: #0072bc;
+      color: white; }
+    .intro_button:hover {
+      background: #ddd; }
+  .intro_platform {
+    text-align: center;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+    margin-bottom: -1px; }
+    .intro_platform > h2 {
+      font-size: 24pt;
+      line-height: 1;
+      margin: 0; }
+    .intro_platform > p {
+      font-size: 14pt;
+      margin: 10px 10px 20px; }
+  .intro_ios {
+    background: url("/gfx/ios-store-en.svg") 50% no-repeat;
+    display: inline-block;
+    width: 120px;
+    height: 40px; }
+
+@media screen and (min-width: 700px) {
+  .intro_title {
+    font-size: 24pt; }
+  .intro_main {
+    display: flex;
+    position: relative;
+    max-width: 1200px;
+    align-items: center;
+    width: 100%;
+    margin: 40px auto;
+    justify-content: space-evenly; }
+  .intro_logo {
+    order: 2;
+    margin: 0;
+    flex-basis: 33.333333%;
+    height: 20vw; }
+  .intro_points {
+    width: auto;
+    text-align: left;
+    font-size: 18pt; }
+    .intro_points-1 {
+      order: 1; }
+    .intro_points-2 {
+      order: 3; }
+  .intro_platforms {
+    display: flex;
+    position: relative;
+    max-width: 1200px;
+    width: 100%;
+    margin: 40px auto; }
+  .intro_platform {
+    border: none;
+    padding: 0 20px;
+    box-sizing: border-box;
+    flex-basis: 33.3333333%; }
+    .intro_platform:nth-child(2) {
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee; } }
+
+@media screen and (min-width: 1000px) {
+  .intro_points {
+    font-size: 24pt; }
+    .intro_points > li {
+      margin: 20px 0; }
+  .intro_platform > h2 {
+    font-size: 32pt; } }
+
+@keyframes hue {
+  0% {
+    filter: hue-rotate(0deg); }
+  100% {
+    filter: hue-rotate(360deg); } }

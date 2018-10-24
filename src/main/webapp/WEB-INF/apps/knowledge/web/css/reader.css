@@ -51,29 +51,27 @@ html, body {
 @media screen and (min-width: 1000px) {
   .reader_layout_navigation {
     width: 199px; }
-
   .reader_layout_list {
     position: absolute;
     width: 399px;
     bottom: 0;
     left: 200px; }
-
   .reader_layout_info {
     left: 599px; }
-
   .reader_layout_viewer {
     left: 599px; } }
+
 @media screen and (min-width: 1600px) {
   .reader_layout_viewer {
     right: 200px;
     bottom: 0; }
-
   .reader_layout_info {
     width: 200px;
     height: 100%;
     left: auto;
     border-top: none;
     border-left: 1px solid #eee; } }
+
 .reader_sidebar {
   height: 100%;
   overflow: hidden; }
@@ -107,6 +105,7 @@ html, body {
   background: #fafafa;
   display: flex;
   align-items: center; }
+
 .reader_list_middle {
   position: absolute;
   top: 31px;

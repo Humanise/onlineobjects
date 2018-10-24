@@ -52,6 +52,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		addJsfMatcher("/<language>", "reader.xhtml");
 		addJsfMatcher("/<language>/analyze", "analyze.xhtml");
 		addJsfMatcher("/<language>/extract", "extract.xhtml");
+		addJsfMatcher("/<language>/intro", "intro.xhtml");
 	}
 	
 	@Override
@@ -84,6 +85,9 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	@Override
 	public boolean isAllowed(Request request) {
+		if (request.testLocalPathFull("en","intro") || request.testLocalPathStart("gfx")) {
+			return true;
+		}
 		return !request.isUser(SecurityService.PUBLIC_USERNAME);
 	}
 	

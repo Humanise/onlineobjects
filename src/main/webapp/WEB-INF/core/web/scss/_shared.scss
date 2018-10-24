@@ -65,8 +65,21 @@ $regular-font-size: 16px;
   transition-delay:         $delay;
 }
 
+$icons : (
+  quote : '\e902',
+  hypothesis : '\e901',
+  question : '\e903',
+  star_line : '\e609',
+  check: '\e918',
+  star: '\e919'
+);
+
 @mixin icon($icon) {
-  content: $icon;
+  @if map-has-key($icons, $icon) {
+    content: map-get($icons, $icon);
+  } @else {
+    content: $icon;
+  }
   font-family: 'OnlineObjects';
   display: inline-block;
   vertical-align: middle;

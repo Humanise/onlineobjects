@@ -75,6 +75,7 @@
   .oo_filters_filter.is-visible {
     opacity: 1;
     z-index: 1; }
+
 .oo_filters_option {
   display: inline-block;
   font-size: 16px;
@@ -99,6 +100,7 @@
       background: #666;
       border: 1px solid #666;
       color: #fff; }
+
 .oo_filters_title {
   display: none; }
 
@@ -138,7 +140,6 @@
 @media screen and (min-width: 760px) {
   .oo_filters_bar {
     display: none; }
-
   .oo_filters_body {
     overflow: visible;
     height: auto !important;
@@ -184,7 +185,6 @@
     height: 0;
     margin-bottom: 20px;
     margin-top: 20px; }
-
   .oo_filters_title_text {
     display: inline-block;
     line-height: 20px;
