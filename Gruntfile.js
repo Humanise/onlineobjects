@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+  const sass = require('node-sass');
+
   // Project configuration.
   config = {
     pkg: grunt.file.readJSON('package.json'),
@@ -17,7 +19,11 @@ module.exports = function(grunt) {
     },
     sass: {
       core: {
-        options : {sourcemap:'none'},
+        options: {
+          implementation: sass,
+          sourceMap: false,
+          outputStyle: 'nested'
+        },
         files: [{
           expand: true,
           cwd: 'src/main/webapp/WEB-INF/core/web/scss/',
@@ -38,7 +44,11 @@ module.exports = function(grunt) {
       }
     }
     config.sass[app] = {
-      options : {sourcemap:'none'},
+      options: {
+        implementation: sass,
+        sourceMap: false,
+        outputStyle: 'nested'
+      },
       files: [{
         expand: true,
         cwd: 'src/main/webapp/WEB-INF/apps/' + app + '/web/scss/',
@@ -53,7 +63,7 @@ module.exports = function(grunt) {
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-sass');
 
   // Default task(s).
   grunt.registerTask('default', 'Watch', ['sass','watch']);
