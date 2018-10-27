@@ -13,7 +13,7 @@ import org.springframework.beans.factory.InitializingBean;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
@@ -29,7 +29,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.Filters.Variant;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsSearchView extends AbstractView implements InitializingBean {
+public class WordsSearchView extends LegacyAbstractView implements InitializingBean {
 
 	private static final int PAGING = 10;
 	private WordService wordService;

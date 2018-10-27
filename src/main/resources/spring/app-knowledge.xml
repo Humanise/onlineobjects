@@ -58,5 +58,8 @@
    	</bean>
    	
    	<bean id="knowledgeAnalyzeView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeAnalyzeView" autowire="byType"/>
+
    	<bean id="knowledgeExtractionView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeExtractionView" autowire="byType"/>
+
+   	<bean id="knowledgeIntroView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeIntroView"/>
 </beans>

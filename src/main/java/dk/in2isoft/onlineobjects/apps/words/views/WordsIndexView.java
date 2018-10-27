@@ -7,7 +7,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
-public class WordsIndexView extends AbstractView implements InitializingBean {
+public class WordsIndexView extends LegacyAbstractView implements InitializingBean {
 
 	private static final int PAGING = 10;
 	private ModelService modelService;

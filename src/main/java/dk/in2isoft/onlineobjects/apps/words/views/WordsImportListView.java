@@ -12,7 +12,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
@@ -32,7 +32,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsImportListView extends AbstractView implements InitializingBean {
+public class WordsImportListView extends LegacyAbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private LanguageService languageService;

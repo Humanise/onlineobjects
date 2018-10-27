@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
-public class WordsFrontView extends AbstractView implements InitializingBean {
+public class WordsFrontView extends LegacyAbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private EventService eventService;

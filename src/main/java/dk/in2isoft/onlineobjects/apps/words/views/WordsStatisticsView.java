@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.onlineobjects.modules.language.LanguageStatistic;
 import dk.in2isoft.onlineobjects.modules.language.LanguageStatisticsDataProvider;
 
-public class WordsStatisticsView extends AbstractView {
+public class WordsStatisticsView extends LegacyAbstractView {
 
 	
 	private LanguageStatisticsDataProvider statisticsDataProvider;

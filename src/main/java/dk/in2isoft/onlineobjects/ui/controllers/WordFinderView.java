@@ -9,7 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.AnyModelChangeListener;
@@ -21,7 +21,7 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordFinderView extends AbstractView implements InitializingBean {
+public class WordFinderView extends LegacyAbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private EventService eventService;

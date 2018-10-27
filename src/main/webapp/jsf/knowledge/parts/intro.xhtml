@@ -9,48 +9,50 @@
 >
   <ui:composition>
 
+    <f:loadBundle basename="dk.in2isoft.onlineobjects.apps.knowledge.msg.KnowledgeIntroView" var="msg"/>
+
     <o:dependency from="local" src="/css/intro.css"/>
     <o:dependency from="core" src="/css/oo_icon.css"/>
     <o:dependency from="local" src="/js/intro.js"/>
 
     <div class="intro js-intro">
-      <h1 class="intro_title"><span>Track your</span> <strong>knowledge</strong></h1>
+      <h1 class="intro_title"><span>${msg.track_your}</span> <strong>${msg.knowledge}</strong></h1>
       <div class="intro_main">
         <figure class="intro_logo">
         </figure>
         <ul class="intro_points intro_points-1">
-          <li class="intro_point intro_point-feature">Ask questions</li>
-          <li class="intro_point intro_point-feature">Find answers</li>
-          <li class="intro_point intro_point-feature">Store articles</li>
+          <li class="intro_point intro_point-feature">${msg.feature_1}</li>
+          <li class="intro_point intro_point-feature">${msg.feature_2}</li>
+          <li class="intro_point intro_point-feature">${msg.feature_3}</li>
         </ul>
         <ul class="intro_points intro_points-2">
-          <li class="intro_point intro_point-check">Cross platform</li>
-          <li class="intro_point intro_point-check">Ad free</li>
-          <li class="intro_point intro_point-check">Synchronized</li>
+          <li class="intro_point intro_point-check">${msg.check_1}</li>
+          <li class="intro_point intro_point-check">${msg.check_2}</li>
+          <li class="intro_point intro_point-check">${msg.check_3}</li>
         </ul>
       </div>
       <div class="intro_signup">
-        <a class="intro_button" href="#signup">Sign up</a>
-        <a class="intro_button" href="#login">Log in</a>
+        <a class="intro_button" href="#signup">${msg.sign_up}</a>
+        <a class="intro_button" href="#login">${msg.log_in}</a>
       </div>
       <div class="intro_platforms">
         <div class="intro_platform">
           <h2>iOS</h2>
-          <p>Mobile focused feature set</p>
-          <p><o:link href="mailto:jonas@humanise.dk">Send a mail to join the beta</o:link></p>
+          <p>${msg.ios_text}</p>
+          <p><o:link href="mailto:jonas@humanise.dk">${msg.join_beta}</o:link></p>
           <!--
           <a href="#" class="intro_ios">Get it from the App Store</a>
           -->
         </div>
         <div class="intro_platform">
           <h2>Web</h2>
-          <p>Universal access to everything</p>
-          <a href="#login" class="intro_button">Log in</a>
+          <p>${msg.web_text}</p>
+          <a href="#login" class="intro_button">${msg.log_in}</a>
         </div>
         <div class="intro_platform">
           <h2>Mac</h2>
-          <p>Native macOS integration</p>
-          <a href="https://www.humanise.dk/downloads/OnlineObjects.dmg" class="intro_button">Download Mac app</a>
+          <p>${msg.mac_text}</p>
+          <a href="https://www.humanise.dk/downloads/OnlineObjects.dmg" class="intro_button">${msg.download_mac_app}</a>
         </div>
       </div>
     </div>

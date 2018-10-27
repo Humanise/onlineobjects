@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
@@ -34,7 +34,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsWordView extends AbstractView implements InitializingBean {
+public class WordsWordView extends LegacyAbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private WordService wordService;

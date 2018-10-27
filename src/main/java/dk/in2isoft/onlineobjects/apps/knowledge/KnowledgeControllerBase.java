@@ -57,11 +57,13 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	@Override
 	public void unknownRequest(Request request) throws IOException,
 			EndUserException {
-		if (request.testLocalPathFull() || request.testLocalPathFull("en")) {
+		if (request.testLocalPathFull() || request.testLocalPathFull("en") || request.testLocalPathFull("da")) {
+			String language = getLanguage(request);
+			if (language == null) language = "en";
 			if (request.isLoggedIn()) {
-				request.redirect("/en/app");
+				request.redirect("/" + language + "/app");
 			} else {
-				request.redirect("/en/intro");
+				request.redirect("/" + language + "/intro");
 			}
 		} else {
 			super.unknownRequest(request);
@@ -91,7 +93,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		if (request.testLocalPathFull() || request.testLocalPathFull("da") || request.testLocalPathFull("en")) {
 			return true;
 		}
-		if (request.testLocalPathFull("en","intro") || request.testLocalPathStart("gfx")) {
+		if (request.testLocalPathFull("en","intro") || request.testLocalPathFull("da","intro") || request.testLocalPathStart("gfx")) {
 			return true;
 		}
 		return !request.isUser(SecurityService.PUBLIC_USERNAME);
