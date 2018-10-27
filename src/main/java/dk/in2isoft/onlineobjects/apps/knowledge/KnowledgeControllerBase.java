@@ -48,8 +48,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 
 	public KnowledgeControllerBase() {
 		super("knowledge");
-		addJsfMatcher("/", "reader.xhtml");
-		addJsfMatcher("/<language>", "reader.xhtml");
+		addJsfMatcher("/<language>/app", "reader.xhtml");
 		addJsfMatcher("/<language>/analyze", "analyze.xhtml");
 		addJsfMatcher("/<language>/extract", "extract.xhtml");
 		addJsfMatcher("/<language>/intro", "intro.xhtml");
@@ -58,8 +57,12 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	@Override
 	public void unknownRequest(Request request) throws IOException,
 			EndUserException {
-		if (request.testLocalPathStart()) {
-			super.unknownRequest(request);
+		if (request.testLocalPathFull() || request.testLocalPathFull("en")) {
+			if (request.isLoggedIn()) {
+				request.redirect("/en/app");
+			} else {
+				request.redirect("/en/intro");
+			}
 		} else {
 			super.unknownRequest(request);
 		}
@@ -85,6 +88,9 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	@Override
 	public boolean isAllowed(Request request) {
+		if (request.testLocalPathFull() || request.testLocalPathFull("da") || request.testLocalPathFull("en")) {
+			return true;
+		}
 		if (request.testLocalPathFull("en","intro") || request.testLocalPathStart("gfx")) {
 			return true;
 		}

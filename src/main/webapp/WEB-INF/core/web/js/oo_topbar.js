@@ -215,9 +215,7 @@ oo.TopBar.prototype = {
       parameters : {username:values.username,password:values.password},
       $success : function(response) {
         hui.ui.msg.success({text:this._text('you_are_logged_in')});
-        setTimeout(function() {
-          document.location.reload();
-        },500);
+        this._afterLogin();
       }.bind(this),
       $failure : function(t) {
         var obj = hui.string.fromJSON(t.responseText);
@@ -231,14 +229,32 @@ oo.TopBar.prototype = {
       }
     })
   },
+  _afterLogin : function() {
+    var path = this.element.getAttribute('data-login-url');
+    if (path) {
+      document.location = path;
+      return;
+    }
+    setTimeout(function() {
+      document.location.reload();
+    },500);
+  },
   _doLogout : function() {
     this._userPanel.setBusy(true);
     hui.ui.request({
       url : '/service/authentication/logout',
       $success : function() {
-        document.location.reload();
-      }
+        this._afterLogout();
+      }.bind(this)
     })
+  },
+  _afterLogout : function() {
+    var path = this.element.getAttribute('data-logout-url');
+    if (path) {
+      document.location = path;
+      return;
+    }
+    document.location.reload();    
   },
   _showPasswordRecovery : function() {
     if (!this._passwordRecoveryBox) {

@@ -39,7 +39,7 @@ public class TopBarComponent extends AbstractComponent {
 	public static final String FAMILY = "onlineobjects.topBar";
 
 	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
-	private static List<String> privateApps = Lists.newArrayList("knowledge", "desktop", "tools");
+	private static List<String> privateApps = Lists.newArrayList("knowledge"); //, "desktop", "tools"
 	private static Map<String,String> icons = new HashMap<String, String>();
 
 	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;
@@ -75,7 +75,13 @@ public class TopBarComponent extends AbstractComponent {
 		boolean publicUser = !request.isLoggedIn();
 		String texts = buildTexts(request.getLocale(), msg);
 
+		
 		out.startDiv("oo_topbar oo_faded").withId(getClientId()).withAttribute("data-texts", texts);
+		// TODO: Get this via application controller
+		if ("knowledge".equals(request.getApplication())) {
+			out.withAttribute("data-login-url", "/"+request.getLanguage()+"/app");
+			out.withAttribute("data-logout-url", "/"+request.getLanguage()+"/intro");
+		}
 		out.startA("oo_topbar_logo").withHref(configurationService.getApplicationContext("front", null, request));
 		out.startEm("oo_topbar_logo_icon oo_icon_onlineobjects").endEm();
 		out.startSpan("oo_topbar_logo_text").startSpan("oo_topbar_logo_part").text("Online").endSpan().text("Objects").endSpan();
