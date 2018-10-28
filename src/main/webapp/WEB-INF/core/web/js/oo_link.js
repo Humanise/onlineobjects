@@ -7,7 +7,12 @@ oo.Link = function(options) {
 }
 
 oo.Link.create = function(options) {
-  options.element = hui.build('a.oo_link', {href: '#', children: [hui.build('span', {text: options.text})]});
+  options.element = hui.build('a.oo_link', {
+    href: '#',
+    children: [
+      hui.build('span', {text: hui.ui.getTranslated(options.text)})
+    ]
+  });
   return new oo.Link(options);
 }
 

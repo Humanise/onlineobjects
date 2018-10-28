@@ -167,6 +167,15 @@ oo.signUp = function() {
   });
 }
 
+oo.recover = function() {
+  if (this._recoverLoading) return;
+  this._recoverLoading = true;
+  hui.build('script',{
+    'src': '/core/js/oo_recover.js',
+    parent: document.head
+  });
+}
+
 hui.on(['hui'],function() {
   hui.on(hui.find('.js-signup'),'click',function() {oo.signUp()})
 });

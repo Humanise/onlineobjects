@@ -38,8 +38,8 @@ public class TopBarComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.topBar";
 
-	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
-	private static List<String> privateApps = Lists.newArrayList("knowledge"); //, "desktop", "tools"
+	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people", "knowledge");
+	private static List<String> privateApps = Lists.newArrayList(); //, "desktop", "tools"
 	private static Map<String,String> icons = new HashMap<String, String>();
 
 	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;

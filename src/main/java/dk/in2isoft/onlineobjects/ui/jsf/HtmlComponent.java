@@ -30,7 +30,10 @@ public class HtmlComponent extends AbstractComponent {
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String language = "en";
-		Locale locale = context.getExternalContext().getRequestLocale();
+		Locale locale = context.getViewRoot().getLocale();
+		if (locale == null) {
+			locale = context.getExternalContext().getRequestLocale();			
+		}
 		if (locale!=null && locale.getLanguage()!=null) {
 			language = locale.getLanguage();
 		}

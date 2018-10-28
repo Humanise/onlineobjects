@@ -7,16 +7,14 @@
   oo.SignUp.prototype = {
     _show : function() {
       if (!this._box) {
-        var box = this._box = hui.ui.Box.create({
-          modal: true,
-          title: 'Sign up',
+        var box = this._box = hui.ui.Panel.create({
+          title: {en: 'Sign up', da: 'Bliv medlem'},
           closable: true,
-          absolute: true,
           width: 400,
           padding: 15
         });
         var form = this._form = hui.ui.Formula.create();
-        var group = form.buildGroup(null,[
+        var group = form.buildGroup(null, [
           {
             type: 'TextInput',
             label: 'E-mail',
@@ -24,28 +22,33 @@
           },
           {
             type: 'TextInput',
-            label: 'Username',
+            label: {en: 'Username', da: 'Brugernavn'},
             options: {key:'username', testName: 'signupUsername'}
           },
           {
             type: 'TextInput',
-            label: 'Password',
+            label: {en: 'Password', da: 'Kodeord'},
             options: {key:'password', secret: true, testName: 'signupPassword'}
           },
           {
             type: 'Checkbox',
-            label: 'Accept terms',
-            options: {key:'terms', testName: 'signupAccept'}
+            label: {en: 'Accept terms', da:'Acceptér vilkårene'},
+            options: {key:'terms', testName: 'signupAccept', text:'dadad'}
           }
         ]);
-        var termsLink = oo.Link.create({text: 'Read the terms'});
+        var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
         group.add(termsLink)
         var buttons = group.createButtons();
-        var cancel = hui.ui.Button.create({text:'Cancel'});
+        var cancel = hui.ui.Button.create({text: {en: 'Cancel', da: 'Annuller'}, variant: 'light'});
         buttons.add(cancel);
-        buttons.add(hui.ui.Button.create({text:'Signup', highlighted:true, submit:true, testName: 'signupSubmit'}));
+        buttons.add(hui.ui.Button.create({
+          text: {en: 'Sign up', da: 'Bliv medlem'},
+          highlighted: true,
+          variant: 'light',
+          submit: true,
+          testName: 'signupSubmit'
+        }));
         box.add(form);
-        box.addToDocument();
         form.listen({
           $submit : this._submit.bind(this)
         });
@@ -70,16 +73,16 @@
       var values = form.getValues();
       var failure = null;
       if (hui.isBlank(values.email)) {
-        failure = "The e-mail is required"
+        failure = {en: 'The e-mail is required', da: 'E-mail er krævet'}
       }
       else if (hui.isBlank(values.username)) {
-        failure = "A username is required"
+        failure = {en: 'A username is required', da: 'Brugernavnet er krævet'}
       }
       else if (hui.isBlank(values.password)) {
-        failure = "A password is reqired"
+        failure = {en: 'A password is reqired', da: 'Kodeordet er krævet'}
       }
       else if (!values.terms) {
-        failure = "Please accept the terms"
+        failure = {en: 'Please accept the terms', da: 'Acceptér veligst vilkårene'}
       }
       if (failure) {
         hui.ui.msg.fail({text: failure});
@@ -96,7 +99,10 @@
           password: values.password
         },
         $success : function() {
-          hui.ui.msg.success({text:'Welcome, look in your inbox :-)'});
+          hui.ui.msg.success({text: {
+            en: 'Welcome, look in your inbox :-)',
+            da: 'Velkommen, se i din indbakke :-)'
+          }});
           form.reset();
           box.hide();
           setTimeout(function() {

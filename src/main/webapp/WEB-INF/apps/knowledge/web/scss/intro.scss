@@ -2,7 +2,7 @@
 
 .intro {
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   font-size: 0;
@@ -19,7 +19,7 @@
     }
 
     > strong {
-      font-size: 2em;
+      font-size: 2.5em;
       display: block;
       text-transform: capitalize;
     }
@@ -47,9 +47,11 @@
     text-align: center;
     font-weight: 500;
   }
+
   &_point {
     margin: 10px 0;
     line-height: 1;
+    white-space: nowrap;
 
     @include icon-before(star) {
       display: inline-block;
@@ -71,7 +73,7 @@
     margin: 20px 0;
   }
   &_signup > &_button {
-    margin: 0 10px;
+    margin: 5px 10px;
   }
 
   &_button {

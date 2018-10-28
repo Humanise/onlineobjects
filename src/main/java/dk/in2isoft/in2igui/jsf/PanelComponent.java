@@ -13,7 +13,7 @@ import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=PanelComponent.TYPE)
-@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Panel.js" }, css = { "/hui/css/panel.css" }, requires = { HUIComponent.class })
+@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Panel.js" }, css = { "/hui/css/panel.css" }, requires = { HUIComponent.class, SymbolComponent.class })
 public class PanelComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.panel";

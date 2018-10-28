@@ -192,7 +192,7 @@ oo.TopBar.prototype = {
         html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'
       });
       p.add(forgot);
-      hui.listen(forgot,'click',this._showPasswordRecovery.bind(this));
+      hui.listen(forgot, 'click', oo.recover);
     }
     return this._loginPanel;
   },
@@ -257,53 +257,7 @@ oo.TopBar.prototype = {
     document.location.reload();    
   },
   _showPasswordRecovery : function() {
-    if (!this._passwordRecoveryBox) {
-      var box = this._passwordRecoveryBox = hui.ui.Box.create({modal:true,title:'I forgot my password',closable:true,absolute:true,width:400,padding:10});
-      box.add(hui.build('div.oo_topbar_forgot_intro',{text:'Please provide either your username or your e-mail. We will then mail you instructions on how to change your password.'}))
-      var form = this._passwordRecoveryForm = hui.ui.Formula.create();
-      var group = form.buildGroup(null,[
-        {type:'TextInput',label:'Username or e-mail:',options:{key:'usernameOrMail',name:'ooTopBarUsernameOrMail'}}
-      ]);
-      var buttons = group.createButtons();
-      var cancel = hui.ui.Button.create({text:'Cancel'});
-      buttons.add(cancel);
-      buttons.add(hui.ui.Button.create({text:'Go',highlighted:true,submit:true}));
-      box.add(form);
-      box.addToDocument();
-      form.listen({
-        $submit : function(vars) {
-          var values = form.getValues();
-          if (hui.isBlank(values.usernameOrMail)) {
-            form.focus();
-            hui.ui.stress(hui.ui.get('ooTopBarUsernameOrMail'));
-            return;
-          }
 
-          hui.ui.msg({text:'Let\'s see if we can find you...',busy:true});
-          hui.ui.request({
-            url : '/service/authentication/recoverPassword',
-            parameters : {usernameOrMail:values.usernameOrMail},
-            $success : function() {
-              hui.ui.msg.success({text:'Look in your inbox :-)'});
-              form.reset();
-              box.hide();
-            },
-            $failure : function() {
-              hui.ui.msg.fail({text:'We could not find you, please try something else'});
-              form.focus();
-            }
-          })
-        }
-      });
-      cancel.listen({
-        $click : function() {
-          form.reset();
-          box.hide();
-        }
-      })
-    }
-    this._passwordRecoveryBox.show();
-    this._passwordRecoveryForm.focus();
   },
 
   _showInbox : function(a) {

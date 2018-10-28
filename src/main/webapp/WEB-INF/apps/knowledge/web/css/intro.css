@@ -1,7 +1,7 @@
 @charset "UTF-8";
 .intro {
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   font-size: 0; }
@@ -14,7 +14,7 @@
       font-weight: normal;
       display: block; }
     .intro_title > strong {
-      font-size: 2em;
+      font-size: 2.5em;
       display: block;
       text-transform: capitalize; }
   .intro_logo {
@@ -37,7 +37,8 @@
     font-weight: 500; }
   .intro_point {
     margin: 10px 0;
-    line-height: 1; }
+    line-height: 1;
+    white-space: nowrap; }
     .intro_point:before {
       content: "";
       font-family: 'OnlineObjects';
@@ -60,7 +61,7 @@
     text-align: center;
     margin: 20px 0; }
   .intro_signup > .intro_button {
-    margin: 0 10px; }
+    margin: 5px 10px; }
   .intro_button {
     display: inline-block;
     height: 42px;
