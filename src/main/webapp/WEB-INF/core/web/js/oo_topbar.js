@@ -192,7 +192,7 @@ oo.TopBar.prototype = {
         html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'
       });
       p.add(forgot);
-      hui.listen(forgot, 'click', oo.recover);
+      hui.listen(forgot, 'click', function() {oo.recover()});
     }
     return this._loginPanel;
   },
