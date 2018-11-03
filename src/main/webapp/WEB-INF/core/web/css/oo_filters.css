@@ -1,7 +1,7 @@
 @charset "UTF-8";
 .oo_filters_bar {
   font-size: 0;
-  margin: 5px -5px 5px -5px; }
+  margin: 5px -5px 5px 0; }
   .oo_filters_bar_item {
     display: inline-block;
     height: 26px;
@@ -15,7 +15,6 @@
     font-weight: 400;
     font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: 1px;
     overflow: hidden;
     white-space: nowrap;
     margin-right: 1px; }
@@ -136,6 +135,10 @@
       padding: 0 6px; }
     .oo_filters_intro_option:hover {
       background: #f3f3f3; }
+
+@media screen and (min-width: 340px) {
+  .oo_filters_bar_item {
+    letter-spacing: 1px; } }
 
 @media screen and (min-width: 760px) {
   .oo_filters_bar {

@@ -71,11 +71,12 @@ public class LinkComponent extends AbstractComponent {
 		}
 		writer.withTestName(testName);
 		String id = getId();
-		if (StringUtils.isNotBlank(id)) {
-			writer.withId(id);
-		} else if (Strings.isNotBlank(name)) {
+		if (Strings.isNotBlank(name)) {
 			writer.withId(getClientId());
 		}
+		else if (StringUtils.isNotBlank(id)) {
+			writer.withId(id);
+		} 
 		if (StringUtils.isNotBlank(onclick)) {
 			writer.withAttribute("onclick", onclick);
 		}
