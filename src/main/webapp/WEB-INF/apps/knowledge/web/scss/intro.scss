@@ -137,6 +137,7 @@
       align-items: center;
       width: 100%;
       margin: 40px auto;
+      justify-content: space-around; // Fallback for MSIE
       justify-content: space-evenly;
     }
 
