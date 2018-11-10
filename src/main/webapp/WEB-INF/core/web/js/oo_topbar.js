@@ -176,8 +176,8 @@ oo.TopBar.prototype = {
 
       var form = this._loginForm = hui.ui.Formula.create({name:'topBarLoginForm'});
       form.buildGroup(null,[
-        {type:'TextInput',label:this._text('username'),options:{key:'username'}},
-        {type:'TextInput',label:this._text('password'),options:{secret:true,key:'password'}}
+        {type: 'TextInput', label: this._text('username'), options: {key: 'username',testName: 'topUsername'}},
+        {type: 'TextInput', label: this._text('password'), options: {secret: true, key: 'password',testName: 'topPassword'}}
       ]);
       p.add(form);
       var login = hui.ui.Button.create({
