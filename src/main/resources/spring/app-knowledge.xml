@@ -11,7 +11,7 @@
    		<property name="contentExtractors">
    			<map>
    				<entry key="OnlineObjects">
-   					<bean class="dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor"/>
+   					<bean class="dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor"/>
    				</entry>
    				<entry key="Boilerpipe">
    					<bean class="dk.in2isoft.onlineobjects.modules.information.Boilerpipe"/>

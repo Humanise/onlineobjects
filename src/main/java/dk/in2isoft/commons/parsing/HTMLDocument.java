@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DocumentToText;
-import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Nodes;
@@ -95,7 +95,7 @@ public class HTMLDocument extends XMLDocument {
     public String getExtractedText() {
 		String rawString = getRawString();
 		if (Strings.isNotBlank(rawString)) {
-			nu.xom.Document document = new SimpleContentExtractor().extract(getXOMDocument());
+			nu.xom.Document document = new RecognizingContentExtractor().extract(getXOMDocument());
 			if (document != null) {
 				DocumentToText doc2text = new DocumentToText();
 				return doc2text.getText(document);

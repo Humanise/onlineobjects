@@ -16,18 +16,23 @@ import dk.in2isoft.commons.lang.Strings;
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.ParentNode;
 import nu.xom.Text;
 
 public class DocumentCleaner {
 
 	private Multimap<String, String> validAttributes = HashMultimap.create();
-	private Set<String> validTags = Sets.newHashSet();
-	private Set<String> validLeaves = Sets.newHashSet();
+	private Set<String> validTags = new HashSet<>();
+	private Set<String> validLeaves = new HashSet<>();
 	
-	private Set<String> bannedTags = Sets.newHashSet();
+	private Set<String> bannedTags = new HashSet<>();
+	private Set<String> semanticAttributes = new HashSet<>();
 
 	private URI uri;
+	private boolean allowDataAttributes;
+	private boolean allowClasses;
+	private boolean allowSemanticAttributes;
 	
 	private static final Logger log = LoggerFactory.getLogger(DocumentCleaner.class);
 
@@ -51,6 +56,9 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("dl","dt","dd"));
 		validTags.addAll(Sets.newHashSet("ul","ol","menu","li")); // TODO: menu is deprecated, translate it into ul
 		validTags.addAll(Sets.newHashSet("blockquote","figure","figcaption","pre"));
+
+		// TODO: This should be an option 
+		validTags.addAll(Sets.newHashSet("div","section","article","aside","main","footer","nav"));
 		
 		bannedTags.add("script");
 		bannedTags.add("style");
@@ -63,6 +71,24 @@ public class DocumentCleaner {
 		validLeaves.add("body");
 		validLeaves.add("html");
 		validLeaves.add("head");
+		
+		semanticAttributes.add("about");
+		semanticAttributes.add("typeof");
+		semanticAttributes.add("role");
+		semanticAttributes.add("itemprop");
+		semanticAttributes.add("itemtype");
+	}
+	
+	public void setAllowDataAttributes(boolean allowDataAttributes) {
+		this.allowDataAttributes = allowDataAttributes;
+	}
+	
+	public void setAllowClasses(boolean allowClasses) {
+		this.allowClasses = allowClasses;
+	}
+	
+	public void setAllowSemanticAttributes(boolean allowSemanticAttributes) {
+		this.allowSemanticAttributes = allowSemanticAttributes;
 	}
 	
 	public void setUrl(String url) {
@@ -81,6 +107,7 @@ public class DocumentCleaner {
 		if (document.getRootElement()==null) {
 			return;
 		}
+		// TODO lowercase all elements
 		Set<nu.xom.Node> nodesToRemove = Sets.newHashSet();
 		DOM.travel(document, node -> {			
 			if (node instanceof Comment) {
@@ -93,7 +120,7 @@ public class DocumentCleaner {
 				element.getAttributeCount();
 				for (int j = element.getAttributeCount() - 1; j >= 0; j--) {
 					Attribute attribute = element.getAttribute(j);
-					if (!validAttributes.containsEntry(nodeName, attribute.getLocalName())) {
+					if (!isValid(nodeName, attribute)) {
 						element.removeAttribute(attribute);
 					}
 				}
@@ -102,7 +129,12 @@ public class DocumentCleaner {
 					nodesToRemove.add(element);
 					return;
 				}
-				
+				if (nodeName.equals("img")) {
+					String src = element.getAttributeValue("src");
+					if (Strings.isBlank(src)) {
+						nodesToRemove.add(element);
+					}
+				}
 				if (nodeName.equals("a")) {
 					if (element.getAttributeCount() == 0) {
 						nodesToRemove.add(element);
@@ -120,6 +152,38 @@ public class DocumentCleaner {
 				}
 			}
 		});
+		removeNodes(nodesToRemove);
+		if (uri!=null) {
+			DOM.travelElements(document, element -> {
+				if (!element.getLocalName().equalsIgnoreCase("img")) {
+					return;
+				}
+				Attribute attribute = element.getAttribute("src");
+				if (attribute!=null) {
+					String value = attribute.getValue();
+					try {
+						attribute.setValue(uri.resolve(value).toString());
+					} catch (IllegalArgumentException e) {
+						log.warn("Error resolving image URL",e);
+					}
+				}
+				
+			});
+		}
+		removeLeaves(document);
+		nodesToRemove.clear();
+		DOM.travel(document, node -> {			
+			if (node instanceof Element) {
+				Element element = (Element) node;
+				if (isUnnecessary(element)) {
+					nodesToRemove.add(element);
+				}
+			}
+		});
+		removeNodes(nodesToRemove);
+	}
+
+	private void removeNodes(Set<nu.xom.Node> nodesToRemove) {
 		for (nu.xom.Node toRemove : nodesToRemove) {
 			ParentNode parent = toRemove.getParent();
 			if (parent!=null) {
@@ -148,24 +212,46 @@ public class DocumentCleaner {
 				}
 			}
 		}
-		if (uri!=null) {
-			DOM.travelElements(document, element -> {
-				if (!element.getLocalName().equalsIgnoreCase("img")) {
-					return;
-				}
-				Attribute attribute = element.getAttribute("src");
-				if (attribute!=null) {
-					String value = attribute.getValue();
-					try {
-						attribute.setValue(uri.resolve(value).toString());
-					} catch (IllegalArgumentException e) {
-						log.warn("Error resolving image URL",e);
+	}
+
+	private boolean isUnnecessary(Element element) {
+		Set<String> blocks = Sets.newHashSet("ul","p","h1","h2","h3","h4","h5","h6");
+		if (element.getLocalName().toLowerCase().equals("div")) {
+			int childElementCount = element.getChildElements().size();
+			for (int i = 0; i < element.getChildCount(); i++) {
+				Node child = element.getChild(i);
+				if (child instanceof Text) {
+					Text text = (Text) child;
+					if (Strings.isNotBlank(text.getValue())) {
+						return false;
+					}
+				} else if (child instanceof Element) {
+					Element ce = (Element) child;
+					if (childElementCount == 1 && blocks.contains(ce.getLocalName().toLowerCase())) {
+						return true;
+					}
+					if (!ce.getLocalName().toLowerCase().equals("div")) {
+						return false;
 					}
 				}
-				
-			});
+			}
+			return true;
 		}
-		removeLeaves(document);
+		return false;
+	}
+
+	private boolean isValid(String nodeName, Attribute attribute) {
+		String attrName = attribute.getLocalName().toLowerCase();
+		if (allowClasses && attrName.equals("class")) {
+			return true;
+		}
+		if (allowSemanticAttributes && semanticAttributes.contains(attrName)) {
+			return true;
+		}
+		if (allowDataAttributes && attrName.startsWith("data")) {
+			return true;
+		}
+		return validAttributes.containsEntry(nodeName, attrName);
 	}
 	
 	private void removeLeaves(nu.xom.Document document) {

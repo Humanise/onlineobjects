@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Min</th>
+          <th>Max</th>
+          <th>Average</th>
+          <th>Missing</th>
+          <th>Extra</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr th:each="extractor : ${extractors}">
+        <th th:text="${extractor.name}"></th>
+        <td th:text="${#numbers.formatPercent(extractor.min, 1, 2)}"></th>
+        <td th:text="${#numbers.formatPercent(extractor.max, 1, 2)}"></th>
+        <td th:text="${#numbers.formatPercent(extractor.average, 1, 2)}"></th>
+        <td th:text="${extractor.missing}"></th>
+        <td th:text="${extractor.extra}"></th>
+      </tr>
+      </tbody>
+    </table>
+
+    <section th:each="extractor : ${extractors}" th:if="${extractor.name=='recognize' || extractor.name=='none'}">
+      <h2 th:text="${extractor.name}">Extractor name</h2>
+      <div th:each="test : ${extractor.tests}">
+        <h3 th:text="${test.name}">Test name</h3>
+        <h4>Missing</h4>
+        <div th:each="line : ${test.lines.missing}" th:text="${line}">Lorem ipsum</div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -63,22 +62,11 @@ public class Files {
 		if (encoding==null) {
 			encoding = Strings.UTF8;
 		}
-		FileInputStream inputStream = null;
-		StringWriter writer = null;
-		try {
-			writer = new StringWriter();
-			inputStream = new FileInputStream(file);
-			IOUtils.copy(inputStream, writer, encoding);
-			return writer.toString();
-		} catch (FileNotFoundException e) {
-			// Ignore
+		try (FileInputStream inputStream = new FileInputStream(file)){			
+			return IOUtils.toString(inputStream, encoding);
 		} catch (IOException e) {
 			// Ignore
-		} finally {
-			IOUtils.closeQuietly(inputStream);			
-			IOUtils.closeQuietly(writer);			
 		}
-		
 		return null;
 	}
 

@@ -1,0 +1,522 @@
+Edit
+Read in another language
+
+Bell's theorem
+
+This article may require cleanup to meet Wikipedia's quality standards. The specific problem is: The article seems to have had too many local edits: it's a bit rambling, has unstable notation, and repeats itself many times. Please help improve this article if you can. (May 2017) (Learn how and when to remove this template message)
+
+Bell's theorem is a "no-go theorem" that draws an important distinction between quantum mechanics and the world as described by classical mechanics, particularly concerning quantum entanglement where two or more particles in a quantum state continue to be mutually dependent, even at large physical separations. This theorem is named after John Stewart Bell.
+
+A series of experiments has verified the theorem and showed that quantum entanglement occurs over large distances. Quantum entanglement has profound implications for the outcomes of measurements of quantum systems; for example, in quantum computing.
+
+In its simplest form, Bell's theorem states:[1]
+
+No physical theory of local hidden variables can ever reproduce all of the predictions of quantum mechanics.
+
+Cornell solid-state physicist David Mermin has described the appraisals of the importance of Bell's theorem in the physics community as ranging from "indifference" to "wild extravagance".[2] Lawrence Berkeley particle physicist Henry Stapp declared: "Bell's theorem is the most profound discovery of science."[3]
+
+Bell's theorem rules out local hidden variables as a viable explanation of quantum mechanics (though it still leaves the door open for non-local hidden variables, such as De Broglie–Bohm theory, etc). Bell concluded:
+
+In a theory in which parameters are added to quantum mechanics to determine the results of individual measurements, without changing the statistical predictions, there must be a mechanism whereby the setting of one measuring device can influence the reading of another instrument, however remote. Moreover, the signal involved must propagate instantaneously, so that such a theory could not be Lorentz invariant.[4]
+
+Bell summarized one of the least popular ways to address the theorem, superdeterminism, in a 1985 BBC Radio interview:
+
+There is a way to escape the inference of superluminal speeds and spooky action at a distance. But it involves absolute determinism in the universe, the complete absence of free will. Suppose the world is super-deterministic, with not just inanimate nature running on behind-the-scenes clockwork, but with our behavior, including our belief that we are free to choose to do one experiment rather than another, absolutely predetermined, including the 'decision' by the experimenter to carry out one set of measurements rather than another, the difficulty disappears. There is no need for a faster-than-light signal to tell particle A what measurement has been carried out on particle B, because the universe, including particle A, already 'knows' what that measurement, and its outcome, will be.[5]
+
+Example of simple Bell type inequality and its violation in quantum mechanics. Top: assuming any probability distribution among 8 possibilities for values of 3 binary variables ABC, we always get the above inequality. Bottom: example of its violation using quantum Born rule: probability is normalized square of amplitude.
+
+Contents
+
+Historical backgroundEdit
+
+In the early 1930s, the philosophical implications of the current interpretations of quantum theory troubled many prominent physicists of the day, including Albert Einstein. In a well-known 1935 paper, Boris Podolsky and co-authors Einstein and Nathan Rosen (collectively "EPR") sought to demonstrate by the EPR paradox that quantum mechanics was incomplete. This provided hope that a more complete (and less troubling) theory might one day be discovered. But that conclusion rested on the seemingly reasonable assumptions of locality and realism (together called "local realism" or "local hidden variables", often interchangeably). In the vernacular of Einstein: locality meant no instantaneous ("spooky") action at a distance; realism meant the moon is there even when not being observed. These assumptions were hotly debated in the physics community, notably between Einstein and Niels Bohr.
+
+In his groundbreaking 1964 paper, "On the Einstein Podolsky Rosen paradox",[4][6] physicist John Stewart Bell presented an analogy (based on spin measurements on pairs of entangled electrons) to EPR's hypothetical paradox. Using their reasoning, he said, a choice of measurement setting here should not affect the outcome of a measurement there (and vice versa). After providing a mathematical formulation of locality and realism based on this, he showed specific cases where this would be inconsistent with the predictions of quantum mechanics theory.
+
+In experimental tests following Bell's example, now using quantum entanglement of photons instead of electrons, John Clauser and Stuart Freedman (1972) and Alain Aspect et al. (1981) demonstrated that the predictions of quantum mechanics are correct in this regard, although relying on additional unverifiable assumptions that open loopholes for local realism.
+
+In October 2015, Hensen and co-workers[7] reported that they performed a loophole-free Bell test which might force one to reject at least one of the principles of locality, realism, or freedom-of-choice (the last "could" lead to alternative superdeterministic theories).[8] Two of these logical possibilities, non-locality and non-realism, correspond to well-developed interpretations of quantum mechanics, and have many supporters; this is not the case for the third logical possibility, non-freedom. Conclusive experimental evidence of the violation of Bell's inequality would drastically reduce the class of acceptable deterministic theories but would not falsify absolute determinism, which was described by Bell himself as "not just inanimate nature running on behind-the-scenes clockwork, but with our behaviour, including our belief that we are free to choose to do one experiment rather than another, absolutely predetermined". However, Bell himself considered absolute determinism an implausible solution.
+
+OverviewEdit
+
+Bell's theorem states that any physical theory that incorporates local realism cannot reproduce all the predictions of quantum mechanical theory. Because numerous experiments agree with the predictions of quantum mechanical theory, and show differences between correlations that could not be explained by local hidden variables, the experimental results have been taken by many as refuting the concept of local realism as an explanation of the physical phenomena under test. For a hidden variable theory, if Bell's conditions are correct, the results that agree with quantum mechanical theory appear to indicate superluminal (faster-than-light) effects, in contradiction to the principle of locality.
+
+These three key concepts – locality, realism, freedom – are highly technical and much debated. In particular, the concept of realism is now somewhat different from what it was in discussions in the 1930s. It is more precisely called counterfactual definiteness; it means that we may think of outcomes of measurements that were not actually performed as being just as much part of reality as those that were made. Locality is short for local relativistic causality. (Currently accepted quantum field theories are local in the terminology of the Lagrangian formalism and axiomatic approach.) Freedom refers to the physical possibility of determining settings on measurement devices independently of the internal state of the physical system being measured.
+
+Illustration of Bell test for spin-half particles such as electrons. A source produces a singlet pair, one particle is sent to one location, and the other is sent to another location. A measurement of the entangled property is performed at various angles at each location. The scheme for measurements on photons looks very similar: the quantum state is different but has very similar properties.
+
+The theorem is usually proved by consideration of a quantum system of two entangled qubits. The most common examples concern systems of particles that are entangled in spin or polarization. Quantum mechanics allows predictions of correlations that would be observed if these two particles have their spin or polarization measured in different directions. Bell showed that if a local hidden variable theory holds, then these correlations would have to satisfy certain constraints, called Bell inequalities. However, for the quantum correlations arising in the specific example considered, those constraints are not satisfied, hence the phenomenon being studied cannot be explained by a local hidden variables theory.
+
+Following the argument in the Einstein–Podolsky–Rosen (EPR) paradox paper (but using the example of spin, as in David Bohm's version of the EPR argument[4][9]), Bell considered an experiment in which there are "a pair of spin one-half particles formed somehow in the singlet spin state and moving freely in opposite directions."[4] The two particles travel away from each other to two distant locations, at which measurements of spin are performed, along axes that are independently chosen. Each measurement yields a result of either spin-up (+) or spin-down (−); it means, spin in the positive or negative direction of the chosen axis.
+
+The probability of the same result being obtained at the two locations depends on the relative angles at which the two spin measurements are made, and is strictly between zero and one for all relative angles other than perfectly parallel or antiparallel alignments (0° or 180°). Since total angular momentum is conserved, and since the total spin is zero in the singlet state, the probability of the same result with parallel (antiparallel) alignment is 0 (1). This last prediction is true classically as well as quantum mechanically.
+
+Bell's theorem is concerned with correlations defined in terms of averages taken over very many trials of the experiment. The correlation of two binary variables is usually defined in quantum physics as the average of the products of the pairs of measurements. Note that this is different from the usual definition of correlation in statistics. The quantum physicist's "correlation" is the statistician's "raw (uncentered, unnormalized) product moment". They are similar in that, with either definition, if the pairs of outcomes are always the same, the correlation is +1; if the pairs of outcomes are always opposite, the correlation is -1; and if the pairs of outcomes agree 50% of the time, then the correlation is 0. The correlation is related in a simple way to the probability of equal outcomes, namely it is equal to twice the probability of equal outcomes, minus one.
+
+Measuring the spin of these entangled particles along anti-parallel directions—i.e., along the same axis but in opposite directions, the set of all results is perfectly correlated. On the other hand, if measurements are performed along parallel directions they always yield opposite results, and the set of measurements shows perfect anti-correlation. This is in accord with the above stated probabilities of measuring the same result in these two cases. Finally, measurement at perpendicular directions has a 50% chance of matching, and the total set of measurements is uncorrelated. These basic cases are illustrated in the table below. Columns should be read as examples of pairs of values that could be recorded by Alice and Bob with time increasing going to the right.
+
+Anti-parallel
+Pair
+1234…n
+Alice, 0°
++−++…−Bob, 180°
++−++…−Correlation
+( +1+1+1+1…+1 )/ n = +1
+(100% identical)
+Parallel
+1234…n
+Alice, 0°
++−−+…+Bob, 0° or 360°
+−++−…−Correlation
+( −1−1−1−1…−1 )/ n = −1
+(100% opposite)
+Orthogonal
+1234…n
+Alice, 0°
++−+−…−Bob, 90° or 270°
+−−++…−Correlation
+( −1+1+1−1…+1 )/ n = 0
+(50% identical, 50% opposite)
+
+The best possible local realist imitation (red) for the quantum correlation of two spins in the singlet state (blue), insisting on perfect anti-correlation at 0°, perfect correlation at 180°. Many other possibilities exist for the classical correlation subject to these side conditions, but all are characterized by sharp peaks (and valleys) at 0°, 180°, and 360°, and none has more extreme values (±0.5) at 45°, 135°, 225°, and 315°. These values are marked by stars in the graph, and are the values measured in a standard Bell-CHSH type experiment: QM allows ±1/√2 = ±0.7071…, local realism predicts ±0.5 or less.
+
+With the measurements oriented at intermediate angles between these basic cases, the existence of local hidden variables could agree with/would be consistent with a linear dependence of the correlation in the angle but, according to Bell's inequality (see below), could not agree with the dependence predicted by quantum mechanical theory, namely, that the correlation is the negative cosine of the angle. Experimental results match the curve predicted by quantum mechanics.[1]
+
+Over the years, Bell's theorem has undergone a wide variety of experimental tests. However, various common deficiencies in the testing of the theorem have been identified, including the detection loophole[10] and the communication loophole.[10] Over the years experiments have been gradually improved to better address these loopholes. In 2015, the first experiment to simultaneously address all of the loopholes was performed.[7]
+
+To date, Bell's theorem is generally regarded as supported by a substantial body of evidence and there are few supporters of local hidden variables, though the theorem is continually the subject of study, criticism, and refinement.[11][12]
+
+ImportanceEdit
+
+Bell's theorem, derived in his seminal 1964 paper titled On the Einstein Podolsky Rosen paradox,[4] has been called, on the assumption that the theory is correct, "the most profound in science".[13] Perhaps of equal importance is Bell's deliberate effort to encourage and bring legitimacy to work on the completeness issues, which had fallen into disrepute.[14] Later in his life, Bell expressed his hope that such work would "continue to inspire those who suspect that what is proved by the impossibility proofs is lack of imagination."[14]
+
+The title of Bell's seminal article refers to the 1935 paper by Einstein, Podolsky and Rosen[15] that challenged the completeness of quantum mechanics. In his paper, Bell started from the same two assumptions as did EPR, namely (i) reality (that microscopic objects have real properties determining the outcomes of quantum mechanical measurements), and (ii) locality (that reality in one location is not influenced by measurements performed simultaneously at a distant location). Bell was able to derive from those two assumptions an important result, namely Bell's inequality. The theoretical (and later experimental) violation of this inequality implies that at least one of the two assumptions must be false.
+
+In two respects Bell's 1964 paper was a step forward compared to the EPR paper: firstly, it considered more hidden variables than merely the element of physical reality in the EPR paper; and Bell's inequality was, in part, experimentally testable, thus raising the possibility of testing the local realism hypothesis. Limitations on such tests to date are noted below. Whereas Bell's paper deals only with deterministic hidden variable theories, Bell's theorem was later generalized to stochastic theories[16] as well, and it was also realised[17] that the theorem is not so much about hidden variables, as about the outcomes of measurements that could have been taken instead of the one actually taken. Existence of these variables is called the assumption of realism, or the assumption of counterfactual definiteness.
+
+After the EPR paper, quantum mechanics was in an unsatisfactory position: either it was incomplete, in the sense that it failed to account for some elements of physical reality, or it violated the principle of a finite propagation speed of physical effects. In a modified version of the EPR thought experiment, two hypothetical observers, now commonly referred to as Alice and Bob, perform independent measurements of spin on a pair of electrons, prepared at a source in a special state called a spin singlet state. It is the conclusion of EPR that once Alice measures spin in one direction (e.g. on the x axis), Bob's measurement in that direction is determined with certainty, as being the opposite outcome to that of Alice, whereas immediately before Alice's measurement Bob's outcome was only statistically determined (i.e., was only a probability, not a certainty); thus, either the spin in each direction is an element of physical reality, or the effects travel from Alice to Bob instantly.
+
+In QM, predictions are formulated in terms of probabilities — for example, the probability that an electron will be detected in a particular place, or the probability that its spin is up or down. The idea persisted, however, that the electron in fact has a definite position and spin, and that QM's weakness is its inability to predict those values precisely. The possibility existed that some unknown theory, such as a hidden variables theory, might be able to predict those quantities exactly, while at the same time also being in complete agreement with the probabilities predicted by QM. If such a hidden variables theory exists, then because the hidden variables are not described by QM the latter would be an incomplete theory.
+
+Local realismEdit
+
+The concept of local realism is formalized to state, and prove, Bell's theorem and generalizations. A common approach is the following:
+
+There is a probability space Λ and the observed outcomes by both Alice and Bob result by random sampling of the (unknown, "hidden") parameter λ ∈ Λ.
+The values observed by Alice or Bob are functions of the local detector settings and the hidden parameter only. Thus, there are functions A,B : S2 × Λ → {-1, +1} , where a detector setting is modeled as a location on the unit sphere S2, such that
+
+The value observed by Alice with detector setting a is A(a, λ)
+The value observed by Bob with detector setting b is B(b, λ)
+
+Perfect anti-correlation would require B(c, λ) = −A(c, λ), c ∈ S2. Implicit in assumption 1) above, the hidden parameter space Λ has a probability measure μ and the expectation of a random variable X on Λ with respect to μ is written
+
+E ⁡ ( X ) = ∫ Λ X ( λ ) p ( λ ) d λ , {\displaystyle \operatorname {E} (X)=\int _{\Lambda }X(\lambda )p(\lambda )d\lambda ,}
+
+where for accessibility of notation we assume that the probability measure has a probability density p that therefore is nonnegative and integrates to 1. The hidden parameter is often thought of as being associated with the source but it can just as well also contain components associated with the two measurement devices.
+
+Bell inequalitiesEdit
+
+Bell inequalities concern measurements made by observers on pairs of particles that have interacted and then separated. Assuming local realism, certain constraints must hold on the relationships between the correlations between subsequent measurements of the particles under various possible measurement settings. Let A and B be as above. Define for the present purposes three correlation functions:
+
+Let Ce(a, b) denote the experimentally measured correlation defined by
+
+C e ( a , b ) = N + + + N − − − N + − − N − + N + + + N − − + N + − + N − + , {\displaystyle C_{e}(a,b)={\frac {N_{++}+N_{--}-N_{+-}-N_{-+}}{N_{++}+N_{--}+N_{+-}+N_{-+}}},}
+
+where N++ is the number of measurements yielding "spin up" in the direction of a measured by Alice (first subscript +) and "spin up" in the direction of b measured by Bob. The other occurrences of N are analogously defined.
+
+Let Cq(a, b) denote the correlation as predicted by quantum mechanics. This is given by the expression
+
+C q ( a , b ) = ⟨ A | ( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) | A ⟩ , {\displaystyle C_{q}(a,b)=\left\langle A\left|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}\right|A\right\rangle ,}
+
+where A is the antisymmetric spin wave function. This value is calculated to be
+
+C q ( a , b ) = − a ⋅ b . {\displaystyle C_{q}(a,b)=-\mathbf {a} \cdot \mathbf {b} .}
+
+Let Ch(a, b) denote the correlation as predicted by any hidden variable theory. In the formalization of above, this is
+
+C h ( a , b ) = E ( A ( a , λ ) B ( b , λ ) ) = ∫ Λ A ( a , λ ) B ( b , λ ) p ( λ ) d λ . {\displaystyle C_{h}(a,b)=E(A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda ))=\int _{\Lambda }A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda )p(\lambda )d\lambda .}
+
+Details on calculation of Cq(a, b)
+
+The two-particle spin space is the tensor product of the two-dimensional spin Hilbert spaces of the individual particles. Each individual space is an irreducible representation space of the rotation group SO(3). The product space decomposes as a direct sum of irreducible representations with definite total spins 0 and 1 of dimensions 1 and 3 respectively. Full details may be found in Clebsch—Gordan decomposition. The total spin zero subspace is spanned by the singlet state in the product space, a vector explicitly given by
+
+| A ⟩ = 1 2 ( α ( 1 ) β ( 2 ) − β ( 1 ) α ( 2 ) ) = 1 2 ( [ 1 0 ] ⊗ [ 0 1 ] − [ 0 1 ] ⊗ [ 1 0 ] ) , {\displaystyle |A\rangle ={\frac {1}{\sqrt {2}}}\left(\alpha ^{(1)}\beta ^{(2)}-\beta ^{(1)}\alpha ^{(2)}\right)={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1\\0\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}0\\1\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right),}
+
+with adjoint in this representation
+
+⟨ A | = 1 2 ( [ 1 0 ] ⊗ [ 0 1 ] − [ 0 1 ] ⊗ [ 1 0 ] ) . {\displaystyle \langle A|={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}0&1\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}1&0\end{bmatrix}}\right).}
+
+The way single particle operators act on the product space is exemplified below by the example at hand; one defines the tensor product of operators, where the factors are single particle operators, thus if Π, Ω are single particle operators,
+
+( Π ⊗ Ω ) ( | x ⟩ ⊗ | y ⟩ ) = Π | x ⟩ ⊗ Ω | y ⟩ , {\displaystyle (\Pi \otimes \Omega )(|x\rangle \otimes |y\rangle )=\Pi |x\rangle \otimes \Omega |y\rangle ,}
+
+and
+
+Π ( 1 ) ( | x ⟩ ⊗ | y ⟩ ) ≡ Π | x ⟩ ⊗ Id ⁡ | y ⟩ , {\displaystyle \Pi ^{(1)}(|x\rangle \otimes |y\rangle )\equiv \Pi |x\rangle \otimes \operatorname {Id} |y\rangle ,}
+
+etc., where the superscript in parentheses indicates on which Hilbert space in the tensor product space the action is intended and the action is defined by the right hand side. The singlet state has total spin 0 as may be verified by application of the operator of total spin J · J = (J1 + J2) ⋅ (J1 + J2) by a calculation similar to that presented below.
+
+The expectation value of the operator
+
+( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) = ( Id ⊗ σ ⋅ b ) ( σ ⋅ a ⊗ Id ) , {\displaystyle \left({\boldsymbol {\sigma }}\cdot \mathbf {b} \right)^{(2)}\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \right)^{(1)}=\left(\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} \right)\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} \right),}
+
+in the singlet state can be calculated straightforwardly. One has, by definition of the Pauli matrices,
+
+σ ⋅ a ⊗ Id = [ a z a x − i a y a x + i a y − a z ] ⊗ [ 1 0 0 1 ] . {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} ={\begin{bmatrix}a_{z}&a_{x}-ia_{y}\\a_{x}+ia_{y}&-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1&0\\0&1\end{bmatrix}}.}
+
+Upon left application of this on |A⟩ one obtains
+
+σ ⋅ a ⊗ I d | A ⟩ = 1 2 ( [ a z a x + i a y ] ⊗ [ 0 1 ] − [ a x − i a y − a z ] ⊗ [ 1 0 ] ) . {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \mathrm {Id} |A\rangle ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}a_{z}\\a_{x}+ia_{y}\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}a_{x}-ia_{y}\\-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right).}
+
+Likewise, application (to the left) of the operator corresponding to b on ⟨A| yields
+
+⟨ A | Id ⊗ σ ⋅ b = 1 2 ( [ 1 0 ] ⊗ [ b x + i b y − b z ] − [ 0 1 ] ⊗ [ b z b x − i b y ] ) . {\displaystyle \langle A|\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}b_{x}+ib_{y}&-b_{z}\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}b_{z}&b_{x}-ib_{y}\end{bmatrix}}\right).}
+
+The inner products on the tensor product space is defined by
+
+⟨ x ⊗ y | u ⊗ v ⟩ = ⟨ x | u ⟩ ⟨ y | v ⟩ . {\displaystyle \langle x\otimes y|u\otimes v\rangle =\langle x|u\rangle \langle y|v\rangle .}
+
+Given this, the expectation value reduces to
+
+⟨ A | ( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) | A ⟩ = − a ⋅ b . {\displaystyle \langle A|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}|A\rangle =-\mathbf {a} \cdot \mathbf {b} .}
+
+With this notation, a concise summary of what follows can be made.
+
+Theoretically, there exists a, b such that
+
+C q ≠ C h , {\displaystyle C_{q}\neq C_{h},}
+
+whatever are the particular characteristics of the hidden variable theory as long as it abides to the rules of local realism as defined above. That is to say, no local hidden variable theory can make the same predictions as quantum mechanics.
+
+Experimentally, instances of
+
+C e ≠ C h {\displaystyle C_{e}\neq C_{h}}
+
+have been found (whatever the hidden variable theory), but
+
+C e ≠ C q (not found) {\displaystyle C_{e}\neq C_{q}\quad {\text{(not found)}}}
+
+has never been found. That is to say, predictions of quantum mechanics have never been falsified by experiment. These experiments include such that can rule out local hidden variable theories. But see below on possible loopholes.
+
+Original Bell's inequalityEdit
+
+The inequality that Bell derived can then be written as:[4]
+
+C h ( a , c ) − C h ( b , a ) − C h ( b , c ) ≤ 1 , {\displaystyle C_{h}(a,c)-C_{h}(b,a)-C_{h}(b,c)\leq 1,}
+
+where a, b and c refer to three arbitrary settings of the two analysers. This inequality is however restricted in its application to the rather special case in which the outcomes on both sides of the experiment are always exactly anticorrelated whenever the analysers are parallel. The advantage of restricting attention to this special case is the resulting simplicity of the derivation. In experimental work, the inequality is not very useful because it is hard, if not impossible, to create perfect anti-correlation.
+
+This simple form has an intuitive explanation, however. It is equivalent to the following elementary result from probability theory. Consider three (highly correlated, and possibly biased) coin-flips X, Y, and Z, with the property that:
+
+X and Y give the same outcome (both heads or both tails) 99% of the time
+Y and Z also give the same outcome 99% of the time,
+
+then X and Z must also yield the same outcome at least 98% of the time. The number of mismatches between X and Y (1/100) plus the number of mismatches between Y and Z (1/100) are together the maximum possible number of mismatches between X and Z (a simple Boole–Fréchet inequality).
+
+Imagine a pair of particles that can be measured at distant locations. Suppose that the measurement devices have settings, which are angles—e.g., the devices measure something called spin in some direction. The experimenter chooses the directions, one for each particle, separately. Suppose the measurement outcome is binary (e.g., spin up, spin down). Suppose the two particles are perfectly anti-correlated—in the sense that whenever both measured in the same direction, one gets identically opposite outcomes, when both measured in opposite directions they always give the same outcome. The only way to imagine how this works is that both particles leave their common source with, somehow, the outcomes they will deliver when measured in any possible direction. (How else could particle 1 know how to deliver the same answer as particle 2 when measured in the same direction? They don't know in advance how they are going to be measured...). The measurement on particle 2 (after switching its sign) can be thought of as telling us what the same measurement on particle 1 would have given.
+
+Start with one setting exactly opposite to the other. All the pairs of particles give the same outcome (each pair is either both spin up or both spin down). Now shift Alice's setting by one degree relative to Bob's. They are now one degree off being exactly opposite to one another. A small fraction of the pairs, say f, now give different outcomes. If instead we had left Alice's setting unchanged but shifted Bob's by one degree (in the opposite direction), then again a fraction f of the pairs of particles turns out to give different outcomes. Finally consider what happens when both shifts are implemented at the same time: the two settings are now exactly two degrees away from being opposite to one another. By the mismatch argument, the chance of a mismatch at two degrees can't be more than twice the chance of a mismatch at one degree: it cannot be more than 2f.
+
+Compare this with the predictions from quantum mechanics for the singlet state. For a small angle θ, measured in radians, the chance of a different outcome is approximately f 1 = θ 2 / 4 {\displaystyle f_{1}=\theta ^{2}/4} as explained by small-angle approximation. At two times this small angle, the chance of a mismatch is therefore about 4 times larger, since f 2 = ( 2 θ ) 2 / 4 = 2 2 θ 2 / 4 ≈ 4 f 1 {\displaystyle f_{2}=(2\theta )^{2}/4=2^{2}\theta ^{2}/4\approx 4f_{1}} . But we just argued that it cannot be more than 2 times as large.
+
+This intuitive formulation is due to David Mermin. The small-angle limit is discussed in Bell's original article, and therefore goes right back to the origin of the Bell inequalities.
+
+CHSH inequalityEdit
+
+Main article: CHSH inequality
+
+Generalizing Bell's original inequality,[4] John Clauser, Michael Horne, Abner Shimony and R. A. Holt introduced the CHSH inequality,[18] which puts classical limits on the set of four correlations in Alice and Bob's experiment, without any assumption of perfect correlations (or anti-correlations) at equal settings
+
+( 1 ) C h ( a , b ) + C h ( a , b ′ ) + C h ( a ′ , b ) − C h ( a ′ , b ′ ) ≤ 2. {\displaystyle (1)\quad C_{h}(a,b)+C_{h}(a,b')+C_{h}(a',b)-C_{h}(a',b')\leq 2.}
+
+Making the special choice a ′ = b + π {\displaystyle a'=b+\pi } , denoting b ′ = c {\displaystyle b'=c} , and assuming perfect anti-correlation at equal settings, perfect correlation at opposite settings, therefore ρ ( a , a + π ) = 1 {\displaystyle \rho (a,a+\pi )=1} and ρ ( b , a + π ) = − ρ ( b , a ) {\displaystyle \rho (b,a+\pi )=-\rho (b,a)} , the CHSH inequality reduces to the original Bell inequality. Nowadays, (1) is also often simply called "the Bell inequality", but sometimes more completely "the Bell-CHSH inequality".
+
+DerivationEdit
+
+With abbreviated notation
+
+A = A ( a , λ ) , A ′ = A ( a ′ , λ ) , B = B ( b , λ ) , B ′ = B ( b ′ , λ ) , {\displaystyle A=A(a,\lambda ),A'=A(a',\lambda ),B=B(b,\lambda ),B'=B(b',\lambda ),}
+
+the CHSH inequality can be derived as follows. Each of the four quantities is ±1 and each depends on λ. It follows that for any λ ∈ Λ, one of B + B′ and B − B′ is zero, and the other is ±2. From this it follows that
+
+A B + A B ′ + A ′ B − A ′ B ′ = A ( B + B ′ ) + A ′ ( B − B ′ ) ≤ 2 , {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2,}
+
+and therefore
+
+C h ( a , b ) + C h ( a , b ′ ) + C h ( a ′ , b ) − C h ( a ′ , b ′ ) = ∫ Λ A B p d λ + ∫ Λ A B ′ p d λ + ∫ Λ A ′ B p d λ − ∫ Λ A ′ B ′ p d λ = ∫ Λ ( A B + A B ′ + A ′ B − A ′ B ′ ) p d λ = ∫ Λ ( A ( B + B ′ ) + A ′ ( B − B ′ ) ) p d λ ≤ 2. {\displaystyle {\begin{aligned}C_{h}(a,b)+C_{h}\left(a,b'\right)+C_{h}\left(a',b\right)-C_{h}\left(a',b'\right)&=\int _{\Lambda }ABpd\lambda +\int _{\Lambda }AB'pd\lambda +\int _{\Lambda }A'Bpd\lambda -\int _{\Lambda }A'B'pd\lambda \\&=\int _{\Lambda }\left(AB+AB'+A'B-A'B'\right)pd\lambda \\&=\int _{\Lambda }\left(A\left(B+B'\right)+A'\left(B-B'\right)\right)pd\lambda \leq 2.\end{aligned}}}
+
+At the heart of this derivation is a simple algebraic inequality concerning four variables, A, A′, B, B′, which take the values ±1 only:
+
+A B + A B ′ + A ′ B − A ′ B ′ = A ( B + B ′ ) + A ′ ( B − B ′ ) ≤ 2. {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2.}
+
+The CHSH inequality is seen to depend only on the following three key features of a local hidden variables theory: (1) realism: alongside of the outcomes of actually performed measurements, the outcomes of potentially performed measurements also exist at the same time; (2) locality, the outcomes of measurements on Alice's particle don't depend on which measurement Bob chooses to perform on the other particle; (3) freedom: Alice and Bob can indeed choose freely which measurements to perform.
+
+The realism assumption is actually somewhat idealistic, and Bell's theorem only proves non-locality with respect to variables that only exist for metaphysical reasons[citation needed]. However, before the discovery of quantum mechanics, both realism and locality were completely uncontroversial features of physical theories.
+
+Bell inequalities are violated by quantum mechanical predictionsEdit
+
+The measurements performed by Alice and Bob are spin measurements on electrons. Alice can choose between two detector settings labeled a and a′; these settings correspond to measurement of spin along the z or the x axis. Bob can choose between two detector settings labeled b and b′; these correspond to measurement of spin along the z′ or x′ axis, where the x′ − z′ coordinate system is rotated 135° relative to the x − z coordinate system. The spin observables are represented by the 2 × 2 self-adjoint matrices:
+
+S x = [ 0 1 1 0 ] , S z = [ 1 0 0 − 1 ] {\displaystyle S_{x}={\begin{bmatrix}0&1\\1&0\end{bmatrix}},\quad S_{z}={\begin{bmatrix}1&0\\0&-1\end{bmatrix}}}
+
+These are the Pauli spin matrices normalized so that the corresponding eigenvalues are ±1. As is customary, we use the bra–ket notation to denote the eigenvectors of Sx by
+
+| + x ⟩ , | − x ⟩ . {\displaystyle \left|+x\right\rangle ,\quad \left|-x\right\rangle .}
+
+Let ϕ {\displaystyle \phi } be the spin singlet state for a pair of electrons discussed in the EPR paradox. This is a specially constructed state described by the following vector in the tensor product
+
+| ϕ ⟩ = 1 2 ( | + x ⟩ ⊗ | − x ⟩ − | − x ⟩ ⊗ | + x ⟩ ) {\displaystyle |\phi \rangle ={\frac {1}{\sqrt {2}}}\left(\,\left|+x\right\rangle \otimes \left|-x\right\rangle -\left|-x\right\rangle \otimes \left|+x\right\rangle \,\right)}
+
+Now let us apply the CHSH formalism to the measurements that can be performed by Alice and Bob.
+
+A ( a ) = S z ⊗ I A ( a ′ ) = S x ⊗ I B ( b ) = − 1 2 I ⊗ ( S z + S x ) B ( b ′ ) = 1 2 I ⊗ ( S z − S x ) {\displaystyle {\begin{aligned}A(a)&=S_{z}\otimes I\\A(a')&=S_{x}\otimes I\\B(b)&=-{\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}+S_{x})\\B(b')&={\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}-S_{x})\end{aligned}}}
+
+The operators B ( b ′ ) , B ( b ) {\displaystyle \scriptstyle B(b'),B(b)} correspond to Bob's spin measurements along x′ and z′. Note that the A operators commute with the B operators, so we can apply our calculation for the correlation. In this case, we can show that the CHSH inequality fails. In fact, a straightforward calculation shows that[citation needed]
+
+⟨ A ( a ) B ( b ) ⟩ = ⟨ A ( a ′ ) B ( b ) ⟩ = ⟨ A ( a ′ ) B ( b ′ ) ⟩ = 1 2 ⟨ A ( a ) B ( b ′ ) ⟩ = − 1 2 {\displaystyle {\begin{aligned}\left\langle A(a)B(b)\right\rangle =\left\langle A\left(a'\right)B(b)\right\rangle =\left\langle A\left(a'\right)B\left(b'\right)\right\rangle &={\frac {1}{\sqrt {2}}}\\\left\langle A(a)B\left(b'\right)\right\rangle &=-{\frac {1}{\sqrt {2}}}\end{aligned}}}
+
+so that
+
+⟨ A ( a ) B ( b ) ⟩ + ⟨ A ( a ′ ) B ( b ′ ) ⟩ + ⟨ A ( a ′ ) B ( b ) ⟩ − ⟨ A ( a ) B ( b ′ ) ⟩ = 4 2 = 2 2 > 2 {\displaystyle \left\langle A(a)B(b)\right\rangle +\left\langle A\left(a'\right)B\left(b'\right)\right\rangle +\left\langle A\left(a'\right)B(b)\right\rangle -\left\langle A(a)B\left(b'\right)\right\rangle ={\frac {4}{\sqrt {2}}}=2{\sqrt {2}}>2}
+
+Bell's Theorem: If the quantum mechanical formalism is correct, then the system consisting of a pair of entangled electrons cannot satisfy the principle of local realism. Note that 2√2 is indeed the upper bound for quantum mechanics called Tsirelson's bound. The operators giving this maximal value are always isomorphic to the Pauli matrices.
+
+Testing by practical experimentsEdit
+
+Scheme of a "two-channel" Bell test
+The source S produces pairs of "photons", sent in opposite directions. Each photon encounters a two-channel polariser whose orientation (a or b) can be set by the experimenter. Emerging signals from each channel are detected and coincidences of four types (++, −−, +− and −+) counted by the coincidence monitor.
+
+Main article: Bell test experiments
+
+Experimental tests can determine whether the Bell inequalities required by local realism hold up to the empirical evidence.
+
+Actually, most experiments have been performed using polarization of photons rather than spin of electrons (or other spin-half particles). The quantum state of the pair of entangled photons is not the singlet state, and the correspondence between angles and outcomes is different from that in the spin-half set-up. The polarization of a photon is measured in a pair of perpendicular directions. Relative to a given orientation, polarization is either vertical (denoted by V or by +) or horizontal (denoted by H or by -). The photon pairs are generated in the quantum state
+
+1 2 ( | V ⟩ ⊗ | V ⟩ + | H ⟩ ⊗ | H ⟩ ) {\displaystyle {\frac {1}{\sqrt {2}}}\left(|V\rangle \otimes |V\rangle +|H\rangle \otimes |H\rangle \right)}
+
+where | V ⟩ {\displaystyle |V\rangle } and | H ⟩ {\displaystyle |H\rangle } denotes the state of a single vertically or horizontally polarized photon, respectively (relative to a fixed and common reference direction for both particles).
+
+When the polarization of both photons is measured in the same direction, both give the same outcome: perfect correlation. When measured at directions making an angle 45° with one another, the outcomes are completely random (uncorrelated). Measuring at directions at 90° to one another, the two are perfectly anti-correlated. In general, when the polarizers are at an angle θ to one another, the correlation is cos(2θ). So relative to the correlation function for the singlet state of spin half particles, we have a positive rather than a negative cosine function, and angles are halved: the correlation is periodic with period π instead of 2π.
+
+Bell's inequalities are tested by "coincidence counts" from a Bell test experiment such as the optical one shown in the diagram. Pairs of particles are emitted as a result of a quantum process, analysed with respect to some key property such as polarisation direction, then detected. The setting (orientations) of the analysers are selected by the experimenter.
+
+Bell test experiments to date overwhelmingly violate Bell's inequality.
+
+Two classes of Bell inequalitiesEdit
+
+The fair sampling problem was faced openly in the 1970s. In early designs of their 1973 experiment, Freedman and Clauser[19] used fair sampling in the form of the Clauser–Horne–Shimony–Holt (CHSH[18]) hypothesis. However, shortly afterwards Clauser and Horne[16] made the important distinction between inhomogeneous (IBI) and homogeneous (HBI) Bell inequalities. Testing an IBI requires that we compare certain coincidence rates in two separated detectors with the singles rates of the two detectors. Nobody needed to perform the experiment, because singles rates with all detectors in the 1970s were at least ten times all the coincidence rates. So, taking into account this low detector efficiency, the QM prediction actually satisfied the IBI. To arrive at an experimental design in which the QM prediction violates IBI we require detectors whose efficiency exceeds 82.8% for singlet states,[20] but have very low dark rate and short dead and resolving times. This is now within reach.
+
+Practical challengesEdit
+
+Main article: Loopholes in Bell test experiments
+
+Because, at that time, even the best detectors didn't detect a large fraction of all photons, Clauser and Horne[16] recognized that testing Bell's inequality required some extra assumptions. They introduced the No Enhancement Hypothesis (NEH):
+
+A light signal, originating in an atomic cascade for example, has a certain probability of activating a detector. Then, if a polarizer is interposed between the cascade and the detector, the detection probability cannot increase.
+
+Given this assumption, there is a Bell inequality between the coincidence rates with polarizers and coincidence rates without polarizers.
+
+The experiment was performed by Freedman and Clauser,[19] who found that the Bell's inequality was violated. So the no-enhancement hypothesis cannot be true in a local hidden variables model.
+
+While early experiments used atomic cascades, later experiments have used parametric down-conversion, following a suggestion by Reid and Walls,[21] giving improved generation and detection properties. As a result, the most recent experiments with photons no longer suffer from the detection loophole (see Bell test experiments). This makes the photon the first experimental system for which all main experimental loopholes have been surmounted, albeit presently only in separate experiments (Giustina et al. (2013), Bell violation using entangled photons without the fair-sampling assumption, Nature 497, 227–230; B.G. Christensen et al. (2013), Detection-Loophole-Free Test of Quantum Nonlocality, and Applications, arXiv:1306.5772).
+
+Metaphysical aspectsEdit
+
+Most advocates of the hidden-variables idea believe that experiments have ruled out local hidden variables. They are ready to give up locality, explaining the violation of Bell's inequality by means of a non-local hidden variable theory, in which the particles exchange information about their states. This is the basis of the Bohm interpretation of quantum mechanics, which requires that all particles in the universe be able to instantaneously exchange information with all others. A 2007 experiment ruled out a large class of non-Bohmian non-local hidden variable theories.[22]
+
+If the hidden variables can communicate with each other faster than light, Bell's inequality can easily be violated. Once one particle is measured, it can communicate the necessary correlations to the other particle. Since in relativity the notion of simultaneity is not absolute, this is unattractive. One idea is to replace instantaneous communication with a process that travels backwards in time along the past light cone. This is the idea behind a transactional interpretation of quantum mechanics, which interprets the statistical emergence of a quantum history as a gradual coming to agreement between histories that go both forward and backward in time.[23]
+
+A few advocates of deterministic models have not given up on local hidden variables. For example, Gerard 't Hooft has argued that the superdeterminism loophole cannot be dismissed.[24][25]
+
+A possible (but not universally accepted) solution is offered by the many worlds theory of quantum mechanics. According to this, not only is collapse of the wave function illusory, but the apparent random branching of possible futures when quantum systems interact with the macroscopic world is also an illusion. Measurement does not lead to a random choice of possible outcome; rather, the only ingredient of quantum mechanics is the unitary evolution of the wave function. All possibilities co-exist forever and the only reality is the quantum mechanical wave function. According to this view, two distant observers both split into superpositions when measuring a spin. The Bell inequality violations are no longer counterintuitive, because it is not clear which copy of the observer B will be seen by observer A when they compare notes. If reality includes all the different outcomes, locality in physical space (not outcome space) places no restrictions on how the split observers can meet up.
+
+This point underlines the fact that the argument that realism is incompatible with quantum mechanics and locality depends on a particular formalization of the concept of realism. In its weakest form, the assumption underpinning that particular formalization is called counterfactual definiteness. This is the assumption that outcomes of measurements that are not performed are just as real as those of measurements that were performed. Counterfactual definiteness is an uncontroversial property of all classical physical theories prior to quantum theory, due to their determinism. Many worlds interpretations are not only counterfactually indefinite, but are also factually indefinite. The results of all experiments, even ones that have been performed, are not uniquely determined.
+
+If one chooses to reject counterfactual definiteness, reality has been made smaller, and there is no non-locality problem. On the other hand, one is thereby introducing irreducible or intrinsic randomness into our picture of the world: randomness that cannot be "explained" as merely the reflection of our ignorance of underlying, variable, physical quantities. Non-determinism becomes a fundamental property of nature.
+
+Assuming counterfactual definiteness, reality has been enlarged, and there is a non-locality problem. On the other hand, in the many-worlds interpretation of quantum mechanics, reality consists only of a deterministically evolving wave function and non-locality is a non-issue.
+
+There have also been repeated claims that Bell's arguments are irrelevant because they depend on hidden assumptions that, in fact, are questionable. For example, E. T. Jaynes[26] claimed in 1989 that there are two hidden assumptions in Bell's theorem that could limit its generality. According to him:
+
+Bell interpreted conditional probability P(X|Y) as a causal inference, i.e. Y exerted a causal inference on X in reality. However, P(X|Y) actually only means logical inference (induction). Causes cannot travel faster than light or backward in time, but deduction can.
+Bell's inequality does not apply to some possible hidden variable theories. It only applies to a certain class of local hidden variable theories. In fact, it might have just missed the kind of hidden variable theories that Einstein is most interested in.
+
+However, Richard D. Gill has argued that Jaynes misunderstood Bell's analysis. Gill points out that in the same conference volume in which Jaynes argues against Bell, Jaynes confesses to being extremely impressed by a short proof by Steve Gull presented at the same conference, that the singlet correlations could not be reproduced by a computer simulation of a local hidden variables theory.[27] According to Jaynes (writing nearly 30 years after Bell's landmark contributions), it would probably take us another 30 years to fully appreciate Gull's stunning result.
+
+In 2006 a flurry of activity about implications for determinism arose with the paper: The Free Will Theorem[28] which stated "the response of a spin 1 particle to a triple experiment is free—that is to say, is not a function of properties of that part of the universe that is earlier than this response with respect to any given inertial frame."[29] This theorem raised awareness of a tension between determinism fully governing an experiment (on the one hand) and Alice and Bob being free to choose any settings they like for their observations (on the other).[30][31] The philosopher David Hodgson supports this theorem as showing that determinism is unscientific, and that quantum mechanics allows observers (at least in some instances) the freedom to make observations of their choosing, thereby leaving the door open for free will.[32]
+
+General remarksEdit
+
+The violations of Bell's inequalities, due to quantum entanglement, provide near definitive demonstrations of something that was already strongly suspected: that quantum physics cannot be represented by any version of the classical picture of physics.[33] Some earlier elements that had seemed incompatible with classical pictures included complementarity and wavefunction collapse. The Bell violations show that no resolution of such issues can avoid the ultimate strangeness of quantum behavior.[34]
+
+The EPR paper "pinpointed" the unusual properties of the entangled states, e.g. the above-mentioned singlet state, which is the foundation for present-day applications of quantum physics, such as quantum cryptography; one application involves the measurement of quantum entanglement as a physical source of bits for Rabin's oblivious transfer protocol. This non-locality was originally supposed to be illusory, because the standard interpretation could easily do away with action-at-a-distance by simply assigning to each particle definite spin-states for all possible spin directions. The EPR argument was: therefore these definite states exist, therefore quantum theory is incomplete, since they do not appear in the theory. Bell's theorem showed that the "entangledness" prediction of quantum mechanics has a degree of non-locality that cannot be explained away by any local theory.
+
+What is powerful about Bell's theorem is that it doesn't refer to any particular physical theory. It shows that nature violates the most general assumptions behind classical pictures, not just details of some particular models. No combination of local deterministic and local random variables can reproduce the phenomena predicted by quantum mechanics and repeatedly observed in experiments.[35]
+
+See alsoEdit
+
+physics portal
+
+Bell test experiments
+Bohr–Einstein debates on quantum mechanics
+CHSH Bell test
+Counterfactual definiteness
+Correlation does not imply causation
+Einstein's thought experiments
+Epistemological Letters
+Free will theorem
+Fundamental Fysiks Group
+GHZ experiment
+Hidden variable theory
+Local hidden variable theory
+Loopholes in Bell test experiments
+Leggett inequality
+Leggett–Garg inequality
+Measurement in quantum mechanics
+Mott problem
+Normally distributed and uncorrelated does not imply independent
+PBR theorem
+Quantum contextuality
+Quantum entanglement
+Quantum nonlocality
+Renninger negative-result experiment
+Sakurai's Bell inequality
+
+NotesEdit
+
+^ a b C.B. Parker (1994). McGraw-Hill Encyclopaedia of Physics (2nd ed.). McGraw-Hill. p. 542. ISBN 978-0-07-051400-3. Bell himself wrote: "If [a hidden variable theory] is local it will not agree with quantum mechanics, and if it agrees with quantum mechanics it will not be local. This is what the theorem says." John Bell, Speakable and Unspeakable in Quantum Mechanics, Cambridge University Press, 1987, p. 65.
+
+^ Mermin, David (April 1985). "Is the moon there when nobody looks? Reality and the quantum theory" (PDF). Physics Today. 38 (4): 38–47. Bibcode:1985PhT....38d..38M. doi:10.1063/1.880968.
+
+^ Stapp, Henry P. (1975). "Bell's Theorem and World Process". Nuovo Cimento. 29B (2): 270–276. Bibcode:1975NCimB..29..270S. doi:10.1007/BF02728310. (Quote on p. 271)
+
+^ a b c d e f g Bell, John (1964). "On the Einstein Podolsky Rosen Paradox" (PDF). Physics. 1 (3): 195–200.
+
+^ The quotation is an adaptation from the edited transcript of the radio interview with John Bell of 1985. See The Ghost in the Atom: A Discussion of the Mysteries of Quantum Physics, by Paul C. W. Davies and Julian R. Brown, 1986/1993, pp. 45-46
+
+^ Reprinted in JS Bell (2004). "Chapter 2:On the Einstein-Podolsky-Rosen paradox". Speakable and Unspeakable in Quantum Mechanics: Collected Papers on Quantum Philosophy (Alain Aspect introduction to 1987 ed.). Cambridge University Press. pp. 14–21. ISBN 978-0521523387.
+
+^ a b Hensen, B; Bernien, H; Dréau, AE; Reiserer, A; Kalb, N; Blok, MS; Ruitenberg, J; Vermeulen, RF; Schouten, RN; Abellán, C; Amaya, W; Pruneri, V; Mitchell, MW; Markham, M; Twitchen, DJ; Elkouss, D; Wehner, S; Taminiau, TH; Hanson, R (2015). "Loophole-free Bell inequality violation using electron spins separated by 1.3 kilometres". Nature. 526 (7575): 682–686. arXiv:1508.05949. Bibcode:2015Natur.526..682H. doi:10.1038/nature15759. PMID 26503041.
+
+^ Zeeya Merali (2015-08-27). "Quantum 'spookiness' passes toughest test yet". Nature. 525 (7567): 14–15. doi:10.1038/nature.2015.18255. PMID 26333448. Retrieved 2017-06-03.
+
+^ Bohm, David (1951). Quantum Theory. Prentice−Hall.
+
+^ a b Article on Bell's Theorem by Abner Shimony in the Stanford Encyclopedia of Philosophy, (2004).
+
+^ Griffiths, David J. (1998). Introduction to Quantum Mechanics (2nd ed.). Pearson/Prentice Hall. p. 423.
+
+^ Merzbacher, Eugene (2005). Quantum Mechanics (3rd ed.). John Wiley & Sons. pp. 18, 362.
+
+^ Stapp 1975
+
+^ a b Bell, JS (1982). "On the impossible pilot wave" (PDF). Foundations of Physics. 12 (10): 989–99. Bibcode:1982FoPh...12..989B. doi:10.1007/bf01889272. Reprinted in Speakable and unspeakable in quantum mechanics: collected papers on quantum philosophy. CUP, 2004, p. 160.
+
+^ Einstein, A.; Podolsky, B.; Rosen, N. (1935). "Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?" (PDF). Physical Review. 47 (10): 777–780. Bibcode:1935PhRv...47..777E. doi:10.1103/PhysRev.47.777.
+
+^ a b c Clauser, John F. (1974). "Experimental consequences of objective local theories" (PDF). Physical Review D. 10 (2): 526–535. Bibcode:1974PhRvD..10..526C. doi:10.1103/PhysRevD.10.526. Archived from the original (PDF) on 2013-12-25.
+
+^ Eberhard, P. H. (1977). "Bell's theorem without hidden variables" (PDF). Nuovo Cimento B. 38 (1): 75–80. arXiv:quant-ph/0010047. Bibcode:1977NCimB..38...75E. CiteSeerX 10.1.1.252.6568. doi:10.1007/BF02726212.
+
+^ a b Clauser, John; Horne, Michael; Shimony, Abner; Holt, Richard (1969). "Proposed Experiment to Test Local Hidden-Variable Theories". Physical Review Letters. 23 (15): 880–884. Bibcode:1969PhRvL..23..880C. doi:10.1103/PhysRevLett.23.880.
+
+^ a b Freedman, Stuart J.; Clauser, John F. (1972). "Experimental Test of Local Hidden-Variable Theories" (PDF). Physical Review Letters. 28 (14): 938–941. Bibcode:1972PhRvL..28..938F. doi:10.1103/PhysRevLett.28.938.
+
+^ Anupam Garg; N.D. Mermin (1987), "Detector inefficiencies in the Einstein-Podolsky-Rosen experiment", Phys. Rev. D, 25 (12): 3831–5, Bibcode:1987PhRvD..35.3831G, doi:10.1103/PhysRevD.35.3831
+
+^ Reid, M. D.; Walls, D. F. (1986). "Violations of classical inequalities in quantum optics". Physical Review A. 34 (2): 1260–1276. Bibcode:1986PhRvA..34.1260R. doi:10.1103/PhysRevA.34.1260.
+
+^ Gröblacher, Simon; Paterek, Tomasz; Kaltenbaek, Rainer; Brukner, Časlav; Żukowski, Marek; Aspelmeyer, Markus; Zeilinger, Anton (2007). "An experimental test of non-local realism". Nature. 446 (7138): 871–5. arXiv:0704.2529. Bibcode:2007Natur.446..871G. doi:10.1038/nature05677. PMID 17443179.
+
+^ Cramer, John (1986). "The transactional interpretation of quantum mechanics". Reviews of Modern Physics. 58 (3): 647–687. Bibcode:1986RvMP...58..647C. doi:10.1103/RevModPhys.58.647.
+
+^ Gerard 't Hooft (2009). "Entangled quantum states in a local deterministic theory". arXiv:0908.3408 [quant-ph].
+
+^ Gerard 't Hooft (2007). "The Free-Will Postulate in Quantum Mechanics". arXiv:quant-ph/0701097.
+
+^ Jaynes, E. T. (1989). Clearing up Mysteries—The Original Goal (PDF). Maximum Entropy and Bayesian Methods. pp. 1–27. CiteSeerX 10.1.1.46.1264. doi:10.1007/978-94-015-7860-8_1. ISBN 978-90-481-4044-2.
+
+^ Gill, Richard D. (2003). "Time, Finite Statistics, and Bell's Fifth Position". Proc. Of "Foundations of Probability and Physics - 2", Ser. Math. Modelling in Phys., Engin., and Cogn. Sc. 5/2002: 179–206. arXiv:quant-ph/0301059. Bibcode:2003quant.ph..1059G.
+
+^ Conway, John; Simon Kochen (2006). "The Free Will Theorem". Foundations of Physics. 36 (10): 1441–1473. arXiv:quant-ph/0604079. Bibcode:2006FoPh...36.1441C. doi:10.1007/s10701-006-9068-6.
+
+^ Conway, John H. & Simon Kochen (2009). "The strong free will theorem" (PDF). Notices of the AMS. 56 (2): 226–232.
+
+^ Cator, Eric & Klaas Landsman (2014). "Constraints on determinism: Bell versus Conway–Kochen". Foundations of Physics. 44 (7): 781–791. arXiv:1402.1972. Bibcode:2014FoPh...44..781C. doi:10.1007/s10701-014-9815-z.
+
+^ Esfeld, Michael (2015). "Bell's Theorem and the Issue of Determinism and Indeterminism". Foundations of Physics. 45 (5): 471–482. arXiv:1503.00660. Bibcode:2015FoPh...45..471E. doi:10.1007/s10701-015-9883-8.
+
+^ David Hodgson (2012). "Chapter 7: Science and determinism". Rationality + Consciousness = Free Will. Oxford University Press. ISBN 9780199845309.
+
+^ Penrose, Roger (2007). The Road to Reality. Vintage Books. p. 583. ISBN 978-0-679-77631-4.
+
+^ Abers, E. (2004). Quantum Mechanics. Addison Wesley. pp. 193–195. ISBN 9780131461000.
+
+^ R.G. Lerner; G.L. Trigg (1991). Encyclopaedia of Physics (2nd ed.). VHC publishers. p. 495. ISBN 978-0-89573-752-6.
+
+ReferencesEdit
+
+Aspect, A.; et al. (1981). "Experimental Tests of Realistic Local Theories via Bell's Theorem". Phys. Rev. Lett. 47 (7): 460–463. Bibcode:1981PhRvL..47..460A. doi:10.1103/physrevlett.47.460.
+Aspect, A.; et al. (1982). "Experimental Realization of Einstein–Podolsky–Rosen–Bohm Gedankenexperiment: A New Violation of Bell's Inequalities". Phys. Rev. Lett. 49 (2): 91–94. Bibcode:1982PhRvL..49...91A. doi:10.1103/physrevlett.49.91.
+Aspect, A.; et al. (1982). "Experimental Test of Bell's Inequalities Using Time-Varying Analyzers". Phys. Rev. Lett. 49 (25): 1804–1807. Bibcode:1982PhRvL..49.1804A. doi:10.1103/physrevlett.49.1804.
+Aspect, A.; Grangier, P. (1985). "About resonant scattering and other hypothetical effects in the Orsay atomic-cascade experiment tests of Bell inequalities: a discussion and some new experimental data". Lettere al Nuovo Cimento. 43 (8): 345–348. doi:10.1007/bf02746964.
+D'Espagnat, B. (1979). "The Quantum Theory and Reality" (PDF). Scientific American. 241 (5): 158–181. Bibcode:1979SciAm.241e.158D. doi:10.1038/scientificamerican1179-158.
+Bell, J. S. (1966). "On the problem of hidden variables in quantum mechanics". Rev. Mod. Phys. 38 (3): 447–452. Bibcode:1966RvMP...38..447B. doi:10.1103/revmodphys.38.447.
+Bell, J. S. (1964). "On the Einstein Podolsky Rosen Paradox" (PDF). Physics. 1 (3): 195–200.
+J. S. Bell, Introduction to the hidden variable question, Proceedings of the International School of Physics 'Enrico Fermi', Course IL, Foundations of Quantum Mechanics (1971) 171–81
+J. S. Bell, Bertlmann's socks and the nature of reality, Journal de Physique, Colloque C2, suppl. au numero 3, Tome 42 (1981) pp C2 41–61
+J. S. Bell, Speakable and Unspeakable in Quantum Mechanics (Cambridge University Press 1987) [A collection of Bell's papers, including all of the above.]
+Clauser, J. F.; Shimony, A. (1978). "Bell's theorem: experimental tests and implications" (PDF). Reports on Progress in Physics. 41 (12): 1881–1927. Bibcode:1978RPPh...41.1881C. CiteSeerX 10.1.1.482.4728. doi:10.1088/0034-4885/41/12/002.
+Clauser, J. F.; Horne, M. A. (1974). "Experimental consequences of objective local theories". Phys. Rev. D. 10 (2): 526–535. Bibcode:1974PhRvD..10..526C. doi:10.1103/physrevd.10.526.
+Fry, E. S.; Walther, T.; Li, S. (1995). "Proposal for a loophole-free test of the Bell inequalities" (PDF). Phys. Rev. A. 52 (6): 4381–4395. Bibcode:1995PhRvA..52.4381F. doi:10.1103/physreva.52.4381. hdl:1969.1/126533. PMID 9912775.
+E. S. Fry, and T. Walther, Atom based tests of the Bell Inequalities — the legacy of John Bell continues, pp 103–117 of Quantum [Un]speakables, R.A. Bertlmann and A. Zeilinger (eds.) (Springer, Berlin-Heidelberg-New York, 2002)
+R. B. Griffiths, Consistent Quantum Theory', Cambridge University Press (2002).
+Hardy, L. (1993). "Nonlocality for 2 particles without inequalities for almost all entangled states". Physical Review Letters. 71 (11): 1665–1668. Bibcode:1993PhRvL..71.1665H. doi:10.1103/physrevlett.71.1665. PMID 10054467.
+M. A. Nielsen and I. L. Chuang, Quantum Computation and Quantum Information, Cambridge University Press (2000)
+Pearle, P. (1970). "Hidden-Variable Example Based upon Data Rejection". Physical Review D. 2 (8): 1418–25. Bibcode:1970PhRvD...2.1418P. doi:10.1103/physrevd.2.1418.
+A. Peres, Quantum Theory: Concepts and Methods, Kluwer, Dordrecht, 1993.
+P. Pluch, Theory of Quantum Probability, PhD Thesis, University of Klagenfurt, 2006.
+B. C. van Frassen, Quantum Mechanics, Clarendon Press, 1991.
+Rowe, M.A.; Kielpinski, D.; Meyer, V.; Sackett, C.A.; Itano, W.M.; Monroe, C.; Wineland, D.J. (2001). "Experimental violation of Bell's inequalities with efficient detection". Nature. 409 (6822): 791–794. Bibcode:2001Natur.409..791K. doi:10.1038/35057215. PMID 11236986.
+Sulcs, S. (2003). "The Nature of Light and Twentieth Century Experimental Physics". Foundations of Science. 8 (4): 365–391. doi:10.1023/A:1026323203487.
+Gröblacher, S.; et al. (2007). "An experimental test of non-local realism". Nature. 446 (7138): 871–875. arXiv:0704.2529. Bibcode:2007Natur.446..871G. doi:10.1038/nature05677. PMID 17443179.
+Matsukevich, D. N.; Maunz, P.; Moehring, D. L.; Olmschenk, S.; Monroe, C. (2008). "Bell Inequality Violation with Two Remote Atomic Qubits". Phys. Rev. Lett. 100 (15): 150404. arXiv:0801.2184. Bibcode:2008PhRvL.100o0404M. doi:10.1103/physrevlett.100.150404. PMID 18518088.
+The comic Dilbert, by Scott Adams, refers to Bell's Theorem in the 1992-09-21 and 1992-09-22 strips.
+Shimony, Abner. "Bell's Theorem". In Zalta, Edward N. Stanford Encyclopedia of Philosophy.
+
+Further readingEdit
+
+The following are intended for general audiences.
+
+Amir D. Aczel, Entanglement: The greatest mystery in physics (Four Walls Eight Windows, New York, 2001).
+A. Afriat and F. Selleri, The Einstein, Podolsky and Rosen Paradox (Plenum Press, New York and London, 1999)
+J. Baggott, The Meaning of Quantum Theory (Oxford University Press, 1992)
+N. David Mermin, "Is the moon there when nobody looks? Reality and the quantum theory", in Physics Today, April 1985, pp. 38–47.
+Louisa Gilder, The Age of Entanglement: When Quantum Physics Was Reborn (New York: Alfred A. Knopf, 2008)
+Brian Greene, The Fabric of the Cosmos (Vintage, 2004, ISBN 0-375-72720-5)
+Nick Herbert, Quantum Reality: Beyond the New Physics (Anchor, 1987, ISBN 0-385-23569-0)
+D. Wick, The infamous boundary: seven decades of controversy in quantum physics (Birkhauser, Boston 1995)
+R. Anton Wilson, Prometheus Rising (New Falcon Publications, 1997, ISBN 1-56184-056-4)
+Gary Zukav "The Dancing Wu Li Masters" (Perennial Classics, 2001, ISBN 0-06-095968-1)
+Goldstein, Sheldon; et al. (2011). "Bell's theorem". Scholarpedia. 6 (10): 8378. Bibcode:2011SchpJ...6.8378G. doi:10.4249/scholarpedia.8378.
+
+External linksEdit
+
+Wikibooks has a book on the topic of: Quantum_MechanicsWikiversity has learning resources about Bell's_theorem Wikimedia Commons has media related to Optics.
+
+"On the Einstein Podolsky Rosen Paradox", Bell's original paper.
+Another version of Bell's paper.
+An explanation of Bell's Theorem, based on N. D. Mermin's article, Mermin, N. D. (1981). "Bringing home the atomic world: Quantum mysteries for anybody". American Journal of Physics. 49 (10): 940–943. Bibcode:1981AmJPh..49..940M. doi:10.1119/1.12594.
+Mermin: Spooky Actions At A Distance? Oppenheimer Lecture
+Quantum Entanglement, by Dr Andrew H. Thomas.
+Bell's Theorem with Easy Math, by David R. Schneider. Another simple explanation of Bell's Inequality.
+Bell's theorem on arXiv.org
+Interactive experiments with single photons: entanglement and Bell´s theorem
+Article on Bell's theorem at Stanford encyclopedia of philosophy by Abner Shimony
+Discussion using a recent framework introduced by Gill
+"Bell's theorem". Internet Encyclopedia of Philosophy.
+Hazewinkel, Michiel, ed. (2001) [1994], "Bell inequalities", Encyclopedia of Mathematics, Springer Science+Business Media B.V. / Kluwer Academic Publishers, ISBN 978-1-55608-010-4
+Spooky Action at a Distance: an Explanation of Bell's Theorem
+
+Retrieved from "https://en.wikipedia.org/w/index.php?title=Bell%27s_theorem&oldid=869448567"
+

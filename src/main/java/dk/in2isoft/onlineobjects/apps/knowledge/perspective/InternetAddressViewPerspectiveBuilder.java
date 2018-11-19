@@ -45,6 +45,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery.Similarity;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
@@ -202,7 +203,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			ContentExtractor extractor = contentExtractors.get(settings.getExtractionAlgorithm());
 			if (extractor==null) {
 				log.debug("Unknown extrator: " + settings.getExtractionAlgorithm());
-				extractor = new SimpleContentExtractor();
+				extractor = new RecognizingContentExtractor();
 			}
 			Document extracted = extractor.extract(xom);
 			trace("Extracted", watch);

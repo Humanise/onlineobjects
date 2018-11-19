@@ -11,16 +11,17 @@ import java.util.function.Consumer;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
@@ -143,7 +144,7 @@ public class TestHTMLDocument extends AbstractSpringTestCase {
 				File out = new File(folder,file.getName()+".extracted.htm");
 				try (FileWriter w = new FileWriter(out)) {
 					Document document = doc.getXOMDocument();
-					SimpleContentExtractor x = new SimpleContentExtractor();
+					RecognizingContentExtractor x = new RecognizingContentExtractor();
 					Document extracted = x.extract(document);
 					cleaner.clean(extracted);
 					w.append(extracted.toXML());

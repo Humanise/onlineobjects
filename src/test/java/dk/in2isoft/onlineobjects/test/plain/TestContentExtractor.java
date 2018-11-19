@@ -8,8 +8,10 @@ import org.junit.Test;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.recognizing.ListRecognizer;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import nu.xom.Document;
+import nu.xom.Element;
 
 public class TestContentExtractor extends AbstractSpringTestCase {
 	
@@ -42,5 +44,13 @@ public class TestContentExtractor extends AbstractSpringTestCase {
 				"</div></body></html>\n";
 		Assert.assertEquals(expected , serialized);
 	}
-	
+
+	@Test
+	public void testListRecognizer() throws MalformedURLException, IOException {
+		String xml = "<?xml version='1.0'?><div><h3>References</h3><ul><li><a>test</a></li></ul></div>";
+		Document doc = DOM.parseXOM(xml);
+		Element ul = doc.getRootElement().getChildElements("ul").get(0);
+		ListRecognizer recognizer = new ListRecognizer();
+		Assert.assertEquals(0, recognizer.recognize(ul), 0);
+	}
 }

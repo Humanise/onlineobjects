@@ -1,0 +1,16 @@
+Bell's theorem is a "no-go theorem" that draws an important distinction between quantum mechanics and the world as described by classical mechanics, particularly concerning quantum entanglement where two or more particles in a quantum state continue to be mutually dependent, even at large physical separations. This theorem is named after John Stewart Bell.
+
+A series of experiments has verified the theorem and showed that quantum entanglement occurs over large distances. Quantum entanglement has profound implications for the outcomes of measurements of quantum systems; for example, in quantum computing.
+
+No physical theory of local hidden variables can ever reproduce all of the predictions of quantum mechanics.
+
+Cornell solid-state physicist David Mermin has described the appraisals of the importance of Bell's theorem in the physics community as ranging from "indifference" to "wild extravagance". Lawrence Berkeley particle physicist Henry Stapp declared: "Bell's theorem is the most profound discovery of science."
+
+Bell's theorem rules out local hidden variables as a viable explanation of quantum mechanics (though it still leaves the door open for non-local hidden variables, such as De Broglie–Bohm theory, etc). Bell concluded:
+
+In a theory in which parameters are added to quantum mechanics to determine the results of individual measurements, without changing the statistical predictions, there must be a mechanism whereby the setting of one measuring device can influence the reading of another instrument, however remote. Moreover, the signal involved must propagate instantaneously, so that such a theory could not be Lorentz invariant.
+
+Bell summarized one of the least popular ways to address the theorem, superdeterminism, in a 1985 BBC Radio interview:
+
+There is a way to escape the inference of superluminal speeds and spooky action at a distance. But it involves absolute determinism in the universe, the complete absence of free will. Suppose the world is super-deterministic, with not just inanimate nature running on behind-the-scenes clockwork, but with our behavior, including our belief that we are free to choose to do one experiment rather than another, absolutely predetermined, including the 'decision' by the experimenter to carry out one set of measurements rather than another, the difficulty disappears. There is no need for a faster-than-light signal to tell particle A what measurement has been carried out on particle B, because the universe, including particle A, already 'knows' what that measurement, and its outcome, will be.
+

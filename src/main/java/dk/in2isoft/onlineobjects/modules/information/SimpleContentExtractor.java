@@ -20,6 +20,7 @@ import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.HTML;
 import dk.in2isoft.onlineobjects.core.Pair;
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
+import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -42,6 +43,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		List<Element> longestText = findLongestText(document);
 		Element heading = findHeading(document);
 		if (heading!=null) {
+			//heading.addAttribute(new Attribute("data-role", "main-title"));
 			longestText.add(heading);
 		}
 		//for (Element element : longestText) {
@@ -82,7 +84,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 
 		Nodes titles = document.query("//*[local-name()='title']");
 		if (titles.size() > 0) {
-			title = getText(titles.get(0));
+			title = DOM.getText(titles.get(0));
 		}
 		
 		NormalizedLevenshtein l = new NormalizedLevenshtein();
@@ -92,7 +94,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 				found = element;
 				break;
 			}
-			String text = getText(element);
+			String text = DOM.getText(element);
 			double similarity = l.similarity(title, text);
 			if (similarity > foundSimilarity) {
 				foundSimilarity = similarity;
@@ -114,6 +116,13 @@ public class SimpleContentExtractor implements ContentExtractor {
 			}
 			if (node instanceof Element) {
 				Element element = (Element) node;
+				for (int i = element.getAttributeCount() - 1; i >= 0; i--) {
+					Attribute attribute = element.getAttribute(i);
+					if (attribute.getLocalName().startsWith("data")) {
+						element.removeAttribute(attribute);
+					}
+				}
+				
 				if (!isValid(element)) {
 					nodesToRemove.add(element);
 				}
@@ -231,19 +240,5 @@ public class SimpleContentExtractor implements ContentExtractor {
 			}
 		}
 		return length;
-	}
-	
-	private String getText(Node node) {
-		String text = "";
-		if (node instanceof Text) {
-			String value = node.getValue();
-			text += value==null ? "" : value;
-		} else {
-			int count = node.getChildCount();
-			for (int i = 0; i < count; i++) {
-				text+=getText(node.getChild(i));
-			}
-		}
-		return text;
 	}
 }
