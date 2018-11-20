@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
@@ -23,8 +23,6 @@ import dk.in2isoft.commons.lang.StringSearcher.Result;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DecoratedDocument;
-import dk.in2isoft.commons.xml.DocumentCleaner;
-import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeModelService;
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -45,10 +43,8 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
-import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery.Similarity;
-import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalytics;
 import dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer;
 import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
@@ -90,7 +86,6 @@ public class InternetAddressViewPerspectiveBuilder {
 		trace("Get analytics", watch);
 		Document xom = DOM.parseXOM(analytics.getXml());
 		trace("Parse dom", watch);
-		//HTMLDocument document = internetAddressService.getHTMLDocument(address, session);
 		
 		ArticleData data = buildData(address, session);
 		trace("Build data", watch);
@@ -114,7 +109,7 @@ public class InternetAddressViewPerspectiveBuilder {
 
 		trace("Build info", watch);
 		if (xom != null) {
-			buildRendering(xom, data, article, settings, watch, session);
+			buildRendering(xom, analytics, data, article, settings, watch, session);
 		}
 
 		trace("Total", watch);
@@ -192,37 +187,20 @@ public class InternetAddressViewPerspectiveBuilder {
 		return writer.toString();
 	}
 
-	private void buildRendering(Document xom, ArticleData data, InternetAddressViewPerspective perspective, Settings settings, StopWatch watch, Privileged session) throws ModelException,
+	private void buildRendering(Document xom, TextDocumentAnalytics analytics, ArticleData data, InternetAddressViewPerspective perspective, Settings settings, StopWatch watch, Privileged session) throws ModelException,
 			ExplodingClusterFuckException {
 
 		{
-			if (xom==null) {
+			if (analytics==null) {
 				log.warn("No XOM document");
 				return;
 			}
-			ContentExtractor extractor = contentExtractors.get(settings.getExtractionAlgorithm());
-			if (extractor==null) {
-				log.debug("Unknown extrator: " + settings.getExtractionAlgorithm());
-				extractor = new RecognizingContentExtractor();
-			}
-			Document extracted = extractor.extract(xom);
-			trace("Extracted", watch);
-
-			DocumentToText doc2txt = new DocumentToText();
-			String text = doc2txt.getText(extracted);
-			perspective.setText(text);
+			
+			perspective.setText(analytics.getText());
 
 			watch.split();
-			trace("Text version", watch);
-
-			DocumentCleaner cleaner = new DocumentCleaner();
-			cleaner.setUrl(data.address.getAddress());
-			cleaner.clean(extracted);
-
-			trace("Cleaned", watch);
 			
-			Document annotated = annotate(perspective, data, settings, extracted, watch);
-
+			Document annotated = annotate(perspective, data, settings, xom, watch);
 			trace("Annotated", watch);
 
 			HTMLWriter formatted = new HTMLWriter();

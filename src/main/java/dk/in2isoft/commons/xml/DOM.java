@@ -170,11 +170,11 @@ public class DOM {
 				Builder bob = new Builder();
 				return bob.build(reader);
 			} catch (ValidityException e) {
-				
+				log.warn("Unable to parse", e);
 			} catch (ParsingException e) {
-				
+				log.warn("Unable to parse", e);
 			} catch (IOException e) {
-				
+				log.warn("Unable to parse", e);
 			}
 		}
 		return null;

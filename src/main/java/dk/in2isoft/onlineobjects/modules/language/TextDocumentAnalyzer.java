@@ -30,6 +30,7 @@ import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
+import nu.xom.DocType;
 import nu.xom.Document;
 
 public class TextDocumentAnalyzer {
@@ -47,7 +48,7 @@ public class TextDocumentAnalyzer {
 			return null;
 		}
 		Document extracted = extractor.extract(xom);
-
+		extracted.setDocType(new DocType("html"));
 		DocumentCleaner cleaner = new DocumentCleaner();
 		cleaner.setUrl(htmlDocument.getOriginalUrl());
 		cleaner.clean(extracted);
