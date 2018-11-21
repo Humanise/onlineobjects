@@ -17,8 +17,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
+import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;

@@ -15,13 +15,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.ccil.cowan.tagsoup.Parser;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.input.DOMBuilder;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.W3CDom;
-import org.apache.logging.log4j.Logger;
-import org.ccil.cowan.tagsoup.Parser;
-import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -32,13 +31,11 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Element;
 import nu.xom.Node;
-import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ParsingException;
 import nu.xom.Text;
 import nu.xom.ValidityException;
 import nu.xom.XMLException;
-import nu.xom.XPathContext;
 import nu.xom.converters.DOMConverter;
 
 public class DOM {
@@ -156,7 +153,7 @@ public class DOM {
 		} catch (XMLException e) {
 			log.warn("Unable to convert DOM to XOM", e);
 			return null;
-		}
+		} 
 	}
 	
 	public static org.jdom2.Document toJDOM(Document domDocument) {
@@ -182,8 +179,7 @@ public class DOM {
 
 	public static nu.xom.Document parseWildHhtml(String wild) {
 		org.jsoup.nodes.Document document = Jsoup.parse(wild);
-		Document w3cDoc = new W3CDom().fromJsoup(document);
-		return toXOM(w3cDoc);
+		return new dk.in2isoft.commons.xml.W3CDom().toXOM(document);
 	}
 	
 	public static nu.xom.Document parseAnyXOM(String wild) {
@@ -243,22 +239,15 @@ public class DOM {
 
 	public static String getBodyXML(nu.xom.Document document) {
 		StringBuilder sb = new StringBuilder();
-		XPathContext c = new XPathContext();
-		c.addNamespace("html", document.getRootElement().getNamespaceURI());
-		Nodes bodies = document.query("//html:body", c);
-		if (bodies.size() > 0) {
-			Node node = bodies.get(bodies.size() - 1);
-			if (node instanceof Element) {
-				Element body = (Element) node;
-				int childCount = body.getChildCount();
-				for (int i = 0; i < childCount; i++) {
-					Node child = body.getChild(i);
-					sb.append(child.toXML());
-				}
+		List<Element> bodies = findElements(document, element -> element.getLocalName().toLowerCase().equals("body"));
+		for (Element body : bodies) {
+			int childCount = body.getChildCount();
+			for (int i = 0; i < childCount; i++) {
+				Node child = body.getChild(i);
+				sb.append(child.toXML());
 			}
-			return sb.toString();
 		}
-		return "";
+		return sb.toString();
 	}
 
 	public static boolean isAny(Element element, String... names) {

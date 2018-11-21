@@ -27,6 +27,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jsoup.Jsoup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,18 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 			
 			log.info("Checking: {}", dir.getName());
 			Files.overwriteTextFile(document.toXML(), new File(dir, baseName+".xhtml"));
+			{
+				String str = Files.readString(original);
+				Document xom = DOM.parseAnyXOM(str);
+				Files.overwriteTextFile(xom.toXML(), new File(dir, baseName+".tagsoup.xhtml"));
+				Document jsouped = DOM.parseWildHhtml(str);
+				if (jsouped!=null) {
+					Files.overwriteTextFile(jsouped.toXML(), new File(dir, baseName+".jsoup.xhtml"));
+				} else {
+					org.jsoup.nodes.Document jsoup = Jsoup.parse(str);
+					Files.overwriteTextFile(jsoup.outerHtml(), new File(dir, baseName+".jsoup.raw.xhtml"));
+				}
+			}
 			
 			for (Extractor extractor : extractors) {
 

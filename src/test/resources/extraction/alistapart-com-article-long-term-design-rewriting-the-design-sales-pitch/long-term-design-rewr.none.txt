@@ -3,10 +3,15 @@ A List Apart
 Menu
 
 Home
+
 Articles
+
 Events
+
 Topics
+
 Write for us
+
 Back to top
 
 Long-Term Design: Rewriting the Design Sales Pitch
@@ -113,13 +118,17 @@ Most clients don’t know how to match all of their marketing efforts to the new
 To be clear, long-term work is not unpaid work. Delivering a design doesn’t mean a designer should be on the hook for free support indefinitely. Depending on the client and the kind of work you do for them, there are many possible ways to structure a long-term relationship, such as:
 
 Monthly retainers
+
 Additional project phases, such as conversion rate optimization (CRO) and user testing
+
 Scheduling a check-in call a month after launching a new design
+
 Including a written analytics report in the project fee.
 
 Clients might see these as attempts to increase fees and the project scope. That’s because long-term structures can be as unfamiliar to clients as they are to designers. To address those concerns, designers need to educate our clients about the benefits and value of long-term engagements. Great ways to begin the conversation include:
 
 Explaining that optimization will help the client see the most return from their investment
+
 Explaining that optimization will help avoid the need for a redesign later.
 
 Design’s “old money”: Big agencies and bigger accounts
@@ -251,11 +260,17 @@ Accessibility · October 16, 2018
 For people who make websites.
 
 About
+
 Authors
+
 Masthead
+
 Style Guide
+
 Contact
+
 Sponsorships
+
 Follow us: RSS · Email · Facebook · Google+ · Twitter
 
 A Book Apart
@@ -273,6 +288,7 @@ Three days of design, code, and content for people who make websites.
 See this year’s schedule
 
 ISSN 1534-0295 · Copyright © 1998–2018 A List Apart & Our Authors Permissions & Copyright · Privacy Policy · Fonts by Webtype · Log In · Register
+
 A List Apart An Event Apart A Book Apart Arcustech
 
 Want the best way to store and serve images and videos? Try Cloudinary. Get your own free account.

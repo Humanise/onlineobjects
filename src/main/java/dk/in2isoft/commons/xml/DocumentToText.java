@@ -18,6 +18,13 @@ public class DocumentToText {
 	private int newLines = 0;
 
     public String getText(Document doc) {
+        StringBuffer data = new StringBuffer();
+        traverse(doc,data);
+        String text = data.toString();
+        return clean(text);
+    }
+    
+    public String clean(String text) {
     	String whitespace_chars =  ""       /* dummy empty string for homogeneity */
                 + "\\u0009" // CHARACTER TABULATION
                 //+ "\\u000A" // LINE FEED (LF)
@@ -46,17 +53,16 @@ public class DocumentToText {
                 + "\\u205F" // MEDIUM MATHEMATICAL SPACE
                 + "\\u3000" // IDEOGRAPHIC SPACE
                 ;        
-        StringBuffer data = new StringBuffer();
-        traverse(doc,data);
-        String text = data.toString();
-        // Remove trailing and leading
+    	// Remove trailing and leading
         text = text.replaceAll("(?m)["+whitespace_chars+"]+$", "").replaceAll("(?m)^["+whitespace_chars+"]+", "");
         // Normalize to common space
         text = text.replaceAll("["+whitespace_chars+"]+", " ");
+        // Remove leading spaces/lines
+        text = text.replaceAll("^[ \\n]+", "");
+        // Remove trailing
+        text = text.replaceAll(" \\n", "\n");
         // Max 2 breaks
         text = text.replaceAll("([\\n]{2,})", "\n\n");
-        // Remove trailing spaces
-        text = text.replaceAll("^["+whitespace_chars+"\\n]+", "");
         // Max 1 space
         //text = text.replaceAll("["+whitespace_chars+"]{2,}", " ");
         return text;

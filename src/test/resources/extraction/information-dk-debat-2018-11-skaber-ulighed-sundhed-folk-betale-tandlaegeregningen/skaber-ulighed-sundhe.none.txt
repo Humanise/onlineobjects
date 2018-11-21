@@ -11,12 +11,19 @@ Menu
 Log ind
 
 Køb abonnement
+
 Dagens avis
+
 E-avisen
+
 Avisarkiv
+
 Podcast
+
 Nyhedsbreve
+
 Butikken
+
 Apps
 
 Søgefelt
@@ -51,7 +58,9 @@ Ditte Ahlgren
 Kommentarer (71)
 
 Del
+
 Tweet
+
 Email
 
 Det er svært at forestille sig, at det offentlige sundhedsvæsen ville udskrive en regning til en person, der har fået livreddende behandling. For eksempel fru Jensen, der er blevet behandlet for en blodprop i hjertet, eller hr. Pedersen, der har fået amputeret benet, fordi det var ramt af koldbrand som en senfølge af diabetes.

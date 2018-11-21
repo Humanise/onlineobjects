@@ -56,26 +56,113 @@ Bell's theorem is concerned with correlations defined in terms of averages taken
 Measuring the spin of these entangled particles along anti-parallel directions—i.e., along the same axis but in opposite directions, the set of all results is perfectly correlated. On the other hand, if measurements are performed along parallel directions they always yield opposite results, and the set of measurements shows perfect anti-correlation. This is in accord with the above stated probabilities of measuring the same result in these two cases. Finally, measurement at perpendicular directions has a 50% chance of matching, and the total set of measurements is uncorrelated. These basic cases are illustrated in the table below. Columns should be read as examples of pairs of values that could be recorded by Alice and Bob with time increasing going to the right.
 
 Anti-parallel
+
 Pair
-1234…n
+
+1
+2
+3
+4
+…
+n
 Alice, 0°
-+−++…−Bob, 180°
-+−++…−Correlation
-( +1+1+1+1…+1 )/ n = +1
+
++
+−
++
++
+…
+−
+Bob, 180°
+
++
+−
++
++
+…
+−
+Correlation
+
+( +1
++1
++1
++1
+…
++1 )
+/ n = +1
+
 (100% identical)
 Parallel
-1234…n
+
+1
+2
+3
+4
+…
+n
+
 Alice, 0°
-+−−+…+Bob, 0° or 360°
-−++−…−Correlation
-( −1−1−1−1…−1 )/ n = −1
+
++
+−
+−
++
+…
++
+Bob, 0° or 360°
+
+−
++
++
+−
+…
+−
+Correlation
+
+( −1
+−1
+−1
+−1
+…
+−1 )
+/ n = −1
+
 (100% opposite)
 Orthogonal
-1234…n
+
+1
+2
+3
+4
+…
+n
+
 Alice, 0°
-+−+−…−Bob, 90° or 270°
-−−++…−Correlation
-( −1+1+1−1…+1 )/ n = 0
+
++
+−
++
+−
+…
+−
+Bob, 90° or 270°
+
+−
+−
++
++
+…
+−
+Correlation
+
+( −1
++1
++1
+−1
+…
++1 )
+/ n = 0
+
 (50% identical, 50% opposite)
 
 The best possible local realist imitation (red) for the quantum correlation of two spins in the singlet state (blue), insisting on perfect anti-correlation at 0°, perfect correlation at 180°. Many other possibilities exist for the classical correlation subject to these side conditions, but all are characterized by sharp peaks (and valleys) at 0°, 180°, and 360°, and none has more extreme values (±0.5) at 45°, 135°, 225°, and 315°. These values are marked by stars in the graph, and are the values measured in a standard Bell-CHSH type experiment: QM allows ±1/√2 = ±0.7071…, local realism predicts ±0.5 or less.
@@ -103,9 +190,11 @@ Local realismEdit
 The concept of local realism is formalized to state, and prove, Bell's theorem and generalizations. A common approach is the following:
 
 There is a probability space Λ and the observed outcomes by both Alice and Bob result by random sampling of the (unknown, "hidden") parameter λ ∈ Λ.
+
 The values observed by Alice or Bob are functions of the local detector settings and the hidden parameter only. Thus, there are functions A,B : S2 × Λ → {-1, +1} , where a detector setting is modeled as a location on the unit sphere S2, such that
 
 The value observed by Alice with detector setting a is A(a, λ)
+
 The value observed by Bob with detector setting b is B(b, λ)
 
 Perfect anti-correlation would require B(c, λ) = −A(c, λ), c ∈ S2. Implicit in assumption 1) above, the hidden parameter space Λ has a probability measure μ and the expectation of a random variable X on Λ with respect to μ is written
@@ -209,6 +298,7 @@ where a, b and c refer to three arbitrary settings of the two analysers. This in
 This simple form has an intuitive explanation, however. It is equivalent to the following elementary result from probability theory. Consider three (highly correlated, and possibly biased) coin-flips X, Y, and Z, with the property that:
 
 X and Y give the same outcome (both heads or both tails) 99% of the time
+
 Y and Z also give the same outcome 99% of the time,
 
 then X and Z must also yield the same outcome at least 98% of the time. The number of mismatches between X and Y (1/100) plus the number of mismatches between Y and Z (1/100) are together the maximum possible number of mismatches between X and Z (a simple Boole–Fréchet inequality).
@@ -339,6 +429,7 @@ Assuming counterfactual definiteness, reality has been enlarged, and there is a 
 There have also been repeated claims that Bell's arguments are irrelevant because they depend on hidden assumptions that, in fact, are questionable. For example, E. T. Jaynes[26] claimed in 1989 that there are two hidden assumptions in Bell's theorem that could limit its generality. According to him:
 
 Bell interpreted conditional probability P(X|Y) as a causal inference, i.e. Y exerted a causal inference on X in reality. However, P(X|Y) actually only means logical inference (induction). Causes cannot travel faster than light or backward in time, but deduction can.
+
 Bell's inequality does not apply to some possible hidden variable theories. It only applies to a certain class of local hidden variable theories. In fact, it might have just missed the kind of hidden variable theories that Einstein is most interested in.
 
 However, Richard D. Gill has argued that Jaynes misunderstood Bell's analysis. Gill points out that in the same conference volume in which Jaynes argues against Bell, Jaynes confesses to being extremely impressed by a short proof by Steve Gull presented at the same conference, that the singlet correlations could not be reproduced by a computer simulation of a local hidden variables theory.[27] According to Jaynes (writing nearly 30 years after Bell's landmark contributions), it would probably take us another 30 years to fully appreciate Gull's stunning result.
@@ -358,28 +449,51 @@ See alsoEdit
 physics portal
 
 Bell test experiments
+
 Bohr–Einstein debates on quantum mechanics
+
 CHSH Bell test
+
 Counterfactual definiteness
+
 Correlation does not imply causation
+
 Einstein's thought experiments
+
 Epistemological Letters
+
 Free will theorem
+
 Fundamental Fysiks Group
+
 GHZ experiment
+
 Hidden variable theory
+
 Local hidden variable theory
+
 Loopholes in Bell test experiments
+
 Leggett inequality
+
 Leggett–Garg inequality
+
 Measurement in quantum mechanics
+
 Mott problem
+
 Normally distributed and uncorrelated does not imply independent
+
 PBR theorem
+
 Quantum contextuality
+
 Quantum entanglement
+
 Quantum nonlocality
+
 Renninger negative-result experiment
+
 Sakurai's Bell inequality
 
 NotesEdit
@@ -457,31 +571,57 @@ NotesEdit
 ReferencesEdit
 
 Aspect, A.; et al. (1981). "Experimental Tests of Realistic Local Theories via Bell's Theorem". Phys. Rev. Lett. 47 (7): 460–463. Bibcode:1981PhRvL..47..460A. doi:10.1103/physrevlett.47.460.
+
 Aspect, A.; et al. (1982). "Experimental Realization of Einstein–Podolsky–Rosen–Bohm Gedankenexperiment: A New Violation of Bell's Inequalities". Phys. Rev. Lett. 49 (2): 91–94. Bibcode:1982PhRvL..49...91A. doi:10.1103/physrevlett.49.91.
+
 Aspect, A.; et al. (1982). "Experimental Test of Bell's Inequalities Using Time-Varying Analyzers". Phys. Rev. Lett. 49 (25): 1804–1807. Bibcode:1982PhRvL..49.1804A. doi:10.1103/physrevlett.49.1804.
+
 Aspect, A.; Grangier, P. (1985). "About resonant scattering and other hypothetical effects in the Orsay atomic-cascade experiment tests of Bell inequalities: a discussion and some new experimental data". Lettere al Nuovo Cimento. 43 (8): 345–348. doi:10.1007/bf02746964.
+
 D'Espagnat, B. (1979). "The Quantum Theory and Reality" (PDF). Scientific American. 241 (5): 158–181. Bibcode:1979SciAm.241e.158D. doi:10.1038/scientificamerican1179-158.
+
 Bell, J. S. (1966). "On the problem of hidden variables in quantum mechanics". Rev. Mod. Phys. 38 (3): 447–452. Bibcode:1966RvMP...38..447B. doi:10.1103/revmodphys.38.447.
+
 Bell, J. S. (1964). "On the Einstein Podolsky Rosen Paradox" (PDF). Physics. 1 (3): 195–200.
+
 J. S. Bell, Introduction to the hidden variable question, Proceedings of the International School of Physics 'Enrico Fermi', Course IL, Foundations of Quantum Mechanics (1971) 171–81
+
 J. S. Bell, Bertlmann's socks and the nature of reality, Journal de Physique, Colloque C2, suppl. au numero 3, Tome 42 (1981) pp C2 41–61
+
 J. S. Bell, Speakable and Unspeakable in Quantum Mechanics (Cambridge University Press 1987) [A collection of Bell's papers, including all of the above.]
+
 Clauser, J. F.; Shimony, A. (1978). "Bell's theorem: experimental tests and implications" (PDF). Reports on Progress in Physics. 41 (12): 1881–1927. Bibcode:1978RPPh...41.1881C. CiteSeerX 10.1.1.482.4728. doi:10.1088/0034-4885/41/12/002.
+
 Clauser, J. F.; Horne, M. A. (1974). "Experimental consequences of objective local theories". Phys. Rev. D. 10 (2): 526–535. Bibcode:1974PhRvD..10..526C. doi:10.1103/physrevd.10.526.
+
 Fry, E. S.; Walther, T.; Li, S. (1995). "Proposal for a loophole-free test of the Bell inequalities" (PDF). Phys. Rev. A. 52 (6): 4381–4395. Bibcode:1995PhRvA..52.4381F. doi:10.1103/physreva.52.4381. hdl:1969.1/126533. PMID 9912775.
+
 E. S. Fry, and T. Walther, Atom based tests of the Bell Inequalities — the legacy of John Bell continues, pp 103–117 of Quantum [Un]speakables, R.A. Bertlmann and A. Zeilinger (eds.) (Springer, Berlin-Heidelberg-New York, 2002)
+
 R. B. Griffiths, Consistent Quantum Theory', Cambridge University Press (2002).
+
 Hardy, L. (1993). "Nonlocality for 2 particles without inequalities for almost all entangled states". Physical Review Letters. 71 (11): 1665–1668. Bibcode:1993PhRvL..71.1665H. doi:10.1103/physrevlett.71.1665. PMID 10054467.
+
 M. A. Nielsen and I. L. Chuang, Quantum Computation and Quantum Information, Cambridge University Press (2000)
+
 Pearle, P. (1970). "Hidden-Variable Example Based upon Data Rejection". Physical Review D. 2 (8): 1418–25. Bibcode:1970PhRvD...2.1418P. doi:10.1103/physrevd.2.1418.
+
 A. Peres, Quantum Theory: Concepts and Methods, Kluwer, Dordrecht, 1993.
+
 P. Pluch, Theory of Quantum Probability, PhD Thesis, University of Klagenfurt, 2006.
+
 B. C. van Frassen, Quantum Mechanics, Clarendon Press, 1991.
+
 Rowe, M.A.; Kielpinski, D.; Meyer, V.; Sackett, C.A.; Itano, W.M.; Monroe, C.; Wineland, D.J. (2001). "Experimental violation of Bell's inequalities with efficient detection". Nature. 409 (6822): 791–794. Bibcode:2001Natur.409..791K. doi:10.1038/35057215. PMID 11236986.
+
 Sulcs, S. (2003). "The Nature of Light and Twentieth Century Experimental Physics". Foundations of Science. 8 (4): 365–391. doi:10.1023/A:1026323203487.
+
 Gröblacher, S.; et al. (2007). "An experimental test of non-local realism". Nature. 446 (7138): 871–875. arXiv:0704.2529. Bibcode:2007Natur.446..871G. doi:10.1038/nature05677. PMID 17443179.
+
 Matsukevich, D. N.; Maunz, P.; Moehring, D. L.; Olmschenk, S.; Monroe, C. (2008). "Bell Inequality Violation with Two Remote Atomic Qubits". Phys. Rev. Lett. 100 (15): 150404. arXiv:0801.2184. Bibcode:2008PhRvL.100o0404M. doi:10.1103/physrevlett.100.150404. PMID 18518088.
+
 The comic Dilbert, by Scott Adams, refers to Bell's Theorem in the 1992-09-21 and 1992-09-22 strips.
+
 Shimony, Abner. "Bell's Theorem". In Zalta, Edward N. Stanford Encyclopedia of Philosophy.
 
 Further readingEdit
@@ -489,33 +629,57 @@ Further readingEdit
 The following are intended for general audiences.
 
 Amir D. Aczel, Entanglement: The greatest mystery in physics (Four Walls Eight Windows, New York, 2001).
+
 A. Afriat and F. Selleri, The Einstein, Podolsky and Rosen Paradox (Plenum Press, New York and London, 1999)
+
 J. Baggott, The Meaning of Quantum Theory (Oxford University Press, 1992)
+
 N. David Mermin, "Is the moon there when nobody looks? Reality and the quantum theory", in Physics Today, April 1985, pp. 38–47.
+
 Louisa Gilder, The Age of Entanglement: When Quantum Physics Was Reborn (New York: Alfred A. Knopf, 2008)
+
 Brian Greene, The Fabric of the Cosmos (Vintage, 2004, ISBN 0-375-72720-5)
+
 Nick Herbert, Quantum Reality: Beyond the New Physics (Anchor, 1987, ISBN 0-385-23569-0)
+
 D. Wick, The infamous boundary: seven decades of controversy in quantum physics (Birkhauser, Boston 1995)
+
 R. Anton Wilson, Prometheus Rising (New Falcon Publications, 1997, ISBN 1-56184-056-4)
+
 Gary Zukav "The Dancing Wu Li Masters" (Perennial Classics, 2001, ISBN 0-06-095968-1)
+
 Goldstein, Sheldon; et al. (2011). "Bell's theorem". Scholarpedia. 6 (10): 8378. Bibcode:2011SchpJ...6.8378G. doi:10.4249/scholarpedia.8378.
 
 External linksEdit
 
-Wikibooks has a book on the topic of: Quantum_MechanicsWikiversity has learning resources about Bell's_theorem Wikimedia Commons has media related to Optics.
+Wikibooks has a book on the topic of: Quantum_Mechanics
+Wikiversity has learning resources about Bell's_theorem
+Wikimedia Commons has media related to Optics.
 
 "On the Einstein Podolsky Rosen Paradox", Bell's original paper.
+
 Another version of Bell's paper.
+
 An explanation of Bell's Theorem, based on N. D. Mermin's article, Mermin, N. D. (1981). "Bringing home the atomic world: Quantum mysteries for anybody". American Journal of Physics. 49 (10): 940–943. Bibcode:1981AmJPh..49..940M. doi:10.1119/1.12594.
+
 Mermin: Spooky Actions At A Distance? Oppenheimer Lecture
+
 Quantum Entanglement, by Dr Andrew H. Thomas.
+
 Bell's Theorem with Easy Math, by David R. Schneider. Another simple explanation of Bell's Inequality.
+
 Bell's theorem on arXiv.org
+
 Interactive experiments with single photons: entanglement and Bell´s theorem
+
 Article on Bell's theorem at Stanford encyclopedia of philosophy by Abner Shimony
+
 Discussion using a recent framework introduced by Gill
+
 "Bell's theorem". Internet Encyclopedia of Philosophy.
+
 Hazewinkel, Michiel, ed. (2001) [1994], "Bell inequalities", Encyclopedia of Mathematics, Springer Science+Business Media B.V. / Kluwer Academic Publishers, ISBN 978-1-55608-010-4
+
 Spooky Action at a Distance: an Explanation of Bell's Theorem
 
 Retrieved from "https://en.wikipedia.org/w/index.php?title=Bell%27s_theorem&oldid=869448567"

@@ -1,12 +1,21 @@
 Søg på politiken.dk
+
 Kundecenter
+
 Plus
+
 Live
+
 Billet
+
 Nyhedsbreve
+
 E-avis
+
 Annoncer
+
 AdministrÃ©r privatlivsindstillinger
+
 Persondata
 
 Log ind Køb abonnement
@@ -14,21 +23,33 @@ Log ind Køb abonnement
 fredag
 
 Debat
+
 Leder
+
 Kroniken
+
 Klummer
+
 Debatindlæg
+
 Dagens tegning
+
 Indsend debatindlæg
 
 Menu
 
 Debat
+
 Leder
+
 Kroniken
+
 Klummer
+
 Debatindlæg
+
 Dagens tegning
+
 Indsend debatindlæg
 
 Menu
@@ -47,29 +68,45 @@ ATS
 Danmark
 
 Samfund
+
 Politik
+
 Uddannelse
+
 København
+
 Undervisningsprisen
 
 Debat
 
 Leder
+
 Kroniken
+
 Klummer
+
 Debatindlæg
+
 Dagens tegning
+
 Indsend debatindlæg
 
 Forbrug og liv
 
 Bolig
+
 Sundhed
+
 Digitalt
+
 Motion
+
 Biler
+
 Livsstil
+
 Guides
+
 Test
 
 Foto
@@ -77,10 +114,15 @@ Foto
 iBYEN
 
 Anmeldelser
+
 Guider
+
 Klummer
+
 Byliv
+
 Listen
+
 Skudt i byen
 
 Internationalt
@@ -88,60 +130,95 @@ Internationalt
 Kultur
 
 Film og tv
+
 Musik
+
 Medier
+
 Bøger
+
 Kunst
+
 Scene
+
 Erotik
+
 Design
+
 Arkitektur
+
 Mode
+
 Historie
 
 Live
 
 PolitikenBillet
+
 Kunstkritikerskolen
+
 Kurser
+
 Kritikerskolen
+
 Skoleledernetværket
+
 Podcast
+
 Video
 
 Mad
 
 Opskrifter
+
 Nyt om mad
+
 Anmeldelser
+
 Vin
 
 Navne
 
 Fødselsdage
+
 Dødsfald
+
 Dødsannoncer
 
 Podcast
 
 Du lytter til Politiken
+
 Politikens Poptillæg
+
 Kongerækken
+
 Alt er nu
+
 Min energi er et andet sted
+
 Nedtælling til valget
+
 Third Ear
+
 Politiken Dokumentar
+
 Plus En
+
 Bogfolk
 
 Rejser
 
 Nyheder
+
 Guider
+
 Storby og kultur
+
 Sol og strand
+
 Temarejser
+
 Hoteller
 
 Seneste nyt
@@ -149,18 +226,27 @@ Seneste nyt
 Sport
 
 Resultater
+
 Fodbold
+
 Cykling
+
 Håndbold
+
 Golf
+
 Tennis
+
 Formel 1
+
 Ishockey
+
 Svømning
 
 Striber
 
 Wulffmorgenthaler
+
 Ting jeg gjorde
 
 Video
@@ -168,17 +254,25 @@ Video
 Viden og tech
 
 Viden
+
 Tech
+
 Viden og Tech analyser
 
 Økonomi
 
 Dansk økonomi
+
 Global økonomi
+
 Privatøkonomi
+
 Arbejdsmarked
+
 Bolig
+
 Virksomheder
+
 2050
 
 Annoncørbetalt indhold
@@ -186,27 +280,45 @@ Annoncørbetalt indhold
 Nyhedsbreve
 
 Politiken Morgen
+
 Dagens Overblik
+
 Chefredaktøren anbefaler
+
 Politiken Mad
+
 Politiken Debat
+
 Politiken Sport
+
 Politiken Kultur
+
 Politiken Foto
+
 Politiken Weekend
+
 Borgen indefra
+
 Politiken Rejser
+
 Politiken Bøger
+
 Politiken film
+
 Tech og Viden
+
 Politiken Penge
+
 Politiken Sundhed
+
 Politiken Ibyen
 
 Margueritløbet
 
 Om Margueritløbet
+
 Lav et Margueritspot
+
 Om løbets partnere
 
 Følg os
@@ -214,11 +326,17 @@ Følg os
 Andre tjenester
 
 Annoncer
+
 Billet
+
 Kundecenter
+
 Nyhedsbreve
+
 Politikens oplysning
+
 RSS-feeds
+
 Persondata
 
 Tegning: Anne-Marie Steen Petersen
@@ -436,7 +554,9 @@ Ups
 Ok
 
 Ældste
+
 Nyeste
+
 Mest anbefalede
 
 Skriv kommentar
