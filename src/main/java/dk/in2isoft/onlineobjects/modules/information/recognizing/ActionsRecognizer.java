@@ -1,6 +1,9 @@
 package dk.in2isoft.onlineobjects.modules.information.recognizing;
 
+import java.util.Map;
+
 import dk.in2isoft.commons.xml.DOM;
+import nu.xom.Document;
 import nu.xom.Element;
 
 public class ActionsRecognizer implements Recognizer {
@@ -13,15 +16,18 @@ public class ActionsRecognizer implements Recognizer {
 	@Override
 	public double recognize(Element element) {
 		if (element.getChildElements().size() > 0) return 0;
-		String[] x = {"log ind", "abonnement", "gå til hovedindhold", "søg", "mail-adresse",
+		String[] texts = {"log ind", "abonnement", "gå til hovedindhold", "søg", "mail-adresse",
 				"adgangskode", "opret konto", "bestil ny adgangskode", "søgefelt", "abonnement",
 				"facebook", "twitter", "del", "rss", "del artklen",
-				"cookies", "privatlivspolitik",
+				"cookies", "privatlivspolitik","kopiér link", "kopier link", "tilmeld",
 				"nyhedsbrev",
-				"annonce","artiklen fortsætter efter annoncen", "læs også:"
+				"annonce","artiklen fortsætter efter annoncen", "læs også:",
+				"subscribe", "next article", "most recent newsletter", "pdf version", "menu", "skip to main content",
+				"search", "sign up", "open main menu",
+				"e-alert", "submit", "my account", "login", "☰"
 			};
 		String text = DOM.getText(element).toLowerCase().trim();
-		for (String string : x) {
+		for (String string : texts) {
 			
 			if (text.equals(string)) {
 				return -1;
@@ -42,6 +48,11 @@ public class ActionsRecognizer implements Recognizer {
 			return -1;
 		}
 		return 0;
+	}
+
+	@Override
+	public Map<Element,Double> recognize(Document document) {
+		return null;
 	}
 
 }

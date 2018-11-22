@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.modules.information.recognizing;
 
+import java.util.Map;
+
+import nu.xom.Document;
 import nu.xom.Element;
 
 public class NavigationRecognizer implements Recognizer {
@@ -19,6 +22,11 @@ public class NavigationRecognizer implements Recognizer {
 			return -1;
 		}
 		return 0;
+	}
+
+	@Override
+	public Map<Element,Double> recognize(Document document) {
+		return null;
 	}
 
 }

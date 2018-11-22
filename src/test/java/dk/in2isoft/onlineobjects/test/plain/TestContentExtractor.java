@@ -53,4 +53,13 @@ public class TestContentExtractor extends AbstractSpringTestCase {
 		ListRecognizer recognizer = new ListRecognizer();
 		Assert.assertEquals(0, recognizer.recognize(ul), 0);
 	}
+
+	@Test
+	public void testListRecognizer2() throws MalformedURLException, IOException {
+		String xml = "<?xml version='1.0'?><div><h3>Unrelated</h3><ul><li><a>test</a></li></ul></div>";
+		Document doc = DOM.parseXOM(xml);
+		Element ul = doc.getRootElement().getChildElements("ul").get(0);
+		ListRecognizer recognizer = new ListRecognizer();
+		Assert.assertEquals(-1, recognizer.recognize(ul), 0);
+	}
 }

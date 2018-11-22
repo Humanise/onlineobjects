@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.model.Entity;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -19,11 +20,20 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 public class CacheService implements InitializingBean {
 
+	private ConfigurationService configurationService;
 	private CacheManager manager;
 	private static final Logger log = LogManager.getLogger(CacheService.class);	
 	
 	
 	public <T> T getCached(Entity entity,Class<T> perspective, Callable<T> producer) {
+		if (configurationService.isDisableCache()) {
+			try {
+				return producer.call();
+			} catch (Exception e) {
+				log.error("Unable to produce object for cache", e);
+				return null;
+			}
+		}
 		Cache cache = getCache(perspective);
 		Serializable key = entity.getId();
 		Element found = cache.get(key);
@@ -66,4 +76,7 @@ public class CacheService implements InitializingBean {
 		manager = CacheManager.create(); 
 	}
 
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
 }

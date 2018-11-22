@@ -1,5 +1,3 @@
-Sunday, January 23, 2011
-
 Hibernate Performance Tuning Tips
 
 Top 10 Hibernate Performance Tuning Recommendations:

@@ -1,10 +1,12 @@
 package dk.in2isoft.onlineobjects.modules.information.recognizing;
 
 import java.util.HashSet;
+import java.util.Map;
 
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.xml.DOM;
+import nu.xom.Document;
 import nu.xom.Element;
 
 public class BodyTextRecognizer implements Recognizer {
@@ -40,6 +42,11 @@ public class BodyTextRecognizer implements Recognizer {
 	private double scoreByTextLength(Element element) {
 		double x = ((double) DOM.getText(element).length()) / 100.0;
 		return Math.min(1, x);
+	}
+
+	@Override
+	public Map<Element,Double> recognize(Document document) {
+		return null;
 	}
 
 }

@@ -1,7 +1,3 @@
-A List Apart
-
-Menu
-
 Long-Term Design: Rewriting the Design Sales Pitch
 
 by Jarrod Drysdale March 02, 2017 Published in Design, Business

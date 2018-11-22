@@ -56,6 +56,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean optimizeResources;
 
 	private boolean simulateHttps;
+	private boolean disableCache;
 
 
 	public void afterPropertiesSet() throws Exception {
@@ -116,6 +117,14 @@ public class ConfigurationService implements InitializingBean {
 			}
 		}
 		return file;
+	}
+	
+	public void setDisableCache(boolean disableCache) {
+		this.disableCache = disableCache;
+	}
+	
+	public boolean isDisableCache() {
+		return disableCache;
 	}
 	
 	public String getDeploymentId() {

@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.modules.information;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -92,11 +94,24 @@ public class RecognizingContentExtractor implements ContentExtractor {
 				}
 			}
 		});
+		for (Recognizer recognizer : recognizers) {
+			Map<Element, Double> map = recognizer.recognize(document);
+			if (map!=null) {
+				for (Entry<Element, Double> entry : map.entrySet()) {
+					Double value = entry.getValue();
+					if (value!=null && value != 0) {
+						entry.getKey().addAttribute(new Attribute("data-" + recognizer.getName(), value.toString()));
+					}
+				}
+			}
+		}
 	}
 
 	private Document simplify(Document document) {
 		DocumentCleaner cleaner = new DocumentCleaner();
 		cleaner.setAllowClasses(true);
+		cleaner.setAllowMetaTags(true);
+		cleaner.setAllowSemanticAttributes(true);
 		cleaner.clean(document);
 		return document;
 	}

@@ -95,7 +95,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		Arrays.sort(dirs);
 		
 		for (File dir : dirs) {
-			//if (!dir.getName().startsWith("nngroup")) continue;
+			//if (!dir.getName().startsWith("videnskab")) continue;
 			File infoFile = findByExtension(dir, "json");
 			if (infoFile==null) {
 				log.warn("Info file not found: {}", infoFile);

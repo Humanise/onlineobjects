@@ -33,6 +33,7 @@ public class DocumentCleaner {
 	private boolean allowDataAttributes;
 	private boolean allowClasses;
 	private boolean allowSemanticAttributes;
+	private boolean allowMetaTags;
 	
 	private static final Logger log = LoggerFactory.getLogger(DocumentCleaner.class);
 
@@ -46,6 +47,10 @@ public class DocumentCleaner {
 		validAttributes.put("img", "width");
 		validAttributes.put("img", "height");
 		
+		validAttributes.put("meta", "name");
+		validAttributes.put("meta", "content");
+		validAttributes.put("meta", "property");
+
 		validTags.addAll(Sets.newHashSet("html","head","body","title"));
 		validTags.addAll(Sets.newHashSet("h1","h2","h3","h4","h5","h6","p"));
 		validTags.addAll(Sets.newHashSet("strong","em","a","img","br","hr"));
@@ -71,6 +76,7 @@ public class DocumentCleaner {
 		validLeaves.add("body");
 		validLeaves.add("html");
 		validLeaves.add("head");
+		validLeaves.add("meta");
 		
 		semanticAttributes.add("about");
 		semanticAttributes.add("typeof");
@@ -89,6 +95,10 @@ public class DocumentCleaner {
 	
 	public void setAllowSemanticAttributes(boolean allowSemanticAttributes) {
 		this.allowSemanticAttributes = allowSemanticAttributes;
+	}
+	
+	public void setAllowMetaTags(boolean allowMetaTags) {
+		this.allowMetaTags = allowMetaTags;
 	}
 	
 	public void setUrl(String url) {
@@ -125,7 +135,7 @@ public class DocumentCleaner {
 					}
 				}
 				
-				if (!validTags.contains(nodeName)) {
+				if (!isValidTag(nodeName)) {
 					nodesToRemove.add(element);
 					return;
 				}
@@ -181,6 +191,13 @@ public class DocumentCleaner {
 			}
 		});
 		removeNodes(nodesToRemove);
+	}
+
+	private boolean isValidTag(String nodeName) {
+		if (allowMetaTags && nodeName.equals("meta")) {
+			return true;
+		}
+		return validTags.contains(nodeName);
 	}
 
 	private void removeNodes(Set<nu.xom.Node> nodesToRemove) {

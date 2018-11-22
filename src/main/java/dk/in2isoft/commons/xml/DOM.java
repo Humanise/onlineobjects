@@ -65,13 +65,15 @@ public class DOM {
 	
 	public static String getText(Node node) {
 		String text = "";
-		if (node instanceof Text) {
-			String value = node.getValue();
-			text += value==null ? "" : value;
-		} else {
-			int count = node.getChildCount();
-			for (int i = 0; i < count; i++) {
-				text+=getText(node.getChild(i));
+		if (node != null) {
+			if (node instanceof Text) {
+				String value = node.getValue();
+				text += value==null ? "" : value;
+			} else {
+				int count = node.getChildCount();
+				for (int i = 0; i < count; i++) {
+					text+=getText(node.getChild(i));
+				}
 			}
 		}
 		return text;
@@ -271,5 +273,34 @@ public class DOM {
 			if (child instanceof Element) found = (Element) child;
 		}
 		return null;
+	}
+
+	public static List<Element> getAllPrevious(Element element) {
+		List<Element> found = new ArrayList<>(); 
+		ParentNode parent = element.getParent();
+		int count = parent.getChildCount();
+		for (int i = 0; i < count; i++) {
+			Node child = parent.getChild(i);
+			if (child == element) {
+				break;
+			}
+			if (child instanceof Element) {
+				found.add((Element) child);
+			}
+		}
+		return found;
+	}
+
+	public static boolean hasAttribute(Element element, String name, String value) {
+		return value.equals(element.getAttributeValue(name));
+	}
+
+	public static List<Element> findBefore(Element main) {
+		List<Element> found = getAllPrevious(main);
+		List<Element> trail = getAncestors(main);
+		for (Element ancestor : trail) {
+			found.addAll(getAllPrevious(ancestor));
+		}
+		return found;
 	}
 }

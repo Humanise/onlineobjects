@@ -1,7 +1,10 @@
 package dk.in2isoft.onlineobjects.modules.information.recognizing;
 
+import java.util.Map;
+
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
@@ -66,6 +69,11 @@ public class ListRecognizer implements Recognizer {
 			return DOM.getText(prev).trim().toLowerCase();
 		}
 		return "";
+	}
+
+	@Override
+	public Map<Element,Double> recognize(Document document) {
+		return null;
 	}
 
 }

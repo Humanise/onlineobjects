@@ -59,6 +59,7 @@
         <property name="simulateHttps" value="${development.simulateHttps}"/>
         <property name="testMode" value="${testMode}"/>
         <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
+        <property name="disableCache" value="${cache.disabled}"></property>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
