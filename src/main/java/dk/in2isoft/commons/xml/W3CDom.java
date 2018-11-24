@@ -163,9 +163,11 @@ public class W3CDom {
                 nu.xom.Text text = new nu.xom.Text(sourceText.getWholeText());
                 dest.appendChild(text);
             } else if (source instanceof org.jsoup.nodes.Comment) {
-                org.jsoup.nodes.Comment sourceComment = (org.jsoup.nodes.Comment) source;
-                nu.xom.Comment comment = new nu.xom.Comment(sourceComment.getData());
-                dest.appendChild(comment);
+            	// TODO: Comment data cannot contain carriage returns. (\r)
+            	// http://www.tfcbooks.com/tesla/1926-01-30.htm
+                //org.jsoup.nodes.Comment sourceComment = (org.jsoup.nodes.Comment) source;
+                //nu.xom.Comment comment = new nu.xom.Comment(sourceComment.getData());
+                //dest.appendChild(comment);
             } else if (source instanceof org.jsoup.nodes.DataNode) {
                 org.jsoup.nodes.DataNode sourceData = (org.jsoup.nodes.DataNode) source;
                 nu.xom.Text node = new nu.xom.Text(sourceData.getWholeData());
