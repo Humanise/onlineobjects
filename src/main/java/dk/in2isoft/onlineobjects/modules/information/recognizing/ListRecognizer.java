@@ -6,7 +6,6 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Text;
 
@@ -31,12 +30,26 @@ public class ListRecognizer implements Recognizer {
 				if (child instanceof Element) {
 					Element childElement = (Element) child;
 					if (DOM.isAny(childElement, "li")) {
-						Elements liChildren = childElement.getChildElements();
-						if (liChildren.size() != 1) {
-							return 0;
+						boolean hasLink = false;
+						for (int j = 0; j < childElement.getChildCount(); j++) {
+							Node childOfLi = childElement.getChild(j);
+							if (childOfLi instanceof Text) {
+								Text text = (Text) childOfLi;
+								if (Strings.isNotBlank(text.getValue())) {
+									return 0;
+								}
+							}
+							else if (childOfLi instanceof Element) {
+								Element el = (Element) childOfLi;
+								if (DOM.isAny(el, "a")) {
+									if (hasLink) return 0;
+									hasLink = true;
+								} else {
+									return 0;
+								}
+							}
 						}
-						Element first = liChildren.get(0);
-						if (!DOM.isAny(first, "a")) {
+						if (!hasLink) {
 							return 0;
 						}
 					} else {

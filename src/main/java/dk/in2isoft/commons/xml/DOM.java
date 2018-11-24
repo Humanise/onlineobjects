@@ -180,6 +180,7 @@ public class DOM {
 	}
 
 	public static nu.xom.Document parseWildHhtml(String wild) {
+		if (Strings.isBlank(wild)) return null;
 		org.jsoup.nodes.Document document = Jsoup.parse(wild);
 		return new dk.in2isoft.commons.xml.W3CDom().toXOM(document);
 	}

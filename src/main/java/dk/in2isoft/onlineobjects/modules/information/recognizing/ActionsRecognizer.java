@@ -24,7 +24,7 @@ public class ActionsRecognizer implements Recognizer {
 				"annonce","artiklen fortsætter efter annoncen", "læs også:",
 				"subscribe", "next article", "most recent newsletter", "pdf version", "menu", "skip to main content",
 				"search", "sign up", "open main menu",
-				"e-alert", "submit", "my account", "login", "☰"
+				"e-alert", "submit", "my account", "login", "☰","tweet","share"
 			};
 		String text = DOM.getText(element).toLowerCase().trim();
 		for (String string : texts) {

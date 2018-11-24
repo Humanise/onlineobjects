@@ -41,7 +41,7 @@ public class TitleRecognizer implements Recognizer {
 		Map<Element,Double> nodes = new HashMap<>();
 		
 		List<Element> candidates = DOM.findElements(document, element -> {
-			if (DOM.isAny(element, "title")) {
+			if (DOM.isAny(element, "title","body","head","html")) {
 				return false;
 			}
 			if (DOM.isAny(element, "h1")) {
@@ -50,9 +50,9 @@ public class TitleRecognizer implements Recognizer {
 			if (element.getChildElements().size() == 0) {
 				String text = DOM.getText(element);
 				if (Strings.isNotBlank(text)) {
-					if (titles.contains(normalize(text))) {
-						return true;
-					}
+					// TODO: Try to limit possible candidates
+					// Maybe exclude items with only block children
+					return true;
 				}
 			}
 			return false;
@@ -87,7 +87,11 @@ public class TitleRecognizer implements Recognizer {
 		compare(cs, titles);
 		
 		cs.sort((a,b) -> {
-			return b.comparison.compareTo(a.comparison);
+			int textComparison = b.comparison.compareTo(a.comparison);
+			if (textComparison != 0) {
+				return textComparison;
+			}
+			return b.rank.compareTo(a.rank);
 		});
 		return cs.get(0).element;
 	}
@@ -110,6 +114,7 @@ public class TitleRecognizer implements Recognizer {
 			Candidate candidate = new Candidate();
 			candidate.element = element;
 			candidate.text = normalize(DOM.getText(element));
+			candidate.rank = element.getLocalName().toLowerCase().equals("h1") ? 1.0 : 0.0;
 			out.add(candidate);
 		}
 		return out;
@@ -134,5 +139,6 @@ public class TitleRecognizer implements Recognizer {
 		Element element;
 		String text;
 		Double comparison = 0.0;
+		Double rank = 0.0;
 	}
 }

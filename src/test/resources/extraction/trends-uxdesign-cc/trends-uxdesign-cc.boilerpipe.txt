@@ -1,0 +1,30 @@
+#1The death and rebirth of UX
+
+As designers, we have always fought to be involved in strategic decisions early on. Now that we have a seat at the table, what are we going to do about it?
+
+Is your app onboarding experience off? Here’s a checklist of best practices. Not sure which type of menu to use on your site? Just follow this pattern library. Is your homepage headline uninspiring? Let's just A/B test it. At the same time UX Design gained attention from companies and the media over the last few years, a significant portion of its practices have been commoditized. Or like pessimists say: UX is dead.
+
+In our 2016 trend report, we pointed out that the concept of being a UX Designer is becoming so pervasive that will soon disappear. Heading into 2018 this transformation is finally taking shape. The variety of platforms and channels we design for demands a new set of skills, methods, and body of knowledge that go beyond what the classic website-and-app UI designer can deliver.
+
+Sure, UX is dead. Now let's get back to work.
+
+Click-bait-y articles about the fall of UX can make designers anxious about their careers. But if you have been working in this industry for long enough, you have probably seen this happen before. From “webmaster”, to “information architect”, to “interaction designer”, to “UX designer”, we have always been able to adapt what we do and call ourselves – while maintaining our mission of creating meaningful experiences for people.
+
+What we see now is not any different. Our field is maturing, budgets are increasing, and the design landscape is getting more complex and competitive. We can’t expect every designer to be the jack of all trades. We can't be doing our job in 2018 the same way we did in 2008.
+
+As the broad "UX designer" title starts to dissolve, we see fellow designers focusing on new paths and specializations:
+
+Some designers are adventuring in new fields and technologies, like virtual reality, conversational design, voice interfaces;
+
+Some are focusing on more specific areas of the design craft, like motion design, prototyping, UX writing;
+
+Some are updating their titles to Product Designers, broadening their scope beyond interaction design to focus more on product strategy and business.
+
+This shift from UX Design to Product Design is only accelerating in 2018. As our role and responsibilities grow inside our companies, understanding more about business and design strategy becomes inevitable.
+
+Being comfortable with business lingo is just the first step. We have to be able to talk to our business peers about lead generation, CRM, metrics, EBITDA, targeting, retargeting, revenue models, search engine marketing, direct response landing pages. Even more than that, we have to know when and where to put on business hats ourselves. A blue-sky design proposal might sound great in theory, but if not feasible from a business perspective, it shouldn't be where you invest most of your time.
+
+"Improving people’s lives through design” sounds like a great objective to put in your Linkedin profile. But the designs we create also have to make business sense.
+
+2018 will be the year where designers will, not without struggle, learn to be more strategic about the features, screens, and experiences they design. It’s about time we accept the fact we are not artists and embrace being part of a business. For the best.
+

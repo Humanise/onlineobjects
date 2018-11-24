@@ -28,7 +28,7 @@ class Fetcher
   def run
     @urls.each do |url|
       pretty = url.gsub(/https?:\/\/(www\.)?/i, "").gsub(/\W+/i, "-").gsub(/\-$/i, "")
-      pretty_short = url.gsub(/https?:\/\/[^\/]+\//i, "").split('/').last.gsub(/\W+/i, "-")[0..20]
+      pretty_short = url.gsub(/https?:\/\//i, "").split('/').last.gsub(/\W+/i, "-")[0..20]
       folder = @base.join('src/test/resources/extraction').join("#{pretty}");
       folder.mkdir unless folder.exist?
       archive = folder.join("#{pretty_short}.webarchive")

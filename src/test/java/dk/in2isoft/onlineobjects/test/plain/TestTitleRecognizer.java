@@ -120,4 +120,55 @@ public class TestTitleRecognizer extends TestCase {
 			}
 		}
 	}
+
+	@Test
+	public void testUX() {
+		String xml = "<?xml version='1.0'?>"
+				+ "<html><head>"
+				+ "<title>The State of UX in 2018</title>"
+				+ "</head>"
+				+ "<body>"
+				+ "<div>" + 
+				" <a href=\"/\"> UX Trends </a>\n" + 
+				" <div>The State of UX Design in 2018</div>\n" + 
+				" </div>"
+				+ "<h1 data-title=\"1.0\">2017\n" + 
+				"                <br/>Highlights\n" + 
+				"              </h1>"
+				+ "</body></html>";
+		Document document = DOM.parseXOM(xml);
+		Assert.assertNotNull(document);
+
+		TitleRecognizer recognizer = new TitleRecognizer();
+		Map<Element, Double> recognize = recognizer.recognize(document);
+		
+		for (Entry<Element, Double> entry : recognize.entrySet()) {
+			if (entry.getValue() == 1) {
+				Assert.assertEquals("<div>The State of UX Design in 2018</div>", entry.getKey().toXML());
+			}
+		}
+	}
+
+	@Test
+	public void testAdobe() {
+		String xml = "<?xml version='1.0'?>"
+				+ "<html><head>"
+				+ "<title>Not Another Free Image Click-Bait Article | Create</title>"
+				+ "</head>"
+				+ "<body>"
+				+ "<aside>NOT ANOTHER FREE IMAGE CLICK-BAIT ARTICLE</aside>"
+				+ "<h1>Not Another Free Image Click-Bait Article</h1>"
+				+ "</body></html>";
+		Document document = DOM.parseXOM(xml);
+		Assert.assertNotNull(document);
+
+		TitleRecognizer recognizer = new TitleRecognizer();
+		Map<Element, Double> recognize = recognizer.recognize(document);
+		
+		for (Entry<Element, Double> entry : recognize.entrySet()) {
+			if (entry.getValue() == 1) {
+				Assert.assertEquals("<h1>Not Another Free Image Click-Bait Article</h1>", entry.getKey().toXML());
+			}
+		}
+	}
 }
