@@ -62,11 +62,11 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("table","tbody","tr","th","td","thead","tfoot","colgroup","col","caption"));
 		validTags.addAll(Sets.newHashSet("dl","dt","dd"));
 		validTags.addAll(Sets.newHashSet("ul","ol","menu","li")); // TODO: menu is deprecated, translate it into ul
-		validTags.addAll(Sets.newHashSet("blockquote","figure","figcaption","pre"));
+		validTags.addAll(Sets.newHashSet("blockquote","pre"));
 		validTags.addAll(Sets.newHashSet("div"));
 
 		// TODO: This should be an option 
-		structureTags.addAll(Sets.newHashSet("section","article","aside","main","footer","nav"));
+		structureTags.addAll(Sets.newHashSet("section","article","aside","main","footer","nav","figure","figcaption"));
 		
 		
 		bannedTags.add("script");
