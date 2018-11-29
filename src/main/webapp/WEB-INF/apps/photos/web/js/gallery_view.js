@@ -138,7 +138,7 @@ var galleryView = {
           document.location = '/'+oo.language+'/users/'+this.username;
         }.bind(this),
         $failure : function() {
-          hui.ui.showMessage({text:'Unable to delete gallery',icon:'common/warning',duration:2000});
+          hui.ui.msg.fail({text:'Unable to delete gallery'});
         }
       })
     }.bind(this)});
@@ -149,7 +149,7 @@ var galleryView = {
       url : '/updateGalleryTitle',
       parameters : {id:this.galleryId,title:value},
       $failure : function() {
-        hui.ui.showMessage({text:{en:'Unable to change title',da:'Kunne ikke ændre titlen'},icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:{en:'Unable to change title',da:'Kunne ikke ændre titlen'}});
       },
       $success : function() {
         oo.update({id:'galleries',fade:true});

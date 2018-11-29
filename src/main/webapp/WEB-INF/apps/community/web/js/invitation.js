@@ -29,17 +29,17 @@ oo.community.Invitation = {
     var password = passwordField.getValue();
     var passwordAgain = passwordAgainField.getValue();
     if (hui.isEmpty(username)) {
-      hui.ui.showMessage({text:'Brugernavnet skal udfyldes',duration:2000});
+      hui.ui.msg.fail({text:'Brugernavnet skal udfyldes'});
       usernameField.focus();
     } else if (hui.isEmpty(password) || hui.isEmpty(passwordAgain)) {
-      hui.ui.showMessage({text:'Begge kodeord skal udfyldes',duration:2000});
+      hui.ui.msg.fail({text:'Begge kodeord skal udfyldes'});
       if (hui.isEmpty(password)) {
          passwordField.focus();
       } else if (hui.isEmpty(passwordAgain)) {
          passwordAgainField.focus();
       }
     } else if (password!==passwordAgain) {
-      hui.ui.showMessage({text:'De to kodeord er ikke ens',duration:2000});
+      hui.ui.msg.fail({text:'De to kodeord er ikke ens'});
       passwordAgainField.select();
     } else {
       var delegate = {

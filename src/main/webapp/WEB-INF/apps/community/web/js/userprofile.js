@@ -77,7 +77,7 @@ oo.community.UserProfile.prototype = {
     this.profileEditor.appendChild(form.element);
   },
   saveEditor : function() {
-    hui.ui.showMessage('Gemmer profil...');
+    hui.ui.msg('Gemmer profil...');
     AppCommunity.updateUserProfile(this.profileForm.getValues(),function() {
       document.location.reload();
     });

@@ -46,12 +46,12 @@ hui.ui.listen({
   },
   $click$barLogOut : function() {
     CoreSecurity.logOut(function() {
-      hui.ui.showMessage('Du er nu logget ud');
+      hui.ui.msg.success('Du er nu logget ud');
       window.setTimeout(function() {
         document.location.reload();
       },1000);
     });
-  } 
+  }
 })
 
 oo.community.util = {
@@ -107,7 +107,7 @@ oo.community.Chrome.prototype = {
   logOut : function() {
     CoreSecurity.logOut(function() {
       hui.ui.fadeOut(hui.get.firstByClass(document.body,'login_info'),1000);
-      hui.ui.showMessage('Du er nu logget ud');
+      hui.ui.msg.success('Du er nu logget ud');
       window.setTimeout(function() {
         hui.ui.hideMessage();
       },2000);
@@ -230,7 +230,7 @@ oo.community.Chrome.UserInfo = function() {
 oo.community.Chrome.UserInfo.prototype = {
   $click$casingLogout : function() {
     CoreSecurity.logOut(function() {
-      hui.ui.showMessage('Du er nu logget ud');
+      hui.ui.msg.success('Du er nu logget ud');
       window.setTimeout(function() {
         document.location.reload();
       },1000);
@@ -251,7 +251,7 @@ oo.community.Chrome.Login = function() {
 }
 
 oo.community.Chrome.Login.prototype = {
-  addBeahvior : function() {    
+  addBeahvior : function() {
     this.form.onsubmit = this.logIn.bind(this);
     hui.get.firstByClass(this.form,'submit').tabIndex=-1;
     hui.listen(this.recoverLink,'click',function(e) {hui.stop(e);this.recoverPassword()}.bind(this));
@@ -292,19 +292,19 @@ oo.community.Chrome.Login.prototype = {
         }
       },
         errorHandler : function(errorString, exception) {
-        hui.ui.showMessage({text:'Der skete desværre en fejl',icon:'common/warning'});
+        hui.ui.msg.fail({text:'Der skete desværre en fejl'});
       }
     };
-    hui.ui.showMessage('Logger ind...');
+    hui.ui.msg('Logger ind...');
     CoreSecurity.changeUser(username,password,delegate);
     return false;
   },
-  
+
   $click$casingLogin : function() {
     this.logIn();
   },
   userDidLogIn : function(username) {
-    hui.ui.showMessage('Du er nu logget ind!');
+    hui.ui.msg('Du er nu logget ind!');
     window.setTimeout(function() {
       document.location.reload();
     },500);
@@ -327,18 +327,17 @@ oo.community.Chrome.Login.prototype = {
         var values = form.getValues();
         var str = values.usernameOrEmail;
         if (hui.isBlank(str)) {
-          hui.ui.showMessage({text:'Feltet skal udfyldes',duration:3000});
+          hui.ui.msg.fail({text:'Feltet skal udfyldes'});
           form.focus();
         } else {
           this.sendingEmail = true;
           create.setEnabled(false);
-          hui.ui.showMessage({text:'Sender e-post-besked, vent venligst...'});
+          hui.ui.msg({text:'Sender e-post-besked, vent venligst...', busy: true});
           CoreSecurity.recoverPassword(str,{
             callback:function(success) {
               if (success) {
                 hui.ui.hideMessage();
                 hui.ui.alert({title:'Vi har nu sendt dig en vejledning på din e-post-adresse.',text:'Vejledningen beskriver hvordan du ændrer dit kodeord. Hvis du ikke modtager beskeden bedes du kontakte os.',emotion:'smile'});
-                //ui.showMessage({text:'E-post-beskeden er afsendt, se i din indbakke :-)',duration:5000});
                 box.hide();
               } else {
                 hui.ui.hideMessage();
@@ -366,7 +365,7 @@ oo.community.Chrome.Login.prototype = {
     this.recoverForm.focus();
   },
   submitRecoverPassword : function() {
-    
+
   }
 }
 
@@ -448,7 +447,7 @@ oo.community.Chrome.SignUp.prototype = {
     } else if (e.code=='noPassword') {
       this.password.setError('Kodeordet er ikke validt');
     } else {
-      hui.ui.showMessage({text:'Der skete en uventet fejl',duration:3000});
+      hui.ui.msg.fail({text:'Der skete en uventet fejl'});
     }
   },
   userDidSignUp : function(username) {
@@ -456,7 +455,7 @@ oo.community.Chrome.SignUp.prototype = {
     this.password.setValue();
     this.name.setValue();
     this.email.setValue();
-    hui.ui.showMessage('Opretter hjemmeside...');
+    hui.ui.msg('Opretter hjemmeside...');
     window.setTimeout(function() {
       document.location=oo.community.Chrome.buildUserWebsiteURL(username)+'?edit=true#firstRun'
     },2000);

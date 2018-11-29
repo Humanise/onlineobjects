@@ -344,9 +344,9 @@ OO.Editor.prototype = {
         },
         errorHandler : function(msg,e) {
           if (e.code=='lastPage') {
-            hui.ui.showMessage({text:'Den sidste side kan ikke slettes',duration:3000});
+            hui.ui.msg.fail({text:'Den sidste side kan ikke slettes'});
           } else {
-            hui.ui.showMessage({text:'Der skete en ukendt fejl',duration:3000});
+            hui.ui.msg.fail({text:'Der skete en ukendt fejl'});
           }
         }
       }

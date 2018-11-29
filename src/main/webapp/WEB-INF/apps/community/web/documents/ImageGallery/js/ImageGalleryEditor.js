@@ -75,7 +75,7 @@ OO.Editor.ImageGallery.prototype = {
   },
   refreshImages : function() {
     this.busy=true;
-    hui.ui.showMessage('Indlæser billeder...');
+    hui.ui.msg('Indlæser billeder...');
     ImageGalleryDocument.listImages(OnlineObjects.content.id,
       function(data) {
         this.parseImages(data);

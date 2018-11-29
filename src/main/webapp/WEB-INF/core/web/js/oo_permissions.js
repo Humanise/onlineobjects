@@ -9,7 +9,7 @@ oo.Permissions = function(options) {
         url : '/service/model/changeAccess',
         parameters : {entityId : options.entityId, publicView : value},
         $failure : function() {
-          hui.ui.showMessage({text:'Unable to change access',icon:'common/warning',duration:2000});
+          hui.ui.msg.fail({text:'Unable to change access'});
         }
       })
 

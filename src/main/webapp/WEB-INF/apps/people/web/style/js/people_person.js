@@ -93,20 +93,20 @@ var personView = {
     this.profileEditor.appendChild(form.element);
   },
   saveEditor : function() {
-    hui.ui.showMessage({text:'Gemmer profil...',busy:true});
+    hui.ui.msg({text:'Gemmer profil...',busy:true});
     var info = this.profileForm.getValues();
     info.userId = this.userId;
     hui.ui.request({
       url : '/updateUserProfile',
       json : {info : info},
       $success : function() {
-        hui.ui.showMessage({text:{da:'Gemt',en:'Saved'},icon:'common/success',duration:2000});
+        hui.ui.msg.success({text:{da:'Gemt',en:'Saved'}});
         oo.update({id:'profileInfo',$success:function() {
           this.cancelEditor();
         }.bind(this)})
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'An unexpected error occurred',duration:4000})
+        hui.ui.msg.fail({text:'An unexpected error occurred'})
       }
     })
   },

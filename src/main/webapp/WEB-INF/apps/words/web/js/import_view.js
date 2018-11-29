@@ -39,7 +39,7 @@ var importView = {
         this.latestWordNode.focus();
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:{en:'Unable to add word',da:'Kunne ikke tilføje ordet'},icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:{en:'Unable to add word',da:'Kunne ikke tilføje ordet'}});
       }
     });
   }

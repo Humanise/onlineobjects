@@ -96,7 +96,7 @@ oo.Map.prototype = {
   _reload : function() {
     hui.cls.add(this.element,'oo_map_busy');
     oo.update({id:this.element.id,$success : function() {
-      //hui.ui.showMessage({text:'The map is updated',icon:'common/success'});
+      //hui.ui.msg({text:'The map is updated'});
     }});
   }
 };
