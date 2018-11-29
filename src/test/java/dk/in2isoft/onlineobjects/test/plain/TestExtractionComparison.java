@@ -153,6 +153,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 					continue;
 				}
 				cleaner.setAllowDataAttributes(extractor.name.equals("recognize.debug"));
+				cleaner.setAllowStructureTags(extractor.name.equals("recognize.debug"));
 				cleaner.clean(extracted);
 
 				File out = new File(dir, baseName+"."+extractor.getName()+".html");

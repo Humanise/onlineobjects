@@ -24,6 +24,7 @@ public class DocumentCleaner {
 
 	private Multimap<String, String> validAttributes = HashMultimap.create();
 	private Set<String> validTags = new HashSet<>();
+	private Set<String> structureTags = new HashSet<>();
 	private Set<String> validLeaves = new HashSet<>();
 	
 	private Set<String> bannedTags = new HashSet<>();
@@ -34,6 +35,7 @@ public class DocumentCleaner {
 	private boolean allowClasses;
 	private boolean allowSemanticAttributes;
 	private boolean allowMetaTags;
+	private boolean allowStructureTags;
 	
 	private static final Logger log = LoggerFactory.getLogger(DocumentCleaner.class);
 
@@ -61,9 +63,11 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("dl","dt","dd"));
 		validTags.addAll(Sets.newHashSet("ul","ol","menu","li")); // TODO: menu is deprecated, translate it into ul
 		validTags.addAll(Sets.newHashSet("blockquote","figure","figcaption","pre"));
+		validTags.addAll(Sets.newHashSet("div"));
 
 		// TODO: This should be an option 
-		validTags.addAll(Sets.newHashSet("div","section","article","aside","main","footer","nav"));
+		structureTags.addAll(Sets.newHashSet("section","article","aside","main","footer","nav"));
+		
 		
 		bannedTags.add("script");
 		bannedTags.add("style");
@@ -117,6 +121,12 @@ public class DocumentCleaner {
 		if (document.getRootElement()==null) {
 			return;
 		}
+		DOM.travelElements(document, element -> {
+			element.setLocalName(element.getLocalName().toLowerCase());
+			if (!allowStructureTags && structureTags.contains(element.getLocalName())) {
+				element.setLocalName("div");
+			}
+		});			
 		// TODO lowercase all elements
 		Set<nu.xom.Node> nodesToRemove = Sets.newHashSet();
 		DOM.travel(document, node -> {			
@@ -195,6 +205,9 @@ public class DocumentCleaner {
 
 	private boolean isValidTag(String nodeName) {
 		if (allowMetaTags && nodeName.equals("meta")) {
+			return true;
+		}
+		if (allowStructureTags && structureTags.contains(nodeName)) {
 			return true;
 		}
 		return validTags.contains(nodeName);
@@ -358,4 +371,8 @@ public class DocumentCleaner {
 		}
 	}
 	*/
+
+	public void setAllowStructureTags(boolean allow) {
+		this.allowStructureTags = allow;
+	}
 }
