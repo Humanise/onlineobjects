@@ -52,7 +52,6 @@ Measuring the spin of these entangled particles along anti-parallel directions�
 
 Anti-parallel
 (50% identical, 50% opposite)
-
 The best possible local realist imitation (red) for the quantum correlation of two spins in the singlet state (blue), insisting on perfect anti-correlation at 0°, perfect correlation at 180°. Many other possibilities exist for the classical correlation subject to these side conditions, but all are characterized by sharp peaks (and valleys) at 0°, 180°, and 360°, and none has more extreme values (±0.5) at 45°, 135°, 225°, and 315°. These values are marked by stars in the graph, and are the values measured in a standard Bell-CHSH type experiment: QM allows ±1/√2 = ±0.7071…, local realism predicts ±0.5 or less.
 
 With the measurements oriented at intermediate angles between these basic cases, the existence of local hidden variables could agree with/would be consistent with a linear dependence of the correlation in the angle but, according to Bell's inequality (see below), could not agree with the dependence predicted by quantum mechanical theory, namely, that the correlation is the negative cosine of the angle. Experimental results match the curve predicted by quantum mechanics.[1]

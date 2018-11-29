@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Test;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -25,6 +26,11 @@ public class TestStrings extends TestCase {
 		assertEquals("Jonas Munk", Strings.concatWords(new String[] {"","Jonas"," ","Munk","   ",null}));
 	}
 	
+	@Test
+	public void testBlank() {
+		assertTrue(Strings.isBlank(" ")); // Non-breaking space		
+	}
+
 	@Test
 	public void testEquals() {
 		assertTrue(Strings.equals(null, null));
