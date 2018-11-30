@@ -122,7 +122,11 @@ public class TitleRecognizer implements Recognizer {
 
 	private String getMainTitle(Document doc) {
 		Element title = DOM.findElement(doc, element -> DOM.isAny(element, "title"));
-		return DOM.getText(title);
+		String text = DOM.getText(title);
+		if (text.contains("|")) {
+			text = text.split("\\|")[0].trim();
+		}
+		return text;
 	}
 
 	private String getOpenGraphTitle(Document doc) {

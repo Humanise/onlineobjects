@@ -1,0 +1,1109 @@
+Erik FlowersDecember 17, 2012 at 7:24 am | Permalink
+
+As an aside, I think I left out the fundamental importance and scope of what user interface design actually does consist of on its own merit. UI isn’t easy, and it’s not just visual design or aesthetic or style. Clarity and affordance are crucial and that’s not something that is just a visual job.
+
+Then, that leaves out the fundamental importance and scope of what visual design actually does… I am seeing a pattern here.
+
+Andy MontgomeryDecember 17, 2012 at 8:47 am | Permalink
+
+Great piece Erik. This is one of those areas that feels like common sense to those of us doing UX, but creates regular challenges when interacting with people outside the discipline. The “What we want them to see” chart is painfully accurate. Sometimes when the average-guy-on-the-street asks what I do, I punt and say “user interface design” since he’ll know what that means, but I appreciate your desire to keep educating. A good reminder to all of us doing the work every day.
+
+sokohl.com » Blog Archive » Keep RepeatingDecember 17, 2012 at 9:03 am | Permalink
+
+[…] has written a great article on why UX and UI aren’t synonyms. Read it. Learn it. Live […]
+
+DonMannDecember 17, 2012 at 10:29 am | Permalink
+
+Hi Eric, I also enjoyed your piece and when asked what I do, I tell them that I design computer software, the interaction between the Human and Computer / UX Designer. I’ve found on many job post that when the term UI Architect / UI Engineer is used, it’s usually used in conjunction with someone that codes, which I do not.. I use tools like iRise, Visio, In-Design etc.. Keep up the good work and appreciate your time and efforts..
+
+Erik FlowersDecember 17, 2012 at 10:51 am | Permalink
+
+Yeah it’s a strange thing to describe. I usually start with “Ever used something that is really a pleasant experience. Something that made your task easy, or fun, or useful? A piece of software, a UI on your DVR, anything like that? I do the work that makes that stuff possible.”
+
+Or if I want to deflect, I go with “I work on the software design and usabilty of the things that protect the encryption that protects all your online shopping and banking and the world’s sensitive information.” You say ‘encryption’ and people glaze over and walk away. :)
+
+DonMannDecember 17, 2012 at 11:27 am | Permalink
+
+LOL!!! I usually never use our lingo with them, as you’re right, they just kind of glaze over.. I usually ask mention them going into a bank and opening a new account, or when they sign up for online banking and mention the interface that they use to input their information.. Then the light goes on and they understand..
+
+December 17, 2012 at 10:11 pm | Permalink
+
+[…] Bild von Dan Willis, via helloerik.com. […]
+
+jormaDecember 18, 2012 at 2:44 am | Permalink
+
+Fantastic comparison between what we want them to see and reality :D
+
+misentoscossaDecember 18, 2012 at 7:44 am | Permalink
+
+Same here! I think I will send this article to all the recruiters that continuously contact me for interview as ‘UX *something*’ but in reality they look for Apache, database- and whatever deeply technical- people.
+
+Andy MarshallDecember 19, 2012 at 2:47 am | Permalink
+
+Love this article – so many people in the web industry have started appending UX to their job title, but they really don’t get the bigger picture.
+
+The UX Umbrella is helpful in explaining what’s really involved, though for me there should be some mention of psychology in there – understanding how humans think, learn, remember, and understand is so crucial to designing the experience.
+
+Erik FlowersDecember 19, 2012 at 12:33 pm | Permalink
+
+Totally. I believe that anyone who wants to have “UX” in their title needs to have deep knowledge in each item under the umbrella, and plentiful experience in *doing* it. Even for UX managers, principals, directors and CXO’s, I really believe you need to be a top-shelf practitioner so when the UX problems get hard, you know exactly HOW to fix things and WHY.
+
+I have a draft of another post about Psychology coming up. I have a undergraduate degree in Psychology where I had a deep interest in learning, memory, behavior modification and shaping, and the neuropsychology of cognition. I also did like 2000 hours as an intern with a clinical psychologist. This was all in the midst of a web development career, so it was like I was pursuing 2 careers at once.
+
+December 20, 2012 at 11:27 am | Permalink
+
+well said, man
+
+December 20, 2012 at 2:00 pm | Permalink
+
+“I usually start with..”
+
+December 21, 2012 at 5:36 am | Permalink
+
+Great post – I work in a industry where UX = Wireframes.
+
+Ivan MorgadoDecember 22, 2012 at 6:35 pm | Permalink
+
+It’s a very good article…is so important to realize what is each one…I would like read something like that but with differences between a software engineer and developer….
+
+Erik FlowersDecember 22, 2012 at 8:48 pm | Permalink
+
+Sounds like a great topic. I’ll add it to my list. I am a UX practitioner that is probably on the high-end of average for how close I work with engineers and developers, I will tap some of their opinions. I am a true believer that UX should be coupled with the implementation of the code.
+
+Karl KaufmannDecember 23, 2012 at 5:10 pm | Permalink
+
+Excellent article. Too often, the process gets confused in the client’s eye, and makes the process ever more challenging. It’s great to see the process spelled out as it is here…
+
+Terry FitzgeraldDecember 23, 2012 at 5:55 pm | Permalink
+
+Thank goodness some people get this. I’m a UX/Usability specialist and I’m finding it harder and harder to get projects because I don’t know HTML, CSS or Photoshop. But I’ve seen many of the sites and apps that are based solely on these skills and they are lacking. It’s a hard sell – everyone thinks they understand the user
+
+Erik FlowersDecember 23, 2012 at 7:47 pm | Permalink
+
+Yeah this is a real shame. There is a real need for skilled practitioners who don’t come from web design or graphic arts. Dedicated researchers and user testers are a great asset to have in a company who is willing to bring them on. I presume you do user flows, wireframes, personas, narrative journeys, etc etc?
+
+It’s the unicorn syndrome. Partially I think it’s because people just don’t get or know what a UX lifecycle should be, and also I think it’s just a scale issue.
+
+It’s like the personnel chain for an engineering effort, it could have an architect, a strict api engineer, a build manager, several backend only devs, several front end devs, system/load/performance QA, interface and blackbox QA, and then a product manager a project manager. That’s a pretty universally accepted chain for a large-scale software endeavor.
+
+But dividing a UX team up into 6 people, I just don’t think the bottom 90% of the world is ready for that. Various research and IA roles exist in a lot of places, but not really in a UX team or a focused UX chain.
+
+It will happen though, and sooner than we think.
+
+December 24, 2012 at 2:13 am | Permalink
+
+Fantastic write-up Eric. Thank you and merry Christmas
+
+Ramon GervaisDecember 24, 2012 at 5:13 am | Permalink
+
+It all sounds like A big ego problem for a small buzz-term that people now a days use to make a lot of money. And don’t get me wrong there are some good roll-models and conferences. But if I look at the web where still standing still… So to all you UX’ers go and create, do your thing and surprise us ;-)
+
+nixa espinolaDecember 24, 2012 at 8:34 am | Permalink
+
+I remember this being an issue since…ever! Five years ago I read some articles and heard a bunch of discussions about how the “experience” cannot be designed because, strictly speaking, the elements which shape that experience are actually the ones designed. Here is a short and honest related article: http://tinyurl.com/6pupr6
+
+Anyway it is amazing to see people in the industry who still think UI=UX (and there are plenty!). I will now do exactly what @misentoscossa suggests :) as an attempt to educate not only clients but also stakeholders.
+
+Thanks for the article Eric! It is always good to check how things are.
+
+December 24, 2012 at 10:13 am | Permalink
+
+I’m not quite sure what this post means.
+
+Himanshu VyasDecember 24, 2012 at 11:19 pm | Permalink
+
+Really Lovable Article, It’s making clear my head about UI & UX…….
+
+December 25, 2012 at 1:28 am | Permalink
+
+Nice and Clear. Thank you and merry Christmas to all..
+
+Greg MaleticDecember 25, 2012 at 1:17 pm | Permalink
+
+What’s the point of considering UX without UI, or vice-versa? And if there is no point, what’s the purpose in making a distinction?
+
+Erik FlowersDecember 25, 2012 at 1:37 pm | Permalink
+
+UI is a key component of UX. For anything that has to be interacted with, eventually someone uses a UI, even if they had various experience along the way to get to a UI. If the article portrayed UI as something that isn’t a component of UX, then that’s an omission. In the 2 long side-by-side bullet lists, interface design, visual design, and interaction design are all a part of UX.
+
+The purpose of making a distinction is so that people who use the 2 interchangeably or more often with a one way interpretation of “UX = UI” see that you can’t just jump to building or fixing UI to solve user or business problems/goals.
+
+The problem is when people who want to have a broad-spectrum UX career run into employers, bosses, clients, and general people who want their product to have “better UX.” They know that UX is an important buzzword, and their product is usually “ugly” or “hard to use.” So the assumption is that you bring on a UX designer… who then fixes the UI “look and feel” of your site/product. That may fix 10% of the usability/experience problems if they are a good interface designer. If they aren’t, then it’s just rearranging deckchairs on the Titanic.
+
+I think I need to write on article on the definition, nuance, and merits of *User Interface Design* as a few people have misconstrued this as a knock or dismissal of the art of UI. That’s the furthest from the truth.
+
+Here’s the pont of this article, in story form: You’re a company with a pretty powerful windows app that first built for Windows 98, and you’ve kept it updated through XP, Vista, and 7. Now that Windows 8 is out, your product manager says “Man, we really need to modernize our app. It’s hard to use, though powerful, and frankly uglier than sin.”
+
+So someone on the team says “Well, let’s hire a UX designer to come and change the look and feel. It’s got all the function we need, we just need some lipstick on this pig.”
+
+So they find a UX designer and bring him on, and say “Hey, spruce this baby up so that it really just looks great and works in the Windows 8 ecosystem!” and the designer replies “Okay, lets get started nailing down the personas, get some interviews scheduled, and walk through flows of the major problems your product solves.”
+
+*crickets*
+
+“Wait, I thought you were going to just change the look and feel?” Says the team.
+
+“I am. But how can I change the look and feel before addressing the core usability, intuitiveness, and experience of the whole product first?”
+
+At this point, this is when half the room usually has a lightbulb go off and see that a UI can’t be fixed in good conscious without at least some UX work. Look and feel never saved anything from being a fundamentally poor experience.
+
+So I guess, the distinction is that a top-shelf UI designer would take the work that UX has provided, the user stories, flows, information architecture, personas… and they’d start to create the perfect wireframes/mockups and layouts for the visible interface. They are a part of the UX process. But a UI designer who is asked to just start with wireframes, or worse full color mockups, that’s design malpractice.
+
+Adi |the boss|December 27, 2012 at 12:26 am | Permalink
+
+Article is informative highlighting a very important issue, but it would be better with the examples showing the difference between UX & UI.
+
+December 27, 2012 at 9:55 pm | Permalink
+
+I actually do want to do this. Probably in January.
+
+Martina KettnerDecember 28, 2012 at 3:56 am | Permalink
+
+I guess it means there’s a lot of talk about good UX, but not a lot of action. I agree and disagree. Looking back 10 years from now one can definitely see the development in the digital user experience. But you also need to consider the conditions now and then, as we have a lot more to work with today both technically and content wise (and that is not anything we can thank UX people for), which should create more opportunities and also greater challenges.
+
+And I agree when saying “go and create, do your thing and surprise us” because I believe most disruptive design ideas and solutions that really changed people’s experience didn’t come from a so called UX person who consciously applied the UX umbrella. No, they came from people in the need of solving a problem, or from people with a driving force to take advantage of an opportunity. Take the wheel as an example.
+
+I definitely think “UX people” are needed in every business, but then I don’t mean people with certain titles, tasks, tools or work processes, but people who solve problems for the customer/the user but think beyond them when coming up with solutions. Looking at users in retroperspective is limited by nature, and basing a design by understanding such will limit any solution. But combining tomorrow users with todays possibilities can open up for innovation and potentially great design.
+
+Tweet Parade (no. 52 Dec 2012) | gonzoblogDecember 29, 2012 at 7:02 am | Permalink
+
+[…] UX Is Not UI – UX has become a neologism. When something has “good UX” it is an implied meaning of having the core components of UX. That’s the true heart of the battle between UX and those who only want UI – or don’t know the difference. […]
+
+December 30, 2012 at 3:59 pm | Permalink
+
+While this is a UX forum, and some have stated many here are the choir, I very much appreciate the articulation of the difference. The more help
+we get in educating the better. When it comes time rationalize the budget for the resources you need to do UX it really helps to be able to delineate what is needed to build great UIs.
+
+Erik FlowersDecember 30, 2012 at 4:26 pm | Permalink
+
+Yes, the constant resource constraint is part of the need for education. When it comes down to the choice to apply “veneer” UI, or invest in solid UX, the veneer often wins because the UX can always be done later.
+
+I find articles like Aral Balkans “Design is not veneer” particularly poignant when imploring people to listen! http://aralbalkan.com/notes/design-is-not-veneer/
+
+Haresh KarkarDecember 31, 2012 at 2:25 am | Permalink
+
+Very well drafted article! We often face issues in explaining difference between various skill sets. I work in IT services industry where majority of projects are managed by people with development background. For them, world is flat! They ask IAs to do visual design, visual designers to write html, and etc. etc. They often define ‘good UX’ as ‘development friendly’ solution which takes minimum efforts and require less pain.
+
+January 2, 2013 at 3:07 pm | Permalink
+
+[…] It is written by Erik. […]
+
+Michael LajlevJanuary 7, 2013 at 1:53 am | Permalink
+
+Why people believe that they can design a user experience is still a mystery to me? I think all designers try to optimize their design to delieve the best possible user experience, but that doesn’t make them a UX designer. A while ago I posted this short thought http://blog.laj.lv/why-ux-designer-is-a-terrible-job-title/
+
+Erik FlowersJanuary 7, 2013 at 9:41 am | Permalink
+
+I don’t think anyone actually believes they “design an experience.” I’ve never encountered that. Most of the people who actually practice UX typically understand that it’s a development/design strategy that primes a site or product for a solution. Part of why I think UX is a neologism. It just encompasses the umbrella disciplines.
+
+With regards to the perfect holiday car that you mention in your blog post. That’s something where you would strategize, research, and design your car with the intent of being an optimized holiday car. I realize that they still might not make it to wally-world. But there’s a whoooole lot of design and strategy engineering that could go into a holiday car. And then marketing. If you woo and delight the user, it is possible to really shape and influence their experience. Psychologists of the mid 20th century have proven this over and over. Skinner, Zimbardo, Bandura, Watson, etc etc…
+
+I think it’s time to do a post on real behaviorists and behavior shaping :)
+
+Iza BartosiewiczJanuary 7, 2013 at 6:21 pm | Permalink
+
+And let’s not forget older users and users with disabilities. Accessibility also belongs under the UX Umbrella…
+
+January 7, 2013 at 7:57 pm | Permalink
+
+Critical point. Thanks for bringing that up.
+
+Michael LajlevJanuary 8, 2013 at 8:00 am | Permalink
+
+Seriously I would love a post on behavior shaping! That is so much more clear than “user experience design”.
+
+Great UX ExplanationJanuary 8, 2013 at 7:02 pm | Permalink
+
+[…] is a fantastic post explaining how UX is not UI by Erik Flowers on his blog here. I agree with him completely, despite my faux pas of using “Designer” in describing […]
+
+January 9, 2013 at 8:54 am | Permalink
+
+Looking forward to that post, Erik.
+
+I’m imminently starting my own blog, and I think many of the articles will touch on this critical aspect of UX.
+
+January 10, 2013 at 6:20 pm | Permalink
+
+[…] Here’s a great overview by Erik Flowers of what UX means: UX is not UI. […]
+
+Jakub LinowskiJanuary 10, 2013 at 10:01 pm | Permalink
+
+I’m going to post a short tweet I sent out a few days ago and see what the reaction will be. :)
+
+“The UX Umbrella is filled with lot’s of hot air and waiting to burst as its just claiming credit for good design”
+
+January 10, 2013 at 10:17 pm | Permalink
+
+My jimmies ain’t even rustled.
+
+Finn GaidaJanuary 13, 2013 at 2:32 pm | Permalink
+
+Speaking of UX, would you mind horizontally mirroring your header image, cause I find it somewhat irritating, that, along the standard time graph line from left to right the thought is converted by the brain into light that comes out of the eye? Would be clearer if the light fell into the eye and produced a thought. Great article by the way!
+
+Erik FlowersJanuary 13, 2013 at 3:11 pm | Permalink
+
+I thought it was like, the wave and vision were both heading towards the center! I get what you’re saying though ;) I’ll test it out. I always imagined the face should face to the right.
+
+January 13, 2013 at 3:23 pm | Permalink
+
+Oh, that’s a point. :D
+
+Erik FlowersJanuary 13, 2013 at 3:45 pm | Permalink
+
+To anyone following this thread – A lot of people have emailed me asking if they can use the 2-column comparison list of what UX is vs. what people think it is, so I made a little website for http://www.UXisnotUI.com where a poster can be downloaded in various sizes and formats.
+
+January 17, 2013 at 9:25 am | Permalink
+
+[…] UX is not UI | Hello Erik […]
+
+heyitsjayyJanuary 23, 2013 at 7:50 am | Permalink
+
+There are differences. The two could overlap in a role though.
+
+January 29, 2013 at 8:16 am | Permalink
+
+[…] UX is not UI […]
+
+UX is not UI | WaverleyJanuary 31, 2013 at 4:08 am | Permalink
+
+[…] recently came across an article by Erik Flowers which makes a useful distinction between two terms that are usually conflated and […]
+
+UX är inte UIFebruary 12, 2013 at 6:16 am | Permalink
+
+[…] Flowers skriver läsvärt om hur UX inte är UI men att UI är en stor och självklar del av […]
+
+February 19, 2013 at 8:13 am | Permalink
+
+[…] UI is not UX – AMEN! […]
+
+NotPaidToSayThisMarch 4, 2013 at 5:08 pm | Permalink
+
+I think it helps to stop thinking of UX as an aspect of interactive software and of that alone. As Wikipedia says: “ISO 9241-210 defines user experience as ‘a person’s perceptions and responses that result from the use or anticipated use of a product, system or service'”. The definition is focused on the person experiencing the artifact, not the artifact itself–and definitely not the people who designed it. The definition would include a product like a snowboard or a chair that may or may not have input devices, screens, speakers or even electronics. It would include a system like the Paris Metro. Or a service like shirt pressing or turn-down in a hotel. Or the experience of filling out and handing in a paper form at the post office. Or the experience of opening a box containing a new iPod or a pair of shoes. Or the experience of finding someone to help you when your computer or software application has crashed or your neighbor is playing loud music at 3AM. And of course the experience of using a software product or service through its carefully researched, designed and usability-tested user interface. Or through its brilliantly inspired but totally unvalidated UI. They are all UX.
+
+March 11, 2013 at 12:58 pm | Permalink
+
+Yes, this is a great case to integrate service blueprints and service experience architecture as well.
+
+Check out patrick quattlebaums’s presentation from MX Conference 2013 on them:
+
+PankajMarch 12, 2013 at 11:36 pm | Permalink
+
+Good article with nice explanation. Really very helpful. Right now many designers are not follow these rules. But if they read this then it will be helpful to them.
+
+March 13, 2013 at 12:02 pm | Permalink
+
+[…] UX is not UI | Hello Erik – User Experience @Erik_UX. […]
+
+UX: what it is, what it isn’t | life is [User cUstomer hUman] eXperienceMarch 25, 2013 at 6:35 am | Permalink
+
+[…] this is a great illustration. And we all love pictures more than words, don’t we? Read Erik’s post for more of his point of […]
+
+UX Artifacts and Adventure | Hello Erik - User Experience @Erik_UXMarch 29, 2013 at 12:14 pm | Permalink
+
+[…] the UX is not UI article, I wrote: “UX is the intangible design of a strategy that brings us to a solution.” I […]
+
+3 Ways Technology is Becoming More Human from @engageQApril 4, 2013 at 12:55 pm | Permalink
+
+[…] of much of our technological landscape. (Editor’s note: UX and UI are two different things! UX is not UI.) Every gadget encountered on a day-to-day basis has most likely undergone extensive market […]
+
+April 27, 2013 at 12:52 am | Permalink
+
+[…] http://www.helloerik.com/ux-is-not-ui Accessed on 24 April 2013 […]
+
+SvetaMay 2, 2013 at 6:29 pm | Permalink
+
+Great article! What about comparing UX and marketing? Sometimes people ask me for marketing advice and I tell them marketing and UX are not same. Thanks!
+
+What UX (User Experience) Is Not … | Portfolio of Svetlana KouznetsovaMay 6, 2013 at 3:40 pm | Permalink
+
+[…] wrote an excellent article about how many people are confusing UX with UI by “thinking that UX = User Interface Design.” He explains that UI is a major part of UX, but UX is not UI. While it is important to have a […]
+
+FILive: The Future of UX: Killing the Wireframe Machine | A grain of saltMay 11, 2013 at 6:34 pm | Permalink
+
+[…] same thing. The UI is definitely a piece, but not the whole. See Eric Flowers’ article : UI is not UX for more insight on […]
+
+Pandurangappa PMay 17, 2013 at 3:28 am | Permalink
+
+I am doing Designing & development…then what i’m? UX Developer….
+
+Erik FlowersMay 19, 2013 at 7:07 pm | Permalink
+
+I think that marketing is a part of overall customer/user experience. Service Experience Architecture is the next phase of end-to-end touchpoint experience planning.
+
+Here’s a great video from the MX Conference 2013. Patrick Quattlebaum talks about the future of SEA and what it means to UX architects in the present: http://vimeo.com/62888010
+
+SvetaMay 19, 2013 at 7:12 pm | Permalink
+
+Thanks for response, Erik. As for video, unfortunately, as one of millions of deaf/hoh people, I cannot access it as it is not captioned – which I find ironic as accessibility is part of UX. I advocate for captioning as universal access during my UX conference talks and also on my website – http://www.audio-accessibility.com. I understand it’s not your video, but I wanted you to be aware in case you plan to make one or are interested in spreading more awareness about captioning.
+
+May 19, 2013 at 7:18 pm | Permalink
+
+Here’s one of his slideshares on the same topic: http://www.adaptivepath.com/ideas/category/service-design
+
+Also, Brandon Schauer has written a few fantastic articles on it as well: http://adaptivepath.com/ideas/exploratorium-mapping-the-experience-of-experiments
+
+May 20, 2013 at 5:32 pm | Permalink
+
+[…] Bonustrack [not an app] : UX is not UI […]
+
+UX is not UI (in poche parole) | Giomino's BlogJune 14, 2013 at 7:21 am | Permalink
+
+[…] di seguito invece “UX is not UI” spiegato con qualche parola in più dall’autore di questo bellissimo poster (ovvero […]
+
+To Hell with the Slash! | Elisabeth HubertJune 16, 2013 at 9:50 am | Permalink
+
+[…] many people who have written about the difference between UX and UI, but perhaps my favorite is UX is not UI by Erik Flowers. I encourage you to take a read to come up to speed if you are unaware that the two […]
+
+Christine KoJuly 12, 2013 at 12:39 pm | Permalink
+
+Hi Erik,
+
+I just came out of what I thought to be a UX internship today…only to find out during the presentation that it was for a UI Designer. I put 90% of my efforts into building the strategy, bridging business and user goals, user research, personas, user stories, and other context of use, and then 10% on the UI for a few pages. I told them I am NOT a visual designer, that my strength lies in understand the user, and ensuring a user-centered design process – a champion so to speak. They had NO interest in the UX process and only wanted to see the design. Never did they interject, ask questions, or inquire as to why I did what I did (in the wireframes). I came out feeling jaded, upset, and mislead, and felt that this organization would not appreciate UX for what it truly is – a beautiful collaboration of all the things you mentioned above in your post. It frustrates me that companies today do not see the value of conducting user research, user testing, or even iterative design (I’m a giant fan of Agile). We are behind where we should be, and I can only hope that one day UX functions will be delegated to more than just one poor soul who’s coding one day, and user testing the next.
+
+Erik FlowersJuly 12, 2013 at 1:34 pm | Permalink
+
+I’ve had that happen. I’ve even had the opposite happen where I had all this IxD and UI work, and it was a more UX research/persona focused place (and it was one of the top 10 “UX” places to work… a household name /sad).
+
+Keep looking, they’re out there. Unless it’s a place you KNOW has a UX org that is rad (google, amazon, apple, netflix), usually it’s the hiring manager who you want to see if they have a good understanding of the UX they want. If there is no presence, or little, you can see if they’ll champion it away from just UI design and wireframing into things that are a little more broad and holistic UX work.
+
+But they are out there. Especially in places where you have a product or engineering department head who knows they need it, but has to trailblaze it for their company. I’ve been the “first guy” at a few places. You have to have an advocate.
+
+Keep looking. They’re out there. If you’re in NYC, check out http://www.elisabethhubert.com, I know she has hired interns and may have openings, and she’s the *best* and does exactly what you said you wanted to do.
+
+Christine KoJuly 12, 2013 at 1:38 pm | Permalink
+
+Hi Erik,
+
+Thank you so much, I feel a bit better now :) I am definitely going to contact Elisabeth Hubert :) I’m currently in Toronto, Canada, but definitely willing to move if she’ll have me!
+
+July 19, 2013 at 9:47 am | Permalink
+
+[…] This post was inspired by Erik Flower’s great article on UX, which you can find here. […]
+
+Lisa McMichaelJuly 29, 2013 at 1:33 pm | Permalink
+
+Erik, great addition to this conversation (which btw was sent to me from colleagues in Atlanta UX Mentors).
+
+I would suggest adding one more role to the above list: front-end web developer. In my professional experience I’ve found that firms would find this ideal, if not expected, from the UX team member.
+
+Erik FlowersJuly 29, 2013 at 3:08 pm | Permalink
+
+Interesting take. The way I see it though, UX people aren’t best suited for front end development. HTML and CSS prototyping is good, and maybe that stuff makes it into production, but I would say that if someone is going to be doing actual web development, they’re no longer doing UX and either they have a dual-career, or they are doing both roles poorly.
+
+I agree though, most firms would find that idea, but they’d be looking for a Unicorn at that point, and they’ll never find one. (see: http://www.designstaff.org/articles/hiring-a-designer-2011-11-01.html)
+
+Lisa McMichaelJuly 29, 2013 at 7:05 pm | Permalink
+
+Definitely agree that “UX people aren’t best suited…” yet what I’ve observed (to my dismay) is a persistent trend — firms filling roles for “Usability Manager” or “UX Designer” etc., expecting someone to bring both “genius” UX experience and front-end dev skills to this role (and other knowledge as well such as usability testing).
+
+Erik, continue to inform and educate on this topic! I’ve shared this article w/ several colleagues in Tampa Bay and Atlanta. Already I’m hearing that they need help with the nuanced differences between UX roles.
+
+Erik FlowersJuly 29, 2013 at 7:19 pm | Permalink
+
+Actually, I’m curious as to the definitions of Front End Developer, so I’d like to explore further. This isn’t snark, I want to know how these terms are used around the world.
+
+To me, FED is someone who:
+– writes production javascript/coffeescript, ruby, php, clojure/clojurescript, dart, etc etc
+– A programmer who can wire up and make use of API’s, databases, and integrate with backend development code.
+– Writes the html/css and integrates the javascript to make the UI work with the production code.
+
+A FED writes the code that goes into production to make a front end work. They are legitimate programmers.
+
+Now, a UX person who “codes” I thnk would often be called a “web developer”, which is a little bit of a misnomer as “developer” implies that there is fucntional code going on. To me would consist of
+– someone who can write HTML/CSS, and possible write it well enough to go into production with
+– someone who can cobble together jquery well enough to do a prorotype
+– Possibly write the html/css to integrate with existing FED code to build that “presentation layer” on top of actual functioning code.
+
+That part would be reasonable to expect. I’ve never heard of a person who fits my FED description and ever claimed to be a UX person, and also I haven’t heard of someone wanting a front end programmer to dive into research and storyboarding. I am sure it’s possible though.
+
+But, in my opinion, expecting any “UX” person to do more “coding” than just html/css and some hacky jQuery is not realistic.
+
+SvetaJuly 29, 2013 at 7:29 pm | Permalink
+
+Agreed with Erik. I’ve seen lately a lot of advertisements for “UX Developers” that don’t mention anything about UX-related tasks at all, only programming-related stuff and even database-related as well! As if hiring managers have no clue what UX actually mean and just throw it in the title because it sounds cool.
+
+Also, Front-end do mostly front-end work (hence the name) which is HTML, CSS, JavaScript and not more than that. The php, java, and other programming languages as well as database are usually done by back-end programmers or software engineers. That’s why there’s a difference between front-end designers and back-end developers.
+
+July 29, 2013 at 7:37 pm | Permalink
+
+interesting.
+
+The FED’s I work with typically are doing pretty compled front end stuff, usually really complicated coffeescript/clojure and front end API, which compiles down to javascript of course, but it’s way way way more complex than any “web developer” could do. They might still do the html/css as well, but even then sometimes that stuff is done by a designer, where it’s broken up MVC and the FED’s work on the models and the designers are free to do the html in the View /mind-boggle.
+
+Or maybe it’s just who I am working with. Typically I do the html/css via jade/bootstrap/less, and the FED controls the node.js stack for frontend and backend. BUT, since I don’t actually code working code, they also then build all the javascript interactions as well.
+
+But huge caveat – I am living in full MVC node.js and such land where the line between frontend, backend, model and view are so blurred that it doesn’t really fit the old “backend does php, front end does js.”
+
+But, this is all a great example about how freaking nuts all these “titles” are and how hard it is for cheapskate companies to actually hire what they NEED instead of trying to find unicorns (or shitty horses with cones on their heads).
+
+Great stuff though, keep it coming.
+
+UX is not UI | Just RandomJuly 30, 2013 at 10:55 am | Permalink
+
+[…] explanation about the above points are given by Erik Flowers in his article regarding this topic. so get the BIG picture, read and get your self […]
+
+August 6, 2013 at 1:47 pm | Permalink
+
+[…] Read the article […]
+
+UX is not UI | Simone BorsciAugust 8, 2013 at 1:10 am | Permalink
+
+[…] UX has become a neologism. When something has “good UX” it is an implied meaning of having the core components of UX (research, maybe a persona, IA, interaction, interface, etc etc…). It’s not really necessary or desirable to tack the word design onto the end anymore. It’s a distraction and leads people down a parallel but misguided path… the path to thinking that UX = User Interface Design. see more [Article] […]
+
+HsynAugust 8, 2013 at 2:16 am | Permalink
+
+If you think UX as at the same level as UI, you are already on the wrong direction.
+What I think about UX is at much much higher level so that this position should be held by a real expert since it effects companies’ reputation.
+For example;
+Compare Soundcloud.com (my favorite site so far) to any of its alternatives. There you can see that UX is the first thing to their success in my opinion.
+
+__mAugust 8, 2013 at 4:02 am | Permalink
+
+Isn’t usability engineering the process and UX the result? Calling the process UX is a bad UX.
+
+vladiimAugust 8, 2013 at 4:29 pm | Permalink
+
+There is a real lack of education out there on the components and processes behind UX. I’m constantly gob-struck how many large-scale/large budget projects I see that have minimal thought behind them. Great freakin’ post
+
+August 8, 2013 at 8:20 pm | Permalink
+
+[…] Read full article here:UX is not UI […]
+
+The Usability PeopleAugust 9, 2013 at 6:08 am | Permalink
+
+The flying unicorn that can sing, code and do great UX? see http://theusabilitypeople.com/dont-look-flying-unicorn-can-sing-write-code-and-do-ux
+
+certifyDAugust 9, 2013 at 6:56 am | Permalink
+
+Extremely good reference. I keep coming back to it and the table as well. Many thanks for writing and sharing it.
+
+azumbrunnenAugust 9, 2013 at 10:29 am | Permalink
+
+You could sum it up as Steve Jobs once said…
+
+“UX is not just how it looks like and feels like, UX is how it works.”
+
+azumbrunnenAugust 9, 2013 at 10:32 am | Permalink
+
+wtf
+
+User Experience Research Methodologies - Designer SchoolAugust 9, 2013 at 5:21 pm | Permalink
+
+[…] Sorry it has been so long since my last post. It has been quite hectic with the projects I have been working on the projects in my class at General Assembly. I will be wrapping up with the UX Immersive course soon, so I should have more time to get some UX posts up on the site. So, let’s get back to it… Before you go into Photoshop or Illustrator, before you you start drawing up wireframes, before you starting making sitemaps, even before you create personas, you need to do your research. This is why some people confuse UX (user experience) with UI (user interface) design. […]
+
+femmebotAugust 11, 2013 at 12:16 am | Permalink
+
+Curious…could you define what “Product Design” means?
+
+August 11, 2013 at 1:01 am | Permalink
+
+It is meant to mean the over all concept, “idea”, value proposition, etc.
+
+Like if someone said “People need a way to know when their doors are unlocked.” Product design would be the ideation and creation of what the idea for the product actually is – is it a camera that is pointed at the doors so you can see if they’re unlocked? A wireless sensor in the lock that texts you if it’s unlocked? Is it doors that always lock when they are closed? A trained monkey that whacks cymbals together if it sees the door is unlocked?
+
+The business problem stated was “let people know when their doors are unlocked.” The product design is that envisioning of how exactly you are going to do that.
+
+It’s a different way of thinking for some. Instead of thinking “lets build wireless door locks”, you think “how can we warn people their doors are unlocked.” Product design is the part where you literally conceptualized and brainstorm what you’re actually going to *produce* to solve that problem.
+
+That’s how I see it.
+
+femmebotAugust 11, 2013 at 1:18 am | Permalink
+
+Thanks. It seems much narrower than how others define it:
+
+UX != UI | Great White SpotAugust 11, 2013 at 11:14 am | Permalink
+
+[…] across a great blog post by Eric Flowers detailing the differences between UX and UI design. I definitely agree with his point that UI is just a small chunk of UX but often gets mistaken as […]
+
+Tim DawsonAugust 11, 2013 at 10:37 pm | Permalink
+
+Good post and discussion… what I love is that a bunch of non-UX people referred me to it… great that the broader community is really starting to challenge existing notions of what UX is and does.
+
+Erica_B1August 12, 2013 at 10:18 am | Permalink
+
+Yeah i am waiting to be surprised by these amazing UX people as well. I think any normal designer should know and do all that stuff, of course you have to do research and understand your content etc, why should there be a special job for that, it’s the designers job.
+
+August 12, 2013 at 12:23 pm | Permalink
+
+[…] UX is not UI | By @Erik_UX. […]
+
+montybark00August 13, 2013 at 5:58 am | Permalink
+
+you mean…. “Design is not just what it looks like and feels like. Design is how it works.” – I guess you can interchange the word design and UX but not sure if you should misquote someone.
+
+montybark00August 13, 2013 at 6:05 am | Permalink
+
+I would be very happy to never hear or see a headline that reads “UX is not UI” again. On the other hand it does make sense to say “UX is not just UI” that I can understand.
+
+montybark00August 13, 2013 at 6:12 am | Permalink
+
+Not to misunderstand I do appreciate this article and the comments. I just think the title is misleading.
+
+azumbrunnenAugust 13, 2013 at 8:17 am | Permalink
+
+I’m aware it’s about design and not UX when he said it. but the article pretty much goes in that direction.
+
+Erik FlowersAugust 13, 2013 at 8:45 am | Permalink
+
+The title is more of a direct response to the belief that the terms are interchangeable and aren’t different enough to be distinct. And of course, it is an article title, so it’s supposed to grab attention.
+
+But to me, it’s similar to (but not quite as bad) as “JavaScript is not Java.” Both are programming languages, both may be used on the same project. Both might be used by the same person ON the same project.
+
+I’ve started jobs projects where the majority of the people there commented “so you’re here to fix the UI/look? It’s so ugly, it’s been killing us.” And I respond with “Well, I am actually here to do personas and then storyboards, ‘information architecture’ is sort of what it is called.”
+
+It’s a “not equal to”.
+
+Stephen N. CrowleyAugust 13, 2013 at 1:08 pm | Permalink
+
+I agree Andy- UX Developer XYZ etc. pops up in places liked LinkedIn. I tend to dismiss a title because I am naturally curious as to what someones job entails and I was fortunate to have a discussion with a few people that called themselves UX Developers, the answer I got was “well, we design the UI which is the UX piece and we code the front end.” I was a bit confused so I asked their process, which was very much development without a user centered approach (no real research, user studies etc). I think UX is also about being an evangelist, winning hearts and minds, within your community and organization but having a process and sharing it, share your results other wise organizations will continue to look at UX as the people who just come in and add the magic sprinkles.
+
+Brendan MatkinAugust 13, 2013 at 1:16 pm | Permalink
+
+I really appreciated this article. You have not only made the intersection between UI and UX super clear, you have helped to define other user experience boundaries as well. I’m just getting into the industry (interning right now) and have been surprised at how broad the client expectations can be.
+
+As you mentioned, it seems like many people are completely unaware of even the most basic research and testing practices, and expect a shiny new interface to “fix the website”, often without even being aware of what the problem is. How do you patch a tire if you don’t know where it’s leaking?
+
+Also wanted to say thanks for responding to so many comments. I learned just as much from your replies (as well as the comments of others) as I did from the article!
+
+Erik FlowersAugust 13, 2013 at 3:12 pm | Permalink
+
+It’s easier to articulate ideas through comments than it is to try and write a post, which takes days and days. Replying off the cuff is a lot easier to actually communicate ideas =D
+
+August 14, 2013 at 2:23 am | Permalink
+
+[…] UX is not UI […]
+
+August 14, 2013 at 2:34 am | Permalink
+
+[…] UX is not UI […]
+
+August 16, 2013 at 6:36 am | Permalink
+
+Best comment here
+
+August 16, 2013 at 6:59 am | Permalink
+
+We are in luck. Adaptive Path has posted all the videos with PDF transcripts here http://mxconference.com/videos/ !
+
+August 16, 2013 at 7:05 am | Permalink
+
+I just posted a link to transcripts In the reply below. Check it out.
+
+SvetaAugust 16, 2013 at 9:16 am | Permalink
+
+Videos need to have BOTH captions and transcripts – it’s not convenient to look between video and a transcript. Also, a PDF format is not acceptable due to various reasons. It may not be a big deal for you if you have a normal hearing, but it is for us who are deaf and hard of hearing people. I am an accessibility specialist and give consultations to businesses on best practices of media accessibility: http://audio-accessibility.com/solutions/consultation-and-training/.
+
+SvetaAugust 16, 2013 at 9:17 am | Permalink
+
+Also, Vimeo video players are not acceptable – they do not support captioning. I would recommend YouTube or other players (like LongTail) that have captioning support.
+
+SvetaAugust 16, 2013 at 9:29 am | Permalink
+
+Just found out that they provide both captions and transcripts which is great (though there are some things that need to be fixed). Also, not “all” videos are accessible.
+
+Erik FlowersAugust 16, 2013 at 9:35 am | Permalink
+
+This is a huge topic. Really important to bring up. I have no real experience with making videos with captions and such, so this is really great to learn and consider, not just in video but in everything.
+
+I am doing a talk in about a month that will be recorded, I will be SURE to make sure that when it’s posted online after, it is properly captioned.
+
+SvetaAugust 16, 2013 at 9:38 am | Permalink
+
+It’s great that you will make your aural information accessible. Contact me if you need my consultation services about best practices.
+
+Vivek kuniyilAugust 18, 2013 at 10:47 pm | Permalink
+
+Great article. Well, for me, UI is a part of UX.
+And how big that part is, depends on the needs and the designer.
+
+August 19, 2013 at 12:06 am | Permalink
+
+[…] >원문 보기 […]
+
+Issue 58 – Spread A Little Sunshine, Make A Little Magic | Tech Leadership NewsAugust 19, 2013 at 12:31 pm | Permalink
+
+[…] UX is not UI “UX is an acronym for “user experience.” It is almost always followed by the word “design.” By the nature of the term, people who perform the work become “UX designers.” But these designers aren’t designing things in the same sense as a visual or interface designer. UX is the intangible design of a strategy that brings us to a solution.” […]
+
+August 20, 2013 at 9:38 am | Permalink
+
+Wonderful! UX is about creating neurologically “accurate” experiences driving the interface with expected results.
+
+August 20, 2013 at 1:58 pm | Permalink
+
+[…] http://www.helloerik.com/ux-is-not-ui —-> What’s UX and what’s UI? […]
+
+V1rtualBrownAugust 21, 2013 at 8:08 pm | Permalink
+
+The umbrella is great. “What we want them to see” has a lot of overlap with the role of the Product Manager. Probably half the list is the responsibility of the Product Manager. Certainly UX participates/ collaborates in that half but its not their primary responsibility.
+
+jsw0984August 24, 2013 at 3:58 pm | Permalink
+
+I’m not a huge fan of the common usage of the term UX. It has created an immense amount of confusion in the industry because it has become this ..I hate to say it but.. buzzword used in place of an occupational title. It’s a term that encompasses mishmashes of multiple occupational specialties with people that have a wide variety of differing skill sets. Because of this, we have this general understanding of what UX means as a concept and as a working process within the industry, but when you try to use it in place of an occupational title there will always be this great confusion because not every UX role will be requiring all the same necessary core skills. Without this term, we still have existing titles that have typically been expected to handle many of these tasks already. For instance, a UI designer has often needed to have this understanding of strategy, conceptualization, interaction, etc. and an Information Architect has needs the ability to strategize and understand interactions without bringing in the skills required of a visual designer. The list goes on. So, it makes me think that perhaps we should use this term only as a way of understanding parts of a process rather than using it as this somewhat ambiguous and commonly misunderstood title that for years has resulted in more occupational confusion. I can’t count how many recruiters I’ve spoken with that each have a different understanding the term.
+
+August 24, 2013 at 4:07 pm | Permalink
+
+I agree with most of this.
+
+The part that still is difficult for both employers and employees to accept is that often, a single (or 2,3) “UX designer” or “UX whatever” is expected to cover the entire gamut of all things that could be contained in a UX process. I only have my own experience to draw from, obviously, but I have yet to meet anyone or work anywhere where the actual occupational title wasn’t “UX generalist and graphic designer.”
+
+I know as companies get larger and more sophisticated with the way they deliver experiences, there are positions that are differences with distinction (info. architect, interface designer, interaction designer, visual designer, user researcher etc etc), but what I’ve seen is that most often, those are activities that “UX person” does.
+
+I often see it akin to say, a creative marketing agency that has traditionally worked in only design mediums, and want to start offering some digital services. So they hire 1 developer and give them a title of “Code Designer”, and they are then in charge of; architecture, database planning, database administration, backend development, API development, front end development, HTML, CSS, quality assurance (automation and blackbox) as well as server hardware/software maintenance, and then probably also the company website.
+
+That scenario is probably a bit more rare than the inverse “UX Person” role. But, again, I can only draw from my career experience which is just 1 person’s view.
+
+PhilAugust 26, 2013 at 11:58 am | Permalink
+
+My (cynical but honest) response: “No, not in at least 10 years”. All software (and hardware) is way too complex these days, even things that used to be simple. I go out of my way (and often out of my planned budget) to buy the simplest products I can find, and most of the time they’re still ridiculously complex.
+
+It’s not just computers and computer software. As software eats the world, everything is a victim. It’s no longer possible to buy a camera which isn’t covered in LCD displays and buttons, and packed full of hidden modes and trick key combinations and mysterious icons. It’s already almost impossible to buy a car without a giant touchscreen console. Audio receivers have mostly suffered the same fate, though if you’re willing to spend 10 times as much money you can get separate components that do the same job without the horrible user interface. My microwave in 1995 had 2 knobs (power, and time) and worked perfectly fine, and every microwave I’ve seen since then has at least 25 buttons yet doesn’t actually do a single thing better, and many things worse.
+
+I haven’t bought a car in over 10 years, and I honestly don’t think I’m smart enough to operate any modern car with its 1000’s of buttons everywhere. If my current car ever dies (heaven forbid!), I’m going to replace it with a good old 1969 Ford Mustang. It’s bad at safety and emissions and braking and all those other modern achievements, but nobody this century (not even the last holdouts like Porsche or Lotus!) has managed to build a car which is simple and beautiful and fun.
+
+I think that UX/UI have been losing the battle against feature complexity for years, and I’m not sure I believe it’ll ever be able to ever win.
+
+HOliveiraAugust 27, 2013 at 7:07 am | Permalink
+
+Great article and thank you for the post
+
+August 27, 2013 at 1:34 pm | Permalink
+
+Tesla won =D
+
+I think Apple pretty much did too. Despite successes or failures, they’re committed to shipping experiences, the best they can. The problems you described are product problems, they are experience problems. A good UX team may very well make a care for you that you love, but is also very complex beneath the “membrane” of experience and functionality.
+
+Shanti GuySeptember 13, 2013 at 6:32 am | Permalink
+
+This is an ironic post because you are talking about an audience misinterpreting the true meaning of a term (UX). The only portion of this audience that really matters are the ones that want to pay for UX. I have been solving communication problems my entire career. The problem of UX consumers not understanding UX, is a classic case the audience wanting sausage but not wanting to know how its made. Of course UX is not UI but the audience that does not see the point in understanding this, does not care. I only use the term UX for the teams I work with. If they don’t know what UX is, its a great way to explain working with me will mean a comprehensive process-that they will be expected to take part in. The problem becomes “Why does it cost twice as much for you to make a web site?” All I can say to this is that the majority of people in the world go for the cheaper option because they don’t care about quality in their own work. The much smaller group that pays for quality appreciate the difference.
+
+“Design Malpractice” – thats funny.
+
+col dixonOctober 14, 2013 at 12:48 am | Permalink
+
+I’ve just come across this post as I was searching ‘What’s the difference between UX & Ui design’. The reason I was searching is because I wanted to send a breakdown through to a HR person. I’ve just had to walk away from contract because I was sold it as a UX designer role, but in truth, the whole job was UI. I’m not a person to get prissy about these things, I do come from a design background and I hate the term a ‘hybrid designer’ for a designer that can do both UX & UI. I specifically choose to concentrate on the UX part of my career, attending seminar, attending courses, reading all the books I can on human behaviour, if I wanted to continue as a UI designer I would of polishing my skills in that arena, but as I always explain to people that wonder what I do… I deal with the psychology behind a website, I am there to champion the end user, the only way that I would ever intervene within UI is if I believe that the colour, typography, photography or iconography would detract away from the user journey. As I explain to a lot of people these days, you have three people in a decent design process… The IA – who is the brain, the UX who is the muscles, bones and nerves of the project and then you have the UI which is the hair and skin (the exterior) of the project.
+
+October 18, 2013 at 1:14 pm | Permalink
+
+[…] Are you confused about how UX and UI are different? Check out this article re-posted from HelloErik. […]
+
+October 20, 2013 at 6:57 pm | Permalink
+
+Great post, loving it!
+
+Changvy UX DesignerOctober 22, 2013 at 12:57 am | Permalink
+
+[…] wonderful article by Erik explains in great detail and precision about how user interaction design is different to […]
+
+October 23, 2013 at 7:05 am | Permalink
+
+[…] Оригинал: http://www.helloerik.com/ux-is-not-ui […]
+
+KarlOctober 29, 2013 at 5:27 pm | Permalink
+
+User Experience is a subset of Design. Its domain of language and processes may not vary enough for some people to feel its differentiated enough, but as with all practices people in the practice focus on the subtleties.
+
+Ari MaguireNovember 6, 2013 at 5:53 pm | Permalink
+
+Great read. My position with my company lumps the two, and the larger we get the more narrow that role of true UX becomes. When we were smaller, being on a team of UX designers made sense at the work force level. We all collectively had an influence on the shape of the company. Now that we’re growing, our UX influence is shrinking. At least mine is. This is where I’m starting to focus on facets of UX, one being the UI of our product. I think large scale companies still don’t get it right. You have to have an executive or high level UX point man if you want a successful UX across the company. If they continue to maintain them at lower levels, even directors, the big picture will fail to be drawn correctly. Especially when CMO’s and CTO’s have more influence. Its irritating.
+
+I see the role of a high level UX designer (yes, I prefer that) similar to that of a film director. Film directors deliver an experience to the spectator, one that attributes many facets of entertainment – story, visuals, editing, sound, music, etc.. He rarely physically produces any of those, but nothing gets by him without his OK and he’s often heavily involved in the production of each. But in the end its his vision. Aside from the obvious differences in content and such, whats the difference?
+
+Erik FlowersNovember 8, 2013 at 1:00 pm | Permalink
+
+If companies grow but the experience and service design influence and management doesn’t grow with it, it’s a recipe for failure. Look at all the companies with VP’s of Service Design or VP’s of Experience Design, those places are the future. Can’t really be helped though if a company sees experience design (customer, service, user) as a resource to be applied and not a fundamental pillar.
+
+Read some of Kerry Bodine’s blog posts. She’s a “VP analyst for customer experience professionals”,
+
+DecideNovember 20, 2013 at 8:55 pm | Permalink
+
+I see. So an IA architect should have the ability to design a beautiful, hi-fidelity interface based off of simple, plain wireframes? Or is it, the visual designer should be able to organize, categorize, and structure a vast web application, ensuring that the hierarchy of information will be spot on? And what exactly is a ‘normal’ designer? Product designer? Graphic Designer? A great UX practitioner does not surprise anyone. If you use an app or web site, and it was intuitive and did not frustrate you, then the UX professionals essentially did their job. The point Erik is making here, is that UX/UI are buzz terms, and many going around demanding them or touting them, really do not understand them. Unfortunately, you do not either.
+
+Erica_B1November 21, 2013 at 8:05 am | Permalink
+
+Your second scenario is what I am advocating. Get rid of the middle man (the IA architect). A good designer does all of that intuitively.
+
+Erik FlowersNovember 21, 2013 at 11:09 am | Permalink
+
+UX intuition isn’t UX work. We all “keep UX in mind” but saying that titles, tools, and roles are superfluous is patently false.
+
+UX doesn’t even have to be a role, but no, a visual designer doesn’t do IA just as quality assurance testers don’t do system architecture or write unit tests.
+
+This idea that UX is just a mindset and that people should “just be able to do it” is what diminishes the impact, respect, and legitimacy in organizations. Of course we all include the tenets and are focused on building and subsequently selling experience, but you can definitely take the terms of on the list up there, and say “producing the relevant deliverables to these parts is my job.”
+
+I guess I never made it clear, but I absolutely do NOT think the lefthand column up there is the “UX designers” job description. It’s a subdivision of foci about what a UX “department” may very well be responsible for, with people who focus, specialize, and produce specific elements.
+
+Also, the discourse on the internet and my own philosophy have evolved and progressed passed the “UX is not UI” idea, which was always just a reminder to those outside the “know” to realize that UX people can and do a variety of things, but not all at once and not as a Unicorn.
+
+elevatusNovember 23, 2013 at 12:28 pm | Permalink
+
+Although there are a new crop of Visual Designers who can “crossover” and run with some UX aspects, their primary talent pushes them towards color, scale, whitespace, font & brand. I would say that most visual designers, unless surrounded by solid UX people, are not typically trained up enough to know what they don’t know about UX. I worked in the agency/branding world for a decade. It isn’t intended to be a ding, it is just a bi-product of how people are trained in school and/or what they choose to focus on.
+
+UX Designers have some of those talents, but skew more towards an analytical focus on prioritization, clarity, meaning (terms/labels) and general “intuitiveness”.
+
+Information Architects focus on structuring and organizing the categories & data on your site. Many companies do not have the funds for a dedicated IA, so they lean on UX to handle this.
+
+elevatusNovember 23, 2013 at 12:30 pm | Permalink
+
+I know what you mean by surprise, you are trying to say; “Hey, do something cool!”. The irony is that UX tries to mainly focus on solving user problems, by enabling them to complete their tasks more efficiently – with a potential bi-product of “cool”. Most people will mainly only notice when UX is done poorly, not when it is done perfectly – because they will be onto the rest of their life.
+
+elevatusNovember 23, 2013 at 12:32 pm | Permalink
+
+The term is fine, the application of the term, by non-ux’rs and/or people who want to be seen as UX’rs is the issue.
+
+November 27, 2013 at 5:06 am | Permalink
+
+[…] via UX is not UI | UX at Hello Erik. […]
+
+Julius SekahDecember 9, 2013 at 6:50 am | Permalink
+
+@erikflowers:disqus does this mean, that there is nothing like UI/UX designer as in you are either a UI guy or a Ux person.
+
+December 9, 2013 at 10:36 am | Permalink
+
+There’s no real “UX/UI” as a job.
+
+You can do UX, you can do UI. You could have both and say “UX and UI” as in someone is capable of both, or you could say “UX & UI” as in someone does both jobs.
+
+But UX/UI makes no sense as it’s saying you want some combination of a discipline, and then a specific aspect.
+
+I see it like saying “We are looking for a Python/Functions person” or “Web Designer/ person” or “Designer/Brush Tool person” or “Chef/Spatulas.” Makes no sense.
+
+You can be both, you can do both, there’s nothing up there that is mutually exclusive.
+
+But the point is that none of the terms or jobs are “job titles” and they aren’t things that you meld together. If someone wanted to be a UX/UI designer, I would call it “I am a UX & UI designer” the same way you would say “I am a UX designer and Javascript developer,” not “UX/Javascript.”
+
+Or, some people think the slash is just semantic details and it doesn’t really matter. Except that when UX/UI is desired, it almost always means “Interface Designer who we hope considers the user’s experience.”
+
+January 8, 2014 at 10:33 am | Permalink
+
+[…] Sumber : http://www.helloerik.com/ux-is-not-ui […]
+
+RyanJanuary 27, 2014 at 11:10 pm | Permalink
+
+Yes I agree it should be lumped with the designer; at least the majority of the points brought up in the article (copy writing HA no way). But I take offense to the employers that expect me to also do front-end code as a UI designer. Get off my back and stop lumping us all together. It really irks me.
+
+Article Roundup for 02.04.2014 | Tvenge DesignFebruary 4, 2014 at 4:11 pm | Permalink
+
+[…] UX is not UI | Experience Design at Hello Erik Don’t get the two mixed up. They are very different. […]
+
+Patrick SavalleFebruary 13, 2014 at 3:36 pm | Permalink
+
+One of the most important aspects is completely overlooked here and almost any other text on this topic. Interaction design is about the interaction of the user with the device. But since most websites today have an important social function (peer-to-peer interaction), we need to have something I call ‘social design’. The way the device facilitates the interaction between users.
+
+If interaction design is based on psychology as it where, social design is based on sociology.
+
+There is a lot to social design. For instance, things like the Matheus effect on voting systems, etc. etc.
+
+February 24, 2014 at 12:35 pm | Permalink
+
+Hello Erik,
+
+*lovely to virtually meet you*.
+
+I enjoyed your article and have posted a few of these in the past week or two on Twitter as the subject seems to be gaining momentum to a wider audience; not only the difference between UX and UI, but all of the different skill sets to ultimately end up with a customer experience that is intuitive and achieves its goals. What I personally find particularly interesting is most of the skill sets you list have been spearheaded, in my experience, by Product Managers working with all of the various teams and accomplishing many of them themselves. Do you find UX positions are usurping Product Manager roles completely, or perhaps working hand in hand with Product Managers or perhaps Designers or UX roles are taking a few of these skill sets away from, I imagine a very grateful Product Manager who can then concentrate on the other 200 elements they need to deliver the end to end solution and then manage in-life? I’d love your feedback on how all the roles interlink in your experience and which ways you believe it is best split for best results. I’m curious how USA tends to do it, if indeed there is a norm. Thank you very much and again, great article. Best, Caryn.
+
+Why startups & enterprises in Asia should invest in UXFebruary 25, 2014 at 6:11 am | Permalink
+
+[…] UX (User Experience) is not such a strange term in the west, as compared to the Asian region. Many IT giants like Apple, IBM, Amazon and Facebook are well-known for delivering great user experience. Undoubtedly, UX has recently becoming a buzz word in Asia, thanks to continued promotional efforts by the local UX community. Yet, many UX practitioners still find it difficult to ‘sell’ the idea of UX to enterprises even in developed Asian countries like Singapore and Taiwan. Many have misconceptions and thus, misuse the term, ‘UX’. I always hear from founders that they understand the importance of UX and that they have a great UX designer/team but after further discussion, I come to realise that the mentioned ‘UX team’ does only graphic user interface design. I do not claim to be a ‘know-it-all’ when it comes to the correct definition of UX, but I am pretty certain that it is safe for me to enlighten you on the fact that UX IS NOT UI. (You may read a very interesting article that explains why UX is not UI here). […]
+
+Why startups & enterprises in Asia should invest in UX | Xcluesiv Cloud Technology BlogMarch 1, 2014 at 3:34 am | Permalink
+
+[…] Undoubtedly, UX has recently becoming a buzz word in Asia, thanks to continued promotional efforts by the local UX community. Yet, many UX practitioners still find it difficult to ‘sell’ the idea of UX to enterprises even in developed Asian countries like Singapore and Taiwan. Many have misconceptions and thus, misuse the term, ‘UX’. I always hear from founders that they understand the importance of UX and that they have a great UX designer/team but after further discussion, I come to realise that the mentioned ‘UX team’ does only graphic user interface design. I do not claim to be a ‘know-it-all’ when it comes to the correct definition of UX, but I am pretty certain that it is safe for me to enlighten you on the fact that UX IS NOT UI. (You may read a very interesting article that explains why UX is not UI here). […]
+
+Why Startups & Enterprises in Asia should Invest in UX | Netizen TestingMarch 19, 2014 at 1:15 am | Permalink
+
+[…] UX (User Experience) is not such a strange term in the west, as compared to the Asian region. Many IT giants like Apple, IBM, Amazon and Facebook are well-known for delivering great user experience. Undoubtedly, UX has recently becoming a buzz word in Asia, thanks to continued promotional efforts by the local UX community. Yet, many UX practitioners still find it difficult to ‘sell’ the idea of UX to enterprises even in developed Asian countries like Singapore and Taiwan. Many have misconceptions and thus, misuse the term, ‘UX’. I always hear from founders that they understand the importance of UX and that they have a great UX designer/team but after further discussion, I come to realise that the mentioned ‘UX team’ does only graphic user interface design. I do not claim to be a ‘know-it-all’ when it comes to the correct definition of UX, but I am pretty certain that it is safe for me to enlighten you on the fact that UX IS NOT UI. (You may read a very interesting article that explains why UX is not UI here). […]
+
+xianMarch 20, 2014 at 6:49 am | Permalink
+
+UX is not a subset of design. UX strategy and user research are inputs to design but are not design. UX may impact the data model, the communications strategy, etc.
+
+It is heavily intertwined with design but one is not a subset of the other.
+
+March 27, 2014 at 3:48 am | Permalink
+
+[…] Image source […]
+
+April 1, 2014 at 11:52 am | Permalink
+
+[…] A great article that I found about the difference between UX and UI can be found here. […]
+
+April 18, 2014 at 5:39 am | Permalink
+
+[…] Poster criado por Erik Flowers (ler artigo do autor): […]
+
++ UX & UI – Research Interest | Jef LeeMay 6, 2014 at 11:23 pm | Permalink
+
+[…] his article is just a very basic knowledge. Other than that, I found an article which told me “UX is not UI!“. This article’s author is Erik Flowers, tells people(including me) on how […]
+
+How User Consultants can help Internal Teams | Usability MattersMay 9, 2014 at 11:39 am | Permalink
+
+[…] the swelling interest in omni-channel customer experience, it’s still a poorly understood field. Eric Flower’s image summarizes it poignantly: there is still a gulf of understanding between what UX is and how it’s […]
+
+May 19, 2014 at 12:00 am | Permalink
+
+The slash totally works. Let me show you:
+UX and/or UI. See what I did there?
+
+May 19, 2014 at 8:36 am | Permalink
+
+I also enjoy baseball/football. We wear pads and gloves and kick homeruns.
+
+Jacob MadsenMay 19, 2014 at 9:32 am | Permalink
+
+Bo Jackson and Dion Sanders did as well, but they never played them both at the same time. I was trying to point out that the slash doesn’t work as UX/UI because it mistakenly equivocates them. But to move it to the conjunction and/or allows me to state that I can do both, though they are not the same role. I’m fairly certain that is in harmony with your article, which I think is excellent and was shared with thanks on my social networks.
+
+May 19, 2014 at 9:37 am | Permalink
+
+Yes, it is in harmony.
+
+I think people can be the Bo Jackson, as long as companies realize they’re hiring 2 disciplines and asking for 2 different set of expectations. This really all boils down to company expectations and bad hiring practices. I think people in the experience design realm get it, but getting pigeonholed by jobs that conflate the 2 is something that needs to evolve.
+
+Thanks for joining the conversation and contributing. The more people who read this, the better.
+
+Erik FlowersMay 25, 2014 at 12:41 pm | Permalink
+
+As of today May 25th, 2014, this article has had 117,831 unique views in 526 days. That’s 222 uniques a day. #damn
+
+questorJune 4, 2014 at 8:24 pm | Permalink
+
+Excellent distinction!
+
+Now the challenge is to get Applicant Tracking Systems to understand the difference between these keywords.
+
+And while we’re at it, the whole experience of applying online to a company can be really disheartening and difficult. (Come to think of it, so is the UI, and other aspects of the hiring process.)
+
+So much in need of redesign and friendly interfaces between man and machine. And men & women too.
+
+Optimal Workshop | The UX language debate — why it’s a good thingJune 29, 2014 at 10:41 pm | Permalink
+
+[…] ‘Perhaps we should use this term only as a way of understanding parts of a process, rather than using it as this somewhat ambiguous and commonly misunderstood title.’ jsw […]
+
+What is the difference between UX and UI? | modern8July 15, 2014 at 8:42 am | Permalink
+
+[…] Many designers today are asked to fulfill both roles. The article I mentioned above along with this excellent article by Erik Flowers list more specific responsibilities these designers may encounter in the current […]
+
+July 27, 2014 at 9:37 pm | Permalink
+
+Great Tips! I’ll try them, thank you!
+
+Designing in an Agile World | tony quirozJuly 28, 2014 at 3:06 pm | Permalink
+
+[…] put us in the age old position of having to explain that UX ≠ UI; something that Eric Flowers addressed brilliantly in what’s become a semi-famous write up in UX […]
+
+August 1, 2014 at 4:51 am | Permalink
+
+[…] is not UI: helloerik.com/ux-is-not-ui […]
+
+August 2, 2014 at 1:52 am | Permalink
+
+I think titles don’t matter what matters is the doing.
+
+Miłosz W.October 23, 2014 at 12:29 am | Permalink
+
+Great post! I myself attended a couple of job interviews on which the people talking to me knew they had to employ a “UX Designer” but didn’t know what comes with it…
+
+UX Architect » How to break into UXDecember 21, 2014 at 1:36 pm | Permalink
+
+[…] first it’s important to know that UX and UI are not synonymous. While many job postings combine them, UI is a subset of UX, just as research and information […]
+
+December 22, 2014 at 7:25 am | Permalink
+
+[…] 40. UX is not UI […]
+
+December 22, 2014 at 9:44 am | Permalink
+
+[…] 40. UX is not UI […]
+
+December 23, 2014 at 12:01 am | Permalink
+
+[…] 40. UX is not UI […]
+
+megaDecember 24, 2014 at 1:43 am | Permalink
+
+“and/” did work there.
+
+What does UX actually mean? | React And RespondJanuary 10, 2015 at 2:07 am | Permalink
+
+[…] sure what there definition was but I’m sure it wasn’t going to be the same as mine. This article was posted by Erik Flowers on December 15, 2012 and it’s helped me explain what I actually do […]
+
+A Fundamental Difference Between UI+UX – Mac Galeano UX Director + DesignerJanuary 26, 2015 at 8:26 pm | Permalink
+
+[…] Many designers today are asked to fulfill both roles. The article I mentioned above along with this excellent article by Erik Flowers list more specific responsibilities these designers may encounter in the current […]
+
+A UX Designer That Hates UI – Mac Galeano UX Director + DesignerJanuary 28, 2015 at 9:32 am | Permalink
+
+[…] is not UI, as others (and myself) have observed. The tasks for designing a good user experience are just as fun and […]
+
+The UX Umbrella | Posting For LaterPosting For LaterFebruary 20, 2015 at 8:08 am | Permalink
+
+[…] this diagram while reading the article UX is not UI by Erik Flowers. The UX Umbrella highlights how UX solves […]
+
+February 20, 2015 at 9:33 am | Permalink
+
+[…] Experience Design at Hello Erik […]
+
+UI Does Not Equal UX | Cesar VelaFebruary 25, 2015 at 3:28 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+UI Does Not Equal UX | Oh Alright!February 25, 2015 at 3:28 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+UI Does Not Equal UX | Omaha Sun TimesFebruary 25, 2015 at 4:49 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+UI Does Not Equal UX | TeamOTGFebruary 25, 2015 at 5:05 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+UI Does Not Equal UX | The H2O StandardFebruary 25, 2015 at 8:08 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+UI Does Not Equal UX | BloggerFebruary 25, 2015 at 9:46 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+Mobile Technology News, February 26, 2015 | DigitalWorkshedFebruary 25, 2015 at 11:33 pm | Permalink
+
+[…] clear up a common misunderstanding; UI does not equal UX. There… I said it. People may see UX as Interface Design but it is not that […]
+
+Karen TottenMarch 5, 2015 at 8:28 pm | Permalink
+
+Azumbrunnen, misquoting by substitution of the very terms that are under discussion here only leads to more confusion!
+
+March 12, 2015 at 6:58 am | Permalink
+
+[…] UX também não é só usabilidade… Poster criado por Erik Flowers (ler artigo do autor): […]
+
+March 17, 2015 at 8:11 am | Permalink
+
+[…] found this article interesting and explicative about what UI and UX […]
+
+March 27, 2015 at 6:41 am | Permalink
+
+[…] Source: UX is not UI […]
+
+Don't marginalize your UX - Blog - vaadin.comApril 21, 2015 at 2:56 am | Permalink
+
+[…] the designer will produce the UI blueprints (here is a nice list of things that might be included: http://www.helloerik.com/ux-is-not-ui), from which you can start the implementation. On smaller projects this process can take anywhere […]
+
+5 ways ux design will build your brand - ux design brandingMay 11, 2015 at 7:32 am | Permalink
+
+[…] UX principles, and content strategy, important considerations are left under the table. In “UX is not UI,” Erik Flowers details some of the top mistakes people make when trying to understand the […]
+
+The Gamble of a Just Build It Mentality & How to Avoid ItMay 13, 2015 at 9:49 pm | Permalink
+
+[…] UX principles, and content strategy, important considerations are left under the table. In “UX is not UI,” Erik Flowers details some of the top mistakes people make when trying to understand the […]
+
+RaulsdgMay 18, 2015 at 10:29 am | Permalink
+
+Is that quote yours?
+
+What is a full stack employee? | Growth hacker en SEO consultantMay 26, 2015 at 2:17 am | Permalink
+
+[…] Just as there are full-stack engineers and full-stack startups, the full-stack employee has a powerful combination of skills that make them incredibly valuable. They are adept at navigating the rapidly evolving and shifting technological landscape. They make intuitive decisions amidst information-abundance, where sparse facts mingle loosely with data-drenched opinions. Full stack employees are capable of speaking design lingo, know that using Comic Sans is criminal, and are adept at making mocks in Keynote, Sketch, or Skitch (if it comes to that). And they know the difference between UI and UX. […]
+
+UX Is Not UI | UXVentureJune 2, 2015 at 6:54 am | Permalink
+
+[…] However, as I dove deeper and expanded my understanding I soon realized the inherent differences. Erik Flower‘s writing on the subject, which I’ve included an excerpt and link to the full article […]
+
+June 4, 2015 at 1:57 pm | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 4, 2015 at 1:59 pm | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 4, 2015 at 1:59 pm | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 4, 2015 at 2:20 pm | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 4, 2015 at 2:45 pm | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 5, 2015 at 3:22 am | Permalink
+
+[…] Image source: Hello Erik […]
+
+June 5, 2015 at 4:19 am | Permalink
+
+[…] Image source: Hello Erik […]
+
+Three Common UX Mistakes That Can Kill Good Design | A multi-disciplined Graphic Designer and Art Director based in Bristol with a passion for technology and digital designJune 9, 2015 at 1:38 am | Permalink
+
+[…] fields. Check out the article here. Image via Allan Ajifo Image via BBQ Cultures Image via Hello Erik Image via Duolingo Signup Form Image via UXPin [via The Next […]
+
+June 9, 2015 at 1:38 am | Permalink
+
+[…] Image via Hello Erik […]
+
+June 19, 2015 at 12:32 am | Permalink
+
+[…] Image source: Hello Erik […]
+
+Arnold BarclayJune 25, 2015 at 1:22 am | Permalink
+
+UX and UI both are the different, but related to the one design and development department. UX & UI are main assets of web designers. If both neglect each other you doesn’t make a proper web designs.
+
+June 30, 2015 at 2:51 pm | Permalink
+
+Amazing article. Thank you!!
+
+STADIUM GRAPHJuly 13, 2015 at 5:51 am | Permalink
+
+This is true, it might have more to do with research than design… it’s definitely formative to the design process and I think that real UX-ers kind of cover that transition from research to some kind of low-fi version of an experience.
+
+xianJuly 13, 2015 at 11:44 am | Permalink
+
+sure. UX is a design-oriented concept, but it is broader than design. A front-end coder should be thinking about the user experience, and a person designing a database needs to know what sort of experience it is supposed to power and support. UX is a concern of the entire company making software.
+
+Albee GraceJuly 19, 2015 at 8:15 pm | Permalink
+
+any suggestions on how to select a good UX/UED agency?
+
+UI und UX – Wo liegt der Unterschied?July 21, 2015 at 5:47 am | Permalink
+
+[…] User tatsächlich sieht und mit dem er interagiert. Oder wie es Erik Flowers in seinem Artikel „UX is not UI“ […]
+
+chswebJuly 26, 2015 at 1:11 pm | Permalink
+
+To really begin to understand the difference between UI and UX, we have to apply some design-thinking. The type of thinking that removes everything. The type of thinking that gets right to the root of the problem and provides the simplest solution. Here is what I’ve always said:
+
+A UI can be designed.
+A UX can be measured.
+A good Designer can do both.
+
+From this simple perspective, we can begin to think bigger, in a more organized fashion. What do you think?
+
+July 28, 2015 at 12:49 am | Permalink
+
+[…] Fuente: UX is not UI […]
+
+Ta kontroll på feilmeldingene | KlokkeklartSeptember 3, 2015 at 8:24 am | Permalink
+
+[…] til en av våre selgere at de ikke hadde behov for UX. Det er godt kjent at det ofte settes et likhetstegn mellom begrepet UX (brukeropplevelse) og UI (brukergrensesnitt). I dette tilfellet var sannheten at de ikke ønsket designere av […]
+
+Sylvester EzeaniSeptember 15, 2015 at 7:29 pm | Permalink
+
+[…] this diagram while reading the article UX is not UI by Erik Flowers. The UX Umbrella highlights how UX solves […]
+
+LG’s HomeChat review | Apart from UXSeptember 16, 2015 at 4:16 am | Permalink
+
+[…] on whether you clicked on invisible or intangible, you might have ended up reading this or that. If not, I strongly recommend you have a read. To […]
+
+October 12, 2015 at 5:49 am | Permalink
+
+[…] UX is not UI […]
+
+UX and UI : The Apparent Difference | The Creative BanterNovember 4, 2015 at 8:49 am | Permalink
+
+[…] “UX is the intangible design of a strategy that brings us to a solution. User Interface on the other hand is the crossover between visual design (look and feel) and the interaction design (how the look and feel work)” – HelloErik […]
