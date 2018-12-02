@@ -2,7 +2,9 @@
 
 Jakob Nielsen by Jakob Nielsen on January 1, 1995
 
-Topics: standards & conventions,Heuristic Evaluation,Human Computer Interaction,Web Usability,Top
+Topics:
+standards & conventions,Heuristic Evaluation,Human Computer Interaction,Web Usability,Top 10 Heuristic Evaluation
+
 Summary: Jakob Nielsen's 10 general principles for interaction design. They are called "heuristics" because they are broad rules of thumb and not specific usability guidelines.
 
 Visibility of system status

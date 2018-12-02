@@ -61,114 +61,21 @@ Bell's theorem is concerned with correlations defined in terms of averages taken
 
 Measuring the spin of these entangled particles along anti-parallel directions—i.e., along the same axis but in opposite directions, the set of all results is perfectly correlated. On the other hand, if measurements are performed along parallel directions they always yield opposite results, and the set of measurements shows perfect anti-correlation. This is in accord with the above stated probabilities of measuring the same result in these two cases. Finally, measurement at perpendicular directions has a 50% chance of matching, and the total set of measurements is uncorrelated. These basic cases are illustrated in the table below. Columns should be read as examples of pairs of values that could be recorded by Alice and Bob with time increasing going to the right.
 
-Anti-parallel
-
-Pair
-
-1
-2
-3
-4
-…
-n
-Alice, 0°
-
-+
-−
-+
-+
-…
-−
-Bob, 180°
-
-+
-−
-+
-+
-…
-−
-Correlation
-
-( +1
-+1
-+1
-+1
-…
-+1 )
-/ n = +1
-
+Anti-parallel Pair
+1 2 3 4 … n
+Alice, 0° + − + + … −
+Bob, 180° + − + + … −
+Correlation ( +1 +1 +1 +1 … +1 ) / n = +1
 (100% identical)
-Parallel
-
-1
-2
-3
-4
-…
-n
-
-Alice, 0°
-
-+
-−
-−
-+
-…
-+
-Bob, 0° or 360°
-
-−
-+
-+
-−
-…
-−
-Correlation
-
-( −1
-−1
-−1
-−1
-…
-−1 )
-/ n = −1
-
+Parallel 1 2 3 4 … n
+Alice, 0° + − − + … +
+Bob, 0° or 360° − + + − … −
+Correlation ( −1 −1 −1 −1 … −1 ) / n = −1
 (100% opposite)
-Orthogonal
-
-1
-2
-3
-4
-…
-n
-
-Alice, 0°
-
-+
-−
-+
-−
-…
-−
-Bob, 90° or 270°
-
-−
-−
-+
-+
-…
-−
-Correlation
-
-( −1
-+1
-+1
-−1
-…
-+1 )
-/ n = 0
-
+Orthogonal 1 2 3 4 … n
+Alice, 0° + − + − … −
+Bob, 90° or 270° − − + + … −
+Correlation ( −1 +1 +1 −1 … +1 ) / n = 0
 (50% identical, 50% opposite)
 
 The best possible local realist imitation (red) for the quantum correlation of two spins in the singlet state (blue), insisting on perfect anti-correlation at 0°, perfect correlation at 180°. Many other possibilities exist for the classical correlation subject to these side conditions, but all are characterized by sharp peaks (and valleys) at 0°, 180°, and 360°, and none has more extreme values (±0.5) at 45°, 135°, 225°, and 315°. These values are marked by stars in the graph, and are the values measured in a standard Bell-CHSH type experiment: QM allows ±1/√2 = ±0.7071…, local realism predicts ±0.5 or less.

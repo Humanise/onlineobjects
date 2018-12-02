@@ -12,7 +12,7 @@ public class DocumentToText {
 	
 	private Set<String> ignore = Sets.newHashSet("script","head","style","noscript");
 
-	private Set<String> singleBlocks = Sets.newHashSet("div","br","li","dt","dd");
+	private Set<String> singleBlocks = Sets.newHashSet("div","br","li","dt","dd","tr");
 	private Set<String> doubleBlocks = Sets.newHashSet("p","h1","h2","h3","h4","h5","h6","ol","ul","dl");
 	
 	private int newLines = 0;
@@ -81,6 +81,7 @@ public class DocumentToText {
                 		newLines--;
                 	}
                     value = value.replaceAll("\\t"," ");
+                    value = value.replaceAll("\n", " ");
                     value = value.replaceAll("\\s{2,}", " ");
                     //value = value.replaceAll("\\s{2,}", " ");                	
     				data.append(value);

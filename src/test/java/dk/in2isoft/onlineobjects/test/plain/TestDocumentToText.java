@@ -43,4 +43,19 @@ public class TestDocumentToText extends TestCase {
 		
 		Assert.assertEquals("This is a test\n\none more line", text);
 	}
+	@Test
+	public void testTables() {
+		String xml = "<?xml version='1.0'?><html>" +
+				"<head><title>Hello world</title></head>" +
+				"<body>" + 
+				"<table>\n" +
+				"<tr><td>A</td>\n<td>B\n</td><td>C</td>\n</tr>" + 
+				"</table>" +
+				"</body>" +
+				"</html>";
+		nu.xom.Document document = DOM.parseXOM(xml);
+		String text = new DocumentToText().getText(document);
+		
+		Assert.assertEquals("A B C", text);
+	}
 }

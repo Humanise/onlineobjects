@@ -47,21 +47,21 @@ Bell's theorem is concerned with correlations defined in terms of averages taken
 
 Measuring the spin of these entangled particles along anti-parallel directions—i.e., along the same axis but in opposite directions, the set of all results is perfectly correlated. On the other hand, if measurements are performed along parallel directions they always yield opposite results, and the set of measurements shows perfect anti-correlation. This is in accord with the above stated probabilities of measuring the same result in these two cases. Finally, measurement at perpendicular directions has a 50% chance of matching, and the total set of measurements is uncorrelated. These basic cases are illustrated in the table below. Columns should be read as examples of pairs of values that could be recorded by Alice and Bob with time increasing going to the right.
 
-Anti-parallel	Pair
-1	2	3	4	…	n
-Alice, 0°	+	−	+	+	…	−
-Bob, 180°	+	−	+	+	…	−
-Correlation	( +1	+1	+1	+1	…	+1 )	/ n = +1
+Anti-parallel Pair
+1 2 3 4 … n
+Alice, 0° + − + + … −
+Bob, 180° + − + + … −
+Correlation ( +1 +1 +1 +1 … +1 ) / n = +1
 (100% identical)
-Parallel	1	2	3	4	…	n
-Alice, 0°	+	−	−	+	…	+
-Bob, 0° or 360°	−	+	+	−	…	−
-Correlation	( −1	−1	−1	−1	…	−1 )	/ n = −1
+Parallel 1 2 3 4 … n
+Alice, 0° + − − + … +
+Bob, 0° or 360° − + + − … −
+Correlation ( −1 −1 −1 −1 … −1 ) / n = −1
 (100% opposite)
-Orthogonal	1	2	3	4	…	n
-Alice, 0°	+	−	+	−	…	−
-Bob, 90° or 270°	−	−	+	+	…	−
-Correlation	( −1	+1	+1	−1	…	+1 )	/ n = 0
+Orthogonal 1 2 3 4 … n
+Alice, 0° + − + − … −
+Bob, 90° or 270° − − + + … −
+Correlation ( −1 +1 +1 −1 … +1 ) / n = 0
 (50% identical, 50% opposite)
 
 The best possible local realist imitation (red) for the quantum correlation of two spins in the singlet state (blue), insisting on perfect anti-correlation at 0°, perfect correlation at 180°. Many other possibilities exist for the classical correlation subject to these side conditions, but all are characterized by sharp peaks (and valleys) at 0°, 180°, and 360°, and none has more extreme values (±0.5) at 45°, 135°, 225°, and 315°. These values are marked by stars in the graph, and are the values measured in a standard Bell-CHSH type experiment: QM allows ±1/√2 = ±0.7071…, local realism predicts ±0.5 or less.
@@ -91,68 +91,68 @@ The value observed by Alice with detector setting a is A(a, λ)
 The value observed by Bob with detector setting b is B(b, λ)
 Perfect anti-correlation would require B(c, λ) = −A(c, λ), c ∈ S2. Implicit in assumption 1) above, the hidden parameter space Λ has a probability measure μ and the expectation of a random variable X on Λ with respect to μ is written
 
-{\displaystyle \operatorname {E} (X)=\int _{\Lambda }X(\lambda )p(\lambda )d\lambda ,} {\displaystyle \operatorname {E} (X)=\int _{\Lambda }X(\lambda )p(\lambda )d\lambda ,}
+E ⁡ ( X ) = ∫ Λ X ( λ ) p ( λ ) d λ , {\displaystyle \operatorname {E} (X)=\int _{\Lambda }X(\lambda )p(\lambda )d\lambda ,}
 where for accessibility of notation we assume that the probability measure has a probability density p that therefore is nonnegative and integrates to 1. The hidden parameter is often thought of as being associated with the source but it can just as well also contain components associated with the two measurement devices.
 
 Bell inequalities
 Bell inequalities concern measurements made by observers on pairs of particles that have interacted and then separated. Assuming local realism, certain constraints must hold on the relationships between the correlations between subsequent measurements of the particles under various possible measurement settings. Let A and B be as above. Define for the present purposes three correlation functions:
 
 Let Ce(a, b) denote the experimentally measured correlation defined by
-{\displaystyle C_{e}(a,b)={\frac {N_{++}+N_{--}-N_{+-}-N_{-+}}{N_{++}+N_{--}+N_{+-}+N_{-+}}},} {\displaystyle C_{e}(a,b)={\frac {N_{++}+N_{--}-N_{+-}-N_{-+}}{N_{++}+N_{--}+N_{+-}+N_{-+}}},}
+C e ( a , b ) = N + + + N − − − N + − − N − + N + + + N − − + N + − + N − + , {\displaystyle C_{e}(a,b)={\frac {N_{++}+N_{--}-N_{+-}-N_{-+}}{N_{++}+N_{--}+N_{+-}+N_{-+}}},}
 where N++ is the number of measurements yielding "spin up" in the direction of a measured by Alice (first subscript +) and "spin up" in the direction of b measured by Bob. The other occurrences of N are analogously defined.
 Let Cq(a, b) denote the correlation as predicted by quantum mechanics. This is given by the expression
-{\displaystyle C_{q}(a,b)=\left\langle A\left|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}\right|A\right\rangle ,} {\displaystyle C_{q}(a,b)=\left\langle A\left|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}\right|A\right\rangle ,}
+C q ( a , b ) = ⟨ A | ( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) | A ⟩ , {\displaystyle C_{q}(a,b)=\left\langle A\left|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}\right|A\right\rangle ,}
 where A is the antisymmetric spin wave function. This value is calculated to be
-{\displaystyle C_{q}(a,b)=-\mathbf {a} \cdot \mathbf {b} .} {\displaystyle C_{q}(a,b)=-\mathbf {a} \cdot \mathbf {b} .}
+C q ( a , b ) = − a ⋅ b . {\displaystyle C_{q}(a,b)=-\mathbf {a} \cdot \mathbf {b} .}
 Let Ch(a, b) denote the correlation as predicted by any hidden variable theory. In the formalization of above, this is
-{\displaystyle C_{h}(a,b)=E(A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda ))=\int _{\Lambda }A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda )p(\lambda )d\lambda .} {\displaystyle C_{h}(a,b)=E(A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda ))=\int _{\Lambda }A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda )p(\lambda )d\lambda .}
+C h ( a , b ) = E ( A ( a , λ ) B ( b , λ ) ) = ∫ Λ A ( a , λ ) B ( b , λ ) p ( λ ) d λ . {\displaystyle C_{h}(a,b)=E(A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda ))=\int _{\Lambda }A(\mathbf {a} ,\lambda )B(\mathbf {b} ,\lambda )p(\lambda )d\lambda .}
 Details on calculation of Cq(a, b)
 The two-particle spin space is the tensor product of the two-dimensional spin Hilbert spaces of the individual particles. Each individual space is an irreducible representation space of the rotation group SO(3). The product space decomposes as a direct sum of irreducible representations with definite total spins 0 and 1 of dimensions 1 and 3 respectively. Full details may be found in Clebsch—Gordan decomposition. The total spin zero subspace is spanned by the singlet state in the product space, a vector explicitly given by
 
-{\displaystyle |A\rangle ={\frac {1}{\sqrt {2}}}\left(\alpha ^{(1)}\beta ^{(2)}-\beta ^{(1)}\alpha ^{(2)}\right)={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1\\0\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}0\\1\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right),} {\displaystyle |A\rangle ={\frac {1}{\sqrt {2}}}\left(\alpha ^{(1)}\beta ^{(2)}-\beta ^{(1)}\alpha ^{(2)}\right)={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1\\0\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}0\\1\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right),}
+| A ⟩ = 1 2 ( α ( 1 ) β ( 2 ) − β ( 1 ) α ( 2 ) ) = 1 2 ( [ 1 0 ] ⊗ [ 0 1 ] − [ 0 1 ] ⊗ [ 1 0 ] ) , {\displaystyle |A\rangle ={\frac {1}{\sqrt {2}}}\left(\alpha ^{(1)}\beta ^{(2)}-\beta ^{(1)}\alpha ^{(2)}\right)={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1\\0\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}0\\1\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right),}
 with adjoint in this representation
 
-{\displaystyle \langle A|={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}0&1\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}1&0\end{bmatrix}}\right).} {\displaystyle \langle A|={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}0&1\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}1&0\end{bmatrix}}\right).}
+⟨ A | = 1 2 ( [ 1 0 ] ⊗ [ 0 1 ] − [ 0 1 ] ⊗ [ 1 0 ] ) . {\displaystyle \langle A|={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}0&1\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}1&0\end{bmatrix}}\right).}
 The way single particle operators act on the product space is exemplified below by the example at hand; one defines the tensor product of operators, where the factors are single particle operators, thus if Π, Ω are single particle operators,
 
-{\displaystyle (\Pi \otimes \Omega )(|x\rangle \otimes |y\rangle )=\Pi |x\rangle \otimes \Omega |y\rangle ,} {\displaystyle (\Pi \otimes \Omega )(|x\rangle \otimes |y\rangle )=\Pi |x\rangle \otimes \Omega |y\rangle ,}
+( Π ⊗ Ω ) ( | x ⟩ ⊗ | y ⟩ ) = Π | x ⟩ ⊗ Ω | y ⟩ , {\displaystyle (\Pi \otimes \Omega )(|x\rangle \otimes |y\rangle )=\Pi |x\rangle \otimes \Omega |y\rangle ,}
 and
 
-{\displaystyle \Pi ^{(1)}(|x\rangle \otimes |y\rangle )\equiv \Pi |x\rangle \otimes \operatorname {Id} |y\rangle ,} {\displaystyle \Pi ^{(1)}(|x\rangle \otimes |y\rangle )\equiv \Pi |x\rangle \otimes \operatorname {Id} |y\rangle ,}
+Π ( 1 ) ( | x ⟩ ⊗ | y ⟩ ) ≡ Π | x ⟩ ⊗ Id ⁡ | y ⟩ , {\displaystyle \Pi ^{(1)}(|x\rangle \otimes |y\rangle )\equiv \Pi |x\rangle \otimes \operatorname {Id} |y\rangle ,}
 etc., where the superscript in parentheses indicates on which Hilbert space in the tensor product space the action is intended and the action is defined by the right hand side. The singlet state has total spin 0 as may be verified by application of the operator of total spin J · J = (J1 + J2) ⋅ (J1 + J2) by a calculation similar to that presented below.
 
 The expectation value of the operator
 
-{\displaystyle \left({\boldsymbol {\sigma }}\cdot \mathbf {b} \right)^{(2)}\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \right)^{(1)}=\left(\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} \right)\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} \right),} {\displaystyle \left({\boldsymbol {\sigma }}\cdot \mathbf {b} \right)^{(2)}\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \right)^{(1)}=\left(\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} \right)\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} \right),}
+( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) = ( Id ⊗ σ ⋅ b ) ( σ ⋅ a ⊗ Id ) , {\displaystyle \left({\boldsymbol {\sigma }}\cdot \mathbf {b} \right)^{(2)}\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \right)^{(1)}=\left(\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} \right)\left({\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} \right),}
 in the singlet state can be calculated straightforwardly. One has, by definition of the Pauli matrices,
 
-{\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} ={\begin{bmatrix}a_{z}&a_{x}-ia_{y}\\a_{x}+ia_{y}&-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1&0\\0&1\end{bmatrix}}.} {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} ={\begin{bmatrix}a_{z}&a_{x}-ia_{y}\\a_{x}+ia_{y}&-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1&0\\0&1\end{bmatrix}}.}
+σ ⋅ a ⊗ Id = [ a z a x − i a y a x + i a y − a z ] ⊗ [ 1 0 0 1 ] . {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \operatorname {Id} ={\begin{bmatrix}a_{z}&a_{x}-ia_{y}\\a_{x}+ia_{y}&-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1&0\\0&1\end{bmatrix}}.}
 Upon left application of this on |A⟩ one obtains
 
-{\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \mathrm {Id} |A\rangle ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}a_{z}\\a_{x}+ia_{y}\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}a_{x}-ia_{y}\\-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right).} {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \mathrm {Id} |A\rangle ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}a_{z}\\a_{x}+ia_{y}\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}a_{x}-ia_{y}\\-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right).}
+σ ⋅ a ⊗ I d | A ⟩ = 1 2 ( [ a z a x + i a y ] ⊗ [ 0 1 ] − [ a x − i a y − a z ] ⊗ [ 1 0 ] ) . {\displaystyle {\boldsymbol {\sigma }}\cdot \mathbf {a} \otimes \mathrm {Id} |A\rangle ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}a_{z}\\a_{x}+ia_{y}\end{bmatrix}}\otimes {\begin{bmatrix}0\\1\end{bmatrix}}-{\begin{bmatrix}a_{x}-ia_{y}\\-a_{z}\end{bmatrix}}\otimes {\begin{bmatrix}1\\0\end{bmatrix}}\right).}
 Likewise, application (to the left) of the operator corresponding to b on ⟨A| yields
 
-{\displaystyle \langle A|\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}b_{x}+ib_{y}&-b_{z}\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}b_{z}&b_{x}-ib_{y}\end{bmatrix}}\right).} {\displaystyle \langle A|\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}b_{x}+ib_{y}&-b_{z}\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}b_{z}&b_{x}-ib_{y}\end{bmatrix}}\right).}
+⟨ A | Id ⊗ σ ⋅ b = 1 2 ( [ 1 0 ] ⊗ [ b x + i b y − b z ] − [ 0 1 ] ⊗ [ b z b x − i b y ] ) . {\displaystyle \langle A|\operatorname {Id} \otimes {\boldsymbol {\sigma }}\cdot \mathbf {b} ={\frac {1}{\sqrt {2}}}\left({\begin{bmatrix}1&0\end{bmatrix}}\otimes {\begin{bmatrix}b_{x}+ib_{y}&-b_{z}\end{bmatrix}}-{\begin{bmatrix}0&1\end{bmatrix}}\otimes {\begin{bmatrix}b_{z}&b_{x}-ib_{y}\end{bmatrix}}\right).}
 The inner products on the tensor product space is defined by
 
-{\displaystyle \langle x\otimes y|u\otimes v\rangle =\langle x|u\rangle \langle y|v\rangle .} {\displaystyle \langle x\otimes y|u\otimes v\rangle =\langle x|u\rangle \langle y|v\rangle .}
+⟨ x ⊗ y | u ⊗ v ⟩ = ⟨ x | u ⟩ ⟨ y | v ⟩ . {\displaystyle \langle x\otimes y|u\otimes v\rangle =\langle x|u\rangle \langle y|v\rangle .}
 Given this, the expectation value reduces to
 
-{\displaystyle \langle A|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}|A\rangle =-\mathbf {a} \cdot \mathbf {b} .} {\displaystyle \langle A|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}|A\rangle =-\mathbf {a} \cdot \mathbf {b} .}
+⟨ A | ( σ ⋅ b ) ( 2 ) ( σ ⋅ a ) ( 1 ) | A ⟩ = − a ⋅ b . {\displaystyle \langle A|({\boldsymbol {\sigma }}\cdot \mathbf {b} )^{(2)}({\boldsymbol {\sigma }}\cdot \mathbf {a} )^{(1)}|A\rangle =-\mathbf {a} \cdot \mathbf {b} .}
 With this notation, a concise summary of what follows can be made.
 
 Theoretically, there exists a, b such that
-{\displaystyle C_{q}\neq C_{h},} {\displaystyle C_{q}\neq C_{h},}
+C q ≠ C h , {\displaystyle C_{q}\neq C_{h},}
 whatever are the particular characteristics of the hidden variable theory as long as it abides to the rules of local realism as defined above. That is to say, no local hidden variable theory can make the same predictions as quantum mechanics.
 Experimentally, instances of
-{\displaystyle C_{e}\neq C_{h}} {\displaystyle C_{e}\neq C_{h}}
+C e ≠ C h {\displaystyle C_{e}\neq C_{h}}
 have been found (whatever the hidden variable theory), but
-{\displaystyle C_{e}\neq C_{q}\quad {\text{(not found)}}} {\displaystyle C_{e}\neq C_{q}\quad {\text{(not found)}}}
+C e ≠ C q (not found) {\displaystyle C_{e}\neq C_{q}\quad {\text{(not found)}}}
 has never been found. That is to say, predictions of quantum mechanics have never been falsified by experiment. These experiments include such that can rule out local hidden variable theories. But see below on possible loopholes.
 Original Bell's inequality
 The inequality that Bell derived can then be written as:[4]
 
-{\displaystyle C_{h}(a,c)-C_{h}(b,a)-C_{h}(b,c)\leq 1,} {\displaystyle C_{h}(a,c)-C_{h}(b,a)-C_{h}(b,c)\leq 1,}
+C h ( a , c ) − C h ( b , a ) − C h ( b , c ) ≤ 1 , {\displaystyle C_{h}(a,c)-C_{h}(b,a)-C_{h}(b,c)\leq 1,}
 where a, b and c refer to three arbitrary settings of the two analysers. This inequality is however restricted in its application to the rather special case in which the outcomes on both sides of the experiment are always exactly anticorrelated whenever the analysers are parallel. The advantage of restricting attention to this special case is the resulting simplicity of the derivation. In experimental work, the inequality is not very useful because it is hard, if not impossible, to create perfect anti-correlation.
 
 This simple form has an intuitive explanation, however. It is equivalent to the following elementary result from probability theory. Consider three (highly correlated, and possibly biased) coin-flips X, Y, and Z, with the property that:
@@ -165,7 +165,7 @@ Imagine a pair of particles that can be measured at distant locations. Suppose t
 
 Start with one setting exactly opposite to the other. All the pairs of particles give the same outcome (each pair is either both spin up or both spin down). Now shift Alice's setting by one degree relative to Bob's. They are now one degree off being exactly opposite to one another. A small fraction of the pairs, say f, now give different outcomes. If instead we had left Alice's setting unchanged but shifted Bob's by one degree (in the opposite direction), then again a fraction f of the pairs of particles turns out to give different outcomes. Finally consider what happens when both shifts are implemented at the same time: the two settings are now exactly two degrees away from being opposite to one another. By the mismatch argument, the chance of a mismatch at two degrees can't be more than twice the chance of a mismatch at one degree: it cannot be more than 2f.
 
-Compare this with the predictions from quantum mechanics for the singlet state. For a small angle θ, measured in radians, the chance of a different outcome is approximately {\displaystyle f_{1}=\theta ^{2}/4} {\displaystyle f_{1}=\theta ^{2}/4} as explained by small-angle approximation. At two times this small angle, the chance of a mismatch is therefore about 4 times larger, since {\displaystyle f_{2}=(2\theta )^{2}/4=2^{2}\theta ^{2}/4\approx 4f_{1}} {\displaystyle f_{2}=(2\theta )^{2}/4=2^{2}\theta ^{2}/4\approx 4f_{1}}. But we just argued that it cannot be more than 2 times as large.
+Compare this with the predictions from quantum mechanics for the singlet state. For a small angle θ, measured in radians, the chance of a different outcome is approximately f 1 = θ 2 / 4 {\displaystyle f_{1}=\theta ^{2}/4} as explained by small-angle approximation. At two times this small angle, the chance of a mismatch is therefore about 4 times larger, since f 2 = ( 2 θ ) 2 / 4 = 2 2 θ 2 / 4 ≈ 4 f 1 {\displaystyle f_{2}=(2\theta )^{2}/4=2^{2}\theta ^{2}/4\approx 4f_{1}} . But we just argued that it cannot be more than 2 times as large.
 
 This intuitive formulation is due to David Mermin. The small-angle limit is discussed in Bell's original article, and therefore goes right back to the origin of the Bell inequalities.
 
@@ -173,22 +173,22 @@ CHSH inequality
 Main article: CHSH inequality
 Generalizing Bell's original inequality,[4] John Clauser, Michael Horne, Abner Shimony and R. A. Holt introduced the CHSH inequality,[18] which puts classical limits on the set of four correlations in Alice and Bob's experiment, without any assumption of perfect correlations (or anti-correlations) at equal settings
 
-{\displaystyle (1)\quad C_{h}(a,b)+C_{h}(a,b')+C_{h}(a',b)-C_{h}(a',b')\leq 2.} {\displaystyle (1)\quad C_{h}(a,b)+C_{h}(a,b')+C_{h}(a',b)-C_{h}(a',b')\leq 2.}
-Making the special choice {\displaystyle a'=b+\pi } {\displaystyle a'=b+\pi }, denoting {\displaystyle b'=c} b'=c, and assuming perfect anti-correlation at equal settings, perfect correlation at opposite settings, therefore {\displaystyle \rho (a,a+\pi )=1} \rho (a,a+\pi )=1 and {\displaystyle \rho (b,a+\pi )=-\rho (b,a)} \rho (b,a+\pi )=-\rho (b,a), the CHSH inequality reduces to the original Bell inequality. Nowadays, (1) is also often simply called "the Bell inequality", but sometimes more completely "the Bell-CHSH inequality".
+( 1 ) C h ( a , b ) + C h ( a , b ′ ) + C h ( a ′ , b ) − C h ( a ′ , b ′ ) ≤ 2. {\displaystyle (1)\quad C_{h}(a,b)+C_{h}(a,b')+C_{h}(a',b)-C_{h}(a',b')\leq 2.}
+Making the special choice a ′ = b + π {\displaystyle a'=b+\pi } , denoting b ′ = c {\displaystyle b'=c} , and assuming perfect anti-correlation at equal settings, perfect correlation at opposite settings, therefore ρ ( a , a + π ) = 1 {\displaystyle \rho (a,a+\pi )=1} and ρ ( b , a + π ) = − ρ ( b , a ) {\displaystyle \rho (b,a+\pi )=-\rho (b,a)} , the CHSH inequality reduces to the original Bell inequality. Nowadays, (1) is also often simply called "the Bell inequality", but sometimes more completely "the Bell-CHSH inequality".
 
 Derivation
 With abbreviated notation
 
-{\displaystyle A=A(a,\lambda ),A'=A(a',\lambda ),B=B(b,\lambda ),B'=B(b',\lambda ),} {\displaystyle A=A(a,\lambda ),A'=A(a',\lambda ),B=B(b,\lambda ),B'=B(b',\lambda ),}
+A = A ( a , λ ) , A ′ = A ( a ′ , λ ) , B = B ( b , λ ) , B ′ = B ( b ′ , λ ) , {\displaystyle A=A(a,\lambda ),A'=A(a',\lambda ),B=B(b,\lambda ),B'=B(b',\lambda ),}
 the CHSH inequality can be derived as follows. Each of the four quantities is ±1 and each depends on λ. It follows that for any λ ∈ Λ, one of B + B′ and B − B′ is zero, and the other is ±2. From this it follows that
 
-{\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2,} {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2,}
+A B + A B ′ + A ′ B − A ′ B ′ = A ( B + B ′ ) + A ′ ( B − B ′ ) ≤ 2 , {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2,}
 and therefore
 
-{\displaystyle {\begin{aligned}C_{h}(a,b)+C_{h}\left(a,b'\right)+C_{h}\left(a',b\right)-C_{h}\left(a',b'\right)&=\int _{\Lambda }ABpd\lambda +\int _{\Lambda }AB'pd\lambda +\int _{\Lambda }A'Bpd\lambda -\int _{\Lambda }A'B'pd\lambda \\&=\int _{\Lambda }\left(AB+AB'+A'B-A'B'\right)pd\lambda \\&=\int _{\Lambda }\left(A\left(B+B'\right)+A'\left(B-B'\right)\right)pd\lambda \leq 2.\end{aligned}}} {\displaystyle {\begin{aligned}C_{h}(a,b)+C_{h}\left(a,b'\right)+C_{h}\left(a',b\right)-C_{h}\left(a',b'\right)&=\int _{\Lambda }ABpd\lambda +\int _{\Lambda }AB'pd\lambda +\int _{\Lambda }A'Bpd\lambda -\int _{\Lambda }A'B'pd\lambda \\&=\int _{\Lambda }\left(AB+AB'+A'B-A'B'\right)pd\lambda \\&=\int _{\Lambda }\left(A\left(B+B'\right)+A'\left(B-B'\right)\right)pd\lambda \leq 2.\end{aligned}}}
+C h ( a , b ) + C h ( a , b ′ ) + C h ( a ′ , b ) − C h ( a ′ , b ′ ) = ∫ Λ A B p d λ + ∫ Λ A B ′ p d λ + ∫ Λ A ′ B p d λ − ∫ Λ A ′ B ′ p d λ = ∫ Λ ( A B + A B ′ + A ′ B − A ′ B ′ ) p d λ = ∫ Λ ( A ( B + B ′ ) + A ′ ( B − B ′ ) ) p d λ ≤ 2. {\displaystyle {\begin{aligned}C_{h}(a,b)+C_{h}\left(a,b'\right)+C_{h}\left(a',b\right)-C_{h}\left(a',b'\right)&=\int _{\Lambda }ABpd\lambda +\int _{\Lambda }AB'pd\lambda +\int _{\Lambda }A'Bpd\lambda -\int _{\Lambda }A'B'pd\lambda \\&=\int _{\Lambda }\left(AB+AB'+A'B-A'B'\right)pd\lambda \\&=\int _{\Lambda }\left(A\left(B+B'\right)+A'\left(B-B'\right)\right)pd\lambda \leq 2.\end{aligned}}}
 At the heart of this derivation is a simple algebraic inequality concerning four variables, A, A′, B, B′, which take the values ±1 only:
 
-{\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2.} {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2.}
+A B + A B ′ + A ′ B − A ′ B ′ = A ( B + B ′ ) + A ′ ( B − B ′ ) ≤ 2. {\displaystyle AB+AB'+A'B-A'B'=A\left(B+B'\right)+A'\left(B-B'\right)\leq 2.}
 The CHSH inequality is seen to depend only on the following three key features of a local hidden variables theory: (1) realism: alongside of the outcomes of actually performed measurements, the outcomes of potentially performed measurements also exist at the same time; (2) locality, the outcomes of measurements on Alice's particle don't depend on which measurement Bob chooses to perform on the other particle; (3) freedom: Alice and Bob can indeed choose freely which measurements to perform.
 
 The realism assumption is actually somewhat idealistic, and Bell's theorem only proves non-locality with respect to variables that only exist for metaphysical reasons[citation needed]. However, before the discovery of quantum mechanics, both realism and locality were completely uncontroversial features of physical theories.
@@ -196,22 +196,25 @@ The realism assumption is actually somewhat idealistic, and Bell's theorem only 
 Bell inequalities are violated by quantum mechanical predictions
 The measurements performed by Alice and Bob are spin measurements on electrons. Alice can choose between two detector settings labeled a and a′; these settings correspond to measurement of spin along the z or the x axis. Bob can choose between two detector settings labeled b and b′; these correspond to measurement of spin along the z′ or x′ axis, where the x′ − z′ coordinate system is rotated 135° relative to the x − z coordinate system. The spin observables are represented by the 2 × 2 self-adjoint matrices:
 
-{\displaystyle S_{x}={\begin{bmatrix}0&1\\1&0\end{bmatrix}},\quad S_{z}={\begin{bmatrix}1&0\\0&-1\end{bmatrix}}} S_{x}={\begin{bmatrix}0&1\\1&0\end{bmatrix}},\quad S_{z}={\begin{bmatrix}1&0\\0&-1\end{bmatrix}}
+S x = [ 0 1 1 0 ] , S z = [ 1 0 0 − 1 ] {\displaystyle S_{x}={\begin{bmatrix}0&1\\1&0\end{bmatrix}},\quad S_{z}={\begin{bmatrix}1&0\\0&-1\end{bmatrix}}}
 These are the Pauli spin matrices normalized so that the corresponding eigenvalues are ±1. As is customary, we use the bra–ket notation to denote the eigenvectors of Sx by
 
-{\displaystyle \left|+x\right\rangle ,\quad \left|-x\right\rangle .} {\displaystyle \left|+x\right\rangle ,\quad \left|-x\right\rangle .}
-Let {\displaystyle \phi } \phi be the spin singlet state for a pair of electrons discussed in the EPR paradox. This is a specially constructed state described by the following vector in the tensor product
+| + x ⟩ , | − x ⟩ . {\displaystyle \left|+x\right\rangle ,\quad \left|-x\right\rangle .}
+Let ϕ {\displaystyle \phi } be the spin singlet state for a pair of electrons discussed in the EPR paradox. This is a specially constructed state described by the following vector in the tensor product
 
-{\displaystyle |\phi \rangle ={\frac {1}{\sqrt {2}}}\left(\,\left|+x\right\rangle \otimes \left|-x\right\rangle -\left|-x\right\rangle \otimes \left|+x\right\rangle \,\right)} {\displaystyle |\phi \rangle ={\frac {1}{\sqrt {2}}}\left(\,\left|+x\right\rangle \otimes \left|-x\right\rangle -\left|-x\right\rangle \otimes \left|+x\right\rangle \,\right)}
+| ϕ ⟩ = 1 2 ( | + x ⟩ ⊗ | − x ⟩ − | − x ⟩ ⊗ | + x ⟩ ) {\displaystyle |\phi \rangle ={\frac {1}{\sqrt {2}}}\left(\,\left|+x\right\rangle \otimes \left|-x\right\rangle -\left|-x\right\rangle \otimes \left|+x\right\rangle \,\right)}
+
 Now let us apply the CHSH formalism to the measurements that can be performed by Alice and Bob.
 
-{\displaystyle {\begin{aligned}A(a)&=S_{z}\otimes I\\A(a')&=S_{x}\otimes I\\B(b)&=-{\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}+S_{x})\\B(b')&={\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}-S_{x})\end{aligned}}} {\begin{aligned}A(a)&=S_{z}\otimes I\\A(a')&=S_{x}\otimes I\\B(b)&=-{\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}+S_{x})\\B(b')&={\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}-S_{x})\end{aligned}}
-The operators {\displaystyle \scriptstyle B(b'),B(b)} \scriptstyle B(b'),B(b) correspond to Bob's spin measurements along x′ and z′. Note that the A operators commute with the B operators, so we can apply our calculation for the correlation. In this case, we can show that the CHSH inequality fails. In fact, a straightforward calculation shows that[citation needed]
+A ( a ) = S z ⊗ I A ( a ′ ) = S x ⊗ I B ( b ) = − 1 2 I ⊗ ( S z + S x ) B ( b ′ ) = 1 2 I ⊗ ( S z − S x ) {\displaystyle {\begin{aligned}A(a)&=S_{z}\otimes I\\A(a')&=S_{x}\otimes I\\B(b)&=-{\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}+S_{x})\\B(b')&={\frac {1}{\sqrt {2}}}\ I\otimes (S_{z}-S_{x})\end{aligned}}}
 
-{\displaystyle {\begin{aligned}\left\langle A(a)B(b)\right\rangle =\left\langle A\left(a'\right)B(b)\right\rangle =\left\langle A\left(a'\right)B\left(b'\right)\right\rangle &={\frac {1}{\sqrt {2}}}\\\left\langle A(a)B\left(b'\right)\right\rangle &=-{\frac {1}{\sqrt {2}}}\end{aligned}}} {\displaystyle {\begin{aligned}\left\langle A(a)B(b)\right\rangle =\left\langle A\left(a'\right)B(b)\right\rangle =\left\langle A\left(a'\right)B\left(b'\right)\right\rangle &={\frac {1}{\sqrt {2}}}\\\left\langle A(a)B\left(b'\right)\right\rangle &=-{\frac {1}{\sqrt {2}}}\end{aligned}}}
+The operators B ( b ′ ) , B ( b ) {\displaystyle \scriptstyle B(b'),B(b)} correspond to Bob's spin measurements along x′ and z′. Note that the A operators commute with the B operators, so we can apply our calculation for the correlation. In this case, we can show that the CHSH inequality fails. In fact, a straightforward calculation shows that[citation needed]
+
+⟨ A ( a ) B ( b ) ⟩ = ⟨ A ( a ′ ) B ( b ) ⟩ = ⟨ A ( a ′ ) B ( b ′ ) ⟩ = 1 2 ⟨ A ( a ) B ( b ′ ) ⟩ = − 1 2 {\displaystyle {\begin{aligned}\left\langle A(a)B(b)\right\rangle =\left\langle A\left(a'\right)B(b)\right\rangle =\left\langle A\left(a'\right)B\left(b'\right)\right\rangle &={\frac {1}{\sqrt {2}}}\\\left\langle A(a)B\left(b'\right)\right\rangle &=-{\frac {1}{\sqrt {2}}}\end{aligned}}}
+
 so that
 
-{\displaystyle \left\langle A(a)B(b)\right\rangle +\left\langle A\left(a'\right)B\left(b'\right)\right\rangle +\left\langle A\left(a'\right)B(b)\right\rangle -\left\langle A(a)B\left(b'\right)\right\rangle ={\frac {4}{\sqrt {2}}}=2{\sqrt {2}}>2} {\displaystyle \left\langle A(a)B(b)\right\rangle +\left\langle A\left(a'\right)B\left(b'\right)\right\rangle +\left\langle A\left(a'\right)B(b)\right\rangle -\left\langle A(a)B\left(b'\right)\right\rangle ={\frac {4}{\sqrt {2}}}=2{\sqrt {2}}>2}
+⟨ A ( a ) B ( b ) ⟩ + ⟨ A ( a ′ ) B ( b ′ ) ⟩ + ⟨ A ( a ′ ) B ( b ) ⟩ − ⟨ A ( a ) B ( b ′ ) ⟩ = 4 2 = 2 2 > 2 {\displaystyle \left\langle A(a)B(b)\right\rangle +\left\langle A\left(a'\right)B\left(b'\right)\right\rangle +\left\langle A\left(a'\right)B(b)\right\rangle -\left\langle A(a)B\left(b'\right)\right\rangle ={\frac {4}{\sqrt {2}}}=2{\sqrt {2}}>2}
 Bell's Theorem: If the quantum mechanical formalism is correct, then the system consisting of a pair of entangled electrons cannot satisfy the principle of local realism. Note that 2√2 is indeed the upper bound for quantum mechanics called Tsirelson's bound. The operators giving this maximal value are always isomorphic to the Pauli matrices.
 
 Testing by practical experiments
@@ -223,8 +226,8 @@ Experimental tests can determine whether the Bell inequalities required by local
 
 Actually, most experiments have been performed using polarization of photons rather than spin of electrons (or other spin-half particles). The quantum state of the pair of entangled photons is not the singlet state, and the correspondence between angles and outcomes is different from that in the spin-half set-up. The polarization of a photon is measured in a pair of perpendicular directions. Relative to a given orientation, polarization is either vertical (denoted by V or by +) or horizontal (denoted by H or by -). The photon pairs are generated in the quantum state
 
-{\displaystyle {\frac {1}{\sqrt {2}}}\left(|V\rangle \otimes |V\rangle +|H\rangle \otimes |H\rangle \right)} {\displaystyle {\frac {1}{\sqrt {2}}}\left(|V\rangle \otimes |V\rangle +|H\rangle \otimes |H\rangle \right)}
-where {\displaystyle |V\rangle } |V\rangle and {\displaystyle |H\rangle } |H\rangle denotes the state of a single vertically or horizontally polarized photon, respectively (relative to a fixed and common reference direction for both particles).
+1 2 ( | V ⟩ ⊗ | V ⟩ + | H ⟩ ⊗ | H ⟩ ) {\displaystyle {\frac {1}{\sqrt {2}}}\left(|V\rangle \otimes |V\rangle +|H\rangle \otimes |H\rangle \right)}
+where | V ⟩ {\displaystyle |V\rangle } and | H ⟩ {\displaystyle |H\rangle } denotes the state of a single vertically or horizontally polarized photon, respectively (relative to a fixed and common reference direction for both particles).
 
 When the polarization of both photons is measured in the same direction, both give the same outcome: perfect correlation. When measured at directions making an angle 45° with one another, the outcomes are completely random (uncorrelated). Measuring at directions at 90° to one another, the two are perfectly anti-correlated. In general, when the polarizers are at an angle θ to one another, the correlation is cos(2θ). So relative to the correlation function for the singlet state of spin half particles, we have a positive rather than a negative cosine function, and angles are halved: the correlation is periodic with period π instead of 2π.
 

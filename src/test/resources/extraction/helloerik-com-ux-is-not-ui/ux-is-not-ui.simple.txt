@@ -370,7 +370,6 @@ Sara Ortloff Khoury December 30, 2012 at 3:59 pm | Permalink
 
 While this is a UX forum, and some have stated many here are the choir, I
 very much appreciate the articulation of the difference. The more help
-
 we get in educating the better. When it comes time rationalize the budget for the resources you need to do UX it really helps to be able to delineate what is needed to build great UIs.
 
 Erik Flowers December 30, 2012 at 4:26 pm | Permalink
@@ -604,21 +603,15 @@ Erik Flowers July 29, 2013 at 7:19 pm | Permalink
 Actually, I’m curious as to the definitions of Front End Developer, so I’d like to explore further. This isn’t snark, I want to know how these terms are used around the world.
 
 To me, FED is someone who:
-
 – writes production javascript/coffeescript, ruby, php, clojure/clojurescript, dart, etc etc
-
 – A programmer who can wire up and make use of API’s, databases, and integrate with backend development code.
-
 – Writes the html/css and integrates the javascript to make the UI work with the production code.
 
 A FED writes the code that goes into production to make a front end work. They are legitimate programmers.
 
 Now, a UX person who “codes” I thnk would often be called a “web developer”, which is a little bit of a misnomer as “developer” implies that there is fucntional code going on. To me would consist of
-
 – someone who can write HTML/CSS, and possible write it well enough to go into production with
-
 – someone who can cobble together jquery well enough to do a prorotype
-
 – Possibly write the html/css to integrate with existing FED code to build that “presentation layer” on top of actual functioning code.
 
 That part would be reasonable to expect. I’ve never heard of a person who fits my FED description and ever claimed to be a UX person, and also I haven’t heard of someone wanting a front end programmer to dive into research and storyboarding. I am sure it’s possible though.
@@ -660,11 +653,8 @@ UX is not UI | Simone Borsci August 8, 2013 at 1:10 am | Permalink
 Hsyn August 8, 2013 at 2:16 am | Permalink
 
 If you think UX as at the same level as UI, you are already on the wrong direction.
-
 What I think about UX is at much much higher level so that this position should be held by a real expert since it effects companies’ reputation.
-
 For example;
-
 Compare Soundcloud.com (my favorite site so far) to any of its alternatives. There you can see that UX is the first thing to their success in my opinion.
 
 __m August 8, 2013 at 4:02 am | Permalink
@@ -722,7 +712,6 @@ femmebot August 11, 2013 at 1:18 am | Permalink
 Thanks. It seems much narrower than how others define it:
 
 — https://www.quora.com/Product-Design-physical-goods/What-is-a-day-in-the-life-of-a-product-designer
-
 — https://www.quora.com/Working-at-Quora/What-do-the-Quora-product-designers-work-on-at-Quora
 
 UX != UI | Great White Spot August 11, 2013 at 11:14 am | Permalink
@@ -828,7 +817,6 @@ It’s great that you will make your aural information accessible. Contact me if
 Vivek kuniyil August 18, 2013 at 10:47 pm | Permalink
 
 Great article. Well, for me, UI is a part of UX.
-
 And how big that part is, depends on the needs and the designer.
 
 [번역] UX is not UI by Erik Flowers | Lovelyredsky August 19, 2013 at 12:06 am | Permalink
@@ -932,7 +920,6 @@ Erik Flowers November 8, 2013 at 1:00 pm | Permalink
 If companies grow but the experience and service design influence and management doesn’t grow with it, it’s a recipe for failure. Look at all the companies with VP’s of Service Design or VP’s of Experience Design, those places are the future. Can’t really be helped though if a company sees experience design (customer, service, user) as a resource to be applied and not a fundamental pillar.
 
 Read some of Kerry Bodine’s blog posts. She’s a “VP analyst for customer experience professionals”,
-
 http://blogs.forrester.com/kerry_bodine, especially http://blogs.forrester.com/kerry_bodine/13-10-04-how_does_service_design_relate_to_cx_and_ux
 
 Decide November 20, 2013 at 8:55 pm | Permalink
@@ -1076,7 +1063,6 @@ How User Consultants can help Internal Teams | Usability Matters May 9, 2014 at 
 Jacob Madsen May 19, 2014 at 12:00 am | Permalink
 
 The slash totally works. Let me show you:
-
 UX and/or UI. See what I did there?
 
 Erik Flowers May 19, 2014 at 8:36 am | Permalink
@@ -1344,9 +1330,7 @@ chsweb July 26, 2015 at 1:11 pm | Permalink
 To really begin to understand the difference between UI and UX, we have to apply some design-thinking. The type of thinking that removes everything. The type of thinking that gets right to the root of the problem and provides the simplest solution. Here is what I’ve always said:
 
 A UI can be designed.
-
 A UX can be measured.
-
 A good Designer can do both.
 
 From this simple perspective, we can begin to think bigger, in a more organized fashion. What do you think?

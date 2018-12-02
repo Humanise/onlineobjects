@@ -1,7 +1,6 @@
 Follow @asktog
 
-askTog
-Interaction Solutions for the Real World
+askTog Interaction Solutions for the Real World
 
 Navigation
 
@@ -200,7 +199,6 @@ Changing your interpretation of a user’s habitual action is one of the the wor
 If you want to attract existing users of someone else’s product to your product, you should try to interpret your new user’s commands in the same way by, for example, allowing them to reuse the same shortcut keys they’ve grown used to.
 
 Case Study: Apple “Command” Modifier Key
-
 It was years before Apple finally gave Windows users a simple way to continue to use the Control key, rather than the Command key, for their keyboard shortcuts. Windows users new to Mac faced great difficulty in unlearning/relearning such an ingrained habit. Users having to switch between the two operating system as they moved between office and home had to unlearn/relearn twice a day and would end up constantly making errors as well as having to set aside their task to consciously consider what modifier key to press each and every time they wanted to make use of “shortcut” keys that were shortcuts no more. A large percentage of the difficulty in switching or using dual operating systems was due to this one missing capability, and it was a completely unnecessary hindrance from the start.
 
 2) Induced Inconsistency
@@ -288,7 +286,6 @@ Principle: If the user cannot find it, it does not exist
 Not all buyers are naive. Even those that are don’t stay that way long. Only the most persistent buyers/users will travel the web searching for a treasure map to features that you choose to hide from them. Most will simply turn to your competitors, taking you at your word that you just don’t offer whatever they were after.
 
 Case Study: Safari for the Mac
-
 I abandoned the Safari browser for Firefox after I found that Safari for the Mac had started corrupting PDF files when doing a Save As. Two years later, I tried Safari again, assuming Apple had by now fixed the bug. The bug persisted, but I persisted this time, too, spending 20 minutes Googling for a work-around. The solution I discovered? Never use Save As to save a PDF file. Instead, mouse away from the top of the display, where 100% of the file-manipulation controls are, toward the bottom of the window, where nothing but content exists. Suddenly, a gray box with a floppy-disk icon will start fading into view inside the content region. Click the icon, and Safari will save your PDF.
 
 Use Active Discovery to guide people to more advanced features
@@ -336,7 +333,6 @@ Developers working on complex sites and cloud-based web applications deserve acc
 On laptop and desktop computers, controls, and, in particular, hidden controls have no place inside the content area.
 
 Case Study: Apple’s Inverted Applications
-
 Apple, as of the early 2010s, began migrating controls from the area surrounding the content region of their Macintosh applications into the content region itself. The controls popped up in locations that would obscure the very content the user was attempting to affect. The user was often unable to move the controls far enough out of the way to be able to see what they were doing. Even when a control panel could be moved beyond the edges of the content window, it would revert to its original obscuring position the next time it was invoked. While this approach was sometimes a necessity for apps designed for phones, it made no practical sense for apps designed for the large screens found on traditional computers. Some of the affected apps would take up as little as 10% or 20% of the user’s screen, providing huge amounts of room for the controls suddenly being forced into the even smaller content region. It resulted in serious degradation of the user’s satisfaction and productivity.
 
 Principle: Communicate your gestural vocabulary with visual diagrams
@@ -736,7 +732,6 @@ Next Steps
 If you want more, consider joining me for three days for my Interaction Design Course. It’s practical, engaging, and we always have a lot of fun. You’ll find the schedule close to the top in the right-hand column. Until then, thanks for reading.
 
 (The copyright notice that follows you will discover is, essentially, a release for you to copy this post as much as you want as long as you aren’t publishing it for money.)
-
 Top
 
 Copyright
@@ -752,7 +747,6 @@ No commerical use may be made of the work beyond these exceptions without permis
 If you want to translate this work and make your result available for free, please contact me so we can exchange links.
 
 In other words, I want people to make free and full use of this material, I just don’t want people to claim it as their own or to cynically make money off something that I am attempting to offer for free.
-
 Top
 
 Subscribe
@@ -812,7 +806,6 @@ The word “let” was missing.
 I really like your suggestion of thinking of a principle a day and letting it sink in.
 
 Thanks,
-
 Rizwan
 
 Bruce Tognazzini 7 Mar 2014 at 12:51 pm #

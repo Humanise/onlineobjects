@@ -60,18 +60,13 @@ Bill Wagner
 
 on 22 Mar 12
 
-Great post! My favorite case study involving clarity is the way Toyota re-imagined the way customers pick options for new cars.
-Instead of presenting customers with an ala carte list of 100+ options for their new car and a corresponding 2-week lead time to find and deliver the desired combination of options, they began offering standardized options packages that simplified the product selection process while streamlining manufacturing and inventory management. See any similarities to the way Jason and crew have simplified project management software?
-And in the Toyota example, clarity was delivered when John and Jane Q. Public no longer needed a mechanical engineering degree to pick out a new car. More isn’t always better, sometimes it’s just… more.
+Great post! My favorite case study involving clarity is the way Toyota re-imagined the way customers pick options for new cars. Instead of presenting customers with an ala carte list of 100+ options for their new car and a corresponding 2-week lead time to find and deliver the desired combination of options, they began offering standardized options packages that simplified the product selection process while streamlining manufacturing and inventory management. See any similarities to the way Jason and crew have simplified project management software? And in the Toyota example, clarity was delivered when John and Jane Q. Public no longer needed a mechanical engineering degree to pick out a new car. More isn’t always better, sometimes it’s just… more.
 
 fafkulec
 
 on 22 Mar 12
 
-I’m often confused about pricing plans. Why do they force me to make a decision upfront? Why do they force me even to do any math? Some time ago I had to choose git repo hosting. Just look at those pricing plans and see confusion vs clarity defined.
-https://github.com/plans
-http://repositoryhosting.com/
-The same thing is with mobile providers, ISPs, gym subscription etc.
+I’m often confused about pricing plans. Why do they force me to make a decision upfront? Why do they force me even to do any math? Some time ago I had to choose git repo hosting. Just look at those pricing plans and see confusion vs clarity defined. https://github.com/plans http://repositoryhosting.com/ The same thing is with mobile providers, ISPs, gym subscription etc.
 
 internetfavs.com
 
@@ -179,8 +174,7 @@ Melisa Clubb
 
 on 28 Mar 12
 
-People should have clarity about things which they are determined to do. ” I AM CONFUSED ” is loser’s attitude.
-Clarity is winners’ attitude
+People should have clarity about things which they are determined to do. ” I AM CONFUSED ” is loser’s attitude. Clarity is winners’ attitude
 
 Fredrik falkman
 

@@ -436,7 +436,6 @@ Wherever possible, use multi-threading to push latency into the background
 Latency can often be hidden from users through multi-tasking techniques, letting them continue with their work while transmission and computation take place in the background. Modern web browsers can pre-fetch data, reducing the dead time when the user reaches the end of a task and must wait for the next page to appear.
 
 Principle: Reduce the user’s experience of latency
-
 Acknowledge all button clicks by visual or aural feedback within 50 milliseconds
 Trap multiple clicks of the same button or object.
 
