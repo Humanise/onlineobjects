@@ -38,8 +38,6 @@ Principle: User test the visual design as thoroughly as the behavioral design
 
 User test after aesthetic changes have been made, benchmarking, where applicable, the new design against the old. Ensure that learnability, satisfaction, and productivity have been improved or at least have stayed the same. If not, newly-added aesthetics that are causing a problem need to be rethought.
 
-Top
-
 Anticipation
 
 Principle: Bring to the user all the information and tools needed for each step of the process
@@ -49,8 +47,6 @@ Software and hardware systems should attempt to anticipate the user’s wants an
 Anticipation requires that designers have a deep understanding of both the task domain and the users in order to predict what will be needed. It also requires sufficient usability testing to ensure the goal has been met: If a tool or source for information is there on the screen, but users can’t find it, it may as well not even be present.
 
 The penalty for failing to anticipate is often swift and permanent, particularly if you do not have a captive user, as is the case with public websites and apps, for example. Those users will probably never return from their search. Even if you do have a captive user, you probably don’t have a captive client, and if the client’s employees are wasting time trying to find required resources, your competitors will have a good story to tell when it is time to make their next pitch.
-
-Top
 
 Autonomy
 
@@ -90,8 +86,6 @@ Principle: Ensure status information is accurate
 
 Status information can be up to date, yet inaccurate. At the time of this writing, when a user updated an iPhone or iPad to a new generation of system software, a progress indicator would appear showing that it will take approximately five minutes to complete the task. Actually, it typically takes an hour or more. (The new system itself would update in five minutes, but then all the other tens or hundreds of megabytes of information on the phone had to be re-uploaded.) The user, having been lied to, was left with no way to predict when she might actually get her device back. Such a user is not feeling autonomous.
 
-Top
-
 Color
 
 Color blindness
@@ -113,8 +107,6 @@ Color is a vital dimension of our limited communication abilities. Stripping awa
 Principle: Do not strip away or overwhelm color cues in the interface because of a passing graphic-design fad.
 
 Generating artificial obsolescence through fashion is a time-honored and effective way to move products from clothing to cars. A new fashion should not and need not, however, detract from user-performance. User test after making aesthetic changes, benchmarking the new design against the old. Ensure that learnability, satisfaction, and productivity have improved or at least stayed the same. If not, newly added aesthetics that are causing a problem need to be rethought.
-
-Top
 
 Consistency
 
@@ -199,8 +191,6 @@ Final Rule: Dragging a document within a logical volume will move it. Dragging i
 
 99+% of our users could not possibly tell you what a “logical volume” is, yet they understand the rule without our having to explicitly teach them. Why? Because it is consistent with user expectations, part of which is a very strong expectation that carrying out a routine activity will not result in the destruction of their work.
 
-Top
-
 Defaults
 
 Principle: Defaults within fields should be easy to “blow away”
@@ -222,8 +212,6 @@ Make sure, through user testing, that users understand the extent of the restora
 User-test your restoration options to find out what users think the result of pressing the button will be. If you are going to do something benign, but they interpret it as potentially destructive, they won’t use the option, leaving them with the same broken or partially broken system that made them consider using it in the first place. Likewise, if you wipe out hours of careful customization without properly preparing them, they may not be nearly as grateful as you might expect. (I once had a young chap in India help me out with a minor problem on my DVR. When he was finished, he had led me to reinitialize the hard disk, erasing every single program on the machine. That was a bit more restoration than I was looking for. After that, I was able to carry out the rest of my conversation with him without even using the phone. I had no idea I could yell that loud.)
 
 When designing tabbed objects, such as properties and preference windows, ensure that the visual design makes the scope of a restoration button clear. Individual tabbed “cards” should be visually separated from the surrounding window so that buttons may be placed either within the individual card or in the surrounding area, indicating whether the button action will apply only to the current tab or all tabs. There is never an excuse for leaving such a scope ambiguous. This is not a fashion decision.
-
-Top
 
 Discoverability
 
@@ -319,8 +307,6 @@ To discover what information you need to communicate and to ensure you’re succ
 
 Not one of the errors I’ve discussed above would ever make it into production were user-experience groups conducting usability studies and altering the design based on those results.
 
-Top
-
 Efficiency of the User
 
 Principle: Look at the user’s productivity, not the computer’s
@@ -356,8 +342,6 @@ Leave open the possibility the message is improperly being generated by a deeper
 “Error -1264” doesn’t do any of these. Rare is the error message that covers even Point One well. Yours should cover all three. Your Quality Assurance group should be charged with the responsibility for reporting back to you any message that does not fulfill the criteria.
 
 Many other principles in this list affect efficiency, Latency Reduction and Readability in particular.
-
-Top
 
 Explorable Interfaces
 
@@ -397,8 +381,6 @@ Principle: Make it easy and attractive to stay in
 
 A clear, visible workflow that enables people to understand where they are and move either backward or forward in a process will encourage people to stick with a task. Consider, as an example, a multi-step checkout procedure. Making the navigation visible by putting each step on a clearly-labelled tab will let people know where they are in the process. Clicking an earlier tab should allow people to jump back to correct an error or just change their mind by, for example, selecting a different delivery address. They should then be able to click on the tab they were originally on and resume their forward movement. When you either forbid people to move back or destroy all subsequent data if they do, they will not be happy with you. Even if they decide to grit their teeth and continue with the current sale, they are unlikely to ever return.
 
-Top
-
 Fitts’s Law
 
 Principle: The time to acquire a target is a function of the distance to and size of the target
@@ -425,8 +407,6 @@ Like so much in the field of human-computer interaction, you must do a timed usa
 
 For more on Fitts’s Law, see my A Quiz Designed to Give You Fitts
 
-Top
-
 Human Interface Objects
 
 Human-interface objects are separate and distinct from the objects found in object-oriented systems. Our objects include folders, documents, buttons, menus, and the trashcan. They appear within the user’s environment and may or may not map directly to an object-oriented program’s object. In fact, many early GUI’s were built entirely in non-object-oriented environments.
@@ -448,8 +428,6 @@ Principle: Human-interface objects should be understandable, self-consistent, an
 Principle: Use a new object when you want a user to interact with it in a different way or when it will result in different behavior
 
 If dropping a document on your delete-document icon will destroy it instantly and permanently, do not make it look like a trash can. People come with expectations about previously encountered objects. It’s important not to confuse or water down such expectations. For example, if you use a trash can icon, but instantly destroy documents dropped into it, it broadens the rule for trash cans. Instead of the rule remaining: “Dropping a document on a trash can does not delete it. Rather, it stores it in the trash can. Selecting ‘Empty Trash’ is necessary to actually delete it,” it will shift to, “Dropping a document on a trash can will destroy it either right now or sometime in the next six months to a year.” That is not only confusing for your users, it is damaging to every other developer that uses the trash can icon in the proper way.
-
-Top
 
 Latency Reduction
 
@@ -479,8 +457,6 @@ Mobile, which has an architecture more in keeping with traditional GUI applicati
 
 Automotive applications today are oftentimes sluggish, suffering from a fatal cocktail of weak hardware, poor design/coding practices, and high latency. Consider the car hurtling down the road at 88 feet per second (27 meters per second) while the user, eyes fixed on the flat panel display, waits to learn which of ACDC’s many fine works he’s currently enjoying. Imagine the rich irony when the accident report reveals it was “Highway to Hell.”
 
-Top
-
 Learnability
 
 Ideally, products would have no learning curve: Users would walk up to them for the very first time and achieve instant mastery. In practice, however, all applications and services, no matter how simple, will display a learning curve.
@@ -502,8 +478,6 @@ Principle: Avoid only testing for learnability
 Much usability testing involves running a series of tests at regular intervals with your spending only 20 minutes to an hour with each subject you recruit. You end up knowing everything about the initial learning curve and nothing about either the long-term curve or the end-state level of productivity.
 
 If you are working on an application that will be used habitually, go about it entirely differently: Work with HR to hire temporary workers. Then, have them spend a week or two coming up to speed on the interface, monitoring them with time tests to see what the overall learning curve and the eventual efficiency of your interface actually prove out to be.
-
-Top
 
 Metaphors, Use of
 
@@ -545,8 +519,6 @@ DP AR Pro
 
 To use the replacement app, you walk around outside or scramble around on the roof until you can see the satellite(s) you need against clear sky without anything in the way. Mount the dish there, and you’re done. No map interpretation skills are needed.
 
-Top
-
 Protect Users’ Work
 
 Principle: Ensure that users never lose their work
@@ -560,8 +532,6 @@ Of course, never in a thousand years would such an event take place at Harrod’
 Travel sites, in general, think nothing of repeatedly tossing all the information the user has entered about cities, times, days of travel, frequent flyer numbers, anything that takes time and trouble to type in. The user may attempt nothing more radical than leaving a half hour later, but that is apparently grounds to destroy their choice of departure city and date as well as arrival city and date. If the user is impolite enough to go to the bathroom, well, that sort of activity poses a significant security risk, so of course their entire evening’s work must be destroyed, with a message explaining its been done for their own good.
 
 Travel sites may be the tip of the iceberg, but websites in general, are notorious for their cavalier attitude when it comes to their user’s hard work, and it doesn’t stop there: Traditional applications continue to crash and burn, and the excuses for entire computer systems crashing and burning are at an end. Small portables can survive a power outage. It’s no longer acceptable that many of today’s high-end desktop computers and operating systems still do not support and encourage continuous-save. That, coupled with a small amount of power-protected memory, could eliminate the embarrassment of $5000 machines offering less reliability than 10-cent toys.
-
-Top
 
 Readability
 
@@ -588,8 +558,6 @@ Presbyopia, the condition of hardened, less flexible lenses, coupled with reduce
 Principle: There’s often an inverse relationship between the “prettiness” of a font and its readability.
 
 Specifically, anti-aliasing softens the edges of a font, giving it a much smoother appearance on the digital page. The problem is that the human vision system responds to sharp edges, so, in smaller font sizes, an anti-aliased font, while often appearing more attractive, can be quite difficult to comprehend.There are anti-alias techniques that specifically increase the sharpness of the edges the eye is seeking, so this is not strictly a black and white issue (so to speak), but it is definitely something of which you should be aware and not something in which every graphic designer has been schooled. You will want to run some reading speed and comprehension tests on proposed font changes.
-
-Top
 
 Simplicity
 
@@ -633,8 +601,6 @@ How is that simple?
 
 Fortunately, after many years, help is at hand: Apps like Photo Shack HD (the HD is important) enable you to search on all the criteria that Apple is importing but refusing to show you. That’s OK for really advanced features. However a remarkably high percentage (100% to be exact) know how to search.
 
-Top
-
 State
 
 Principle: Because many of our browser-based products exist in a stateless environment, we have the responsibility to track state as needed
@@ -667,8 +633,6 @@ Principle: Make clear what you will store & protect the user’s information
 
 State data is neither good nor evil, but it can be put to both uses. You should make clear in your privacy policy that you will be saving data, making your case for why it is in the user’s interest. Any data from the user, including state data, should be encrypted and safeguarded.
 
-Top
-
 Visible Navigation
 
 (See also: Discoverability)
@@ -689,14 +653,11 @@ Principle: Limit screen counts by using overlays
 
 In designing complex apps, strive for a minimal number of screens, each representing a separate and distinct task the user will be performing. When a user needs to perform a subtask, bring up an overlay that is smaller than full screen, so that users can see a darkened image of the main screen still present in the background. What is seen need not be memorized, so users need not remember how that overlay maps onto the screen behind it.
 
-Top
-
 Next Steps
 
 If you want more, consider joining me for three days for my Interaction Design Course. It’s practical, engaging, and we always have a lot of fun. You’ll find the schedule close to the top in the right-hand column. Until then, thanks for reading.
 
 (The copyright notice that follows you will discover is, essentially, a release for you to copy this post as much as you want as long as you aren’t publishing it for money.)
-Top
 
 Copyright
 
@@ -711,7 +672,6 @@ No commerical use may be made of the work beyond these exceptions without permis
 If you want to translate this work and make your result available for free, please contact me so we can exchange links.
 
 In other words, I want people to make free and full use of this material, I just don’t want people to claim it as their own or to cynically make money off something that I am attempting to offer for free.
-Top
 
 Subscribe to the askTog RSS feed or, for new article announcements and the rare pithy comment, follow me on Twitter
 

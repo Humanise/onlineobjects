@@ -27,12 +27,35 @@
       </tbody>
     </table>
 
+    <section th:each="extractor : ${extractors}" th:if="${extractor.name=='recognize'}">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Comparison</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr th:each="test : ${extractor.tests}">
+        <th th:text="${test.name}"></th>
+        <td th:text="${#numbers.formatPercent(test.comparison, 1, 4)}"></th>
+      </tr>
+      </tbody>
+    </table>
+      
+    </section>
+
     <section th:each="extractor : ${extractors}" th:if="${extractor.name=='recognize' || extractor.name=='none'}">
+      <hr/>
       <h2 th:text="${extractor.name}">Extractor name</h2>
       <div th:each="test : ${extractor.tests}">
         <h3 th:text="${test.name}">Test name</h3>
         <h4>Missing</h4>
         <div th:each="line : ${test.lines.missing}" th:text="${line}">Lorem ipsum</div>
+        <div th:if="${extractor.name=='recognize'}">
+        <h4>Extra</h4>
+        <div th:each="line : ${test.lines.extra}" th:text="${line}">Lorem ipsum</div>
+        </div>
       </div>
     </section>
   </body>

@@ -356,73 +356,73 @@ Notes
 
 ^ a b C.B. Parker (1994). McGraw-Hill Encyclopaedia of Physics (2nd ed.). McGraw-Hill. p. 542. ISBN 978-0-07-051400-3. Bell himself wrote: "If [a hidden variable theory] is local it will not agree with quantum mechanics, and if it agrees with quantum mechanics it will not be local. This is what the theorem says." John Bell, Speakable and Unspeakable in Quantum Mechanics, Cambridge University Press, 1987, p. 65.
 
-Mermin, David (April 1985). "Is the moon there when nobody looks? Reality and the quantum theory" (PDF). Physics Today. 38 (4): 38–47. Bibcode:1985PhT....38d..38M. doi:10.1063/1.880968.
+^ Mermin, David (April 1985). "Is the moon there when nobody looks? Reality and the quantum theory" (PDF). Physics Today. 38 (4): 38–47. Bibcode:1985PhT....38d..38M. doi:10.1063/1.880968.
 
-Stapp, Henry P. (1975). "Bell's Theorem and World Process". Nuovo Cimento. 29B (2): 270–276. Bibcode:1975NCimB..29..270S. doi:10.1007/BF02728310. (Quote on p. 271)
+^ Stapp, Henry P. (1975). "Bell's Theorem and World Process". Nuovo Cimento. 29B (2): 270–276. Bibcode:1975NCimB..29..270S. doi:10.1007/BF02728310. (Quote on p. 271)
 
 ^ a b c d e f g Bell, John (1964). "On the Einstein Podolsky Rosen Paradox" (PDF). Physics. 1 (3): 195–200.
 
-The quotation is an adaptation from the edited transcript of the radio interview with John Bell of 1985. See The Ghost in the Atom: A Discussion of the Mysteries of Quantum Physics, by Paul C. W. Davies and Julian R. Brown, 1986/1993, pp. 45-46
+^ The quotation is an adaptation from the edited transcript of the radio interview with John Bell of 1985. See The Ghost in the Atom: A Discussion of the Mysteries of Quantum Physics, by Paul C. W. Davies and Julian R. Brown, 1986/1993, pp. 45-46
 
-Reprinted in JS Bell (2004). "Chapter 2:On the Einstein-Podolsky-Rosen paradox". Speakable and Unspeakable in Quantum Mechanics: Collected Papers on Quantum Philosophy (Alain Aspect introduction to 1987 ed.). Cambridge University Press. pp. 14–21. ISBN 978-0521523387.
+^ Reprinted in JS Bell (2004). "Chapter 2:On the Einstein-Podolsky-Rosen paradox". Speakable and Unspeakable in Quantum Mechanics: Collected Papers on Quantum Philosophy (Alain Aspect introduction to 1987 ed.). Cambridge University Press. pp. 14–21. ISBN 978-0521523387.
 
 ^ a b Hensen, B; Bernien, H; Dréau, AE; Reiserer, A; Kalb, N; Blok, MS; Ruitenberg, J; Vermeulen, RF; Schouten, RN; Abellán, C; Amaya, W; Pruneri, V; Mitchell, MW; Markham, M; Twitchen, DJ; Elkouss, D; Wehner, S; Taminiau, TH; Hanson, R (2015). "Loophole-free Bell inequality violation using electron spins separated by 1.3 kilometres". Nature. 526 (7575): 682–686. arXiv:1508.05949. Bibcode:2015Natur.526..682H. doi:10.1038/nature15759. PMID 26503041.
 
-Zeeya Merali (2015-08-27). "Quantum 'spookiness' passes toughest test yet". Nature. 525 (7567): 14–15. doi:10.1038/nature.2015.18255. PMID 26333448. Retrieved 2017-06-03.
+^ Zeeya Merali (2015-08-27). "Quantum 'spookiness' passes toughest test yet". Nature. 525 (7567): 14–15. doi:10.1038/nature.2015.18255. PMID 26333448. Retrieved 2017-06-03.
 
-Bohm, David (1951). Quantum Theory. Prentice−Hall.
+^ Bohm, David (1951). Quantum Theory. Prentice−Hall.
 
 ^ a b Article on Bell's Theorem by Abner Shimony in the Stanford Encyclopedia of Philosophy, (2004).
 
-Griffiths, David J. (1998). Introduction to Quantum Mechanics (2nd ed.). Pearson/Prentice Hall. p. 423.
+^ Griffiths, David J. (1998). Introduction to Quantum Mechanics (2nd ed.). Pearson/Prentice Hall. p. 423.
 
-Merzbacher, Eugene (2005). Quantum Mechanics (3rd ed.). John Wiley & Sons. pp. 18, 362.
+^ Merzbacher, Eugene (2005). Quantum Mechanics (3rd ed.). John Wiley & Sons. pp. 18, 362.
 
-Stapp 1975
+^ Stapp 1975
 
 ^ a b Bell, JS (1982). "On the impossible pilot wave" (PDF). Foundations of Physics. 12 (10): 989–99. Bibcode:1982FoPh...12..989B. doi:10.1007/bf01889272. Reprinted in Speakable and unspeakable in quantum mechanics: collected papers on quantum philosophy. CUP, 2004, p. 160.
 
-Einstein, A.; Podolsky, B.; Rosen, N. (1935). "Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?" (PDF). Physical Review. 47 (10): 777–780. Bibcode:1935PhRv...47..777E. doi:10.1103/PhysRev.47.777.
+^ Einstein, A.; Podolsky, B.; Rosen, N. (1935). "Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?" (PDF). Physical Review. 47 (10): 777–780. Bibcode:1935PhRv...47..777E. doi:10.1103/PhysRev.47.777.
 
 ^ a b c Clauser, John F. (1974). "Experimental consequences of objective local theories" (PDF). Physical Review D. 10 (2): 526–535. Bibcode:1974PhRvD..10..526C. doi:10.1103/PhysRevD.10.526. Archived from the original (PDF) on 2013-12-25.
 
-Eberhard, P. H. (1977). "Bell's theorem without hidden variables" (PDF). Nuovo Cimento B. 38 (1): 75–80. arXiv:quant-ph/0010047. Bibcode:1977NCimB..38...75E. CiteSeerX 10.1.1.252.6568. doi:10.1007/BF02726212.
+^ Eberhard, P. H. (1977). "Bell's theorem without hidden variables" (PDF). Nuovo Cimento B. 38 (1): 75–80. arXiv:quant-ph/0010047. Bibcode:1977NCimB..38...75E. CiteSeerX 10.1.1.252.6568. doi:10.1007/BF02726212.
 
 ^ a b Clauser, John; Horne, Michael; Shimony, Abner; Holt, Richard (1969). "Proposed Experiment to Test Local Hidden-Variable Theories". Physical Review Letters. 23 (15): 880–884. Bibcode:1969PhRvL..23..880C. doi:10.1103/PhysRevLett.23.880.
 
 ^ a b Freedman, Stuart J.; Clauser, John F. (1972). "Experimental Test of Local Hidden-Variable Theories" (PDF). Physical Review Letters. 28 (14): 938–941. Bibcode:1972PhRvL..28..938F. doi:10.1103/PhysRevLett.28.938.
 
-Anupam Garg; N.D. Mermin (1987), "Detector inefficiencies in the Einstein-Podolsky-Rosen experiment", Phys. Rev. D, 25 (12): 3831–5, Bibcode:1987PhRvD..35.3831G, doi:10.1103/PhysRevD.35.3831
+^ Anupam Garg; N.D. Mermin (1987), "Detector inefficiencies in the Einstein-Podolsky-Rosen experiment", Phys. Rev. D, 25 (12): 3831–5, Bibcode:1987PhRvD..35.3831G, doi:10.1103/PhysRevD.35.3831
 
-Reid, M. D.; Walls, D. F. (1986). "Violations of classical inequalities in quantum optics". Physical Review A. 34 (2): 1260–1276. Bibcode:1986PhRvA..34.1260R. doi:10.1103/PhysRevA.34.1260.
+^ Reid, M. D.; Walls, D. F. (1986). "Violations of classical inequalities in quantum optics". Physical Review A. 34 (2): 1260–1276. Bibcode:1986PhRvA..34.1260R. doi:10.1103/PhysRevA.34.1260.
 
-Gröblacher, Simon; Paterek, Tomasz; Kaltenbaek, Rainer; Brukner, Časlav; Żukowski, Marek; Aspelmeyer, Markus; Zeilinger, Anton (2007). "An experimental test of non-local realism". Nature. 446 (7138): 871–5. arXiv:0704.2529. Bibcode:2007Natur.446..871G. doi:10.1038/nature05677. PMID 17443179.
+^ Gröblacher, Simon; Paterek, Tomasz; Kaltenbaek, Rainer; Brukner, Časlav; Żukowski, Marek; Aspelmeyer, Markus; Zeilinger, Anton (2007). "An experimental test of non-local realism". Nature. 446 (7138): 871–5. arXiv:0704.2529. Bibcode:2007Natur.446..871G. doi:10.1038/nature05677. PMID 17443179.
 
-Cramer, John (1986). "The transactional interpretation of quantum mechanics". Reviews of Modern Physics. 58 (3): 647–687. Bibcode:1986RvMP...58..647C. doi:10.1103/RevModPhys.58.647.
+^ Cramer, John (1986). "The transactional interpretation of quantum mechanics". Reviews of Modern Physics. 58 (3): 647–687. Bibcode:1986RvMP...58..647C. doi:10.1103/RevModPhys.58.647.
 
-Gerard 't Hooft (2009). "Entangled quantum states in a local deterministic theory". arXiv:0908.3408 [quant-ph].
+^ Gerard 't Hooft (2009). "Entangled quantum states in a local deterministic theory". arXiv:0908.3408 [quant-ph].
 
-Gerard 't Hooft (2007). "The Free-Will Postulate in Quantum Mechanics". arXiv:quant-ph/0701097.
+^ Gerard 't Hooft (2007). "The Free-Will Postulate in Quantum Mechanics". arXiv:quant-ph/0701097.
 
-Jaynes, E. T. (1989). Clearing up Mysteries—The Original Goal (PDF). Maximum Entropy and Bayesian Methods. pp. 1–27. CiteSeerX 10.1.1.46.1264. doi:10.1007/978-94-015-7860-8_1. ISBN 978-90-481-4044-2.
+^ Jaynes, E. T. (1989). Clearing up Mysteries—The Original Goal (PDF). Maximum Entropy and Bayesian Methods. pp. 1–27. CiteSeerX 10.1.1.46.1264. doi:10.1007/978-94-015-7860-8_1. ISBN 978-90-481-4044-2.
 
-Gill, Richard D. (2003). "Time, Finite Statistics, and Bell's Fifth Position". Proc. Of "Foundations of Probability and Physics - 2", Ser. Math. Modelling in Phys., Engin., and Cogn. Sc. 5/2002: 179–206. arXiv:quant-ph/0301059. Bibcode:2003quant.ph..1059G.
+^ Gill, Richard D. (2003). "Time, Finite Statistics, and Bell's Fifth Position". Proc. Of "Foundations of Probability and Physics - 2", Ser. Math. Modelling in Phys., Engin., and Cogn. Sc. 5/2002: 179–206. arXiv:quant-ph/0301059. Bibcode:2003quant.ph..1059G.
 
-Conway, John; Simon Kochen (2006). "The Free Will Theorem". Foundations of Physics. 36 (10): 1441–1473. arXiv:quant-ph/0604079. Bibcode:2006FoPh...36.1441C. doi:10.1007/s10701-006-9068-6.
+^ Conway, John; Simon Kochen (2006). "The Free Will Theorem". Foundations of Physics. 36 (10): 1441–1473. arXiv:quant-ph/0604079. Bibcode:2006FoPh...36.1441C. doi:10.1007/s10701-006-9068-6.
 
-Conway, John H. & Simon Kochen (2009). "The strong free will theorem" (PDF). Notices of the AMS. 56 (2): 226–232.
+^ Conway, John H. & Simon Kochen (2009). "The strong free will theorem" (PDF). Notices of the AMS. 56 (2): 226–232.
 
-Cator, Eric & Klaas Landsman (2014). "Constraints on determinism: Bell versus Conway–Kochen". Foundations of Physics. 44 (7): 781–791. arXiv:1402.1972. Bibcode:2014FoPh...44..781C. doi:10.1007/s10701-014-9815-z.
+^ Cator, Eric & Klaas Landsman (2014). "Constraints on determinism: Bell versus Conway–Kochen". Foundations of Physics. 44 (7): 781–791. arXiv:1402.1972. Bibcode:2014FoPh...44..781C. doi:10.1007/s10701-014-9815-z.
 
-Esfeld, Michael (2015). "Bell's Theorem and the Issue of Determinism and Indeterminism". Foundations of Physics. 45 (5): 471–482. arXiv:1503.00660. Bibcode:2015FoPh...45..471E. doi:10.1007/s10701-015-9883-8.
+^ Esfeld, Michael (2015). "Bell's Theorem and the Issue of Determinism and Indeterminism". Foundations of Physics. 45 (5): 471–482. arXiv:1503.00660. Bibcode:2015FoPh...45..471E. doi:10.1007/s10701-015-9883-8.
 
-David Hodgson (2012). "Chapter 7: Science and determinism". Rationality + Consciousness = Free Will. Oxford University Press. ISBN 9780199845309.
+^ David Hodgson (2012). "Chapter 7: Science and determinism". Rationality + Consciousness = Free Will. Oxford University Press. ISBN 9780199845309.
 
-Penrose, Roger (2007). The Road to Reality. Vintage Books. p. 583. ISBN 978-0-679-77631-4.
+^ Penrose, Roger (2007). The Road to Reality. Vintage Books. p. 583. ISBN 978-0-679-77631-4.
 
-Abers, E. (2004). Quantum Mechanics. Addison Wesley. pp. 193–195. ISBN 9780131461000.
+^ Abers, E. (2004). Quantum Mechanics. Addison Wesley. pp. 193–195. ISBN 9780131461000.
 
-R.G. Lerner; G.L. Trigg (1991). Encyclopaedia of Physics (2nd ed.). VHC publishers. p. 495. ISBN 978-0-89573-752-6.
+^ R.G. Lerner; G.L. Trigg (1991). Encyclopaedia of Physics (2nd ed.). VHC publishers. p. 495. ISBN 978-0-89573-752-6.
 
 References
 

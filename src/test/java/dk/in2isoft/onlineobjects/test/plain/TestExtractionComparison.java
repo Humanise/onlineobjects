@@ -188,7 +188,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 				}
 				log.info(baseName + " - " + extractor.getName() + "- : " + comparison + " - " + (time / 1000000) +"ms");
 				extractor.addTime(time);
-				extractor.addResult(dir.getName(), info, lines);
+				extractor.addResult(dir.getName(), info, lines, comparison);
 			}
 			//break;
 		}
@@ -336,11 +336,12 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 			total+=comparison;
 		}
 		
-		public void addResult(String name, Info info, Lines lines) {
+		public void addResult(String name, Info info, Lines lines, double comparison) {
 			ReportTest test = new ReportTest();
 			test.name = name;
 			test.url = info.url;
 			test.lines = lines;
+			test.comparison = comparison;
 			tests.add(test);
 		}
 		
@@ -375,6 +376,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 	}
 	
 	private class ReportTest {
+		public double comparison;
 		String name;
 		String url;
 		Lines lines;
@@ -385,6 +387,10 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		
 		public Lines getLines() {
 			return lines;
+		}
+		
+		public double getComparison() {
+			return comparison;
 		}
 	}
 	

@@ -22,9 +22,13 @@ public class ActionsRecognizer implements Recognizer {
 				"cookies", "privatlivspolitik","kopiér link", "kopier link", "tilmeld",
 				"nyhedsbrev",
 				"annonce","artiklen fortsætter efter annoncen", "læs også:",
+				"læs artiklen senere","læs kommentar",
 				"subscribe", "next article", "most recent newsletter", "pdf version", "menu", "skip to main content",
 				"search", "sign up", "open main menu",
-				"e-alert", "submit", "my account", "login", "☰","tweet","share"
+				"read later",
+				"e-alert", "submit", "my account", "login", "☰",
+				"tweet","share","share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
+				"follow me on twitter","click to follow"
 			};
 		String text = DOM.getText(element).toLowerCase().trim();
 		for (String string : texts) {
@@ -35,12 +39,15 @@ public class ActionsRecognizer implements Recognizer {
 		}
 		// Wikipedia...
 		if (DOM.isAny(element, "a")) {
-			if (text.equals("edit") || text.equals("^")) {
+			String href = element.getAttributeValue("href");
+			if (text.equals("edit")) {
 				return -1;
 			}
-		}
-		if (DOM.isAny(element, "a") && text.equals("edit")) {
-			return -1;
+			if (text.equals("top") || text.equals("to top")) {
+				if (href!=null && href.startsWith("#")) {
+					return -1;
+				}
+			}
 		}
 		
 		String cls = element.getAttributeValue("class");
