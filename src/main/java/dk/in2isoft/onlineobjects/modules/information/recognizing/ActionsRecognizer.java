@@ -27,7 +27,8 @@ public class ActionsRecognizer implements Recognizer {
 				"search", "sign up", "open main menu",
 				"read later",
 				"e-alert", "submit", "my account", "login", "☰",
-				"tweet","share","share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
+				"tweet","share","pin it","share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
+				"share to twitter","blogthis!","share to facebook","share to pinterest","email this",
 				"follow me on twitter","click to follow"
 			};
 		String text = DOM.getText(element).toLowerCase().trim();

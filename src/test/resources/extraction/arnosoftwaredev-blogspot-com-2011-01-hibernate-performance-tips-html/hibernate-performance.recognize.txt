@@ -32,6 +32,4 @@ Database Performance Tuning from Arno Huetter
 
 More Hibernate postings:
 
-Email ThisBlogThis!Share to TwitterShare to FacebookShare to Pinterest
-
 Newer Post Older Post Home

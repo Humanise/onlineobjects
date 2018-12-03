@@ -1,0 +1,72 @@
+One really interesting feature of Swift is the ability to create lightweight value containers using tuples. The concept is quite simple - tuples let you easily group together any number of objects or values without having to create a new type. But even though it's a simple concept, it opens up some really cool opportunities, both in terms of API design and when structuring code.
+
+In the standard library, tuples are used for things like forming (key, value) pairs when iterating over a dictionary, or when returning the outcome of an insert into a Set (like we used last week in The power of sets in Swift). This week, let's take a look at how we can use tuples in our own code, and some of the techniques that they enable us to use.
+
+Lightweight types
+
+One way of describing tuples is that they are lightweight, inlined types. If you have two values - let's say a title and a subtitle - you can quickly group them together into a new type, completely inline wherever you'll use it, like this:
+
+class TextView: UIView { func render(_ texts: (title: String, subtitle: String)) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle } }
+
+One alternative to the above would be to create a struct instead. While this is probably preferable in situations where you'll use this kind of pair in multiple places, being able to keep the type definition inline - where you're actually using it - can really help to keep things simple. It also makes adding additional properties as trivial as changing the function signature:
+
+class TextView: UIView { func render(_ texts: (title: String, subtitle: String, description: String)) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle descriptionLabel.text = texts.description } }
+
+Using something like the above may seem trivial, but I personally find that it really makes a big difference to productivity if I can type things out in the same place rather than having to jump around to multiple places in a code base to make such a simple change.
+
+One downside to the above approach, though, is that things tend to become a bit messy if the list of properties start to grow. One way to address this, while still keeping things nice and simple, is to use a typealias to create a lightweight type definition for a tuple:
+
+class TextView: UIView { typealias Texts = (title: String, subtitle: String, description: String) func render(_ texts: Texts) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle descriptionLabel.text = texts.description } }
+
+Doing the above also makes it super easy to extract the tuple into an explicit type - like a struct - if we want to in the future, since our code is now using Texts to refer to it.
+
+Simplified call sites
+
+Another cool thing about tuples is the impact they can have on the call sites of a certain API. Even though a tuple can have labels, you are always free to ignore those when creating an instance. This can help make call sites look really nice and clean, for example when dealing with vector types, like coordinates.
+
+Let's say our app has a model for storing locations on a tile-based map, and that we choose to use a tuple to define a coordinate on that map, like this:
+
+struct Map { private let width: Int private var tiles: [Tile] subscript(_ coordinate: (x: Int, y: Int)) -> Tile { return tiles[coordinate.x + coordinate.y * width] } }
+
+Since we used a tuple, we can now either choose to include or omit the x and y labels when creating a coordinate:
+
+let tileA = map[(x: 1, y: 0)] let tileB = map[(2, 1)]
+
+Again, it might seem like a minor detail, but if it makes our code nicer to both read & write - then I think that's a pretty big win 👍.
+
+Equality
+
+Tuples can also be super useful when checking if multiple values are equal. Even though they don't conform to the Equatable protocol (or any protocol for that matter), the Swift standard library defines == overloads for tuples that contain values that themselves are equatable.
+
+Let's say we're building a view controller that lets the user search for other users within a given scope (they may, for example, choose to only search among their friends). Since we don't want to waste resources searching for results that are already being displayed, we can easily use a tuple to keep track of the current search criteria and verify that they have actually changed since the last search, like this:
+
+class UserSearchViewController: UIViewController { enum Scope { case friends case favorites case all } private var currentCriteria: (query: String, scope: Scope)? func searchForUsers(matching query: String, in scope: Scope) { if let criteria = currentCriteria { // If the search critera matches what is already rendered, we can // return early without having to perform an actual search guard (query, scope) != criteria else { return } } currentCriteria = (query, scope) // Perform search ... } }
+
+No additional types need to be defined, and no need to write any Equatable implementations (although hopefully that'll soon be a thing of the past since Swift will soon start to synthesize most of those implementations for us 🎉).
+
+Combined with first class functions
+
+Combining tuples with the fact that Swift supports first class functions can let us do some really interesting things. It turns out that the argument list of any closure can in fact be described using a tuple, and since - thanks to first class functions - all functions are also closures, we can actually use a tuple to pass arguments to a function. All we have to do is to make Swift treat a function as a closure. To do that we could define a call function that takes any function and applies its required arguments to it, like this:
+
+func call<Input, Output>(_ function: (Input) -> Output, with input: Input) -> Output { return function(input) }
+
+Now let's say we want to instantiate a group of view classes that can all be initialized using the same type of argument list:
+
+class HeaderView: UIView { init(font: UIFont, textColor: UIColor) { ... } } class PromotionView: UIView { init(font: UIFont, textColor: UIColor) { ... } } class ProfileView: UIView { init(font: UIFont, textColor: UIColor) { ... } }
+
+Using our call function, we can now simply apply a tuple containing the expected arguments (in this case the styles that we want to create the view using) by passing each view's initializer as a function and calling it using our styles tuple:
+
+let styles = (UIFont.systemFont(ofSize: 20), UIColor.red) let headerView = call(HeaderView.init, with: styles) let promotionView = call(PromotionView.init, with: styles) let profileView = call(ProfileView.init, with: styles)
+
+The above is little bit crazy, but it's pretty cool! 😀
+
+Conclusion
+
+Tuples in Swift are simple, but very powerful. Not only can we use them to quickly define types inline, but we can also use them to make tasks like checking multiple values for equality a lot simpler. Finally, combined with first class functions, we can use tuples to basically pass an argument list around as a value - which is really interesting.
+
+Just like every other Swift feature, tuples make different tradeoffs than more explicitly defined types, like classes and structs. They're a lot easier to define and are very lightweight, but as such they can't do things like store weak references or have any kind of logic contained in them (like having methods). On one hand this is a downside, but it also helps preserve simplicity when dealing with more simple data containers.
+
+What do you think? Do you currently use tuples in your code, or is it something you'll try out? Let me know, along with any other questions, comments or feedback you might have on Twitter @johnsundell.
+
+Thanks for reading! 🚀
+

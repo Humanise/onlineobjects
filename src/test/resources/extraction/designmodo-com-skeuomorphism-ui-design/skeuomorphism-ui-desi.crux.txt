@@ -1,0 +1,42 @@
+DesignPaula Borowska •
+
+February 02, 2013
+
+• 20 Comments
+
+In the last few weeks the debate over skeuomorphism has been getting more and more heated. I would like to make two points for you in this post. First, what skeuomorphism actually is – as I’ve seen so many people not fully understand it – and two some examples of it for you to get inspired by.
+
+Skeuomorphism is the imitation of another object by copying its material AND shape AND functionality. I have noticed way too many people assume that skeuomorphism is only about the texture like faux leather or faux wood. However, that is by far not the case as skeuomorphism is also about the shape and functionality. Sometimes the object doesn’t actually do anything but provides an idea that it does like a paperclip on a side of a webpage –it provides the idea that it is holding up the page.
+
+Let’s take a look at the famous – or infamous if you prefer – Apple newsstand bookshelf. It has all three components to its design that name is a perfect a skeuomorphism example. First, it has the faux wooden texture, it is also shaped like a newsstand shaving and lastly it functions like a shelf with magazines placed on the racks. On top of this, the magazines open up like a magazine would in real life. And that is exactly what skeuomorphism is!
+
+What is it not?
+
+Some things are sometimes confused to be skeuomorphism when they are not. A perfect example of this is a sign in form. The reason they are not skeuomorphism is because they do not exist anywhere but digital interfaces so they cannot be a replica of something physical (a checkbox within the signup form would be considered skeuomorphism though). Another example is a navigation bar with a metal texture and extensive details.
+
+So anything that was created for the digital world without being first a physical object is not skeuomorphism.
+
+Of course, this is following the definition very strictly. Given that we are humans we will always give it some leeway but I don’t think we should get it completely wrong like identifying a use of faux leather to be the full extent of skeuomorphism.
+
+Is it bad or good?
+
+Wells Riley made a very good point about skeuomorphism in that skeuomorphism is a design choice and shouldn’t be critiqued as a bad thing unless it harms the usability of the design. If skeuomorphism allows the user to better navigate the interface over a non-skeuomorphism design then it is a better design choice. Sometimes skeuomorphism in a design can be considered unnecessary but this doesn’t mean it is a bad thing.
+
+Impress your audience with animated websites and web presentations.
+
+With Slides, we don’t make you start from an empty slate. All you have to do is to pick the elements you like best and combine them. Each slide has been carefully crafted to satisfy three key criteria: aesthetic, function and usability. That way you know every element works together seamlessly while enhancing the impact of your content.
+
+Create a Website
+
+It is ever going to go away?
+
+Some things don’t have to be replicas of physical items such as a calendar or notepad. But, some things just cannot be changed, so no – it will not go away. And the reason is what I just said: some things just won’t – and even shouldn’t be – change. The best example is a button. Unlike its texture and even its shape, a button’s functionality will always be the same. In that way it will always be a skeuomorphic representation of a button you see on your TV remote.
+
+Same goes for the keypad buttons on a phone’s dial interface – it will always be like a physical telephones keypad. More importantly, it shouldn’t be changed. Those types of interfaces are just so simple and so intuitive it would be hard to change them without causing confusion and uproar; and following Wells’ point you shouldn’t change them if they help the users as making things complicated just to get away from a design trend is an awful idea.
+
+Personally, it is like country music to me…
+
+I’ll admit, I am not a fan of skeuomorphism but let me explain to you my approach towards it. I don’t like skeuomorphism just like I do not like country music. However, sometimes there is a pretty great county song that I cannot get enough of. The same thing applies to skeuomorphism. Although I am not a fan of this design style it is sometimes exceptionally well executed like in the 15 examples below. Let’s take a look!
+
+Like what you're reading? Subscribe to our top stories.
+

@@ -18,28 +18,28 @@
       <tbody>
       <tr>
         <th>readability</th>
-        <td>0.15%<td>99.48%<td>69.16%<td>815<td>125</tr>
+        <td>0.15%<td>99.75%<td>70.57%<td>913<td>149</tr>
       <tr>
         <th>simple</th>
-        <td>7.62%<td>99.89%<td>78.41%<td>53<td>1849</tr>
+        <td>7.62%<td>99.89%<td>77.69%<td>127<td>2114</tr>
       <tr>
         <th>boilerpipe</th>
-        <td>0.00%<td>98.95%<td>52.81%<td>710<td>823</tr>
+        <td>0.00%<td>99.52%<td>55.56%<td>783<td>833</tr>
       <tr>
         <th>crux</th>
-        <td>4.04%<td>99.08%<td>66.93%<td>940<td>125</tr>
+        <td>4.04%<td>99.08%<td>66.26%<td>1062<td>143</tr>
       <tr>
         <th>mercury</th>
         <td>34.60%<td>99.71%<td>83.89%<td>161<td>41</tr>
       <tr>
         <th>none</th>
-        <td>7.57%<td>98.90%<td>67.78%<td>41<td>3704</tr>
+        <td>7.57%<td>98.90%<td>67.34%<td>115<td>4059</tr>
       <tr>
         <th>recognize</th>
-        <td>49.76%<td>98.50%<td>89.92%<td>99<td>523</tr>
+        <td>49.76%<td>98.50%<td>89.42%<td>175<td>576</tr>
       <tr>
         <th>recognize.debug</th>
-        <td>7.57%<td>98.90%<td>67.78%<td>41<td>3702</tr>
+        <td>7.57%<td>98.90%<td>67.34%<td>115<td>4057</tr>
       </tbody>
     </table>
 
@@ -69,7 +69,7 @@
         <td>97.4269%</tr>
       <tr>
         <th>arnosoftwaredev-blogspot-com-2011-01-hibernate-performance-tips-html</th>
-        <td>84.7525%</tr>
+        <td>83.7341%</tr>
       <tr>
         <th>asktog-com-atc-principles-of-interaction-design</th>
         <td>95.9632%</tr>
@@ -82,6 +82,12 @@
       <tr>
         <th>create-adobe-com-2018-1-8-not_another_free_ima-html</th>
         <td>96.6049%</tr>
+      <tr>
+        <th>designmodo-com-skeuomorphism-ui-design</th>
+        <td>83.7009%</tr>
+      <tr>
+        <th>dn-dk-nyheder-kaempe-faktatjek-slar-fast-intensivt-landbrug-presser-dyr-og-natur</th>
+        <td>86.3686%</tr>
       <tr>
         <th>dr-dk-nyheder-penge-klodser-i-fremgang-det-koerer-lego</th>
         <td>89.8418%</tr>
@@ -115,6 +121,9 @@
       <tr>
         <th>signalvnoise-com-posts-3144-what-clarity-is-all-about</th>
         <td>81.1237%</tr>
+      <tr>
+        <th>swiftbysundell-com-posts-using-tuples-as-lightweight-types-in-swift</th>
+        <td>88.7608%</tr>
       <tr>
         <th>tfcbooks-com-tesla-1926-01-30-htm</th>
         <td>96.8789%</tr>
@@ -179,6 +188,18 @@
       </div>
       <div>
         <h3>create-adobe-com-2018-1-8-not_another_free_ima-html</h3>
+        <h4>Missing</h4>
+        
+        
+      </div>
+      <div>
+        <h3>designmodo-com-skeuomorphism-ui-design</h3>
+        <h4>Missing</h4>
+        <div>Some things don’t have to be replicas of physical items such as a calendar or notepad. But, some things just cannot be changed, so no – it will not go away. And the reason is what I just said: some things just won’t  – and even shouldn’t be – change. The best example is a button. Unlike its texture and even its shape, a button’s functionality will always be the same. In that way it will always be a skeuomorphic representation of a button you see on your TV remote.</div>
+        
+      </div>
+      <div>
+        <h3>dn-dk-nyheder-kaempe-faktatjek-slar-fast-intensivt-landbrug-presser-dyr-og-natur</h3>
         <h4>Missing</h4>
         
         
@@ -277,6 +298,84 @@
         
       </div>
       <div>
+        <h3>swiftbysundell-com-posts-using-tuples-as-lightweight-types-in-swift</h3>
+        <h4>Missing</h4>
+        <div>Using tuples as lightweight types in Swift</div>
+        <div>class TextView: UIView {</div>
+        <div>    func render(_ texts: (title: String, subtitle: String)) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class TextView: UIView {</div>
+        <div>    func render(_ texts: (title: String, subtitle: String, description: String)) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>        descriptionLabel.text = texts.description</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class TextView: UIView {</div>
+        <div>    typealias Texts = (title: String, subtitle: String, description: String)</div>
+        <div>    func render(_ texts: Texts) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>        descriptionLabel.text = texts.description</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>struct Map {</div>
+        <div>    private let width: Int</div>
+        <div>    private var tiles: [Tile]</div>
+        <div>    subscript(_ coordinate: (x: Int, y: Int)) -&gt; Tile {</div>
+        <div>        return tiles[coordinate.x + coordinate.y * width]</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>let tileA = map[(x: 1, y: 0)]</div>
+        <div>let tileB = map[(2, 1)]</div>
+        <div>class UserSearchViewController: UIViewController {</div>
+        <div>    enum Scope {</div>
+        <div>        case friends</div>
+        <div>        case favorites</div>
+        <div>        case all</div>
+        <div>    }</div>
+        <div>    private var currentCriteria: (query: String, scope: Scope)?</div>
+        <div>    func searchForUsers(matching query: String, in scope: Scope) {</div>
+        <div>        if let criteria = currentCriteria {</div>
+        <div>            // If the search critera matches what is already rendered, we can</div>
+        <div>            // return early without having to perform an actual search</div>
+        <div>            guard (query, scope) != criteria else {</div>
+        <div>                return</div>
+        <div>            }</div>
+        <div>        }</div>
+        <div>        currentCriteria = (query, scope)</div>
+        <div>        // Perform search</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>func call&lt;Input, Output&gt;(_ function: (Input) -&gt; Output, with input: Input) -&gt; Output {</div>
+        <div>    return function(input)</div>
+        <div>}</div>
+        <div>class HeaderView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class PromotionView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class ProfileView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>let styles = (UIFont.systemFont(ofSize: 20), UIColor.red)</div>
+        <div>let headerView = call(HeaderView.init, with: styles)</div>
+        <div>let promotionView = call(PromotionView.init, with: styles)</div>
+        <div>let profileView = call(ProfileView.init, with: styles)</div>
+        
+      </div>
+      <div>
         <h3>tfcbooks-com-tesla-1926-01-30-htm</h3>
         <h4>Missing</h4>
         
@@ -344,7 +443,6 @@
         <div>Fetching Strategies In Hibernate</div>
         <div>
         <h4>Extra</h4>
-        <div>Email ThisBlogThis!Share to TwitterShare to FacebookShare to Pinterest</div>
         <div>Newer Post Older Post Home</div>
         </div>
       </div>
@@ -430,6 +528,65 @@
         <h4>Extra</h4>
         <div>WORTH IT - +</div>
         <div>Visions Not Previously Seen: The Groundbreaking Design Work of Barbara Stauffacher Solomon Make It in a Minute: Paper Cutout Effect in Photoshop Going Bigger with Your Poster Designs</div>
+        </div>
+      </div>
+      <div>
+        <h3>designmodo-com-skeuomorphism-ui-design</h3>
+        <h4>Missing</h4>
+        <div>Some things don’t have to be replicas of physical items such as a calendar or notepad. But, some things just cannot be changed, so no – it will not go away. And the reason is what I just said: some things just won’t  – and even shouldn’t be – change. The best example is a button. Unlike its texture and even its shape, a button’s functionality will always be the same. In that way it will always be a skeuomorphic representation of a button you see on your TV remote.</div>
+        <div>
+        <h4>Extra</h4>
+        <div>DesignPaula Borowska • February 02, 2013 •</div>
+        <div>Share</div>
+        <div>Impress your audience with animated websites and web presentations.</div>
+        <div>With Slides, we don’t make you start from an empty slate. All you have to do is to pick the elements you like best and combine them. Each slide has been carefully crafted to satisfy three key criteria: aesthetic, function and usability. That way you know every element works together seamlessly while enhancing the impact of your content.</div>
+        <div>Create a Website</div>
+        <div>Some things don’t have to be replicas of physical items such as a calendar or notepad. But, some things just cannot be changed, so no – it will not go away. And the reason is what I just said: some things just won’t – and even shouldn’t be – change. The best example is a button. Unlike its texture and even its shape, a button’s functionality will always be the same. In that way it will always be a skeuomorphic representation of a button you see on your TV remote.</div>
+        <div>Like what you&#39;re reading? Subscribe to our top stories.</div>
+        <div>arrow_forward</div>
+        <div>I agree to storage of my email according to Privacy Policy.</div>
+        <div>Share post</div>
+        <div>Related Articles</div>
+        <div>Animated Presentations Made Easy</div>
+        <div>Learn more All Products</div>
+        <div>Searchkeyboard_return</div>
+        <div>We use cookies to ensure that we give you the best experience on our website.</div>
+        <div>Read our Privacy Statement.</div>
+        <div>I disagree</div>
+        <div>I agree</div>
+        <div>550K Followers</div>
+        </div>
+      </div>
+      <div>
+        <h3>dn-dk-nyheder-kaempe-faktatjek-slar-fast-intensivt-landbrug-presser-dyr-og-natur</h3>
+        <h4>Missing</h4>
+        
+        <div>
+        <h4>Extra</h4>
+        <div>Pressemeddelelse</div>
+        <div>Tags:</div>
+        <div>Natur</div>
+        <div>Landbrug</div>
+        <div>Tilmeld nyhedsbrev Bliv medlem</div>
+        <div>Nysgerrig efter mere? Find flere artikler om samme eller relaterede emner</div>
+        <div>Nyhed Ny Naturkanon: 10 ud af 15 naturområder er fredede 20. november 2018</div>
+        <div>Nyhed Rekordmange studerende på naturkonference 20. november 2018</div>
+        <div>Nyhed Stormøde i DN: Klima, natur og frivillighed skal på dagsordenen i 2019 19. november 2018</div>
+        <div>130000</div>
+        <div>Medlemmer</div>
+        <div>Om os</div>
+        <div>500</div>
+        <div>Medlemsfordele</div>
+        <div>Medlemsfordele</div>
+        <div>1500</div>
+        <div>Aktive lokalt</div>
+        <div>Lokalafdelinger</div>
+        <div>1000</div>
+        <div>Oplevelser i hele landet</div>
+        <div>Oplev naturen</div>
+        <div>Cookies?</div>
+        <div>Vi bruger cookies for at forbedre din oplevelse, vurdere brugen af de enkelte elementer på hjemmesiden og til at støtte markedsføringen af vores services. Ved at klikke ok accepterer du vores brug af cookies.</div>
+        <div>Læs mere Okay</div>
         </div>
       </div>
       <div>
@@ -954,6 +1111,99 @@
         <div>Jason Fried wrote this on Mar 22 2012 26 comments</div>
         <div>Read all of Jason Fried’s posts, and follow Jason Fried on Twitter.</div>
         <div>If you liked this Business post by Jason Fried, you’ll probably like reading Four new people join the 37signals family, Launch: The all new Basecamp, and Link: Great defense by OXO</div>
+        </div>
+      </div>
+      <div>
+        <h3>swiftbysundell-com-posts-using-tuples-as-lightweight-types-in-swift</h3>
+        <h4>Missing</h4>
+        <div>Using tuples as lightweight types in Swift</div>
+        <div>One really interesting feature of Swift is the ability to create lightweight value containers using tuples. The concept is quite simple - tuples let you easily group together any number of objects or values without having to create a new type. But even though it&#39;s a simple concept, it opens up some really cool opportunities, both in terms of API design and when structuring code.</div>
+        <div>In the standard library, tuples are used for things like forming (key, value) pairs when iterating over a dictionary, or when returning the outcome of an insert into a Set (like we used last week in The power of sets in Swift). This week, let&#39;s take a look at how we can use tuples in our own code, and some of the techniques that they enable us to use.</div>
+        <div>class TextView: UIView {</div>
+        <div>    func render(_ texts: (title: String, subtitle: String)) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class TextView: UIView {</div>
+        <div>    func render(_ texts: (title: String, subtitle: String, description: String)) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>        descriptionLabel.text = texts.description</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class TextView: UIView {</div>
+        <div>    typealias Texts = (title: String, subtitle: String, description: String)</div>
+        <div>    func render(_ texts: Texts) {</div>
+        <div>        titleLabel.text = texts.title</div>
+        <div>        subtitleLabel.text = texts.subtitle</div>
+        <div>        descriptionLabel.text = texts.description</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>struct Map {</div>
+        <div>    private let width: Int</div>
+        <div>    private var tiles: [Tile]</div>
+        <div>    subscript(_ coordinate: (x: Int, y: Int)) -&gt; Tile {</div>
+        <div>        return tiles[coordinate.x + coordinate.y * width]</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>let tileA = map[(x: 1, y: 0)]</div>
+        <div>let tileB = map[(2, 1)]</div>
+        <div>class UserSearchViewController: UIViewController {</div>
+        <div>    enum Scope {</div>
+        <div>        case friends</div>
+        <div>        case favorites</div>
+        <div>        case all</div>
+        <div>    }</div>
+        <div>    private var currentCriteria: (query: String, scope: Scope)?</div>
+        <div>    func searchForUsers(matching query: String, in scope: Scope) {</div>
+        <div>        if let criteria = currentCriteria {</div>
+        <div>            // If the search critera matches what is already rendered, we can</div>
+        <div>            // return early without having to perform an actual search</div>
+        <div>            guard (query, scope) != criteria else {</div>
+        <div>                return</div>
+        <div>            }</div>
+        <div>        }</div>
+        <div>        currentCriteria = (query, scope)</div>
+        <div>        // Perform search</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>func call&lt;Input, Output&gt;(_ function: (Input) -&gt; Output, with input: Input) -&gt; Output {</div>
+        <div>    return function(input)</div>
+        <div>}</div>
+        <div>class HeaderView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class PromotionView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>class ProfileView: UIView {</div>
+        <div>    init(font: UIFont, textColor: UIColor) {</div>
+        <div>        ...</div>
+        <div>    }</div>
+        <div>}</div>
+        <div>let styles = (UIFont.systemFont(ofSize: 20), UIColor.red)</div>
+        <div>let headerView = call(HeaderView.init, with: styles)</div>
+        <div>let promotionView = call(PromotionView.init, with: styles)</div>
+        <div>let profileView = call(ProfileView.init, with: styles)</div>
+        <div>
+        <h4>Extra</h4>
+        <div>class TextView: UIView { func render(_ texts: (title: String, subtitle: String)) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle } }</div>
+        <div>class TextView: UIView { func render(_ texts: (title: String, subtitle: String, description: String)) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle descriptionLabel.text = texts.description } }</div>
+        <div>class TextView: UIView { typealias Texts = (title: String, subtitle: String, description: String) func render(_ texts: Texts) { titleLabel.text = texts.title subtitleLabel.text = texts.subtitle descriptionLabel.text = texts.description } }</div>
+        <div>struct Map { private let width: Int private var tiles: [Tile] subscript(_ coordinate: (x: Int, y: Int)) -&gt; Tile { return tiles[coordinate.x + coordinate.y * width] } }</div>
+        <div>let tileA = map[(x: 1, y: 0)] let tileB = map[(2, 1)]</div>
+        <div>class UserSearchViewController: UIViewController { enum Scope { case friends case favorites case all } private var currentCriteria: (query: String, scope: Scope)? func searchForUsers(matching query: String, in scope: Scope) { if let criteria = currentCriteria { // If the search critera matches what is already rendered, we can // return early without having to perform an actual search guard (query, scope) != criteria else { return } } currentCriteria = (query, scope) // Perform search ... } }</div>
+        <div>func call&lt;Input, Output&gt;(_ function: (Input) -&gt; Output, with input: Input) -&gt; Output { return function(input) }</div>
+        <div>class HeaderView: UIView { init(font: UIFont, textColor: UIColor) { ... } } class PromotionView: UIView { init(font: UIFont, textColor: UIColor) { ... } } class ProfileView: UIView { init(font: UIFont, textColor: UIColor) { ... } }</div>
+        <div>let styles = (UIFont.systemFont(ofSize: 20), UIColor.red) let headerView = call(HeaderView.init, with: styles) let promotionView = call(PromotionView.init, with: styles) let profileView = call(ProfileView.init, with: styles)</div>
+        <div>Mar 18 Preventing views from being model aware in Swift</div>
+        <div>Mar 4 The power of sets in Swift</div>
         </div>
       </div>
       <div>

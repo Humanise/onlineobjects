@@ -1,0 +1,530 @@
+ Articles
+
+Products
+
+Market
+
+Jobs
+
+Follow Us
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+menu
+
+Skeuomorphism in User Interface Design, What is It?
+
+Design 4 minutes
+
+Skeuomorphism in User Interface Design, What is It?
+
+Paula Borowska
+
+DesignPaula Borowska • February 02, 2013 • 20 Comments
+
+Share
+
+Share
+
+Tweet
+
+Share
+
+Pin It
+
+Share
+
+In the last few weeks the debate over skeuomorphism has been getting more and more heated. I would like to make two points for you in this post. First, what skeuomorphism actually is – as I’ve seen so many people not fully understand it – and two some examples of it for you to get inspired by.
+
+What skeuomorphism actually is?
+
+Skeuomorphism is the imitation of another object by copying its material AND shape AND functionality. I have noticed way too many people assume that skeuomorphism is only about the texture like faux leather or faux wood. However, that is by far not the case as skeuomorphism is also about the shape and functionality. Sometimes the object doesn’t actually do anything but provides an idea that it does like a paperclip on a side of a webpage –it provides the idea that it is holding up the page.
+
+Let’s take a look at the famous – or infamous if you prefer – Apple newsstand bookshelf. It has all three components to its design that name is a perfect a skeuomorphism example. First, it has the faux wooden texture, it is also shaped like a newsstand shaving and lastly it functions like a shelf with magazines placed on the racks. On top of this, the magazines open up like a magazine would in real life. And that is exactly what skeuomorphism is!
+
+What is it not?
+
+Some things are sometimes confused to be skeuomorphism when they are not. A perfect example of this is a sign in form. The reason they are not skeuomorphism is because they do not exist anywhere but digital interfaces so they cannot be a replica of something physical (a checkbox within the signup form would be considered skeuomorphism though). Another example is a navigation bar with a metal texture and extensive details.
+
+So anything that was created for the digital world without being first a physical object is not skeuomorphism.
+
+Of course, this is following the definition very strictly. Given that we are humans we will always give it some leeway but I don’t think we should get it completely wrong like identifying a use of faux leather to be the full extent of skeuomorphism.
+
+Is it bad or good?
+
+Wells Riley made a very good point about skeuomorphism in that skeuomorphism is a design choice and shouldn’t be critiqued as a bad thing unless it harms the usability of the design. If skeuomorphism allows the user to better navigate the interface over a non-skeuomorphism design then it is a better design choice. Sometimes skeuomorphism in a design can be considered unnecessary but this doesn’t mean it is a bad thing.
+
+Impress your audience with animated websites and web presentations.
+
+With Slides, we don’t make you start from an empty slate. All you have to do is to pick the elements you like best and combine them. Each slide has been carefully crafted to satisfy three key criteria: aesthetic, function and usability. That way you know every element works together seamlessly while enhancing the impact of your content.
+
+Create a Website
+
+It is ever going to go away?
+
+Some things don’t have to be replicas of physical items such as a calendar or notepad. But, some things just cannot be changed, so no – it will not go away. And the reason is what I just said: some things just won’t – and even shouldn’t be – change. The best example is a button. Unlike its texture and even its shape, a button’s functionality will always be the same. In that way it will always be a skeuomorphic representation of a button you see on your TV remote.
+
+Same goes for the keypad buttons on a phone’s dial interface – it will always be like a physical telephones keypad. More importantly, it shouldn’t be changed. Those types of interfaces are just so simple and so intuitive it would be hard to change them without causing confusion and uproar; and following Wells’ point you shouldn’t change them if they help the users as making things complicated just to get away from a design trend is an awful idea.
+
+Personally, it is like country music to me…
+
+I’ll admit, I am not a fan of skeuomorphism but let me explain to you my approach towards it. I don’t like skeuomorphism just like I do not like country music. However, sometimes there is a pretty great county song that I cannot get enough of. The same thing applies to skeuomorphism. Although I am not a fan of this design style it is sometimes exceptionally well executed like in the 15 examples below. Let’s take a look!
+
+Skeuomorphism done well!
+
+Like what you're reading? Subscribe to our top stories.
+
+arrow_forward
+I agree to storage of my email according to Privacy Policy.
+
+Paula Borowska
+
+Paula is a freelance web designer who documents her travels with photos and words. She works with small companies that want to re-brand their online businesses to create products that change lives of their customers all in the hopes of gaining more customers and retaining their current ones longer.
+
+Posts by Paula Borowska
+Share post
+
+Share
+
+Tweet
+
+Share
+
+Show 20 Comments
+
+Comments
+
+Leave a Comment Cancel Reply
+
+Your comment
+Your public name
+
+Your email
+
+Your website
+
+I agree to storage of my data according to Privacy Policy.
+
+Dan Feb 2, 12:17 pm
+
+Great article! Pretty useful to know @Paula
+(:
+
+Reply
+
+Marcus Burnette Feb 2, 5:12 pm
+
+I wrote about such a thing not too long ago. Skeumorphism, whether you like it or not, can never go away. It’s because of what we’ve named things: web “page” or browser “window”.
+
+http://www.mburnette.com/blog/skeumorphism-will-never-die
+
+Reply
+
+Carlos Feb 6, 2:45 am
+
+Excellent acotation Marcus, im fully agree… there’s a single, simple & sutil bond between digital representations and reality. Is very romantic to bring this objects to our displays but if (its) functionality is not enabled is a sadly fake as Paula argues, remember the old quid between art and design. Tx Dmodo.
+
+Reply
+
+Namanyay Goel Feb 2, 5:50 pm
+
+You forgot one thing: It’s only skeumorphism when there is an *essential* component of another object used, “an element of design or structure that serves little or no purpose in the artifact fashioned from the new material but was essential to the object made from the original material”.
+
+What you’re saying in most examples is fauxmorphism or realism.
+
+Reply
+
+Paula Borowska Feb 17, 6:13 am
+
+Skeuomorphism is faux because it is digital, it can never replicate an essential component.
+
+Reply
+
+Nabin Singh Feb 2, 6:00 pm
+
+Nice article Paula :). I like how you mention skeuomorphism as country music, some are really hard to resist although you don’t like their type.
+
+Reply
+
+Paula Borowska Feb 2, 10:23 pm
+
+Thank you! I personally do not like how most often skeuomorphism is executed but like I said, sometimes it is done very well.
+
+Reply
+
+Rakesh Patwari Feb 2, 7:17 pm
+
+Very nice article, I agree that skeuomorphism is not going anywhere more so as we as designers look for real physical things for inspiration both for form and interactions. Nice read.
+
+Reply
+
+Paula Borowska Feb 2, 10:24 pm
+
+The thing is, it can’t go away! We can change how we go about the design style of things but that’s about it.
+
+Reply
+
+dominic Feb 3, 1:50 am
+
+the two books which spring most pertinently to mind are ‘the design of everyday things” and “the invisible computer”, both by don norman. i find it amusing how few so-called “ux” practitioners/experts have even heard of don norman, let alone read any of his work.
+
+@marcus – web ‘pages’ are an extension of the whole desktop paradigm, as first brought to the public’s attention with the xerox star. none of these things are particularly new any more..
+
+Reply
+
+chuck Feb 5, 5:51 pm
+
+I’m sorry, but those rotating knobs are terrible, both with a mouse or touch. They are unusable and an example of bad skeuomorphism.
+
+Reply
+
+Hamranhansenhansen Feb 5, 7:21 pm
+
+The whole anti-skeuomorphism thing is just PC nerds longing for the old days when they were needed to run the computers for everyone else. It boils down to pure traditionalism, which PC nerds don’t notice in themselves because they think the PC is modern. It is not. It’s from 1977.
+
+Most workflows do not use a traditional PC at all. Notice traditional PC’s number about 1 billion and humans number 7 billion. An audio engineer wants his or her computer to morph into an audio mixer or EQ, not show him a window full of code. Photographer’s computers should morph between camera and touch editing — that is how photography work gets done. In the past, the camera and editor were separate but not today and not tomorrow. Lawyers are not PC people, they are paper people, they use giant stacks of legal briefs carted to court on a dolly. That is why lawyers all have iPads now — it’s a computerized stack of paper. The reading of legal briefs (happens thousands of times) is more important than they typing of legal briefs (happens once.) Lawyers really don’t care what typewriter they use, but pack 100 kilos of paper into an iPad and they will get out their wallet and buy iPads. The iPads should continue to show them the documents they work with, again not a window full of code or some abstraction that a programmer thought up.
+
+There was a time when humanity recognized that there are going to be a lot of computers going forward. Computer nerds thought that would mean everyone would have to learn FORTRAN and watch Monty Python, but the truth is, the computers are going to adapt to the users by becoming the devices they already know how to use. There are electric guitars that plug directly into iPad and the two together are a “guitar computer.” Guitarists being who they are, the iPad shows them amps and flangers and tuners — not windows of code.
+
+So “skeuomorphism” is just a symptom of 1 billion computers changing in order to adapt to 7 billion humans. The computers have to become the devices we use daily.
+
+When electric power was deployed, everything electric was prefaced by “electro” but once everything was electric we stopped soon that. Same with “cyber” and the same with “computer.” When everything is computerized, you have computerized camera and computerized phone but you just call them “camera” and “phone.” So all of the interfaces we use are going to be computerized, but when we computerize an audio mixer, it is still an audio mixer afterwards, it still uses an audio mixer interface, not the interface from some 30 year old PC.
+
+Reply
+
+Earl Varona Feb 5, 7:29 pm
+
+When it comes to ‘design’ there are really no set rules because the rules change with the convention. The bottom line is it needs to be usable and provides great experience to the user (given that the design’s purpose is reached). But great article and I love those super clean interfaces. :)
+
+Reply
+
+SockRolid Feb 6, 12:05 am
+
+Perfect. Bookmarked for future reference.
+
+Reply
+
+Alok Desai Feb 7, 10:57 am
+
+Personally I am a fan of skeuomorphism, although i’ve seen some designs which look exceptionally well in flat more, for ex, the windows phone tiles.
+
+Yes sometimes skeuomorphism can become an overkill and heavy to eyes, but if executed keeping a balance in mind, it can be really pleasing to eye and intuitive.
+
+Reply
+
+Thuto Paul Feb 9, 8:59 pm
+
+Nice article, i personally i think it’s a matter of preference.. in windows 8 (metro design principles) they say it’s not necessary to fake reality (It slows development, skeuomorphic designs can be too heavy to be loaded & it can be never be exactly the same) we must just admit and appreciate digital technology as 1s and 0s.
+
+But then again it’s artistic, it has no rules. I can only imagine for Windows 8 and windows phone that eventually developers will get tired of designing & developing for tiles
+
+Reply
+
+Paula Borowska Feb 17, 6:10 am
+
+I totally agree with you and some of the things that others said as well. I tired to explain what skeuomorphism is rather then knock it down. Like I said I don’t love it myself as often time it is overdone and looks like shit. I think that people are not focusing in this issue in the right matter; personally i feel it should be about the quality of the design not the medium it is done in. It’s like scrutinizing a painting because it was made with paints.
+
+Reply
+
+Windo Mar 12, 7:03 am
+
+Ahh this make it clear to me, as so many people influenced by apple-ism design, thanks!
+
+Reply
+
+Charles Oct 13, 7:41 am
+
+Love the article and I don’t disagree with you, but have a question. What about physical skeuomorphs, like fake wood on station wagons or fake stitching on fake leather in cars? According to Wikipedia, the concept of skeuomorphism has been around since the 19th century. It seems that physical skeuomorphs are exactly what you’re saying digital skeuomorphism is not. Or maybe you’re talking about good skeuomorphism vs. bad? Maybe a digital skeuomorph that doesn’t provide users with real affordances via the metaphor are needless, whereas those that do enhance usability.
+
+Reply
+
+Charles Oct 13, 11:33 pm
+
+Skimmed through the reference on Wikipedia. The term ‘skeuomorph’ was coined by March in 1890: ‘But the forms of ornament demonstrably due to structure require a name. If those taken from animals are called zoomorphs, and those from plants phyllomorphs, it will be convenient to call those derived from structure, skeuomorphs σκενή, tackle, tools, vessels, equipment, dress’ (p. 166). (March, H. C. (1890). The meaning of ornament; or its archaeology and its psychology. Transactions of the Lancashire and Chesire Antiquarian Society, Volume 7, pp. 160-192.) According to March, a skeuomorph is an ornament and is therefore by definition functionless. (Good) digital skeuomorphs go beyond this by applying metaphor to extend physical affordances to digital UIs.
+
+Reply
+
+Related Articles
+
+Design
+
+Gleb Kuznetsov and Nick Babich
+
+Mood Boards for Product Designers
+
+Coding • Design
+
+Diana Valeanu
+
+The Short History of Website Building [Infographic]
+
+Design
+
+Editorial
+
+Postcards – Responsive Email Templates Builder [Full Overview Video]
+
+Design
+
+Gleb Kuznetsov and Nick Babich
+
+Motion Design in Digital Experiences of the Future
+
+Design
+
+Paula Borowska
+
+What is a Design Audit and Why You Should Conduct One?
+
+Design
+
+Paula Borowska
+
+How to be a Great Design Mentor and Where to Find one for Yourself
+
+Design
+
+Carrie Cousins
+
+Everything You Need to Know About Dark Patterns
+
+Design
+
+Paula Borowska
+
+What is a Design System, Why It is Important and What to Include
+
+Animated Presentations Made Easy
+
+Learn more All Products
+
+Copyright © 2010-2018.
+All Rights Reserved.
+
+Articles
+
+News
+
+Coding
+
+Design
+
+Inspiration
+
+Freebies
+
+Tutorials
+
+WordPress
+
+Products
+
+Postcards
+
+Slides Framework
+
+Startup Framework
+
+Qards WordPress
+
+Job Board
+
+Affiliate Program
+
+Banners
+
+Market
+
+Submit Product
+
+Free Goods
+
+Mockups
+
+UI Kits
+
+Icons
+
+Fonts
+
+Tools
+
+Company
+
+About Us
+
+Contact Us
+
+Newsletter
+
+Privacy Policy
+
+Terms and Conditions
+
+Cookies Policy
+
+Merch
+
+Follow Us
+
+Twitter
+
+Facebook
+
+Instagram
+
+Google+
+
+Youtube
+
+Medium
+
+Dribbble
+
+Searchkeyboard_return
+
+We use cookies to ensure that we give you the best experience on our website.
+Read our Privacy Statement.
+
+I disagree
+
+I agree
+
+Twitter
+
+Facebook
+
+Google +
+
+Youtube
+
+Dribbble
+
+Medium
+
+Instagram
+
+rss_feed RSS
+
+550K Followers
+
+shopping_cart Cart
+
+Your cart is empty 🙀
+
+Go to Shop Go to Market
+
+Login
+
+Sign Up
+
+Become an Affiliate
+
+Lost Password?
+
+Shop
+
+Market
+
+Jobs
+
+Follow Us
+
+Twitter
+
+Facebook
+
+Google +
+
+Youtube
+
+Dribbble
+
+Medium
+
+Instagram
+
+rss_feed RSS
+
+Design
+
+Website Design
+
+UX Design
+
+App Design
+
+Responsive Design
+
+Inspiration
+
+Websites Examples
+
+Apps Examples
+
+Icons Examples
+
+Interviews
+
+Coding
+
+Tutorials
+
+Adobe Illustrator
+
+Adobe Photoshop
+
+Bootstrap
+
+CSS3
+
+HTML
+
+jQuery
+
+Sketch App
+
+SVG
+
+Freebies
+
+Icons
+
+UI Kits
+
+Resources
+
+Fonts
+
+Graphics
+
+Icons
+
+Scripts
+
+Templates
+
+Tools
+
+WordPress
+
+Themes
+
+Plugins
+
+Tutorials
+
+News
+
