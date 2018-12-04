@@ -1,0 +1,1461 @@
+
+<!DOCTYPE html>
+<html lang="en-US" class="chrome chrome64 html_boxed ">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Links Naji" />
+<meta name="keywords" content="bigrams,classification,corpus,predictiion,stopwords,text classification,unigrams,thinknook,business intelligence,sql server,bi" />
+<meta name="blogcatalog" content="9BC10615890" />
+<meta name="robots" content="index, follow" />
+<link rel="icon" href="http://thinknook.com/wp-content/uploads/2012/03/me-southparked-transperant.png" type="image/png">
+
+<!-- page title, displayed in your browser bar -->
+<title>  10 Tips to Improve your Text Classification Algorithm Accuracy and Performance | Thinknook</title>
+
+
+<!-- add feeds, pingback and stuff-->
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="alternate" type="application/rss+xml" title="Thinknook RSS2 Feed" href="http://feeds.feedburner.com/Thinknook" />
+<link rel="pingback" href="http://thinknook.com/xmlrpc.php" />
+<link rel="author" href="https://plus.google.com/u/0/100254608780828426453/posts"/>
+<link rel="publisher" href="https://plus.google.com/100254608780828426453"/>
+
+<!-- add css stylesheets -->	
+<link rel="stylesheet" type="text/css" media="all" href="http://thinknook.com/wp-content/themes/sentence/style.css" />
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/grid.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/base.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/layout.css?v=1" type="text/css" media="screen"/>
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/slideshow.css?v=1" type="text/css" media="screen"/>
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/shortcodes.css" type="text/css" media="screen"/>
+
+
+
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/js/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen"/>
+<!--<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/js/projekktor/theme/style.css" type="text/css" media="screen"/>-->
+
+
+<!-- mobile setting -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+<!-- plugin and theme output with wp_head() -->
+
+	<link rel="stylesheet" href="http://thinknook.com/wp-content/plugins/slick-social-share-buttons/css/dcssb.css" type="text/css" media="screen"  />
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-18395073-1']);
+				            _gaq.push(['_setCustomVar',2,'post_type','post',3],['_setCustomVar',3,'tags','bigrams classification corpus predictiion stopwords text-cla',3],['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel="alternate" type="application/rss+xml" title="Thinknook &raquo; 10 Tips to Improve your Text Classification Algorithm Accuracy and Performance Comments Feed" href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/feed/" />
+<link rel='stylesheet' id='five-star-rating-CSS-css'  href='http://thinknook.com/wp-content/plugins/five-star-rating/assets/css/five-star-rating.css?ver=4.1.24' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_likes-css'  href='http://thinknook.com/wp-content/plugins/jetpack/modules/likes/style.css?ver=2.3.7' type='text/css' media='all' />
+<link rel='stylesheet' id='contact-form-7-css'  href='http://thinknook.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='vye_dynamic-css'  href='http://thinknook.com/wp-content/plugins/youtube-embed/css/main.min.css?ver=4.1.24' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack-widgets-css'  href='http://thinknook.com/wp-content/plugins/jetpack/modules/widgets/widgets.css?ver=20121003' type='text/css' media='all' />
+<link rel='stylesheet' id='sharedaddy-css'  href='http://thinknook.com/wp-content/plugins/jetpack/modules/sharedaddy/sharing.css?ver=2.3.7' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://thinknook.com/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<script type='text/javascript' src='http://thinknook.com/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/five-star-rating/assets/js/five-star-rating.min.js?ver=0.1'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/jetpack/_inc/postmessage.js?ver=2.3.7'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/jetpack/_inc/jquery.inview.js?ver=2.3.7'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/jetpack/_inc/jquery.jetpack-resize.js?ver=2.3.7'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/themes/sentence/js/avia.js?ver=2'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/slick-social-share-buttons/js/ga.social_tracking.js?ver=4.1.24'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/slick-social-share-buttons/js/jquery.social.slick.1.0.js?ver=4.1.24'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://thinknook.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://thinknook.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Text Classification Threshold Performance Graph' href='http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/' />
+<link rel='next' title='Running Highcharts within SSRS (or any JS Graph Library)' href='http://thinknook.com/running-highcharts-within-ssrs-or-any-js-graph-library-2013-01-22/' />
+<meta name="generator" content="WordPress 4.1.24" />
+<link rel='canonical' href='http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/' />
+<link rel='shortlink' href='http://wp.me/p2waZP-f4' />
+
+<!-- WP-SWFObject 2.4 by unijimpe -->
+<script src="http://thinknook.com/wp-content/plugins/wp-swfobject/2.0/swfobject.js" type="text/javascript"></script>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="10 Tips to Improve your Text Classification Algorithm Accuracy and Performance" />
+<meta property="og:url" content="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" />
+<meta property="og:description" content="In this article I discuss some methods you could adopt to improve the accuracy of your text classifier, I&#039;ve taken a generalized approach so the recommendations here should really apply for most te..." />
+<meta property="og:site_name" content="Thinknook" />
+<meta property="og:image" content="http://thinknook.com/wp-content/uploads/2013/01/network.gif" />
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+		<link rel="stylesheet" id="custom-css-css" type="text/css" href="http://thinknook.com/?custom-css=1&#038;csblog=1&#038;cscache=6&#038;csrev=8" />
+		
+<!-- custom styles set at your backend-->
+<style type='text/css' id='dynamic-styles'>
+#top .site-fontcolor, html, body, .blog-meta .post-meta-infos a, .blog-meta .post-meta-infos a span, .entry-content p a, .entry-content blockquote a, .entry-content>ul li a, .entry-content>ol li a{
+color:#29383d;
+}
+
+#top .meta-color, div .meta-color a, .main_menu ul li a, .blog-inner-meta, .blog-inner-meta a, #top .widget ul li a, .minitext, .form-allowed-tags, div .pagination, #comments span, .minitext, .commentmetadata a, .blog-tags, .blog-tags a, .title_container #s, .wp-caption, .first-quote:before, .first-quote:after, blockquote small, blockquote cite, .hero-text, .js_active .tab, .news-time, .contentSlideControlls a, #js_sort_items a, .text-sep, .template-search a.post-entry .news-excerpt, .borderlist>li, .post_nav, .post_nav a, .quote-content, #top .widget_nav_menu li, .tweet-time, #top .avia_parnter_empty, .avia_socialcount a span, td, #top th.nobg, caption, .page-title, #top .first-title{
+color:#5F6A6E;
+}
+
+#top .heading-color, strong, #top .main-color, .main_menu a,  #top .first-quote p, #top .main_menu .menu li li a:hover, h1, h2, h3, h4, h5, h6, .js_active .tab.active_tab, .first-quote, div .callout{
+color:#151C1F;
+}
+
+#top .search-result-counter{
+color:#f8f8f8;
+}
+
+.side-container, .post_nav{
+background-color:#151C1F;
+}
+
+#top .site-background, html, body, .comment-reply-link, .main_menu .menu ul li, .title_container #searchsubmit:hover, .isotope .entry-content, .image_overlay_effect, .tagcloud a, .news-thumb, .tweet-thumb a, fieldset, pre, .container_wrap .social_bookmarks li, #info_text_header.minimized{
+background-color:#1e2324;
+}
+
+tr:nth-child(even) td, tr:nth-child(even) th{
+background-color:#1e2324;
+}
+
+#top .on-primary-color, #top .on-primary-color a, .dropcap2, div .button, input[type="submit"], #submit, .info_text_header, .info_text_header a, .info_text_header a:hover, .contentSlideControlls a.activeItem, #top .related_posts .contentSlideControlls a.activeItem, .contentSlideControlls a:hover, #top .related_posts .contentSlideControlls a:hover, #top th, #top th a,  a.button:hover, .callout a, #top .big_button:hover{
+color:#1e2324;
+}
+
+#top .aside-background, div .gravatar img, #top .main_menu .menu li ul a:hover, #top .related_posts_default_image, div .numeric_controls a, .title_container #searchsubmit, .title_container #s, .tab_content.active_tab_content, .js_active #top  .active_tab, .toggler.activeTitle, .contentSlideControlls a, #top .social_bookmarks li{
+background-color:#f8f8f8;
+}
+
+tr:nth-child(odd) td, tr:nth-child(odd) th{
+background-color:#f8f8f8;
+}
+
+.boxed #overflow_bg, .boxed #primary, #top #header, #top.boxed .site-background, .boxed .comment-reply-link, .boxed .main_menu .menu ul li, .boxed .title_container #searchsubmit:hover, .boxed .isotope .entry-content, .boxed .image_overlay_effect, .boxed .tagcloud a, .boxed .news-thumb, .boxed fieldset, .boxed pre, .boxed .social_bookmarks li, .boxed #info_text_header.minimized, .portfolio-sort-container, .post_nav_sep, #top.boxed .news-thumb ,#top.boxed .tweet-thumb a{
+background-color:#ffffff;
+}
+
+.boxed tr:nth-child(even) td, .boxed tr:nth-child(even) th{
+background-color:#ffffff;
+}
+
+#top.boxed  .on-primary-color,  #top.boxed .on-primary-color a, .boxed .dropcap2, .boxed div .button,.boxed  input[type="submit"],.boxed  #submit, .boxed .info_text_header,.boxed  .info_text_header a,.boxed  .info_text_header a:hover, .boxed .contentSlideControlls a.activeItem, #top.boxed  .related_posts .contentSlideControlls a.activeItem, .boxed .contentSlideControlls a:hover, #top.boxed  .related_posts .contentSlideControlls a:hover, .boxed th, .boxed .tweet-thumb a, #top.boxed th, #top.boxed th a, .boxed a.button:hover, .boxed .callout a, .side-container, .main_menu ul:first-child > li.current-menu-item > a, .main_menu ul:first-child > li.current_page_item > a, .main_menu a:hover, .post_nav span, .post_nav a, .post_nav a:hover, #top .entry-content p a:hover, #top .entry-content blockquote a:hover, #top .entry-content>ul li a:hover, #top .entry-content>ol li a:hover{
+color:#ffffff;
+}
+
+#top .primary-background, .dropcap2, div .button, input[type="submit"], #submit, .info_text_header, #info_text_header .infotext, .numeric_controls a:hover, .numeric_controls .active_item, .contentSlideControlls a.activeItem, #top th, #top .related_posts .contentSlideControlls a.activeItem, #top .arrow_controls a, #main .content #searchsubmit:hover, .callout a, #info_text_header.minimized:hover{
+background-color:#2e9dbf;
+}
+
+#top .primary-color, a, #cancel-comment-reply-link, .blog-tags a:hover, .relThumb a:hover strong, .flex_column h1, .flex_column h2, .flex_column h3, .flex_column h4, .flex_column h5, .flex_column h6, #top #wrap_all .tweet-text a, #top #js_sort_items a.active_sort, .callout a:hover{
+color:#2e9dbf;
+}
+
+#top .primary-border, div .main_menu ul:first-child > li.current-menu-item > a, div .main_menu ul:first-child > li.current_page_item > a, div .button, input[type="submit"], #submit, #top .main_menu .menu ul, .info_text_header, .entry-content a, blockquote, blockquote blockquote blockquote{
+border-color:#2e9dbf;
+}
+
+h1, h2, h3, h4, h5, h6, .hero-text, .first-quote, legend, #top .slideshow_caption h1, .main_menu ul:first-child > li > a strong{
+font-family:Signika Negative;
+}
+
+
+
+#top .extralight-border, div #header .container, div .pagination, #top .pagination span, div .pagination a, div .gravatar img, #top div .commentlist ul, div .children .children .says, div .commentlist>.comment, div .input-text, input[type="text"], input[type="password"], input[type="email"], textarea, select, #top .main_menu .menu li, pre, code, div .numeric_controls a, div .pullquote_boxed, div .news-thumb, div .tweet-thumb a, #top .borderlist>li, .post_nav, #top .wp-caption, .slideshow,  .widget a, .widget li, .widget span, .widget div, table, td, tr, th, #footer .container, #socket .container, #top fieldset, #top .social_bookmarks, #top .social_bookmarks li, #info_text_header, .ajax-control a, .inner_column, #top .blog-meta, .inner-entry, .inner_slide, #top .main_menu ul:first-child{
+border-color:#e1e1e1;
+}
+
+#top .highlight-background, div .button:hover, input[type="submit"]:hover, #submit:hover, .contentSlideControlls a:hover, #top .related_posts .contentSlideControlls a:hover, #top .caption-slideshow-button:hover, #top .arrow_controls a:hover, #main .content #searchsubmit, #top .entry-content p a:hover, #top .entry-content blockquote a:hover, #top .entry-content>ul li a:hover, #top .entry-content>ol li a:hover{
+background-color:#089cc9;
+}
+
+a:hover, #top .widget ul li a:hover, #top .widget ul li .news-link:hover strong, #top #wrap_all .tweet-text a:hover, #js_sort_items a:hover, .ajax_slide a:hover, .ajax-control a:hover, .like-count:hover a{
+color:#089cc9;
+}
+
+#top .caption-slideshow-button:hover, blockquote blockquote, blockquote blockquote blockquote blockquote{
+border-color:#089cc9;
+}
+
+.sidebar, #sidebar_bg, #top .sidebar .main_menu .menu li ul a, .sidebar .main_menu .menu ul, #top .sidebar th, .sort_width_container.large_element #js_sort_items{
+background-color:#222829;
+}
+
+.sidebar tr:nth-child(even) td, .sidebar tr:nth-child(even) th{
+background-color:#222829;
+}
+
+.sidebar .main_menu ul:first-child > li.current-menu-item > a, .sidebar .main_menu ul:first-child > li.current_page_item > a, .sidebar .main_menu li:hover > a,  .sidebar .avia_socialcount, .sidebar .avia_parnter_empty, .sidebar .tagcloud a, .sidebar .tab_content.active_tab_content, .js_active #top .sidebar .active_tab, .sidebar .toggler.activeTitle, #top .portfolio-title, .inner-entry{
+background-color:#33393a;
+}
+
+.sidebar .main_menu ul:first-child > li> a, #top .sidebar .main_menu ul:first-child > li > a strong, #top .sidebar h1, #top .sidebar h2, #top .sidebar h3, #top .sidebar h4, #top .sidebar h5, #top .sidebar h6, #top .sidebar, #top .sidebar strong, #top #secondary .sidebar .widget a:hover, #top .sidebar th, #top .sidebar .widget ul li .news-link:hover strong, #top #wrap_all .sidebar .tweet-text a:hover, #top .sidebar .main_menu .menu li ul a:hover, #top .portfolio-title, #top .portfolio-title a:hover, #top .sort_width_container.large_element #js_sort_items a.active_sort{
+color:#ffffff;
+}
+
+.sidebar .main_menu ul:first-child > li > a span, #top .sidebar span,  #top .sidebar .tweet-time, #top #secondary .sidebar .widget a,  #top #secondary .sidebar caption, #top .sidebar td, #top .sidebar .widget ul li .news-link:hover strong, #top .sidebar .main_menu .menu li ul a, #top .sort_width_container.large_element a{
+color:#919494;
+}
+
+#top .sidebar img{
+border-color:#919494;
+}
+
+#top #secondary .sidebar div, #top #secondary .sidebar ul, #top #secondary  .sidebar li, #top #secondary .sidebar a, #top #secondary .sidebar span, #top .sidebar .widget .seperator, .sidebar td, .sidebar th{
+border-color:#3E4344;
+}
+
+#top .sidebar img, .sidebar tr:nth-child(odd) td, .sidebar tr:nth-child(odd) th {
+background-color:#3E4344;
+}
+
+#footer{
+background-color:#33393a;
+}
+
+#top #wrap_all #footer a, #footer h1, #footer h2, #footer h3, #footer h4, #footer h5, #footer h6, #footer strong, #footer .tabcontainer span, #top #footer table, #top #footer table td, #top #footer table caption{
+color:#ffffff;
+}
+
+#footer, #footer div, #footer p, #footer span, #top #wrap_all #footer a:hover strong{
+color:#CCCECE;
+}
+
+#footer a, #footer div, #footer span, #footer li, #footer ul{
+border-color:#666B6C;
+}
+
+#footer table, #footer td, #footer tr, #footer th #footer img{
+border-color:#CCCECE;
+}
+
+#top #footer .tagcloud a, #footer .tab_content.active_tab_content, .js_active #top #footer .active_tab, #footer .news-thumb, #footer .tweet-thumb a{
+background-color:#666B6C;
+}
+
+#footer tr:nth-child(odd) td, #footer tr:nth-child(odd) th{
+background-color:#666B6C;
+}
+
+#socket, #socket a, html.html_stretched{
+background-color:#222829;
+}
+
+#socket, #socket a{
+color:#ffffff;
+}
+
+::-moz-selection{
+background-color:#2e9dbf;
+}
+
+::-webkit-selection{
+background-color:#2e9dbf;
+}
+
+::selection{
+background-color:#2e9dbf;
+}
+
+::-moz-selection{
+color:#ffffff;
+}
+
+::-webkit-selection{
+color:#ffffff;
+}
+
+::selection{
+color:#ffffff;
+}
+
+html.html_boxed, body{
+background-image:url(http://thinknook.com/wp-content/themes/sentence/images/background-images/ios-linen-light.png);
+}
+
+
+html, body{
+background-position:top left;
+}
+
+html, body{
+background-repeat:repeat;
+}
+
+html, body{
+background-attachment:fixed;
+}
+
+</style>
+
+<!-- end custom styles-->
+
+
+<!-- google webfont font replacement -->
+<link id="google_webfont_1" rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Signika+Negative" />
+
+<link rel="stylesheet" href="http://thinknook.com/wp-content/themes/sentence/css/custom.css" type="text/css" media="screen"/>
+
+</head>
+
+
+<body id="top" class="single single-post postid-934 single-format-standard right_sidebar boxed helvetica-neue-websave">
+
+	<div id='wrap_all'>	
+				  
+			<div class='container_wrap' >
+						
+						<div class='container'>
+						
+							<div id='overflow_bg'></div>
+							<div id='sidebar_bg'></div>
+							
+							<div id='header' class='seven units alpha offset-by-one'>
+						
+							<h1 class='logo'><a href='http://thinknook.com/'><img src=http://thinknook.com/wp-content/uploads/2012/03/thinknook-new-logo3.png alt='' /></a></h1><ul class="social_bookmarks"><li class='twitter'><a href='http://twitter.com/thinknook'>Follow us on Twitter</a></li><li class='facebook'><a href='http://www.facebook.com/profile.php?id=61013518'>Join our Facebook Group</a></li><li class='gplus'><a href='https://plus.google.com/u/0/100254608780828426453'>Join me on Google Plus</a></li><li class='linkedin'><a href='http://uk.linkedin.com/in/ibrahimnaji'>Add me on Linkedin</a></li>	<li class="rss"><a href="http://feeds.feedburner.com/Thinknook">RSS</a></li></ul>							</div> <!-- end header -->
+							
+							<div id='primary' class='eight alpha units'>
+						
+							
+						
+			
+
+			
+		<!-- ####### MAIN CONTAINER ####### -->
+		<div id='main'>
+		
+			<div class='template-blog template-single-blog'>
+				
+				<div class='content units eight alpha'>
+				
+				
+
+		<div class='post-entry post-entry-type-standard post-entry-934'>
+		
+			<span class='entry-border-overflow extralight-border'></span>
+			
+			
+			<h1 class='post-title offset-by-one '>
+					<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" rel="bookmark" title="Permanent Link: 10 Tips to Improve your Text Classification Algorithm Accuracy and Performance">10 Tips to Improve your Text Classification Algorithm Accuracy and Performance					<span class='post-format-icon minor-meta'></span>
+					</a>
+			</h1>
+			
+			<!--meta info-->
+	        <div class="one unit alpha blog-meta">
+	        	
+	        	<div class='side-container side-container-date'>
+	        		
+	        		<div class='side-container-inner'>
+	        		
+	        			<span class='date-day'>21</span>
+   						<span class='date-month'>Jan</span>
+   						
+	        		</div>
+	        		
+	        	</div>
+				
+			</div><!--end meta info-->	
+			
+
+			<div class="seven units entry-content">	
+			
+			 <span class='date-container minor-meta meta-color'>January 21, 2013</span>	
+				<p><a href="http://thinknook.com/wp-content/uploads/2013/01/network.gif" ><img class="alignright size-medium wp-image-964" title="network structure from http://www.aip.org/pacs/" src="http://thinknook.com/wp-content/uploads/2013/01/network-300x268.gif" alt="" width="300" height="268" /></a></p>
+<p>In this article I discuss some methods you could adopt to improve the accuracy of your text classifier, I&#8217;ve taken a generalized approach so the recommendations here should really apply for most text classification problem you are dealing with, be it Sentiment Analysis, Topic Classification or any text based classifier. This is by no means a comprehensive list, but it should provide a nice introduction into the subject of text classification algorithm optimisation.</p>
+<p><span id="more-934"></span></p>
+<p>Without further ado, here are 10 tips you could try to help improve the result of your text classification algorithm.</p>
+<h3></h3>
+<h3>Eliminate Low Quality Features (Words)</h3>
+<p>Low quality features in your training data-set is more likely to contribute negatively to your classification results (particularly since they might not be classified correctly), eliminating these low quality features can often lead to better classification results. In my experience this generally leads to a very healthy increase in over-all accuracy.</p>
+<p>It is sometimes difficult to select a cut-off point for the most important features, generally it is recommended to design a research bench-work application that recursively tries different cut-off points and selects the one with the best accuracy (against a test data-set), for example for a Topic classifier I found that considering only the top <strong>15,000</strong> most frequent words (in my training set) leads to the best average performance against my multiple test data-sets.</p>
+<p>A nice bi-product of eliminating low quality features is that your algorithm can be trained a lot faster, since the probability space is much smaller, which opens up the possibility of tweaking the algorithm more readily.</p>
+<p>There is an excellent article by Jacob on<a title="remove low quality features in NLTK python" href="http://streamhacker.com/2010/06/16/text-classification-sentiment-analysis-eliminate-low-information-features/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://streamhacker.com/2010/06/16/text-classification-sentiment-analysis-eliminate-low-information-features/']);" target="_blank"> Eliminating Low Information Features in NLTK</a>, which can also be generalized to many classification algorithms.</p>
+<h3>Recursively Grow your Stopword List</h3>
+<p>I usually have at least 5 different stopwords list per classification project, each of which grows as the algorithm is re-optimised and tweaked throughout the life-time of the project, in order for the classifier to meet the target accuracy figure, some of the stopword lists include:</p>
+<ul>
+<li><strong>Frequently used English (or any language) words</strong>: this will include about 500 words that doesn&#8217;t really contribute to context, such as: &#8220;<em>and</em>, <em>the</em>, <em>for</em>, <em>if</em>, <em>I</em>&#8221; etc.</li>
+<li><strong>Countries</strong></li>
+<li><strong>Cities</strong></li>
+<li><strong>Names</strong></li>
+<li><strong>Adjectives</strong></li>
+<li><strong>Temporal words</strong>: this will include about 100 words such as: &#8220;<em>Tuesday</em>, <em>tomorrow</em>, <em>January</em>&#8220;, etc.</li>
+</ul>
+<p>And many others, obviously not all classification project will use all stopwords list, you will need to match the right stopwords with the right classification problem. You could grow your stopwords list by iteratively analyzing the top features in your algorithm for words that shouldn&#8217;t be in there&#8230; and of course use logic!</p>
+<h3>Look Beyond Unigram into Bigrams and Trigrams</h3>
+<p>In text classification, Unigrams are single words, Bigrams are two related words (appear frequently next to each other in text), and Trigram is just the next extension of that concept.</p>
+<p>I found that often <a title="collocations" href="http://streamhacker.com/2010/05/24/text-classification-sentiment-analysis-stopwords-collocations/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://streamhacker.com/2010/05/24/text-classification-sentiment-analysis-stopwords-collocations/']);" target="_blank">considering Bigrams in a classification</a> algorithm tends to really boost performance, since the increased long-tail specificity of the word means that the classifier can easily determine which class has a higher probability, leading to better classifications. In my experience Trigrams do not have offer the same boost as Bigrams, but they are worth considering and could be essential for certain types of classifiers. You could also go beyond Trigrams if you felt that the classification problem requires it.</p>
+<p>The important thing to remember here is to apply the same logic for eliminating low quality bigrams and trigrams as you would with unigrams.</p>
+<h3>Diversify your Training Corpus</h3>
+<p>This point cannot be stressed enough, particularly if you wish to create a production-ready text classifier that behaves as expected in the lab as it would in the real world.</p>
+<p>Diversity in the training corpus helps dilute word features that are specific to one particular corpus, allowing the classification algorithm to only select features that have a root contribution towards the text classification problem at hand. Obviously you need to select the corpus intelligently and do not just add more data for the sake of adding more data, it is all about the context of the classification problem.</p>
+<p>For example if you were building a sentiment classification algorithm that will be used to classify social media sentiment, you need to make sure that your training set includes a variety of sources and not just training data from Twitter, ignoring communication from other social hubs like Facebook (a space in which you intend to run your algorithm). This will lead to features specific to Twitter data to appear in your classification probability space, leading to poor results when applied to other input sources.</p>
+<h3>Tweak Precision and Recall</h3>
+<p>I have written an article that discusses <a title="Testing &amp; Diagnosing a Text Classification Algorithm" href="http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/" >precision and recall in the context of the Confusion Matrix</a>. The idea here is to tweak the system so when it fails, it does so in a manner that is more tolerable. This can be done by shifting <em>False Positive (or Precision)</em> under-performance to <em>False Negative (or recall) </em>under-performance, and viseversa according to you what is best for your system.</p>
+<h3>Eliminate Low Quality Predictions (Learn to Say &#8220;I Dont Know&#8221;)</h3>
+<p>Sometimes the algorithm might not be sure about which class the input text belongs to, this could be because</p>
+<ul>
+<li>The text does not contain features that the algorithm has been trained on. For example words that do not exist enough in the training set.</li>
+<li>The input text contains words from a different number of classes, resulting in evenly distributing the probability across those classes. For example a sentiment classifier trying to classify the input &#8220;I am happy and angry&#8221;</li>
+</ul>
+<p>In these scenarios the classifier usually returns the item with the highest probability even though it is a very low quality guess.</p>
+<p>If your model can tolerate a reduction in the coverage of what it can classify, you could greatly improve the accuracy of what is being classified by returning &#8220;Class Unknown&#8221;  when the classifier is too uncertain (highest probability is lower than threshold), this can be done by <a title="Text Classification Threshold Performance Graph" href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/"  target="_blank">analyzing probability filter threshold against accuracy and coverage</a>.</p>
+<h3>Canonicalize Words through Lemma Reduction</h3>
+<p>The same word can have different formats depending on its grammatical usage (verb, adjective, noun, etc.), the idea of canonicalization is to reduce words to their lowest  format (lemma), assuming that the grammatical placement of words is an irrelevant feature to your classifier. For example the words:</p>
+<ul>
+<li>Running</li>
+<li>Runner</li>
+<li>Runs</li>
+<li>Ran</li>
+<li>Runners</li>
+</ul>
+<div>All can be reduced down to the word &#8220;<strong><em>Run</em></strong>&#8221; as far as the classifier is concerned.</div>
+<p>This approach in reducing the word space can sometimes be extremely powerful <strong>when used in the right context</strong>, since it does not only reduce the probability space of the algorithm generated by the training set (giving the same word 1 score is better and more accurate than 10 different scores), but also helps in reducing the chances of encountering new words that the algorithm has not been trained on (when the algorithm is deployed), since all text will be reduced to its lowest canonical form, leading to improved <em>practical accuracy</em> of the algorithm.</p>
+<p>This could also extend to <strong>normalizing exaggerations in speech</strong>, which is a very common problem when classifying social data, this will include reducing words like &#8220;<em>haaaaapppppyyyyy</em>&#8221; to &#8220;<em>happy</em>&#8220;, or even better, reducing all exaggerated lengths of the word &#8220;<em>happy</em>&#8221; to a canonical format different from the non-exaggerated form, for example reducing both &#8220;<em>haaaaapppppyyyyy</em>&#8221; and &#8220;<em>haaaaaaaaaaaaaapppppyyy</em>&#8221;  to &#8220;<strong><em>haapppyy</em></strong>&#8220;, this will differentiate it from the non-exaggerated form when scoring it for classification, but still reduces the over-all probability space by normalizing the word. A good example of where this might be applicable is when classifying <em>conversational intensity</em>.</p>
+<h3>Eliminate Numerals, Punctuation and Corpus Specific Text</h3>
+<p>If any character in training &amp; testing corpus, and input text, contribute nothing towards the classification then they <strong>should be taken out</strong>, as all they will do is clutter your probability space with features that look like this:</p>
+<ul>
+<li>Running,</li>
+<li>Running.</li>
+<li>Running!!!</li>
+<li>Running!?!?</li>
+<li>#Running</li>
+<li>&#8220;Running&#8221;</li>
+</ul>
+<p>Diluting the actual real probability that should be associated with the word &#8220;<em>Running</em>&#8220;, while occupying space in your high quality features that could be put to better use.</p>
+<p>Sometimes you might need to consider the nature of the training data-set itself, and if there is any peculiarities that you need to take out, for example if you are dealing with a data-set from Twitter, you might want to eliminate (using a RegEx perhaps) any usernames (of the format <em><a title="my twitter account" href="https://twitter.com/thinknook" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://twitter.com/thinknook']);" target="_blank">@thinknook</a></em>) because they do not contribute towards the classification problem you have at hand.</p>
+<p>I toyed with the idea of breaking text into its grammatical structure and removing a particular grammatical class (say <a title="Grammatical interjection" href="http://en.wikipedia.org/wiki/Interjection" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://en.wikipedia.org/wiki/Interjection']);" target="_blank">Interjection</a>) completely, but over-all the results weren&#8217;t very successful for my particular situation, and a comprehensive stopwords list that included all encountered Interjection words worked better.</p>
+<h3>Try a Different Classification Algorithm</h3>
+<p>Classification algorithms come in many different formats, some are intended as a speedier way to execute the same algorithms, others might offer a more consistent performance or higher over-all accuracy for the specific problem you have at hand. For example if you are currently running your classifier on a <a title="Naive Bayes classifier" href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://en.wikipedia.org/wiki/Naive_Bayes_classifier']);" target="_blank">Naive Bayes algorithm</a>, then it might be worth considering a <a title="maximum entropy" href="http://en.wikipedia.org/wiki/Principle_of_maximum_entropy" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://en.wikipedia.org/wiki/Principle_of_maximum_entropy']);" target="_blank">Maximum Entropy</a> one.</p>
+<p>Many Natural Language Processing tools come with many flavors of classification algorithms, in this article I go through the <a title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux" href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/"  target="_blank">NLTK classification algorithms</a> as well as present a Linux 64x compiled library of my favorite Maximum Entropy algorithm, MEGAM.</p>
+<h3>To Lower or Not To Lower (your Text)</h3>
+<p>This again relates to the problem of canonicalizing the features (or words) in the probability space (and input data). The decision of whether lowering all text makes sense (and yields better accuracy for your classifier) depends on what exactly you are trying to classify, for example if you are classifying <em><strong>Intensity</strong></em> or <em><strong>Mood</strong></em>, then capitalization might be an important feature that contributes positively to the accuracy of the predictions, but if you are trying to classify text into topics or categories, then lowering all text (training, test and input data) might have a very healthy impact on over-all accuracy.</p>
+<p>You could get a bit more clever than the brute force approach, and selectively choose to keep certain words capitalized due to their positive contribution in differentiating them from their lower format counterpart.</p>
+<h3>Targeted Manual Injection and Curation of Corpus Data</h3>
+<p>A low quality corpus is the Achilles&#8217; heel of a classification algorithm, you could tweak all you want, implement awesome features extraction techniques and do all the recommendations above and still get nowhere if you do not have a comprehensive good quality training corpus.</p>
+<p>It is highly recommended that you dedicate time towards a level of manual curation of your training set, particularly if the training set involves human entry, or people trying to game the system for their own benefit. For example if you are using a blog directory as a training set for Topic classification, users entering their blog details might try to trick the topic cataloguing system and get more traffic by ticking as many topics as possible, leading to a poor training corpus and a poor classification algorithm. There is a cool article by Alistair that takes a generalized look on <a title="data warefare" href="http://radar.oreilly.com/2013/01/stacks-get-hacked-the-inevitable-rise-of-data-warfare.html" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://radar.oreilly.com/2013/01/stacks-get-hacked-the-inevitable-rise-of-data-warfare.html']);" target="_blank">data mining and prediction using public (minimally administered) data</a>, and the issues surrounding that.</p>
+<p>The point about corpus diversity does help to a certain extend in diluting the impact of this issue, but as far as I can tell at one point you will hit a brick wall were the only way to improve accuracy is to manual curate the training data, this could be at 10% accuracy or at 90% depending on your situation. I also found that sometimes using a good quality subset of an over-all bad quality corpus leads to better results than using the whole corpus, which seems to suggest that quality is more important than quantity.</p>
+<p>Sometimes it is also necessary to plug-in targeted content in your training set intended to remove ambiguity between two classes in the classification algorithm, lower a high probability factor for a feature against a particular class, or introduce a new content area that is not explored by the initial training corpus.</p>
+<p>If you&#8217;ve made it this far then I salute you sir, and wish you the best with your classification endeavors!</p>
+<div class="FSR_container"><div class="FSR_stars"> <span class="FSR_full_star">*</span> <span class="FSR_full_star">*</span> <span class="FSR_full_star">*</span> <span class="FSR_full_star">*</span> <span class="FSR_half_star">&frac12;</span> <span class="FSR_votes">6</span> <span class="FSR_tvotes">votes</span></div><!-- powered by Five Star Rating- http://wordpress-plug.in/featured/five-star-rating/ --></div>
+<div class='yarpp-related'>
+<p>Related posts:</p><ol>
+<li><a href='http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/' rel='bookmark' title='Testing &amp; Diagnosing a Text Classification Algorithm'>Testing &#038; Diagnosing a Text Classification Algorithm</a></li>
+<li><a href='http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/' rel='bookmark' title='Text Classification Threshold Performance Graph'>Text Classification Threshold Performance Graph</a></li>
+<li><a href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/' rel='bookmark' title='Twitter Sentiment Analysis Training Corpus (Dataset)'>Twitter Sentiment Analysis Training Corpus (Dataset)</a></li>
+<li><a href='http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/' rel='bookmark' title='NLTK Megam (Maximum Entropy) Library on 64-bit Linux'>NLTK Megam (Maximum Entropy) Library on 64-bit Linux</a></li>
+<li><a href='http://thinknook.com/querying-the-full-text-index-in-sql-server-2012-12-05/' rel='bookmark' title='Querying the Full-Text Index in SQL Server'>Querying the Full-Text Index in SQL Server</a></li>
+</ol>
+</div>
+<span class="blog-tags minor-meta"><strong>Tags: </strong><span><a href="http://thinknook.com/tag/bigrams/" rel="tag">bigrams</a>, <a href="http://thinknook.com/tag/classification/" rel="tag">classification</a>, <a href="http://thinknook.com/tag/corpus/" rel="tag">corpus</a>, <a href="http://thinknook.com/tag/predictiion/" rel="tag">predictiion</a>, <a href="http://thinknook.com/tag/stopwords/" rel="tag">stopwords</a>, <a href="http://thinknook.com/tag/text-classification/" rel="tag">text classification</a>, <a href="http://thinknook.com/tag/unigrams/" rel="tag">unigrams</a></span></span>				
+				
+				
+				<div class='blog-inner-meta extralight-border'>
+	        	
+					<div class='post-meta-infos'>
+												
+						<span class='comment-container minor-meta'><a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comments" class="comments-link"  title="Comment on 10 Tips to Improve your Text Classification Algorithm Accuracy and Performance"> <span>17 Comments</span></a></span><span class='text-sep comment-container-sep'>/</span><div class="like-count minor-meta"><a data-post_id='934' data-json='http://api.facebook.com/restserver.php?method=links.getStats&urls=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F' class='avia_social_link avia_facebook_likes' href='http://www.facebook.com/sharer/sharer.php?t=10+Tips+to+Improve+your+Text+Classification+Algorithm+Accuracy+and+Performance&amp;u=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F'><span class='avia_count'>Array</span> Likes</a><div class="avia-facebook-like"><div class="fb-like" data-href="http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F" data-send="false" data-layout="box_count" data-width="250" data-show-faces="false" data-font="arial"></div></div></div><span class="text-sep like-count-sep">/</span><span class="tweets-count minor-meta"><a data-post_id='934' data-json='http://urls.api.twitter.com/1/urls/count.json?url=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F' class='avia_social_link avia_retweet_link' href='https://twitter.com/intent/tweet?text=10+Tips+to+Improve+your+Text+Classification+Algorithm+Accuracy+and+Performance&amp;url=http%3A%2F%2Fwp.me%2Fp2waZP-f4&amp;via=thinknook'><span class='avia_count'>36</span> Tweets</a></span><span class="text-sep tweets-count-sep">/</span><span class="blog-categories minor-meta">posted in <a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/" rel="category tag">Classification</a> </span>					
+					</div>	
+					
+				</div>
+
+								
+			</div>	
+			
+
+		</div><!--end post-entry-->					<div class='offset-by-one large_element'>
+						<div class='post_nav'><span class='post_nav_sep'></span>
+							<div class='previous_post_link_align'>
+								<span class="previous_post_link post-nav-link"><span>&larr;</span> <a href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/" rel="prev">Text Classification Threshold Performance Graph</a> </span>							</div>
+							<div class='next_post_link_align'>
+								<span class="next_post_link post-nav-link"><a href="http://thinknook.com/running-highcharts-within-ssrs-or-any-js-graph-library-2013-01-22/" rel="next">Running Highcharts within SSRS (or any JS Graph Library)</a> <span>&rarr;</span></span>							</div>
+						</div> <!-- end navigation -->
+					</div>
+
+					<div class ='related_posts '><span class='entry-border-overflow entry-border-overflow-bottom extralight-border'></span><h5 class='related_title'>Related Posts</h5><div class='content_slider autoslide_false'><div class='single_slide single_slide_nr_1'><div class='one_fourth relThumb relThumb1 post-format-standard'>
+<a href='http://thinknook.com/approaching-trend-analysis-through-discretization-and-correlation-2012-12-16/' class='relThumWrap noLightbox'>
+<span class='related_image_wrap'><span class='related_posts_default_image'></span></span>
+<span class='relThumbTitle'>
+<strong class='relThumbHeading'>Generic Trend Classification Engine using Pearson Correlation...</strong>
+</span>
+</a></div><!-- end .relThumb -->
+<div class='one_fourth relThumb relThumb2 post-format-standard'>
+<a href='http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/' class='relThumWrap noLightbox'>
+<span class='related_image_wrap'><span class='related_posts_default_image'></span></span>
+<span class='relThumbTitle'>
+<strong class='relThumbHeading'>NLTK Megam (Maximum Entropy) Library on 64-bit Lin...</strong>
+</span>
+</a></div><!-- end .relThumb -->
+<div class='one_fourth relThumb relThumb3 post-format-standard'>
+<a href='http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/' class='relThumWrap noLightbox'>
+<span class='related_image_wrap'><span class='related_posts_default_image'></span></span>
+<span class='relThumbTitle'>
+<strong class='relThumbHeading'>Testing &#038; Diagnosing a Text Classification Al...</strong>
+</span>
+</a></div><!-- end .relThumb -->
+</div></div></div>
+
+
+	        	
+	        	
+<div class='comment-entry post-entry'>
+
+<div class='comment_meta_container alpha one unit'>
+			
+			<div class='side-container side-container-comment'>
+	        		
+	        		<div class='side-container-inner'>
+	        				        			
+	        			<span class='comment-count'>17</span>
+   						<span class='comment-text'>replies</span>
+   						
+	        		</div>
+	        		
+	        	</div>
+			
+			</div>
+
+			
+			<div class='comment_container seven units alpha offset-by-one'>
+			
+
+			<ol class="commentlist">
+					<li class="comment even thread-even depth-1" id="li-comment-1234">
+	
+		<div id="comment-1234">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/30dfd749c26da5b24758eb46efa7d223?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Manish</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1234">January 21, 2013 at 5:54 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Assuming you have access to LogisticRegression with L1 and L2 regularization (e.g. sci-kit):<br />
+Use L1/L2 regularization to automatically eliminate redundant features rather than the above heuristical approach. Use L1-regularization to get a list of relevant features and then train a different classifier with this subset of features. Let the classifier do the work and tell you what features were found important. Features required really depend on the classification task.</p>
+<p>You can also iteratively work on feature engineering by generating more-of-the-relevant features for your *task*. To see what features are relevant &#8212; inspect the weights assigned to the features (and feature sets) by the regularized-classifier. I typically bucket my features by a name-space to generate feature-sets. For example: &#8216;verbs:xxx&#8217;, &#8216;bigrams:&#8230;&#8217;, etc. I can then roll-up by feature-set the regularization scores to determine which type of features are working well &#8212; and simply work on generating more of those types of features.</p>
+<p>I spend less-time on eliminating features and more on generating different types of features that are helping a given classification task. </p>
+<p>I also use the regularization weights to find bugs in my code. If for a feature-set, the weights are lower than expected, it is possible I have a bug in the code and am not generating the features properly.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1234#respond' onclick='return addComment.moveForm( "comment-1234", "1234", "respond", "934" )' aria-label='Reply to Manish'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor odd alt depth-2" id="li-comment-1236">
+	
+		<div id="comment-1236">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">admin</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1236">January 21, 2013 at 8:37 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hey Manish,</p>
+<p>Thanks for the great comment, my understanding of classification algorithm is still somewhat naive (no pun intended), but I understand the general premise of the approach you have highlighted above. MEGAM seems to offer L2 Regularization (actually it looks like an implementation of Gaussian Prior which effectively achieves the same result, i think :S) within NLTK so I will definitely give that a go&#8230; otherwise as per your suggestion Sci-Kit seems like the way to go for finer control over L1/L2 regularization, the results of which can then be plugged back into NLTK if needs be.</p>
+<p>I particularly like the point regarding categorizing features into bucket to diagnose what features are contributing the most towards the classification problem&#8230; what really jumps out at me is the fact that this idea can be extended to reflect document structure or word placement (something I had in the back of my mind for a while now), for example features appearing in the subject of an email can be tagged with &#8216;subject:feature&#8217; (since subject might be more relevant than body). We can even bucket the words by position within the document, so say have 3 buckets:<br />
+0 &#8211; 100 words: bucket1<br />
+100-200 words: bucket2<br />
+201+ words: bucket3<br />
+And place features within those buckets accordingly, given that feature placement (and position) within text contribute towards the classification scenario you are dealing with.</p>
+<p>Really loved your comments, although now I have about 20 new bookmarked sites that I need to read :)&#8230; It appears that the more I know, the more I know that I don&#8217;t know!!</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1236#respond' onclick='return addComment.moveForm( "comment-1236", "1236", "respond", "934" )' aria-label='Reply to admin'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-1251">
+	
+		<div id="comment-1251">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/30dfd749c26da5b24758eb46efa7d223?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Manish</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1251">January 22, 2013 at 8:16 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hi Ibrahim,</p>
+<p>Thanks for your response. Glad u like it.</p>
+<p>I use a combination of NLTK (primarily for the Tree and ParentedTree datastructures) and sci-kit for classification/machine learning stuff.</p>
+<p>Yeah the document structure feature is quite powerful. I use it for wikipedia classification (e.g infobox:, abstract:), etc. I need to blog about it.</p>
+<p>&#8211; Manish</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1251#respond' onclick='return addComment.moveForm( "comment-1251", "1251", "respond", "934" )' aria-label='Reply to Manish'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-1797">
+	
+		<div id="comment-1797">
+			<div class="gravatar">
+				<img alt='' src='http://0.gravatar.com/avatar/c1c948e4c0c2d199d601134929dbc51b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="https://raajaa.jux.com" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','https://raajaa.jux.com']);"  rel='external nofollow' class='url'>G S VIJAY RAAJAA</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1797">April 16, 2013 at 6:36 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hi,</p>
+<p>      Can you throw light on stemming exaggerations in conversations? such as happpyyyyy to happy.<br />
+The existing stemming algorithms doesn&#8217;t serve the same.</p>
+<p>I would like to appreciate your efforts and the blog is quite informative.</p>
+<p>Regards,<br />
+Vijay Raajaa G S</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1797#respond' onclick='return addComment.moveForm( "comment-1797", "1797", "respond", "934" )' aria-label='Reply to G S VIJAY RAAJAA'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="li-comment-2492">
+	
+		<div id="comment-2492">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://thinknook.com/"   rel='external nofollow' class='url'>Links Naji</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2492">July 13, 2013 at 1:05 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hi Vijay,</p>
+<p>Am really not sure how I missed your comment!, apologies for not replying sooner.</p>
+<p>To handle exaggerations in conversation, most likely you will need to implement your own algorithm, which has to be specific to the classification problem you are trying to solve. For example this type of word reduction might not be a good idea if classifying Sentiment, Conversational Intensity, Mood and even perhaps personality traits, but would yield better results when applied to News Topics or Football Equipment classification problems.</p>
+<p>As far as implementation goes, you could just write a Regular Expression (RegEx) that can identify a word with an exceptional number of repeated letters in that language, for example 3 letters in a row in English could indicate exaggerated speech, and then handle that word in the manner you best see fit, such as bucketing them as per MANISH&#8217;s suggestion above, or reduce them to a canonical word (remove the exaggeration), etc.</p>
+<p>Remember to apply this type of word reduction on the training set, as well as the test set and the live data when the algorithm is being used.</p>
+<p>I hope this helps!</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2492#respond' onclick='return addComment.moveForm( "comment-2492", "2492", "respond", "934" )' aria-label='Reply to Links Naji'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2488">
+	
+		<div id="comment-2488">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/da6e5d628886802c81edf9b14a9cb03f?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Jaseema banu</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2488">July 13, 2013 at 6:25 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>i&#8217;m started doing my final year project on sentiment analysis and opinion mining for social networks.. pls tell me a classifier algorithm that gives greater accuracy and more advantages. i want that choosing classifier algorithm must be a new approach. Thankz in advance&#8230;&#8230;&#8230;</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2488#respond' onclick='return addComment.moveForm( "comment-2488", "2488", "respond", "934" )' aria-label='Reply to Jaseema banu'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="li-comment-2515">
+	
+		<div id="comment-2515">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://thinknook.com/"   rel='external nofollow' class='url'>Links Naji</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2515">July 15, 2013 at 10:03 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hi Jaseema,</p>
+<p>Regarding selecting the right algorithm for the job, I strongly recommend trying out a few algorithms yourself, even perhaps on different packages (NLTK, R or Orange, etc). Once you have the data-set ready, and have identified the best features to extract  from the text, then applying various algorithms should be really simple, and there are mountains of tutorials and ready-made code that can help you with that. Personally I found that the <a href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/"  title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux" rel="nofollow">MEGAM library on NLTK</a> (which is a MaxEnt algorithm) offers  decent accuracy across the many classification tasks I had to deal with.</p>
+<p>As for finding a new approach, I recommend reading some of the new papers and research on sentiment analysis for inspiration, there are some really good and unique ideas out there, and hopefully this will help trigger some unique ideas of your own!</p>
+<p>I hope this helps, best of luck with your dissertation!</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2515#respond' onclick='return addComment.moveForm( "comment-2515", "2515", "respond", "934" )' aria-label='Reply to Links Naji'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-2978">
+	
+		<div id="comment-2978">
+			<div class="gravatar">
+				<img alt='' src='http://0.gravatar.com/avatar/61e56893370404cfd8327e99faaf0e6b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Jayson</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2978">August 13, 2013 at 9:22 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hello Sir Ibrahim Naji, reading your blog posts has let me learned many things, I thank you for that. I do have some questions too, I am currently doing a thesis on emotion analysis on disaster related tweets, and I have some problems, how do I incorporate the frequent words that have been collected then translate it into an emotion? For example, the tweet is, &#8220;God is our refuge and strength so when you choose friends make sure that most of them are God fearing pray 4 them #bopha&#8221; Thank you sir in advance.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2978#respond' onclick='return addComment.moveForm( "comment-2978", "2978", "respond", "934" )' aria-label='Reply to Jayson'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="li-comment-2979">
+	
+		<div id="comment-2979">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://thinknook.com/"   rel='external nofollow' class='url'>Links Naji</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2979">August 13, 2013 at 9:27 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hello Jayson,</p>
+<p>Awesome, am really glad you found the articles useful.</p>
+<p>Regarding your question, there are many approaches to doing emotion classification, each has some advantages and disadvantages, I strongly recommending reading a book on Data Mining to get a better holistic picture about the over-all discipline, and maybe that will also spark some unique ideas of your own, which will make for a great thesis!. There is a good book by <a href="http://www.cs.uic.edu/~liub/WebMiningBook.html" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.cs.uic.edu/~liub/WebMiningBook.html']);" title="Web Data Mining by Ling Liu" target="_blank" rel="nofollow">Bing Liu on Web Data Mining</a> I would recommend for this task.</p>
+<p>As far as your specific problem is concerned, it looks like you are looking at classifying based on <a href="http://en.wikipedia.org/wiki/Plutchik%27s_Wheel_of_Emotions#Plutchik.27s_wheel_of_emotions" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://en.wikipedia.org/wiki/Plutchik%27s_Wheel_of_Emotions#Plutchik.27s_wheel_of_emotions']);" title="Wheek of Emotion" target="_blank" rel="nofollow">Plutchik&#8217;s wheel of emotions</a>, in which he identifies 8 primal emotions, and uses those to build more complex human emotions. There are already some classification APIs that returns results based on this wheel of emotion, I recommend looking at <a href="https://developer.conveyapi.com/features.html" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://developer.conveyapi.com/features.html']);" title="Convey API" target="_blank" rel="nofollow">ConveyAPI&#8217;s Emotion classifier</a> as a practical example.</p>
+<p>As far as building a classifier is concerned, assuming you are building a &#8220;supervised learning&#8221; classifier, you will need 2 things:</p>
+<p><strong>1) A training corpus of already emotion classified text.</strong></p>
+<p>There are a few ways you could build this corpus, for example:</p>
+<ul>
+<li>You could try cleaning up the data in the <a href="http://www.experienceproject.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.experienceproject.com/']);" title="Experience Project" target="_blank" rel="nofollow">Experience Project</a>.</li>
+<li>Using transcripts on <a href="http://www.ted.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.ted.com/']);" title="TED" target="_blank" rel="nofollow">TED</a>, you can search by emotions such as Courageous, Inspiring, Funny, etc.</li>
+<li>Build your own corpus using <a href="https://www.mturk.com/mturk/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.mturk.com/mturk/']);" title="Mechanical Turk by Amazon" target="_blank" rel="nofollow">Amazon&#8217;s Mechanical Turk</a>. Cheap and easier to setup than one might think.</li>
+<li>Although not really recommended, but you could sign-up to a trial on one of the online APIs that offer emotion classification, and use your free trial to build a corpus. I am sure if you are using the data for research purpose it won&#8217;t cause too many issues, but the draw back is that you are building on something with an inherent inaccuracy, this inaccuracy will potentially be compounded when you building your own classifier on top of that data-set.</li>
+<li>Get creative! <img src="http://thinknook.com/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></li>
+</ul>
+<p><strong>2) A classification engine.</strong></p>
+<p>There are many packages out there that really simplifies the whole process, for example <a href="http://www.r-project.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.r-project.org/']);" title="R Statistical Programming" target="_blank" rel="nofollow">R</a> (for advance users) or <a href="http://nltk.org/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://nltk.org/']);" title="NLTK" target="_blank" rel="nofollow">NLTK </a>(for beginners/mid-level users). Each of those packages have great examples on how to get started, and a huge user community with many blog posts that can provide you with already made code. If you decide to go for NLTK I really recommend going through <a href="http://streamhacker.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://streamhacker.com/']);" title="Steamhacker" target="_blank" rel="nofollow">Jacob Perkins&#8217; Streamhacker blog</a>, he has so many examples on NLTK, and explains things very well.</p>
+<p>Once you have those 2 elements, then begins the process of refining the algorithm and results to achieve the desired accuracy, my posts on improving your classification algorithm, or measuring accuracy using the confusion matrix, should aid you some of the way there, or at least give you some ideas on how to get started. There are many interesting articles online if you do some research.</p>
+<p>It is important to note that all of this might help you get started, but in order to produce something totally unique and awesome, you will need to dig deep and understand the mathematical models and concepts these algorithms operate on, and read some of the very interesting research out there on various approaches and the results they produced.</p>
+<p>I hope this all makes sense, please do not hesitate to hit me up if you need more information.</p>
+<p>Goodluck with your thesis!</p>
+<p>Cheers,</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2979#respond' onclick='return addComment.moveForm( "comment-2979", "2979", "respond", "934" )' aria-label='Reply to Links Naji'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3220">
+	
+		<div id="comment-3220">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/9301be563b3cfac51414d3e315e60a08?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">john kim</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3220">May 22, 2014 at 11:05 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Good text analytic methosds</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3220#respond' onclick='return addComment.moveForm( "comment-3220", "3220", "respond", "934" )' aria-label='Reply to john kim'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3282">
+	
+		<div id="comment-3282">
+			<div class="gravatar">
+				<img alt='' src='http://0.gravatar.com/avatar/2f4e1b450923f57496295ab4bc7fe3a7?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Johnc511</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3282">September 4, 2014 at 2:40 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>I think  you have  remarked some very interesting points ,  appreciate it for the post. ckdfcbgdccck</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3282#respond' onclick='return addComment.moveForm( "comment-3282", "3282", "respond", "934" )' aria-label='Reply to Johnc511'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3333">
+	
+		<div id="comment-3333">
+			<div class="gravatar">
+				<img alt='' src='http://0.gravatar.com/avatar/434540905167208eed1ae369b1137249?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Viacheslav</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3333">February 24, 2015 at 2:35 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>A LOT of value here. Thanks Ibrahim, thanks Manish.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3333#respond' onclick='return addComment.moveForm( "comment-3333", "3333", "respond", "934" )' aria-label='Reply to Viacheslav'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="li-comment-3334">
+	
+		<div id="comment-3334">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://thinknook.com/"   rel='external nofollow' class='url'>Links Naji</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3334">February 24, 2015 at 11:08 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Thanks <img src="http://thinknook.com/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /></p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3334#respond' onclick='return addComment.moveForm( "comment-3334", "3334", "respond", "934" )' aria-label='Reply to Links Naji'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-3356">
+	
+		<div id="comment-3356">
+			<div class="gravatar">
+				<img alt='' src='http://0.gravatar.com/avatar/43b07d3044923d8218dcc496008f5ccb?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://www.heartbeat.marketing" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.heartbeat.marketing']);"  rel='external nofollow' class='url'>lana</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3356">July 1, 2015 at 2:58 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>Hello Ibrahim Naji, thank you for a great summary of tools and approaches. I am wondering what are the best emotion classifiers out there. Most are based on the Plutchik’s wheel. Do you know of any that go beyond that into Value Systems? I am considering having a unique classifier build for market research purposes. Would you recommend to use an existing one, or have one built specifically for my application? An example of a classifier &#8220;output&#8221; is on my website here (manual coding): <a href="http://www.heartbeat.marketing/report-example#600-women-1" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.heartbeat.marketing/report-example#600-women-1']);" rel="nofollow">http://www.heartbeat.marketing/report-example#600-women-1</a>.<br />
+Thank you,<br />
+Lana</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3356#respond' onclick='return addComment.moveForm( "comment-3356", "3356", "respond", "934" )' aria-label='Reply to lana'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1" id="li-comment-3386">
+	
+		<div id="comment-3386">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/7131ff14c033f76063878014faa440f6?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Rukayat Hussein</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3386">October 26, 2015 at 1:16 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>please i want to know the  figure(value) or range of values  that determine the classifier accuracy is good or bad.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3386#respond' onclick='return addComment.moveForm( "comment-3386", "3386", "respond", "934" )' aria-label='Reply to Rukayat Hussein'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1" id="li-comment-3387">
+	
+		<div id="comment-3387">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/7131ff14c033f76063878014faa440f6?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading">Rukayat Hussein</cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3387">October 26, 2015 at 1:28 pm</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>How can i evaluate the content of  a data set(s) i.e to know if a data set is good for a specific domain or not without the use of any classifier algorithms.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3387#respond' onclick='return addComment.moveForm( "comment-3387", "3387", "respond", "934" )' aria-label='Reply to Rukayat Hussein'>Reply</a>			</div>
+			
+		</div>
+	</div>
+<ul class="children">
+	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="li-comment-3389">
+	
+		<div id="comment-3389">
+			<div class="gravatar">
+				<img alt='' src='http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G' class='avatar avatar-36 photo' height='36' width='36' />			</div>
+			
+			<!-- display the comment -->
+			<div class='comment_content'>
+			
+			<cite class="author_name heading"><a href="http://thinknook.com/"   rel='external nofollow' class='url'>Links Naji</a></cite> <span class="says">says:</span>						
+			<!-- display the comment metadata like time and date-->
+			<div class="comment-meta commentmetadata">
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3389">October 29, 2015 at 12:16 am</a>
+			</div>
+			
+			<!-- display the comment text -->
+			<div class='comment_text entry-content'>
+			<p>This question on <a href="http://www.researchgate.net/post/In_Text_Classification_how_do_you_find_the_correlation_between_a_feature_and_the_class_label" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www.researchgate.net/post/In_Text_Classification_how_do_you_find_the_correlation_between_a_feature_and_the_class_label']);" rel="nofollow">ResearchGate </a>might be able to help you out, there are multiple approaches to doing this.</p>
+						<a class='comment-reply-link' href='/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3389#respond' onclick='return addComment.moveForm( "comment-3389", "3389", "respond", "934" )' aria-label='Reply to Links Naji'>Reply</a>			</div>
+			
+		</div>
+	</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+			</ol>
+						
+			
+			
+			
+			
+</div> <!-- end grid div--><div class='comment_container seven units alpha offset-by-one'><h3 class='miniheading'>Leave a Reply</h3><span class='minitext'>Want to join the discussion? <br/>Feel free to contribute!</span>								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://thinknook.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-describedby="email-notes" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-describedby="form-allowed-tags" aria-required="true"></textarea></p>						<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" class="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='934' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="e8a2abec36" /></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments" style="display: inline;">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog" style="display: inline;">Notify me of new posts by email.</label></p>					</form>
+							</div><!-- #respond -->
+			        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('#commentform').submit(function () {
+                    _gaq.push(
+                            ['_setAccount', 'UA-18395073-1'],
+                            ['_trackEvent', 'comment', 'submit']
+                    );
+                });
+            });
+        </script>
+		</div>
+</div>				
+				
+				<!--end content-->
+				</div>
+				
+			</div><!--end container-->
+
+	</div>
+	<!-- ####### END MAIN CONTAINER ####### -->
+</div>
+		
+<div id='secondary'><div class='sidebar'><div class='inner_sidebar extralight-border'><div class='main_menu main_menu' data-selectname='Select a page'><div class='fallback_menu'><ul class='avia_mega menu'><li ><a href='http://thinknook.com'>Home</a></li><li class="page_item page-item-288"><a href="http://thinknook.com/pagerank-checker/">PageRank Checker</a></li>
+<li class="page_item page-item-330"><a href="http://thinknook.com/sql-optimization-challenge/">SQL Optimization Challenge</a></li>
+<li class="page_item page-item-495 page_item_has_children"><a href="http://thinknook.com/sql-tools-libraries/">SQL Tools &#038; Libraries</a>
+<ul class='children'>
+	<li class="page_item page-item-497"><a href="http://thinknook.com/sql-tools-libraries/ssrs-client-library/">SSRS Client Library</a></li>
+</ul>
+</li>
+<li class="page_item page-item-2"><a href="http://thinknook.com/about/">About me</a></li>
+</ul></div></div><div id="text-4" class="widget widget_text"><h3 class="widgettitle">Books I am currently reading</h3>			<div class="textwidget"><OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab" id="Player_1e6f920a-41be-4dc0-812c-1bee3ba14d4b"  WIDTH="250px" HEIGHT="250px"> <PARAM NAME="movie" VALUE="http://ws.amazon.co.uk/widgets/q?rt=ss_ssw&ServiceVersion=20070822&MarketPlace=GB&ID=V20070822%2FGB%2Fthinknook-21%2F8003%2F1e6f920a-41be-4dc0-812c-1bee3ba14d4b&Operation=GetDisplayTemplate"><PARAM NAME="quality" VALUE="high"><PARAM NAME="bgcolor" VALUE="#FFFFFF"><PARAM NAME="allowscriptaccess" VALUE="always"><embed src="http://ws.amazon.co.uk/widgets/q?rt=ss_ssw&ServiceVersion=20070822&MarketPlace=GB&ID=V20070822%2FGB%2Fthinknook-21%2F8003%2F1e6f920a-41be-4dc0-812c-1bee3ba14d4b&Operation=GetDisplayTemplate" id="Player_1e6f920a-41be-4dc0-812c-1bee3ba14d4b" quality="high" bgcolor="#ffffff" name="Player_1e6f920a-41be-4dc0-812c-1bee3ba14d4b" allowscriptaccess="always"  type="application/x-shockwave-flash" align="middle" height="250px" width="250px"></embed></OBJECT> <NOSCRIPT><a href="http://ws.amazon.co.uk/widgets/q?rt=ss_ssw&ServiceVersion=20070822&MarketPlace=GB&ID=V20070822%2FGB%2Fthinknook-21%2F8003%2F1e6f920a-41be-4dc0-812c-1bee3ba14d4b&Operation=NoScript" onclick="javascript:_gaq.push(['_trackEvent','outbound-widget','http://ws.amazon.co.uk/widgets/q?rt=ss_ssw&amp;ServiceVersion=20070822&amp;MarketPlace=GB&amp;ID=V20070822%2FGB%2Fthinknook-21%2F8003%2F1e6f920a-41be-4dc0-812c-1bee3ba14d4b&amp;Operation=NoScript']);">Amazon.co.uk Widgets</a></NOSCRIPT></div>
+		<span class="seperator extralight-border"></span></div><div id="text-3" class="widget widget_text"><h3 class="widgettitle">Bigging myself up abit</h3>			<div class="textwidget"><img style="padding:3px;background-color:white" src="http://thinknook.com/wp-content/uploads/2012/07/MCSArgb_1459-e1343131913345.png"></img>
+<img style="padding:3px;background-color:white" src="http://thinknook.com/wp-content/uploads/2013/01/MCITPrgb_1255.png"></img>
+<img style="padding:3px;background-color:white" src="http://thinknook.com/wp-content/uploads/2013/03/MCITPrgb_1256-e1364730723274.png"></img>
+<img style="padding:3px;background-color:white" src="http://thinknook.com/wp-content/uploads/2013/03/google-analytics-qualified-individual.jpg"></img>
+
+
+</div>
+		<span class="seperator extralight-border"></span></div><div id="search-4" class="widget widget_search"><form action="http://thinknook.com/" id="searchform" method="get">
+	<div>
+		<input type="submit" value="" id="searchsubmit" class="button"/>
+		<input type="text" id="s" name="s" value="Search site"/>
+	</div>
+</form><!-- end searchform--><span class="seperator extralight-border"></span></div><div id="avia_combo_widget-3" class="widget avia_combo_widget"><div class='tabcontainer tab_initial_open tab_initial_open__1'><div class="tab first_tab widget_tab_popular"><span>Popular</span></div><div class='tab_content'><ul class="news-wrap"><li class="news-content post-format-standard"><a class='news-link' title='Twitter Sentiment Analysis Training Corpus (Dataset)' href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/'><span class='news-thumb'></span><strong class='news-headline'>Twitter Sentiment Analysis Training Corpus (Dataset)<span class='news-time'>September 22, 2012, 5:13 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='Truncate SSIS Catalog Database Operation Log Tables' href='http://thinknook.com/truncate-ssis-catalog-database-operation-log-tables-2012-11-03/'><span class='news-thumb'></span><strong class='news-headline'>Truncate SSIS Catalog Database Operation Log Tables<span class='news-time'>November 3, 2012, 9:36 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='Running Highcharts within SSRS (or any JS Graph Library)' href='http://thinknook.com/running-highcharts-within-ssrs-or-any-js-graph-library-2013-01-22/'><span class='news-thumb'></span><strong class='news-headline'>Running Highcharts within SSRS (or any JS Graph Library...<span class='news-time'>January 22, 2013, 10:00 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='10 Tips to Improve your Text Classification Algorithm Accuracy and Performance' href='http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/'><span class='news-thumb'></span><strong class='news-headline'>10 Tips to Improve your Text Classification Algorithm Accuracy...<span class='news-time'>January 21, 2013, 1:06 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='SSRS SSL Certificate Nightmare' href='http://thinknook.com/ssrs-ssl-certificate-nightmare-2011-06-28/'><span class='news-thumb'></span><strong class='news-headline'>SSRS SSL Certificate Nightmare<span class='news-time'>June 28, 2011, 11:56 am</span></strong></a></li></ul></div><div class="tab widget_tab_recent"><span>Recent</span></div><div class='tab_content'><ul class="news-wrap"><li class="news-content post-format-standard"><a class='news-link' title='Getting Started with Solr &#038; Carrot2 Clustering' href='http://thinknook.com/getting-started-with-solr-carrot2-clustering-2013-10-08/'><span class='news-thumb'></span><strong class='news-headline'>Getting Started with Solr &#038; Carrot2 Clustering<span class='news-time'>October 8, 2013, 3:07 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='Keyword Stemming and Lemmatisation with Apache Solr' href='http://thinknook.com/keyword-stemming-and-lemmatisation-with-apache-solr-2013-08-02/'><span class='news-thumb'></span><strong class='news-headline'>Keyword Stemming and Lemmatisation with Apache Solr<span class='news-time'>August 2, 2013, 12:30 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='In-Memory (Memory Optimized) Tables in SQL Server 2014' href='http://thinknook.com/in-memory-memory-optimized-tables-and-oltp-with-sql-server-2014-2013-07-12/'><span class='news-thumb'></span><strong class='news-headline'>In-Memory (Memory Optimized) Tables in SQL Server 2014<span class='news-time'>July 12, 2013, 2:32 am</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='Connecting SQL Server and Analysis Services to Hadoop Hive' href='http://thinknook.com/connecting-sql-server-and-analysis-services-to-hadoop-hive-2013-07-09/'><span class='news-thumb'></span><strong class='news-headline'>Connecting SQL Server and Analysis Services to Hadoop H...<span class='news-time'>July 9, 2013, 9:50 pm</span></strong></a></li><li class="news-content post-format-standard"><a class='news-link' title='Visual Studio 2013 Preview is Available for Download' href='http://thinknook.com/visual-studio-2013-preview-is-available-for-download-2013-06-29/'><span class='news-thumb'></span><strong class='news-headline'>Visual Studio 2013 Preview is Available for Download<span class='news-time'>June 29, 2013, 12:00 am</span></strong></a></li></ul></div><div class="tab widget_tab_comments"><span>Comments</span></div><div class='tab_content'><ul class="news-wrap"><li class="news-content"><a class='news-link' title='Truncate SSIS Catalog Database Operation Log Tables' href='http://thinknook.com/truncate-ssis-catalog-database-operation-log-tables-2012-11-03/#comment-3521'><span class='news-thumb'><img alt='' src='http://1.gravatar.com/avatar/fd0aecb2a1cfc35d0d36e88235a3141c?s=48&amp;d=retro&amp;r=G' class='avatar avatar-48 photo' height='48' width='48' /></span><strong class='news-headline'>Thanks for the script. It is very helpful. Do i need to...<span class='news-time'>November 3, 9:36 pm by vishal dandge</span></strong></a></li><li class="news-content"><a class='news-link' title='Twitter Sentiment Analysis Training Corpus (Dataset)' href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3514'><span class='news-thumb'><img alt='' src='http://1.gravatar.com/avatar/1f556581c5bd79c143d3b7ea129f991f?s=48&amp;d=retro&amp;r=G' class='avatar avatar-48 photo' height='48' width='48' /></span><strong class='news-headline'>Dear sir ,
+
+Can you please provide me a dataset that containing...<span class='news-time'>September 22, 5:13 pm by Sithara Fernando</span></strong></a></li><li class="news-content"><a class='news-link' title='Twitter Sentiment Analysis Training Corpus (Dataset)' href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3511'><span class='news-thumb'><img alt='' src='http://1.gravatar.com/avatar/dd214d40862850817539138a6fc770ab?s=48&amp;d=retro&amp;r=G' class='avatar avatar-48 photo' height='48' width='48' /></span><strong class='news-headline'>Hi
+ I am working on twitter sentiment analysis for course...<span class='news-time'>September 22, 5:13 pm by Sarker Monojit Asish</span></strong></a></li><li class="news-content"><a class='news-link' title='Twitter Sentiment Analysis Training Corpus (Dataset)' href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3509'><span class='news-thumb'><img alt='' src='http://1.gravatar.com/avatar/bc8889c1a0bfddc2f8a3d9eeed6949f2?s=48&amp;d=retro&amp;r=G' class='avatar avatar-48 photo' height='48' width='48' /></span><strong class='news-headline'>Yes I too need this dataset. I have a question that how...<span class='news-time'>September 22, 5:13 pm by kush shrivastava</span></strong></a></li><li class="news-content"><a class='news-link' title='Twitter Sentiment Analysis Training Corpus (Dataset)' href='http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3508'><span class='news-thumb'><img alt='' src='http://1.gravatar.com/avatar/9b63e79e9a125bf6a82ddfe85a2f49d2?s=48&amp;d=retro&amp;r=G' class='avatar avatar-48 photo' height='48' width='48' /></span><strong class='news-headline'>I need necessary to arabic sentment analysis dataset It...<span class='news-time'>September 22, 5:13 pm by mona</span></strong></a></li></ul></div><div class="tab last_tab widget_tab_tags"><span>Tags</span></div><div class='tab_content tagcloud'><a href='http://thinknook.com/tag/apache/' class='tag-link-209' title='2 topics' style='font-size: 12px;'>apache</a>
+<a href='http://thinknook.com/tag/atari/' class='tag-link-45' title='1 topic' style='font-size: 12px;'>atari</a>
+<a href='http://thinknook.com/tag/big-data/' class='tag-link-55' title='1 topic' style='font-size: 12px;'>big data</a>
+<a href='http://thinknook.com/tag/c-2/' class='tag-link-44' title='1 topic' style='font-size: 12px;'>c#</a>
+<a href='http://thinknook.com/tag/classification/' class='tag-link-82' title='4 topics' style='font-size: 12px;'>classification</a>
+<a href='http://thinknook.com/tag/cubes/' class='tag-link-179' title='2 topics' style='font-size: 12px;'>cubes</a>
+<a href='http://thinknook.com/tag/database-growth/' class='tag-link-58' title='2 topics' style='font-size: 12px;'>database growth</a>
+<a href='http://thinknook.com/tag/dmoz/' class='tag-link-43' title='1 topic' style='font-size: 12px;'>dmoz</a>
+<a href='http://thinknook.com/tag/dmv/' class='tag-link-59' title='3 topics' style='font-size: 12px;'>dmv</a>
+<a href='http://thinknook.com/tag/full-text/' class='tag-link-91' title='2 topics' style='font-size: 12px;'>full-text</a>
+<a href='http://thinknook.com/tag/full-text-search/' class='tag-link-90' title='2 topics' style='font-size: 12px;'>full-text search</a>
+<a href='http://thinknook.com/tag/games/' class='tag-link-46' title='1 topic' style='font-size: 12px;'>games</a>
+<a href='http://thinknook.com/tag/hadoop-2/' class='tag-link-53' title='5 topics' style='font-size: 12px;'>hadoop</a>
+<a href='http://thinknook.com/tag/hdinsight/' class='tag-link-54' title='3 topics' style='font-size: 12px;'>HDInsight</a>
+<a href='http://thinknook.com/tag/highcharts/' class='tag-link-136' title='2 topics' style='font-size: 12px;'>highcharts</a>
+<a href='http://thinknook.com/tag/hive/' class='tag-link-140' title='2 topics' style='font-size: 12px;'>hive</a>
+<a href='http://thinknook.com/tag/html5/' class='tag-link-48' title='1 topic' style='font-size: 12px;'>html5</a>
+<a href='http://thinknook.com/tag/immediate_sync/' class='tag-link-32' title='1 topic' style='font-size: 12px;'>immediate_sync</a>
+<a href='http://thinknook.com/tag/integration-services/' class='tag-link-39' title='2 topics' style='font-size: 12px;'>integration services</a>
+<a href='http://thinknook.com/tag/ir/' class='tag-link-207' title='2 topics' style='font-size: 12px;'>IR</a>
+<a href='http://thinknook.com/tag/javascript/' class='tag-link-137' title='2 topics' style='font-size: 12px;'>javascript</a>
+<a href='http://thinknook.com/tag/job-agent/' class='tag-link-41' title='3 topics' style='font-size: 12px;'>job agent</a>
+<a href='http://thinknook.com/tag/js/' class='tag-link-47' title='3 topics' style='font-size: 12px;'>js</a>
+<a href='http://thinknook.com/tag/log/' class='tag-link-56' title='2 topics' style='font-size: 12px;'>log</a>
+<a href='http://thinknook.com/tag/map/' class='tag-link-148' title='2 topics' style='font-size: 12px;'>map</a>
+<a href='http://thinknook.com/tag/microsoft-bi/' class='tag-link-51' title='1 topic' style='font-size: 12px;'>microsoft bi</a>
+<a href='http://thinknook.com/tag/mobile-bi/' class='tag-link-49' title='2 topics' style='font-size: 12px;'>mobile bi</a>
+<a href='http://thinknook.com/tag/nltk/' class='tag-link-78' title='2 topics' style='font-size: 12px;'>nltk</a>
+<a href='http://thinknook.com/tag/non-immediate_sync/' class='tag-link-31' title='1 topic' style='font-size: 12px;'>non-immediate_sync</a>
+<a href='http://thinknook.com/tag/odbc/' class='tag-link-147' title='2 topics' style='font-size: 12px;'>odbc</a>
+<a href='http://thinknook.com/tag/replication/' class='tag-link-30' title='1 topic' style='font-size: 12px;'>replication</a>
+<a href='http://thinknook.com/tag/reportplus/' class='tag-link-50' title='1 topic' style='font-size: 12px;'>reportplus</a>
+<a href='http://thinknook.com/tag/solr-2/' class='tag-link-206' title='2 topics' style='font-size: 12px;'>solr</a>
+<a href='http://thinknook.com/tag/sql/' class='tag-link-75' title='4 topics' style='font-size: 12px;'>sql</a>
+<a href='http://thinknook.com/tag/sql-2012/' class='tag-link-40' title='2 topics' style='font-size: 12px;'>sql 2012</a>
+<a href='http://thinknook.com/tag/sql-2014/' class='tag-link-182' title='2 topics' style='font-size: 12px;'>sql 2014</a>
+<a href='http://thinknook.com/tag/sql-optimisation/' class='tag-link-11' title='1 topic' style='font-size: 12px;'>SQL Optimisation</a>
+<a href='http://thinknook.com/tag/sql-server-2/' class='tag-link-33' title='22 topics' style='font-size: 12px;'>sql server</a>
+<a href='http://thinknook.com/tag/ssas-2/' class='tag-link-138' title='4 topics' style='font-size: 12px;'>ssas</a>
+<a href='http://thinknook.com/tag/ssis-2/' class='tag-link-37' title='5 topics' style='font-size: 12px;'>ssis</a>
+<a href='http://thinknook.com/tag/ssis-2012/' class='tag-link-38' title='3 topics' style='font-size: 12px;'>ssis 2012</a>
+<a href='http://thinknook.com/tag/ssrs-2/' class='tag-link-66' title='6 topics' style='font-size: 12px;'>ssrs</a>
+<a href='http://thinknook.com/tag/statistics/' class='tag-link-71' title='2 topics' style='font-size: 12px;'>statistics</a>
+<a href='http://thinknook.com/tag/text-classification/' class='tag-link-123' title='2 topics' style='font-size: 12px;'>text classification</a>
+<a href='http://thinknook.com/tag/transaction-log/' class='tag-link-57' title='2 topics' style='font-size: 12px;'>transaction log</a></div></div><span class="seperator extralight-border"></span></div><div id="categories-2" class="widget widget_categories"><h3 class="widgettitle">Dev Categories</h3>		<ul>
+	<li class="cat-item cat-item-20"><a href="http://thinknook.com/category/coding/" >Coding</a> (8)
+<ul class='children'>
+	<li class="cat-item cat-item-21"><a href="http://thinknook.com/category/coding/c/" >C#</a> (4)
+</li>
+	<li class="cat-item cat-item-24"><a href="http://thinknook.com/category/coding/coding-libraries/" >Coding Libraries</a> (3)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-25"><a href="http://thinknook.com/category/gaming/" >Gaming</a> (2)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://thinknook.com/category/graphing-charts/" >Graphing &amp; Charts</a> (2)
+<ul class='children'>
+	<li class="cat-item cat-item-14"><a href="http://thinknook.com/category/graphing-charts/financial-charts/" >Financial Charts</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-52"><a href="http://thinknook.com/category/hardware/" >Hardware</a> (2)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://thinknook.com/category/sql-server/" title="Collection of MS SQL Server scripts, tricks and hacks I found useful over the years ">MS SQL Server</a> (91)
+<ul class='children'>
+	<li class="cat-item cat-item-36"><a href="http://thinknook.com/category/sql-server/business-intelligence/" >Business Intelligence</a> (4)
+</li>
+	<li class="cat-item cat-item-27"><a href="http://thinknook.com/category/sql-server/data-mining/" >Data-Mining</a> (9)
+	<ul class='children'>
+	<li class="cat-item cat-item-119"><a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/" >Classification</a> (3)
+</li>
+	<li class="cat-item cat-item-42"><a href="http://thinknook.com/category/sql-server/data-mining/sentiment-analysis/" >Sentiment Analysis</a> (2)
+</li>
+	</ul>
+</li>
+	<li class="cat-item cat-item-28"><a href="http://thinknook.com/category/sql-server/hadoop/" >Hadoop</a> (6)
+</li>
+	<li class="cat-item cat-item-26"><a href="http://thinknook.com/category/sql-server/powerpivot/" >PowerPivot</a> (3)
+</li>
+	<li class="cat-item cat-item-16"><a href="http://thinknook.com/category/sql-server/sql-development/" >SQL Development</a> (6)
+</li>
+	<li class="cat-item cat-item-23"><a href="http://thinknook.com/category/sql-server/sql-events-conferences/" >SQL Events &amp; Conferences</a> (2)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://thinknook.com/category/sql-server/sql-optimisation/" >SQL Optimisation</a> (14)
+</li>
+	<li class="cat-item cat-item-29"><a href="http://thinknook.com/category/sql-server/sql-replication/" >SQL Replication</a> (3)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://thinknook.com/category/sql-server/sql-server-dba/" >SQL Server DBA</a> (20)
+</li>
+	<li class="cat-item cat-item-34"><a href="http://thinknook.com/category/sql-server/ssas/" >SSAS</a> (8)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://thinknook.com/category/sql-server/ssis/" >SSIS</a> (15)
+</li>
+	<li class="cat-item cat-item-7"><a href="http://thinknook.com/category/sql-server/ssrs/" >SSRS</a> (18)
+	<ul class='children'>
+	<li class="cat-item cat-item-35"><a href="http://thinknook.com/category/sql-server/ssrs/power-view/" >Power View</a> (4)
+</li>
+	</ul>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://thinknook.com/category/sql-server/t-sql/" title="Scripts demonstrating latest features or a few optimisation tricks">T-SQL</a> (8)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://thinknook.com/category/online-tracking/" >Online Tracking</a> (1)
+</li>
+	<li class="cat-item cat-item-18"><a href="http://thinknook.com/category/search/" >Search</a> (3)
+<ul class='children'>
+	<li class="cat-item cat-item-205"><a href="http://thinknook.com/category/search/solr/" >Solr</a> (2)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://thinknook.com/category/social-media/" >Social Media</a> (3)
+<ul class='children'>
+	<li class="cat-item cat-item-12"><a href="http://thinknook.com/category/social-media/google-plus/" >Google Plus</a> (2)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://thinknook.com/category/social-media/social-api/" >Social API</a> (1)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://thinknook.com/category/uncategorized/" >Uncategorized</a> (2)
+</li>
+	<li class="cat-item cat-item-5"><a href="http://thinknook.com/category/xml/" >XML</a> (3)
+<ul class='children'>
+	<li class="cat-item cat-item-22"><a href="http://thinknook.com/category/xml/converters/" >Converters</a> (1)
+</li>
+	<li class="cat-item cat-item-6"><a href="http://thinknook.com/category/xml/xslt/" title="Useful XSLT templates
+
+Sometimes getting stuck into some code is the best way to learn your way around a programming language, especially when it comes to a functional programming language such as XSLT.
+
+As with XSL and other languages such as XPATH, XQUERY, REGEX, etc., I always tend to forget them quickly after I wrote something for a particular task, which pretty much means that I have to relearn some things again for the next task that needs done (which tends to be a month or two later). I suppose this is the purpose of this blog.">XSLT</a> (1)
+</li>
+</ul>
+</li>
+		</ul>
+<span class="seperator extralight-border"></span></div></div></div></div>	          </div>
+
+
+			
+			
+			<!-- ####### FOOTER CONTAINER ####### -->
+			<div id='footer' class='container_wrap '>
+				<div class='container'>
+				
+					<div class='one_fourth first'>				<div class='widget'>
+				<h3 class='widgettitle'>Interesting links</h3>
+				<span class='minitext'>Besides are some interesting links for you! Enjoy your stay :)</span>
+				</div>
+			</div><div class='one_fourth '><div class='widget widget_pages'><h3 class='widgettitle'>Pages</h3><ul><li class="page_item page-item-288"><a href="http://thinknook.com/pagerank-checker/">PageRank Checker</a></li>
+<li class="page_item page-item-330"><a href="http://thinknook.com/sql-optimization-challenge/">SQL Optimization Challenge</a></li>
+<li class="page_item page-item-495 page_item_has_children"><a href="http://thinknook.com/sql-tools-libraries/">SQL Tools &#038; Libraries</a></li>
+<li class="page_item page-item-497"><a href="http://thinknook.com/sql-tools-libraries/ssrs-client-library/">SSRS Client Library</a></li>
+<li class="page_item page-item-2"><a href="http://thinknook.com/about/">About me</a></li>
+</ul><span class='seperator extralight-border'></span></div></div><div class='one_fourth '><div class='widget widget_categories'><h3 class='widgettitle'>Categories</h3><ul>	<li class="cat-item cat-item-36"><a href="http://thinknook.com/category/sql-server/business-intelligence/" >Business Intelligence</a>
+</li>
+	<li class="cat-item cat-item-21"><a href="http://thinknook.com/category/coding/c/" >C#</a>
+</li>
+	<li class="cat-item cat-item-119"><a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/" >Classification</a>
+</li>
+	<li class="cat-item cat-item-20"><a href="http://thinknook.com/category/coding/" >Coding</a>
+</li>
+	<li class="cat-item cat-item-24"><a href="http://thinknook.com/category/coding/coding-libraries/" >Coding Libraries</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="http://thinknook.com/category/xml/converters/" >Converters</a>
+</li>
+	<li class="cat-item cat-item-27"><a href="http://thinknook.com/category/sql-server/data-mining/" >Data-Mining</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://thinknook.com/category/graphing-charts/financial-charts/" >Financial Charts</a>
+</li>
+	<li class="cat-item cat-item-25"><a href="http://thinknook.com/category/gaming/" >Gaming</a>
+</li>
+	<li class="cat-item cat-item-12"><a href="http://thinknook.com/category/social-media/google-plus/" >Google Plus</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="http://thinknook.com/category/graphing-charts/" >Graphing &amp; Charts</a>
+</li>
+	<li class="cat-item cat-item-28"><a href="http://thinknook.com/category/sql-server/hadoop/" >Hadoop</a>
+</li>
+	<li class="cat-item cat-item-52"><a href="http://thinknook.com/category/hardware/" >Hardware</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://thinknook.com/category/sql-server/" title="Collection of MS SQL Server scripts, tricks and hacks I found useful over the years ">MS SQL Server</a>
+</li>
+	<li class="cat-item cat-item-19"><a href="http://thinknook.com/category/online-tracking/" >Online Tracking</a>
+</li>
+	<li class="cat-item cat-item-35"><a href="http://thinknook.com/category/sql-server/ssrs/power-view/" >Power View</a>
+</li>
+	<li class="cat-item cat-item-26"><a href="http://thinknook.com/category/sql-server/powerpivot/" >PowerPivot</a>
+</li>
+	<li class="cat-item cat-item-18"><a href="http://thinknook.com/category/search/" >Search</a>
+</li>
+	<li class="cat-item cat-item-42"><a href="http://thinknook.com/category/sql-server/data-mining/sentiment-analysis/" >Sentiment Analysis</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://thinknook.com/category/social-media/social-api/" >Social API</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://thinknook.com/category/social-media/" >Social Media</a>
+</li>
+	<li class="cat-item cat-item-205"><a href="http://thinknook.com/category/search/solr/" >Solr</a>
+</li>
+	<li class="cat-item cat-item-16"><a href="http://thinknook.com/category/sql-server/sql-development/" >SQL Development</a>
+</li>
+	<li class="cat-item cat-item-23"><a href="http://thinknook.com/category/sql-server/sql-events-conferences/" >SQL Events &amp; Conferences</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="http://thinknook.com/category/sql-server/sql-optimisation/" >SQL Optimisation</a>
+</li>
+	<li class="cat-item cat-item-29"><a href="http://thinknook.com/category/sql-server/sql-replication/" >SQL Replication</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="http://thinknook.com/category/sql-server/sql-server-dba/" >SQL Server DBA</a>
+</li>
+	<li class="cat-item cat-item-34"><a href="http://thinknook.com/category/sql-server/ssas/" >SSAS</a>
+</li>
+	<li class="cat-item cat-item-15"><a href="http://thinknook.com/category/sql-server/ssis/" >SSIS</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://thinknook.com/category/sql-server/ssrs/" >SSRS</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://thinknook.com/category/sql-server/t-sql/" title="Scripts demonstrating latest features or a few optimisation tricks">T-SQL</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://thinknook.com/category/uncategorized/" >Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://thinknook.com/category/xml/" >XML</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="http://thinknook.com/category/xml/xslt/" title="Useful XSLT templates
+
+Sometimes getting stuck into some code is the best way to learn your way around a programming language, especially when it comes to a functional programming language such as XSLT.
+
+As with XSL and other languages such as XPATH, XQUERY, REGEX, etc., I always tend to forget them quickly after I wrote something for a particular task, which pretty much means that I have to relearn some things again for the next task that needs done (which tends to be a month or two later). I suppose this is the purpose of this blog.">XSLT</a>
+</li>
+</ul><span class='seperator extralight-border'></span></div></div><div class='one_fourth '><div class='widget widget_archive'><h3 class='widgettitle'>Archive</h3><ul>	<li><a href='http://thinknook.com/2013/10/'>October 2013</a></li>
+	<li><a href='http://thinknook.com/2013/08/'>August 2013</a></li>
+	<li><a href='http://thinknook.com/2013/07/'>July 2013</a></li>
+	<li><a href='http://thinknook.com/2013/06/'>June 2013</a></li>
+	<li><a href='http://thinknook.com/2013/05/'>May 2013</a></li>
+	<li><a href='http://thinknook.com/2013/03/'>March 2013</a></li>
+	<li><a href='http://thinknook.com/2013/02/'>February 2013</a></li>
+	<li><a href='http://thinknook.com/2013/01/'>January 2013</a></li>
+	<li><a href='http://thinknook.com/2012/12/'>December 2012</a></li>
+	<li><a href='http://thinknook.com/2012/11/'>November 2012</a></li>
+	<li><a href='http://thinknook.com/2012/10/'>October 2012</a></li>
+	<li><a href='http://thinknook.com/2012/09/'>September 2012</a></li>
+	<li><a href='http://thinknook.com/2012/08/'>August 2012</a></li>
+	<li><a href='http://thinknook.com/2012/07/'>July 2012</a></li>
+	<li><a href='http://thinknook.com/2012/06/'>June 2012</a></li>
+	<li><a href='http://thinknook.com/2012/05/'>May 2012</a></li>
+	<li><a href='http://thinknook.com/2012/04/'>April 2012</a></li>
+	<li><a href='http://thinknook.com/2012/03/'>March 2012</a></li>
+	<li><a href='http://thinknook.com/2012/02/'>February 2012</a></li>
+	<li><a href='http://thinknook.com/2012/01/'>January 2012</a></li>
+	<li><a href='http://thinknook.com/2011/12/'>December 2011</a></li>
+	<li><a href='http://thinknook.com/2011/11/'>November 2011</a></li>
+	<li><a href='http://thinknook.com/2011/10/'>October 2011</a></li>
+	<li><a href='http://thinknook.com/2011/08/'>August 2011</a></li>
+	<li><a href='http://thinknook.com/2011/07/'>July 2011</a></li>
+	<li><a href='http://thinknook.com/2011/06/'>June 2011</a></li>
+	<li><a href='http://thinknook.com/2010/09/'>September 2010</a></li>
+</ul><span class='seperator extralight-border'></span></div></div>
+					
+				</div>
+				
+			</div>
+		<!-- ####### END FOOTER CONTAINER ####### -->
+
+		
+		
+		<!-- ####### SOCKET CONTAINER ####### -->
+			<div id='socket' class='container_wrap '>
+				<div class='container'>
+					<span class='copyright'>&copy; Copyright - <a href='http://thinknook.com/'>Thinknook</a> - <a href='http://www.kriesi.at'>Wordpress Theme by Kriesi.at</a></span>
+								
+				</div>
+			</div>
+			<!-- ####### END SOCKET CONTAINER ####### -->
+			
+			
+			
+			
+			
+			
+			
+		
+	
+	</div><!--end container_wrap-->
+			
+
+		</div><!-- end wrap_all -->
+		
+		
+		
+				
+
+<div id="dc-dcssb">
+		<ul id="nav-dcssb" class=""><li id="dcssb-twitter" class="size-box"><a href="http://twitter.com/share" data-url="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" data-counturl="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" data-text="10 Tips to Improve your Text Classification Algorithm Accuracy and Performance" class="twitter-share-button" data-count="vertical" data-via="thinknook"></a></li>
+			<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			<li id="dcssb-facebook" class="size-box"><iframe src="http://www.facebook.com/plugins/like.php?app_id=&amp;href=http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/&amp;send=false&amp;layout=box_count&amp;width=50&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=62" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height:62px;" allowTransparency="true"></iframe></li>
+				<li id="dcssb-plusone" class="size-box"><g:plusone size="tall" href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" count="true"></g:plusone></li>
+			<script type="text/javascript">
+				(function() {
+					var po = document.createElement("script"); po.type = "text/javascript"; po.async = true;
+					po.src = "https://apis.google.com/js/plusone.js";
+					var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(po, s);
+				})();
+				</script>
+				<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script>
+			<li id="dcssb-linkedin" class="size-box"><script type="in/share" data-url="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" data-counter="top"></script></li>
+			<li id="dcssb-stumble" class="size-box"><iframe src="http://www.stumbleupon.com/badge/embed/5/?url=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:50px; height: 60px;" allowTransparency="true"></iframe></li><li id="dcssb-pinit" class="size-box vertical pin-featured"><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F&amp;media=http%3A%2F%2Fthinknook.com%2Fwp-content%2Fuploads%2F2013%2F01%2Fnetwork.gif&amp;description=%0D%0A%0D%0AIn+this+article+I+discuss+some+methods+you+could+adopt+to+i" class="pin-it-button" count-layout="vertical">Pin It</a><script type="text/javascript" src="http://assets.pinterest.com/js/pinit.js"></script></li></ul>
+		<div class="clear"></div>
+		<div class="dc-corner"><span></span></div>
+		</div>			<script type="text/javascript">_ga.trackFacebook();</script>
+			<script type="text/javascript">
+				jQuery(window).load(function() {
+
+								
+					var config = {
+						idWrapper : 'dcssb-slick',
+						location: 'left',
+						align: 'top',
+						offset: '100px',
+						speed: 600,
+						tabText: '<img src="http://thinknook.com/wp-content/plugins/slick-social-share-buttons/css/images/tab_left_vertical.png" alt="Share" />',
+						autoClose: false,
+						loadOpen: true,
+						classWrapper: 'dc-social-slick vertical',
+						classOpen: 'dcssb-open',
+						classClose: 'dcssb-close',
+						classToggle: 'dcssb-link'					
+					};
+					if(!jQuery().dcSocialSlick) {
+						jQuery.getScript('http://thinknook.com/wp-content/plugins/slick-social-share-buttons/js/jquery.social.slick.1.0.js', function(){
+							jQuery('#dc-dcssb').dcSocialSlick(config);
+						}); 
+					} else {
+						jQuery('#dc-dcssb').dcSocialSlick(config);
+					}
+
+								});
+			</script>
+		
+				<div style="display:none">
+	<div class="grofile-hash-map-30dfd749c26da5b24758eb46efa7d223">
+	</div>
+	<div class="grofile-hash-map-5c3225273894362eb0f6372723ea3e8b">
+	</div>
+	<div class="grofile-hash-map-c1c948e4c0c2d199d601134929dbc51b">
+	</div>
+	<div class="grofile-hash-map-da6e5d628886802c81edf9b14a9cb03f">
+	</div>
+	<div class="grofile-hash-map-61e56893370404cfd8327e99faaf0e6b">
+	</div>
+	<div class="grofile-hash-map-9301be563b3cfac51414d3e315e60a08">
+	</div>
+	<div class="grofile-hash-map-2f4e1b450923f57496295ab4bc7fe3a7">
+	</div>
+	<div class="grofile-hash-map-434540905167208eed1ae369b1137249">
+	</div>
+	<div class="grofile-hash-map-43b07d3044923d8218dcc496008f5ccb">
+	</div>
+	<div class="grofile-hash-map-7131ff14c033f76063878014faa440f6">
+	</div>
+	<div class="grofile-hash-map-fd0aecb2a1cfc35d0d36e88235a3141c">
+	</div>
+	<div class="grofile-hash-map-1f556581c5bd79c143d3b7ea129f991f">
+	</div>
+	<div class="grofile-hash-map-dd214d40862850817539138a6fc770ab">
+	</div>
+	<div class="grofile-hash-map-bc8889c1a0bfddc2f8a3d9eeed6949f2">
+	</div>
+	<div class="grofile-hash-map-9b63e79e9a125bf6a82ddfe85a2f49d2">
+	</div>
+	</div>
+
+ <script type='text/javascript'>
+ /* <![CDATA[ */  
+var avia_framework_globals = {
+ 	frameworkUrl: 'http://thinknook.com/wp-content/themes/sentence/framework/', 
+ 	installedAt: 'http://thinknook.com/wp-content/themes/sentence/', 
+ 	ajaxurl: 'http://thinknook.com/wp-admin/admin-ajax.php'
+ 	}; 
+ /* ]]> */ 
+ </script>
+ 
+ <script type='text/javascript'>
+/* <![CDATA[ */
+var avia_social_count_nonce = {"nonce":"c389c6f1a6"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/themes/sentence/js/avia-social.js?ver=1'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/themes/sentence/js/prettyPhoto/js/jquery.prettyPhoto.js?ver=3.0.1'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/themes/sentence/js/aviapoly.js?ver=1.1.0'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-includes/js/comment-reply.min.js?ver=4.1.24'></script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/contact-form-7/includes/js/jquery.form.js?ver=3.09'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var _wpcf7 = {"loaderUrl":"http:\/\/thinknook.com\/wp-content\/plugins\/contact-form-7\/images\/ajax-loader.gif","sending":"Sending ...","cached":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=3.2'></script>
+<script type='text/javascript' src='http://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201844'></script>
+<script type='text/javascript' src='http://s.gravatar.com/js/gprofiles.js?ver=2018Octaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://thinknook.com/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.1.24'></script>
+
+	<script src="http://stats.wordpress.com/e-201844.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	st_go({v:'ext',j:'1:2.3.7',blog:'37221441',post:'934',tz:'1'});
+	var load_cmc = function(){linktracker_init(37221441,934,2);};
+	if ( typeof addLoadEvent != 'undefined' ) addLoadEvent(load_cmc);
+	else load_cmc();
+	</script></body>
+</html>
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Page Caching using disk: enhanced
+
+ Served from: thinknook.com @ 2018-10-30 09:37:32 by W3 Total Cache -->

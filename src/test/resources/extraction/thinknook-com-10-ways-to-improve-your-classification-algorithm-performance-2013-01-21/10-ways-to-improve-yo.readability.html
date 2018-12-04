@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"><html><head> 
+   
+   
+   
+   
+   
+   
+  <title>  10 Tips to Improve your Text Classification Algorithm Accuracy and Performance | Thinknook</title> 
+   
+   
+   
+   
+          
+     
+                   
+   
+   
+   
+   
+   
+   
+    
+   
+   
+   
+   
+   
+        
+ </head> 
+ <body>
+  
+   <div>
+    <h1>10 Tips to Improve your Text Classification Algorithm Accuracy and Performance | Thinknook</h1>
+    
+     <div> 
+      January 21, 2013 
+      <p><a href="http://thinknook.com/wp-content/uploads/2013/01/network.gif"><img title="network structure from http://www.aip.org/pacs/" src="http://thinknook.com/wp-content/uploads/2013/01/network-300x268.gif" width="300" height="268" /></a></p> 
+      <p>In this article I discuss some methods you could adopt to improve the accuracy of your text classifier, I’ve taken a generalized approach so the recommendations here should really apply for most text classification problem you are dealing with, be it Sentiment Analysis, Topic Classification or any text based classifier. This is by no means a comprehensive list, but it should provide a nice introduction into the subject of text classification algorithm optimisation.</p> 
+      <p>Without further ado, here are 10 tips you could try to help improve the result of your text classification algorithm.</p> 
+       
+      <h3>Eliminate Low Quality Features (Words)</h3> 
+      <p>Low quality features in your training data-set is more likely to contribute negatively to your classification results (particularly since they might not be classified correctly), eliminating these low quality features can often lead to better classification results. In my experience this generally leads to a very healthy increase in over-all accuracy.</p> 
+      <p>It is sometimes difficult to select a cut-off point for the most important features, generally it is recommended to design a research bench-work application that recursively tries different cut-off points and selects the one with the best accuracy (against a test data-set), for example for a Topic classifier I found that considering only the top <strong>15,000</strong> most frequent words (in my training set) leads to the best average performance against my multiple test data-sets.</p> 
+      <p>A nice bi-product of eliminating low quality features is that your algorithm can be trained a lot faster, since the probability space is much smaller, which opens up the possibility of tweaking the algorithm more readily.</p> 
+      <p>There is an excellent article by Jacob on<a title="remove low quality features in NLTK python" href="http://streamhacker.com/2010/06/16/text-classification-sentiment-analysis-eliminate-low-information-features/"> Eliminating Low Information Features in NLTK</a>, which can also be generalized to many classification algorithms.</p> 
+      <h3>Recursively Grow your Stopword List</h3> 
+      <p>I usually have at least 5 different stopwords list per classification project, each of which grows as the algorithm is re-optimised and tweaked throughout the life-time of the project, in order for the classifier to meet the target accuracy figure, some of the stopword lists include:</p> 
+      <ul> 
+       <li><strong>Frequently used English (or any language) words</strong>: this will include about 500 words that doesn’t really contribute to context, such as: “<em>and</em>, <em>the</em>, <em>for</em>, <em>if</em>, <em>I</em>” etc.</li> 
+       <li><strong>Countries</strong></li> 
+       <li><strong>Cities</strong></li> 
+       <li><strong>Names</strong></li> 
+       <li><strong>Adjectives</strong></li> 
+       <li><strong>Temporal words</strong>: this will include about 100 words such as: “<em>Tuesday</em>, <em>tomorrow</em>, <em>January</em>“, etc.</li> 
+      </ul> 
+      <p>And many others, obviously not all classification project will use all stopwords list, you will need to match the right stopwords with the right classification problem. You could grow your stopwords list by iteratively analyzing the top features in your algorithm for words that shouldn’t be in there… and of course use logic!</p> 
+      <h3>Look Beyond Unigram into Bigrams and Trigrams</h3> 
+      <p>In text classification, Unigrams are single words, Bigrams are two related words (appear frequently next to each other in text), and Trigram is just the next extension of that concept.</p> 
+      <p>I found that often <a title="collocations" href="http://streamhacker.com/2010/05/24/text-classification-sentiment-analysis-stopwords-collocations/">considering Bigrams in a classification</a> algorithm tends to really boost performance, since the increased long-tail specificity of the word means that the classifier can easily determine which class has a higher probability, leading to better classifications. In my experience Trigrams do not have offer the same boost as Bigrams, but they are worth considering and could be essential for certain types of classifiers. You could also go beyond Trigrams if you felt that the classification problem requires it.</p> 
+      <p>The important thing to remember here is to apply the same logic for eliminating low quality bigrams and trigrams as you would with unigrams.</p> 
+      <h3>Diversify your Training Corpus</h3> 
+      <p>This point cannot be stressed enough, particularly if you wish to create a production-ready text classifier that behaves as expected in the lab as it would in the real world.</p> 
+      <p>Diversity in the training corpus helps dilute word features that are specific to one particular corpus, allowing the classification algorithm to only select features that have a root contribution towards the text classification problem at hand. Obviously you need to select the corpus intelligently and do not just add more data for the sake of adding more data, it is all about the context of the classification problem.</p> 
+      <p>For example if you were building a sentiment classification algorithm that will be used to classify social media sentiment, you need to make sure that your training set includes a variety of sources and not just training data from Twitter, ignoring communication from other social hubs like Facebook (a space in which you intend to run your algorithm). This will lead to features specific to Twitter data to appear in your classification probability space, leading to poor results when applied to other input sources.</p> 
+      <h3>Tweak Precision and Recall</h3> 
+      <p>I have written an article that discusses <a title="Testing &amp; Diagnosing a Text Classification Algorithm" href="http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/">precision and recall in the context of the Confusion Matrix</a>. The idea here is to tweak the system so when it fails, it does so in a manner that is more tolerable. This can be done by shifting <em>False Positive (or Precision)</em> under-performance to <em>False Negative (or recall) </em>under-performance, and viseversa according to you what is best for your system.</p> 
+      <h3>Eliminate Low Quality Predictions (Learn to Say “I Dont Know”)</h3> 
+      <p>Sometimes the algorithm might not be sure about which class the input text belongs to, this could be because</p> 
+      <ul> 
+       <li>The text does not contain features that the algorithm has been trained on. For example words that do not exist enough in the training set.</li> 
+       <li>The input text contains words from a different number of classes, resulting in evenly distributing the probability across those classes. For example a sentiment classifier trying to classify the input “I am happy and angry”</li> 
+      </ul> 
+      <p>In these scenarios the classifier usually returns the item with the highest probability even though it is a very low quality guess.</p> 
+      <p>If your model can tolerate a reduction in the coverage of what it can classify, you could greatly improve the accuracy of what is being classified by returning “Class Unknown”  when the classifier is too uncertain (highest probability is lower than threshold), this can be done by <a title="Text Classification Threshold Performance Graph" href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/">analyzing probability filter threshold against accuracy and coverage</a>.</p> 
+      <h3>Canonicalize Words through Lemma Reduction</h3> 
+      <p>The same word can have different formats depending on its grammatical usage (verb, adjective, noun, etc.), the idea of canonicalization is to reduce words to their lowest  format (lemma), assuming that the grammatical placement of words is an irrelevant feature to your classifier. For example the words:</p> 
+      <ul> 
+       <li>Running</li> 
+       <li>Runner</li> 
+       <li>Runs</li> 
+       <li>Ran</li> 
+       <li>Runners</li> 
+      </ul> 
+      <p> All can be reduced down to the word “ <strong><em>Run</em></strong>” as far as the classifier is concerned. </p> 
+      <p>This approach in reducing the word space can sometimes be extremely powerful <strong>when used in the right context</strong>, since it does not only reduce the probability space of the algorithm generated by the training set (giving the same word 1 score is better and more accurate than 10 different scores), but also helps in reducing the chances of encountering new words that the algorithm has not been trained on (when the algorithm is deployed), since all text will be reduced to its lowest canonical form, leading to improved <em>practical accuracy</em> of the algorithm.</p> 
+      <p>This could also extend to <strong>normalizing exaggerations in speech</strong>, which is a very common problem when classifying social data, this will include reducing words like “<em>haaaaapppppyyyyy</em>” to “<em>happy</em>“, or even better, reducing all exaggerated lengths of the word “<em>happy</em>” to a canonical format different from the non-exaggerated form, for example reducing both “<em>haaaaapppppyyyyy</em>” and “<em>haaaaaaaaaaaaaapppppyyy</em>”  to “<strong><em>haapppyy</em></strong>“, this will differentiate it from the non-exaggerated form when scoring it for classification, but still reduces the over-all probability space by normalizing the word. A good example of where this might be applicable is when classifying <em>conversational intensity</em>.</p> 
+      <h3>Eliminate Numerals, Punctuation and Corpus Specific Text</h3> 
+      <p>If any character in training &amp; testing corpus, and input text, contribute nothing towards the classification then they <strong>should be taken out</strong>, as all they will do is clutter your probability space with features that look like this:</p> 
+      <ul> 
+       <li>Running,</li> 
+       <li>Running.</li> 
+       <li>Running!!!</li> 
+       <li>Running!?!?</li> 
+       <li>#Running</li> 
+       <li>“Running”</li> 
+      </ul> 
+      <p>Diluting the actual real probability that should be associated with the word “<em>Running</em>“, while occupying space in your high quality features that could be put to better use.</p> 
+      <p>Sometimes you might need to consider the nature of the training data-set itself, and if there is any peculiarities that you need to take out, for example if you are dealing with a data-set from Twitter, you might want to eliminate (using a RegEx perhaps) any usernames (of the format <em><a title="my twitter account" href="https://twitter.com/thinknook">@thinknook</a></em>) because they do not contribute towards the classification problem you have at hand.</p> 
+      <p>I toyed with the idea of breaking text into its grammatical structure and removing a particular grammatical class (say <a title="Grammatical interjection" href="http://en.wikipedia.org/wiki/Interjection">Interjection</a>) completely, but over-all the results weren’t very successful for my particular situation, and a comprehensive stopwords list that included all encountered Interjection words worked better.</p> 
+      <h3>Try a Different Classification Algorithm</h3> 
+      <p>Classification algorithms come in many different formats, some are intended as a speedier way to execute the same algorithms, others might offer a more consistent performance or higher over-all accuracy for the specific problem you have at hand. For example if you are currently running your classifier on a <a title="Naive Bayes classifier" href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayes algorithm</a>, then it might be worth considering a <a title="maximum entropy" href="http://en.wikipedia.org/wiki/Principle_of_maximum_entropy">Maximum Entropy</a> one.</p> 
+      <p>Many Natural Language Processing tools come with many flavors of classification algorithms, in this article I go through the <a title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux" href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/">NLTK classification algorithms</a> as well as present a Linux 64x compiled library of my favorite Maximum Entropy algorithm, MEGAM.</p> 
+      <h3>To Lower or Not To Lower (your Text)</h3> 
+      <p>This again relates to the problem of canonicalizing the features (or words) in the probability space (and input data). The decision of whether lowering all text makes sense (and yields better accuracy for your classifier) depends on what exactly you are trying to classify, for example if you are classifying <em><strong>Intensity</strong></em> or <em><strong>Mood</strong></em>, then capitalization might be an important feature that contributes positively to the accuracy of the predictions, but if you are trying to classify text into topics or categories, then lowering all text (training, test and input data) might have a very healthy impact on over-all accuracy.</p> 
+      <p>You could get a bit more clever than the brute force approach, and selectively choose to keep certain words capitalized due to their positive contribution in differentiating them from their lower format counterpart.</p> 
+      <h3>Targeted Manual Injection and Curation of Corpus Data</h3> 
+      <p>A low quality corpus is the Achilles’ heel of a classification algorithm, you could tweak all you want, implement awesome features extraction techniques and do all the recommendations above and still get nowhere if you do not have a comprehensive good quality training corpus.</p> 
+      <p>It is highly recommended that you dedicate time towards a level of manual curation of your training set, particularly if the training set involves human entry, or people trying to game the system for their own benefit. For example if you are using a blog directory as a training set for Topic classification, users entering their blog details might try to trick the topic cataloguing system and get more traffic by ticking as many topics as possible, leading to a poor training corpus and a poor classification algorithm. There is a cool article by Alistair that takes a generalized look on <a title="data warefare" href="http://radar.oreilly.com/2013/01/stacks-get-hacked-the-inevitable-rise-of-data-warfare.html">data mining and prediction using public (minimally administered) data</a>, and the issues surrounding that.</p> 
+      <p>The point about corpus diversity does help to a certain extend in diluting the impact of this issue, but as far as I can tell at one point you will hit a brick wall were the only way to improve accuracy is to manual curate the training data, this could be at 10% accuracy or at 90% depending on your situation. I also found that sometimes using a good quality subset of an over-all bad quality corpus leads to better results than using the whole corpus, which seems to suggest that quality is more important than quantity.</p> 
+      <p>Sometimes it is also necessary to plug-in targeted content in your training set intended to remove ambiguity between two classes in the classification algorithm, lower a high probability factor for a feature against a particular class, or introduce a new content area that is not explored by the initial training corpus.</p> 
+      <p>If you’ve made it this far then I salute you sir, and wish you the best with your classification endeavors!</p> 
+      <strong>Tags: </strong><a href="http://thinknook.com/tag/bigrams/">bigrams</a>, <a href="http://thinknook.com/tag/classification/">classification</a>, <a href="http://thinknook.com/tag/corpus/">corpus</a>, <a href="http://thinknook.com/tag/predictiion/">predictiion</a>, <a href="http://thinknook.com/tag/stopwords/">stopwords</a>, <a href="http://thinknook.com/tag/text-classification/">text classification</a>, <a href="http://thinknook.com/tag/unigrams/">unigrams</a> 
+     </div>
+    
+   </div>
+  
+ 
+</body></html></html>

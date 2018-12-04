@@ -77,6 +77,15 @@ public class RecognizingContentExtractor implements ContentExtractor {
 			if (total > 0) {
 				return false;
 			}
+			if (total < 0) {
+				Element title = DOM.findElement(element, other -> {
+					String value = other.getAttributeValue("data-title");
+					return "1.0".equals(value);
+				});
+				if (title!=null) {
+					return false;
+				}
+			}
 			return num > 0;
 		});
 		DOM.removeDeep(toRemove);

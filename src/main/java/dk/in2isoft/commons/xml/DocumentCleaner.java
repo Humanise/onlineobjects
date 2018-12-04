@@ -26,6 +26,7 @@ public class DocumentCleaner {
 	private Set<String> validTags = new HashSet<>();
 	private Set<String> structureTags = new HashSet<>();
 	private Set<String> validLeaves = new HashSet<>();
+	private Set<String> inlineTags = new HashSet<>();
 	
 	private Set<String> bannedTags = new HashSet<>();
 	private Set<String> semanticAttributes = new HashSet<>();
@@ -53,6 +54,40 @@ public class DocumentCleaner {
 		validAttributes.put("meta", "content");
 		validAttributes.put("meta", "property");
 
+		inlineTags.add("strong");
+		inlineTags.addAll(Sets.newHashSet("a",
+				"abbr",
+				"acronym",
+				"b",
+				"bdo",
+				"big",
+				"br",
+				"button",
+				"cite",
+				"code",
+				"dfn",
+				"em",
+				"i",
+				"img",
+				"input",
+				"kbd",
+				"label",
+				"map",
+				"object",
+				"q",
+				"samp",
+				"script",
+				"select",
+				"small",
+				"span",
+				"strong",
+				"sub",
+				"sup",
+				"textarea",
+				"time",
+				"tt",
+				"var"));
+		
 		validTags.addAll(Sets.newHashSet("html","head","body","title"));
 		validTags.addAll(Sets.newHashSet("h1","h2","h3","h4","h5","h6","p"));
 		validTags.addAll(Sets.newHashSet("strong","em","a","img","br","hr"));
@@ -312,8 +347,15 @@ public class DocumentCleaner {
 		boolean modified = false;
 		for (Element element : toRemove) {
 			ParentNode parent = element.getParent();
+
 			if (parent instanceof Element) {
+				int index = parent.indexOf(element);
 				parent.removeChild(element);
+				if (inlineTags.contains(element.getLocalName().toLowerCase())) {
+					if (DOM.getText(element).length() > 0) {
+						((Element) parent).insertChild(" ", index);
+					}
+				}
 				modified = true;
 			}
 		}

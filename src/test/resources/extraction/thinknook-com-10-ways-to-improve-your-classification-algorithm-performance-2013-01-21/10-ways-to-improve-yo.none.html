@@ -1,0 +1,1130 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"><html><head>&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+
+&#x0D;
+&#x0D;
+&#x0D;
+<title>  10 Tips to Improve your Text Classification Algorithm Accuracy and Performance | Thinknook</title>&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+	&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+
+	
+            
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+
+
+
+
+
+
+
+&#x0D;
+&#x0D;
+&#x0D;
+&#x0D;
+</head>&#x0D;
+&#x0D;
+&#x0D;
+<body>&#x0D;
+&#x0D;
+		&#x0D;
+				  &#x0D;
+			&#x0D;
+						&#x0D;
+						&#x0D;
+						&#x0D;
+							&#x0D;
+							&#x0D;
+							&#x0D;
+							<div>&#x0D;
+						&#x0D;
+							<h1><a href="http://thinknook.com/"><img src="http://thinknook.com/wp-content/uploads/2012/03/thinknook-new-logo3.png" /></a></h1><ul><li><a href="http://twitter.com/thinknook">Follow us on Twitter</a></li><li><a href="http://www.facebook.com/profile.php?id=61013518">Join our Facebook Group</a></li><li><a href="https://plus.google.com/u/0/100254608780828426453">Join me on Google Plus</a></li><li><a href="http://uk.linkedin.com/in/ibrahimnaji">Add me on Linkedin</a></li>	<li><a href="http://feeds.feedburner.com/Thinknook">RSS</a></li></ul>							</div> &#x0D;
+							&#x0D;
+							&#x0D;
+						&#x0D;
+							&#x0D;
+						&#x0D;
+			&#x0D;
+&#x0D;
+			&#x0D;
+		&#x0D;
+		&#x0D;
+		&#x0D;
+			&#x0D;
+				&#x0D;
+				&#x0D;
+				&#x0D;
+				
+
+		<div>
+		
+			
+			
+			
+			<h1>
+					<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/" title="Permanent Link: 10 Tips to Improve your Text Classification Algorithm Accuracy and Performance">10 Tips to Improve your Text Classification Algorithm Accuracy and Performance					
+					</a>
+			</h1>
+			
+			
+	        
+	        	
+	        	
+	        		
+	        		<div>
+	        		
+	        			21
+   						Jan
+   						
+	        		</div>
+	        		
+	        	
+				
+				
+			
+
+			<div>	
+			
+			 January 21, 2013	
+				<p><a href="http://thinknook.com/wp-content/uploads/2013/01/network.gif"><img title="network structure from http://www.aip.org/pacs/" src="http://thinknook.com/wp-content/uploads/2013/01/network-300x268.gif" width="300" height="268" /></a></p>
+<p>In this article I discuss some methods you could adopt to improve the accuracy of your text classifier, I’ve taken a generalized approach so the recommendations here should really apply for most text classification problem you are dealing with, be it Sentiment Analysis, Topic Classification or any text based classifier. This is by no means a comprehensive list, but it should provide a nice introduction into the subject of text classification algorithm optimisation.</p>
+
+<p>Without further ado, here are 10 tips you could try to help improve the result of your text classification algorithm.</p>
+
+<h3>Eliminate Low Quality Features (Words)</h3>
+<p>Low quality features in your training data-set is more likely to contribute negatively to your classification results (particularly since they might not be classified correctly), eliminating these low quality features can often lead to better classification results. In my experience this generally leads to a very healthy increase in over-all accuracy.</p>
+<p>It is sometimes difficult to select a cut-off point for the most important features, generally it is recommended to design a research bench-work application that recursively tries different cut-off points and selects the one with the best accuracy (against a test data-set), for example for a Topic classifier I found that considering only the top <strong>15,000</strong> most frequent words (in my training set) leads to the best average performance against my multiple test data-sets.</p>
+<p>A nice bi-product of eliminating low quality features is that your algorithm can be trained a lot faster, since the probability space is much smaller, which opens up the possibility of tweaking the algorithm more readily.</p>
+<p>There is an excellent article by Jacob on<a title="remove low quality features in NLTK python" href="http://streamhacker.com/2010/06/16/text-classification-sentiment-analysis-eliminate-low-information-features/"> Eliminating Low Information Features in NLTK</a>, which can also be generalized to many classification algorithms.</p>
+<h3>Recursively Grow your Stopword List</h3>
+<p>I usually have at least 5 different stopwords list per classification project, each of which grows as the algorithm is re-optimised and tweaked throughout the life-time of the project, in order for the classifier to meet the target accuracy figure, some of the stopword lists include:</p>
+<ul>
+<li><strong>Frequently used English (or any language) words</strong>: this will include about 500 words that doesn’t really contribute to context, such as: “<em>and</em>, <em>the</em>, <em>for</em>, <em>if</em>, <em>I</em>” etc.</li>
+<li><strong>Countries</strong></li>
+<li><strong>Cities</strong></li>
+<li><strong>Names</strong></li>
+<li><strong>Adjectives</strong></li>
+<li><strong>Temporal words</strong>: this will include about 100 words such as: “<em>Tuesday</em>, <em>tomorrow</em>, <em>January</em>“, etc.</li>
+</ul>
+<p>And many others, obviously not all classification project will use all stopwords list, you will need to match the right stopwords with the right classification problem. You could grow your stopwords list by iteratively analyzing the top features in your algorithm for words that shouldn’t be in there… and of course use logic!</p>
+<h3>Look Beyond Unigram into Bigrams and Trigrams</h3>
+<p>In text classification, Unigrams are single words, Bigrams are two related words (appear frequently next to each other in text), and Trigram is just the next extension of that concept.</p>
+<p>I found that often <a title="collocations" href="http://streamhacker.com/2010/05/24/text-classification-sentiment-analysis-stopwords-collocations/">considering Bigrams in a classification</a> algorithm tends to really boost performance, since the increased long-tail specificity of the word means that the classifier can easily determine which class has a higher probability, leading to better classifications. In my experience Trigrams do not have offer the same boost as Bigrams, but they are worth considering and could be essential for certain types of classifiers. You could also go beyond Trigrams if you felt that the classification problem requires it.</p>
+<p>The important thing to remember here is to apply the same logic for eliminating low quality bigrams and trigrams as you would with unigrams.</p>
+<h3>Diversify your Training Corpus</h3>
+<p>This point cannot be stressed enough, particularly if you wish to create a production-ready text classifier that behaves as expected in the lab as it would in the real world.</p>
+<p>Diversity in the training corpus helps dilute word features that are specific to one particular corpus, allowing the classification algorithm to only select features that have a root contribution towards the text classification problem at hand. Obviously you need to select the corpus intelligently and do not just add more data for the sake of adding more data, it is all about the context of the classification problem.</p>
+<p>For example if you were building a sentiment classification algorithm that will be used to classify social media sentiment, you need to make sure that your training set includes a variety of sources and not just training data from Twitter, ignoring communication from other social hubs like Facebook (a space in which you intend to run your algorithm). This will lead to features specific to Twitter data to appear in your classification probability space, leading to poor results when applied to other input sources.</p>
+<h3>Tweak Precision and Recall</h3>
+<p>I have written an article that discusses <a title="Testing &amp; Diagnosing a Text Classification Algorithm" href="http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/">precision and recall in the context of the Confusion Matrix</a>. The idea here is to tweak the system so when it fails, it does so in a manner that is more tolerable. This can be done by shifting <em>False Positive (or Precision)</em> under-performance to <em>False Negative (or recall) </em>under-performance, and viseversa according to you what is best for your system.</p>
+<h3>Eliminate Low Quality Predictions (Learn to Say “I Dont Know”)</h3>
+<p>Sometimes the algorithm might not be sure about which class the input text belongs to, this could be because</p>
+<ul>
+<li>The text does not contain features that the algorithm has been trained on. For example words that do not exist enough in the training set.</li>
+<li>The input text contains words from a different number of classes, resulting in evenly distributing the probability across those classes. For example a sentiment classifier trying to classify the input “I am happy and angry”</li>
+</ul>
+<p>In these scenarios the classifier usually returns the item with the highest probability even though it is a very low quality guess.</p>
+<p>If your model can tolerate a reduction in the coverage of what it can classify, you could greatly improve the accuracy of what is being classified by returning “Class Unknown”  when the classifier is too uncertain (highest probability is lower than threshold), this can be done by <a title="Text Classification Threshold Performance Graph" href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/">analyzing probability filter threshold against accuracy and coverage</a>.</p>
+<h3>Canonicalize Words through Lemma Reduction</h3>
+<p>The same word can have different formats depending on its grammatical usage (verb, adjective, noun, etc.), the idea of canonicalization is to reduce words to their lowest  format (lemma), assuming that the grammatical placement of words is an irrelevant feature to your classifier. For example the words:</p>
+<ul>
+<li>Running</li>
+<li>Runner</li>
+<li>Runs</li>
+<li>Ran</li>
+<li>Runners</li>
+</ul>
+<div>All can be reduced down to the word “<strong><em>Run</em></strong>” as far as the classifier is concerned.</div>
+<p>This approach in reducing the word space can sometimes be extremely powerful <strong>when used in the right context</strong>, since it does not only reduce the probability space of the algorithm generated by the training set (giving the same word 1 score is better and more accurate than 10 different scores), but also helps in reducing the chances of encountering new words that the algorithm has not been trained on (when the algorithm is deployed), since all text will be reduced to its lowest canonical form, leading to improved <em>practical accuracy</em> of the algorithm.</p>
+<p>This could also extend to <strong>normalizing exaggerations in speech</strong>, which is a very common problem when classifying social data, this will include reducing words like “<em>haaaaapppppyyyyy</em>” to “<em>happy</em>“, or even better, reducing all exaggerated lengths of the word “<em>happy</em>” to a canonical format different from the non-exaggerated form, for example reducing both “<em>haaaaapppppyyyyy</em>” and “<em>haaaaaaaaaaaaaapppppyyy</em>”  to “<strong><em>haapppyy</em></strong>“, this will differentiate it from the non-exaggerated form when scoring it for classification, but still reduces the over-all probability space by normalizing the word. A good example of where this might be applicable is when classifying <em>conversational intensity</em>.</p>
+<h3>Eliminate Numerals, Punctuation and Corpus Specific Text</h3>
+<p>If any character in training &amp; testing corpus, and input text, contribute nothing towards the classification then they <strong>should be taken out</strong>, as all they will do is clutter your probability space with features that look like this:</p>
+<ul>
+<li>Running,</li>
+<li>Running.</li>
+<li>Running!!!</li>
+<li>Running!?!?</li>
+<li>#Running</li>
+<li>“Running”</li>
+</ul>
+<p>Diluting the actual real probability that should be associated with the word “<em>Running</em>“, while occupying space in your high quality features that could be put to better use.</p>
+<p>Sometimes you might need to consider the nature of the training data-set itself, and if there is any peculiarities that you need to take out, for example if you are dealing with a data-set from Twitter, you might want to eliminate (using a RegEx perhaps) any usernames (of the format <em><a title="my twitter account" href="https://twitter.com/thinknook">@thinknook</a></em>) because they do not contribute towards the classification problem you have at hand.</p>
+<p>I toyed with the idea of breaking text into its grammatical structure and removing a particular grammatical class (say <a title="Grammatical interjection" href="http://en.wikipedia.org/wiki/Interjection">Interjection</a>) completely, but over-all the results weren’t very successful for my particular situation, and a comprehensive stopwords list that included all encountered Interjection words worked better.</p>
+<h3>Try a Different Classification Algorithm</h3>
+<p>Classification algorithms come in many different formats, some are intended as a speedier way to execute the same algorithms, others might offer a more consistent performance or higher over-all accuracy for the specific problem you have at hand. For example if you are currently running your classifier on a <a title="Naive Bayes classifier" href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Naive Bayes algorithm</a>, then it might be worth considering a <a title="maximum entropy" href="http://en.wikipedia.org/wiki/Principle_of_maximum_entropy">Maximum Entropy</a> one.</p>
+<p>Many Natural Language Processing tools come with many flavors of classification algorithms, in this article I go through the <a title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux" href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/">NLTK classification algorithms</a> as well as present a Linux 64x compiled library of my favorite Maximum Entropy algorithm, MEGAM.</p>
+<h3>To Lower or Not To Lower (your Text)</h3>
+<p>This again relates to the problem of canonicalizing the features (or words) in the probability space (and input data). The decision of whether lowering all text makes sense (and yields better accuracy for your classifier) depends on what exactly you are trying to classify, for example if you are classifying <em><strong>Intensity</strong></em> or <em><strong>Mood</strong></em>, then capitalization might be an important feature that contributes positively to the accuracy of the predictions, but if you are trying to classify text into topics or categories, then lowering all text (training, test and input data) might have a very healthy impact on over-all accuracy.</p>
+<p>You could get a bit more clever than the brute force approach, and selectively choose to keep certain words capitalized due to their positive contribution in differentiating them from their lower format counterpart.</p>
+<h3>Targeted Manual Injection and Curation of Corpus Data</h3>
+<p>A low quality corpus is the Achilles’ heel of a classification algorithm, you could tweak all you want, implement awesome features extraction techniques and do all the recommendations above and still get nowhere if you do not have a comprehensive good quality training corpus.</p>
+<p>It is highly recommended that you dedicate time towards a level of manual curation of your training set, particularly if the training set involves human entry, or people trying to game the system for their own benefit. For example if you are using a blog directory as a training set for Topic classification, users entering their blog details might try to trick the topic cataloguing system and get more traffic by ticking as many topics as possible, leading to a poor training corpus and a poor classification algorithm. There is a cool article by Alistair that takes a generalized look on <a title="data warefare" href="http://radar.oreilly.com/2013/01/stacks-get-hacked-the-inevitable-rise-of-data-warfare.html">data mining and prediction using public (minimally administered) data</a>, and the issues surrounding that.</p>
+<p>The point about corpus diversity does help to a certain extend in diluting the impact of this issue, but as far as I can tell at one point you will hit a brick wall were the only way to improve accuracy is to manual curate the training data, this could be at 10% accuracy or at 90% depending on your situation. I also found that sometimes using a good quality subset of an over-all bad quality corpus leads to better results than using the whole corpus, which seems to suggest that quality is more important than quantity.</p>
+<p>Sometimes it is also necessary to plug-in targeted content in your training set intended to remove ambiguity between two classes in the classification algorithm, lower a high probability factor for a feature against a particular class, or introduce a new content area that is not explored by the initial training corpus.</p>
+<p>If you’ve made it this far then I salute you sir, and wish you the best with your classification endeavors!</p>
+<div> * * * * ½ 6 votes</div>
+<div>
+<p>Related posts:</p><ol>
+<li><a href="http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/" title="Testing &amp; Diagnosing a Text Classification Algorithm">Testing &amp; Diagnosing a Text Classification Algorithm</a></li>
+<li><a href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/" title="Text Classification Threshold Performance Graph">Text Classification Threshold Performance Graph</a></li>
+<li><a href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/" title="Twitter Sentiment Analysis Training Corpus (Dataset)">Twitter Sentiment Analysis Training Corpus (Dataset)</a></li>
+<li><a href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/" title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux">NLTK Megam (Maximum Entropy) Library on 64-bit Linux</a></li>
+<li><a href="http://thinknook.com/querying-the-full-text-index-in-sql-server-2012-12-05/" title="Querying the Full-Text Index in SQL Server">Querying the Full-Text Index in SQL Server</a></li>
+</ol>
+</div>
+<strong>Tags: </strong><a href="http://thinknook.com/tag/bigrams/">bigrams</a>, <a href="http://thinknook.com/tag/classification/">classification</a>, <a href="http://thinknook.com/tag/corpus/">corpus</a>, <a href="http://thinknook.com/tag/predictiion/">predictiion</a>, <a href="http://thinknook.com/tag/stopwords/">stopwords</a>, <a href="http://thinknook.com/tag/text-classification/">text classification</a>, <a href="http://thinknook.com/tag/unigrams/">unigrams</a>				
+				
+				
+				
+	        	
+					<div>
+												
+						<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comments" title="Comment on 10 Tips to Improve your Text Classification Algorithm Accuracy and Performance"> 17 Comments</a>/<div><a href="http://www.facebook.com/sharer/sharer.php?t=10+Tips+to+Improve+your+Text+Classification+Algorithm+Accuracy+and+Performance&amp;u=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F">Array Likes</a></div>/<a href="https://twitter.com/intent/tweet?text=10+Tips+to+Improve+your+Text+Classification+Algorithm+Accuracy+and+Performance&amp;url=http%3A%2F%2Fwp.me%2Fp2waZP-f4&amp;via=thinknook">36 Tweets</a>/posted in <a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/">Classification</a> 					
+					</div>	
+					
+				
+
+								
+			</div>	
+			
+
+		</div>					&#x0D;
+						&#x0D;
+							<div>&#x0D;
+								← <a href="http://thinknook.com/text-classification-threshold-performance-graph-2013-01-20/">Text Classification Threshold Performance Graph</a> 							</div>&#x0D;
+							<div>&#x0D;
+								<a href="http://thinknook.com/running-highcharts-within-ssrs-or-any-js-graph-library-2013-01-22/">Running Highcharts within SSRS (or any JS Graph Library)</a> →							</div>&#x0D;
+						 &#x0D;
+					&#x0D;
+&#x0D;
+					<div><h5>Related Posts</h5><div>
+<a href="http://thinknook.com/approaching-trend-analysis-through-discretization-and-correlation-2012-12-16/">
+
+
+<strong>Generic Trend Classification Engine using Pearson Correlation...</strong>
+
+</a></div>
+<div>
+<a href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/">
+
+
+<strong>NLTK Megam (Maximum Entropy) Library on 64-bit Lin...</strong>
+
+</a></div>
+<div>
+<a href="http://thinknook.com/testing-diagnosing-a-text-classification-algorithm-2013-01-19/">
+
+
+<strong>Testing &amp; Diagnosing a Text Classification Al...</strong>
+
+</a></div>
+</div>
+
+
+	        	
+	        	
+
+
+
+			
+			
+	        		
+	        		<div>
+	        				        			
+	        			17
+   						replies
+   						
+	        		</div>
+	        		
+	        	
+			
+			
+
+			
+			<div>
+			
+
+			<ol>
+					<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/30dfd749c26da5b24758eb46efa7d223?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Manish</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1234">January 21, 2013 at 5:54 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>Assuming you have access to LogisticRegression with L1 and L2 regularization (e.g. sci-kit):<br />
+Use L1/L2 regularization to automatically eliminate redundant features rather than the above heuristical approach. Use L1-regularization to get a list of relevant features and then train a different classifier with this subset of features. Let the classifier do the work and tell you what features were found important. Features required really depend on the classification task.</p>
+<p>You can also iteratively work on feature engineering by generating more-of-the-relevant features for your *task*. To see what features are relevant — inspect the weights assigned to the features (and feature sets) by the regularized-classifier. I typically bucket my features by a name-space to generate feature-sets. For example: ‘verbs:xxx’, ‘bigrams:…’, etc. I can then roll-up by feature-set the regularization scores to determine which type of features are working well — and simply work on generating more of those types of features.</p>
+<p>I spend less-time on eliminating features and more on generating different types of features that are helping a given classification task. </p>
+<p>I also use the regularization weights to find bugs in my code. If for a feature-set, the weights are lower than expected, it is possible I have a bug in the code and am not generating the features properly.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1234#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>admin</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1236">January 21, 2013 at 8:37 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>Hey Manish,</p>
+<p>Thanks for the great comment, my understanding of classification algorithm is still somewhat naive (no pun intended), but I understand the general premise of the approach you have highlighted above. MEGAM seems to offer L2 Regularization (actually it looks like an implementation of Gaussian Prior which effectively achieves the same result, i think :S) within NLTK so I will definitely give that a go… otherwise as per your suggestion Sci-Kit seems like the way to go for finer control over L1/L2 regularization, the results of which can then be plugged back into NLTK if needs be.</p>
+<p>I particularly like the point regarding categorizing features into bucket to diagnose what features are contributing the most towards the classification problem… what really jumps out at me is the fact that this idea can be extended to reflect document structure or word placement (something I had in the back of my mind for a while now), for example features appearing in the subject of an email can be tagged with ‘subject:feature’ (since subject might be more relevant than body). We can even bucket the words by position within the document, so say have 3 buckets:<br />
+0 – 100 words: bucket1<br />
+100-200 words: bucket2<br />
+201+ words: bucket3<br />
+And place features within those buckets accordingly, given that feature placement (and position) within text contribute towards the classification scenario you are dealing with.</p>
+<p>Really loved your comments, although now I have about 20 new bookmarked sites that I need to read :)… It appears that the more I know, the more I know that I don’t know!!</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1236#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/30dfd749c26da5b24758eb46efa7d223?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Manish</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1251">January 22, 2013 at 8:16 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>Hi Ibrahim,</p>
+<p>Thanks for your response. Glad u like it.</p>
+<p>I use a combination of NLTK (primarily for the Tree and ParentedTree datastructures) and sci-kit for classification/machine learning stuff.</p>
+<p>Yeah the document structure feature is quite powerful. I use it for wikipedia classification (e.g infobox:, abstract:), etc. I need to blog about it.</p>
+<p>– Manish</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1251#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://0.gravatar.com/avatar/c1c948e4c0c2d199d601134929dbc51b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="https://raajaa.jux.com">G S VIJAY RAAJAA</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-1797">April 16, 2013 at 6:36 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Hi,</p>
+<p>      Can you throw light on stemming exaggerations in conversations? such as happpyyyyy to happy.<br />
+The existing stemming algorithms doesn’t serve the same.</p>
+<p>I would like to appreciate your efforts and the blog is quite informative.</p>
+<p>Regards,<br />
+Vijay Raajaa G S</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=1797#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://thinknook.com/">Links Naji</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2492">July 13, 2013 at 1:05 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>Hi Vijay,</p>
+<p>Am really not sure how I missed your comment!, apologies for not replying sooner.</p>
+<p>To handle exaggerations in conversation, most likely you will need to implement your own algorithm, which has to be specific to the classification problem you are trying to solve. For example this type of word reduction might not be a good idea if classifying Sentiment, Conversational Intensity, Mood and even perhaps personality traits, but would yield better results when applied to News Topics or Football Equipment classification problems.</p>
+<p>As far as implementation goes, you could just write a Regular Expression (RegEx) that can identify a word with an exceptional number of repeated letters in that language, for example 3 letters in a row in English could indicate exaggerated speech, and then handle that word in the manner you best see fit, such as bucketing them as per MANISH’s suggestion above, or reduce them to a canonical word (remove the exaggeration), etc.</p>
+<p>Remember to apply this type of word reduction on the training set, as well as the test set and the live data when the algorithm is being used.</p>
+<p>I hope this helps!</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2492#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/da6e5d628886802c81edf9b14a9cb03f?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Jaseema banu</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2488">July 13, 2013 at 6:25 am</a>
+			</div>
+			
+			
+			<div>
+			<p>i’m started doing my final year project on sentiment analysis and opinion mining for social networks.. pls tell me a classifier algorithm that gives greater accuracy and more advantages. i want that choosing classifier algorithm must be a new approach. Thankz in advance………</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2488#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://thinknook.com/">Links Naji</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2515">July 15, 2013 at 10:03 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Hi Jaseema,</p>
+<p>Regarding selecting the right algorithm for the job, I strongly recommend trying out a few algorithms yourself, even perhaps on different packages (NLTK, R or Orange, etc). Once you have the data-set ready, and have identified the best features to extract  from the text, then applying various algorithms should be really simple, and there are mountains of tutorials and ready-made code that can help you with that. Personally I found that the <a href="http://thinknook.com/nltk-megam-maximum-entropy-library-on-64-bit-linux-2012-11-27/" title="NLTK Megam (Maximum Entropy) Library on 64-bit Linux">MEGAM library on NLTK</a> (which is a MaxEnt algorithm) offers  decent accuracy across the many classification tasks I had to deal with.</p>
+<p>As for finding a new approach, I recommend reading some of the new papers and research on sentiment analysis for inspiration, there are some really good and unique ideas out there, and hopefully this will help trigger some unique ideas of your own!</p>
+<p>I hope this helps, best of luck with your dissertation!</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2515#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://0.gravatar.com/avatar/61e56893370404cfd8327e99faaf0e6b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Jayson</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2978">August 13, 2013 at 9:22 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Hello Sir Ibrahim Naji, reading your blog posts has let me learned many things, I thank you for that. I do have some questions too, I am currently doing a thesis on emotion analysis on disaster related tweets, and I have some problems, how do I incorporate the frequent words that have been collected then translate it into an emotion? For example, the tweet is, “God is our refuge and strength so when you choose friends make sure that most of them are God fearing pray 4 them #bopha” Thank you sir in advance.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2978#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://thinknook.com/">Links Naji</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-2979">August 13, 2013 at 9:27 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Hello Jayson,</p>
+<p>Awesome, am really glad you found the articles useful.</p>
+<p>Regarding your question, there are many approaches to doing emotion classification, each has some advantages and disadvantages, I strongly recommending reading a book on Data Mining to get a better holistic picture about the over-all discipline, and maybe that will also spark some unique ideas of your own, which will make for a great thesis!. There is a good book by <a href="http://www.cs.uic.edu/~liub/WebMiningBook.html" title="Web Data Mining by Ling Liu">Bing Liu on Web Data Mining</a> I would recommend for this task.</p>
+<p>As far as your specific problem is concerned, it looks like you are looking at classifying based on <a href="http://en.wikipedia.org/wiki/Plutchik%27s_Wheel_of_Emotions#Plutchik.27s_wheel_of_emotions" title="Wheek of Emotion">Plutchik’s wheel of emotions</a>, in which he identifies 8 primal emotions, and uses those to build more complex human emotions. There are already some classification APIs that returns results based on this wheel of emotion, I recommend looking at <a href="https://developer.conveyapi.com/features.html" title="Convey API">ConveyAPI’s Emotion classifier</a> as a practical example.</p>
+<p>As far as building a classifier is concerned, assuming you are building a “supervised learning” classifier, you will need 2 things:</p>
+<p><strong>1) A training corpus of already emotion classified text.</strong></p>
+<p>There are a few ways you could build this corpus, for example:</p>
+<ul>
+<li>You could try cleaning up the data in the <a href="http://www.experienceproject.com/" title="Experience Project">Experience Project</a>.</li>
+<li>Using transcripts on <a href="http://www.ted.com/" title="TED">TED</a>, you can search by emotions such as Courageous, Inspiring, Funny, etc.</li>
+<li>Build your own corpus using <a href="https://www.mturk.com/mturk/" title="Mechanical Turk by Amazon">Amazon’s Mechanical Turk</a>. Cheap and easier to setup than one might think.</li>
+<li>Although not really recommended, but you could sign-up to a trial on one of the online APIs that offer emotion classification, and use your free trial to build a corpus. I am sure if you are using the data for research purpose it won’t cause too many issues, but the draw back is that you are building on something with an inherent inaccuracy, this inaccuracy will potentially be compounded when you building your own classifier on top of that data-set.</li>
+<li>Get creative! <img src="http://thinknook.com/wp-includes/images/smilies/icon_smile.gif" /></li>
+</ul>
+<p><strong>2) A classification engine.</strong></p>
+<p>There are many packages out there that really simplifies the whole process, for example <a href="http://www.r-project.org/" title="R Statistical Programming">R</a> (for advance users) or <a href="http://nltk.org/" title="NLTK">NLTK </a>(for beginners/mid-level users). Each of those packages have great examples on how to get started, and a huge user community with many blog posts that can provide you with already made code. If you decide to go for NLTK I really recommend going through <a href="http://streamhacker.com/" title="Steamhacker">Jacob Perkins’ Streamhacker blog</a>, he has so many examples on NLTK, and explains things very well.</p>
+<p>Once you have those 2 elements, then begins the process of refining the algorithm and results to achieve the desired accuracy, my posts on improving your classification algorithm, or measuring accuracy using the confusion matrix, should aid you some of the way there, or at least give you some ideas on how to get started. There are many interesting articles online if you do some research.</p>
+<p>It is important to note that all of this might help you get started, but in order to produce something totally unique and awesome, you will need to dig deep and understand the mathematical models and concepts these algorithms operate on, and read some of the very interesting research out there on various approaches and the results they produced.</p>
+<p>I hope this all makes sense, please do not hesitate to hit me up if you need more information.</p>
+<p>Goodluck with your thesis!</p>
+<p>Cheers,</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=2979#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/9301be563b3cfac51414d3e315e60a08?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>john kim</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3220">May 22, 2014 at 11:05 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Good text analytic methosds</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3220#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://0.gravatar.com/avatar/2f4e1b450923f57496295ab4bc7fe3a7?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Johnc511</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3282">September 4, 2014 at 2:40 am</a>
+			</div>
+			
+			
+			<div>
+			<p>I think  you have  remarked some very interesting points ,  appreciate it for the post. ckdfcbgdccck</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3282#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://0.gravatar.com/avatar/434540905167208eed1ae369b1137249?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Viacheslav</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3333">February 24, 2015 at 2:35 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>A LOT of value here. Thanks Ibrahim, thanks Manish.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3333#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://thinknook.com/">Links Naji</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3334">February 24, 2015 at 11:08 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>Thanks <img src="http://thinknook.com/wp-includes/images/smilies/icon_smile.gif" /></p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3334#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://0.gravatar.com/avatar/43b07d3044923d8218dcc496008f5ccb?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://www.heartbeat.marketing">lana</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3356">July 1, 2015 at 2:58 am</a>
+			</div>
+			
+			
+			<div>
+			<p>Hello Ibrahim Naji, thank you for a great summary of tools and approaches. I am wondering what are the best emotion classifiers out there. Most are based on the Plutchik’s wheel. Do you know of any that go beyond that into Value Systems? I am considering having a unique classifier build for market research purposes. Would you recommend to use an existing one, or have one built specifically for my application? An example of a classifier “output” is on my website here (manual coding): <a href="http://www.heartbeat.marketing/report-example#600-women-1">http://www.heartbeat.marketing/report-example#600-women-1</a>.<br />
+Thank you,<br />
+Lana</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3356#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/7131ff14c033f76063878014faa440f6?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Rukayat Hussein</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3386">October 26, 2015 at 1:16 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>please i want to know the  figure(value) or range of values  that determine the classifier accuracy is good or bad.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3386#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/7131ff14c033f76063878014faa440f6?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite>Rukayat Hussein</cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3387">October 26, 2015 at 1:28 pm</a>
+			</div>
+			
+			
+			<div>
+			<p>How can i evaluate the content of  a data set(s) i.e to know if a data set is good for a specific domain or not without the use of any classifier algorithms.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3387#respond">Reply</a>			</div>
+			
+		</div>
+	
+<ul>
+	<li>
+	
+		
+			<div>
+				<img src="http://1.gravatar.com/avatar/5c3225273894362eb0f6372723ea3e8b?s=36&amp;d=retro&amp;r=G" height="36" width="36" />			</div>
+			
+			
+			<div>
+			
+			<cite><a href="http://thinknook.com/">Links Naji</a></cite> says:						
+			
+			<div>
+			<a href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#comment-3389">October 29, 2015 at 12:16 am</a>
+			</div>
+			
+			
+			<div>
+			<p>This question on <a href="http://www.researchgate.net/post/In_Text_Classification_how_do_you_find_the_correlation_between_a_feature_and_the_class_label">ResearchGate </a>might be able to help you out, there are multiple approaches to doing this.</p>
+						<a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/?replytocom=3389#respond">Reply</a>			</div>
+			
+		</div>
+	
+</li>
+</ul>
+</li>
+			</ol>
+						
+			
+			
+			
+			
+</div> <div><h3>Leave a Reply</h3>Want to join the discussion? <br />Feel free to contribute!								<div>
+				<h3>Leave a Reply <a href="/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/#respond">Cancel reply</a></h3>
+									
+																			<p>Your email address will not be published. Required fields are marked *</p>							<p>Name * </p>
+<p>Email * </p>
+<p>Website </p>
+												<p>Comment </p>						<p>You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						
+						<p> Notify me of follow-up comments by email.</p><p> Notify me of new posts by email.</p>					
+							</div>
+			        
+		</div>
+				&#x0D;
+				&#x0D;
+				&#x0D;
+				&#x0D;
+				&#x0D;
+			&#x0D;
+&#x0D;
+	&#x0D;
+	&#x0D;
+&#x0D;
+		&#x0D;
+<ul><li><a href="http://thinknook.com">Home</a></li><li><a href="http://thinknook.com/pagerank-checker/">PageRank Checker</a></li>
+<li><a href="http://thinknook.com/sql-optimization-challenge/">SQL Optimization Challenge</a></li>
+<li><a href="http://thinknook.com/sql-tools-libraries/">SQL Tools &amp; Libraries</a>
+<ul>
+	<li><a href="http://thinknook.com/sql-tools-libraries/ssrs-client-library/">SSRS Client Library</a></li>
+</ul>
+</li>
+<li><a href="http://thinknook.com/about/">About me</a></li>
+</ul><h3>Books I am currently reading</h3>			
+		<div><h3>Bigging myself up abit</h3>			<div><img src="http://thinknook.com/wp-content/uploads/2012/07/MCSArgb_1459-e1343131913345.png" />&#x0D;
+<img src="http://thinknook.com/wp-content/uploads/2013/01/MCITPrgb_1255.png" />&#x0D;
+<img src="http://thinknook.com/wp-content/uploads/2013/03/MCITPrgb_1256-e1364730723274.png" />&#x0D;
+<img src="http://thinknook.com/wp-content/uploads/2013/03/google-analytics-qualified-individual.jpg" />&#x0D;
+&#x0D;
+&#x0D;
+</div>
+		</div><div>Popular</div><ul><li><a title="Twitter Sentiment Analysis Training Corpus (Dataset)" href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/"><strong>Twitter Sentiment Analysis Training Corpus (Dataset)September 22, 2012, 5:13 pm</strong></a></li><li><a title="Truncate SSIS Catalog Database Operation Log Tables" href="http://thinknook.com/truncate-ssis-catalog-database-operation-log-tables-2012-11-03/"><strong>Truncate SSIS Catalog Database Operation Log TablesNovember 3, 2012, 9:36 pm</strong></a></li><li><a title="Running Highcharts within SSRS (or any JS Graph Library)" href="http://thinknook.com/running-highcharts-within-ssrs-or-any-js-graph-library-2013-01-22/"><strong>Running Highcharts within SSRS (or any JS Graph Library...January 22, 2013, 10:00 pm</strong></a></li><li><a title="10 Tips to Improve your Text Classification Algorithm Accuracy and Performance" href="http://thinknook.com/10-ways-to-improve-your-classification-algorithm-performance-2013-01-21/"><strong>10 Tips to Improve your Text Classification Algorithm Accuracy...January 21, 2013, 1:06 pm</strong></a></li><li><a title="SSRS SSL Certificate Nightmare" href="http://thinknook.com/ssrs-ssl-certificate-nightmare-2011-06-28/"><strong>SSRS SSL Certificate NightmareJune 28, 2011, 11:56 am</strong></a></li></ul><div>Recent</div><ul><li><a title="Getting Started with Solr &amp; Carrot2 Clustering" href="http://thinknook.com/getting-started-with-solr-carrot2-clustering-2013-10-08/"><strong>Getting Started with Solr &amp; Carrot2 ClusteringOctober 8, 2013, 3:07 pm</strong></a></li><li><a title="Keyword Stemming and Lemmatisation with Apache Solr" href="http://thinknook.com/keyword-stemming-and-lemmatisation-with-apache-solr-2013-08-02/"><strong>Keyword Stemming and Lemmatisation with Apache SolrAugust 2, 2013, 12:30 pm</strong></a></li><li><a title="In-Memory (Memory Optimized) Tables in SQL Server 2014" href="http://thinknook.com/in-memory-memory-optimized-tables-and-oltp-with-sql-server-2014-2013-07-12/"><strong>In-Memory (Memory Optimized) Tables in SQL Server 2014July 12, 2013, 2:32 am</strong></a></li><li><a title="Connecting SQL Server and Analysis Services to Hadoop Hive" href="http://thinknook.com/connecting-sql-server-and-analysis-services-to-hadoop-hive-2013-07-09/"><strong>Connecting SQL Server and Analysis Services to Hadoop H...July 9, 2013, 9:50 pm</strong></a></li><li><a title="Visual Studio 2013 Preview is Available for Download" href="http://thinknook.com/visual-studio-2013-preview-is-available-for-download-2013-06-29/"><strong>Visual Studio 2013 Preview is Available for DownloadJune 29, 2013, 12:00 am</strong></a></li></ul><div>Comments</div><ul><li><a title="Truncate SSIS Catalog Database Operation Log Tables" href="http://thinknook.com/truncate-ssis-catalog-database-operation-log-tables-2012-11-03/#comment-3521"><img src="http://1.gravatar.com/avatar/fd0aecb2a1cfc35d0d36e88235a3141c?s=48&amp;d=retro&amp;r=G" height="48" width="48" /><strong>Thanks for the script. It is very helpful. Do i need to...November 3, 9:36 pm by vishal dandge</strong></a></li><li><a title="Twitter Sentiment Analysis Training Corpus (Dataset)" href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3514"><img src="http://1.gravatar.com/avatar/1f556581c5bd79c143d3b7ea129f991f?s=48&amp;d=retro&amp;r=G" height="48" width="48" /><strong>Dear sir ,&#x0D;
+&#x0D;
+Can you please provide me a dataset that containing...September 22, 5:13 pm by Sithara Fernando</strong></a></li><li><a title="Twitter Sentiment Analysis Training Corpus (Dataset)" href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3511"><img src="http://1.gravatar.com/avatar/dd214d40862850817539138a6fc770ab?s=48&amp;d=retro&amp;r=G" height="48" width="48" /><strong>Hi&#x0D;
+ I am working on twitter sentiment analysis for course...September 22, 5:13 pm by Sarker Monojit Asish</strong></a></li><li><a title="Twitter Sentiment Analysis Training Corpus (Dataset)" href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3509"><img src="http://1.gravatar.com/avatar/bc8889c1a0bfddc2f8a3d9eeed6949f2?s=48&amp;d=retro&amp;r=G" height="48" width="48" /><strong>Yes I too need this dataset. I have a question that how...September 22, 5:13 pm by kush shrivastava</strong></a></li><li><a title="Twitter Sentiment Analysis Training Corpus (Dataset)" href="http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/#comment-3508"><img src="http://1.gravatar.com/avatar/9b63e79e9a125bf6a82ddfe85a2f49d2?s=48&amp;d=retro&amp;r=G" height="48" width="48" /><strong>I need necessary to arabic sentment analysis dataset It...September 22, 5:13 pm by mona</strong></a></li></ul><div>Tags</div><div><a href="http://thinknook.com/tag/apache/" title="2 topics">apache</a>
+<a href="http://thinknook.com/tag/atari/" title="1 topic">atari</a>
+<a href="http://thinknook.com/tag/big-data/" title="1 topic">big data</a>
+<a href="http://thinknook.com/tag/c-2/" title="1 topic">c#</a>
+<a href="http://thinknook.com/tag/classification/" title="4 topics">classification</a>
+<a href="http://thinknook.com/tag/cubes/" title="2 topics">cubes</a>
+<a href="http://thinknook.com/tag/database-growth/" title="2 topics">database growth</a>
+<a href="http://thinknook.com/tag/dmoz/" title="1 topic">dmoz</a>
+<a href="http://thinknook.com/tag/dmv/" title="3 topics">dmv</a>
+<a href="http://thinknook.com/tag/full-text/" title="2 topics">full-text</a>
+<a href="http://thinknook.com/tag/full-text-search/" title="2 topics">full-text search</a>
+<a href="http://thinknook.com/tag/games/" title="1 topic">games</a>
+<a href="http://thinknook.com/tag/hadoop-2/" title="5 topics">hadoop</a>
+<a href="http://thinknook.com/tag/hdinsight/" title="3 topics">HDInsight</a>
+<a href="http://thinknook.com/tag/highcharts/" title="2 topics">highcharts</a>
+<a href="http://thinknook.com/tag/hive/" title="2 topics">hive</a>
+<a href="http://thinknook.com/tag/html5/" title="1 topic">html5</a>
+<a href="http://thinknook.com/tag/immediate_sync/" title="1 topic">immediate_sync</a>
+<a href="http://thinknook.com/tag/integration-services/" title="2 topics">integration services</a>
+<a href="http://thinknook.com/tag/ir/" title="2 topics">IR</a>
+<a href="http://thinknook.com/tag/javascript/" title="2 topics">javascript</a>
+<a href="http://thinknook.com/tag/job-agent/" title="3 topics">job agent</a>
+<a href="http://thinknook.com/tag/js/" title="3 topics">js</a>
+<a href="http://thinknook.com/tag/log/" title="2 topics">log</a>
+<a href="http://thinknook.com/tag/map/" title="2 topics">map</a>
+<a href="http://thinknook.com/tag/microsoft-bi/" title="1 topic">microsoft bi</a>
+<a href="http://thinknook.com/tag/mobile-bi/" title="2 topics">mobile bi</a>
+<a href="http://thinknook.com/tag/nltk/" title="2 topics">nltk</a>
+<a href="http://thinknook.com/tag/non-immediate_sync/" title="1 topic">non-immediate_sync</a>
+<a href="http://thinknook.com/tag/odbc/" title="2 topics">odbc</a>
+<a href="http://thinknook.com/tag/replication/" title="1 topic">replication</a>
+<a href="http://thinknook.com/tag/reportplus/" title="1 topic">reportplus</a>
+<a href="http://thinknook.com/tag/solr-2/" title="2 topics">solr</a>
+<a href="http://thinknook.com/tag/sql/" title="4 topics">sql</a>
+<a href="http://thinknook.com/tag/sql-2012/" title="2 topics">sql 2012</a>
+<a href="http://thinknook.com/tag/sql-2014/" title="2 topics">sql 2014</a>
+<a href="http://thinknook.com/tag/sql-optimisation/" title="1 topic">SQL Optimisation</a>
+<a href="http://thinknook.com/tag/sql-server-2/" title="22 topics">sql server</a>
+<a href="http://thinknook.com/tag/ssas-2/" title="4 topics">ssas</a>
+<a href="http://thinknook.com/tag/ssis-2/" title="5 topics">ssis</a>
+<a href="http://thinknook.com/tag/ssis-2012/" title="3 topics">ssis 2012</a>
+<a href="http://thinknook.com/tag/ssrs-2/" title="6 topics">ssrs</a>
+<a href="http://thinknook.com/tag/statistics/" title="2 topics">statistics</a>
+<a href="http://thinknook.com/tag/text-classification/" title="2 topics">text classification</a>
+<a href="http://thinknook.com/tag/transaction-log/" title="2 topics">transaction log</a></div><div><h3>Dev Categories</h3>		<ul>
+	<li><a href="http://thinknook.com/category/coding/">Coding</a> (8)
+<ul>
+	<li><a href="http://thinknook.com/category/coding/c/">C#</a> (4)
+</li>
+	<li><a href="http://thinknook.com/category/coding/coding-libraries/">Coding Libraries</a> (3)
+</li>
+</ul>
+</li>
+	<li><a href="http://thinknook.com/category/gaming/">Gaming</a> (2)
+</li>
+	<li><a href="http://thinknook.com/category/graphing-charts/">Graphing &amp; Charts</a> (2)
+<ul>
+	<li><a href="http://thinknook.com/category/graphing-charts/financial-charts/">Financial Charts</a> (1)
+</li>
+</ul>
+</li>
+	<li><a href="http://thinknook.com/category/hardware/">Hardware</a> (2)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/" title="Collection of MS SQL Server scripts, tricks and hacks I found useful over the years ">MS SQL Server</a> (91)
+<ul>
+	<li><a href="http://thinknook.com/category/sql-server/business-intelligence/">Business Intelligence</a> (4)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/">Data-Mining</a> (9)
+	<ul>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/">Classification</a> (3)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/sentiment-analysis/">Sentiment Analysis</a> (2)
+</li>
+	</ul>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/hadoop/">Hadoop</a> (6)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/powerpivot/">PowerPivot</a> (3)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-development/">SQL Development</a> (6)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-events-conferences/">SQL Events &amp; Conferences</a> (2)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-optimisation/">SQL Optimisation</a> (14)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-replication/">SQL Replication</a> (3)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-server-dba/">SQL Server DBA</a> (20)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssas/">SSAS</a> (8)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssis/">SSIS</a> (15)
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssrs/">SSRS</a> (18)
+	<ul>
+	<li><a href="http://thinknook.com/category/sql-server/ssrs/power-view/">Power View</a> (4)
+</li>
+	</ul>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/t-sql/" title="Scripts demonstrating latest features or a few optimisation tricks">T-SQL</a> (8)
+</li>
+</ul>
+</li>
+	<li><a href="http://thinknook.com/category/online-tracking/">Online Tracking</a> (1)
+</li>
+	<li><a href="http://thinknook.com/category/search/">Search</a> (3)
+<ul>
+	<li><a href="http://thinknook.com/category/search/solr/">Solr</a> (2)
+</li>
+</ul>
+</li>
+	<li><a href="http://thinknook.com/category/social-media/">Social Media</a> (3)
+<ul>
+	<li><a href="http://thinknook.com/category/social-media/google-plus/">Google Plus</a> (2)
+</li>
+	<li><a href="http://thinknook.com/category/social-media/social-api/">Social API</a> (1)
+</li>
+</ul>
+</li>
+	<li><a href="http://thinknook.com/category/uncategorized/">Uncategorized</a> (2)
+</li>
+	<li><a href="http://thinknook.com/category/xml/">XML</a> (3)
+<ul>
+	<li><a href="http://thinknook.com/category/xml/converters/">Converters</a> (1)
+</li>
+	<li><a href="http://thinknook.com/category/xml/xslt/" title="Useful XSLT templates&#x0D;&#x0A;&#x0D;&#x0A;Sometimes getting stuck into some code is the best way to learn your way around a programming language, especially when it comes to a functional programming language such as XSLT.&#x0D;&#x0A;&#x0D;&#x0A;As with XSL and other languages such as XPATH, XQUERY, REGEX, etc., I always tend to forget them quickly after I wrote something for a particular task, which pretty much means that I have to relearn some things again for the next task that needs done (which tends to be a month or two later). I suppose this is the purpose of this blog.">XSLT</a> (1)
+</li>
+</ul>
+</li>
+		</ul>
+</div>	          &#x0D;
+&#x0D;
+
+			
+			
+			
+			
+				
+				
+									
+				<h3>Interesting links</h3>
+				Besides are some interesting links for you! Enjoy your stay :)
+				
+			<div><h3>Pages</h3><ul><li><a href="http://thinknook.com/pagerank-checker/">PageRank Checker</a></li>
+<li><a href="http://thinknook.com/sql-optimization-challenge/">SQL Optimization Challenge</a></li>
+<li><a href="http://thinknook.com/sql-tools-libraries/">SQL Tools &amp; Libraries</a></li>
+<li><a href="http://thinknook.com/sql-tools-libraries/ssrs-client-library/">SSRS Client Library</a></li>
+<li><a href="http://thinknook.com/about/">About me</a></li>
+</ul></div><div><h3>Categories</h3><ul>	<li><a href="http://thinknook.com/category/sql-server/business-intelligence/">Business Intelligence</a>
+</li>
+	<li><a href="http://thinknook.com/category/coding/c/">C#</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/classification-data-mining/">Classification</a>
+</li>
+	<li><a href="http://thinknook.com/category/coding/">Coding</a>
+</li>
+	<li><a href="http://thinknook.com/category/coding/coding-libraries/">Coding Libraries</a>
+</li>
+	<li><a href="http://thinknook.com/category/xml/converters/">Converters</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/">Data-Mining</a>
+</li>
+	<li><a href="http://thinknook.com/category/graphing-charts/financial-charts/">Financial Charts</a>
+</li>
+	<li><a href="http://thinknook.com/category/gaming/">Gaming</a>
+</li>
+	<li><a href="http://thinknook.com/category/social-media/google-plus/">Google Plus</a>
+</li>
+	<li><a href="http://thinknook.com/category/graphing-charts/">Graphing &amp; Charts</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/hadoop/">Hadoop</a>
+</li>
+	<li><a href="http://thinknook.com/category/hardware/">Hardware</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/" title="Collection of MS SQL Server scripts, tricks and hacks I found useful over the years ">MS SQL Server</a>
+</li>
+	<li><a href="http://thinknook.com/category/online-tracking/">Online Tracking</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssrs/power-view/">Power View</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/powerpivot/">PowerPivot</a>
+</li>
+	<li><a href="http://thinknook.com/category/search/">Search</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/data-mining/sentiment-analysis/">Sentiment Analysis</a>
+</li>
+	<li><a href="http://thinknook.com/category/social-media/social-api/">Social API</a>
+</li>
+	<li><a href="http://thinknook.com/category/social-media/">Social Media</a>
+</li>
+	<li><a href="http://thinknook.com/category/search/solr/">Solr</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-development/">SQL Development</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-events-conferences/">SQL Events &amp; Conferences</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-optimisation/">SQL Optimisation</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-replication/">SQL Replication</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/sql-server-dba/">SQL Server DBA</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssas/">SSAS</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssis/">SSIS</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/ssrs/">SSRS</a>
+</li>
+	<li><a href="http://thinknook.com/category/sql-server/t-sql/" title="Scripts demonstrating latest features or a few optimisation tricks">T-SQL</a>
+</li>
+	<li><a href="http://thinknook.com/category/uncategorized/">Uncategorized</a>
+</li>
+	<li><a href="http://thinknook.com/category/xml/">XML</a>
+</li>
+	<li><a href="http://thinknook.com/category/xml/xslt/" title="Useful XSLT templates&#x0D;&#x0A;&#x0D;&#x0A;Sometimes getting stuck into some code is the best way to learn your way around a programming language, especially when it comes to a functional programming language such as XSLT.&#x0D;&#x0A;&#x0D;&#x0A;As with XSL and other languages such as XPATH, XQUERY, REGEX, etc., I always tend to forget them quickly after I wrote something for a particular task, which pretty much means that I have to relearn some things again for the next task that needs done (which tends to be a month or two later). I suppose this is the purpose of this blog.">XSLT</a>
+</li>
+</ul></div><div><h3>Archive</h3><ul>	<li><a href="http://thinknook.com/2013/10/">October 2013</a></li>
+	<li><a href="http://thinknook.com/2013/08/">August 2013</a></li>
+	<li><a href="http://thinknook.com/2013/07/">July 2013</a></li>
+	<li><a href="http://thinknook.com/2013/06/">June 2013</a></li>
+	<li><a href="http://thinknook.com/2013/05/">May 2013</a></li>
+	<li><a href="http://thinknook.com/2013/03/">March 2013</a></li>
+	<li><a href="http://thinknook.com/2013/02/">February 2013</a></li>
+	<li><a href="http://thinknook.com/2013/01/">January 2013</a></li>
+	<li><a href="http://thinknook.com/2012/12/">December 2012</a></li>
+	<li><a href="http://thinknook.com/2012/11/">November 2012</a></li>
+	<li><a href="http://thinknook.com/2012/10/">October 2012</a></li>
+	<li><a href="http://thinknook.com/2012/09/">September 2012</a></li>
+	<li><a href="http://thinknook.com/2012/08/">August 2012</a></li>
+	<li><a href="http://thinknook.com/2012/07/">July 2012</a></li>
+	<li><a href="http://thinknook.com/2012/06/">June 2012</a></li>
+	<li><a href="http://thinknook.com/2012/05/">May 2012</a></li>
+	<li><a href="http://thinknook.com/2012/04/">April 2012</a></li>
+	<li><a href="http://thinknook.com/2012/03/">March 2012</a></li>
+	<li><a href="http://thinknook.com/2012/02/">February 2012</a></li>
+	<li><a href="http://thinknook.com/2012/01/">January 2012</a></li>
+	<li><a href="http://thinknook.com/2011/12/">December 2011</a></li>
+	<li><a href="http://thinknook.com/2011/11/">November 2011</a></li>
+	<li><a href="http://thinknook.com/2011/10/">October 2011</a></li>
+	<li><a href="http://thinknook.com/2011/08/">August 2011</a></li>
+	<li><a href="http://thinknook.com/2011/07/">July 2011</a></li>
+	<li><a href="http://thinknook.com/2011/06/">June 2011</a></li>
+	<li><a href="http://thinknook.com/2010/09/">September 2010</a></li>
+</ul></div>
+					
+				
+				
+			
+		
+
+		
+		
+		
+			
+				<div>
+					© Copyright - <a href="http://thinknook.com/">Thinknook</a> - <a href="http://www.kriesi.at">Wordpress Theme by Kriesi.at</a>
+								
+				</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+	
+	
+			
+
+		
+		
+		
+		
+				
+
+&#x0D;
+		<ul>&#x0D;
+			&#x0D;
+			&#x0D;
+				&#x0D;
+			&#x0D;
+				&#x0D;
+			&#x0D;
+			<li><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fthinknook.com%2F10-ways-to-improve-your-classification-algorithm-performance-2013-01-21%2F&amp;media=http%3A%2F%2Fthinknook.com%2Fwp-content%2Fuploads%2F2013%2F01%2Fnetwork.gif&amp;description=%0D%0A%0D%0AIn+this+article+I+discuss+some+methods+you+could+adopt+to+i">Pin It</a></li></ul>&#x0D;
+		&#x0D;
+		&#x0D;
+					&#x0D;
+			&#x0D;
+		&#x0D;
+				
+
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+&#x0D;
+</body></html></html>

@@ -76,6 +76,12 @@ public class TestDocumentCleaner extends TestCase {
 			String expected = "";
 			tests.put(xml, expected);
 		}
+		{
+			String xml = "<p>help researchers determine<strong> </strong>what kinds of environments</p>";
+			String expected = "<p>help researchers determine what kinds of environments</p>";
+			tests.put(xml, expected);
+		}
+		
 		
 		tests.forEach((dirty, expected) -> {
 			

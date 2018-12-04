@@ -1,0 +1,176 @@
+The A.V. Club
+Deadspin
+Gizmodo
+Jalopnik
+Jezebel
+Kotaku
+Lifehacker
+Splinter
+The Takeout
+The Root
+The Onion
+Clickhole
+The Inventory
+
+Video
+Review
+Science
+io9
+Field Guide
+Earther
+Design
+Paleofuture
+
+Video
+Review
+Science
+io9
+Field Guide
+Earther
+Design
+Paleofuture
+
+Physics
+
+Physicists Spot Four Black Hole Collisions, Including the Largest One Ever Recorded
+
+Ryan F. Mandelbaum
+Yesterday 12:40pm
+Filed to: black holesFiled to: black holes
+
+black holes
+science
+gravitational waves
+ligo
+nsf
+virgo
+physics
+
+405
+
+Edit
+Embiggen
+Send to Editors
+Promote
+Share to Kinja
+Toggle Conversation tools
+Go to permalink
+
+Computer simulation of colliding black holes.
+Screenshot: LIGO Lab Caltech/MIT (YouTube)
+
+Physicists have spotted four new instances of black holes colliding and sending their gravitational waves toward the Earth, including the most massive collision recorded to date.
+
+We now know that black holes collide with some regularity throughout the universe. Individual collisions are no longer huge news stories—instead, astronomy has entered an era of in which gravitational waves are simply another tool to understand the universe, and new advances come from observing many gravitational wave events. The LIGO (Laser Interferometer Gravitational Wave Observatory) and Virgo collaborations have begun cataloguing these events to tell the broader story about how often these massive crashes occur and what causes them.
+
+Advertisement
+
+A quick recap: The theory of general relativity predicts that certain events in the universe can turn mass into energy and emit gravitational waves, or ripples in the very shape of spacetime that travel at the speed of light. Two of LIGO’s mile-plus-long detectors, one in Washington State and one in Louisiana, and the Virgo detector in Italy hunt for this signal with interferometers. Essentially, they split and recombine laser light, which shines onto a detector. The passing gravitational wave causes the two laser beams to go in and out of phase with each another. The signal causes a wobble smaller than a proton’s width.
+
+You can read about what happens to the colliding black holes more generally in the article linked below, but in short, they combine into a bigger black hole and release excess mass as energy that travels as gravitational waves.
+
+What Happens When Two Black Holes Collide?
+
+On September 14, 2015, signals from one of the Universe’s most mind-boggling, powerful events…
+
+Read more Read
+
+Advertisement
+
+The researchers sifted through the LIGO and Virgo data for events and spotted four new ones that occurred during the summer of 2017. These collisions resulted in black holes weighing as little as 17.8 times and as much as 80.3 times the mass of the Sun, occurring at a distance between 1.044 billion and 8.97 billion light-years away. This brings the total number of known events to 10 measurements of colliding black holes and one measurement of colliding neutron stars. The scientists estimate that each year, another 53 black hole mergers occur in every cubic gigaparsec (that’s a box 3.2 billion light-years on a side) of the universe. They published the results in a pair of papers over the weekend.
+
+Physicists used three independent analyses to find the events in the data, according to a press release. Additionally, there were 14 other potential collisions that only appeared in two of the three analyses.
+
+Black hole mergers
+Graphic: LIGO-Virgo / Frank Elavsky / Northwestern
+
+Advertisement
+
+One of the collisions, the one that resulted in a black hole 80.3 times the Sun’s mass, was especially interesting. Scientists don’t think stars collapsing can result in black holes heavier than 45 solar masses, explained Imre Bartos, University of Florida assistant professor. Plus, it appeared to spin quickly. Perhaps this anomalous observation came from two black holes that merged, and then later merged with a third black hole, in a black hole-rich environment. Such environments even seem to exist near the center of our own galaxy.
+
+But that’s not a proven fact at this point. “With more events coming once LIGO and Virgo turn back on... we will know more about how often such ‘double’ mergers could happen,” said Bartos. “But it is a very exciting possibility.”
+
+More observations of gravitational waves will help researchers determine what kinds of environments these collisions occur in, and how black holes get so close together in the first place. But there’s more to be enthused about. They might let scientists hunt for theorized new particles, like axions. And black hole collisions aren’t the only things that produce gravitational waves; colliding neutron stars do, too. Though scientists didn’t find any new neutron star collisions yet, having a large catalog of neutron star collisions will allow them a new way to determine how quickly the universe is expanding.
+
+Advertisement
+
+It’s exciting times for observational gravitational wave astronomy, a field that only officially began in 2015. New detectors will soon come online to independently verify the discoveries, and more will be learned from more data. Data collection at LIGO and Virgo begins again next spring.
+
+[LIGO 1,2]
+
+Share This Story
+
+Recommended Stories
+
+What Happens When Two Black Holes Collide?
+
+Physicists Just Spotted Gravitational Waves Again—So What's Next?
+
+Gravitational Waves Reveal the Unexpectedly Weird Behavior of Distant Black Holes
+
+Black Holes Slamming Together Officially 'Routine'
+
+Observatories Across the World Announce Groundbreaking New Gravitational Wave Discovery
+
+Mind-Blowing New Theory Connects Black Holes, Dark Matter, and Gravitational Waves
+
+About the author
+
+Ryan F. Mandelbaum
+Ryan F. Mandelbaum
+
+Science writer at Gizmodo | I like physics and eating
+
+EmailTwitterPosts
+
+You may also like
+
+Gizmodo
+
+What Happens When Two Black Holes Collide?
+
+Ryan F. Mandelbaum
+Yesterday 8:22am
+Gizmodo
+
+What's the Deal With Nvidia's Ridiculous $2,500 Titan RTX Graphics Card?
+
+Sam Rutherford
+Yesterday 12:30pm
+Gizmodo
+
+69-Year-Old Troll Loses Case to Make Himself 20 Years Younger
+
+Rhett Jones
+Yesterday 10:32am
+
+Recent from Ryan F. Mandelbaum
+
+2
+4
+8.8K
+
+NASA's Asteroid-Sampling Spacecraft Has Arrived at Its Target
+
+Ryan F. Mandelbaum
+Yesterday 1:10pm
+
+4
+16
+14.8K
+
+The Biggest Science Stories of 2018
+
+Ryan F. Mandelbaum
+Yesterday 11:00am
+
+2
+6
+5.6K
+
+Why Scientists Tried to Measure All of the Starlight That Ever Shone
+
+Ryan F. Mandelbaum
+Yesterday 9:55am
+ShareTweet
+Kinja is in read-only mode. We are working to restore service.
