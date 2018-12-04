@@ -16,9 +16,11 @@ public class ActionsRecognizer implements Recognizer {
 	@Override
 	public double recognize(Element element) {
 		if (element.getChildElements().size() > 0) return 0;
-		String[] texts = {"log ind", "abonnement", "gå til hovedindhold", "søg", "mail-adresse",
+		String[] texts = {
+				"log ind", "abonnement", "gå til hovedindhold", "søg", "mail-adresse",
 				"adgangskode", "opret konto", "bestil ny adgangskode", "søgefelt", "abonnement",
-				"facebook", "twitter", "del", "rss", "del artklen",
+				"facebook", "twitter", "linkedin","reddit","pocket","flipboard","reddit",
+				"del", "rss", "del artklen",
 				"cookies", "privatlivspolitik","kopiér link", "kopier link", "tilmeld",
 				"nyhedsbrev",
 				"annonce","artiklen fortsætter efter annoncen", "læs også:",
@@ -27,7 +29,8 @@ public class ActionsRecognizer implements Recognizer {
 				"search", "sign up", "open main menu",
 				"read later",
 				"e-alert", "submit", "my account", "login", "☰",
-				"tweet","share","pin it","share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
+				"tweet","share","pin it",
+				"share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
 				"share to twitter","blogthis!","share to facebook","share to pinterest","email this",
 				"follow me on twitter","click to follow"
 			};
