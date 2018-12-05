@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <html>
+    <head>
+      <title>SimpleFacetParameters - Solr Wiki</title>
+    </head>
+    <body>
+      <div>
+        <div data-text="0.14" data-title="-1.0"> Search: </div>
+        <div data-text="0.09" data-title="-1.0">
+          <a href="/solr/FrontPage">Solr Wiki</a>
+        </div>
+        <div data-text="0.05" data-title="-1.0">
+          <a href="/solr/SimpleFacetParameters?action=login" data-action="-1.0">Login</a>
+        </div>
+        <h1 data-title="1.0">
+          <a href="/solr/SimpleFacetParameters">SimpleFacetParameters</a>
+        </h1>
+        <ul data-list="-1.0">
+          <li>
+            <a href="/solr/FrontPage">FrontPage</a>
+          </li>
+          <li>
+            <a href="/solr/RecentChanges">RecentChanges</a>
+          </li>
+          <li>
+            <a href="/solr/FindPage">FindPage</a>
+          </li>
+          <li>
+            <a href="/solr/HelpContents">HelpContents</a>
+          </li>
+          <li>
+            <a href="/solr/SimpleFacetParameters">SimpleFacetParameters</a>
+          </li>
+        </ul>
+        <div>
+          <hr/>
+        </div>
+        <ul>
+          <li>Immutable Page</li>
+          <li data-comment="-1.0">
+            <a href="#" data-comment="-1.0">Comments</a>
+          </li>
+          <li>
+            <a href="/solr/SimpleFacetParameters?action=info">Info</a>
+          </li>
+          <li>
+            <a href="/solr/SimpleFacetParameters?action=AttachFile">Attachments</a>
+          </li>
+          <li>
+            <div data-text="1.0"> More Actions: Raw Text Print View Render as Docbook Delete Cache ------------------------ Check Spelling Like Pages Local Site Map ------------------------ Rename Page Copy Page Delete Page ------------------------ My Pages Subscribe User ------------------------ Remove Spam Revert to this revision Package Pages Sync Pages ------------------------ Load Save SlideShow </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div>
+          <p data-text="1.0">Solr provides a
+            <a href="http://lucene.apache.org/solr/api/org/apache/solr/request/SimpleFacets.html">Simple Faceting toolkit</a> which can be reused by various Request Handlers to include a "Facet counts" section within a search response. This extra section provides a breakdown or summary of the results based on some simple criteria, which can be used to help implement more advanced search interfaces. Use of faceting does not affect the results section of a search response. The
+            <a href="/solr/SearchHandler">SearchHandler</a> uses these utilities via the
+            <a href="/solr/FacetComponent">FacetComponent</a>, which supports the parameters listed here.
+          </p>
+          <p data-text="1.0">For More information on General Issues involved with Faceted searches in Solr, please read the
+            <a href="/solr/SolrFacetingOverview">SolrFacetingOverview</a>.
+          </p>
+          <div>
+            <p data-text="0.08">Contents</p>
+            <ol>
+              <li>
+                <a href="#Parameters">Parameters</a>
+                <ol>
+                  <li>
+                    <a href="#facet">facet</a>
+                  </li>
+                  <li>
+                    <a href="#facet.query_:_Arbitrary_Query_Faceting">facet.query : Arbitrary Query Faceting</a>
+                  </li>
+                  <li>
+                    <a href="#Field_Value_Faceting_Parameters">Field Value Faceting Parameters</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#facet.field">facet.field</a>
+                      </li>
+                      <li>
+                        <a href="#facet.prefix">facet.prefix</a>
+                      </li>
+                      <li>
+                        <a href="#facet.sort">facet.sort</a>
+                      </li>
+                      <li>
+                        <a href="#facet.limit">facet.limit</a>
+                      </li>
+                      <li>
+                        <a href="#facet.offset">facet.offset</a>
+                      </li>
+                      <li>
+                        <a href="#facet.mincount">facet.mincount</a>
+                      </li>
+                      <li>
+                        <a href="#facet.missing">facet.missing</a>
+                      </li>
+                      <li>
+                        <a href="#facet.method">facet.method</a>
+                      </li>
+                      <li>
+                        <a href="#facet.enum.cache.minDf">facet.enum.cache.minDf</a>
+                      </li>
+                      <li>
+                        <a href="#facet.threads">facet.threads</a>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <a href="#Date_Faceting_Parameters">Date Faceting Parameters</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#facet.date">facet.date</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.start">facet.date.start</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.end">facet.date.end</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.gap">facet.date.gap</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.hardend">facet.date.hardend</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.other">facet.date.other</a>
+                      </li>
+                      <li>
+                        <a href="#facet.date.include">facet.date.include</a>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <a href="#Facet_by_Range">Facet by Range</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#facet.range">facet.range</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.start">facet.range.start</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.end">facet.range.end</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.gap">facet.range.gap</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.hardend">facet.range.hardend</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.other">facet.range.other</a>
+                      </li>
+                      <li>
+                        <a href="#facet.range.include">facet.range.include</a>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <a href="#Multi-Select_Faceting_and_LocalParams">Multi-Select Faceting and LocalParams</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#Tagging_and_excluding_Filters">Tagging and excluding Filters</a>
+                      </li>
+                      <li>
+                        <a href="#key_:_Changing_the_output_key">key : Changing the output key</a>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <a href="#Pivot_.28ie_Decision_Tree.29_Faceting">Pivot (ie Decision Tree) Faceting</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#facet.pivot">facet.pivot</a>
+                      </li>
+                      <li>
+                        <a href="#facet.pivot.mincount">facet.pivot.mincount</a>
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    <a href="#Interval_Faceting">Interval Faceting</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#facet.interval">facet.interval</a>
+                      </li>
+                      <li>
+                        <a href="#facet.interval.set">facet.interval.set</a>
+                      </li>
+                      <li>
+                        <a href="#Interval_Syntax">Interval Syntax</a>
+                      </li>
+                      <li>
+                        <a href="#Changing_the_interval_Keys">Changing the interval Keys</a>
+                      </li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <a href="#Deprecated_Parameters">Deprecated Parameters</a>
+                <ol data-list="-1.0">
+                  <li>
+                    <a href="#facet.zeros">facet.zeros</a>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <a href="#Examples">Examples</a>
+                <ol>
+                  <li>
+                    <a href="#Facet_Fields">Facet Fields</a>
+                  </li>
+                  <li>
+                    <a href="#Facet_Fields_with_No_Zeros">Facet Fields with No Zeros</a>
+                  </li>
+                  <li>
+                    <a href="#Facet_Fields_with_No_Zeros_And_Missing_Count_For_One_Field">Facet Fields with No Zeros And Missing Count For One Field</a>
+                  </li>
+                  <li>
+                    <a href="#Facet_Field_with_Limit">Facet Field with Limit</a>
+                  </li>
+                  <li>
+                    <a href="#Facet_Fields_and_Facet_Queries">Facet Fields and Facet Queries</a>
+                  </li>
+                  <li>
+                    <a href="#Facet_prefix_.28term_suggest.29">Facet prefix (term suggest)</a>
+                  </li>
+                  <li>
+                    <a href="#Date_Faceting:_per_day_for_the_past_5_days">Date Faceting: per day for the past 5 days</a>
+                  </li>
+                  <li>
+                    <a href="#Retrieve_docs_with_facets_missing">Retrieve docs with facets missing</a>
+                  </li>
+                  <li>
+                    <a href="#Pivot_.28ie_Decision_Tree.29_Faceting-1">Pivot (ie Decision Tree) Faceting</a>
+                  </li>
+                  <li>
+                    <a href="#Interval_Faceting-1">Interval Faceting</a>
+                    <ol data-list="-1.0">
+                      <li>
+                        <a href="#Changing_the_key_per_interval">Changing the key per interval</a>
+                      </li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <a href="#Warming">Warming</a>
+              </li>
+            </ol>
+          </div>
+          <h1>Parameters</h1>
+          <p data-text="1.0">These are the parameters used to drive the Simple Faceting behavior, grouped by the type of faceting they support. </p>
+          <p data-text="0.92">Note that many parameters may be overridden on a per-field basis with the following syntax: </p>
+          <ul>
+            <li>
+              <p data-text="0.35">
+                <tt>f.&lt;fieldName&gt;.&lt;FacetParam&gt;=&lt;value&gt;</tt>
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.04">eg. </p>
+          <pre> facet.limit=10 f.category.facet.limit=5</pre>
+          <p data-text="1.0">Indicating that 10 terms will be returned for all specified facet.fields, excepting category. Which if specified will return 5 terms. </p>
+          <h2>facet</h2>
+          <p data-text="1.0">Set to "true" this param enables facet counts in the query response. Any blank or missing value, or "false" will disable faceting. None of the other parameters listed below will have any effect without setting this param to "true" </p>
+          <p data-text="0.28">The default value is blank. </p>
+          <h2>facet.query : Arbitrary Query Faceting</h2>
+          <p data-text="1.0">This param allows you to specify an arbitrary query in the Lucene default syntax to generate a facet count. By default, faceting returns a count of the unique terms for a "field", while facet.query allows you to determine counts for arbitrary terms or expressions. </p>
+          <p data-text="1.0">This parameter can be specified multiple times to indicate that multiple queries should be used as separate facet constraints. It can be particularly useful for numeric range based facets, or prefix based facets -- see example below (i.e.
+            <tt>price:[* TO 500] and  price:[501 TO *]</tt>).
+          </p>
+          <p data-text="1.0">To specify facet queries not in the Lucene default query syntax, prefix the facet query with the name of the query notation, a la
+            <a href="/solr/LocalParams">LocalParams</a>. For example, to use the hypothetical myfunc query parser, send parameter
+            <tt>facet.query={!myfunc}name~fred</tt>
+          </p>
+          <h2>Field Value Faceting Parameters</h2>
+          <p data-text="0.86">Several params can be used to trigger faceting based on the indexed Terms of a field. </p>
+          <p data-text="1.0">When using this param, it is important to remember that "Term" is a very specific concept in Lucene -- it relates to the literal field/value pairs that are
+            <em>Indexed</em> after any Analysis occurs. For text fields that include stemming, or lowercasing, or word splitting you may not get what you expect. If you want both Analysis (for searching) and Faceting on the full literal Strings, use copyField to create two versions of the field: one Text and one String. Make sure both are
+            <tt>indexed="true"</tt>
+          </p>
+          <h3>facet.field</h3>
+          <p data-text="1.0">This param allows you to specify a field which should be treated as a facet. It will iterate over each Term in the field and generate a facet count using that Term as the constraint. </p>
+          <p data-text="0.82">This parameter can be specified multiple times to indicate multiple facet fields. </p>
+          <p data-text="1.0">None of the other params in this section will have any effect without specifying at least one field name using this param. </p>
+          <h3>facet.prefix</h3>
+          <p data-text="1.0">Limits the terms on which to facet to those starting with the given string prefix. Note that unlike fq, this does not change the search results -- it merely reduces the facet values returned to those beginning with the specified prefix. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.2">Solr1.2</a>
+          </p>
+          <h3>facet.sort</h3>
+          <p data-text="0.67">This param determines the ordering of the facet field constraints. </p>
+          <ul>
+            <li>
+              <p data-text="0.6">
+                <tt>count</tt> - sort the constraints by count (highest count first)
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>index</tt> - to return the constraints sorted in their index order (lexicographic by indexed term). For terms in the ascii range, this will be alphabetically sorted.
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.72">The default is
+            <tt>count</tt> if facet.limit is greater than 0,
+            <tt>index</tt> otherwise.
+          </p>
+          <p data-text="0.86">Prior to
+            <a href="/solr/Solr1.4">Solr1.4</a>, one needed to use
+            <tt>true</tt> instead of
+            <tt>count</tt> and
+            <tt>false</tt> instead of
+            <tt>index</tt>.
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.limit</h3>
+          <p data-text="1.0">This param indicates the maximum number of constraint counts that should be returned for the facet fields. A negative value means unlimited. </p>
+          <p data-text="0.26">The default value is 100. </p>
+          <p data-text="1.0">This parameter can be specified on a per field basis to indicate a separate limit for certain fields. </p>
+          <h3>facet.offset</h3>
+          <p data-text="0.77">This param indicates an offset into the list of constraints to allow paging. </p>
+          <p data-text="0.24">The default value is 0. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.2">Solr1.2</a>
+          </p>
+          <h3>facet.mincount</h3>
+          <p data-text="0.93">This param indicates the minimum counts for facet fields should be included in the response. </p>
+          <p data-text="0.24">The default value is 0. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.2">Solr1.2</a>
+          </p>
+          <h3>facet.missing</h3>
+          <p data-text="1.0">Set to "true" this param indicates that in addition to the Term based constraints of a facet field, a count of all matching results which have no value for the field should be computed </p>
+          <p data-text="0.28">The default value is false. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.method</h3>
+          <p data-text="0.85">This parameter indicates what type of algorithm/method to use when faceting a field. </p>
+          <ul>
+            <li>
+              <p data-text="1.0">
+                <tt>enum</tt> Enumerates all terms in a field, calculating the set intersection of documents that match the term with documents that match the query. This was the default (and only) method for faceting multi-valued fields prior to Solr 1.4.
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>fc</tt> (stands for Field Cache) The facet counts are calculated by iterating over documents that match the query and summing the terms that appear in each document. This was the default method for single valued fields prior to Solr 1.4.
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>fcs</tt> (stands for Field Cache per Segment) works the same as
+                <tt>fc</tt> except the underlying cache data structure is built for each segment of the index individually
+              </p>
+            </li>
+          </ul>
+          <p data-text="1.0">The default value is
+            <tt>fc</tt> (except for BoolField which uses
+            <tt>enum</tt>) since it tends to use less memory and is faster then the enumeration method when a field has many unique terms in the index.
+          </p>
+          <p data-text="1.0">For indexes that are changing rapidly in NRT situations,
+            <tt>fcs</tt> may be a better choice because it reduces the overhead of building the cache structures on the first request and/or warming queries when opening a new searcher -- but tends to be somewhat slower then
+            <tt>fc</tt> for subsequent requests against the same searcher.
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.4">Solr1.4</a>
+          </p>
+          <h3>facet.enum.cache.minDf</h3>
+          <p data-text="1.0">This param indicates the minimum document frequency (number of documents matching a term) for which the filterCache should be used when determining the constraint count for that term. This is only used when
+            <tt>facet.method=enum</tt> method of faceting
+          </p>
+          <p data-text="1.0">A value greater than zero will decrease memory usage of the filterCache, but increase the query time. When faceting on a field with a very large number of terms, and you wish to decrease memory usage, try a low value of 25 to 50 first. </p>
+          <p data-text="0.87">The default value is 0, causing the filterCache to be used for all terms in the field. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.2">Solr1.2</a>
+          </p>
+          <h3>facet.threads</h3>
+          <p data-text="1.0">This param will cause loading the underlying fields used in faceting to be executed in parallel with the number of threads specified. Specify as
+            <tt>facet.threads=#</tt> where # is the maximum number of threads used. Omitting this parameter or specifying the thread count as 0 will not spawn any threads just as before. Specifying a negative number of threads will spin up to Integer.MAX_VALUE threads.
+          </p>
+          <p data-text="0.87">Currently this is limited to the fields, range and query facets are not yet supported. </p>
+          <p data-text="0.87">In at least one case this has reduced warmup times from 20 seconds to under 5 seconds. </p>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr4.5">Solr4.5</a>
+          </p>
+          <h2>Date Faceting Parameters</h2>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.3">Solr1.3</a> Several params can be used to trigger faceting based on Date ranges computed using simple
+            <a href="http://lucene.apache.org/solr/4_0_0/solr-core/org/apache/solr/util/DateMathParser.html">DateMathParser</a> expressions.
+          </p>
+          <p data-text="1.0">When using Date Faceting, the
+            <tt>facet.date</tt>,
+            <tt>facet.date.start</tt>,
+            <tt>facet.date.end</tt>, and
+            <tt>facet.date.gap</tt> params are all mandatory...
+          </p>
+          <ul>
+            <li>
+              <p data-text="1.0">
+                <strong>NOTE:</strong> as of
+                <a href="/solr/Solr3.1">Solr3.1</a> Date Faceting has been deprecated in favor of the more general
+                <a href="/solr/SimpleFacetParameters#rangefaceting">Range Faceting described below</a>. The response structure is slightly different, but the functionality is equivalent (except that it supports numeric fields as well as dates)
+              </p>
+            </li>
+          </ul>
+          <h3>facet.date</h3>
+          <p data-text="1.0">This param allows you to specify names of fields (of type
+            <a href="/solr/DateField">DateField</a>) which should be treated as date facets.
+          </p>
+          <p data-text="0.87">This parameter can be specified multiple times to indicate multiple date facet fields. </p>
+          <h3>facet.date.start</h3>
+          <p data-text="1.0">The lower bound for the first date range for all Date Faceting on this field. This should be a single date expression which may use the
+            <a href="http://lucene.apache.org/solr/4_0_0/solr-core/org/apache/solr/util/DateMathParser.html">DateMathParser</a> syntax.
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.date.end</h3>
+          <p data-text="1.0">The minimum upper bound for the last date range for all Date Faceting on this field (see
+            <tt>facet.date.hardend</tt> for an explanation of what the actual end value may be greater). This should be a single date expression which may use the
+            <a href="http://lucene.apache.org/solr/4_0_0/solr-core/org/apache/solr/util/DateMathParser.html">DateMathParser</a> syntax.
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.date.gap</h3>
+          <p data-text="1.0">The size of each date range expressed as an interval to be added to the lower bound using the
+            <a href="http://lucene.apache.org/solr/4_0_0/solr-core/org/apache/solr/util/DateMathParser.html">DateMathParser</a> syntax.
+          </p>
+          <p data-text="0.41">Example:
+            <tt>facet.date.gap=%2B1DAY</tt> (+1DAY)
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr3.6">Solr3.6</a>,
+            <a href="/solr/Solr4.0">Solr4.0</a> -- See
+            <a href="https://issues.apache.org/jira/browse/SOLR-2366">https://issues.apache.org/jira/browse/SOLR-2366</a> The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).
+          </p>
+          <p data-text="1.0">Example:
+            <tt>facet.date.gap=+1DAY,+2DAY,+3DAY,+10DAY</tt> -- This creates 4+ buckets of size, 1 day, 2 days, 3 days and then 0 or more of 10 days each, depending on the start and end times.
+          </p>
+          <h3>facet.date.hardend</h3>
+          <p data-text="1.0">A Boolean parameter instructing Solr what to do in the event that
+            <tt>facet.date.gap</tt> does not divide evenly between
+            <tt>facet.date.start</tt> and
+            <tt>facet.date.end</tt>. If this is true, the last date range constraint will have an upper bound of
+            <tt>facet.date.end</tt>; if false, the last date range will have the smallest possible upper bound greater then
+            <tt>facet.date.end</tt> such that the range is exactly
+            <tt>facet.date.gap</tt> wide.
+          </p>
+          <p data-text="0.22">The default is false. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.date.other</h3>
+          <p data-text="1.0">This param indicates that in addition to the counts for each date range constraint between
+            <tt>facet.date.start</tt> and
+            <tt>facet.date.end</tt>, counts should also be computed for...
+          </p>
+          <ul>
+            <li>
+              <p data-text="0.79">
+                <tt>before</tt> all records with field values lower then lower bound of the first range
+              </p>
+            </li>
+            <li>
+              <p data-text="0.83">
+                <tt>after</tt> all records with field values greater then the upper bound of the last range
+              </p>
+            </li>
+            <li>
+              <p data-text="0.85">
+                <tt>between</tt> all records with field values between the start and end bounds of all ranges
+              </p>
+            </li>
+            <li>
+              <p data-text="0.38">
+                <tt>none</tt> compute none of this information
+              </p>
+            </li>
+            <li>
+              <p data-text="0.44">
+                <tt>all</tt> shortcut for
+                <tt>before</tt>,
+                <tt>between</tt>, and
+                <tt>after</tt>
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="1.0">In addition to the
+            <tt>all</tt> option, this parameter can be specified multiple times to indicate multiple choices -- but
+            <tt>none</tt> will override all other options.
+          </p>
+          <h3>facet.date.include</h3>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr3.1">Solr3.1</a>
+          </p>
+          <p data-text="1.0">By default, the ranges used to compute date faceting between facet.date.start and facet.date.end are all inclusive of both endpoints, while the the "before" and "after" ranges are not inclusive. This behavior can be modified by the
+            <tt>facet.date.include</tt> param, which can be any combination of the following options...
+          </p>
+          <ul>
+            <li>
+              <p data-text="0.55">
+                <tt>lower</tt> = all gap based ranges include their lower bound
+              </p>
+            </li>
+            <li>
+              <p data-text="0.55">
+                <tt>upper</tt> = all gap based ranges include their upper bound
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>edge</tt> = the first and last gap ranges include their edge bounds (ie: lower for the first one, upper for the last one) even if the corresponding upper/lower option is not specified
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>outer</tt> = the "before" and "after" ranges will be inclusive of their bounds, even if the first or last ranges already include those boundaries.
+              </p>
+            </li>
+            <li>
+              <p data-text="0.46">
+                <tt>all</tt> = shorthand for lower, upper, edge, outer
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.77">This parameter can be specified multiple times to indicate multiple choices. </p>
+          <h2>Facet by Range</h2>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr3.1">Solr3.1</a>
+          </p>
+          <p data-text="1.0">As a generalization of the Date faceting described above, one can use the Range Faceting feature on any date field or any numeric field that supports range queries. This is particularly useful for the cases in the past where one might stitch together a series of range queries (as facet by query) for things like prices, etc. </p>
+          <h3>facet.range</h3>
+          <p data-text="1.0">This param indicates what field to create range facets for. This param allows you to specify names of fields which should be treated as range facets. </p>
+          <p data-text="0.43">Example:
+            <tt>facet.range=price&amp;facet.range=age</tt>
+          </p>
+          <h3>facet.range.start</h3>
+          <p data-text="0.31">The lower bound of the ranges. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.66">Example:
+            <tt>f.price.facet.range.start=0.0&amp;f.age.facet.range.start=10</tt>
+          </p>
+          <h3>facet.range.end</h3>
+          <p data-text="0.31">The upper bound of the ranges. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.67">Example:
+            <tt>f.price.facet.range.end=1000.0&amp;f.age.facet.range.start=99</tt>
+          </p>
+          <h3>facet.range.gap</h3>
+          <p data-text="1.0">The size of each range expressed as a value to be added to the lower bound. For date fields, this should be expressed using the
+            <a href="http://lucene.apache.org/solr/4_0_0/solr-core/org/apache/solr/util/DateMathParser.html">DateMathParser</a> syntax. (ie:
+            <tt>facet.range.gap=%2B1DAY</tt>, decoded = "+1DAY", URL encoding uses a normal plus sign as a space, so passing a plus to Solr request URL Hex encoding as %2B )
+          </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.62">Example:
+            <tt>f.price.facet.range.gap=100&amp;f.age.facet.range.gap=10</tt>
+          </p>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr3.6">Solr3.6</a>,
+            <a href="/solr/Solr4.0">Solr4.0</a> -- See
+            <a href="https://issues.apache.org/jira/browse/SOLR-2366">https://issues.apache.org/jira/browse/SOLR-2366</a> The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).
+          </p>
+          <p data-text="1.0">Example:
+            <tt>facet.date.gap=1,2,3,10</tt> -- This creates 4+ buckets of size, 1, 2, 3 and then 0 or more buckets of 10 days each, depending on the start and end values.
+          </p>
+          <h3>facet.range.hardend</h3>
+          <p data-text="1.0">A Boolean parameter instructing Solr what to do in the event that
+            <tt>facet.range.gap</tt> does not divide evenly between
+            <tt>facet.range.start</tt> and
+            <tt>facet.range.end</tt>. If this is true, the last range constraint will have an upper bound of
+            <tt>facet.range.end</tt>; if false, the last range will have the smallest possible upper bound greater then
+            <tt>facet.range.end</tt> such that the range is exactly
+            <tt>facet.range.gap</tt> wide.
+          </p>
+          <p data-text="0.22">The default is false. </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <h3>facet.range.other</h3>
+          <p data-text="1.0">This param indicates that in addition to the counts for each range constraint between
+            <tt>facet.range.start</tt> and
+            <tt>facet.range.end</tt>, counts should also be computed for...
+          </p>
+          <ul>
+            <li>
+              <p data-text="0.79">
+                <tt>before</tt> all records with field values lower then lower bound of the first range
+              </p>
+            </li>
+            <li>
+              <p data-text="0.83">
+                <tt>after</tt> all records with field values greater then the upper bound of the last range
+              </p>
+            </li>
+            <li>
+              <p data-text="0.85">
+                <tt>between</tt> all records with field values between the start and end bounds of all ranges
+              </p>
+            </li>
+            <li>
+              <p data-text="0.38">
+                <tt>none</tt> compute none of this information
+              </p>
+            </li>
+            <li>
+              <p data-text="0.44">
+                <tt>all</tt> shortcut for
+                <tt>before</tt>,
+                <tt>between</tt>, and
+                <tt>after</tt>
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="1.0">In addition to the
+            <tt>all</tt> option, this parameter can be specified multiple times to indicate multiple choices -- but
+            <tt>none</tt> will override all other options.
+          </p>
+          <h3>facet.range.include</h3>
+          <p data-text="1.0">By default, the ranges used to compute range faceting between facet.range.start and facet.range.end are inclusive of their lower bounds and exclusive of the upper bounds. The "before" range is exclusive and the "after" range is inclusive. This default, equivalent to
+            <tt>lower</tt> below, will
+            <em>not</em> result in double counting at the boundaries. This behavior can be modified by the
+            <tt>facet.range.include</tt> param, which can be any combination of the following options...
+          </p>
+          <ul>
+            <li>
+              <p data-text="0.55">
+                <tt>lower</tt> = all gap based ranges include their lower bound
+              </p>
+            </li>
+            <li>
+              <p data-text="0.55">
+                <tt>upper</tt> = all gap based ranges include their upper bound
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>edge</tt> = the first and last gap ranges include their edge bounds (ie: lower for the first one, upper for the last one) even if the corresponding upper/lower option is not specified
+              </p>
+            </li>
+            <li>
+              <p data-text="1.0">
+                <tt>outer</tt> = the "before" and "after" ranges will be inclusive of their bounds, even if the first or last ranges already include those boundaries.
+              </p>
+            </li>
+            <li>
+              <p data-text="0.46">
+                <tt>all</tt> = shorthand for lower, upper, edge, outer
+              </p>
+            </li>
+          </ul>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.77">This parameter can be specified multiple times to indicate multiple choices. </p>
+          <p data-text="1.0">If you want to ensure you don't double-count, don't choose both lower &amp; upper, don't choose outer, and don't choose all. </p>
+          <h2>Multi-Select Faceting and LocalParams</h2>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.4">Solr1.4</a> The
+            <a href="/solr/LocalParams">LocalParams</a> syntax provides a method of adding meta-data to other parameter values, much like XML attributes.
+          </p>
+          <h3>Tagging and excluding Filters</h3>
+          <p data-text="1.0">One can tag specific filters and exclude those filters when faceting. This is generally needed when doing multi-select faceting. </p>
+          <p data-text="0.52">Consider the following example query with faceting: </p>
+          <pre>q=mainquery&amp;fq=status:public&amp;fq=doctype:pdf&amp;facet=on&amp;facet.field=doctype</pre>
+          <p data-text="1.0">Because everything is already constrained by the filter
+            <tt>doctype:pdf</tt>, the
+            <tt>facet.field=doctype</tt> facet command is currently redundant and will return 0 counts for everything except
+            <tt>doctype:pdf</tt>.
+          </p>
+          <p data-text="1.0">To implement a multi-select facet for doctype, a GUI may want to still display the other doctype values and their associated counts, as if the
+            <tt>doctype:pdf</tt> constraint had not yet been applied. Example:
+          </p>
+          <pre>=== Document Type === [ ] Word (42) [x] PDF (96) [ ] Excel(11) [ ] HTML (63)</pre>
+          <p data-text="1.0">To return counts for doctype values that are currently not selected, tag filters that directly constrain doctype, and exclude those filters when faceting on doctype. </p>
+          <pre>q=mainquery&amp;fq=status:public&amp;fq={!tag=dt}doctype:pdf&amp;facet=on&amp;facet.field={!ex=dt}doctype</pre>
+          <p data-text="1.0">Filter exclusion is supported for all types of facets. Both the
+            <tt>tag</tt> and
+            <tt>ex</tt> local params may specify multiple values by separating them with commas.
+          </p>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr3.1">Solr3.1</a> Starting with Solr 3.1, the primary relevance query (i.e. the one normally specified by the
+            <strong>q</strong> parameter) may also be excluded.
+          </p>
+          <h3>key : Changing the output key</h3>
+          <p data-text="1.0">To change the output key for a faceting command, specify a new name via the
+            <tt>key</tt> local param. For example,
+          </p>
+          <pre>facet.field={!ex=dt key=mylabel}doctype</pre>
+          <p data-text="1.0">Will cause the results to be returned under the key "mylabel" rather than "doctype" in the response. This can be helpful when faceting on the same field multiple times with different exclusions. </p>
+          <h2>Pivot (ie Decision Tree) Faceting</h2>
+          <p data-text="0.83">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr4.0">Solr4.0</a> Pivot faceting allows you to facet within the results of the parent facet
+          </p>
+          <h3>facet.pivot</h3>
+          <p data-text="0.9">A list of fields to pivot. Multiple values will create multiple sections in the response </p>
+          <pre>&amp;facet.pivot=cat,popularity,inStock&amp;facet.pivot=popularity,cat</pre>
+          <h3>facet.pivot.mincount</h3>
+          <p data-text="1.0">The minimum number of documents that need to match for the result to show up in the results. Default value is 1 </p>
+          <h2>Interval Faceting</h2>
+          <p data-text="1.0">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr4.10">Solr4.10</a> Another supported form of faceting is “Interval Faceting”. This sounds similar to “Range Faceting”, but the functionality is really closer to doing “Facet Queries” with range queries. Interval Faceting allows you to set variable intervals and count the number of documents that have values within those intervals in the specified field. Before
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr5.2">Solr5.2</a>, fields used for Interval Faceting had to have “docValues” enabled, but this is no longer a restriction.
+            <a href="/solr/DocValues">DocValues</a> will be used if present, but fieldCache will be used otherwise.
+          </p>
+          <p data-text="1.0">Even though the same functionality can be achieved by using facet query with range queries, the implementation of these two methods is very different and will provide different performance depending on the context. If you are concerned about the performance of your searches you should test with both options. Interval Faceting tends to be better with multiple intervals for the same fields, while facet query tend to be better in environments where cache is more effective (static indexes for example) </p>
+          <h3>facet.interval</h3>
+          <p data-text="1.0">This parameter Indicate the field where interval faceting must be applied. It can be used multiple times in the same request to indicate multiple fields. </p>
+          <pre>&amp;facet.interval=price&amp;facet.interval=size</pre>
+          <h3>facet.interval.set</h3>
+          <p data-text="1.0">This parameter is used to set the intervals for the field. This parameter can be specified multiple times to indicate multiple intervals. This parameter is global, which means that it will be used for all fields indicated with facet.interval unless there is an override for a specific field. To override this parameter on a specific field you can use: f.&lt;fieldname&gt;.facet.interval.set </p>
+          <pre>&amp;f.price.facet.interval.set=[0,10]&amp;f.price.facet.interval.set=(10,100]</pre>
+          <h3>Interval Syntax</h3>
+          <p data-text="1.0">Intervals must begin with either '(' or '[', be followed by the start value, then a comma ',', the end value, and finally ')' or ']’. </p>
+          <p data-text="0.13">For example: </p>
+          <ul>
+            <li>
+              <p data-text="0.63">(1,10) -&gt; will include values greater than 1 and lower than 10 </p>
+            </li>
+            <li>
+              <p data-text="0.7">[1,10) -&gt; will include values greater or equal to 1 and lower than 10 </p>
+            </li>
+            <li>
+              <p data-text="0.77">[1,10] -&gt; will include values greater or equal to 1 and lower or equal to 10 </p>
+            </li>
+          </ul>
+          <p data-text="1.0">The initial and end values can't be empty, if the interval needs to be unbounded, the special character '*' can be used for both, start and end limit. When using '*', '(' and '[', and ')' and ']' will be treated equal. [*,*] will include all documents with a value in the field. The interval limits may be strings, there is no need to add quotes, all the text until the comma will be treated as the start limit, and the text after that will be the end limit, for example: [Buenos Aires, New York]. Keep in mind that a string-like comparison will be done to match documents in string intervals (case-sensitive). The comparator can't be changed. Commas, brackets and square brackets can be escaped by using '\' in front of them. Whitespaces before and after the values will be omitted. Start limit can't be grater than the end limit. Equal limits are allowed, this allows you to indicate the specific values that you want to count, like [A,A], [B,B] and [C,Z]. </p>
+          <h3>Changing the interval Keys</h3>
+          <p data-text="1.0">Similar than with facet queries, with Interval Faceting the keys of the intervals can be changed by using the “key”
+            <a href="/solr/LocalParam">LocalParam</a>.
+          </p>
+          <pre>&amp;f.price.facet.interval.set={!key=foo}[0,10]&amp;f.price.facet.interval.set={!key=bar}[10,100]</pre>
+          <h1>Deprecated Parameters</h1>
+          <h2>facet.zeros</h2>
+          <p data-text="1.0">Set to "true" this param indicates that constraint counts for facet fields should be included even if the count is "0", set to "false" or blank and the "0" counts will be suppressed to save on the amount of data returned in the response. </p>
+          <p data-text="0.29">The default value is "true". </p>
+          <p data-text="0.54">This parameter can be specified on a per field basis. </p>
+          <p data-text="0.28">Use facet.mincount instead. </p>
+          <h1>Examples</h1>
+          <p data-text="1.0">
+            <strong>Note:</strong> In many of these examples "rows" is set to 0 so that the main result set is empty, to better emphasize the facet data.
+          </p>
+          <h2>Facet Fields</h2>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=ipod&amp;rows=0&amp;facet=true&amp;facet.limit=-1&amp;facet.field=cat&amp;facet.field=inStock</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;2&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound="4" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"&gt; &lt;lst name="cat"&gt; &lt;int name="search"&gt;0&lt;/int&gt; &lt;int name="memory"&gt;0&lt;/int&gt; &lt;int name="graphics"&gt;0&lt;/int&gt; &lt;int name="card"&gt;0&lt;/int&gt; &lt;int name="music"&gt;1&lt;/int&gt; &lt;int name="software"&gt;0&lt;/int&gt; &lt;int name="electronics"&gt;3&lt;/int&gt; &lt;int name="copier"&gt;0&lt;/int&gt; &lt;int name="multifunction"&gt;0&lt;/int&gt; &lt;int name="camera"&gt;0&lt;/int&gt; &lt;int name="connector"&gt;2&lt;/int&gt; &lt;int name="hard"&gt;0&lt;/int&gt; &lt;int name="scanner"&gt;0&lt;/int&gt; &lt;int name="monitor"&gt;0&lt;/int&gt; &lt;int name="drive"&gt;0&lt;/int&gt; &lt;int name="printer"&gt;0&lt;/int&gt; &lt;/lst&gt; &lt;lst name="inStock"&gt; &lt;int name="false"&gt;3&lt;/int&gt; &lt;int name="true"&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Facet Fields with No Zeros</h2>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=ipod&amp;rows=0&amp;facet=true&amp;facet.limit=-1&amp;facet.field=cat&amp;facet.mincount=1&amp;facet.field=inStock</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound="4" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"&gt; &lt;lst name="cat"&gt; &lt;int name="music"&gt;1&lt;/int&gt; &lt;int name="connector"&gt;2&lt;/int&gt; &lt;int name="electronics"&gt;3&lt;/int&gt; &lt;/lst&gt; &lt;lst name="inStock"&gt; &lt;int name="false"&gt;3&lt;/int&gt; &lt;int name="true"&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Facet Fields with No Zeros And Missing Count For One Field</h2>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=ipod&amp;rows=0&amp;facet=true&amp;facet.limit=-1&amp;facet.field=cat&amp;f.cat.facet.missing=true&amp;facet.mincount=1&amp;facet.field=inStock</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound="4" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"&gt; &lt;lst name="cat"&gt; &lt;int name="music"&gt;1&lt;/int&gt; &lt;int name="connector"&gt;2&lt;/int&gt; &lt;int name="electronics"&gt;3&lt;/int&gt; &lt;int&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;lst name="inStock"&gt; &lt;int name="false"&gt;3&lt;/int&gt; &lt;int name="true"&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Facet Field with Limit</h2>
+          <p data-text="0.97">
+            <tt>http://localhost:8983/solr/select?rows=0&amp;q=inStock:true&amp;facet=true&amp;facet.field=cat&amp;facet.limit=5</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;4&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound="12" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"&gt; &lt;lst name="cat"&gt; &lt;int name="electronics"&gt;10&lt;/int&gt; &lt;int name="memory"&gt;3&lt;/int&gt; &lt;int name="drive"&gt;2&lt;/int&gt; &lt;int name="hard"&gt;2&lt;/int&gt; &lt;int name="monitor"&gt;2&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Facet Fields and Facet Queries</h2>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=video&amp;rows=0&amp;facet=true&amp;facet.field=inStock&amp;facet.query=price:[*+TO+500]&amp;facet.query=price:[500+TO+*]</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;11&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound="3" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"&gt; &lt;int name="price:[* TO 500]"&gt;2&lt;/int&gt; &lt;int name="price:[500 TO *]"&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;lst name="facet_fields"&gt; &lt;lst name="inStock"&gt; &lt;int name="false"&gt;2&lt;/int&gt; &lt;int name="true"&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Facet prefix (term suggest)</h2>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=hatcher&amp;wt=ruby&amp;indent=on&amp;facet=on&amp;rows=0&amp;facet.field=text&amp;facet.prefix=xx&amp;facet.limit=5&amp;facet.mincount=1</tt>
+          </p>
+          <pre>{ 'responseHeader'=&gt;{ 'status'=&gt;0, 'QTime'=&gt;88, 'params'=&gt;{ 'facet.limit'=&gt;'5', 'wt'=&gt;'ruby', 'rows'=&gt;'0', 'facet'=&gt;'on', 'facet.mincount'=&gt;'1', 'facet.field'=&gt;'text', 'indent'=&gt;'on', 'facet.prefix'=&gt;'xx', 'q'=&gt;'hatcher'}}, 'response'=&gt;{'numFound'=&gt;90,'start'=&gt;0,'docs'=&gt;[] }, 'facet_counts'=&gt;{ 'facet_queries'=&gt;{}, 'facet_fields'=&gt;{ 'text'=&gt;[ 'xx',7, 'xxxviii',2, 'xx909337',1, 'xxvi',1] } } }</pre>
+          <h2>Date Faceting: per day for the past 5 days</h2>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr1.3">Solr1.3</a>
+          </p>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select/?q=*:*&amp;rows=0&amp;facet=true&amp;facet.date=timestamp&amp;facet.date.start=NOW/DAY-5DAYS&amp;facet.date.end=NOW/DAY%2B1DAY&amp;facet.date.gap=%2B1DAY</tt>
+          </p>
+          <pre>&lt;response&gt; &lt;lst name="responseHeader"&gt; &lt;int name="status"&gt;0&lt;/int&gt; &lt;int name="QTime"&gt;5&lt;/int&gt; &lt;lst name="params"&gt; &lt;str name="facet.date"&gt;timestamp&lt;/str&gt; &lt;str name="facet.date.end"&gt;NOW/DAY+1DAY&lt;/str&gt; &lt;str name="facet.date.gap"&gt;+1DAY&lt;/str&gt; &lt;str name="rows"&gt;0&lt;/str&gt; &lt;str name="facet"&gt;true&lt;/str&gt; &lt;str name="facet.date.start"&gt;NOW/DAY-5DAYS&lt;/str&gt; &lt;str name="indent"&gt;true&lt;/str&gt; &lt;str name="q"&gt;*:*&lt;/str&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;result name="response" numFound="42" start="0"/&gt; &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"/&gt; &lt;lst name="facet_dates"&gt; &lt;lst name="timestamp"&gt; &lt;int name="2007-08-11T00:00:00.000Z"&gt;1&lt;/int&gt; &lt;int name="2007-08-12T00:00:00.000Z"&gt;5&lt;/int&gt; &lt;int name="2007-08-13T00:00:00.000Z"&gt;3&lt;/int&gt; &lt;int name="2007-08-14T00:00:00.000Z"&gt;7&lt;/int&gt; &lt;int name="2007-08-15T00:00:00.000Z"&gt;2&lt;/int&gt; &lt;int name="2007-08-16T00:00:00.000Z"&gt;16&lt;/int&gt; &lt;str name="gap"&gt;+1DAY&lt;/str&gt; &lt;date name="end"&gt;2007-08-17T00:00:00Z&lt;/date&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</pre>
+          <h2>Retrieve docs with facets missing</h2>
+          <p data-text="1.0">All the docs counted by facet.missing can be retrieved using a query filter:
+            <tt>fq=-facetField:[* TO *]</tt>
+          </p>
+          <h2>Pivot (ie Decision Tree) Faceting</h2>
+          <p data-text="0.09">
+            <img height="16" src="/wiki/modernized/img/attention.png" title="&lt;!&gt;" width="16"/>
+            <a href="/solr/Solr4.0">Solr4.0</a>
+          </p>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=*:*&amp;facet.pivot=cat,popularity,inStock&amp;facet.pivot=popularity,cat&amp;facet=true&amp;facet.field=cat&amp;facet.limit=5&amp;rows=0&amp;wt=json&amp;indent=true&amp;facet.pivot.mincount=0</tt>
+          </p>
+          <pre>"facet_pivot":{ "cat,popularity,inStock":[{ "field":"cat", "value":"electronics", "count":14, "pivot":[{ "field":"popularity", "value":"6", "count":5, "pivot":[{ "field":"inStock", "value":"true", "count":5}]}, { "field":"popularity", "value":"7", "count":4, "pivot":[{ "field":"inStock", "value":"false", "count":2}, { "field":"inStock", "value":"true", "count":2}]}, { ...</pre>
+          <h2>Interval Faceting</h2>
+          <p data-text="1.0">NOTE: make sure docValues="true" on the "price" field of your example schema before running this query
+            <tt>http://localhost:8983/solr/select?q=*:*&amp;facet=true&amp;facet.interval=price&amp;f.price.facet.interval.set=[0,10]&amp;f.price.facet.interval.set=%2810,100]&amp;f.price.facet.interval.set=%28100,*]</tt>
+          </p>
+          <pre>... &lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"/&gt; &lt;lst name="facet_dates"/&gt; &lt;lst name="facet_ranges"/&gt; &lt;lst name="facet_intervals"&gt; &lt;lst name="price"&gt; &lt;int name="[0,10]"&gt;3&lt;/int&gt; &lt;int name="(10,100]"&gt;4&lt;/int&gt; &lt;int name="(100,*]"&gt;9&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; ...</pre>
+          <h3>Changing the key per interval</h3>
+          <p data-text="1.0">
+            <tt>http://localhost:8983/solr/select?q=*:*&amp;facet=true&amp;facet.interval=price&amp;f.price.facet.interval.set={!key='cheap'}[0,10]&amp;f.price.facet.interval.set={!key='average'}%2810,100]&amp;f.price.facet.interval.set={!key='expensive'}%28100,*]</tt>
+          </p>
+          <pre>&lt;lst name="facet_counts"&gt; &lt;lst name="facet_queries"/&gt; &lt;lst name="facet_fields"/&gt; &lt;lst name="facet_dates"/&gt; &lt;lst name="facet_ranges"/&gt; &lt;lst name="facet_intervals"&gt; &lt;lst name="price"&gt; &lt;int name="cheap"&gt;3&lt;/int&gt; &lt;int name="average"&gt;4&lt;/int&gt; &lt;int name="expensive"&gt;9&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt;</pre>
+          <h1>Warming</h1>
+          <p data-text="1.0">facet.field queries using the term enumeration method can avoid the evaluation of some terms for greater efficiency. To force the evaluation of all terms for warming, the base query should match a single document. </p>
+        </div>
+        <p data-text="0.79">SimpleFacetParameters (last edited 2015-04-25 19:33:00 by
+          <a href="/solr/TomasFernandezLobbe" title="TomasFernandezLobbe @ 67.180.18.4[67.180.18.4]">TomasFernandezLobbe</a>)
+        </p>
+      </div>
+      <div>
+        <ul>
+          <li>Immutable Page</li>
+          <li data-comment="-1.0">
+            <a href="#" data-comment="-1.0">Comments</a>
+          </li>
+          <li>
+            <a href="/solr/SimpleFacetParameters?action=info">Info</a>
+          </li>
+          <li>
+            <a href="/solr/SimpleFacetParameters?action=AttachFile">Attachments</a>
+          </li>
+          <li>
+            <div data-text="1.0"> More Actions: Raw Text Print View Render as Docbook Delete Cache ------------------------ Check Spelling Like Pages Local Site Map ------------------------ Rename Page Copy Page Delete Page ------------------------ My Pages Subscribe User ------------------------ Remove Spam Revert to this revision Package Pages Sync Pages ------------------------ Load Save SlideShow </div>
+          </li>
+        </ul>
+        <ul data-list="-1.0">
+          <li>
+            <a href="http://moinmo.in/" title="This site uses the MoinMoin Wiki software.">MoinMoin Powered</a>
+          </li>
+          <li>
+            <a href="http://moinmo.in/Python" title="MoinMoin is written in Python.">Python Powered</a>
+          </li>
+          <li>
+            <a href="http://moinmo.in/GPL" title="MoinMoin is GPL licensed.">GPL licensed</a>
+          </li>
+          <li>
+            <a href="http://validator.w3.org/check?uri=referer" title="Click here to validate this page.">Valid HTML 4.01</a>
+          </li>
+        </ul>
+      </div>
+    </body>
+  </html>
+</html>

@@ -1,0 +1,22 @@
+The Internet is going the wrong way#
+
+Evidence #
+
+Facebook is taking the place of blogs, but doesn't permit linking, styles. Posts can't have titles or include podcasts. As a result these essential features are falling into disuse. We're returning to AOL. Linking, especially is essential. #
+
+Click a link in a web browser, it should open a web page, not try to open an app which you may not have installed. This is what Apple does with podcasts and now news.#
+
+Google is forcing websites to change to support HTTPS. Sounds innocuous until you realize how many millions of historic domains won't make the switch. It's as if a library decided to burn all books written before 2000, say. The web has been used as an archival medium, it isn't up to a company to decide to change that, after the fact. #
+
+Medium, a blogging site, is gradually closing itself off to the world. People used it for years as the place-of-record. I objected when I saw them do this, because it was easy to foresee Medium pivoting, and they will pivot again. The final pivot will be when they go off the air entirely, as commercial blogging systems often do. #
+
+Instead#
+
+We should preserve the past on the web, and learn to make sites even more future-safe. The web is where human knowlege accumulates. #
+
+It's time for tech people to have values, as journalism, medicine and law do. Deliberately taking features out of the web, claiming pieces of the web as corporate property, forcing the history offline, all are terrible abuses of what make the Internet great. An ethical technologist would refuse to do this work.#
+
+When we teach people to create technology, they should learn to respect and enhance the things that make the Internet great, not help modern day robber barons appropriate them. #
+
+The Internet is a place for the people, like parks, libraries, museums, historic places. It's okay if corporations want to exploit the net, like DisneyLand or cruise lines, but not at the expense of the natural features of the net. #
+

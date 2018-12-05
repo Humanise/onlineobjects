@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <title>
+      The Breakthrough Institute - 
+      
+      The Edge of the Petri Dish
+	        
+    </title> 
+    <meta charset='utf-8' />
+    <!-- <meta name = "viewport" content = "initial-scale = 1.0"> -->
+    <meta content='' name='description' />
+    <meta content='' name='author' />
+    <meta property="fb:admins" content="1063740002"/>
+    <meta property="fb:admins" content="507891894"/>
+    <meta property="fb:admins" content="1075636452"/>
+    <meta property="fb:admins" content="1063530090"/>
+  <meta property="og:title"  
+     content="
+  
+    The Edge of the Petri Dish  -- Can Humankind Avoid Its Biological Destiny?
+       
+"/>
+    <meta property="og:image" content="
+    /images/main_image/Mann_Cover.jpg
+        " />
+    
+    <script type="text/javascript" charset="utf-8" src="https://thebreakthrough.org/index.php?ACT=jquery"></script>
+    <script type="text/javascript" charset="utf-8" src="https://thebreakthrough.org/index.php?ACT=jquery&amp;plugin=jquery.oembed"></script>
+    <script type="text/javascript" charset="utf-8" src="https://thebreakthrough.org/index.php?ACT=jquery&amp;plugin=jquery.flexslider"></script>
+    
+    <script type="text/javascript">
+      $(document).ready(function(){
+        //	$("#slider ul li").width($(window).width()); 	
+        //	$("#slider").easySlider({ auto: true, continuous: true });
+        //	$(window).bind("resize", function() {	$("#slider ul li").width($(window).width()); });
+        
+        
+        //		remove last comma or other separator in lists like authors and staff categories on "people" pages
+        		 $("p.status .separator").last().hide();
+        		 
+        $('#slider').flexslider();
+//        Remove top-level items from subnav in Dialogue section. They only want "Location, Speakers, 
+        if ($('ul#dialogue').length != 0){
+        $('ul#dialogue li:nth-child(5) ~ li').remove();
+        }
+        
+       $('#full_content sup').wrap("<a class='footnote'></a>");
+       $("a.footnote").each(function (){
+       	$(this).attr("href", "#foot"+$(this).text());
+              	   });
+ 	  
+ 	   
+		$("#footnotes p").each(function () {
+		var footIndex = ($("#footnotes p").index(this)+1);
+		$(this).attr("id", "foot"+footIndex);
+		});
+		
+		 });
+    </script>
+   <script src="https://thebreakthrough.org/js/bootstrap-dropdown.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" type="text/css" media="all" href="https://thebreakthrough.org/index.php?css=site/css_style.v.1479934800" />
+
+    <link href='https://thebreakthrough.org/images/elements/favicon.ico' rel='shortcut icon' />
+    <link href='ico/apple-touch-icon-144-precomposed.png' rel='apple-touch-icon-precomposed' sizes='144x144' />
+    <link href='ico/apple-touch-icon-114-precomposed.png' rel='apple-touch-icon-precomposed' sizes='114x114' />
+    <link href='ico/apple-touch-icon-72-precomposed.png' rel='apple-touch-icon-precomposed' sizes='72x72' />
+    <link href='ico/apple-touch-icon-57-precomposed.png' rel='apple-touch-icon-precomposed' />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/thebreakthrough?format=xml" />
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-4437158-5']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+    	
+    <script type="text/javascript">
+      $(document).ready(function(){
+      $(".sub-nav ul li.first").next().children("a").text("Current Issue");
+      });	
+    </script>
+        
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1859106194329873', {
+em: 'insert_email_variable'
+});
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1859106194329873&ev=PageView&noscript=1"
+/></noscript>
+<!-- DO NOT MODIFY -->
+<!-- End Facebook Pixel Code -->
+
+  </head>
+  <body class="journal">
+<!--start nav-->
+
+<div class='navbar'>
+  <div class='navbar-inner'>
+    <div class='container'>
+      <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+      </a>
+      <a class='brand' href='https://thebreakthrough.org/'>the Breakthrough Institute</a>
+      <div class='nav-collapse'>
+        <ul class='nav'>
+          <li>
+            <a href='https://thebreakthrough.org/about' id="nav-about">About</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/journal' id="nav-journal">Journal</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/dialogue' id="nav-dialogue">Dialogue</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/fellowship' id="nav-generation" >Fellowships</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/issues' id="nav-programs">Issues</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/publications' id="nav-publications">Publications</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/voices' id="nav-voices" >Voices</a>
+          </li>
+          <li>
+            <a href='https://thebreakthrough.org/donate' id="nav-donate" >Donate</a>
+          </li>
+
+          <form id="search-form" method="post" action="https://thebreakthrough.org/index.php"  >
+<div class='hiddenFields'>
+<input type="hidden" name="ACT" value="8" />
+<input type="hidden" name="XID" value="0ae79ffdbe024e9ed4d545a62b8d40037fe1039c" />
+<input type="hidden" name="RES" value="" />
+<input type="hidden" name="meta" value="AUYO6k3OWiSeJO3AS8to3UwFLV8DfYZk3UDDzZo011dMVBKYjnLbErtoWVJBNygQxqoXfl3k3ekdrPQIPGVB1LGsBBaHYacgEKcdQ9nDeV247aDgEn5xipCGNnPEVztELwDj2cTnJFFACLx0UOaS/G2hya9WkHPOMd65K5sGqTWIogIR76NO80bhxjZD+gIUBsQoJsEFaj9aX62rb5mMSBrzypkBkhKMoAHz643FrM6BdQkCOsVl/SoVTJZ9NCUU+Z/4KaDVwWCTvmlvWIsU/KqGGIv2kG/F+oQxpArRp4x5Lxnb6bIuAjkZHE9GiUa36JOrziW/u/zjX8CVoPqbieO4GzjxWNLbvtuIO5OM8nZGc6dMjbsjbcW6ScK+qWvOz9/YM3vIPp1GAZCScrsffXUSmcbI8e6cFqQO/7/n73KkkuXQICzcHwC2xH/9go7FfMX9nFU+/TkQelx7eqXw1g==" />
+<input type="hidden" name="site_id" value="1" />
+</div>
+
+
+          <li>
+            <input class='search' type='search' name="keywords"  id="keywords"/>
+          </li>
+          </form>
+        </ul>
+      </div>
+      <!-- /.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<!--end nav-->
+<!--start subnav-->
+
+<div class='sub-nav'>
+
+<ul id="journal">
+<li class="first" id="journal-journal-about"><a href="https://thebreakthrough.org/index.php/journal/about/">About</a></li>
+<li id="journal-journal-no.-9-summer-2018"><a href="https://thebreakthrough.org/index.php/journal/no.-9-summer-2018/">No. 9 / Summer 2018</a></li>
+<li id="journal-journal-past-issues"><a href="https://thebreakthrough.org/index.php/journal/past-issues/">Past Issues</a></li>
+<li id="journal-journal-authors"><a href="https://thebreakthrough.org/index.php/journal/authors/">Authors</a></li>
+<li class="last" id="journal-journal-subscribe-to-the-journal"><a href="https://thebreakthrough.org/index.php/journal/subscribe-to-the-journal/">Subscribe</a></li>
+</ul>
+</div>
+
+<!--end subnav!!!!-->
+
+
+
+<div class='container' id='article'>
+  <div class='page'>
+    <div class='content'>
+    
+<!-- START CONTENT -->
+	<div id="left">
+		<a href="https://thebreakthrough.org/index.php/journal/the-edge-of-the-petri-dish" title="The Edge of the Petri Dish"><h1>The Edge of the Petri Dish</h1></a>
+	
+		<h2>Can Humankind Avoid Its Biological Destiny?</h2>
+		<div id="main_image"><img alt="{photo_credit}" src="/images/main_image/Mann_Cover.jpg"></div><p id="main_image_credit"><small><em></em></small></p>
+		<div id="caption">
+					<p><strong><!--START AUTHOR LIST-->
+<script type="text/javascript">
+  $(document).ready(function(){$(".separator").last().hide();});
+</script>
+                 
+	  <a class="tag" href="https://thebreakthrough.org/people/profile/Charles-Mann">Charles Mann<span class="separator">, </span></a>
+
+
+
+<!--END AUTHOR LIST-->
+</strong></p>		
+		</div>
+
+	<div id="post_content">
+
+		<div id="full_content">	
+		<p style="text-align:justify"><img alt="" src="/images/Screen_Shot_2018-01-26_at_12.37.18_PM.png" style="float:left; height:38px; margin:0px 5px; width:40px" /></p>
+
+<p style="text-align:justify">n June 30, 1860, Samuel Wilberforce, DD, 36th Bishop of Oxford, attended the 30th annual meeting of the British Association for the Advancement of Science, held at Oxford University. Countless students have been taught that during the meeting, Wilberforce attacked evolution, setting off an impromptu debate which became a &ldquo;tipping point&rdquo; in the history of thought. I was one of those students. The debate, my biology professor explained, was the opening salvo of the war between Science and Religion &mdash; and Religion lost. My textbook backed him up. Wilberforce&rsquo;s anti-evolution assault, it said, was swept aside by researchers&rsquo; &ldquo;careful and scientific defense.&rdquo; In a flourish unusual in an undergraduate text, it boasted that the pro-evolution arguments &ldquo;neatly lifted the Bishop&rsquo;s scalp.&rdquo; That day the forces of empirical knowledge had beaten back the armies of religious ignorance.</p>
+
+<p style="text-align:justify">None of this is accurate. There was no real debate that day in Oxford. Nor was there a clear victor, still less a scalping. Not that many people were paying attention; the &ldquo;debate&rdquo; was not mentioned by a single London newspaper. Still, the exchange was important, though the quarrel was less between scientific theory and religious faith than between two conceptions of humankind&rsquo;s place in the cosmos. And far from being an enduring victory for rationality over faith, the debate inaugurated a conflict which continues to the present day, and is less about the past than about the future.</p>
+
+<p style="text-align:center"><big><strong>1.</strong></big></p>
+
+<p style="text-align:justify">In 1860 science was not assumed to be inaccessible to ordinary people; the attendees at the Advancement of Science meeting included many ordinary, middle-class Britons, as well as Oxford students and faculty. The crowd packed a hall at the university&rsquo;s new museum, standing in aisles and doorways. In that jammed, sweltering space, the subject on attendees&rsquo; minds was <em>On the Origin of Species</em>, by Charles Darwin. Published just seven months before, the book had created a public uproar, dividing educated Britons into pro- and anti-evolution camps.</p>
+
+<p style="text-align:justify">Wilberforce&rsquo;s friends believed him to be an obvious candidate to lead the charge against Darwin. Ambitious, witty, and politically connected, the 54-year-old cleric had a reputation for such smooth and convincing oratory that his detractors mocked him as &ldquo;Soapy Sam.&rdquo; His allies were sure that an eloquent public condemnation from him would deal a severe blow to Darwinism.</p>
+
+<p style="text-align:justify">As the bishop may have known, another audience member was poised for a counterstrike: Thomas Henry Huxley, almost 20&nbsp;years Wilberforce&rsquo;s junior but already known as much for his vehement defense of Darwin, a friend, as for his contributions to comparative anatomy. A poor boy who had never been able to finish his university degree, Huxley had risen to a full professorship through ambition, brilliance, and dogged work. Prickly and quick to take offense, he enjoyed a good, vicious fight with plenty of character assassination.</p>
+
+<p style="text-align:justify">In the version of events retailed in my college class, the bishop spoke for half an hour, his theatrical, booming voice filling the hall with Darwinism&rsquo;s supposed flaws. Much of the audience was delighted; every barb drew cheers and approving laughter. Goaded, perhaps, by the crowd, the bishop closed his peroration with the kind of snide jab that he would never have used in the pulpit. Turning to Huxley with a saponaceous smile, he asked grandly whether it was &ldquo;through his grandfather or his grandmother that he claimed his descent from a monkey.&rdquo;</p>
+
+<p style="text-align:justify">Huxley (my professor said) was delighted by this sally. He whispered to a neighbor, &ldquo;The Lord hath delivered him into mine hands&rdquo; &mdash; a line, fittingly enough, from Scripture. Then he stood. No, Huxley said, he would not be ashamed to have an ape for an ancestor, but he would be ashamed &ldquo;to have sprung from one who prostituted the gifts of culture and eloquence to the service of prejudice and of falsehood.&rdquo;</p>
+
+<p style="text-align:justify">Like the rest of my class, I chuckled when I heard this exchange. But I couldn&rsquo;t fathom why it counted as a victory for science. I understood that the bishop had overstepped by intimating that one of Huxley&rsquo;s grandparents had been sexually involved with an animal. Huxley had used this gaffe as an opening to strike back with an even more direct personal swipe. But neither man had said anything substantive about evolution. How could this be an advance for rational thinking?<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>The quarrel was less between scientific theory and religious faith than between two conceptions of humankind&rsquo;s place in the cosmos.</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+No transcript exists of Wilberforce&rsquo;s remarks. But he had just written an 18,000-word takedown of <em>Origin</em>, soon to be published in a prominent literary journal. Most historians believe that at Oxford the bishop simply laid out the criticisms in his review. If so, Huxley faced a challenge, because Wilberforce&rsquo;s review was far from ignorant. Indeed, Darwin later admitted that it was &ldquo;uncommonly clever; [the review] picks out with skill all the most conjectural parts, &amp; brings forward well all difficulties.&rdquo; The bishop&rsquo;s facility with scientific argument was unsurprising: he had a first-class mathematics degree from Oxford and, like Darwin, was a member of the Royal Society, Britain&rsquo;s premier scientific body.</p>
+
+<p style="text-align:justify">Part of the bishop&rsquo;s cleverness lay in his decision to attack Darwin mainly on scientific grounds, rather than invoking Christian dogma. From the beginning, Wilberforce targeted <em>Origin</em>&rsquo;s greatest weakness: the paucity of direct evidence for the evolution of one species from another. If the history of life were filled with these &ldquo;transmutations,&rdquo; the bishop reasoned, it must also be filled with in-between beasts, halfway evolved between old and new. Fossils of these in-between creatures should be everywhere. &ldquo;Yet never have the longing observations of Mr. Darwin and the transmutationists found one such instance to establish their theory.&rdquo; If evolution was real, where were these intermediate entities?<sup>1</sup></p>
+
+<p style="text-align:justify">Only after spending more than 15,000 words critiquing the evidence for the <em>existence </em>of evolution did Wilberforce turn to his main concern: natural selection, the proposed <em>mechanism </em>for evolution. At bottom, the concept of natural selection is so simple that Huxley later claimed that his reaction to learning it was &ldquo;How extremely stupid not to have thought of that!&rdquo; Darwin contended that some offspring are, by chance, different from their parents; that some of these random differences &mdash; somewhat stronger muscles, say &mdash; will be beneficial (others will not be); and that individuals with the favorable variations will have a better chance of reproducing and passing on these favorable variations. In this way, Darwin argued, natural selection ensures that randomly appearing, advantageous features spread through populations. The process ensures that all species continually evolve through time, eventually giving rise, as the changes accumulate, to new species.</p>
+
+<p style="text-align:justify">In the closing paragraphs of <em>Origin</em>, Darwin summed up his thoughts with an image: a hillside of untidy foliage that he often walked by. He asked readers to picture this &ldquo;tangled bank,&rdquo; as he called it, alive &ldquo;with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms crawling through the damp earth.&rdquo; Although the inhabitants of the hillside &mdash; that is, the earth&rsquo;s living creatures &mdash; are &ldquo;so different from each other, and dependent upon each other in so complex a manner, [they] have all been produced by laws acting around us.&rdquo; The important words here are &ldquo;all&rdquo; and &ldquo;produced.&rdquo; Living things may look dissimilar to the casual eye, but they are identical on a deeper level &mdash; all of them. Each and every one was produced by natural selection, and natural selection will determine its future.</p>
+
+<p style="text-align:justify">Each and every one &mdash; that would include human beings, wouldn&rsquo;t it? Here Darwin ducked. Throughout <em>Origin</em>, he sedulously avoided discussing whether his ideas also applied to people &mdash; if, that is, <em>Homo sapiens </em>were just another weed on his tangled bank.</p>
+
+<p style="text-align:justify">Darwin&rsquo;s reticence didn&rsquo;t fool the bishop. If natural selection directs the course of life and people are part of life, Wilberforce wrote in his review, the clear implication is that &ldquo;the principle of natural selection [applies] to MAN himself.&rdquo; (Note the sudden burst of capital letters; the bishop was thundering in disapproval.) Human beings, too, must have evolved through natural selection from some previous, not-quite-human species. And this notion, Wilberforce said, is &ldquo;absolutely incompatible&rdquo; with a true understanding of the &ldquo;moral and spiritual condition of man.&rdquo;</p>
+
+<p style="text-align:justify">Human beings, the bishop believed, had been created by God and endowed with a unique spark. But if, as Darwin suggested, people were created by unthinking natural forces, they could not possibly have any high standing. Should <em>Homo sapiens </em>share its nature with all other creatures &mdash; should our species be, as Wilberforce facetiously suggested, just a bunch of overachieving &ldquo;mushrooms&rdquo; &mdash; we would be, by definition, nothing special.</p>
+
+<p style="text-align:justify">As the University College London geographer Simon Lewis has pointed out, Darwin&rsquo;s argument &mdash; that humankind owed its existence to the same processes that gave rise to flatworms and amoebae &mdash; was a second, biological Copernican Revolution. The original Copernican Revolution is usually said to have begun in the early 16th century, when the Polish-German polymath Nicolaus Copernicus, drawing on data from Arab and Persian geometers, proposed that the earth orbits around the sun, and not the sun around the earth. Because the earth moved, it could not be, as had been thought, the focal point of the cosmos. The Copernican Revolution, the science historian Dick Teresi has noted, was neither a revolution, in the sense that it occurred over a long time, nor particularly Copernican, in that it was also the product of thinkers other than Copernicus. Still, it had great impact on our conception of ourselves and our place in the cosmos. Earth, our home, was no longer the pivot of existence. It was just a place, one among many, without particular distinction.</p>
+
+<p style="text-align:justify">Unlike the first Copernican Revolution, the second happened rapidly and was largely the product of a single mind &mdash; Charles Darwin. But it, too, nudged our species out of the spotlight. &ldquo;We are not even at the heart of life on Earth,&rdquo; as Lewis put it. Because humankind owed its existence to the same processes that produced every other organism, Darwin implied, <em>Homo sapiens </em>was a species like any other, without particular distinction. This new Copernican Revolution was what had attracted Wilberforce&rsquo;s ire.<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>Should&nbsp;<em>Homo sapiens&nbsp;</em>share its nature with all other creatures, we would be, by definition, nothing special.</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+To the bishop, there was a fundamental line between human beings and all other creatures. Naturally, he described that difference in Christian terms: people had souls, animals did not; people were endowed by God with the capacity for change and redemption, animals were not. But Wilberforce&rsquo;s view can be put in broader, more general terms, which do not depend on religious belief: <em>Homo sapiens </em>has an inner flame of creativity and intelligence that allows it to burn down barriers that would trap any other species. Or, more succinctly: human beings are not wholly controlled by the natural processes that control all other creatures. We are not simply another species.</p>
+
+<p style="text-align:justify">Wilberforce&rsquo;s remark about Huxley&rsquo;s ape ancestors was thus more than a snarky gibe. Consciously or not, the bishop was asking whether Huxley was prepared to affirm that he and all other people were prisoners of biology. Blinded by contempt, Huxley seems not to have realized that his adversary was posing, however rudely, an important question. (The &ldquo;great question,&rdquo; the conservationist George Perkins Marsh called it a few years later: &ldquo;whether man is <em>of </em>nature or <em>above </em>her.&rdquo;) Not grasping the underpinnings of the dispute, Huxley didn&rsquo;t even try to engage them. Darwin later shuddered at the &ldquo;awful battles which have raged about &lsquo;species&rsquo; at Oxford,&rdquo; but there was no actual debate. At least not in the sense of a genuine attempt to hash out diverging beliefs.</p>
+
+<p style="text-align:justify">Both Huxley and Wilberforce thought they had come off well. Three days after the encounter, the bishop bragged to a friend, &ldquo;I think I thoroughly beat him.&rdquo; Certainly his supporters in the audience, &ldquo;cheering lustily,&rdquo; thought so. Equally pleased, Huxley later boasted that he &ldquo;was the most popular man in Oxford for full four and twenty hours afterwards.&rdquo; In the years to come, Huxley and Wilberforce ran into each other from time to time. The meetings were always cordial. Both viewing themselves as the winner, they could be magnanimous in victory.</p>
+
+<p style="text-align:justify">Over the decades, Huxley came to be seen as triumphant. In his school in the 1960s, the writer Christopher Hitchens was taught that &ldquo;Huxley cleaned Wilberforce&rsquo;s clock, ate his lunch, used him as a mop for the floor, and all that.&rdquo; In my college a few years later, I learned much the same thing. The Wilberforce-Huxley dustup was presented as a morality play ending in a straightforward victory for rational thought. Only much later did I realize that from today&rsquo;s perspective the implications of our species&rsquo; lack of specialness were different from what my teacher and textbook had presented.</p>
+
+<p style="text-align:justify">In Wilberforce&rsquo;s day, those who hoped for a better future cheered on Huxley because science and technology seemed to promise a better life. But now that science and technology have allowed the human enterprise to risk its own survival, the partisans of hope have stepped back from some of Huxley&rsquo;s implications. If the Oxford debate was a morality play, the vices and virtues have slipped off stage and switched masks.</p>
+
+<p style="text-align:center"><big><strong>2.</strong></big></p>
+
+<p style="text-align:justify">Lynn Margulis was a Huxleyite. A researcher who specialized in cells and microorganisms, Margulis was one of the most important biologists in the last half century. Until her death in 2011, she lived in my town, and I would bump into her on the street from time to time. <em>Homo sapiens</em>, she once told me, is an unusually successful species. And it is the fate of every successful species to wipe itself out &mdash; that is the way things work in biology.</p>
+
+<p style="text-align:justify">Margulis explained these ideas to me while talking about one of her scientific heroes, the Russian microbiologist Georgii Gause. In 1934, Gause published <em>The Struggle for Existence</em>, which today is viewed as a scientific landmark, one of the first successful marriages of experiment and theory in ecology.</p>
+
+<p style="text-align:justify">By today&rsquo;s standards, his methodology was simplicity itself. Gause decanted an oatmeal broth into small, flat-bottomed test tubes. Into each he dripped five <em>Paramecium caudatum</em> or <em>Stylonychia mytilus</em>, both single-celled protozoans, one species per tube. He stored the tubes for a week, during which time he observed the results.</p>
+
+<p style="text-align:justify">What Gause saw in his test tubes is often depicted in a graph, time on the horizontal axis, the number of protozoa on the vertical. The line on the graph is like a distorted bell curve, with its left side twisted and stretched. By squinting a bit, it is possible to imagine that the left side of the curve is a kind of flattened <em>S</em>, which is why scientists often refer to Gause&rsquo;s curve as an &ldquo;<em>S</em>-shaped curve.&rdquo; At the beginning (that is, the left side of the <em>S</em>-shaped curve), the number of protozoans grows slowly, and the graph line slowly ascends to the right. But then the line hits an inflection point, and suddenly rockets upward &mdash; a frenzy of growth. The mad rise continues until the organism begins to run out of food, at which time there is a second inflection point, and the growth curve levels off again as bacteria begin to die. Eventually the line descends, and the population falls toward zero.<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>It is the fate of every successful species to wipe itself out &mdash; that is the way things work in biology.</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+Years ago I watched Margulis demonstrate Gause&rsquo;s conclusions to one of her classes with a time-lapse video of <em>Proteus vulgaris</em>, a bacterium that resides in the intestinal tract. Left alone, it divides about every 15 minutes, producing two individuals where before had been one. Margulis switched on the projector. Onscreen was a tiny dot &mdash; <em>P. vulgaris </em>&mdash; in a shallow, circular glass container: a petri dish, its bottom covered with a layer of reddish nutrient goo. The students gasped. In the time-lapse video, the colony seemed to pulse, doubling in size every few seconds, rippling outward until the mass of bacteria filled the screen.</p>
+
+<p style="text-align:justify">By luck or superior adaptation, a few species manage to escape their limits, at least for a while. Nature&rsquo;s success stories, they are like Gause&rsquo;s protozoans; the world is their petri dish. Their populations grow at a terrific rate; they take over large areas, engulfing their environment as if no force opposed them. Then they hit a barrier. They drown in their own wastes. They starve from lack of food. Something figures out how to eat them.</p>
+
+<p style="text-align:justify">When Margulis told me that human beings, like Gause&rsquo;s protozoa, would wipe themselves out, she was affirming her belief in Darwin&rsquo;s view: biological laws apply to every creature. After talking with her, I sometimes told people about these ideas. Few accepted them, and even those who agreed did not fully endorse Margulis&rsquo;s perspective. They told me that the human race was doomed because people are greedy and stupid, not because, as Margulis thought, overreaches and crashes are the natural way, as much a part of the wonders of life as coral reefs and tropical forests. But I also never met anyone who had a convincing argument that she was wrong.</p>
+
+<p style="text-align:justify">Over the years, as my journalistic assignments accumulated, it seemed to me that the responses to my questions fell into two broad categories. Wizards and Prophets, as I have come to call them, each have a separate blueprint for the future. Prophets look at the world as finite, and people as constrained by their environment. Wizards see possibilities as inexhaustible, and humans as wily managers of the world. One views growth and development as the lot and blessing of our species; the other regards stability and preservation as our future and our goal. Wizards regard the earth as a toolbox, its contents freely available for us; Prophets think of the natural world as embodying an overarching order that should not lightly be disturbed. But both assume that Wilberforce, not Huxley, was correct &mdash; that human beings are special creatures who can escape the fate of other successful species.</p>
+
+<p style="text-align:center"><big><strong>3.</strong></big></p>
+
+<p style="text-align:justify">A year after Margulis&rsquo;s death in 2011, I bumped into Daniel B. Botkin, an ecologist who had recently retired from the University of California, Santa Barbara. Botkin has worked in many areas but is perhaps best known for <em>Discordant Harmonies </em>(1990), a classic study debunking the long-held belief that ecosystems will exist in a timeless balance unless people disturb them. He had known Margulis well and respected her. &ldquo;But she&rsquo;s wrong on this one,&rdquo; he said.</p>
+
+<p style="text-align:justify">Not all species would multiply themselves out of existence if given the chance, he said. Among the exceptions is the whooping crane, <em>Grus americana</em>. The subject of one of the longest conservation efforts in North America, the whooper, as it is called, is a sister species to the Eurasian crane, <em>Grus grus</em>; geneticists believe the two species split off from a common ancestor one to three million years ago. Despite their physical similarity, the birds behave differently. Hundreds of thousands of Eurasian cranes exist, despite human hunting. The bird aggressively expands its territory when possible, sometimes infuriating farmers by taking over their fields. Whoopers, by contrast, are shy creatures of the marsh, rarely seen in groups bigger than two; as far as is known, the entire species has never numbered more than 1,500 individuals. &ldquo;Explosive growth is evidently not part of its evolutionary strategy,&rdquo; Botkin said.</p>
+
+<p style="text-align:justify">There are other examples &mdash; not many, but they exist. Another example, from Botkin: the Tiburon mariposa lily (<em>Calochortus tiburonensis</em>). Native to northern California, it lives only on soils made from serpentine, a relatively rare kind of stone that produces soils filled with chromium and nickel, which are toxic to most plants. Serpentine soils occur usually in isolated patches with relatively defined borders &mdash; natural petri dishes, one might say. The lily reproduces slowly enough that it never overwhelms its environment. It never hits the edge of the petri dish.</p>
+
+<p style="text-align:justify">Was there any known case, I asked Botkin, of a species changing its evolutionary strategy? A creature that went from rapid, Gause-style expansion to quiet adjustment to its environment? Of a protozoan transforming itself, so to speak, into a whooping crane? Or of a plant that somehow makes its own serpentine soil?</p>
+
+<p style="text-align:justify">&ldquo;That&rsquo;s the question, isn&rsquo;t it?&rdquo; Botkin said.</p>
+
+<p style="text-align:center"><big><strong>4.</strong></big></p>
+
+<p style="text-align:justify">One possible answer to the question is provided by Robinson Crusoe, hero of Daniel Defoe&rsquo;s famous novel. Shipwrecked alone on an uninhabited island off Venezuela in 1659, Crusoe is an impressive example of fictional human resilience and drive. During his 27-year exile, he learns to catch fish, hunt rabbits, tame goats, prune citrus trees, and create &ldquo;plantations&rdquo; of barley and rice from seeds salvaged from the wreck. (Defoe didn&rsquo;t know that citrus and goats were not native to the Caribbean and thus probably wouldn&rsquo;t have been on the island.) Rescue comes in the form of a shipful of mutineers, who plan to maroon their captain on the supposedly empty island. Crusoe helps the captain recapture his ship and offers the defeated mutineers a choice: permanent exile on the island or trial in England. All choose the island. Crusoe has harnessed so much of its productive power to human use that even a gaggle of inept seamen can survive there in comfort.</p>
+
+<p style="text-align:justify"><em>Robinson Crusoe</em>&rsquo;s first three chapters recount how its hero ended up on his ill-fated voyage. The youngest son of an English merchant, Crusoe has a restless spirit that leads him to become an independent slave trader. On a voyage to Africa, his ship is captured by a &ldquo;Turkish rover&rdquo; captained by a Moor from Morocco. &ldquo;As his proper Prize,&rdquo; Crusoe becomes the captain&rsquo;s house slave. After two years of servitude, Crusoe steals his master&rsquo;s fishing boat and escapes. He bumbles in the boat down the West African coast without food or water and is rescued by a Portuguese slave ship bound for Brazil. There the enterprising Crusoe establishes a small tobacco plantation. But he is short of labor, and decides with some other plantation owners to obtain that labor by taking a ship to Africa and buying some slaves. The ship wrecks on the return voyage. Except for Crusoe, all hands perish, slaves included. He ends up alone on his island.</p>
+
+<p style="text-align:justify">What is striking to a modern reader is that Defoe saw nothing remarkable about expecting readers to sympathize with a man in the slave trade. Crusoe has no qualms about slaving even after having been, most unhappily, a slave himself. Here, character echoes author: Defoe extolled slavery as &ldquo;a most Profitable, Useful, and absolutely necessary Branch of our Commerce.&rdquo; Backing words with deeds, he owned shares in the Royal African Company, created in 1660 to buy men and women in Africa and transport them in chains to the Americas. When the company was attacked in Parliament, he offered to write the equivalent of editorials in its favor. It paid him the rough equivalent of $50,000 for his public-relations services.</p>
+
+<p style="text-align:justify">Defoe was a person of his time. Three centuries ago, when he was writing <em>Robinson Crusoe</em>, societies from one end of the world to another depended on slave labor, as had been the case since at least the Code of Hammurabi in ancient Babylon. Customs differed from one place to another, but slavery was sanctioned and practiced everywhere from Mauritania to Manchuria. Unfree workers existed by the million in the Ottoman Empire, Mughal India, and Ming China. In classical Athens, two-thirds of the inhabitants were slaves; imperial Rome, the historian James C. Scott has written, &ldquo;turned much of the Mediterranean basin into a massive slave emporium.&rdquo; Slaves were less common in early modern Europe, but Portugal, Spain, France, England, and the Netherlands happily exploited huge numbers of them in their American colonies. In the last half of the 18th century alone, almost four million people were taken from Africa in chains. In colonies throughout the Americas at that time, in places ranging from Brazil to Barbados, from South Carolina to Suriname, slaves were so fundamental to the economy that they outnumbered masters, sometimes by ten to one.</p>
+
+<p style="text-align:justify">Then, in the space of a few decades in the 19th century, slavery almost stopped entirely. The implausibility of this change is stunning. In 1860, slaves were the single most valuable economic asset in the United States, collectively worth more than $3 billion, an eye-popping sum at a time when the US gross national product was less than $5 billion. (The slaves would be worth as much as $10 trillion in today&rsquo;s money.) Rather than investing in factories like northern entrepreneurs did, southern businessmen had sunk their capital into slaves. Rightly so, financially speaking &mdash; slaves had a higher return on investment than any other commodity available to them. Enchained men and women had made the region politically powerful, and gave social status to an entire class of poor whites. Slavery was the foundation of the social order. It was, thundered South Carolina senator John C. Calhoun, &ldquo;instead of an evil, a good &mdash; a positive good.&rdquo; (Calhoun was no fringe character; a former US secretary of war and vice president, he would become secretary of state.) Yet despite the institution&rsquo;s great economic value, part of the United States set out to destroy it, wrecking much of the national economy and killing half a million citizens along the way.<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>An institution fundamental to human society for millennia was made over by ideas and a call to action, loudly repeated.</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+Incredibly, the turn against slavery was as universal as slavery itself. Great Britain, leader of the global slave trade, banned its market in human beings in 1807 after a tireless campaign by abolitionists. Two laws enacted in 1833 and 1838 freed all British slaves. Denmark, Sweden, the Netherlands, France, Spain, and Portugal soon outlawed their slave trades, too, and after that slavery itself. Like stars winking out at the approach of dawn, cultures across the globe removed themselves from the previously universal exchange of human cargo. Slavery still exists; the International Labor Organization estimates that almost 21 million people are still forced to work as captives. But in no society anywhere is slavery a legally protected institution &mdash; part of the social fabric &mdash; as it was throughout the world two centuries ago.</p>
+
+<p style="text-align:justify">Historians provide many reasons for this extraordinary transition, high among them the fierce opposition of slaves themselves. But another important cause is that abolitionists convinced people around the world that slavery was a moral disaster. An institution fundamental to human society for millennia was made over by ideas and a call to action, loudly repeated.</p>
+
+<p style="text-align:justify">In the last few centuries, such profound changes have occurred repeatedly. Another, possibly even bigger, example: Since the beginning of our species, almost every known society has been based on the subjugation of women by men. Tales of past matriarchal societies abound, but there is little archaeological evidence for their veracity. In the long run, women&rsquo;s lack of liberty has been as central to the human enterprise as gravitation to the celestial order. The degree of suppression varied from time to time and place to place, but women never had an equal voice. Union and Confederacy clashed over slavery, but they were in accord on the status of women: in neither state could women attend school, have a bank account, or, in many places, own non-personal property. Equally confining in different ways were female lives in Europe, Asia, and Africa. Nowadays women are the majority of US college students, the majority of the US workforce, and the majority of US voters. Again, historians assign multiple causes to this shift, rapid in time, confounding in scope. But a central element was the power of ideas &mdash; the voices and actions of suffragists, who through decades of ridicule and harassment pressed their case. In recent years something similar may have occurred with gay rights: first a few lonely advocates, censured and mocked; then victories in the social and legal sphere; finally, perhaps, a slow movement toward equality.<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>No European in 1800 could have imagined that in 2000 Europe would have no legal slavery, women would be able to vote, and same-sex couples would be able to marry.</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+Equally profound is the decline in violence. Ten thousand years ago, at the dawn of agriculture, societies mustered labor for the fields and controlled harvest surpluses by organizing themselves into states and empires. These promptly revealed an astonishing appetite for war. Their penchant for violence was unaffected by increasing prosperity or higher technological, cultural, and social accomplishments. When classical Athens was at its zenith in the fourth and fifth centuries BC, it was ever at war: against Sparta (First and Second Peloponnesian Wars, Corinthian War); against Persia (Greco-Persian Wars, Wars of the Delian League); against Aegina (Aeginetan War); against Macedon (Olynthian War); against Samos (Samian War); against Chios, Rhodes, and Cos (Social War). Greece was nothing special &mdash; look at the ghastly histories of China, sub-Saharan Africa, or Mesoamerica. Look at early modern Europe, where war followed upon war so fast that historians bundle them into catchall titles like the Hundred Years&rsquo; War or the even more destructive Thirty Years&rsquo; War. The brutality of these conflicts is difficult to grasp; to cite an example from the Israeli political scientist Azar Gat, Germany lost between a fifth and a third of its population in the Thirty Years&rsquo; War &mdash; &ldquo;higher than the German casualties in the First and Second World Wars <em>combined</em>.&rdquo; The statistic is sobering: Germany lost a greater percentage of its people to violence in the 17th century than in the 20th, despite the intervening advances in the technology of slaughter, despite being governed for more than a decade by maniacs who systematically murdered millions of their fellow citizens.</p>
+
+<p style="text-align:justify">As many as one out of every ten people met violent deaths in the first millennium AD, the archaeologist Ian Morris has estimated. Ever since, violence has declined &mdash; gradually, then suddenly. In the decades after the Second World War, rates of violent death plunged to the lowest levels ever seen. Today, humans are far less likely to be slain by other members of their species than a hundred years ago, or a thousand &mdash; an extraordinary transformation that has occurred, almost unheralded, in the lifetime of many of the people reading this article. Given the mayhem documented in every day&rsquo;s headlines, the horrors in the Middle East and the strife in northeast Africa, the idea that violence is diminishing may seem absurd. Nonetheless, every independent effort to collect global statistics on violence suggests that we seem to be winning, at least for now, what the political scientist Joshua Goldstein calls &ldquo;the war on war.&rdquo;</p>
+
+<p style="text-align:center"><big><strong>5.</strong></big></p>
+
+<p style="text-align:justify">Past successes do not guarantee future progress. Violence has ticked upward in the last decade, and may get worse. One can readily imagine some ghastly political or religious insurgency that reinstates slavery; many insurrectionary forces go out of their way to brutalize women. Global poverty has fallen dramatically in recent decades, but could rebound. Lunatics with nuclear weapons may yet strike &mdash; a possibility that will never go away. There is no permanent victory condition for being human, as the writer Bruce Sterling has remarked.</p>
+
+<p style="text-align:justify">Given this record, though, even Lynn Margulis might pause. No European in 1800 could have imagined that in 2000 Europe would have no legal slavery, women would be able to vote, and same-sex couples would be able to marry. No one could have guessed that a continent that had been tearing itself apart for centuries would be largely free of armed conflict, even amid terrible economic times. No one could have guessed that Europe would have vanquished famine.</p>
+
+<p style="text-align:justify">Preventing <em>Homo sapiens </em>from destroying itself &agrave; la Gause would require a still greater transformation, because we would be pushing against nature itself. Success would be unprecedented, biologically speaking. It would be a reverse Copernican Revolution, showing that humankind is exempt from natural processes that govern all other species. But might we be able to do exactly that? Might Margulis have got this one wrong? Might we indeed be special?<br />
+&nbsp;</p>
+
+<blockquote>
+<h2 style="text-align:justify"><span style="color:#A9A9A9"><q>Is it so unlikely that our species, a congeries of changelings, would be able to&nbsp;transform our lives to meet new challenges?</q></span></h2>
+</blockquote>
+
+<p style="text-align:justify"><br />
+Consider, again, Robinson Crusoe. He was a slaver &mdash; but also, in the end, he had a special spark. Confronted with a threat to his survival, he changed his way of life, root and branch, to meet it. Working alone, he transformed the island, enriching its landscape. And then, to his surprise, he realized that he &ldquo;might be more happy in this Solitary Condition, than I should have been in a Liberty of Society, and in all the Pleasures of the World.&rdquo;</p>
+
+<p style="text-align:justify">Living alone on a large, biologically rich island, Crusoe was able to take as many of its resources as he wanted &mdash; he was, so to speak, barely past the first inflection on Gause&rsquo;s curve. Margulis&rsquo;s presumption is that if he and the mutineers had stayed, they eventually would have hit the second inflection point and wiped themselves out. (I am making the unrealistic assumption that they would not have left the island.)</p>
+
+<p style="text-align:justify">Wizards and Prophets both believe that Margulis is wrong &mdash; that Crusoe and the others would have gained enough knowledge to save themselves. They would have either used this knowledge to create technology to soar beyond natural constraints (as Wizards hope) or changed their survival strategy from expanding their presence to living in a steady-state accommodation with what the island offered (as Prophets wish).</p>
+
+<p style="text-align:justify">Of course, Crusoe was a fictional character (though Alexander Selkirk, the castaway whose story apparently inspired Defoe, was not). And the challenge facing the next generation is vastly larger than Crusoe&rsquo;s challenge. But is it so unlikely that our species, a congeries of changelings, would be able to do exactly as Crusoe did &mdash; transform our lives to meet new challenges &mdash; before we round that fateful curve of the second inflection point and nature does it for us?</p>
+
+<p style="text-align:justify">I can imagine Margulis&rsquo;s response: You&rsquo;re imagining our species as some sort of big-brained, hyper-rational, cost-benefit-calculating computer! A better analogy is the bacteria at our feet! Still, Margulis would be the first to agree that removing the shackles from women and slaves has begun to unleash the suppressed talents of two-thirds of the human race. Drastically reducing violence has prevented the waste of countless lives and a staggering amount of resources. Is it really impossible to believe that we wouldn&rsquo;t use those talents and those resources to draw back before the abyss?</p>
+
+<p style="text-align:justify">Our record of success is not that long. In any case, past successes are no guarantee of the future. But it is terrible to suppose that we could get so many other things right and get this one wrong. To have the imagination to see our potential end, but not have the imagination to avoid it. To send humankind to the moon but fail to pay attention to the earth. To have the potential but to be unable to use it &mdash; to be, in the end, no different from the protozoa in the petri dish. It would be evidence that Lynn Margulis&rsquo;s most dismissive beliefs had been right after all. For all our speed and voraciousness, our changeable sparkle and ash, we would be, at last count, not an especially interesting species.</p>
+
+<div>
+<p style="text-align:justify">&nbsp;</p>
+
+<hr />
+<div id="edn1">
+<p style="text-align:justify"><small>[1]&nbsp;Darwin argued that the fossil record was then too incomplete to show transitions, and that later discoveries would fill in the gaps. Almost all scientists believe he was correct. Since then, paleontologists (dinosaur specialists) have uncovered many &ldquo;missing link&rdquo; species. One example: <em>Kulindadromeus zabaikalicus</em>, discovered in 2014. A small, bipedal dinosaur, it has both bird-like feathers and dinosaur-like scales, showing how dinosaurs evolved into birds.</small></p>
+</div>
+
+<hr />
+<p style="text-align:center">&nbsp;</p>
+
+<p style="text-align:center"><a href="http://eepurl.com/bL3MNL"><img alt="" src="https://thebreakthrough.org/images/food_farming_news.png" style="height:113px; width:260px" /></a></p>
+
+<h4 style="text-align:center"><a href="http://eepurl.com/bL3MNL">SUBSCRIBE TO OUR NEWSLETTER</a></h4>
+</div>
+		</div>
+		<!--START SUBJECT TAGS-->
+<div id="subject_tags">
+                <ul >
+					     
+                </ul>
+              </div>
+<!--              END SUBJECT TAGS-->
+
+
+
+	</div>
+	</div>
+<!-- END CONTENT -->
+		
+	</div>
+	<div class="aside">
+		<!--      START CHANNEL SHARE-->
+                  <div class="well share">
+                                               <h5 class="journal-connect">Connect With The Breakthrough Journal</h5>
+                  	  
+                 <ul class="social_icons">  
+                                           
+                        <li>                   
+                          <a class="facebook" href="https://www.facebook.com/Breakthroughjournal">Facebook</a>
+                        </li>
+                        <li>
+                          <a class="twitter" href="https://twitter.com/#!/BTJournal">Twitter</a>
+                        </li>
+                        <li>
+                          <a class="google" href="https://plus.google.com/b/100974430557711352807/100974430557711352807/posts">google</a>
+                        </li>
+                        <li>
+                          <a class="rss" href="http://feeds.feedburner.com/thebreakthrough/journal">&nbsp;</a>
+                        </li>
+                                            </ul>
+                    
+
+                  </div>
+<!--  END CHANNEL SHARE-->
+		
+<!--program tags-->
+<div class="side_title well">
+  <ul class="tags">
+           
+  </ul>
+</div>
+<!--end program tags-->		
+
+		<!--      START POST ADS-->
+        
+                    <div class='well ads padding'>
+             <h4 style="text-align:center">CHARLES C. MANN</h4>
+
+<p style="text-align:center"><img alt="" src="/images/Screen_Shot_2018-01-26_at_3.54.38_PM.png" style="height:235px; width:235px" /><br />
+<br />
+<em>Charles C. Mann is a journalist and author of several books, including</em> 1491<em>, which won the US National Academy of Sciences&#39; Keck award for best book of the year</em>.<em> This essay, which will appear in the forthcoming winter&nbsp;issue of the </em>Breakthrough Journal<em>, is adapted from his most recent book&nbsp;</em><a href="https://www.amazon.com/exec/obidos/ISBN=0307961699/theatla05-20/">The Wizard and the Prophet</a>.<em>&nbsp;</em></p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<p style="text-align:center"><img alt="" src="/images/BTJ_Issue_8.png" style="height:320px; width:235px" /></p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<hr />
+<p style="text-align:center">&nbsp;</p>
+
+<h4 style="text-align:center"><a href="http://crm.thebreakthrough.org/?page=CiviCRM&amp;q=civicrm/contribute/transact&amp;reset=1&amp;id=2">SUBSCRIBE TO THE BREAKTHROUGH JOURNAL</a></h4>
+
+<p>&nbsp;</p>
+
+<p style="text-align:center"><a href="https://thebreakthrough.org/index.php/journal/past-issues/issue-7"><img alt="" src="/images/Journal_7_cover_thumbnail.png" style="height:271px; width:200px" /></a></p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<hr />
+<h4>BREAKTHROUGH JOURNAL NO.&nbsp;7</h4>
+
+<p>&nbsp;</p>
+
+<p><a href="https://thebreakthrough.org/index.php/journal/past-issues/issue-7/on-mother-earth-and-earth-mothers">On Mother Earth and Earth Mothers</a><br />
+<small>by Jennifer Bernstein</small><br />
+&nbsp;</p>
+
+<p><img alt="" src="/images/Feminism_2.jpg" style="height:192px; width:240px" /></p>
+
+<p>&nbsp;</p>
+
+<p><a href="https://thebreakthrough.org/index.php/journal/past-issues/issue-7/can-we-love-nature-and-let-it-go">Can We Love Nature and Let It Go?</a><br />
+<small>by Emma Marris</small><br />
+&nbsp;</p>
+
+<p><img alt="" src="/images/Can_we_love_nature_600.jpg" style="height:159px; width:240px" /></p>
+
+<p>&nbsp;</p>
+
+<p><a href="https://thebreakthrough.org/index.php/journal/past-issues/issue-7/leapfrogging-progress">Leapfrogging Progress</a><br />
+<small>by Calestous Juma</small><br />
+&nbsp;</p>
+
+<p><img alt="" src="/images/Leapfrogging_.jpg" style="height:160px; width:240px" /></p>
+
+<p>&nbsp;</p>
+
+<p><a href="https://thebreakthrough.org/index.php/journal/past-issues/issue-7"><em>Read more from Issue 7</em>...</a></p>
+
+<p>&nbsp;</p>
+
+<hr />
+<p style="text-align:center"><a href="http://eepurl.com/bL3MNL"><img alt="" src="https://thebreakthrough.org/images/food_farming_news.png" style="height:113px; width:260px" /></a></p>
+
+<h4 style="text-align:center"><a href="http://eepurl.com/bL3MNL">SUBSCRIBE TO OUR NEWSLETTER</a></h4> 
+            </div>
+        
+        
+<!--  END POST ADS-->
+	
+	</div>
+</div>
+
+</div>
+
+
+<footer  id="footer" class="footer">
+      <div class="container">
+        <div class="row">
+          <p class="address">
+            The Breakthrough Institute
+            <br>
+            436 14th Street, Suite 820
+            <br>
+            Oakland, CA 94612
+          </p>
+          <p class="contact">
+            <a class="phone" href="tel:510-550-8800">510 550 8800</a>
+            <br>
+            <a href="mailto:info@thebreakthrough.org">info@thebreakthrough.org</a>
+          </p>
+          <p class="social">
+            <a class="facebook" href="https://www.facebook.com/BreakthroughInstitute">become a fan</a>
+            <a class="twitter" href="https://twitter.com/#!/TheBTI">follow us</a>
+            <a class="paypal" href="https://portal.rockpa.org/SSLPage.aspx?pid=404">donate</a>
+            <a class="rss" href="http://feeds.feedburner.com/thebreakthrough">rss</a>
+            <a class="jobs" href="/about/jobs">jobs</a>
+          </p>
+          <p class="copyright">
+            © 2016 the Breakthrough Institute
+            <br>
+            <span>All Rights Reserved</span>
+            <br>
+<br>
+</p>
+<p style="width: 100%; text-align: center;">The Breakthrough Institute is a not-for-profit 501(c)(3)corporation.</p>
+        </div>
+      </div>
+    </footer>    
+         
+   </body>
+   </html>
