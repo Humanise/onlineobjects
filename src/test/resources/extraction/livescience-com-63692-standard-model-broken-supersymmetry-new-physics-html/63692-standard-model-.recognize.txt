@@ -1,0 +1,105 @@
+Bizarre Particles Keep Flying Out of Antarctica's Ice, and They Might Shatter Modern Physics
+
+By Rafi Letzter, Staff Writer | September 26, 2018 08:16pm ET
+
+MORE
+
+A team recovers NASA's Antarctic Impulsive Transient Antenna (ANITA) after a successful flight.
+Credit: Australian Antarctic Division
+
+There's something mysterious coming up from the frozen ground in Antarctica, and it could break physics as we know it.
+
+Physicists don't know what it is exactly. But they do know it's some sort of cosmic ray — a high-energy particle that's blasted its way through space, into the Earth, and back out again. But the particles physicists know about — the collection of particles that make up what scientists call the Standard Model (SM) of particle physics — shouldn't be able to do that. Sure, there are low-energy neutrinos that can pierce through miles upon miles of rock unaffected. But high-energy neutrinos, as well as other high-energy particles, have "large cross-sections." That means that they'll almost always crash into something soon after zipping into the Earth and never make it out the other side.
+
+And yet, since March 2016, researchers have been puzzling over two events in Antarctica where cosmic rays did burst out from the Earth, and were detected by NASA's Antarctic Impulsive Transient Antenna (ANITA) — a balloon-borne antenna drifting over the southern continent.
+
+ANITA is designed to hunt cosmic rays from outer space, so the high-energy neutrino community was buzzing with excitement when the instrument detected particles that seemed to be blasting up from Earth instead of zooming down from space. Because cosmic rays shouldn't do that, scientists began to wonder whether these mysterious beams are made of particles never seen before.
+
+Since then, physicists have proposed all sorts of explanations for these "upward going" cosmic rays, from sterile neutrinos (neutrinos that rarely ever bang into matter) to "atypical dark matter distributions inside the Earth," referencing the mysterious form of matter that doesn't interact with light [The 18 Biggest Unsolved Mysteries in Physics]
+
+All the explanations were intriguing, and suggested that ANITA might have detected a particle not accounted for in the Standard Model. But none of the explanations demonstrated conclusively that something more ordinary couldn't have caused the signal at ANITA.
+
+A new paper uploaded today (Sept. 26) to the preprint server arXiv changes that. In it, a team of astrophysicists from Penn State University showed that there have been more upward-going high-energy particles than those detected during the two ANITA events. Three times, they wrote, IceCube (another, larger neutrino observatory in Antarctica) detected similar particles, though no one had yet connected those events to the mystery at ANITA. And, combining the IceCube and ANITA data sets, the Penn State researchers calculated that, whatever particle is bursting up from the Earth, it has much less than a 1-in-3.5 million chance of being part of the Standard Model. (In technical, statistical terms, their results had confidences of 5.8 and 7.0 sigma, depending on which of their calculations you're looking at.)
+
+Breaking physics
+
+Derek Fox, the lead author on the new paper, said that he first came across the ANITA events in May 2018, in one of the earlier papers attempting to explain them.
+
+"I was like, 'Well this model doesn't make much sense,'" Fox told Live Science, "but the [ANITA] result is very intriguing, so I started checking up on it. I started talking to my office neighbor Steinn Sigurdsson [the second author on the paper, who is also at Penn State] about whether maybe we could gin up some more plausible explanations than the papers that have been published to date."
+
+Fox, Sigurdsson and their colleagues started looking for similar events in data collected by other detectors. When they came across possible upward-going events in IceCube data, he said, he realized that he might have come across something really game-changing for physics. [5 Mysterious Particles Lurking Underground]
+
+The surface facility for the IceCube experiment, which is located under nearly 1 mile (1.6 kilometers) of ice in Antarctica. IceCube suggests ghostly neutrinos don't exist, but a new experiment says they do.
+Credit: Courtesy of IceCube Neutrino Observatory
+
+"That's what really got me going, and looking at the ANITA events with the utmost seriousness," he said, later adding, "This is what physicists live for. Breaking models, setting new constraints [on reality], learning things about the universe we didn't know."
+
+As Live Science has previously reported, experimental, high-energy particle physics has been at a standstill for the last several years. When the 17-mile (27 kilometers), $10 billion Large Hadron Collider (LHC) was completed on the border between France and Switzerland in 2009, scientists thought it would unlock the mysteries of supersymmetry — the mysterious, theoretical class of particles that scientists suspect might exist outside of current physics, but had never detected. According to supersymmetry, every existing particle in the Standard Model has a supersymmetric partner. Researchers suspect these partners exist because the masses of known particles are out of wack — not symmetric with one another.
+
+"Even though the SM works very well in explaining a plethora of phenomena, it still has many handicaps," said Seyda Ipek, a particle physicist at UC Irvine, who was not involved in the current research. "For example, it cannot account for the existence of dark matter, [explain mathematical weirdness in] neutrino masses, or the matter-antimatter asymmetry of the universe."
+
+Instead, the LHC confirmed the Higgs boson, the final undetected part of the Standard Model, in 2012. And then it stopped detecting anything else that important or interesting. Researchers began to question whether any existing physics experiment could ever detect a supersymmetric particle.
+
+"We need new ideas," Jessie Shelton, a theoretical physicist at the University of Illinois at Urbana-Champaign, told Live Science in May, around the same time that Fox first became interested in the ANITA data.
+
+Now, several scientists not involved in the Penn State paper told Live Science that it offers solid (if incomplete) evidence that something new has really arrived.
+
+"It was clear from the start that if the ANITA anomalous events are due to particles that had propagated through thousands of kilometers of Earth, then those particles were very likely not SM particles," said Mauricio Bustamante, an astrophysicist at the Niels Bohr Institute at the University of Copenhagen, who was not an author on the new paper.
+
+"The paper that appeared today is the first systematic calculation of how unlikely is that these events were due to SM neutrinos," he added. "Their result strongly disfavors a SM explanation."
+
+"I think it's very compelling," said Bill Louis, a neutrino physicist at Los Alamos National Laboratory who was not involved in the paper and has been following research into the ANITA events for several months.
+
+If standard model particle created these anomalies, they should have been neutrinos. Researchers know that both because of the particles they decayed into, and because no other standard model particle would even have a fragment of a chance in a million of making it through the Earth.
+
+But neutrinos of this energy, Louis said, just shouldn't make it through the Earth often enough for ANITA or IceCube to detect. It's not how they work. But neutrino detectors like ANITA and IceCube don't detect neutrinos directly. Instead, they detect the particles that neutrinos decay into after smashing into Earth's atmosphere or Antarctic ice. And there are other events that can generate those particles, triggering the detectors. This paper strongly suggests that those events must have been supersymmetric, Louis said, though he added that more data is necessary.
+
+Fox and his colleagues went on to argue that the particles are most likely to be a sort of theoretical supersymmetric particle called "stau sleptons." Stau sleptons are supersymmetric versions of a Standard Model particle called the tau lepton. The "S" is for "supersymmetric" (really). [Sparticles to Neutrinos: The Coolest Little Particles in the Universe]
+
+Louis said that at this stage he thinks that level of specificity is "a bit of a stretch."
+
+The authors make a strong statistical case that no conventional particle would be likely to travel through the Earth in this way, he said, but there isn't yet enough data to be certain. And there's certainly not enough that they could definitively figure out what particle made the trip.
+
+Fox didn't dispute that.
+
+"As an observer, there's no way that I can know that this is a stau," he said. "From my perspective, I go trawling around trying to discover new things about the universe, I come upon some really bizarre phenomenon, and then with my colleagues, we do a little literature search to see if anybody has ever thought that this might happen. And then if we find papers in the literature, including one from 14 years ago that predict something just like this phenomenon, then that gets really high weight from me."
+
+He and his colleagues did find a long chain of papers from theorists predicting that stau sleptons might turn up like this in neutrino observatories. And because those papers were written before the ANITA anomaly, Fox said, that suggests strongly to him that those theorists were onto something.
+
+But there remains a lot of uncertainty on that front, he said. Right now, researchers just know that whatever this particle is, it interacts very weakly with other particles, or else it would have never survived the trip through the planet's dense mass.
+
+What's next
+
+Every physicist who spoke with Live Science agreed that researchers need to collect more data to verify that ANITA and IceCube have cracked supersymmetry. It's possible, Fox said, that when IceCube researchers dig into their data archives they'll find more, similar events that had previously gone unnoticed. Louis and Bustamante both said that NASA should run more ANITA flights to see if similar upward-going particles turn up.
+
+"For us to be certain that these events are not due to unknown unknowns — say, unmapped properties of the Antarctic ice — we would like other instruments to also detect these sort of events," Bustamante said.
+
+A team prepares ANITA for flight over the Antarctic ice.
+Credit: NASA
+
+Over the long-term, if these results are confirmed and the details of what particle is causing them are nailed down, several researchers said that the ANITA anomaly might unlock even more new physics at the LHC.
+
+"Any observation a non-SM particle would be a game changer, because it would tell us which path we should take after the SM," Ipek said. "The type of [supersymmetric] particle they claim to have produced the signals of, sleptons, are very hard to produce and detect at LHC."
+
+"So, it is very interesting if they can be observed by other types of experiments. Of course, if this is true, then we will expect a ladder of other [supersymmetric] particles to be observed at the LHC, which would be a complementary test of the claims."
+
+In other words, the ANITA anomalies could offer scientists the key information necessary to properly tune the LHC to unlock more of supersymmetry. Those experiments might even turn up an explanation for dark matter.
+
+Right now, Fox said, he's just hungry for more data.
+
+Originally published on Live Science.
+
+You'd Also Like
+
+Author Bio
+
+Rafi Letzter, Staff Writer
+
+Rafi joined Live Science in 2017. He has a bachelor's degree in journalism from Northwestern University’s Medill School of journalism. You can find his past science reporting at Inverse, Business Insider and Popular Science, and his past photojournalism on the Flash90 wire service and in the pages of The Courier Post of southern New Jersey.
+
+Science Newsletter: Subscribe
+Submit
+
+Follow Us
+
+Most Popular

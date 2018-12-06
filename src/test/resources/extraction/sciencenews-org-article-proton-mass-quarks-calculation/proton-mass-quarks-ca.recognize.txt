@@ -1,0 +1,198 @@
+<a href="https://g.adspeed.net/ad.php?do=clk&aid=410080&oid=2471&wd=728&ht=90&pair=as" target="_blank"><img title="Newsmatch" style="border:0px;max-width:100%;height:auto;" src="https://g.adspeed.net/ad.php?do=img&aid=410080&oid=2471&wd=728&ht=90&pair=as" alt="Newsmatch" width="728" height="90"/></a>
+
+Physicists finally calculated where the proton’s mass comes from
+
+November 26, 2018
+
+by Emily Conover
+
+Reviews & Previews
+
+Why a chemistry teacher started a science board game company
+
+November 25, 2018
+
+by Kyle Plantz
+
+Society Update
+
+Congratulations to Intel ISEF 2018 Winners!
+
+Feature
+
+Engineers are plugging holes in drinking water treatment
+
+November 25, 2018
+
+by Laurel Hamers
+
+50 Years Ago
+
+50 years ago, screwworm flies inspired a new approach to insect control
+
+November 23, 2018
+
+by Kyle Plantz
+
+Introducing
+
+This huge plant eater thrived in the age of dinosaurs — but wasn’t one of them
+
+November 22, 2018
+
+by Laurel Hamers
+
+News
+
+An orbiter glitch may mean some signs of liquid water on Mars aren’t real
+
+November 21, 2018
+
+by Lisa Grossman
+
+News in Brief
+
+Brain implants let paralyzed people use tablets to send texts and stream music
+
+November 21, 2018
+
+by Laura Sanders
+
+Society Update
+
+Conversations with Maya: Kristina Johnson
+
+News
+
+A new airplane uses charged molecules, not propellers or turbines, to fly
+
+November 21, 2018
+
+by Laurel Hamers
+
+Editor's Note
+
+Do you know how your drinking water is treated?
+
+November 21, 2018
+
+by Nancy Shute
+
+Letters to the Editor
+
+Readers react to the SN 10 and Jocelyn Bell Burnell
+
+November 21, 2018
+
+by Science News Staff
+
+Growth Curve
+
+Don’t spank your kids. Do time-outs and positive talk instead, pediatricians say
+
+November 20, 2018
+
+by Laura Sanders
+
+News
+
+How Twitter bots get people to spread fake news
+
+November 20, 2018
+
+by Maria Temming
+
+﻿
+
+News
+
+Particle Physics
+
+Physicists finally calculated where the proton’s mass comes from
+
+Only 9 percent of the subatomic particle’s bulk comes from the mass of its quarks
+
+By
+
+Emily Conover
+
+6:00am, November 26, 2018
+
+MASSIVE UNDERTAKING Using a technique called lattice QCD, scientists figured out how protons (illustrated here in the nucleus of an atom) get their mass.
+
+ktsdesign/Shutterstock
+
+Sponsor Message
+
+<a href="https://g.adspeed.net/ad.php?do=clk&amp;zid=47245&amp;wd=300&amp;ht=250&amp;pair=as" target="_top"><img style="border:0px;" src="https://g.adspeed.net/ad.php?do=img&amp;zid=47245&amp;wd=300&amp;ht=250&amp;pair=as" alt="i" width="300" height="250"/></a>
+
+A proton’s mass is more than just the sum of its parts. And now scientists know just what accounts for the subatomic particle’s heft.
+
+Protons are made up of even smaller particles called quarks, so you might expect that simply adding up the quarks’ masses should give you the proton’s mass. However, that sum is much too small to explain the proton’s bulk. And new, detailed calculations show that only 9 percent of the proton’s heft comes from the mass of constituent quarks. The rest of the proton’s mass comes from complicated effects occurring inside the particle, researchers report in the Nov. 23 Physical Review Letters.
+
+Quarks get their masses from a process connected to the Higgs boson, an elementary particle first detected in 2012 (SN: 7/28/12, p. 5). But “the quark masses are tiny,” says study coauthor and theoretical physicist Keh-Fei Liu of the University of Kentucky in Lexington. So, for protons, the Higgs explanation falls short.
+
+Instead, most of the proton’s 938 million electron volts of mass is due to complexities of quantum chromodynamics, or QCD, the theory which accounts for the churning of particles within the proton. Making calculations with QCD is extremely difficult, so to study the proton’s properties theoretically, scientists rely on a technique called lattice QCD, in which space and time are broken up into a grid, upon which the quarks reside.
+
+Using this technique, physicists had previously calculated the proton’s mass (SN: 12/20/08, p. 13). But scientists hadn’t divvied up where that mass comes from until now, says theoretical physicist André Walker-Loud of Lawrence Berkeley National Laboratory in California. “It’s exciting because it’s a sign that … we’ve really hit this new era” in which lattice QCD can be used to better understand nuclear physics.
+
+In addition to the 9 percent of the proton’s mass that comes from quarks’ heft, 32 percent comes from the energy of the quarks zipping around inside the proton, Liu and colleagues found. (That’s because energy and mass are two sides of the same coin, thanks to Einstein’s famous equation, E=mc2.) Other occupants of the proton, massless particles called gluons that help hold quarks together, contribute another 36 percent via their energy.
+
+The remaining 23 percent arises due to quantum effects that occur when quarks and gluons interact in complicated ways within the proton. Those interactions cause QCD to flout a principle called scale invariance. In scale invariant theories, stretching or shrinking space and time makes no difference to the theories’ results. Massive particles provide the theory with a scale, so when QCD defies scale invariance, protons also gain mass.
+
+The results of the study aren’t surprising, says theoretical physicist Andreas Kronfeld of Fermilab in Batavia, Ill. Scientists have long suspected that the proton’s mass was made up in this way. But, he says, “this kind of calculation replaces a belief with scientific knowledge.”
+
+Citations
+
+Y.B. Yang et al. Proton mass decomposition from the QCD energy momentum tensor. Physical Review Letters. Vol. 121, November 23, 2018, p. 212001. doi: 10.1103/PhysRevLett.121.212001.
+
+Further Reading
+
+E. Conover. There’s still a lot we don’t know about the proton. Science News. Vol. 191, April 29, 2017, p. 22.
+
+A. Witze. Higgs found. Science News. Vol. 182, July 28, 2012, p. 5.
+
+R. Cowen. Standard model gets right answer for proton, neutron masses. Science News. Vol. 174, December 20, 2008, p. 13.
+
+P. Weiss. Quantum Bull's-Eye: Particle-mass prediction hits the mark. Science News. Vol. 167, May 21, 2005, p. 324.
+
+Get Science News headlines by e-mail.
+
+More from Science News
+
+Sort by Published atMost Viewed
+
+Astronomers find far-flung wind from a black hole in the universe’s first light
+
+In a first, a woman with a uterus transplanted from a deceased donor gives birth
+
+Scientists’ collection of gravitational waves just got a lot bigger
+
+Rebel honeybee workers lay eggs when their queen is away
+
+How some sap-sucking insects fling their pee
+
+NASA’s OSIRIS-REx spacecraft has finally arrived at asteroid Bennu
+
+The Large Hadron Collider is shutting down for 2 years
+
+These new tweezers let scientists do biopsies on living cells
+
+Dads, not just moms, can pass along mitochondrial DNA
+
+Half the world’s annual rain falls in just 12 days
+
+Stone Age people conquered the Tibetan Plateau’s thin air
+
+Around the world, reported measles cases jumped 31 percent in 2017
+
+An acid found in soil may make a disease killing deer less infectious
+
+A jumping spider mom nurses her brood for weeks on milk
+
+Stone-tool makers reached North Africa and Arabia surprisingly early
+
+From the Nature Index Paid Content
+
+<a href="https://g.adspeed.net/ad.php?do=clk&zid=81371&oid=2471&wd=240&ht=240&pair=as" target="_blank"><img style="border:0px;max-width:100%;height:auto;" src="https://g.adspeed.net/ad.php?do=img&zid=81371&oid=2471&wd=240&ht=240&pair=as" alt="i" width="240" height="240"/></a> <a href="https://g.adspeed.net/ad.php?do=clk&zid=87275&oid=2471&wd=240&ht=240&pair=as" target="_blank"><img style="border:0px;max-width:100%;height:auto;" src="https://g.adspeed.net/ad.php?do=img&zid=87275&oid=2471&wd=240&ht=240&pair=as" alt="i" width="240" height="240"/></a> <a href="https://g.adspeed.net/ad.php?do=clk&zid=87276&oid=2471&wd=240&ht=240&pair=as" target="_blank"><img style="border:0px;max-width:100%;height:auto;" src="https://g.adspeed.net/ad.php?do=img&zid=87276&oid=2471&wd=240&ht=240&pair=as" alt="i" width="240" height="240"/></a> <a href="https://g.adspeed.net/ad.php?do=clk&zid=87538&oid=2471&wd=240&ht=240&pair=as" target="_blank"><img style="border:0px;max-width:100%;height:auto;" src="https://g.adspeed.net/ad.php?do=img&zid=87538&oid=2471&wd=240&ht=240&pair=as" alt="i" width="240" height="240"/></a>
+

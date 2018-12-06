@@ -170,14 +170,25 @@ public class W3CDom {
                 //dest.appendChild(comment);
             } else if (source instanceof org.jsoup.nodes.DataNode) {
                 org.jsoup.nodes.DataNode sourceData = (org.jsoup.nodes.DataNode) source;
-                nu.xom.Text node = new nu.xom.Text(sourceData.getWholeData());
+                nu.xom.Text node = new nu.xom.Text(fix(sourceData.getWholeData()));
                 dest.appendChild(node);
             } else {
                 // unhandled
             }
         }
 
-        public void tail(org.jsoup.nodes.Node source, int depth) {
+        private String fix(String str) {
+            char[] data = str.toCharArray();
+            for (int i = 0, len = data.length; i < len; i++) {
+                int result = data[i];
+                if (result == 0x1b) {
+                	data[i] = ' ';
+                }
+            }
+			return new String(data);
+		}
+
+		public void tail(org.jsoup.nodes.Node source, int depth) {
             if (source instanceof org.jsoup.nodes.Element && dest.getParent() instanceof nu.xom.Element) {
                 dest = (nu.xom.Element) dest.getParent(); // undescend. cromulent.
             }

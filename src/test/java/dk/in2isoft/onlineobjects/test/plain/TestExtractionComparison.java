@@ -11,10 +11,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -138,9 +140,12 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 					if (mercuryCache.exists()) {
 						extracted = DOM.parseXOM(Files.readString(mercuryCache));
 					} else {
+						log.warn("Mercury cache miss", extractor.name);
 						extracted = ((MercuryExctractor) contentExtractor).exctract(info.url);
 						if (extracted!=null) {
 							Files.overwriteTextFile(extracted.toXML(), mercuryCache);
+						} else {
+							Files.overwriteTextFile("<?xml version=\"1.0\"?><html><body></body></html>", mercuryCache);
 						}
 					}
 				} else {
@@ -261,8 +266,8 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 
 	private Lines checkLines(String idealText, String text) {
 		Lines lines = new Lines();
-		List<String> idealLines = Arrays.asList(idealText.split("\\n{1,}"));
-		List<String> actualLines = Arrays.asList(text.split("\\n{1,}"));
+		List<String> idealLines = getLines(idealText);
+		List<String> actualLines = getLines(text);
 		for (String line : idealLines) {
 			if (!actualLines.contains(line)) {
 				lines.missing.add(line);
@@ -272,6 +277,15 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 			if (!idealLines.contains(line)) {
 				lines.extra.add(line);
 			}
+		}
+		return lines;
+	}
+
+	private List<String> getLines(String text) {
+		List<String> lines = new ArrayList<>();
+		String[] splitted = text.split("\\n{1,}");
+		for (String string : splitted) {
+			if (Strings.isNotBlank(string)) lines.add(string);
 		}
 		return lines;
 	}
@@ -347,6 +361,13 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		
 		public List<ReportTest> getTests() {
 			return tests;
+		}
+		
+		public List<ReportTest> getTestsByComparison() {
+			return tests.stream().sorted((a,b) -> {
+				if (a.comparison - b.comparison == 0) return 0; 
+				return a.comparison - b.comparison > 0 ? 1 : -1;
+			}).collect(Collectors.toList());
 		}
 		
 		public void lines(Lines lines) {
