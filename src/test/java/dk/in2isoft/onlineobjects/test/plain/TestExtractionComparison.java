@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -81,7 +80,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		extractors.add(new Extractor("recognize", new RecognizingContentExtractor()));
 		extractors.add(new Extractor("recognize.debug", RecognizingContentExtractor.debug()));
 		
-		File folder = new File(getResourcesDir(),"extraction");
+		File folder = getTestsDir();
 		Assert.assertTrue(folder.isDirectory());
 		DocumentCleaner cleaner = new DocumentCleaner();
 		
@@ -119,7 +118,11 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 			{
 				String str = Files.readString(original);
 				Document xom = DOM.parseAnyXOM(str);
-				Files.overwriteTextFile(xom.toXML(), new File(dir, baseName+".tagsoup.xhtml"));
+				if (xom == null) {
+					log.error("Unable to DOM.parseAnyXOM");
+				} else {
+					Files.overwriteTextFile(xom.toXML(), new File(dir, baseName+".tagsoup.xhtml"));
+				}
 				Document jsouped = DOM.parseWildHhtml(str);
 				if (jsouped!=null) {
 					Files.overwriteTextFile(jsouped.toXML(), new File(dir, baseName+".jsoup.xhtml"));
@@ -203,6 +206,19 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		}
 		writeReport(extractors, folder);
 		saveComparisonCache(comparisonCache, folder);
+	}
+
+	private File getTestsDir() {
+		String altPath = getProperty("extraction.dir");
+		if (Strings.isNotBlank(altPath)) {
+			File alt = new File(altPath);
+			if (alt.isDirectory() && alt.exists()) {
+				return alt;
+			} else {
+				log.error("Extraction dir exists but is not a dir: {}", altPath);
+			}
+		}
+		return new File(getResourcesDir(),"extraction");
 	}
 	
 	private double getComparison(String idealText, String actual, Map<String, Double> comparisonCache,
