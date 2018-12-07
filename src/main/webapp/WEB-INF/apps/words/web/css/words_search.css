@@ -109,7 +109,8 @@
 .words_search_query {
   font-size: 9px;
   color: #ddd;
-  font-family: Monaco; }
+  font-family: Monaco;
+  margin-top: 10px; }
   .words_search_query:hover {
     color: #666; }
 
