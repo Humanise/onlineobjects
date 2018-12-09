@@ -41,9 +41,12 @@ public class ActionsRecognizer implements Recognizer {
 				return -1;
 			}
 		}
-		// Wikipedia...
 		if (DOM.isAny(element, "a")) {
 			String href = element.getAttributeValue("href");
+			if (text.equals("#")) {
+				return -1;
+			}
+			// Wikipedia...
 			if (text.equals("edit")) {
 				return -1;
 			}

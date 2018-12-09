@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
@@ -23,41 +23,18 @@ public class TitleRecognizer implements Recognizer {
 
 	@Override
 	public double recognize(Element element) {
-		double points = 0;
-		//if (element.getLocalName().equals("h1"))
-		//	points++;
-		return points;
+		return 0;
 	}
 
 	@Override
 	public Map<Element,Double> recognize(Document document) {
-		String title = getMainTitle(document);
-		String openGraphTitle = getOpenGraphTitle(document);
-		String twitterTitle = getTwitterTitle(document);
-		Set<String> titles = new HashSet<>();
-		if (Strings.isNotBlank(title)) titles.add(normalize(title));
-		if (Strings.isNotBlank(openGraphTitle)) titles.add(normalize(openGraphTitle));
-		if (Strings.isNotBlank(twitterTitle)) titles.add(normalize(twitterTitle));
-		Map<Element,Double> nodes = new HashMap<>();
+		Set<String> titles = findTitles(document);
 		
-		List<Element> candidates = DOM.findElements(document, element -> {
-			if (DOM.isAny(element, "title","body","head","html")) {
-				return false;
-			}
-			if (DOM.isAny(element, "h1")) {
-				return true;
-			}
-			if (element.getChildElements().size() == 0) {
-				String text = DOM.getText(element);
-				if (Strings.isNotBlank(text)) {
-					// TODO: Try to limit possible candidates
-					// Maybe exclude items with only block children
-					return true;
-				}
-			}
-			return false;
-		});
+		List<Element> candidates = findCandidates(document);
+
 		Element main = findMain(candidates, titles);
+
+		Map<Element,Double> nodes = new HashMap<>();
 		if (main!=null) {
 			List<Element> before = DOM.findBefore(main);
 			for (Element other : before) {
@@ -69,6 +46,46 @@ public class TitleRecognizer implements Recognizer {
 		}
 		return nodes;
 	}
+
+	private List<Element> findCandidates(Document document) {
+		return DOM.findElements(document, element -> {
+			if (DOM.isAny(element, "title","body","head","html")) {
+				return false;
+			}
+			if (DOM.isAny(element, "h1")) {
+				return true;
+			}
+			if (element.getChildElements().size() == 0) {
+				// TODO: Just check for first non-blank chars
+				String text = DOM.getText(element);
+				if (Strings.isNotBlank(text)) {
+					// TODO: Try to limit possible candidates
+					// Maybe exclude items with only block children
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+
+	private Set<String> findTitles(Document document) {
+		String mainTitle = getMainTitle(document);
+		String openGraphSiteTitle = getOpenGraphSiteName(document);
+		
+		mainTitle = extractActualTitle(mainTitle, openGraphSiteTitle);
+		
+		String openGraphTitle = getOpenGraphTitle(document);
+		String twitterTitle = getTwitterTitle(document);
+		String facebookTitle = getFacebookTitle(document);
+		
+		Set<String> titles = new HashSet<>();
+		if (Strings.isNotBlank(mainTitle)) titles.add(normalize(mainTitle));
+		if (Strings.isNotBlank(openGraphTitle)) titles.add(normalize(openGraphTitle));
+		if (Strings.isNotBlank(twitterTitle)) titles.add(normalize(twitterTitle));
+		if (Strings.isNotBlank(facebookTitle)) titles.add(normalize(facebookTitle));
+		System.out.println(titles);
+		return titles;
+	}
 	
 	private String normalize(String str) {
 		return str.toLowerCase().replaceAll("\\W", "");
@@ -76,10 +93,13 @@ public class TitleRecognizer implements Recognizer {
 	
 	private Element findMain(List<Element> candidates, Set<String> titles) {
 		if (candidates.isEmpty()) return null;
+		
 		if (!titles.isEmpty()) {
-			List<Element> list = candidates.stream().filter(el -> titles.contains(normalize(DOM.getText(el)))).collect(Collectors.toList());
-			if (!list.isEmpty()) {
-				return list.get(0);
+			Optional<Element> found = candidates.stream().filter(el -> {
+				return "h1".equals(el.getLocalName()) && titles.contains(normalize(DOM.getText(el)));
+			}).findFirst();
+			if (found.isPresent()) {
+				return found.get();
 			}
 		}
 		
@@ -119,24 +139,47 @@ public class TitleRecognizer implements Recognizer {
 		}
 		return out;
 	}
+	
+	private String extractActualTitle(String title, String siteName) {
+		if (title == null) return null;
+		if (siteName != null) {
+			if (title.endsWith(siteName)) {
+				String x = title.substring(0, title.length() - siteName.length());
+				return x.replaceAll("[ -:|]+$", "");
+			}
+		}
+		if (title.contains("|")) {
+			title = title.split("\\|")[0].trim();
+		}
+		return title;
+	}
 
 	private String getMainTitle(Document doc) {
 		Element title = DOM.findElement(doc, element -> DOM.isAny(element, "title"));
-		String text = DOM.getText(title);
-		if (text.contains("|")) {
-			text = text.split("\\|")[0].trim();
-		}
-		return text;
+		return DOM.getText(title);
 	}
 
 	private String getOpenGraphTitle(Document doc) {
-		Element title = DOM.findElement(doc, element -> DOM.isAny(element, "meta") && DOM.hasAttribute(element,"property","og:title"));
-		return title!=null ? title.getAttributeValue("content") : null;
+		return findMetaTag(doc, "property", "og:title");
+	}
+
+	private String getOpenGraphSiteName(Document doc) {
+		return findMetaTag(doc, "property", "og:site_name");
 	}
 
 	private String getTwitterTitle(Document doc) {
-		Element title = DOM.findElement(doc, element -> DOM.isAny(element, "meta") && DOM.hasAttribute(element,"name","twitter:title"));
-		return title!=null ? title.getAttributeValue("content") : null;
+		return findMetaTag(doc, "name", "twitter:title");
+	}
+
+	private String getFacebookTitle(Document doc) {
+		return findMetaTag(doc, "name", "fb_title");
+	}
+
+	private String findMetaTag(Document doc, String attribute, String value) {
+		Element found = DOM.findElement(doc, element -> {
+			return DOM.isAny(element, "meta") && DOM.hasAttribute(element, attribute, value);
+		});
+		return found!=null ? found.getAttributeValue("content") : null;
 	}
 
 	private class Candidate {
@@ -144,5 +187,11 @@ public class TitleRecognizer implements Recognizer {
 		String text;
 		Double comparison = 0.0;
 		Double rank = 0.0;
+		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return element.getLocalName() + ": " + text + " = " + comparison;
+		}
 	}
 }

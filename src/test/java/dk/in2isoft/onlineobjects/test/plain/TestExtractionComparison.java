@@ -96,7 +96,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		Arrays.sort(dirs);
 		
 		for (File dir : dirs) {
-			//if (!dir.getName().startsWith("gizmodo")) continue;
+			//if (!dir.getName().startsWith("abcnews")) continue;
 			File infoFile = findByExtension(dir, "json");
 			if (infoFile==null) {
 				log.warn("Info file not found: {}", infoFile);
@@ -104,6 +104,10 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 			}
 			String baseName = infoFile.getName().split("\\.")[0];
 			File original = findByExtension(dir, "original.html");
+			if (original == null) {
+				log.error("No original in {}", dir.getName());
+				continue;
+			}
 			String idealText = Files.readString(findByExtension(dir, "ideal.txt"));
 			if (idealText == null || idealText.length() < 50) {
 				log.error("No text for {}", dir.getName());
