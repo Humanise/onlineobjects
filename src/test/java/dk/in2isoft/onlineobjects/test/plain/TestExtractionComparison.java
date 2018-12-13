@@ -96,7 +96,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		Arrays.sort(dirs);
 		
 		for (File dir : dirs) {
-			//if (!dir.getName().startsWith("abcnews")) continue;
+			//if (!dir.getName().startsWith("en-wikipedia-org-wiki-Stigmergy")) continue;
 			File infoFile = findByExtension(dir, "json");
 			if (infoFile==null) {
 				log.warn("Info file not found: {}", infoFile);
@@ -166,6 +166,7 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 				}
 				cleaner.setAllowDataAttributes(extractor.name.equals("recognize.debug"));
 				cleaner.setAllowStructureTags(extractor.name.equals("recognize.debug"));
+				cleaner.setAllowSpans(extractor.name.equals("recognize.debug"));
 				cleaner.clean(extracted);
 
 				File out = new File(dir, baseName+"."+extractor.getName()+".html");

@@ -7,6 +7,7 @@ import dk.in2isoft.commons.xml.DOM;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.ParentNode;
 import nu.xom.Text;
 
 public class ListRecognizer implements Recognizer {
@@ -22,6 +23,11 @@ public class ListRecognizer implements Recognizer {
 	public double recognize(Element element) {
 		
 		if (DOM.isAny(element, "ul","ol")) {
+			ParentNode parent = element.getParent();
+			if (parent instanceof Element)
+			if (DOM.isAny((Element)parent, "li")) {
+				return 0;
+			}
 			for (int i = 0; i < element.getChildCount(); i++) {
 				Node child = element.getChild(i);
 				if (child instanceof Text && Strings.isNotBlank(child.getValue())) {

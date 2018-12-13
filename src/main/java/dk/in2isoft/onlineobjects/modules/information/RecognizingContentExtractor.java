@@ -122,6 +122,7 @@ public class RecognizingContentExtractor implements ContentExtractor {
 		cleaner.setAllowMetaTags(true);
 		cleaner.setAllowSemanticAttributes(true);
 		cleaner.setAllowStructureTags(true);
+		cleaner.setAllowSpans(true);
 		cleaner.clean(document);
 		return document;
 	}

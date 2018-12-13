@@ -417,4 +417,12 @@ public class DocumentCleaner {
 	public void setAllowStructureTags(boolean allow) {
 		this.allowStructureTags = allow;
 	}
+
+	public void setAllowSpans(boolean allow) {
+		if (allow) {
+			this.validTags.add("span");
+		} else {
+			this.validTags.remove("span");
+		}
+	}
 }
