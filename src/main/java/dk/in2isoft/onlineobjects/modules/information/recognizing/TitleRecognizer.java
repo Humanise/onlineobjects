@@ -71,8 +71,13 @@ public class TitleRecognizer implements Recognizer {
 	private Set<String> findTitles(Document document) {
 		String mainTitle = getMainTitle(document);
 		String openGraphSiteTitle = getOpenGraphSiteName(document);
+
+		String siteTitle = openGraphSiteTitle;
+		if (mainTitle.endsWith("Wikipedia")) {
+			siteTitle = "Wikipedia";
+		}
 		
-		mainTitle = extractActualTitle(mainTitle, openGraphSiteTitle);
+		mainTitle = extractActualTitle(mainTitle, siteTitle);
 		
 		String openGraphTitle = getOpenGraphTitle(document);
 		String twitterTitle = getTwitterTitle(document);
@@ -144,8 +149,8 @@ public class TitleRecognizer implements Recognizer {
 		if (title == null) return null;
 		if (siteName != null) {
 			if (title.endsWith(siteName)) {
-				String x = title.substring(0, title.length() - siteName.length());
-				return x.replaceAll("[ -:|]+$", "");
+				String withoutSite = title.substring(0, title.length() - siteName.length());
+				return withoutSite.replaceAll("[ -:|]+$", "");
 			}
 		}
 		if (title.contains("|")) {
