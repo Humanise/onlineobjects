@@ -315,6 +315,14 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
 	}
 
+	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "delete" })
+	public void deleteHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteHypothesis(id, user);
+	}
+
+	
 	@Path(exactly = { "v1.0", "knowledge", "statement" })
 	public StatementApiPerspective viewStatement(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
@@ -402,6 +410,13 @@ public class APIController extends APIControllerBase {
 
 		}
 		return knowledgeService.getAddressPerspective(internetAddress, new UserSession(user));
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "delete" })
+	public void deleteInternetAddress(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteInternetAddress(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "agreements" })

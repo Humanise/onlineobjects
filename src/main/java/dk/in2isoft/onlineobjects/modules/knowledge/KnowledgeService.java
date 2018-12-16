@@ -66,6 +66,23 @@ public class KnowledgeService {
 		modelService.deleteEntity(statement, user);
 	}
 
+	public void deleteHypothesis(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
+		modelService.deleteEntity(hypothesis, user);
+	}
+
+	public void deleteInternetAddress(Long id, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, privileged);
+		List<Statement> children = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, privileged);
+
+		modelService.deleteEntity(address, privileged);
+
+		for (Statement htmlPart : children) {
+			modelService.deleteEntity(htmlPart, privileged);
+		}
+
+	}
+
 	public Statement addStatementToInternetAddress(String text, Long internetAddressId, User user) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, internetAddressId, user);
 		return addStatementToInternetAddress(text, address, user);

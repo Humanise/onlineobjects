@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspect
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
@@ -44,6 +45,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	protected HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder;
 	protected PersonService personService;
 	protected KnowledgeModelService readerModelService;
+	protected KnowledgeService knowledgeService;
 	protected InternetAddressService internetAddressService;
 
 	public KnowledgeControllerBase() {
@@ -167,5 +169,9 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
+	}
+	
+	public void setKnowledgeService(KnowledgeService knowledgeService) {
+		this.knowledgeService = knowledgeService;
 	}
 }
