@@ -499,15 +499,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long id = request.getId();
 
 		Privileged privileged = request.getSession();
-		InternetAddress address = modelService.getRequired(InternetAddress.class, id, privileged);
-
-		List<Statement> children = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, privileged);
-
-		modelService.deleteEntity(address, privileged);
-
-		for (Statement htmlPart : children) {
-			modelService.deleteEntity(htmlPart, privileged);
-		}
+		knowledgeService.deleteInternetAddress(id, privileged);
 	}
 
 	@Path
