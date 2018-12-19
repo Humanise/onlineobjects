@@ -41,6 +41,7 @@ import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -740,7 +741,7 @@ public class ModelService implements InitializingBean {
 	
 	public List<Object[]> querySQL(String sql) throws ModelException {
 		try {
-			SQLQuery query = getSession().createSQLQuery(sql);
+			NativeQuery<?> query = getSession().createSQLQuery(sql);
 			return Code.castList(query.list());
 		} catch (HibernateException e) {
 			log.error(e.getMessage(),e);
@@ -750,7 +751,7 @@ public class ModelService implements InitializingBean {
 
 	public <T> List<T> list(CustomQuery<T> query) throws ModelException {
 		try {
-			SQLQuery sql = getSession().createSQLQuery(query.getSQL());
+			NativeQuery<?> sql = getSession().createSQLQuery(query.getSQL());
 			query.setParameters(sql);
 			List<?> list = sql.list();
 			List<T> result = Lists.newArrayList();

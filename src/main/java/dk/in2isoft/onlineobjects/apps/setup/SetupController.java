@@ -35,7 +35,6 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -67,7 +66,7 @@ public class SetupController extends SetupControllerBase {
 	
 	@Override
 	public void unknownRequest(Request request) throws IOException,EndUserException {
-		if (!request.isUser(SecurityService.ADMIN_USERNAME)) {
+		if (!securityService.isAdminUser(request.getSession())) {
 			request.redirectFromBase("/service/authentication/?redirect=/app/setup/&action=appAccessDenied");
 		} else {
 			String path = request.getLocalPathAsString();

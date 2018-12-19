@@ -57,6 +57,7 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.feeds.Feed;
 import dk.in2isoft.onlineobjects.modules.language.WordByInternetAddressQuery;
@@ -157,7 +158,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	private void writeSource(Entity entity, String url, HTMLWriter writer, UserSession session) {
-		List<Person> authors = readerModelService.getAuthors(entity, session);
+		List<Person> authors = knowledgeService.getAuthors(entity, session);
 		if (Code.isNotEmpty(authors) || url!=null) {
 			boolean first = true;
 			writer.startP().withClass("reader_list_source");
@@ -210,7 +211,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			Statement statement = modelService.getRequired(Statement.class, id, privileged);
 			rendering.startH2().text(StringUtils.abbreviate(statement.getText(), 100)).endH2();
 			rendering.startP().text(Statement.class.getSimpleName());
-			List<Person> authors = readerModelService.getAuthors(statement, privileged);
+			List<Person> authors = knowledgeService.getAuthors(statement, privileged);
 			for (Person person : authors) {
 				rendering.text(", ").text(person.getFullName());
 			}
@@ -223,7 +224,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, privileged);
 			rendering.startH2().text(StringUtils.abbreviate(hypothesis.getText(), 100)).endH2();
 			rendering.startP().text(Hypothesis.class.getSimpleName());
-			List<Person> authors = readerModelService.getAuthors(hypothesis, privileged);
+			List<Person> authors = knowledgeService.getAuthors(hypothesis, privileged);
 			for (Person person : authors) {
 				rendering.text(", ").text(person.getFullName());
 			}
@@ -257,9 +258,9 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	@Path
 	public List<FeedPerspective> getFeeds(Request request) throws EndUserException {
-		UserSession session = request.getSession();
-		Pile pile = getFeedPile(session);
-		List<InternetAddress> children = modelService.getChildren(pile, InternetAddress.class, session);
+		User user = getUser(request);
+		Pile pile = getFeedPile(user);
+		List<InternetAddress> children = modelService.getChildren(pile, InternetAddress.class, user);
 		List<FeedPerspective> options = Lists.newArrayList();
 		for (InternetAddress internetAddress : children) {
 			options.add(new FeedPerspective(internetAddress.getName(), internetAddress.getId()));
@@ -288,8 +289,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return options;
 	}
 
-	private Pile getFeedPile(UserSession session) throws ModelException, SecurityException {
-		return pileService.getOrCreatePileByKey("feeds", session.getUser());
+	private Pile getFeedPile(User user) throws ModelException, SecurityException {
+		return pileService.getOrCreatePileByKey("feeds", user);
 	}
 
 	@Path
@@ -300,13 +301,13 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			response = networkService.get(url);
 			if (response.isSuccess()) {
 				Feed feed = feedService.parse(response.getFile());
-				UserSession session = request.getSession();
-				Pile feeds = getFeedPile(session);
+				User user = getUser(request);
+				Pile feeds = getFeedPile(user);
 				InternetAddress address = new InternetAddress();
 				address.setName(feed.getTitle());
 				address.setAddress(url);
-				modelService.createItem(address, session);
-				modelService.createRelation(feeds, address, session);
+				modelService.createItem(address, user);
+				modelService.createRelation(feeds, address, user);
 			}
 		} catch (URISyntaxException e) {
 			throw new IllegalRequestException("The URL is not well formed");
@@ -320,7 +321,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void changeStatus(Request request) throws ModelException, SecurityException, IllegalRequestException {
+	public void changeStatus(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
 		Boolean favorite = request.getBoolean("favorite",null);
@@ -329,22 +330,22 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			return;
 		}
 
-		UserSession session = request.getSession();
+		User user = getUser(request);
 		Entity entity = null;
 		@SuppressWarnings("unchecked")
 		Set<Class<? extends Entity>> types = Sets.newHashSet(InternetAddress.class, Question.class, Statement.class, Hypothesis.class);
 		for (Class<? extends Entity> cls : types) {
 			if (cls.getSimpleName().equals(type)) {
-				entity = modelService.get(cls, id, session);
+				entity = modelService.get(cls, id, user);
 			}
 		}
 		Code.checkNotNull(entity, "Item not found");
 
 		if (favorite!=null) {
-			pileService.addOrRemoveFromPile(session.getUser(), Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite);
+			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite);
 		}
 		if (inbox!=null) {
-			pileService.addOrRemoveFromPile(session.getUser(), Relation.KIND_SYSTEM_USER_INBOX, entity, inbox);
+			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox);
 		}
 	}
 
@@ -353,11 +354,11 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long id = request.getId();
 		boolean favorite = request.getBoolean("favorite");
 
-		UserSession session = request.getSession();
+		User user = getUser(request);
 
-		InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, user);
 		
-		pileService.addOrRemoveFromPile(session.getUser(), Relation.KIND_SYSTEM_USER_FAVORITES, address, favorite);
+		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, address, favorite);
 	}
 
 	@Path
@@ -365,10 +366,10 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long id = request.getId();
 		boolean inbox = request.getBoolean("inbox");
 
-		UserSession session = request.getSession();
+		User user = getUser(request);
 
-		InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
-		pileService.addOrRemoveFromPile(session.getUser(), Relation.KIND_SYSTEM_USER_INBOX, address, inbox);
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, user);
+		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, address, inbox);
 	}
 
 	@Path
@@ -377,20 +378,27 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long articleId = request.getId();
 		boolean hightlight = request.getBoolean("highlight");
 		String algorithm = request.getString("algorithm");
-		UserSession session = request.getSession();
+		User user = getUser(request);
 		
 		Settings settings = new Settings();
 		settings.setExtractionAlgorithm(algorithm);
 		settings.setHighlight(hightlight);
 		settings.setCssNamespace("reader_text_");
 
-		return internetAddressViewPerspectiveBuilder.build(articleId, settings, session);
+		return internetAddressViewPerspectiveBuilder.build(articleId, settings, user);
 	}
 
 	@Path
 	public QuestionViewPerspective viewQuestion(Request request) throws EndUserException {
 		Long id = request.getId();
-		return questionViewPerspectiveBuilder.build(id, request.getSession());
+		User user = getUser(request);
+		return questionViewPerspectiveBuilder.build(id, user);
+	}
+
+	private User getUser(Request request) throws ModelException, ContentNotFoundException {
+		Privileged privileged = request.getSession();
+		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
+		return user;
 	}
 
 	@Path
@@ -489,7 +497,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			throw new IllegalRequestException("No URL");
 		}
 		
-		InternetAddress internetAddress = internetAddressService.importAddress(url, request.getSession().getUser());
+		InternetAddress internetAddress = knowledgeService.createInternetAddress(url, getUser(request));
 
 		return SimpleEntityPerspective.create(internetAddress);
 	}
@@ -570,7 +578,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		perspective.setText(statement.getText());
 		perspective.setId(id);
 		{
-			List<Person> people = readerModelService.getAuthors(statement, session);
+			List<Person> people = knowledgeService.getAuthors(statement, session);
 			perspective.setAuthors(people.stream().map((Person p) -> {
 				ItemData option = new ItemData();
 				option.setId(p.getId());
@@ -680,7 +688,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path
 	public QuestionEditPerspective editQuestion(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
 		Long id = request.getId();
-		return readerModelService.getQuestionEditPerspective(id, request.getSession());
+		return knowledgeService.getQuestionEditPerspective(id, request.getSession());
 	}
 
 	@Path
@@ -714,7 +722,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path
 	public HypothesisEditPerspective editHypothesis(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
 		Long id = request.getId();
-		return readerModelService.getHypothesisEditPerspective(id, request.getSession());
+		return knowledgeService.getHypothesisEditPerspective(id, request.getSession());
 	}
 
 	@Path

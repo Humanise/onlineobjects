@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.ApplicationSession;
+import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
@@ -17,6 +18,7 @@ public abstract class DesktopControlerBase extends ApplicationController {
 	protected ImportService importService;
 	protected ImageService imageService;
 	protected HTMLService htmlService;
+	protected ModelService modelService;
 	protected static final Logger log = LogManager.getLogger(DesktopController.class);
 	
 	public DesktopControlerBase() {
@@ -43,6 +45,11 @@ public abstract class DesktopControlerBase extends ApplicationController {
 
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
+	}
+	
+	@Override
+	public void setModelService(ModelService modelService) {
+		super.setModelService(modelService);
 	}
 
 }

@@ -413,11 +413,6 @@ public class Request {
 		return (UserSession) session;
 	}
 
-	@Deprecated
-	public boolean isUser(String username) {
-		return username.equals(getSession().getUser().getUsername());
-	}
-
 	public boolean hasDomain() {
 		return !request.getLocalName().equals(request.getLocalAddr());
 	}
@@ -503,9 +498,6 @@ public class Request {
 		}
 	}
 
-	public boolean isLoggedIn() {
-		return !isUser(SecurityService.PUBLIC_USERNAME);
-	}
 
 	public boolean isLocalRoot() {
 		return getLocalPath().length==0;

@@ -31,8 +31,6 @@
 
    	<bean id="knowledgeController" class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeController" autowire="byType"/>
    	
-   	<bean id="knowledgeModelService" class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeModelService" autowire="byType"/>
-   	
    	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexer">
    		<property name="documentBuilder" ref="knowledgeIndexDocumentBuilder"/>
    		<property name="indexService" ref="indexService"/>

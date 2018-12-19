@@ -66,11 +66,6 @@
 						<li><a href="{$local-context}/index/"><span>Indeks</span></a></li>
 						-->
 					</ul>
-					<xsl:if test="$user-name!='public'">
-					<div class="login_info">
-						Bruger: <xsl:value-of select="$user-name"/><xsl:text> </xsl:text><a href="#" class="link" id="logOut"><span>Log ud</span></a>
-					</div>
-					</xsl:if>
 				</div>
 			</div>
 		</div>

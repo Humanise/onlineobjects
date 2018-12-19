@@ -25,6 +25,9 @@ import dk.in2isoft.in2igui.jsf.MessageComponent;
 import dk.in2isoft.in2igui.jsf.PanelComponent;
 import dk.in2isoft.in2igui.jsf.SourceComponent;
 import dk.in2isoft.in2igui.jsf.TextInputComponent;
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
@@ -69,10 +72,10 @@ public class TopBarComponent extends AbstractComponent {
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		ConfigurationService configurationService = Components.getBean(ConfigurationService.class);
+		SecurityService securityService = Components.getBean(SecurityService.class);
 		// boolean developmentMode = configurationService.isDevelopmentMode();
 		Request request = Request.get(context);
 		Messages msg = new Messages(this);
-		boolean publicUser = !request.isLoggedIn();
 		String texts = buildTexts(request.getLocale(), msg);
 
 		
@@ -108,6 +111,8 @@ public class TopBarComponent extends AbstractComponent {
 			out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
 		}
 
+		boolean publicUser = securityService.isPublicUser(request.getSession());
+		
 		if (!publicUser && !privateApps.isEmpty()) {
 			for (String app : privateApps) {
 				boolean selected = request.isApplication(app);
@@ -129,13 +134,18 @@ public class TopBarComponent extends AbstractComponent {
 		if (publicUser) {
 			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_login").withAttribute("data", "login").write("Log in").endA().endLi();
 		} else {
-			User user = request.getSession().getUser();
 			InboxService inboxService = Components.getBean(InboxService.class);
-			int count = inboxService.getCountSilently(user);
-			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
-			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
-			out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
-			out.write(user.getName()).endA().endLi();
+			ModelService modelService = Components.getBean(ModelService.class);
+			try {
+				User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
+				int count = inboxService.getCountSilently(user);
+				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
+				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
+				out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
+				out.write(user.getName()).endA().endLi();
+			} catch (EndUserException e) {
+				
+			}
 		}
 		out.endUl();
 	}

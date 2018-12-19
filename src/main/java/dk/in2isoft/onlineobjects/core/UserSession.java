@@ -18,17 +18,18 @@ public class UserSession implements Privileged {
 
 	private Map<Class<? extends ApplicationController>, ApplicationSession> toolSessions;
 
-	private User user;
+	private long identity = -1;
 	
 	private String id;
 	
 	private Set<Ability> abilities;
 
+	private String username;
+
 	public UserSession(User user) {
 		this.id = Strings.generateRandomString(50);
 		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
-		this.user = user;
-		this.abilities = new HashSet<>();
+		changeUser(user, new HashSet<Ability>());
 	}
 	
 	public String getId() {
@@ -50,13 +51,18 @@ public class UserSession implements Privileged {
 		if (user.isNew()) {
 			throw new IllegalArgumentException("Cannot set a user that is not persistent");
 		}
-		this.user = user;
+		changeUser(user, abilities);
+	}
+
+	private void changeUser(User user, Set<Ability> abilities) {
+		this.username = user.getUsername();
+		this.identity = user.getIdentity();
 		this.abilities = abilities;
 	}
 
 	@Deprecated
-	public User getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 	
 	public boolean has(Ability ability) {
@@ -64,7 +70,7 @@ public class UserSession implements Privileged {
 	}
 	
 	public long getIdentity() {
-		return user.getId();
+		return identity;
 	}
 
 	public ApplicationSession getApplicationSession(ApplicationController controller) {
@@ -81,7 +87,7 @@ public class UserSession implements Privileged {
 
 	@Override
 	public String toString() {
-		return "User session for user:"+user;
+		return "User session for user:" + username;
 	}
 	
 	

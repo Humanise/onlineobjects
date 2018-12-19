@@ -46,7 +46,7 @@ public abstract class AbstractManagedBean implements InitializingBean {
 	}
 
 	public String getUserName() {
-		return getRequest().getSession().getUser().getUsername();
+		return getRequest().getSession().getUsername();
 	}
 	
 	public boolean isPublicUser() {

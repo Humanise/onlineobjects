@@ -124,7 +124,7 @@ public class InvitationService {
 		}
 		
 		User newUser = memberService.signUp(session, username, password, person.getFullName(), email);
-		if (!newUser.equals(session.getUser())) {
+		if (newUser.getIdentity() != session.getIdentity()) {
 			throw new StupidProgrammerException("The new user has not been logged in");
 		}
 		

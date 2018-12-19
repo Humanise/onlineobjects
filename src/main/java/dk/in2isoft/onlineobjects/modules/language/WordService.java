@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.flexible.standard.QueryParserUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.hibernate.SQLQuery;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.Lists;
 
@@ -22,7 +22,6 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -249,7 +248,7 @@ public class WordService {
 		return impressions;
 	}
 	
-	public Word createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
+	public Word createWord(String languageCode,String category,String text, User user) throws ModelException, IllegalRequestException, SecurityException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -275,15 +274,15 @@ public class WordService {
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.createItem(word, session);
-			securityService.grantPublicView(word, true, session);
-			Relation languageRelation = modelService.createRelation(language, word, session);
-			securityService.grantPublicView(languageRelation, true, session);
+			modelService.createItem(word, user);
+			securityService.grantPublicView(word, true, user);
+			Relation languageRelation = modelService.createRelation(language, word, user);
+			securityService.grantPublicView(languageRelation, true, user);
 			if (lexicalCategory!=null) {
-				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, session);
-				securityService.grantPublicView(categoryRelation, true, session);
+				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, user);
+				securityService.grantPublicView(categoryRelation, true, user);
 			}
-			ensureOriginator(word, session.getUser());
+			ensureOriginator(word, user);
 			return word;
 		} else {
 			return list.iterator().next();

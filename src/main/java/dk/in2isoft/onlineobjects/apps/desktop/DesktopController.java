@@ -17,9 +17,11 @@ import dk.in2isoft.onlineobjects.apps.desktop.perspectives.ImportPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.UserInfoPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.WidgetPerspective;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -27,6 +29,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.importing.HttpImportTransport;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 import dk.in2isoft.onlineobjects.modules.importing.UploadImportTransport;
@@ -34,6 +37,12 @@ import dk.in2isoft.onlineobjects.modules.networking.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DesktopController extends DesktopControlerBase {
+
+	private User getUser(Request request) throws ModelException, ContentNotFoundException {
+		Privileged privileged = request.getSession();
+		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
+		return user;
+	}
 
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {
@@ -48,11 +57,12 @@ public class DesktopController extends DesktopControlerBase {
 	
 	@Path
 	public void getUserInfo(Request request) throws IOException, EndUserException {
-		if (request.isUser(SecurityService.PUBLIC_USERNAME)) {
+		User user = getUser(request);
+		if (SecurityService.PUBLIC_USERNAME.equals(user.getUsername())) {
 			throw new SecurityException("This user does not have access");
 		}
 		UserInfoPerspective info = new UserInfoPerspective();
-		info.setUsername(request.getSession().getUser().getUsername());
+		info.setUsername(user.getUsername());
 		request.sendObject(info);
 	}
 	

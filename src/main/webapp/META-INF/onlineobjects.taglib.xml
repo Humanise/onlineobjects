@@ -24,13 +24,6 @@
 		</function-signature>
 	</function>
 
-	<function>
-		<function-name>loggedIn</function-name>
-		<function-class>dk.in2isoft.onlineobjects.ui.jsf.Functions
-		</function-class>
-		<function-signature>boolean loggedIn()</function-signature>
-	</function>
-
 	<tag>
 		<tag-name>html</tag-name>
 		<component>

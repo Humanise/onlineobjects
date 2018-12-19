@@ -86,6 +86,7 @@ public class InboxService implements InitializingBean {
 	public int getCountSilently(User user) {
 		if (user==null) {
 			log.error("The user is null, will silently rebort zero");
+			return 0;
 		}
 		try {
 			return getCount(user);

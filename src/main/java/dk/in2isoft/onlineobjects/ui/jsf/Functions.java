@@ -1,6 +1,5 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Locale;
 
@@ -9,7 +8,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
 
 public class Functions {
@@ -20,10 +18,6 @@ public class Functions {
 
 	public static String join(String one, String two) {
 		return StringUtils.join(new String[] {one,two}, "");
-	}
-
-	public static boolean loggedIn() {
-		return Request.get(FacesContext.getCurrentInstance()).isLoggedIn();
 	}
 
 	public static String formatDate(Object value, String format) {

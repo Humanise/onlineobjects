@@ -44,9 +44,9 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	protected QuestionViewPerspectiveBuilder questionViewPerspectiveBuilder;
 	protected HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder;
 	protected PersonService personService;
-	protected KnowledgeModelService readerModelService;
 	protected KnowledgeService knowledgeService;
 	protected InternetAddressService internetAddressService;
+	protected SecurityService securityService;
 
 	public KnowledgeControllerBase() {
 		super("knowledge");
@@ -62,10 +62,10 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		if (request.testLocalPathFull() || request.testLocalPathFull("en") || request.testLocalPathFull("da")) {
 			String language = getLanguage(request);
 			if (language == null) language = "en";
-			if (request.isLoggedIn()) {
-				request.redirect("/" + language + "/app");
-			} else {
+			if (securityService.isPublicUser(request.getSession())) {
 				request.redirect("/" + language + "/intro");
+			} else {
+				request.redirect("/" + language + "/app");
 			}
 		} else {
 			super.unknownRequest(request);
@@ -98,7 +98,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		if (request.testLocalPathFull("en","intro") || request.testLocalPathFull("da","intro") || request.testLocalPathStart("gfx")) {
 			return true;
 		}
-		return !request.isUser(SecurityService.PUBLIC_USERNAME);
+		return !securityService.isPublicUser(request.getSession());
 	}
 	
 	// Wiring...
@@ -163,15 +163,15 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		this.personService = personService;
 	}
 	
-	public void setReaderModelService(KnowledgeModelService readerModelService) {
-		this.readerModelService = readerModelService;
-	}
-	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}
 	
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

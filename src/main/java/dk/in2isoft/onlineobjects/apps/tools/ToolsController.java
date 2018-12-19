@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.Lists;
@@ -38,6 +39,7 @@ import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
@@ -59,19 +61,19 @@ public class ToolsController extends ToolsControllerBase {
 			request.getResponse().sendRedirect("images/");
 		} else if (request.testLocalPathFull("images")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","images.gui.xml"), huiService);
-			ui.setParameter("username", request.getSession().getUser().getUsername());
+			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathFull("persons")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","persons.gui.xml"), huiService);
-			ui.setParameter("username", request.getSession().getUser().getUsername());
+			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathFull("bookmarks")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","bookmarks.gui.xml"), huiService);
-			ui.setParameter("username", request.getSession().getUser().getUsername());
+			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathFull("integration")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","integration.gui.xml"), huiService);
-			ui.setParameter("username", request.getSession().getUser().getUsername());
+			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else {
 			super.unknownRequest(request);
@@ -161,10 +163,10 @@ public class ToolsController extends ToolsControllerBase {
 	}
 
 	@Path
-	public void listInvitations(Request request) throws IOException, ModelException {
+	public void listInvitations(Request request) throws IOException, ModelException, ContentNotFoundException {
 
-		UserSession session = request.getSession();
-		List<Invitation> invitations = modelService.getChildren(session.getUser(), Invitation.class, session);
+		User user = getUser(request);
+		List<Invitation> invitations = modelService.getChildren(user, Invitation.class, user);
 
 		ListWriter out = new ListWriter(request);
 		out.startList();
@@ -172,8 +174,8 @@ public class ToolsController extends ToolsControllerBase {
 		for (Iterator<Invitation> i = invitations.iterator(); i.hasNext();) {
 			Invitation invitation = i.next();
 			DateTime created = new DateTime(invitation.getCreated().getTime());
-			Person invited = modelService.getChild(invitation, Person.class, session);
-			EmailAddress email = invited==null ? null : (EmailAddress) modelService.getChild(invited, EmailAddress.class, session);
+			Person invited = modelService.getChild(invitation, Person.class, user);
+			EmailAddress email = invited==null ? null : (EmailAddress) modelService.getChild(invited, EmailAddress.class, user);
 
 			out.startRow().withId(invitation.getId()).withKind("invitation");
 			out.startCell().text(created.toString("d/M-yyyy HH:mm")).endCell();
@@ -230,7 +232,12 @@ public class ToolsController extends ToolsControllerBase {
 		String name = request.getString("name", "No name");
 		String email = request.getString("email", "No email");
 		String message = request.getString("message");
-		return invitationService.createAndSendInvitation(name, email, message, request.getSession().getUser());
+		User user = getUser(request);
+		return invitationService.createAndSendInvitation(name, email, message, user);
+	}
+
+	private @NonNull User getUser(Request request) throws ModelException, ContentNotFoundException {
+		return modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
 	}
 	
 	@Path
@@ -363,6 +370,6 @@ public class ToolsController extends ToolsControllerBase {
 	
 	@Override
 	public boolean isAllowed(Request request) {
-		return request.isLoggedIn();
+		return securityService.isPublicUser(request.getSession());
 	}
 }
