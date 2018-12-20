@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hamcrest.core.StringStartsWith;
 import org.junit.Test;
 
 import dk.in2isoft.commons.lang.Strings;

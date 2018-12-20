@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.LongType;
 
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
@@ -37,7 +38,7 @@ public class WordByInternetAddressQuery implements CustomQuery<ItemData> {
 		return item;
 	}
 
-	public void setParameters(SQLQuery sql) {
-		sql.setLong("privileged", privileged);
+	public void setParameters(NativeQuery<?> sql) {
+		sql.setParameter("privileged", privileged, LongType.INSTANCE);
 	}
 }

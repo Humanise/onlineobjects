@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 
@@ -43,7 +43,7 @@ public class WordStatisticsQuery implements CustomQuery<WordStatistic> {
 		return stat;
 	}
 
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		
 	}
 }

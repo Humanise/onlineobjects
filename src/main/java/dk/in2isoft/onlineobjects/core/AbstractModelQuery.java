@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.core;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import com.google.common.collect.Lists;
@@ -20,8 +20,6 @@ public abstract class AbstractModelQuery<T> implements ModelQuery {
 	protected int pageNumber;
 	protected Date createdFrom;
 	protected Date createdTo;
-	//protected Entity parent;
-	protected String fromKind;
 	protected Entity toEntity;
 	protected String toKind;
 	protected Long[] ids;
@@ -70,6 +68,6 @@ public abstract class AbstractModelQuery<T> implements ModelQuery {
 		return toEntity;
 	}
 
-	abstract public Query createItemQuery(Session session);
+	abstract public Query<T> createItemQuery(Session session);
 	
 }

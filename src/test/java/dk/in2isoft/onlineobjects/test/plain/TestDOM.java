@@ -58,12 +58,21 @@ public class TestDOM extends TestCase {
 	public void testWildHtml() throws MalformedURLException, IOException {
 		Map<String, String> tests = new HashMap<>();
 		tests.put("<?xml version='1.0'?><root/>",
-				"<?xml version=\"1.0\"?>\n" + "<html><head /><body><root /></body></html>\n" + "");
-		tests.put("<?xml version='1.0'?><a><h1>Hello</h1></a>",
-				"<?xml version=\"1.0\"?>\n" + "<html><head /><body><a><h1>Hello</h1></a></body></html>\n" + "");
+				"<?xml version=\"1.0\"?>\n" +
+				"<html xmlns=\"http://www.w3.org/1999/xhtml\"><head /><body><root /></body></html>");
+		tests.put("<a><h1>Hello</h1></a>",
+				"<?xml version=\"1.0\"?>\n" + 
+				"<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
+				"<head /><body><a><h1>Hello</h1></a></body>" +
+				"</html>");
+		tests.put("<html><body><a><h1>Hello</h1></a></body></html>",
+				"<?xml version=\"1.0\"?>\n" + 
+				"<html xmlns=\"http://www.w3.org/1999/xhtml\">" +
+				"<head /><body><a><h1>Hello</h1></a></body>" +
+				"</html>");
 		for (Entry<String, String> test : tests.entrySet()) {
 			nu.xom.Document document = DOM.parseWildHhtml(test.getKey());
-			Assert.assertEquals(test.getValue(), document.toXML());
+			Assert.assertEquals(test.getValue(), document.toXML().trim());
 		}
 	}
 

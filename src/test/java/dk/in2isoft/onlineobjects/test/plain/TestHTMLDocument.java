@@ -17,11 +17,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
-import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentCleaner;
+import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
@@ -45,9 +44,9 @@ public class TestHTMLDocument extends AbstractSpringTestCase {
 	public void testComplexWikipediaPage() throws MalformedURLException, IOException {
 		HTMLDocument doc = htmlService.getDocumentSilently(getTestFile("language_wikipedia.html").toURI());
 		assertEquals("Language - Wikipedia, the free encyclopedia", doc.getTitle());
-		String text = doc.getFullText();
+		String text = new DocumentToText().getText(doc.getXOMDocument());
 		String[] words = semanticService.getWords(text);
-		assertEquals(15402,words.length);
+		assertEquals(15088, words.length);
 	}
 	
 	@Test
@@ -85,7 +84,6 @@ public class TestHTMLDocument extends AbstractSpringTestCase {
 		watch.start();
 		watch.split();
 		String path = "html/HTML_Standard.html";
-		path = "html/ww11.apirocks.com.html";
 		HTMLDocument doc = htmlService.getDocumentSilently(getTestFile(path).toURI());
 		watch.split();
 		log.info("Loaded: " + watch.getSplitTime());
@@ -95,12 +93,11 @@ public class TestHTMLDocument extends AbstractSpringTestCase {
 		watch.split();
 		log.info("Get XOMDocument: " + watch.getSplitTime());
 
-		String text = doc.getFullText();
+		String text = new DocumentToText().getText(xom);
 		watch.split();
 		log.info("Get full text: " + watch.getSplitTime());
-
 		String[] words = semanticService.getWords(text);
-		//assertEquals(513110,words.length);
+		assertEquals(514902,words.length);
 		watch.split();
 		log.info("Get words: " + watch.getSplitTime());
 

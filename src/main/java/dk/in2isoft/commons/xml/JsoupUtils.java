@@ -6,6 +6,9 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
+import nu.xom.Element;
+import nu.xom.Elements;
+
 /**
  * Helper class to transform a {@link org.jsoup.nodes.Document} to a {@link org.w3c.dom.Document org.w3c.dom.Document},
  * for integration with toolsets that use the W3C DOM.
@@ -17,11 +20,13 @@ public class JsoupUtils {
     public nu.xom.Document toXOM(org.jsoup.nodes.Document in) {
     	org.jsoup.nodes.Element inRoot = in.child(0);
 		String tagName = inRoot.tagName();
-		nu.xom.Element root = new nu.xom.Element(tagName, "http://www.w3.org/1999/xhtml");
-
-        NodeTraversor.traverse(new XOMBuilder(root), in.child(0));
-    			
-    	return new nu.xom.Document(root);
+		nu.xom.Element dummy = new nu.xom.Element(tagName, "http://www.w3.org/1999/xhtml");
+        NodeTraversor.traverse(new XOMBuilder(dummy), in.child(0));
+    	Elements roots = dummy.getChildElements();
+    	
+    	Element root = roots.get(0);
+    	root.detach();
+		return new nu.xom.Document(root);
     }
 
     /**

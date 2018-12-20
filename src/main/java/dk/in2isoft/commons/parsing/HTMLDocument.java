@@ -81,12 +81,7 @@ public class HTMLDocument extends XMLDocument {
 		}
 		return this.contentType;
 	}
-    
-    public String getFullText() {
-        nu.xom.Document doc = getXOMDocument();
-        return doc.getValue();
-    }
-    
+        
     public String getText() {
         nu.xom.Document doc = getXOMDocument();
         return new DocumentToText().getText(doc);

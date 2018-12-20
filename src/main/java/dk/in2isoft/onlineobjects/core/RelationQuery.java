@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -110,18 +112,18 @@ public class RelationQuery {
 		return hql.toString();
 	}
 	
-	private void decorate(Query query) {
+	private void decorate(Query<Relation> query) {
 		if (this.id!=null) {
-			query.setLong("id", this.id);
+			query.setParameter("id", this.id, LongType.INSTANCE);
 		}
 		if (this.fromEntity!=null) {
-			query.setLong("from", this.fromEntity.getId());
+			query.setParameter("from", this.fromEntity.getId(), LongType.INSTANCE);
 		}
 		if (this.toEntity!=null) {
-			query.setLong("to", this.toEntity.getId());
+			query.setParameter("to", this.toEntity.getId(), LongType.INSTANCE);
 		}
 		if (this.kind!=null) {
-			query.setString("kind", this.kind);
+			query.setParameter("kind", this.kind, StringType.INSTANCE);
 		}
 		if (!privileged.isEmpty()) {
 			List<Long> privIds = privileged.stream().map(priv -> priv.getIdentity()).collect(Collectors.toList());
@@ -130,7 +132,7 @@ public class RelationQuery {
 	}
 
 	public Optional<Relation> first() {
-		Query query = modelService.createQuery(getHQL());
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		Relation unique = (Relation) query.uniqueResult();
@@ -138,16 +140,15 @@ public class RelationQuery {
 	}
 
 	public Stream<Relation> stream(int max) {
-		Query query = modelService.createQuery(getHQL());
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		query.setMaxResults(max);
-		List<Relation> list = Code.castList(query.list());
-		return list.stream();
+		return query.stream();
 	}
 
 	public Stream<Relation> stream() {
-		Query query = modelService.createQuery(getHQL());
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		List<Relation> list = Code.castList(query.list());
@@ -155,7 +156,7 @@ public class RelationQuery {
 	}
 
 	public List<Relation> list() {
-		Query query = modelService.createQuery(getHQL());
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
 		List<Relation> list = Code.castList(query.list());

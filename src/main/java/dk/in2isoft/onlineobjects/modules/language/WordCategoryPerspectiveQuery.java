@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.type.StringType;
 
 import dk.in2isoft.commons.lang.Code;
@@ -57,7 +57,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 		return sql.toString();
 	}
 	
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		if (Code.isNotEmpty(words)) {
 			sql.setParameterList("words", words, new StringType());
 		}

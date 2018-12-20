@@ -6,9 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.type.DateType;
+import org.hibernate.type.LongType;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.FieldLimitation.Function;
 import dk.in2isoft.onlineobjects.core.PropertyLimitation.Comparison;
@@ -221,7 +224,6 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 	}
 
 	public Query<T> from(Entity item, String relationKind) {
-		fromKind = relationKind;
 		this.from.add(new Other(item,relationKind));
 		return this;
 	}
@@ -258,22 +260,22 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return new Query<E>(className);
 	}
 
-	public org.hibernate.Query createItemQuery(Session session) {
+	public org.hibernate.query.Query<T> createItemQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select obj");
-		return createQuery(hql, session, false);
+		return Code.cast(createQuery(hql, clazz, session, false));
 	}
 
-	public org.hibernate.Query createCountQuery(Session session) {
+	public org.hibernate.query.Query<Long> createCountQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select count(distinct obj.id)");
-		return createQuery(hql, session, true);
+		return Code.cast(createQuery(hql, Long.class, session, true));
 	}
 
-	public org.hibernate.Query createIdQuery(Session session) {
+	public org.hibernate.query.Query<Long> createIdQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select obj.id");
-		return createQuery(hql, session, true);
+		return Code.cast(createQuery(hql, Long.class, session, true));
 	}
 
-	private org.hibernate.Query createQuery(StringBuilder hql, Session session, boolean ignorePaging) {
+	private <E> org.hibernate.query.Query<E> createQuery(StringBuilder hql, Class<E> type, Session session, boolean ignorePaging) {
 
 		hql.append(" from ");
 		hql.append(clazz.getName());
@@ -422,7 +424,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}
 		//log.info(hql);
-		org.hibernate.query.Query<T> q = session.createQuery(hql.toString());
+		org.hibernate.query.Query<E> q = session.createQuery(hql.toString(), type);
 		if (pageSize > 0 && !ignorePaging) {
 			q.setMaxResults(pageSize);
 			q.setFetchSize(pageSize);
@@ -432,46 +434,46 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			FieldLimitation limit = i.next();
 			Object value = limit.getValue();
 			if (value instanceof Date) {
-				q.setDate(limit.getProperty(), (Date) limit.getValue());
+				q.setParameter(limit.getProperty(), (Date) limit.getValue(), DateType.INSTANCE);
 			} else if (value instanceof List<?>) {
 				q.setParameterList(limit.getProperty(), (List<?>) limit.getValue());
 			} else if (value instanceof Object[]) {
 				q.setParameterList(limit.getProperty(), (Object[]) limit.getValue());
 			} else {
-				q.setString(limit.getProperty(), value==null ? null : value.toString());
+				q.setParameter(limit.getProperty(), value==null ? null : value.toString());
 			}
 		}
 		if (Strings.isDefined(words)) {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				q.setString("word" + i, "%" + word + "%");
+				q.setParameter("word" + i, "%" + word + "%");
 			}
 		}
 		if (customProperties.size() > 0) {
 			for (int i = 0; i < customProperties.size(); i++) {
 				PropertyLimitation propertyLimitation = customProperties.get(i);
-				q.setString("propertyKey"+i, propertyLimitation.getKey());
-				q.setString("propertyValue"+i, propertyLimitation.getValue().toString());
+				q.setParameter("propertyKey"+i, propertyLimitation.getKey());
+				q.setParameter("propertyValue"+i, propertyLimitation.getValue().toString());
 			}
 		}
 		if (createdFrom != null) {
-			q.setDate("createdFrom", createdFrom);
+			q.setParameter("createdFrom", createdFrom, DateType.INSTANCE);
 		}
 		if (createdTo != null) {
-			q.setDate("createdTo", createdTo);
+			q.setParameter("createdTo", createdTo, DateType.INSTANCE);
 		}
 		for (int i = 0; i < from.size(); i++) {
 			Other parent2 = from.get(i);
-			q.setLong("parent_"+i, parent2.getId());
+			q.setParameter("parent_"+i, parent2.getId(), LongType.INSTANCE);
 			if (parent2.getRelationKind() != null) {
-				q.setString("parentKind_"+i, parent2.getRelationKind());
+				q.setParameter("parentKind_"+i, parent2.getRelationKind());
 			}
 		}
 		for (int i = 0; i < to.size(); i++) {
 			Other other = to.get(i);
-			q.setLong("child_"+i, other.getId());
+			q.setParameter("child_"+i, other.getId(), LongType.INSTANCE);
 			if (other.getRelationKind() != null) {
-				q.setString("childKind_"+i, other.getRelationKind());
+				q.setParameter("childKind_"+i, other.getRelationKind());
 			}
 		}
 		/*if (parent != null) {
@@ -481,9 +483,9 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}*/
 		if (toEntity != null) {
-			q.setLong("child", toEntity.getId());
+			q.setParameter("child", toEntity.getId(), LongType.INSTANCE);
 			if (toKind != null) {
-				q.setString("childKind", toKind);
+				q.setParameter("childKind", toKind);
 			}
 		}
 		return q;

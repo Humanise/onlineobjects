@@ -35,7 +35,7 @@ public class TestMemberService extends AbstractSpringTestCase {
 		String password = "zup4$seKr8";
 		String fullName = "Dummy Test User";
 		String email = "name@domain.com";
-
+		
 		assertFails(() -> memberService.createMember(null, null, null, null, null));
 
 		assertFails(() -> memberService.createMember(null, username, password, fullName, email));

@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -20,17 +20,23 @@ public class UsersPersonQuery implements PairQuery<User, Person> {
 	private Class<? extends Entity> childClass;
 	private boolean publicView;
 
-	public Query createCountQuery(Session session) {
+	public Query<Long> createCountQuery(Session session) {
 		HQLBuilder hql = new HQLBuilder().select("count(person)");
-		return createQuery(session, hql, true);
+		build(hql, true);
+		Query<Long> q = session.createQuery(hql.toString(), Long.class);
+		setParams(true, q);
+		return q;
 	}
 
-	public Query createItemQuery(Session session) {
+	public Query<?> createItemQuery(Session session) {
 		HQLBuilder hql = new HQLBuilder().select("user","person");
-		return createQuery(session, hql, false);
+		build(hql, false);
+		Query<?> q = session.createQuery(hql.toString());
+		setParams(false, q);
+		return q;
 	}
-	
-	private Query createQuery(Session session,HQLBuilder hql, boolean ignorePaging) {
+
+	private void build(HQLBuilder hql, boolean ignorePaging) {
 		hql.from(User.class,"user");
 		hql.from(Person.class,"person");
 		hql.from(Relation.class,"rel");
@@ -59,21 +65,22 @@ public class UsersPersonQuery implements PairQuery<User, Person> {
 		if (!ignorePaging) {
 			hql.orderBy("person.name");
 		}
-		Query q = session.createQuery(hql.toString());
+	}
+
+	private void setParams(boolean ignorePaging, Query<?> q) {
 		if (pageSize > 0 && !ignorePaging) {
 			q.setMaxResults(pageSize);
 			q.setFirstResult(pageNumber * pageSize);
 		}
 		if (username!=null) {
-			q.setString("username", username);
+			q.setParameter("username", username);
 		}
 		if (Strings.isDefined(words)) {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				q.setString("word" + i, "%" + word + "%");
+				q.setParameter("word" + i, "%" + word + "%");
 			}
 		}
-		return q;
 	}
 
 	public UsersPersonQuery withUsername(String username) {

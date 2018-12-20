@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.StringType;
 import org.hibernate.Session;
 
 import dk.in2isoft.commons.geo.GeoLatLng;
@@ -22,18 +24,17 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 		this.cls = cls;
 	}
 
-	public Query createCountQuery(Session session) {
+	public Query<Long> createCountQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select count(location) from ");
 		return createQuery(session, hql, true);
 	}
 
-	public Query createItemQuery(Session session) {
+	public Query<?> createItemQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select location,entity from ");
 		return createQuery(session, hql, false);
 	}
 
-	public Query createQuery(Session session, StringBuilder hql,
-			boolean ignorePaging) {
+	public Query createQuery(Session session, StringBuilder hql, boolean ignorePaging) {
 		hql.append(Location.class.getName()).append(" as location");
 		hql.append(",").append(cls.getName()).append(" as entity");
 		hql.append(",").append(Relation.class.getName()).append(" as rel");
@@ -60,14 +61,14 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 		if (Strings.isDefined(words)) {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				q.setString("word" + i, "%" + word + "%");
+				q.setParameter("word" + i, "%" + word + "%", StringType.INSTANCE);
 			}
 		}
 		if (northEast != null && southWest != null) {
-			q.setDouble("minLongitude", southWest.getLng());
-			q.setDouble("maxLongitude", northEast.getLng());
-			q.setDouble("minLatitude", southWest.getLat());
-			q.setDouble("maxLatitude", northEast.getLat());
+			q.setParameter("minLongitude", southWest.getLng(), DoubleType.INSTANCE);
+			q.setParameter("maxLongitude", northEast.getLng(), DoubleType.INSTANCE);
+			q.setParameter("minLatitude", southWest.getLat(), DoubleType.INSTANCE);
+			q.setParameter("maxLatitude", northEast.getLat(), DoubleType.INSTANCE);
 		}
 		return q;
 	}

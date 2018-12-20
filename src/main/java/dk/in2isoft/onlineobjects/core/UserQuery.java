@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.hibernate.Session;
 
 import dk.in2isoft.onlineobjects.model.Client;
@@ -20,18 +21,18 @@ public class UserQuery implements ItemQuery<User> {
 			" and prop.key='" + Property.KEY_AUTHENTICATION_SECRET + "' and prop.value = :secret"; 
 	
 	@Override
-	public Query createItemQuery(Session session) {
+	public Query<User> createItemQuery(Session session) {
 		String hql = "select user " + base;
-		Query query = session.createQuery(hql);
-		query.setString("secret", secret);
+		Query<User> query = session.createQuery(hql, User.class);
+		query.setParameter("secret", secret, StringType.INSTANCE);
 		return query;
 	}
 
 	@Override
-	public Query createCountQuery(Session session) {
+	public Query<Long> createCountQuery(Session session) {
 		String hql = "select count(user.id) " + base;
-		Query query = session.createQuery(hql);
-		query.setString("secret", secret);
+		Query<Long> query = session.createQuery(hql, Long.class);
+		query.setParameter("secret", secret, StringType.INSTANCE);
 		return query;
 	}
 

@@ -4,6 +4,6 @@ import org.hibernate.Session;
 
 public interface ItemQuery<T> {
 
-	public org.hibernate.Query createItemQuery(Session session);
-	public org.hibernate.Query createCountQuery(Session session);
+	public org.hibernate.query.Query<T> createItemQuery(Session session);
+	public org.hibernate.query.Query<Long> createCountQuery(Session session);
 }

@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.modules.information;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.modules.information.MissingSimilarityQuery.SimilarityResult;
@@ -92,7 +92,7 @@ public class MissingSimilarityQuery implements CustomQuery<SimilarityResult> {
 	}
 
 	@Override
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		//sql.setLong("privileged", privilegedId);
 	}
 }

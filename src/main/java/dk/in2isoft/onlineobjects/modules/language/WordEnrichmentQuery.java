@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 
 import dk.in2isoft.onlineobjects.apps.words.perspectives.WordEnrichmentPerspective;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
@@ -35,7 +35,7 @@ public class WordEnrichmentQuery implements CustomQuery<WordEnrichmentPerspectiv
 		return stat;
 	}
 
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		
 	}
 }

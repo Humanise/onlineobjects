@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
@@ -125,9 +125,9 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 		return sql.toString();
 	}
 	
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		if (startingWith!=null) {
-			sql.setString("startingWith", startingWith+"%");
+			sql.setParameter("startingWith", startingWith+"%", StringType.INSTANCE);
 		}
 		if (Code.isNotEmpty(words)) {
 			sql.setParameterList("words", words, new StringType());

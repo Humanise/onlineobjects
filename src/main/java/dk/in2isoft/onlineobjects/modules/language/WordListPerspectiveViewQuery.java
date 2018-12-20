@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
@@ -122,15 +122,15 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 		return sql.toString();
 	}
 	
-	public void setParameters(SQLQuery sql) {
+	public void setParameters(NativeQuery<?> sql) {
 		if (Strings.isNotBlank(startingWith)) {
-			sql.setString("startingWith", startingWith);
+			sql.setParameter("startingWith", startingWith, StringType.INSTANCE);
 		}
 		if (Strings.isNotBlank(language)) {
-			sql.setString("language", language);
+			sql.setParameter("language", language, StringType.INSTANCE);
 		}
 		if (Strings.isNotBlank(category)) {
-			sql.setString("category", category);
+			sql.setParameter("category", category, StringType.INSTANCE);
 		}
 		if (Code.isNotEmpty(words)) {
 			sql.setParameterList("words", words, new StringType());
