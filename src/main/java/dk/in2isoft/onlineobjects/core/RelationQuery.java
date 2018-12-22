@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.hibernate.Criteria;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
@@ -73,7 +72,7 @@ public class RelationQuery {
 	}
 	
 	public String getHQL() {
-		StringBuilder hql = new StringBuilder("select rel from Relation as rel");
+		StringBuilder hql = new StringBuilder("select distinct rel from Relation as rel");
 		if (toClass!=null) {
 			hql.append(", " + toClass.getSimpleName() + " as toClass");
 		}
@@ -131,34 +130,32 @@ public class RelationQuery {
 		}
 	}
 
-	public Optional<Relation> first() {
+	private Query<Relation> getQuery() {
 		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		decorate(query);
+		return query;
+	}
+
+	public Optional<Relation> first() {
+		Query<Relation> query = getQuery();
 		Relation unique = (Relation) query.uniqueResult();
 		return unique==null ? Optional.empty() : Optional.of(ModelService.getSubject(unique));
 	}
 
 	public Stream<Relation> stream(int max) {
-		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		query.setMaxResults(max);
 		return query.stream();
 	}
 
 	public Stream<Relation> stream() {
-		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		List<Relation> list = Code.castList(query.list());
 		return list.stream();
 	}
 
 	public List<Relation> list() {
-		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		List<Relation> list = Code.castList(query.list());
 		return list;
 	}

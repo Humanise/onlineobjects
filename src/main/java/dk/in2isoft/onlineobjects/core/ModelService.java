@@ -22,7 +22,6 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.CacheMode;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
@@ -814,7 +813,7 @@ public class ModelService implements InitializingBean {
 
 	public <T> List<T> list(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<T> items = q.list();
 		for (int i = 0; i < items.size(); i++) {
 			T item = items.get(i);
@@ -823,14 +822,13 @@ public class ModelService implements InitializingBean {
 		return items;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> @Nullable T getFirst(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		q.setFetchSize(1);
 		ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
 		if (results.next()) {
-			return (T) getSubject(results.get(0));
+			return Code.cast(getSubject(results.get(0)));
 		}
 		return null;
 	}
@@ -839,7 +837,7 @@ public class ModelService implements InitializingBean {
 		Query<Long> cq = query.createCountQuery(getSession());
 		Long count = cq.list().iterator().next();
 		Query<T> q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<T> items = q.list();
 		for (int i = 0; i < items.size(); i++) {
 			T item = items.get(i);

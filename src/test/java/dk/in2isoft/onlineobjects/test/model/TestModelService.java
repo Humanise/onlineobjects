@@ -10,7 +10,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
@@ -21,7 +23,7 @@ import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 public class TestModelService extends AbstractSpringTestCase {
 	
 	@Test
-	public void testLoad() throws EndUserException {
+	public void testGenerally() throws EndUserException {
 		User user = getNewTestUser();
 		modelService.createItem(user, getPublicUser());
 		
@@ -30,7 +32,7 @@ public class TestModelService extends AbstractSpringTestCase {
 		modelService.createItem(question, user);
 
 		Statement statement = new Statement();
-		question.setText("My statement");
+		statement.setText("My statement");
 		modelService.createOrUpdateItem(statement, user);
 		
 		modelService.createRelation(question, statement, user);
@@ -66,4 +68,57 @@ public class TestModelService extends AbstractSpringTestCase {
 		modelService.commit();
 		assertFalse(modelService.isDirty());
 	}
+
+
+	@Test
+	public void testDistinct() throws EndUserException {
+		User user = getNewTestUser();
+		modelService.createItem(user, getPublicUser());
+		
+		Question question = new Question();
+		question.addProperty("test-prop", "test-value");
+		question.setName("My question");
+		modelService.createItem(question, user);
+
+		Statement statement = new Statement();
+		statement.setText("My statement");
+		modelService.createItem(statement, user);
+
+		Statement statement2 = new Statement();
+		statement2.setText("My other statement");
+		modelService.createItem(statement2, user);
+		Hypothesis hypothesis = new Hypothesis();
+		hypothesis.setName("My hypothesis");
+		modelService.createItem(hypothesis, user);
+		
+		modelService.createRelation(question, statement, user);
+		modelService.createRelation(question, statement2, user);
+		modelService.createRelation(hypothesis, question, user);
+		
+		securityService.makePublicVisible(question, user);
+		
+		modelService.commit();
+
+		List<Relation> relations = modelService.getRelationsFrom(question, Statement.class, user);
+		assertEquals(2, relations.size());
+
+		Query<Question> query = Query.of(Question.class).as(user).from(hypothesis).to(statement).to(statement2).withPublicView();
+		query.withCustomProperty("test-prop", "test-value");
+		query.withWords("question");
+		List<Question> list = modelService.list(query);
+		assertEquals(1, list.size());
+		
+		question = modelService.getRequired(Question.class, question.getId(), getAdminUser());
+		statement = modelService.getRequired(Statement.class, statement.getId(), getAdminUser());
+		statement2 = modelService.getRequired(Statement.class, statement2.getId(), getAdminUser());
+		user = modelService.getRequired(User.class, user.getId(), getAdminUser());
+		
+		modelService.deleteEntity(question, user);
+		modelService.deleteEntity(statement, user);
+		modelService.deleteEntity(statement2, user);
+		modelService.deleteEntity(user, getAdminUser());
+
+		assertTrue(modelService.isDirty());
+		modelService.commit();
+}
 }
