@@ -55,7 +55,8 @@
 				<pathelement location="${basedir}/src/webapp/WEB-INF/classes" />
 			</classpath>
 			<src path="${basedir}/src/main/java" />
-			<include name="dk/**" />
+			<include name="dk/in2isoft/**" />
+			<include name="org/onlineobjects/**" />
 		</javac>
 
 		<jar destfile="${dest}/OnlineObjects/onlineobjects/WEB-INF/lib/onlineobjects.jar" basedir="${dest}/OnlineObjects_temp/classes"/>
