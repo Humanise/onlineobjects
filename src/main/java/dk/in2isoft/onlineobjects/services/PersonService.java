@@ -43,7 +43,7 @@ public class PersonService {
 		if (person==null) {
 			person = new Person();
 			person.setFullName(text);
-			modelService.createItem(person, privileged);
+			modelService.create(person, privileged);
 		}
 		return person;
 	}
@@ -90,9 +90,9 @@ public class PersonService {
 			existing.setRegion(address.getRegion());
 			existing.setPostalCode(address.getPostalCode());
 			existing.setCountry(address.getCountry());
-			modelService.updateItem(existing, privileged);
+			modelService.update(existing, privileged);
 		} else {
-			modelService.createItem(address, privileged);
+			modelService.create(address, privileged);
 			modelService.createRelation(person, address, Property.KEY_COMMON_PREFERRED, privileged);
 		}
 	}
@@ -136,12 +136,12 @@ public class PersonService {
 		}
 		
 		for (EmailAddress emailAddress : sync.getNew()) {
-			modelService.createItem(emailAddress, session);
+			modelService.create(emailAddress, session);
 			modelService.createRelation(parent, emailAddress, session);
 		}
 		
 		for (EmailAddress emailAddress : sync.getDeleted()) {
-			modelService.deleteEntity(emailAddress, session);
+			modelService.delete(emailAddress, session);
 		}
 	}
 
@@ -166,12 +166,12 @@ public class PersonService {
 		}
 		
 		for (PhoneNumber number : sync.getNew()) {
-			modelService.createItem(number, priviledged);
+			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
 		
 		for (PhoneNumber number : sync.getDeleted()) {
-			modelService.deleteEntity(number, priviledged);
+			modelService.delete(number, priviledged);
 		}
 	}
 	

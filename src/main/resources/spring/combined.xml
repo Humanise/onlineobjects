@@ -81,7 +81,11 @@
 		<property name="surveillanceService" ref="surveillanceService"/>
 	</bean>
 
-	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType"/>
+	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType">
+      <property name="finder">
+        <bean class="dk.in2isoft.onlineobjects.core.Finder" autowire="byType"/>
+      </property>
+    </bean>
 	
 	<bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType"/>
 	

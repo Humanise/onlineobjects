@@ -71,8 +71,8 @@ public class TestImageService extends AbstractSpringTestCase {
 		assertEquals(new Double(9.515666666666666),new Double(location.getLongitude()));
 		
 		// Clean up
-		modelService.deleteEntity(image, privileged);
-		modelService.deleteEntity(location, privileged);
+		modelService.delete(image, privileged);
+		modelService.delete(location, privileged);
 		
 		modelService.commit();
 	}

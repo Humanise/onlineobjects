@@ -34,7 +34,7 @@ public class ImageGalleryImporter extends ImageImporter {
 		
 		Relation relation = new Relation(gallery, image);
 		relation.setPosition(getMaxImagePosition(gallery, request.getSession()) + 1 + index);
-		modelService.createItem(relation, request.getSession());
+		modelService.create(relation, request.getSession());
 
 		imported.add(SimpleEntityPerspective.create(image));
 	}

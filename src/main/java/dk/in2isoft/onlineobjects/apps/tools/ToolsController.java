@@ -133,7 +133,7 @@ public class ToolsController extends ToolsControllerBase {
 		image.setName(name);
 		image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, description);
 		image.overrideProperties(Property.KEY_COMMON_TAG, tags);
-		modelService.updateItem(image, request.getSession());
+		modelService.update(image, request.getSession());
 	}
 	
 	@Path
@@ -222,7 +222,7 @@ public class ToolsController extends ToolsControllerBase {
 		person.setFamilyName(dummy.getFamilyName());
 		person.setNamePrefix(dummy.getNamePrefix());
 		person.setNameSuffix(dummy.getNameSuffix());
-		modelService.createOrUpdateItem(person, request.getSession());
+		modelService.createOrUpdate(person, request.getSession());
 		personService.updateDummyEmailAddresses(person, perspective.getEmails(), request.getSession());
 		personService.updateDummyPhoneNumbers(person, perspective.getPhones(), request.getSession());
 	}
@@ -247,13 +247,13 @@ public class ToolsController extends ToolsControllerBase {
 		Person person = modelService.getRequired(Person.class, id, session);
 		List<EmailAddress> mails = modelService.getChildren(person, EmailAddress.class, session);
 		for (EmailAddress mail : mails) {
-			modelService.deleteEntity(mail, session);
+			modelService.delete(mail, session);
 		}
 		List<PhoneNumber> phones = modelService.getChildren(person, PhoneNumber.class, session);
 		for (PhoneNumber phone : phones) {
-			modelService.deleteEntity(phone, session);
+			modelService.delete(phone, session);
 		}
-		modelService.deleteEntity(person, session);
+		modelService.delete(person, session);
 	}
 	
 	@Path
@@ -324,7 +324,7 @@ public class ToolsController extends ToolsControllerBase {
 		address.setName(info.getName());
 		address.overrideFirstProperty(Property.KEY_COMMON_DESCRIPTION, info.getDescription());
 		address.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
-		modelService.createOrUpdateItem(address, request.getSession());
+		modelService.createOrUpdate(address, request.getSession());
 	}
 	
 	@Path

@@ -60,7 +60,7 @@ public class KnowledgeService {
 		Question question = new Question();
 		question.setText(text);
 		question.setName(text);
-		modelService.createItem(question, user);
+		modelService.create(question, user);
 		return question;
 	}
 
@@ -89,27 +89,27 @@ public class KnowledgeService {
 
 	public void deleteQuestion(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, user);
-		modelService.deleteEntity(question, user);
+		modelService.delete(question, user);
 	}
 
 	public void deleteStatement(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Statement statement = modelService.getRequired(Statement.class, id, user);
-		modelService.deleteEntity(statement, user);
+		modelService.delete(statement, user);
 	}
 
 	public void deleteHypothesis(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
-		modelService.deleteEntity(hypothesis, user);
+		modelService.delete(hypothesis, user);
 	}
 
 	public void deleteInternetAddress(Long id, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, privileged);
 		List<Statement> children = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, privileged);
 
-		modelService.deleteEntity(address, privileged);
+		modelService.delete(address, privileged);
 
 		for (Statement htmlPart : children) {
-			modelService.deleteEntity(htmlPart, privileged);
+			modelService.delete(htmlPart, privileged);
 		}
 
 	}
@@ -143,7 +143,7 @@ public class KnowledgeService {
 			Statement part = new Statement();
 			part.setName(StringUtils.abbreviate(text, 50));
 			part.setText(text);
-			modelService.createItem(part, user);
+			modelService.create(part, user);
 			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
 			return part;
 		}
@@ -158,7 +158,7 @@ public class KnowledgeService {
 		Hypothesis hypothesis = new Hypothesis();
 		hypothesis.setText(text);
 		hypothesis.setName(text);
-		modelService.createItem(hypothesis, user);
+		modelService.create(hypothesis, user);
 		return hypothesis;
 	}
 
@@ -221,7 +221,7 @@ public class KnowledgeService {
 		Statement statement = new Statement();
 		statement.setText(text);
 		statement.setName(text);
-		modelService.createItem(statement, user);
+		modelService.create(statement, user);
 		Person person = memberService.getUsersPerson(user, user);
 		if (person != null) {
 			modelService.createRelation(statement, person, Relation.KIND_COMMON_AUTHOR, user);
@@ -271,14 +271,14 @@ public class KnowledgeService {
 		Question question = modelService.get(Question.class, dummy.getId(), privileged);
 		question.setText(dummy.getText());
 		question.setName(dummy.getText());
-		modelService.updateItem(question, privileged);
+		modelService.update(question, privileged);
 	}
 
 	public void updateStatement(Statement dummy, Privileged privileged) throws ModelException, SecurityException {
 		Statement statement = modelService.get(Statement.class, dummy.getId(), privileged);
 		statement.setText(dummy.getText());
 		statement.setName(dummy.getText());
-		modelService.updateItem(statement, privileged);		
+		modelService.update(statement, privileged);		
 	}
 
 	public InternetAddressApiPerspective getAddressPerspective(Long id, Privileged session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {

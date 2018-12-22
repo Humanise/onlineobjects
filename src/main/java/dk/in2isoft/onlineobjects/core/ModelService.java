@@ -80,6 +80,8 @@ public class ModelService implements InitializingBean {
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
 	private List<EntityValidator> entityValidators;
+
+	private Finder finder;
 	
 	private static final ThreadLocal<String> threadIsDirty = new ThreadLocal<String>();
 
@@ -112,7 +114,6 @@ public class ModelService implements InitializingBean {
 			log.fatal("Could not create session factory", t);
 			throw new ExceptionInInitializerError(t);
 		}
-
 		loadModelInfo();
 	}
 
@@ -315,11 +316,11 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
-	public void createOrUpdateItem(Item item, Privileged privileged) throws ModelException, SecurityException {
+	public void createOrUpdate(Item item, Privileged privileged) throws ModelException, SecurityException {
 		if (item.isNew()) {
 			createItem(item, privileged, getSession());
 		} else {
-			updateItem(item, privileged);
+			update(item, privileged);
 		}
 	}
 
@@ -327,7 +328,7 @@ public class ModelService implements InitializingBean {
 		getSession().save(entry);
 	}
 
-	public void createItem(Item item, Privileged privileged) throws ModelException, SecurityException {
+	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 	}
 	
@@ -377,7 +378,15 @@ public class ModelService implements InitializingBean {
 		session.save(user);
 	}
 
-	public void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {
+	public void delete(Item item, Privileged privileged) throws ModelException, SecurityException {
+		if (item instanceof Entity) {
+			deleteEntity((Entity)item, privileged);
+		} else if (item instanceof Relation) {
+			deleteItem((Relation)item, privileged);
+		}
+	}
+
+	private void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {
 		if (!canDelete(entity, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot delete Entity=" + entity);
 		}
@@ -386,6 +395,7 @@ public class ModelService implements InitializingBean {
 	}
 
 	@Deprecated
+	// TODO: Deleting like this may 
 	private void removeAllRelations(Entity entity) {
 		
 		Session session = getSession();
@@ -409,13 +419,9 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
-	public void deleteRelation(Relation relation, Privileged privileged) throws SecurityException, ModelException {
-		deleteItem(relation, privileged);
-	}
-
-	public void deleteRelations(List<Relation> parents, Privileged privileged) throws SecurityException, ModelException {
-		for (Relation relation : parents) {
-			deleteItem(relation, privileged);
+	public <T extends Item> void delete(List<T> items, Privileged privileged) throws SecurityException, ModelException {
+		for (Item item : items) {
+			deleteItem(item, privileged);
 		}
 	}
 
@@ -434,7 +440,7 @@ public class ModelService implements InitializingBean {
 	}
 
 	// TODO Change to update
-	public void updateItem(Item item, Privileged privileged) throws SecurityException,
+	public void update(Item item, Privileged privileged) throws SecurityException,
 			ModelException {
 		if (!canUpdate(item, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot update Item=" + item);
@@ -462,7 +468,7 @@ public class ModelService implements InitializingBean {
 		toAdd.addAll(ids);
 		for (Relation relation : relations) {
 			if (!ids.contains(relation.getTo().getId())) {
-				this.deleteRelation(relation, privileged);
+				this.delete(relation, privileged);
 			} else {
 				toAdd.remove(relation.getTo().getId());
 			}
@@ -524,7 +530,7 @@ public class ModelService implements InitializingBean {
 			return null;
 		}
 		Relation relation = new Relation(from, to);
-		createItem(relation, privileged);
+		create(relation, privileged);
 		return relation;
 	}
 
@@ -535,7 +541,7 @@ public class ModelService implements InitializingBean {
 		}
 		Relation relation = new Relation(from, to);
 		relation.setKind(kind);
-		createItem(relation, privileged);
+		create(relation, privileged);
 		return relation;
 	}
 
@@ -776,6 +782,10 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
+	public Finder find() {
+		return finder;
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> SearchResult<T> search(CustomQuery<T> query) throws ModelException {
 		String sql = query.getSQL();
@@ -976,40 +986,6 @@ public class ModelService implements InitializingBean {
 		setPrivileged(privileged, q);
 		return list(q);
 	}
-
-	@Deprecated
-	public Map<String, Float> getPropertyCloud(String key, String query, Class<? extends Entity> cls) {
-		Map<String, Float> cloud = new LinkedHashMap<String, Float>();
-		StringBuilder hql = new StringBuilder();
-		hql.append("select p.value as value,count(p.id) as count from ");
-		hql.append(cls.getSimpleName()).append(" as entity");
-		hql.append(" left join entity.properties as p where p.key=:key");
-		if (Strings.isNotBlank(query)) {
-			hql.append(" and lower(value) like lower(:query)");
-		}
-		hql.append(" group by p.value order by lower(value)");
-		Query<?> q = createQuery(hql.toString(), Object.class);
-		q.setString("key", key);
-		if (Strings.isNotBlank(query)) {
-			q.setString("query", "%" + query + "%");
-		}
-		ScrollableResults scroll = q.scroll();
-		while (scroll.next()) {
-			cloud.put(scroll.getString(0), scroll.getLong(1).floatValue());
-		}
-		float max = 0;
-		for (Float count : cloud.values()) {
-			max = Math.max(max, count);
-		}
-		float min = max;
-		for (Float count : cloud.values()) {
-			min = Math.min(min, count);
-		}
-		for (Map.Entry<String, Float> entry : cloud.entrySet()) {
-			entry.setValue(((entry.getValue()-min) / (max-min)));
-		}
-		return cloud;
-	}
 	
 	public Map<String, Integer> getProperties(String key, Class<? extends Entity> cls, Privileged priviledged) {
 		StringBuilder hql = new StringBuilder();
@@ -1059,6 +1035,7 @@ public class ModelService implements InitializingBean {
 		}
 		return obj;
 	}
+
 	public static <T> List<T> getSubjects(List<T> list) {
 		return list.stream().map(obj -> getSubject(obj)).collect(Collectors.toList());
 	}
@@ -1075,23 +1052,8 @@ public class ModelService implements InitializingBean {
 		this.securityService = securityService;
 	}
 	
-	public Finder find() {
-		return new Finder(this, securityService); // TODO only one instance
-	}
-	
-	public static class Finder {
-		
-		private ModelService modelService;
-		private SecurityService securityService;
-
-		public Finder(ModelService modelService, SecurityService securityService) {
-			this.modelService = modelService;
-			this.securityService = securityService;
-		}
-
-		public RelationQuery relations(Privileged privileged) {
-			return new RelationQuery(modelService, securityService).as(privileged);
-		}
+	public void setFinder(Finder finder) {
+		this.finder = finder;
 	}
 
 }

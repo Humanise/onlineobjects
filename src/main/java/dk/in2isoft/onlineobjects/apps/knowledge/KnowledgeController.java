@@ -306,7 +306,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				InternetAddress address = new InternetAddress();
 				address.setName(feed.getTitle());
 				address.setAddress(url);
-				modelService.createItem(address, user);
+				modelService.create(address, user);
 				modelService.createRelation(feeds, address, user);
 			}
 		} catch (URISyntaxException e) {
@@ -423,7 +423,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			Statement part = new Statement();
 			part.setName(StringUtils.abbreviate(text, 50));
 			part.setText(text);
-			modelService.createItem(part, session);
+			modelService.create(part, session);
 			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, session);
 		}
 	}
@@ -443,7 +443,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			Hypothesis part = new Hypothesis();
 			part.setName(StringUtils.abbreviate(text, 50));
 			part.setText(text);
-			modelService.createItem(part, session);
+			modelService.create(part, session);
 			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, session);
 		}
 	}
@@ -463,7 +463,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			Question question = new Question();
 			question.setName(StringUtils.abbreviate(text, 50));
 			question.setText(text);
-			modelService.createItem(question, session);
+			modelService.create(question, session);
 			modelService.createRelation(address, question, Relation.KIND_STRUCTURE_CONTAINS, session);
 		}
 	}
@@ -532,7 +532,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Word word = modelService.get(Word.class, wordId, session);
 		Optional<Relation> relation = modelService.getRelation(internetAddress, word, session);
 		if (relation.isPresent()) {
-			modelService.deleteRelation(relation.get(), modelService.getUser(SecurityService.ADMIN_USERNAME));
+			modelService.delete(relation.get(), modelService.getUser(SecurityService.ADMIN_USERNAME));
 		}
 	}
 
@@ -549,7 +549,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				i.remove();
 			}
 		}
-		modelService.updateItem(internetAddress, session);
+		modelService.update(internetAddress, session);
 	}
 
 	@Path
@@ -626,7 +626,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		boolean addressChanged = !Strings.equals(perspective.getAddress(), internetAddress.getAddress());
 		internetAddress.setAddress(perspective.getAddress());
 
-		modelService.updateItem(internetAddress, privileged);
+		modelService.update(internetAddress, privileged);
 
 		Collection<Long> ids = ItemData.getIds(perspective.getAuthors());
 		modelService.syncRelationsFrom(internetAddress, Relation.KIND_COMMON_AUTHOR, Person.class, ids, privileged);
@@ -657,7 +657,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		statement.setName(StringUtils.abbreviate(text, 50));
 		statement.setText(text);
 
-		modelService.updateItem(statement, privileged);
+		modelService.update(statement, privileged);
 		Collection<Long> ids = ItemData.getIds(perspective.getAuthors());
 		modelService.syncRelationsFrom(statement, Relation.KIND_COMMON_AUTHOR, Person.class, ids, privileged);
 
@@ -682,7 +682,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		if (statement == null) {
 			throw new IllegalRequestException("Statement not found");
 		}
-		modelService.deleteEntity(statement, request.getSession());
+		modelService.delete(statement, request.getSession());
 	}
 
 	@Path
@@ -707,7 +707,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		question.setName(StringUtils.abbreviate(text, 50));
 		question.setText(text);
 
-		modelService.updateItem(question, privileged);
+		modelService.update(question, privileged);
 		Collection<Long> ids = ItemData.getIds(perspective.getAuthors());
 		modelService.syncRelationsFrom(question, Relation.KIND_COMMON_AUTHOR, Person.class, ids, privileged);
 	}
@@ -716,7 +716,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	public void deleteQuestion(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
 		Long id = request.getId();
 		Question question = modelService.getRequired(Question.class, id, request.getSession());
-		modelService.deleteEntity(question, request.getSession());
+		modelService.delete(question, request.getSession());
 	}
 
 	@Path
@@ -741,7 +741,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		hypothesis.setName(StringUtils.abbreviate(text, 50));
 		hypothesis.setText(text);
 
-		modelService.updateItem(hypothesis, privileged);
+		modelService.update(hypothesis, privileged);
 		Collection<Long> ids = ItemData.getIds(perspective.getAuthors());
 		modelService.syncRelationsFrom(hypothesis, Relation.KIND_COMMON_AUTHOR, Person.class, ids, privileged);
 	}
@@ -750,6 +750,6 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	public void deleteHypothesis(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
 		Long id = request.getId();
 		Hypothesis question = modelService.getRequired(Hypothesis.class, id, request.getSession());
-		modelService.deleteEntity(question, request.getSession());
+		modelService.delete(question, request.getSession());
 	}
 }

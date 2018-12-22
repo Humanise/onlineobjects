@@ -86,7 +86,7 @@ public class OnlinePublisherService {
 		}
 		address.setAddress(perspective.getAddress());
 		address.setName(perspective.getName());
-		modelService.createOrUpdateItem(address, privileged);
+		modelService.createOrUpdate(address, privileged);
 		Pile pile = getPile(privileged);
 		if (!modelService.getRelation(pile, address,privileged).isPresent()) {
 			modelService.createRelation(pile, address, privileged);
@@ -108,7 +108,7 @@ public class OnlinePublisherService {
 	public void deletePublisher(Long id, Privileged privileged) throws ModelException, SecurityException {
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, id, privileged);
 		if (internetAddress!=null) {
-			modelService.deleteEntity(internetAddress, privileged);
+			modelService.delete(internetAddress, privileged);
 		}
 	}
 

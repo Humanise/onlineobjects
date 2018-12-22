@@ -18,11 +18,11 @@ public class RatingService {
 		Rating rating = modelService.search(query).getFirst();
 		if (rating!=null) {
 			rating.setRating(rate);
-			modelService.updateItem(rating, user);
+			modelService.update(rating, user);
 		} else {
 			rating = new Rating();
 			rating.setRating(rate);
-			modelService.createItem(rating, user);
+			modelService.create(rating, user);
 			modelService.createRelation(entity, rating, user);
 			modelService.createRelation(user, rating, user);
 		}
@@ -40,11 +40,11 @@ public class RatingService {
 		if (rating!=null) {
 			double newRate = makeValidRate(rating.getRating()+rate);
 			rating.setRating(newRate);
-			modelService.updateItem(rating, user);
+			modelService.update(rating, user);
 		} else {
 			rating = new Rating();
 			rating.setRating(makeValidRate(rate));
-			modelService.createItem(rating, user);
+			modelService.create(rating, user);
 			modelService.createRelation(entity, rating, user);
 			modelService.createRelation(user, rating, user);
 		}

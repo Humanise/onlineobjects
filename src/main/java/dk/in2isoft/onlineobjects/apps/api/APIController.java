@@ -295,7 +295,7 @@ public class APIController extends APIControllerBase {
 		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
 		List<Relation> relations = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).list();
 		for (Relation relation : relations) {
-			modelService.deleteRelation(relation, user);
+			modelService.delete(relation, user);
 		}
 		modelService.commit();
 		return knowledgeService.getQuestionPerspective(question.getId(), user);

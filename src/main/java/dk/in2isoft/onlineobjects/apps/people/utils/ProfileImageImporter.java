@@ -28,7 +28,7 @@ public class ProfileImageImporter extends ImageImporter {
 		securityService.makePublicVisible(image, request.getSession());
 		List<Relation> list = modelService.getRelationsFrom(user, Image.class, Relation.KIND_SYSTEM_USER_IMAGE, user);
 		for (Relation relation : list) {
-			modelService.deleteRelation(relation, this.securityService.getAdminPrivileged());
+			modelService.delete(relation, this.securityService.getAdminPrivileged());
 		}
 		modelService.createRelation(user, image, Relation.KIND_SYSTEM_USER_IMAGE, request.getSession());
 	}

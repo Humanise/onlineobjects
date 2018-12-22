@@ -411,7 +411,7 @@ public class SetupController extends SetupControllerBase {
 			}
 		}
 		user.setName(perspective.getName());
-		modelService.updateItem(user, request.getSession());
+		modelService.update(user, request.getSession());
 		if (securityService.isAdminUser(user)) {
 			modelService.grantPrivileges(user, user, true, true, false, securityService.getAdminPrivileged());
 			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());

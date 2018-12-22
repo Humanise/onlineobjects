@@ -25,15 +25,15 @@ public class TestModelService extends AbstractSpringTestCase {
 	@Test
 	public void testGenerally() throws EndUserException {
 		User user = getNewTestUser();
-		modelService.createItem(user, getPublicUser());
+		modelService.create(user, getPublicUser());
 		
 		Question question = new Question();
 		question.setText("My question");
-		modelService.createItem(question, user);
+		modelService.create(question, user);
 
 		Statement statement = new Statement();
 		statement.setText("My statement");
-		modelService.createOrUpdateItem(statement, user);
+		modelService.createOrUpdate(statement, user);
 		
 		modelService.createRelation(question, statement, user);
 
@@ -53,16 +53,16 @@ public class TestModelService extends AbstractSpringTestCase {
 		modelService.grantPrivileges(question, user, true, true, true, getAdminUser());
 		
 		question.addProperty("myKey", "theValue");
-		modelService.updateItem(question, user);
+		modelService.update(question, user);
 		Map<String, Integer> properties = modelService.getProperties("myKey", Question.class, user);
 		assertEquals(1, properties.size());
 		
 		List<Relation> relationsFromQuestion = modelService.find().relations(user).from(question).list();
 		assertEquals(1, relationsFromQuestion.size());
 		
-		modelService.deleteEntity(question, user);
-		modelService.deleteEntity(statement, user);
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(question, user);
+		modelService.delete(statement, user);
+		modelService.delete(user, getAdminUser());
 
 		assertTrue(modelService.isDirty());
 		modelService.commit();
@@ -73,23 +73,23 @@ public class TestModelService extends AbstractSpringTestCase {
 	@Test
 	public void testDistinct() throws EndUserException {
 		User user = getNewTestUser();
-		modelService.createItem(user, getPublicUser());
+		modelService.create(user, getPublicUser());
 		
 		Question question = new Question();
 		question.addProperty("test-prop", "test-value");
 		question.setName("My question");
-		modelService.createItem(question, user);
+		modelService.create(question, user);
 
 		Statement statement = new Statement();
 		statement.setText("My statement");
-		modelService.createItem(statement, user);
+		modelService.create(statement, user);
 
 		Statement statement2 = new Statement();
 		statement2.setText("My other statement");
-		modelService.createItem(statement2, user);
+		modelService.create(statement2, user);
 		Hypothesis hypothesis = new Hypothesis();
 		hypothesis.setName("My hypothesis");
-		modelService.createItem(hypothesis, user);
+		modelService.create(hypothesis, user);
 		
 		modelService.createRelation(question, statement, user);
 		modelService.createRelation(question, statement2, user);
@@ -113,10 +113,10 @@ public class TestModelService extends AbstractSpringTestCase {
 		statement2 = modelService.getRequired(Statement.class, statement2.getId(), getAdminUser());
 		user = modelService.getRequired(User.class, user.getId(), getAdminUser());
 		
-		modelService.deleteEntity(question, user);
-		modelService.deleteEntity(statement, user);
-		modelService.deleteEntity(statement2, user);
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(question, user);
+		modelService.delete(statement, user);
+		modelService.delete(statement2, user);
+		modelService.delete(user, getAdminUser());
 
 		assertTrue(modelService.isDirty());
 		modelService.commit();

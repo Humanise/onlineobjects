@@ -143,7 +143,7 @@ public class DesktopController extends DesktopControlerBase {
 		address.setName(info.getName());
 		address.overrideFirstProperty(Property.KEY_COMMON_DESCRIPTION, info.getDescription());
 		address.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
-		modelService.createOrUpdateItem(address, request.getSession());
+		modelService.createOrUpdate(address, request.getSession());
 	}
 	
 	@Path

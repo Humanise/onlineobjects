@@ -148,7 +148,7 @@ public class MemberService {
 			User user = new User();
 			user.setUsername(username);
 			securityService.setPassword(user, password);
-			modelService.createItem(user, creator);
+			modelService.create(user, creator);
 	
 			// Make sure only the user has access to itself
 			modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
@@ -160,12 +160,12 @@ public class MemberService {
 			// Create a person
 			Person person = new Person();
 			person.setFullName(fullName);
-			modelService.createItem(person, user);
+			modelService.create(person, user);
 			
 			// Create email
 			EmailAddress emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
-			modelService.createItem(emailAddress, user);
+			modelService.create(emailAddress, user);
 			
 			// Create relation between person and email
 			modelService.createRelation(person, emailAddress, user);
@@ -216,10 +216,10 @@ public class MemberService {
 		// TODO check that an item is not shared with others
 		for (Entity entity : list) {
 			if (!entity.equals(user)) {
-				modelService.deleteEntity(entity, privileged);
+				modelService.delete(entity, privileged);
 			}
 		}
-		modelService.deleteEntity(user, privileged);
+		modelService.delete(user, privileged);
 		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 	}
 
@@ -250,7 +250,7 @@ public class MemberService {
 			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
-			modelService.updateItem(emailAddress, privileged);
+			modelService.update(emailAddress, privileged);
 		} else {
 			if (isPrimaryEmailTaken(email)) {
 				throw new IllegalRequestException(Error.emailExists);
@@ -258,7 +258,7 @@ public class MemberService {
 			emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
-			modelService.createItem(emailAddress, privileged);
+			modelService.create(emailAddress, privileged);
 			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, privileged);
 		}
 		surveillanceService.audit().info("Completed change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
@@ -337,7 +337,7 @@ public class MemberService {
 		person.overrideProperties(Property.KEY_HUMAN_FAVORITE_MOVIE, info.getMovies());
 		person.overrideProperties(Property.KEY_HUMAN_FAVORITE_BOOK, info.getBooks());
 		person.overrideProperties(Property.KEY_HUMAN_FAVORITE_TELEVISIONPROGRAM, info.getTelevisionPrograms());
-		modelService.updateItem(person, priviledged);
+		modelService.update(person, priviledged);
 		updateDummyEmailAddresses(person, info.getEmails(), priviledged);
 		updateDummyPhoneNumbers(person, info.getPhones(), priviledged);
 		updateDummyInternetAddresses(person, info.getUrls(), priviledged);
@@ -364,12 +364,12 @@ public class MemberService {
 		}
 		
 		for (EmailAddress emailAddress : sync.getNew()) {
-			modelService.createItem(emailAddress, session);
+			modelService.create(emailAddress, session);
 			modelService.createRelation(parent, emailAddress, session);
 		}
 		
 		for (EmailAddress emailAddress : sync.getDeleted()) {
-			modelService.deleteEntity(emailAddress, session);
+			modelService.delete(emailAddress, session);
 		}
 	}
 
@@ -394,12 +394,12 @@ public class MemberService {
 		}
 		
 		for (PhoneNumber number : sync.getNew()) {
-			modelService.createItem(number, priviledged);
+			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
 		
 		for (PhoneNumber number : sync.getDeleted()) {
-			modelService.deleteEntity(number, priviledged);
+			modelService.delete(number, priviledged);
 		}
 	}
 
@@ -423,12 +423,12 @@ public class MemberService {
 		}
 		
 		for (InternetAddress number : sync.getNew()) {
-			modelService.createItem(number, priviledged);
+			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
 		
 		for (InternetAddress number : sync.getDeleted()) {
-			modelService.deleteEntity(number, priviledged);
+			modelService.delete(number, priviledged);
 		}
 	}
 	
@@ -460,7 +460,7 @@ public class MemberService {
 		String name = getFullName(user, privileged);
 		String random = Strings.generateRandomString(30);
 		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, random);
-		modelService.updateItem(email, user);
+		modelService.update(email, user);
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);
@@ -503,7 +503,7 @@ public class MemberService {
 		}
 		String key = Strings.generateRandomString(30) + "|" + newEmail;
 		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
-		modelService.updateItem(user, user);
+		modelService.update(user, user);
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);
@@ -571,13 +571,13 @@ public class MemberService {
 		// TODO: Use key to make sure this is legal
 		Privileged admin = securityService.getAdminPrivileged();
 		email.overrideFirstProperty(Property.KEY_CONFIRMATION_TIME, new Date());
-		modelService.updateItem(email, admin);
+		modelService.update(email, admin);
 		surveillanceService.audit().info("Marked email={} confirmed for privileged={}", email, privileged.getIdentity());
 	}
 
 	public void markTermsAcceptance(User user, Privileged privileged) throws SecurityException, ModelException {
 		user.overrideFirstProperty(Property.KEY_TERMS_ACCEPTANCE_TIME, new Date());
-		modelService.updateItem(user, privileged);
+		modelService.update(user, privileged);
 		surveillanceService.audit().info("Marked terms accepted for user={}", user.getUsername());
 	}
 

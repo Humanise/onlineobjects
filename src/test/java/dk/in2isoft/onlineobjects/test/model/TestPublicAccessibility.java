@@ -20,16 +20,16 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 	public void testCreation() throws EndUserException {
 		Comment comment = new Comment();
 		// Public cannot create anything but Users
-		assertFails(()->modelService.createItem(comment, getPublicUser()));
+		assertFails(()->modelService.create(comment, getPublicUser()));
 		
 		User user = getNewTestUser();
 		// Public can create a User
-		modelService.createItem(user, getPublicUser());
+		modelService.create(user, getPublicUser());
 
 		// Public cannot delete the user again
-		assertFails(()->modelService.deleteEntity(user, getPublicUser()));
+		assertFails(()->modelService.delete(user, getPublicUser()));
 		
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(user, getAdminUser());
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		Comment comment = new Comment();
 		assertFails(() -> securityService.grantFullPrivileges(comment, user, getAdminUser()));
 
-		modelService.createItem(user, getAdminUser());
+		modelService.create(user, getAdminUser());
 		
 		// Cannot grant privileges since the comment is unsaved
 		assertFails(() -> securityService.grantFullPrivileges(comment, user, getAdminUser()));
@@ -51,7 +51,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User publicUser = securityService.getPublicUser();
 		User user = getNewTestUser();
 		
-		modelService.createItem(user, getAdminUser());
+		modelService.create(user, getAdminUser());
 		securityService.makePublicVisible(user, getAdminUser());
 		
 		assertFails(()->securityService.grantFullPrivileges(user, publicUser, getAdminUser()));
@@ -79,7 +79,7 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		assertFalse(securityService.canModify(user, user));
 		assertFalse(securityService.canView(user, user));
 		
-		assertFails(()->modelService.deleteEntity(user, publicUser));
+		assertFails(()->modelService.delete(user, publicUser));
 		
 		securityService.grantFullPrivileges(user, user, getAdminUser());
 		
@@ -87,9 +87,9 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		assertTrue(securityService.canModify(user, user));
 		assertTrue(securityService.canView(user, user));
 		
-		modelService.deleteEntity(user, user);
+		modelService.delete(user, user);
 
-		assertFails(()->modelService.createItem(user, publicUser));
+		assertFails(()->modelService.create(user, publicUser));
 		
 		modelService.commit();
 	}
@@ -100,12 +100,12 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User publicUser = securityService.getPublicUser();
 		User user = getNewTestUser();
 		
-		modelService.createItem(user, getAdminUser());
+		modelService.create(user, getAdminUser());
 		
 		assertFalse(securityService.canDelete(user, publicUser));
 		assertFalse(securityService.canDelete(user, user));
 		
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(user, getAdminUser());
 		
 		modelService.commit();
 	}
@@ -117,9 +117,9 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		User user = getNewTestUser();
 		Comment comment = new Comment();
 		
-		modelService.createItem(user, getAdminUser());
+		modelService.create(user, getAdminUser());
 		securityService.grantFullPrivileges(user, user, getAdminUser());
-		modelService.createItem(comment, user);
+		modelService.create(comment, user);
 
 		// The public user cannot delete anything
 		assertFalse(securityService.canDelete(comment, publicUser));
@@ -133,15 +133,15 @@ public class TestPublicAccessibility extends AbstractSpringTestCase {
 		assertFalse(securityService.canDelete(comment, user));
 		
 		// Test that the user cannot delete the comment
-		assertFails(()->modelService.deleteEntity(comment, user));
+		assertFails(()->modelService.delete(comment, user));
 		
 		modelService.grantPrivileges(comment, publicUser, true, true, true, getAdminUser());
 
 		// Now the user can delete again
 		assertTrue(securityService.canDelete(comment, user));
 
-		modelService.deleteEntity(comment, user);
-		modelService.deleteEntity(user, user);
+		modelService.delete(comment, user);
+		modelService.delete(user, user);
 		
 		checkNotPersistent(user, publicUser);
 		checkNotPersistent(comment, publicUser);

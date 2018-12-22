@@ -44,14 +44,14 @@ public class InvitationService {
 		// TODO: Maybe check if a user with the primary e-mail already exists
 		Person person = new Person();
 		person.setFullName(name);
-		modelService.createItem(person, sender);
+		modelService.create(person, sender);
 		
 		EmailAddress email = new EmailAddress();
 		email.setAddress(emailAddress);
-		modelService.createItem(email, sender);
+		modelService.create(email, sender);
 		
 		Relation personEmail = new Relation(person,email);
-		modelService.createItem(personEmail, sender);
+		modelService.create(personEmail, sender);
 		
 		Invitation invitation = createInvitation(sender, person, message);
 		sendInvitation(invitation);
@@ -63,17 +63,17 @@ public class InvitationService {
 		Invitation invitation = new Invitation();
 		invitation.setCode(Strings.generateRandomString(40));
 		invitation.setMessage(message);
-		modelService.createItem(invitation, sender);
+		modelService.create(invitation, sender);
 
 		// Create relation from user to invitation
 		Relation userInvitation = new Relation(sender, invitation);
 		userInvitation.setKind(Relation.KIND_INIVATION_INVITER);
-		modelService.createItem(userInvitation, sender);
+		modelService.create(userInvitation, sender);
 
 		// Create relation from invitation to person
 		Relation invitationPerson = new Relation(invitation, invited);
 		invitationPerson.setKind(Relation.KIND_INIVATION_INVITED);
-		modelService.createItem(invitationPerson, sender);
+		modelService.create(invitationPerson, sender);
 
 		return invitation;
 	}
@@ -120,7 +120,7 @@ public class InvitationService {
 			person = modelService.getChild(invitation, Person.class,admin);
 
 			invitation.setState(Invitation.STATE_ACCEPTED);
-			modelService.updateItem(invitation, admin);
+			modelService.update(invitation, admin);
 		}
 		
 		User newUser = memberService.signUp(session, username, password, person.getFullName(), email);
@@ -131,7 +131,7 @@ public class InvitationService {
 		// Create relation between user and invitation
 		Relation invitaionUserRelation = new Relation(invitation, newUser);
 		invitaionUserRelation.setKind(Relation.KIND_INIVATION_INVITED);
-		modelService.createItem(invitaionUserRelation, session);
+		modelService.create(invitaionUserRelation, session);
 
 		// The new user should be able to see the invite
 		modelService.grantPrivileges(invitation, session, true, false, false, securityService.getAdminPrivileged());

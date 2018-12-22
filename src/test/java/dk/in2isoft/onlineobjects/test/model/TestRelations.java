@@ -23,16 +23,16 @@ public class TestRelations extends AbstractSpringTestCase {
 		Privileged privileged = getAdminUser();
 
 		WebPage page = new WebPage();
-		modelService.createItem(page, privileged);
+		modelService.create(page, privileged);
 		assertTrue(page.getId() > 0);
 		modelService.commit();
 
 		WebNode node = new WebNode();
-		modelService.createItem(node, privileged);
+		modelService.create(node, privileged);
 		modelService.createRelation(page, node, privileged);
 
 		Person person = new Person();
-		modelService.createItem(person, privileged);
+		modelService.create(person, privileged);
 		modelService.createRelation(page, person, privileged);
 		{
 			List<Relation> childRelations = modelService.find().relations(privileged).from(page).list();
@@ -48,9 +48,9 @@ public class TestRelations extends AbstractSpringTestCase {
 			assertTrue(childRelations.size() == 1);
 			assertTrue(childRelations.get(0).getTo() instanceof Person);
 		}
-		modelService.deleteEntity(page, privileged);
-		modelService.deleteEntity(node, privileged);
-		modelService.deleteEntity(person, privileged);
+		modelService.delete(page, privileged);
+		modelService.delete(node, privileged);
+		modelService.delete(person, privileged);
 		modelService.commit();
 	}
 

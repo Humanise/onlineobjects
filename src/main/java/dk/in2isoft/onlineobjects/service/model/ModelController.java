@@ -127,7 +127,7 @@ public class ModelController extends ModelControllerBase {
 			List<String> existingTags = entity.getPropertyValues(Property.KEY_COMMON_TAG);
 			if (!existingTags.contains(tag)) {
 				entity.addProperty(Property.KEY_COMMON_TAG, tag);
-				modelService.updateItem(entity, request.getSession());
+				modelService.update(entity, request.getSession());
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class ModelController extends ModelControllerBase {
 		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request.getSession());
 		Code.checkNotNull(entity, "Entity not found");
-		modelService.deleteEntity(entity, request.getSession());
+		modelService.delete(entity, request.getSession());
 	}
 
 	@Path
@@ -342,7 +342,7 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text", "No question");
 			question.setText(text);
 			question.setName(text);
-			modelService.createItem(question, request.getSession());
+			modelService.create(question, request.getSession());
 			return question;
 		}
 		if (Hypothesis.class.getSimpleName().equals(type)) {
@@ -350,7 +350,7 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text", "No hypothesis");
 			hypothesis.setText(text);
 			hypothesis.setName(text);
-			modelService.createItem(hypothesis, request.getSession());
+			modelService.create(hypothesis, request.getSession());
 			return hypothesis;
 		}
 		throw new IllegalRequestException("Unknown type");

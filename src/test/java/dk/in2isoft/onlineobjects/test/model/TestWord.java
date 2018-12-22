@@ -24,7 +24,7 @@ public class TestWord extends AbstractSpringTestCase {
 		Word word = new Word();
 		word.setText(text);
 		assertEquals(text, word.getText());
-		modelService.createItem(word, priviledged);
+		modelService.create(word, priviledged);
 		{
 			Query<Word> query = Query.of(Word.class).withField("text", text);
 			List<Word> list = modelService.list(query);
@@ -34,7 +34,7 @@ public class TestWord extends AbstractSpringTestCase {
 			assertEquals(loaded.getText(), text);
 		}
 		
-		modelService.deleteEntity(word, priviledged);
+		modelService.delete(word, priviledged);
 		modelService.commit();
 	}
 }

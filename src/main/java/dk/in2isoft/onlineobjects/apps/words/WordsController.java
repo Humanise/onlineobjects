@@ -229,7 +229,7 @@ public class WordsController extends WordsControllerBase {
 			String lang = enrichment.getValue()==null ? null : enrichment.getValue().toString();
 			wordsModelService.changeLanguage(word, lang, user, session);
 			word.removeProperties(Property.KEY_WORD_SUGGESTION_LANGUAGE);
-			modelService.updateItem(word, modelService.getUser("admin"));
+			modelService.update(word, modelService.getUser("admin"));
 		}
 		
 	}

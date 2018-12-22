@@ -38,7 +38,7 @@ public class CommonRemotingFacade extends AbstractRemotingFacade {
 	
 	public void deleteEntity(long id) throws ModelException, SecurityException {
 		Entity entity = modelService.get(Entity.class, id, getUserSession());
-		modelService.deleteEntity(entity, getUserSession());
+		modelService.delete(entity, getUserSession());
 	}
 	
 	public Collection<ItemData> getClasses() {
@@ -65,7 +65,7 @@ public class CommonRemotingFacade extends AbstractRemotingFacade {
 		List<String> existingTags = entity.getPropertyValues(Property.KEY_COMMON_TAG);
 		if (!existingTags.contains(tag)) {
 			entity.addProperty(Property.KEY_COMMON_TAG, tag);
-			modelService.updateItem(entity, getUserSession());
+			modelService.update(entity, getUserSession());
 		} else {
 			log.info("The tag ["+tag+"] already exists");
 		}

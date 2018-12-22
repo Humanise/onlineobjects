@@ -125,7 +125,7 @@ public class SecurityService {
 		}
 		setSaltedPassword(user, password);
 		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
-		modelService.updateItem(user, privileged);
+		modelService.update(user, privileged);
 		surveillanceService.audit().info("Changed password of user={}", user.getUsername());
 	}
 
@@ -307,14 +307,14 @@ public class SecurityService {
 		if (client!=null) {
 			secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
 			syncClientInfo(info, client);
-			modelService.updateItem(client, user);
+			modelService.update(client, user);
 		} else {
 			secret = buildSecret();
 			Client newClient = new Client();
 			newClient.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
 			syncClientInfo(info, newClient);
 			newClient.setUUID(info.getUUID());
-			modelService.createItem(newClient, user);
+			modelService.create(newClient, user);
 			modelService.createRelation(user, newClient, user);
 		}
 		return secret;

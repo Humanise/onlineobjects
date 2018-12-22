@@ -28,7 +28,7 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId, getUserSession());
 		gallery.setTiledWidth(width);
 		gallery.setTiledHeight(height);
-		modelService.updateItem(gallery, getUserSession());
+		modelService.update(gallery, getUserSession());
 	}
 
 	public void updateImagePositions(long galleryId, long[] ids)
@@ -39,7 +39,7 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 			for (Relation relation : relations) {
 				if (relation.getTo().getId() == ids[i]) {
 					relation.setPosition(i + 1);
-					modelService.updateItem(relation, getUserSession());
+					modelService.update(relation, getUserSession());
 				}
 			}
 		}
@@ -58,7 +58,7 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 		image.setName(title);
 		image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, description);
 		image.overrideProperties(Property.KEY_COMMON_TAG, Arrays.asList(tags));
-		modelService.updateItem(image, getUserSession());
+		modelService.update(image, getUserSession());
 		return image;
 	}
 
@@ -68,7 +68,7 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 		if (image == null) {
 			throw new EndUserException("The image does not exist");
 		}
-		modelService.deleteEntity(image, getUserSession());
+		modelService.delete(image, getUserSession());
 	}
 
 	public void changeFrameStyle(long galleryId, String style)
@@ -76,6 +76,6 @@ public class ImageGalleryRemotingFacade extends AbstractRemotingFacade {
 		ImageGallery gallery = modelService.get(ImageGallery.class, galleryId,
 				getUserSession());
 		gallery.overrideFirstProperty(ImageGallery.PROPERTY_FRAMESTYLE, style);
-		modelService.updateItem(gallery, getUserSession());
+		modelService.update(gallery, getUserSession());
 	}
 }

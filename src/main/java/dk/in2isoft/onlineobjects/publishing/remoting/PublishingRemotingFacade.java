@@ -51,13 +51,13 @@ public class PublishingRemotingFacade extends AbstractRemotingFacade {
 		WebSite site = modelService.getParent(node, WebSite.class, getUserSession());
 		site.setName(info.getSiteTitle());
 		
-		modelService.updateItem(page, getUserSession());
+		modelService.update(page, getUserSession());
 	}
 
 	public void changePageTemplate(long pageId, String template) throws EndUserException {
 		WebPage page = modelService.get(WebPage.class, pageId, getUserSession());
 		page.overrideFirstProperty(WebPage.PROPERTY_TEMPLATE, template);
-		modelService.updateItem(page, getUserSession());
+		modelService.update(page, getUserSession());
 	}
 	
 	public Collection<ModelClassInfo> getDocumentClasses() {
@@ -80,7 +80,7 @@ public class PublishingRemotingFacade extends AbstractRemotingFacade {
 	public boolean updateWebNode(long id, String name) throws EndUserException {
 		WebNode node = modelService.get(WebNode.class, id, getUserSession());
 		node.setName(name);
-		modelService.updateItem(node, getUserSession());
+		modelService.update(node, getUserSession());
 		return true;
 	}
 	

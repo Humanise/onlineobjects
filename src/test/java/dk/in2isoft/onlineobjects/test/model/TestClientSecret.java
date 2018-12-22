@@ -77,8 +77,8 @@ public class TestClientSecret extends AbstractSpringTestCase {
 			assertEquals(clients.size(), 2);
 		}
 
-		modelService.deleteEntity(user, getAdminUser());
-		modelService.deleteEntity(otherUser, getAdminUser());
+		modelService.delete(user, getAdminUser());
+		modelService.delete(otherUser, getAdminUser());
 		} catch (Exception e) {
 			modelService.rollBack();
 		}

@@ -441,22 +441,22 @@ public class TestDanNetImporter extends AbstractSpringTask {
 
 	private void removeExistingSynonyms(Word localWord) throws ModelException, SecurityException {
 		List<Relation> outgoingSynonyms = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
-		modelService.deleteRelations(outgoingSynonyms, adminUser);
+		modelService.delete(outgoingSynonyms, adminUser);
 		List<Relation> indcomingSynonyms = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
-		modelService.deleteRelations(indcomingSynonyms, adminUser);
+		modelService.delete(indcomingSynonyms, adminUser);
 	}
 
 	private void removeExistingGeneralizations(Word localWord) throws ModelException, SecurityException {
 		List<Relation> from = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
-		modelService.deleteRelations(from, adminUser);
+		modelService.delete(from, adminUser);
 		List<Relation> to = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
-		modelService.deleteRelations(to, adminUser);
+		modelService.delete(to, adminUser);
 	}
 
 	private void removeExistingDisciplines(Word localWord) throws ModelException, SecurityException {
 		{
 			List<Relation> relations = modelService.getRelationsFrom(localWord, Word.class,Relation.KIND_SEMANTICS_DISCIPLINE, adminUser);
-			modelService.deleteRelations(relations, adminUser);
+			modelService.delete(relations, adminUser);
 		}
 	}
 
@@ -477,7 +477,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 				localWord.addProperty(Property.KEY_SEMANTICS_EXAMPLE, example);
 			}
 		}
-		modelService.updateItem(localWord, publicUser);
+		modelService.update(localWord, publicUser);
 		modelService.commit();
 	}
 
@@ -487,7 +487,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 			localWord = new Word();
 			localWord.setText(label);
 			localWord.addProperty(Property.KEY_DATA_SOURCE, sense.getURI());
-			modelService.createItem(localWord, publicUser);
+			modelService.create(localWord, publicUser);
 		} else {
 			//print("found",localWord);
 		}

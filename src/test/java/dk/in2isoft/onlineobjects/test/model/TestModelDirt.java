@@ -16,8 +16,8 @@ public class TestModelDirt extends AbstractSpringTestCase {
 	public void testThis() throws EndUserException {
 		Privileged priviledged = securityService.getAdminPrivileged();
 		User user = getNewTestUser();
-		modelService.createItem(user, priviledged);
-		modelService.deleteEntity(user, priviledged);
+		modelService.create(user, priviledged);
+		modelService.delete(user, priviledged);
 		assertTrue(modelService.isDirty());
 		modelService.commit();
 		assertFalse(modelService.isDirty());

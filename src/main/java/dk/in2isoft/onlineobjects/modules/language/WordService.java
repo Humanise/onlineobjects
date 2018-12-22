@@ -275,7 +275,7 @@ public class WordService {
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.createItem(word, user);
+			modelService.create(word, user);
 			securityService.grantPublicView(word, true, user);
 			Relation languageRelation = modelService.createRelation(language, word, user);
 			securityService.grantPublicView(languageRelation, true, user);
@@ -372,7 +372,7 @@ public class WordService {
 			log.debug("No matches for " + modification.text);
 			word = new Word();
 			word.setText(modification.text);
-			modelService.createItem(word, privileged);
+			modelService.create(word, privileged);
 		}
 		updateWord(word,modification,source,privileged);
 	}
@@ -411,7 +411,7 @@ public class WordService {
 		InternetAddress address = new InternetAddress();
 		address.setAddress(src);
 		address.setName(Strings.simplifyURL(src));
-		modelService.createItem(address, privileged);
+		modelService.create(address, privileged);
 		securityService.grantPublicView(address, true, privileged);
 		return address;
 	}
@@ -435,20 +435,20 @@ public class WordService {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_SEMANTICS_GLOSSARY);
 			word.addProperty(Property.KEY_SEMANTICS_GLOSSARY, modification.glossary);
-			modelService.updateItem(word, privileged);
+			modelService.update(word, privileged);
 		}
 		if (Strings.isNotBlank(modification.sourceId)) {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_DATA_SOURCE);
 			word.addProperty(Property.KEY_DATA_SOURCE, modification.sourceId);
-			modelService.updateItem(word, privileged);
+			modelService.update(word, privileged);
 		}
 		updateSource(word, source, privileged);
 		if (modification.clearOriginators) {
 			List<Relation> originators = modelService.find().relations(privileged).from(word).to(InternetAddress.class).withKind(Relation.KIND_COMMON_ORIGINATOR).list();
 			log.info("Word->InternetAddress originator count: " + originators.size());
 			for (Relation relation : originators) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			}
 		}
 		//modelService.getChildren(word, Relation.KIND_COMMON_ORIGINATOR, InternetAddress.class);
@@ -463,7 +463,7 @@ public class WordService {
 				create = true;
 			}
 			else if (existing.getTo().getId()!=source.getId()) {
-				modelService.deleteRelation(existing, privileged);
+				modelService.delete(existing, privileged);
 				create = true;
 			}
 
@@ -479,7 +479,7 @@ public class WordService {
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(language)) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			} else {
 				found = true;
 			}
@@ -495,7 +495,7 @@ public class WordService {
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(category)) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			} else {
 				found = true;
 			}

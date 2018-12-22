@@ -32,7 +32,7 @@ public class ImageCleanupJob extends ServiceBackedJob {
 				String name = image.getName();
 				if (name!=null && name.toLowerCase().endsWith(".jpg")) {
 					image.setName(fileService.cleanFileName(name));
-					modelService.updateItem(image, admin);
+					modelService.update(image, admin);
 				}
 				imageService.synchronizeContentType(image, admin);
 				imageService.synchronizeMetaData(image, admin);

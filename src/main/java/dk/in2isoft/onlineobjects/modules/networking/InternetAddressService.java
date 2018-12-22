@@ -59,7 +59,7 @@ public class InternetAddressService {
 				} else {
 					address.removeProperties(Property.KEY_INTERNETADDRESS_ENCODING);
 				}
-				modelService.updateItem(address, privileged);
+				modelService.update(address, privileged);
 			}
 		}
 		
@@ -94,7 +94,7 @@ public class InternetAddressService {
 			} else {
 				address.setName(Strings.simplifyURL(url));
 			}
-			modelService.createItem(address, user);
+			modelService.create(address, user);
 
 			inboxService.add(user, address);
 		}

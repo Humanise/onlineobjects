@@ -46,7 +46,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		row.appendChild(new Element("column", CompoundDocument.CONTENT_NAMESPACE));
 		doc.getRootElement().appendChild(row);
 		compound.setStructure(doc.toXML());
-		modelService.updateItem(compound, getUserSession());
+		modelService.update(compound, getUserSession());
 	}
 
 	public void addColumn(long documentId,int rowIndex,int position) throws EndUserException {
@@ -65,7 +65,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		}
 		row.appendChild(new Element("column", CompoundDocument.CONTENT_NAMESPACE));
 		compound.setStructure(structure.toXML());
-		modelService.updateItem(compound, getUserSession());
+		modelService.update(compound, getUserSession());
 	}
 
 	public String getStructureHTML(long documentId) throws EndUserException, UnsupportedEncodingException {
@@ -96,15 +96,15 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			}
 			
 			Entity part = createPart(type);
-			modelService.createItem(part, getUserSession());
+			modelService.create(part, getUserSession());
 			Relation relation = new Relation(document, part);
 			relation.setKind("document.contains");
-			modelService.createItem(relation, getUserSession());
+			modelService.create(relation, getUserSession());
 			Element section = new Element("section", CompoundDocument.CONTENT_NAMESPACE);
 			section.addAttribute(new Attribute("part-id", String.valueOf(part.getId())));
 			column.insertChild(section, position);
 			document.setStructure(structure.toXML());
-			modelService.updateItem(document, getUserSession());
+			modelService.update(document, getUserSession());
 		}
 	}
 
@@ -122,7 +122,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			setAttribute(column, "left", left);
 			setAttribute(column, "right", right);
 			document.setStructure(structure.toXML());
-			modelService.updateItem(document, getUserSession());
+			modelService.update(document, getUserSession());
 		}
 	}
 	
@@ -173,12 +173,12 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 				long id = Long.valueOf(section.getAttribute("part-id").getValue());
 				Entity part = modelService.get(Entity.class, id, getUserSession());
 				if (part != null) {
-					modelService.deleteEntity(part, getUserSession());
+					modelService.delete(part, getUserSession());
 				}
 			}
 			columnOrRow.detach();
 			document.setStructure(structure.toXML());
-			modelService.updateItem(document, getUserSession());
+			modelService.update(document, getUserSession());
 		}
 	}
 
@@ -192,9 +192,9 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		}
 		sections.get(0).detach();
 		document.setStructure(structure.toXML());
-		modelService.updateItem(document, getUserSession());
+		modelService.update(document, getUserSession());
 		Entity part = modelService.get(Entity.class, partId, getUserSession());
-		modelService.deleteEntity(part, getUserSession());
+		modelService.delete(part, getUserSession());
 	}
 
 	public void setPageRenderingService(PageRenderingService pageRenderingService) {

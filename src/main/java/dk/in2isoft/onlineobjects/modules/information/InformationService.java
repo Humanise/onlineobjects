@@ -67,7 +67,7 @@ public class InformationService {
 		List<Word> list = modelService.list(query);
 		for (Word word : list) {
 			try {
-				modelService.deleteEntity(word, admin);
+				modelService.delete(word, admin);
 				modelService.commit();
 			} catch (SecurityException e) {
 				log.warn("Unable to delete word: " + word);
@@ -115,7 +115,7 @@ public class InformationService {
 				internetAddress.setName(doc.getTitle());
 				internetAddress.addProperty(Property.KEY_INTERNETADDRESS_CONTENT,
 						StringUtils.abbreviate(contents, 3990));
-				modelService.createItem(internetAddress, admin);
+				modelService.create(internetAddress, admin);
 
 				if (Strings.isBlank(contents)) {
 					status.warn("No content: " + link);
@@ -155,7 +155,7 @@ public class InformationService {
 									word.addProperty(Property.KEY_DATA_VALIDATED, "false");
 									word.addProperty(Property.KEY_WORD_SUGGESTION_LANGUAGE, topLanguage);
 
-									modelService.createItem(word, admin);
+									modelService.create(word, admin);
 									securityService.makePublicVisible(word, admin);
 									status.log("New word found: " + word);
 
@@ -195,7 +195,7 @@ public class InformationService {
 		} else {
 			internetAddress.setName(Strings.simplifyURL(url));
 		}
-		modelService.createItem(internetAddress, privileged);
+		modelService.create(internetAddress, privileged);
 		return internetAddress;
 	}
 
@@ -260,7 +260,7 @@ public class InformationService {
 			Relation relation = new Relation(a, b);
 			relation.setStrength(similarity);
 			relation.setKind(Kind.similarity);
-			modelService.createItem(relation, privileged);
+			modelService.create(relation, privileged);
 		}
 
 	}

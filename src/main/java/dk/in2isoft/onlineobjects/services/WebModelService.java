@@ -58,37 +58,37 @@ public class WebModelService {
 		WebPage page = new WebPage();
 		page.setName("Min side");
 		page.setTitle("Min side");
-		modelService.createItem(page,priviledged);
+		modelService.create(page,priviledged);
 		
 		// Create a web node
 		WebNode node = new WebNode();
 		node.setName("Min side");
-		modelService.createItem(node,priviledged);
+		modelService.create(node,priviledged);
 		
 		// Update positions of nodes
 		List<Relation> relations = modelService.getRelationsFrom(site,WebNode.class, priviledged);
 		int position = 1;
 		for (Relation relation : relations) {
 			relation.setPosition(position);
-			modelService.updateItem(relation, priviledged);
+			modelService.update(relation, priviledged);
 			position++;
 		}
 		
 		// Create a relation between node and page
 		Relation nodePageRelation = new Relation(node,page);
-		modelService.createItem(nodePageRelation,priviledged);
+		modelService.create(nodePageRelation,priviledged);
 		
 		// Create a relation between site and node
 		Relation siteNodeRelation = new Relation(site,node);
 		siteNodeRelation.setPosition(position);
-		modelService.createItem(siteNodeRelation,priviledged);
+		modelService.create(siteNodeRelation,priviledged);
 		
 		Entity document = pageRenderingService.getBuilder(clazz).create(priviledged); 
 		
 		// Set gallery as content of page
 		Relation pageDocumentRelation = new Relation(page,document);
 		pageDocumentRelation.setKind(Relation.KIND_WEB_CONTENT);
-		modelService.createItem(pageDocumentRelation,priviledged);
+		modelService.create(pageDocumentRelation,priviledged);
 		
 		return node.getId();
 		
@@ -122,7 +122,7 @@ public class WebModelService {
 		int position = 1;
 		for (Relation relation : relations) {
 			relation.setPosition(position);
-			modelService.updateItem(relation, priviledged);
+			modelService.update(relation, priviledged);
 			position++;
 		}
 	}
@@ -160,16 +160,16 @@ public class WebModelService {
 		// Delete Nodes
 		List<WebNode> nodes = modelService.getParents(page, WebNode.class, privileged);
 		for (WebNode node : nodes) {
-			modelService.deleteEntity(node,privileged);
+			modelService.delete(node,privileged);
 		}
 
 		// Delete page content
 		List<Entity> contents = modelService.getChildren(page, Relation.KIND_WEB_CONTENT, privileged);
 		for (Entity content : contents) {
-			modelService.deleteEntity(content, privileged);
+			modelService.delete(content, privileged);
 		}
 		
-		modelService.deleteEntity(page,privileged);
+		modelService.delete(page,privileged);
 	}
 
 	public void setModelService(ModelService modelService) {

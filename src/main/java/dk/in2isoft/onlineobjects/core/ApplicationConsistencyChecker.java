@@ -32,7 +32,7 @@ public class ApplicationConsistencyChecker implements ConsistencyChecker {
 			log.warn("No setup application present!");
 			Application setup = new Application();
 			setup.setName("setup");
-			modelService.createItem(setup, securityService.getAdminPrivileged());
+			modelService.create(setup, securityService.getAdminPrivileged());
 			modelService.commit();
 			log.info("Created setup application");
 		}

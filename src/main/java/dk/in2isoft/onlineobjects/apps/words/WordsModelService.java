@@ -212,7 +212,7 @@ public class WordsModelService {
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.createItem(word, user);
+			modelService.create(word, user);
 			securityService.makePublicVisible(word, user);
 			Relation languageRelation = modelService.createRelation(language, word, user);
 			securityService.makePublicVisible(languageRelation, user);
@@ -228,7 +228,7 @@ public class WordsModelService {
 		Relation relation = modelService.getRelation(id, session).orElseThrow(() -> 
 			new IllegalRequestException("Relation not found (id="+id+")")
 		);
-		modelService.deleteRelation(relation, session);
+		modelService.delete(relation, session);
 	}
 
 	public void relateWords(long parentId,String kind, long childId, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
@@ -267,7 +267,7 @@ public class WordsModelService {
 			}
 		}
 		List<Relation> parents = modelService.find().relations(privileged).to(word).from(Language.class).list();
-		modelService.deleteRelations(parents, privileged);
+		modelService.delete(parents, privileged);
 		if (language!=null) {
 			Relation relation = modelService.createRelation(language, word, privileged);
 			securityService.makePublicVisible(relation, privileged);
@@ -286,7 +286,7 @@ public class WordsModelService {
 			throw new IllegalRequestException("Unsupported category ("+category+")");
 		}
 		List<Relation> parents = modelService.find().relations(privileged).to(word).from(LexicalCategory.class).list();
-		modelService.deleteRelations(parents, privileged);
+		modelService.delete(parents, privileged);
 		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, privileged);
 		securityService.makePublicVisible(categoryRelation, privileged);
 		wordService.ensureOriginator(word,originator);		
@@ -296,7 +296,7 @@ public class WordsModelService {
 	
 	public void deleteWord(long wordId, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
 		Word word = getWord(wordId, session);
-		modelService.deleteEntity(word, session);
+		modelService.delete(word, session);
 	}
 
 	private Word getWord(long wordId, Privileged session) throws ModelException, IllegalRequestException {

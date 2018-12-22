@@ -23,16 +23,16 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 	@Test
 	public void testLoad() throws EndUserException {
 		User mainUser = getNewTestUser();
-		modelService.createItem(mainUser, getPublicUser());
+		modelService.create(mainUser, getPublicUser());
 
 		User someoneElse = getNewTestUser();
-		modelService.createItem(someoneElse, getPublicUser());
+		modelService.create(someoneElse, getPublicUser());
 		
 		Comment comment = new Comment();
-		modelService.createItem(comment, mainUser);
+		modelService.create(comment, mainUser);
 		
 		Question question = new Question();
-		modelService.createItem(question, mainUser);
+		modelService.create(question, mainUser);
 		
 		Relation questionCommentRelation = modelService.createRelation(question, comment, mainUser);
 		
@@ -94,16 +94,16 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 		assertEquals(questionCommentRelation, modelService.find().relations(someoneElse).from(question).to(Comment.class).first().get());
 		assertEquals(questionCommentRelation, modelService.find().relations(someoneElse).to(comment).from(Question.class).first().get());
 		
-		modelService.deleteEntity(comment, getAdminUser());
-		modelService.deleteEntity(mainUser, getAdminUser());
-		modelService.deleteEntity(someoneElse, getAdminUser());
+		modelService.delete(comment, getAdminUser());
+		modelService.delete(mainUser, getAdminUser());
+		modelService.delete(someoneElse, getAdminUser());
 		modelService.commit();
 	}
 
 	@Test
 	public void testOwner() throws EndUserException {
 		User mainUser = getNewTestUser();
-		modelService.createItem(mainUser, getAdminUser());
+		modelService.create(mainUser, getAdminUser());
 		securityService.grantFullPrivileges(mainUser, mainUser, getAdminUser());
 
 		{	// Check that user has access to itself
@@ -119,14 +119,14 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 
 		// Create another user
 		User someoneElse = getNewTestUser();
-		modelService.createItem(someoneElse, getPublicUser());
+		modelService.create(someoneElse, getPublicUser());
 
 		// The other user should not be able to see the main user
 		assertFalse(securityService.canView(mainUser, someoneElse));
 		
 		// Create a comment
 		Comment comment = new Comment();
-		modelService.createItem(comment, mainUser);
+		modelService.create(comment, mainUser);
 		
 		// Check that only the main user can see the comments owner
 		assertEquals(mainUser, modelService.getOwner(comment, mainUser));
@@ -159,9 +159,9 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 
 		
 		// Clean up
-		modelService.deleteEntity(mainUser, getAdminUser());
-		modelService.deleteEntity(someoneElse, getAdminUser());
-		modelService.deleteEntity(comment, getAdminUser());
+		modelService.delete(mainUser, getAdminUser());
+		modelService.delete(someoneElse, getAdminUser());
+		modelService.delete(comment, getAdminUser());
 		modelService.commit();
 	}
 }

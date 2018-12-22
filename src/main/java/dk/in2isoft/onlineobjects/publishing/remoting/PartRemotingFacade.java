@@ -20,14 +20,14 @@ public class PartRemotingFacade extends AbstractRemotingFacade {
 		HeaderPart part = (HeaderPart) modelService.get(HeaderPart.class, id,getRequest().getSession());
 		updateProperties(part, properties);
 		part.setText(text);
-		modelService.updateItem(part, getUserSession());
+		modelService.update(part, getUserSession());
 	}
 	
 	public void updateHtmlPart(long id,String html,Map<String,String> properties) throws EndUserException {
 		HtmlPart part = modelService.get(HtmlPart.class, id,getRequest().getSession());
 		updateProperties(part, properties);
 		part.setHtml(html);
-		modelService.updateItem(part, getUserSession());
+		modelService.update(part, getUserSession());
 	}
 	
 	public void updateImagePart(long id,Long imageId,Map<String,String> properties) throws EndUserException {
@@ -39,13 +39,13 @@ public class PartRemotingFacade extends AbstractRemotingFacade {
 		UserSession priviledged = getUserSession();
 		List<Relation> relations = modelService.getRelationsFrom(part, Image.class, priviledged);
 		for (Relation relation : relations) {
-			modelService.deleteRelation(relation, priviledged);
+			modelService.delete(relation, priviledged);
 		}
 		if (imageId!=null) {
 			Image image = modelService.get(Image.class, imageId,priviledged);
 			modelService.createRelation(part, image, priviledged);
 		}
-		modelService.updateItem(part, priviledged);
+		modelService.update(part, priviledged);
 	}
 	
 	private void updateProperties(Entity entity,Map<String,String> properties) {

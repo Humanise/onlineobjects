@@ -45,9 +45,9 @@ public class QuoteConversionJob extends ServiceBackedJob {
 							Statement statement = new Statement();
 							statement.setText(part.getHtml());
 							statement.setName(StringUtils.abbreviate(part.getHtml(), 50));
-							modelService.createItem(statement, owner);
+							modelService.create(statement, owner);
 							modelService.createRelation(relation.getFrom(), statement, Relation.KIND_STRUCTURE_CONTAINS, owner);
-							modelService.deleteEntity(part, owner);
+							modelService.delete(part, owner);
 							status.log("Converted: " + part.getHtml());
 						}
 					}
