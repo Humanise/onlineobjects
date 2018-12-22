@@ -55,6 +55,9 @@ public class TestModelService extends AbstractSpringTestCase {
 		Map<String, Integer> properties = modelService.getProperties("myKey", Question.class, user);
 		assertEquals(1, properties.size());
 		
+		List<Relation> relationsFromQuestion = modelService.find().relations(user).from(question).list();
+		assertEquals(1, relationsFromQuestion.size());
+		
 		modelService.deleteEntity(question, user);
 		modelService.deleteEntity(statement, user);
 		modelService.deleteEntity(user, getAdminUser());

@@ -26,34 +26,22 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 
 	public Query<Long> createCountQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select count(location) from ");
-		return createQuery(session, hql, true);
+		build(hql);
+		Query<Long> q = session.createQuery(hql.toString(), Long.class);
+		setParams(true, q);
+		return q;
 	}
 
 	public Query<?> createItemQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select location,entity from ");
-		return createQuery(session, hql, false);
+		build(hql);
+		hql.append(" order by entity.name");
+		Query<?> q = session.createQuery(hql.toString());
+		setParams(false, q);
+		return q;
 	}
 
-	public Query createQuery(Session session, StringBuilder hql, boolean ignorePaging) {
-		hql.append(Location.class.getName()).append(" as location");
-		hql.append(",").append(cls.getName()).append(" as entity");
-		hql.append(",").append(Relation.class.getName()).append(" as rel");
-		hql.append(" where rel.to=entity and rel.from=location");
-		if (Strings.isDefined(words)) {
-			for (int i = 0; i < words.length; i++) {
-				hql.append(" and (lower(entity.name) like lower(:word" + i
-						+ ") or lower(location.name) like lower(:word" + i
-						+ "))");
-			}
-		}
-		if (northEast != null && southWest != null) {
-			hql.append(" and location.latitude>:minLatitude and location.latitude<:maxLatitude");
-			hql.append(" and location.longitude>:minLongitude and location.longitude<:maxLongitude");
-		}
-		if (!ignorePaging) {
-			hql.append(" order by entity.name");
-		}
-		Query q = session.createQuery(hql.toString());
+	private void setParams(boolean ignorePaging, Query<?> q) {
 		if (pageSize > 0 && !ignorePaging) {
 			q.setMaxResults(pageSize);
 			q.setFirstResult(pageNumber * pageSize);
@@ -70,7 +58,24 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 			q.setParameter("minLatitude", southWest.getLat(), DoubleType.INSTANCE);
 			q.setParameter("maxLatitude", northEast.getLat(), DoubleType.INSTANCE);
 		}
-		return q;
+	}
+
+	private void build(StringBuilder hql) {
+		hql.append(Location.class.getName()).append(" as location");
+		hql.append(",").append(cls.getName()).append(" as entity");
+		hql.append(",").append(Relation.class.getName()).append(" as rel");
+		hql.append(" where rel.to=entity and rel.from=location");
+		if (Strings.isDefined(words)) {
+			for (int i = 0; i < words.length; i++) {
+				hql.append(" and (lower(entity.name) like lower(:word" + i
+						+ ") or lower(location.name) like lower(:word" + i
+						+ "))");
+			}
+		}
+		if (northEast != null && southWest != null) {
+			hql.append(" and location.latitude>:minLatitude and location.latitude<:maxLatitude");
+			hql.append(" and location.longitude>:minLongitude and location.longitude<:maxLongitude");
+		}
 	}
 
 	public LocationQuery<T> withWords(String query) {

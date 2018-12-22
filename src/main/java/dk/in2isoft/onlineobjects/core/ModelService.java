@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
@@ -41,6 +39,7 @@ import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -860,11 +859,13 @@ public class ModelService implements InitializingBean {
 		Query<?> q = query.createItemQuery(getSession());
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Pair<T, U>> map = new ArrayList<Pair<T, U>>();
-		for (Iterator<?> i = q.iterate(); i.hasNext();) {
-			Object[] object = (Object[]) i.next();
-			T key = Code.cast(getSubject(object[0]));
-			U value = Code.cast(getSubject(object[1]));
-			map.add(new Pair<T,U>(key, value));
+		try (ScrollableResults scroll = q.scroll(ScrollMode.FORWARD_ONLY)) {
+			while (scroll.next()) {
+				Object[] object = scroll.get();
+				T key = Code.cast(getSubject(object[0]));
+				U value = Code.cast(getSubject(object[1]));
+				map.add(new Pair<T,U>(key, value));
+			}
 		}
 		return new PairSearchResult<T,U>(map,count.intValue());
 	}
