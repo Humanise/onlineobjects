@@ -134,12 +134,12 @@ public class TopBarComponent extends AbstractComponent {
 		if (publicUser) {
 			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_login").withAttribute("data", "login").write("Log in").endA().endLi();
 		} else {
-			InboxService inboxService = Components.getBean(InboxService.class);
+			//InboxService inboxService = Components.getBean(InboxService.class);
 			ModelService modelService = Components.getBean(ModelService.class);
 			try {
 				User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
-				int count = inboxService.getCountSilently(user);
-				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
+				//int count = inboxService.getCountSilently(user);
+				//out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
 				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
 				out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
 				out.write(user.getName()).endA().endLi();

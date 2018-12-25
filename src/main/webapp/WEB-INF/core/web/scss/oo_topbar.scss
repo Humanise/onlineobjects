@@ -6,7 +6,7 @@
 
     font-family: $default-font-family;
     overflow: hidden;
-    border-bottom: 1px solid #fafafa;
+    border-bottom: 1px solid transparent;
     height: 30px;
     font-size: 0;
     white-space: nowrap;
@@ -29,6 +29,9 @@
       text-decoration: none;
       @include transition(color .3s);
 
+      &:focus {
+        outline-offset: -4px;
+      }
 
       &:hover {
         background: #f3f3f3;
@@ -162,7 +165,6 @@
     &_link
     {
       text-decoration: none;
-
       &.is-selected {
         font-weight: 400;
         color: #333;
@@ -325,6 +327,9 @@
   .oo_topbar {
     &_item {
       padding: 0 10px;
+      &:focus {
+        outline-offset: -4px;
+      }
     }
     &_logo {
       &_text {

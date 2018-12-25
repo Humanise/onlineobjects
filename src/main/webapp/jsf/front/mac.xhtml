@@ -1,0 +1,53 @@
+<f:view contentType="text/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:oc = "http://java.sun.com/jsf/composite/components"
+  transient="true"
+>
+<f:loadBundle basename="dk.in2isoft.onlineobjects.apps.front.msg.FrontController" var="msg"/>
+
+<o:doctype/>
+<o:html>
+  <o:head>
+    <o:metatags/>
+    <title>OnlineObjects Mac Client</title>
+    <o:fonts/>
+  </o:head>
+  <o:body light="true">
+    <o:topBar/>
+    <div class="front_mac">
+      <div class="front_mac_icon"></div>
+      <h1 class="front_mac_title"><span>OnlineObjects</span> <span>Macintosh</span> <span>Client</span></h1>
+      <div class="front_mac_download">
+        <oc:aqua text="Download" href="https://www.humanise.dk/downloads/OnlineObjects.dmg"/>
+      </div>
+      <div class="front_mac_text">
+        <p>OnlineObjects was made on a Mac and we bleed six <span class="front_mac_colors"><span>c</span><span>o</span><span>l</span><span>o</span><span>r</span><span>s</span></span>. We have built a native Mac client with the goal of integrating into macOS.</p>
+        <p>The app currently has the following features...</p>
+      </div>
+
+      <hr class="front_mac_divider"/>
+      <h2 class="front_mac_heading">Knowledge</h2>
+      <div class="front_mac_text">
+        <p>A window into your knowledge: browse and modify your questions, quotes and hypothesis.</p>
+      </div>
+      <div class="front_mac_screen front_mac_screen-knowledge"></div>
+
+      <hr class="front_mac_divider"/>
+      <h2 class="front_mac_heading">Safari extension</h2>
+      <div class="front_mac_text">
+        <p>Easily save quotes from web pages. Just select the text and click the toolbar item.</p>
+      </div>
+      <div class="front_mac_screen front_mac_screen-safari"></div>
+    </div>
+    <o:footer/>
+    <o:analytics/>
+  </o:body>
+  <o:dependency src="/css/front_mac.css" from="local"/>
+</o:html>
+
+</f:view>

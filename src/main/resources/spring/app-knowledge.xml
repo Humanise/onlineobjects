@@ -59,5 +59,8 @@
 
    	<bean id="knowledgeExtractionView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeExtractionView" autowire="byType"/>
 
-   	<bean id="knowledgeIntroView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeIntroView"/>
+   	<bean id="knowledgeIntroView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeIntroView">
+      <property name="configurationService" ref="configurationService"/>
+    </bean>
+
 </beans>
