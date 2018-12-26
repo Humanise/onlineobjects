@@ -88,7 +88,6 @@ public class TitleRecognizer implements Recognizer {
 		if (Strings.isNotBlank(openGraphTitle)) titles.add(normalize(openGraphTitle));
 		if (Strings.isNotBlank(twitterTitle)) titles.add(normalize(twitterTitle));
 		if (Strings.isNotBlank(facebookTitle)) titles.add(normalize(facebookTitle));
-		System.out.println(titles);
 		return titles;
 	}
 	
