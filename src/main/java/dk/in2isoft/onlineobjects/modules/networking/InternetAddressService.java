@@ -74,14 +74,14 @@ public class InternetAddressService {
 		String url;
 		try {
 			URI uri = new URI(urlString);
+			verifyAsHttp(uri);
+			// TODO: We should keep the downloaded content
 			uri = networkService.resolveRedirects(uri);
 			uri = networkService.removeTrackingParameters(uri);
-			if (!networkService.isHttpOrHttps(uri)) {
-				throw new IllegalRequestException("The scheme of '" + uri + "' is unsupported");
-			}
+			verifyAsHttp(uri);
 			url = uri.toString();
 		} catch (URISyntaxException e) {
-			throw new IllegalRequestException("", e);
+			throw new IllegalRequestException("Invalid URL syntax", e);
 		}
 		Query<InternetAddress> query = Query.after(InternetAddress.class).as(user).withField(InternetAddress.FIELD_ADDRESS, url);
 		InternetAddress address = modelService.search(query).getFirst();
@@ -99,6 +99,12 @@ public class InternetAddressService {
 			inboxService.add(user, address);
 		}
 		return address;
+	}
+
+	private void verifyAsHttp(URI uri) throws IllegalRequestException {
+		if (!networkService.isHttpOrHttps(uri)) {
+			throw new IllegalRequestException("The scheme of '" + uri + "' is unsupported");
+		}
 	}
 	
 	// Wiring...
