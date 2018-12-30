@@ -868,6 +868,9 @@ public class SetupController extends SetupControllerBase {
 		String password = request.getString("password", "No password");
 		String fullName = request.getString("name", "No full name");
 		String email = request.getString("email", "No e-mail");
+		if (username != null) {
+			username = username.toLowerCase();
+		}
 		memberService.createMember(session, username, password, fullName, email);
 	}
 	

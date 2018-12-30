@@ -119,6 +119,9 @@ public class MemberService {
 
 
 	public User signUp(UserSession session, String username, String password, String fullName, String email) throws EndUserException {
+		if (username != null) {
+			username = username.toLowerCase();
+		}
 		
 		User user = createMember(session, username, password, fullName, email);
 		

@@ -36,6 +36,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String username = request.getString("username");
 		String password = request.getString("password");
 		String redirect = request.getString("redirect");
+		if (username != null) {
+			username = username.toLowerCase();
+		}
 		boolean success = securityService.changeUser(request.getSession(), username, password);
 		if (success) {
 			if (Strings.isNotBlank(redirect)) {
@@ -56,6 +59,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalRequestException(Error.noUsername);
 		}
+		username = username.toLowerCase();
 		if (!StringUtils.isNotBlank(password)) {
 			throw new IllegalRequestException(Error.noPassword);
 		}
@@ -82,6 +86,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String password = request.getString("password");
 		String fullName = request.getString("fullName");
 		String email = request.getString("email");
+		if (username != null) {
+			username = username.toLowerCase();
+		}
 		memberService.signUp(request.getSession(), username, password, fullName, email);
 	}
 
