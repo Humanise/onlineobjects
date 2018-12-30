@@ -370,6 +370,6 @@ public class ToolsController extends ToolsControllerBase {
 	
 	@Override
 	public boolean isAllowed(Request request) {
-		return securityService.isPublicUser(request.getSession());
+		return !securityService.isPublicUser(request.getSession());
 	}
 }

@@ -10,61 +10,53 @@
 
   <source name="tagsSource" url="../getImageTags"/>
 
-  <bar>
-    <button text="Offentligt" icon="inset/public" name="barPublic"/>
-    <button text="Hjemmeside" icon="inset/globe" name="barWebsite"/>
-    <button text="Værktøjer" icon="inset/tools" name="barTools"/>
-    <right>
-      <button text="{username}" icon="inset/user" name="barUser"/>
-      <button text="Log ud" icon="inset/cross" name="barLogOut"/>
-    </right>
-  </bar>
+  <rows>
+    <row height="content">
+      <toolbar>
+        <icon icon="common/image" text="Billeder" selected="true" name="toolImages"/>
+        <icon icon="common/person" text="Personer" name="toolPersons"/>
+        <icon icon="common/internet" text="Bogmærker" name="toolBookmarks"/>
+      </toolbar>
+    </row>
+    <row>
+      <structure>
+        <top>
+          <toolbar>
+            <icon icon="common/image" overlay="new" text="Tilføj billeder" name="newImage"/>
+            <divider/>
+            <icon icon="common/play" text="Lysbilledshow" name="slideShow"/>
+            <icon icon="common/delete" text="Slet" name="deleteSelectedImage">
+              <confirm text="Er du sikker?" ok="Ja, slet" cancel="Nej"/>
+            </icon>
+            <right>
+              <item label="Søgning">
+                <searchfield expanded-width="200" placeholder="Søg her" name="searchfield"/>
+              </item>
+            </right>
+          </toolbar>
+        </top>
+        <middle>
+          <left>
+            <overflow>
+            <selection value="all">
+              <option icon="common/image" text="Alle billeder" value="all"/>
+              <title>Nøgleord</title>
+              <options source="tagsSource" name="tagSelection"/>
+            </selection>
+            </overflow>
+          </left>
+          <center>
+            <overflow>
+              <gallery name="imageGallery" source="imagesSource"/>
+            </overflow>
+          </center>
+        </middle>
+        <bottom>
 
-  <toolbar><!-- variant="dock"-->
-    <icon icon="common/image" text="Billeder" selected="true" name="toolImages"/>
-    <icon icon="common/person" text="Personer" name="toolPersons"/>
-    <icon icon="common/internet" text="Bogmærker" name="toolBookmarks"/>
-    <icon icon="common/settings" text="Integration" name="toolIntegration"/>
-  </toolbar>
-
-  <div style="position: fixed; top: 90px; bottom: 0; left: 0; right: 0; padding: 10px;">
-    <structure>
-      <top>
-        <toolbar>
-          <icon icon="common/image" overlay="new" text="Tilføj billeder" name="newImage"/>
-          <divider/>
-          <icon icon="common/play" text="Lysbilledshow" name="slideShow"/>
-          <icon icon="common/delete" text="Slet" name="deleteSelectedImage">
-            <confirm text="Er du sikker?" ok="Ja, slet" cancel="Nej"/>
-          </icon>
-          <right>
-            <item label="Søgning">
-              <searchfield expanded-width="200" placeholder="Søg her" name="searchfield"/>
-            </item>
-          </right>
-        </toolbar>
-      </top>
-      <middle>
-        <left>
-          <overflow>
-          <selection value="all">
-            <option icon="common/image" text="Alle billeder" value="all"/>
-            <title>Nøgleord</title>
-            <options source="tagsSource" name="tagSelection"/>
-          </selection>
-          </overflow>
-        </left>
-        <center>
-          <overflow>
-            <gallery name="imageGallery" source="imagesSource"/>
-          </overflow>
-        </center>
-      </middle>
-      <bottom>
-
-      </bottom>
-    </structure>
-  </div>
+        </bottom>
+      </structure>
+    </row>
+  </rows>
 
 
   <window name="newImageWindow" title="Nyt billede" width="300" padding="10">
