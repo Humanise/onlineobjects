@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Scheduler" padding="10">
-	<controller name="controller" url="scheduler.js"/>
-	<source url="listJobs" name="listSource"/>
-	<source url="listJobLog" name="logListSource"/>
-	<structure>
-		<top>
-			<toolbar>
-				<icon icon="common/refresh" text="Opdater" name="refresh"/>
-				<icon icon="common/stop" text="Stop" name="interrupt" disabled="true"/>
-				<icon icon="common/play" text="Run" name="start" disabled="true"/>
-				<icon icon="common/pause" text="Pause" name="pause" disabled="true"/>
-				<right>
-					<item label="Active">
-						<checkbox name="active"/>
-					</item>
-					<item label="Live">
+  <controller name="controller" url="scheduler.js"/>
+  <source url="listJobs" name="listSource"/>
+  <source url="listJobLog" name="logListSource"/>
+  <structure>
+    <top>
+      <toolbar>
+        <icon icon="common/refresh" text="Opdater" name="refresh"/>
+        <icon icon="common/stop" text="Stop" name="interrupt" disabled="true"/>
+        <icon icon="common/play" text="Run" name="start" disabled="true"/>
+        <icon icon="common/pause" text="Pause" name="pause" disabled="true"/>
+        <right>
+          <item label="Active">
+            <checkbox name="active"/>
+          </item>
+          <item label="Live">
             <checkbox name="live" value="true"/>
-					</item>
-				</right>
-			</toolbar>
-		</top>
-		<middle>
+          </item>
+        </right>
+      </toolbar>
+    </top>
+    <middle>
       <left></left>
       <center>
-			<bar variant="layout">
-				<text text="Checking..." name="statusText"/>
-			</bar>
-			<split>
-				<row>
-					<overflow>
-						<list name="list" source="listSource" remember="true"/>
-					</overflow>
-				</row>
-				<row>
-					<overflow>
-						<list name="logList" source="logListSource" remember="true" selectable="false"/>
-					</overflow>
-				</row>
-			</split>
+      <bar variant="layout">
+        <text text="Checking..." name="statusText"/>
+      </bar>
+      <split>
+        <row>
+          <overflow>
+            <list name="list" source="listSource" remember="true"/>
+          </overflow>
+        </row>
+        <row>
+          <overflow>
+            <list name="logList" source="logListSource" remember="true" selectable="false"/>
+          </overflow>
+        </row>
+      </split>
       </center>
-		</middle>
-		<bottom/>
-	</structure>
+    </middle>
+    <bottom/>
+  </structure>
 </gui>

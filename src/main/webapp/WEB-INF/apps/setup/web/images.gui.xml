@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Indstillinger" padding="10">
-	<controller url="images.js"/>
-	<source name="imagesSource" url="listImages">
-		<parameter key="text" value="@search.value"/>
-		<parameter key="tag" value="@tags.value"/>
-	</source>
-	<source name="classSource" url="getImageTags"/>
+  <controller url="images.js"/>
+  <source name="imagesSource" url="listImages">
+    <parameter key="text" value="@search.value"/>
+    <parameter key="tag" value="@tags.value"/>
+  </source>
+  <source name="classSource" url="getImageTags"/>
 
-	<structure>
-		<top>
-			<toolbar>
-				<icon icon="common/refresh" text="Sync images" name="syncImages"/>
-				<right>
-					<item label="Search">
-						<searchfield name="search" expanded-width="200"/>
-					</item>
-				</right>
-			</toolbar>
-		</top>
-		<middle>
-			<left>
-				<overflow>
-					<selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
-						<option icon="common/image" text="All images"/>
-						<options name="tags" source="classSource"/>
-					</selection>
-				</overflow>
-			</left>
-			<center>
-				<overflow>
-					<gallery name="imageGallery" source="imagesSource"/>
-				</overflow>
-			</center>
-		</middle>
-		<bottom/>
-	</structure>
+  <structure>
+    <top>
+      <toolbar>
+        <icon icon="common/refresh" text="Sync images" name="syncImages"/>
+        <right>
+          <item label="Search">
+            <searchfield name="search" expanded-width="200"/>
+          </item>
+        </right>
+      </toolbar>
+    </top>
+    <middle>
+      <left>
+        <overflow>
+          <selection value="dk.in2isoft.onlineobjects.model.Entity" name="selection">
+            <option icon="common/image" text="All images"/>
+            <options name="tags" source="classSource"/>
+          </selection>
+        </overflow>
+      </left>
+      <center>
+        <overflow>
+          <gallery name="imageGallery" source="imagesSource"/>
+        </overflow>
+      </center>
+    </middle>
+    <bottom/>
+  </structure>
 </gui>
