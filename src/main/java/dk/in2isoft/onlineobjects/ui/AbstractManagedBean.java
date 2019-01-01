@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.onlineobjects.core.SecurityService;
-
 public abstract class AbstractManagedBean implements InitializingBean {
 
 	public AbstractManagedBean() {
@@ -43,13 +41,5 @@ public abstract class AbstractManagedBean implements InitializingBean {
 	
 	public boolean getIsIP() {
 		return getRequest().isIP();
-	}
-
-	public String getUserName() {
-		return getRequest().getSession().getUsername();
-	}
-	
-	public boolean isPublicUser() {
-		return SecurityService.PUBLIC_USERNAME.equals(getUserName());
 	}
 }

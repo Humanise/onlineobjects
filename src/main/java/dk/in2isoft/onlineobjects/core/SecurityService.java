@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.core;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +21,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.Item;
-import dk.in2isoft.onlineobjects.model.LogEntry;
-import dk.in2isoft.onlineobjects.model.LogLevel;
 import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;

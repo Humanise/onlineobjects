@@ -17,6 +17,7 @@
    	<bean id="accountAgreementsView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountAgreementsView" scope="request">
    		<property name="memberService" ref="memberService"/>
 	    <property name="modelService" ref="modelService"/>
+        <property name="securityService" ref="securityService"/>
    	</bean>
    	
    	<bean id="accountPasswordView" class="dk.in2isoft.onlineobjects.apps.account.views.AccountPasswordView" scope="request">
