@@ -43,6 +43,7 @@ import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
+import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -191,7 +192,7 @@ public class MemberService {
 			modelService.commit();
 			scheduleHealthCheck(user);
 			user = modelService.get(User.class, user.getId(), user);
-			surveillanceService.audit().info("New member created with username={}", username);
+			surveillanceService.logSignUp(user);
 			return user;
 		}
 	}

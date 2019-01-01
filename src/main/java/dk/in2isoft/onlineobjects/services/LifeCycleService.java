@@ -2,16 +2,13 @@ package dk.in2isoft.onlineobjects.services;
 
 import java.util.Date;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.model.LogEntry;
-import dk.in2isoft.onlineobjects.model.LogLevel;
 import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 
@@ -19,7 +16,6 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 
 	private static Logger log = LogManager.getLogger(LifeCycleService.class);
 	private ConsistencyService consistencyService;
-	private ModelService modelService;
 	private SurveillanceService surveillanceService;
 
 	private Date startTime;
@@ -38,12 +34,7 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 			} catch (EndUserException e) {
 				log.error("Failed checking consistency", e);
 			}
-			LogEntry entry = new LogEntry();
-			entry.setLevel(LogLevel.info);
-			entry.setTime(new Date());
-			entry.setType(LogType.startUp);
-			modelService.create(entry);
-			modelService.commit();
+			surveillanceService.log(LogType.startUp);
 		} else {
 			surveillanceService.audit().info("Event: {}", event.getClass().getSimpleName());
 		}
@@ -56,11 +47,7 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	public void setConsistencyService(ConsistencyService consistencyService) {
 		this.consistencyService = consistencyService;
 	}
-	
-	public void setModelService(ModelService modelService) {
-		this.modelService = modelService;
-	}
-	
+		
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}

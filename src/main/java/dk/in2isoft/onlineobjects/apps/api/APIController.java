@@ -181,29 +181,6 @@ public class APIController extends APIControllerBase {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
 		}
 	}
-
-	@Path(start={"v1.0","addImage"})
-	public void addImage(Request request) throws IOException, EndUserException {
-
-		DataImporter importer = importService.createImporter();
-		importer.setListener(new ImageImporter(modelService, imageService) {
-			@Override
-			protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {
-				String secret = parameters.get("secret");
-				if (Strings.isBlank(secret)) {
-					throw new IllegalRequestException("No secret");
-				}
-				securityService.changeUserBySecret(request.getSession(), secret);
-				return true;
-			}
-			
-			@Override
-			protected void postProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
-				
-			}
-		});
-		importer.importMultipart(this, request);
-	}
 	
 	/* ------- Knowledge ------- */
 	

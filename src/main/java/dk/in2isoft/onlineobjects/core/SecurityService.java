@@ -65,10 +65,10 @@ public class SecurityService {
 		}
 		User user = getUser(username, password);
 		if (user!=null) {
-			surveillanceService.audit().info("Changed to user={}", username);
 			Set<Ability> abilities = getAbilities(user);
 			userSession.setUser(user, abilities);
-			log(user, LogType.logIn);
+			surveillanceService.audit().info("Changed to user={}", username);
+			surveillanceService.log(user, LogType.logIn);
 			return true;
 		}
 		return false;
@@ -78,26 +78,7 @@ public class SecurityService {
 		Collection<String> properties = user.getPropertyValues(Property.KEY_ABILITY);
 		return Ability.convert(properties);
 	}
-
-	public void changeUserBySecret(UserSession userSession, String secret) throws SecurityException {
-		User user = getUserBySecret(secret);
-		if (user==null) {
-			throw new SecurityException("No user found with the secret");
-		}
-		log(user, LogType.logIn);
-		surveillanceService.audit().info("Changed (via secret) to user={}", user.getUsername());
-		userSession.setUser(user, getAbilities(user));
-	}
-	
-	private void log(User user, LogType type) {
-		LogEntry entry = new LogEntry();
-		entry.setSubject(user.getId());
-		entry.setTime(new Date());
-		entry.setType(type);
-		entry.setLevel(LogLevel.info);
-		modelService.create(entry);
-	}
-	
+		
 	public User getUser(String username, String password) {
 		User user = modelService.getUser(username);
 		if (user==null) {
@@ -158,6 +139,7 @@ public class SecurityService {
 		if (user==null) {
 			return false;
 		} else {
+			surveillanceService.log(userSession, LogType.logOut);
 			userSession.setUser(user, new HashSet<>());
 			return true;
 		}

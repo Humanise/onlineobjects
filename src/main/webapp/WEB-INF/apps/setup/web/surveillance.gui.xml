@@ -5,6 +5,7 @@
 
   <source name="listSource" url="getSurveillanceList">
     <parameter key="kind" value="@selection.value"/>
+    <parameter key="page" value="@list.window.page"/>
   </source>
   <structure>
     <top>
@@ -21,6 +22,7 @@
           <selection value="longestRunningRequests" name="selection">
             <option icon="common/time" text="Longest requests" value="longestRunningRequests"/>
             <option icon="common/warning" text="Latest exceptions" value="latestExceptions"/>
+            <option icon="view/list" text="Runtime log" value="liveLog"/>
             <option icon="view/list" text="Log" value="log"/>
           </selection>
         </overflow>

@@ -1,17 +1,25 @@
 package dk.in2isoft.onlineobjects.modules.surveillance;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.LogEntry;
+import dk.in2isoft.onlineobjects.model.LogLevel;
+import dk.in2isoft.onlineobjects.model.LogType;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class SurveillanceService {
@@ -21,6 +29,7 @@ public class SurveillanceService {
 	private ConcurrentLinkedQueue<LiveLogEntry> logEntries;
 	private RequestList requestsNotFound;
 	private final Logger auditLog = LogManager.getLogger("audit");
+	private ModelService modelService;
 
 	public SurveillanceService() {
 		longestRunningRequests = new RequestList();
@@ -39,6 +48,30 @@ public class SurveillanceService {
 		}
 	}
 	
+	public void log(Privileged user, LogType type) {
+		LogEntry entry = new LogEntry();
+		entry.setSubject(user.getIdentity());
+		entry.setTime(new Date());
+		entry.setType(type);
+		entry.setLevel(LogLevel.info);
+		modelService.create(entry);
+	}
+
+	public void log(LogType startup) {
+		Session session = modelService.newSession();
+		LogEntry entry = new LogEntry();
+		entry.setLevel(LogLevel.info);
+		entry.setTime(new Date());
+		entry.setType(LogType.startUp);
+		modelService.create(entry, session);
+		modelService.commit(session);
+	}
+
+	public void logSignUp(User user) {
+		audit().info("New member created with username={}", user.getUsername());
+		log(user, LogType.signUp);
+	}
+
 	public void survey(Request request) {
 		if (!request.getRequest().getRequestURI().startsWith("/service/image")) {
 			this.longestRunningRequests.register(request);
@@ -90,4 +123,12 @@ public class SurveillanceService {
 	public Logger audit() {
 		return auditLog;
 	}
+	
+	// Wiring...
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
+	}
+
+
 }
