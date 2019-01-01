@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,14 +27,11 @@ import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
-import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
-import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.knowledge.HypothesisApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
@@ -180,29 +176,6 @@ public class APIController extends APIControllerBase {
 		if (Strings.isNotBlank(quote)) {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
 		}
-	}
-
-	@Path(start={"v1.0","addImage"})
-	public void addImage(Request request) throws IOException, EndUserException {
-
-		DataImporter importer = importService.createImporter();
-		importer.setListener(new ImageImporter(modelService, imageService) {
-			@Override
-			protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {
-				String secret = parameters.get("secret");
-				if (Strings.isBlank(secret)) {
-					throw new IllegalRequestException("No secret");
-				}
-				securityService.changeUserBySecret(request.getSession(), secret);
-				return true;
-			}
-			
-			@Override
-			protected void postProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
-				
-			}
-		});
-		importer.importMultipart(this, request);
 	}
 	
 	/* ------- Knowledge ------- */

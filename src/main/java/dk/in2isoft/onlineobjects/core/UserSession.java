@@ -24,8 +24,6 @@ public class UserSession implements Privileged {
 	
 	private Set<Ability> abilities;
 
-	private String username;
-
 	public UserSession(User user) {
 		this.id = Strings.generateRandomString(50);
 		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
@@ -55,14 +53,8 @@ public class UserSession implements Privileged {
 	}
 
 	private void changeUser(User user, Set<Ability> abilities) {
-		this.username = user.getUsername();
 		this.identity = user.getIdentity();
 		this.abilities = abilities;
-	}
-
-	@Deprecated
-	public String getUsername() {
-		return username;
 	}
 	
 	public boolean has(Ability ability) {
@@ -87,7 +79,7 @@ public class UserSession implements Privileged {
 
 	@Override
 	public String toString() {
-		return "User session for user:" + username;
+		return "User session for user: " + identity;
 	}
 	
 	

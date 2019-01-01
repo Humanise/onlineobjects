@@ -258,6 +258,10 @@ public class ModelService implements InitializingBean {
 		}
 		return session;
 	}
+	
+	public Session newSession() {
+		return sessionFactory.openSession();
+	}
 
 	protected <T> Query<T> createQuery(String hql, Class<T> type) {
 		return getSession().createQuery(hql, type);
@@ -277,7 +281,10 @@ public class ModelService implements InitializingBean {
 	}
 
 	public void commit() {
-		Session session = getSession();
+		commit(getSession());
+	}
+
+	public void commit(Session session) {
 		Transaction tx = session.getTransaction();
 		if (tx.isActive()) {
 			try {
@@ -325,13 +332,21 @@ public class ModelService implements InitializingBean {
 	}
 
 	public void create(LogEntry entry) {
-		getSession().save(entry);
+		create(entry, getSession());
+	}
+
+	public void create(LogEntry entry, Session session) {
+		session.save(entry);
 	}
 
 	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 	}
 	
+	public void create(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
+		createItem(item, privileged, session);
+	}
+
 	public boolean isDirty() {
 		return getSession().isDirty();
 	}

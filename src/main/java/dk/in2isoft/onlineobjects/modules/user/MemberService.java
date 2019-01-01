@@ -194,7 +194,7 @@ public class MemberService {
 			modelService.commit();
 			scheduleHealthCheck(user);
 			user = modelService.get(User.class, user.getId(), user);
-			surveillanceService.audit().info("New member created with username={}", username);
+			surveillanceService.logSignUp(user);
 			return user;
 		}
 	}

@@ -46,6 +46,7 @@
 		class="dk.in2isoft.onlineobjects.apps.words.views.WordsLayoutView"
 		scope="request">
 		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper"/>
+        <property name="securityService" ref="securityService"/>
 	</bean>
 
 	<bean id="wordsWordView"

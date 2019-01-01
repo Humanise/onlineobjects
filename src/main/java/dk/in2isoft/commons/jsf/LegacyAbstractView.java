@@ -7,7 +7,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class LegacyAbstractView {
@@ -44,12 +43,5 @@ public class LegacyAbstractView {
 	public boolean getIsIP() {
 		return getRequest().isIP();
 	}
-
-	public String getUserName() {
-		return getRequest().getSession().getUsername();
-	}
 	
-	public boolean isPublicUser() {
-		return SecurityService.PUBLIC_USERNAME.equals(getUserName());
-	}
 }

@@ -61,19 +61,12 @@ public class ToolsController extends ToolsControllerBase {
 			request.getResponse().sendRedirect("images/");
 		} else if (request.testLocalPathFull("images")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","images.gui.xml"), huiService);
-			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathFull("persons")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","persons.gui.xml"), huiService);
-			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else if (request.testLocalPathFull("bookmarks")) {
 			FileBasedInterface ui = new FileBasedInterface(getFile("web","bookmarks.gui.xml"), huiService);
-			ui.setParameter("username", getUser(request).getUsername());
-			ui.render(request.getRequest(), request.getResponse());
-		} else if (request.testLocalPathFull("integration")) {
-			FileBasedInterface ui = new FileBasedInterface(getFile("web","integration.gui.xml"), huiService);
-			ui.setParameter("username", getUser(request).getUsername());
 			ui.render(request.getRequest(), request.getResponse());
 		} else {
 			super.unknownRequest(request);
@@ -370,6 +363,6 @@ public class ToolsController extends ToolsControllerBase {
 	
 	@Override
 	public boolean isAllowed(Request request) {
-		return securityService.isPublicUser(request.getSession());
+		return !securityService.isPublicUser(request.getSession());
 	}
 }
