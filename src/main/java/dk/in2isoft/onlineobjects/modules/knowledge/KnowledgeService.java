@@ -283,7 +283,7 @@ public class KnowledgeService {
 
 	public InternetAddressApiPerspective getAddressPerspective(Long id, Privileged session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
-		User user = modelService.getRequired(User.class, id, session);
+		User user = modelService.getRequired(User.class, session.getIdentity(), session);
 		return getAddressPerspective(address, user);
 	}
 

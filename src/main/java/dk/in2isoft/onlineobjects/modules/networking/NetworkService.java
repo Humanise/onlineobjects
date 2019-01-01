@@ -132,11 +132,6 @@ public class NetworkService {
 		return uri;
 	}
 
-	@Deprecated
-	public NetworkResponse get(URL url) throws URISyntaxException, IOException {
-		return get(url.toURI());
-	}
-
 	public NetworkResponse get(URI uri) throws IOException {
 		NetworkResponse response = new NetworkResponse();
 		InputStream input = null;
