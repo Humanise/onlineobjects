@@ -260,7 +260,9 @@ public class ModelService implements InitializingBean {
 	}
 	
 	public Session newSession() {
-		return sessionFactory.openSession();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		return session;
 	}
 
 	protected <T> Query<T> createQuery(String hql, Class<T> type) {
@@ -296,6 +298,8 @@ public class ModelService implements InitializingBean {
 				tx.rollback();
 			}
 			log.debug("Commit transaction!");
+		} else {
+			log.error("Unable to commit inactive transaction");
 		}
 	}
 	
