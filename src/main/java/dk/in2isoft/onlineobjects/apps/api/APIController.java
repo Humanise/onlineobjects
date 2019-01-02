@@ -32,6 +32,7 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.knowledge.AddressRequest;
 import dk.in2isoft.onlineobjects.modules.knowledge.HypothesisApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
@@ -172,7 +173,7 @@ public class APIController extends APIControllerBase {
 		String url = request.getString("url", "An URL parameters must be provided");
 		String quote = request.getString("quote");
 
-		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
+		InternetAddress internetAddress = internetAddressService.create(url, null, user);
 		if (Strings.isNotBlank(quote)) {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
 		}
@@ -365,10 +366,15 @@ public class APIController extends APIControllerBase {
 	public InternetAddressApiPerspective addInternetAddress(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		String url = request.getString("url", "An URL parameters must be provided");
-		String quote = request.getString("quote");
-		Long questionId = request.getLong("questionId", null);
 
-		InternetAddress internetAddress = knowledgeService.createInternetAddress(url,  quote, questionId, user);
+		AddressRequest addressRequest = new AddressRequest();
+		addressRequest.setUrl(url);
+		addressRequest.setUser(user);
+		addressRequest.setQuestionId(request.getLong("questionId", null));
+		addressRequest.setTitle(request.getString("title"));
+		addressRequest.setQuote(request.getString("quote"));
+		
+		InternetAddress internetAddress = knowledgeService.createInternetAddress(addressRequest);
 		return knowledgeService.getAddressPerspective(internetAddress, user);
 	}
 

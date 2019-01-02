@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.networking;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -21,11 +22,10 @@ import dk.in2isoft.onlineobjects.services.StorageService;
 
 public class InternetAddressService {
 	
-	StorageService storageService;
-	NetworkService networkService;
-	ModelService modelService;
-	HTMLService htmlService;
-	InboxService inboxService;
+	private StorageService storageService;
+	private NetworkService networkService;
+	private ModelService modelService;
+	private InboxService inboxService;
 
 	public HTMLDocument getHTMLDocument(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
 		File original = getContent(address, privileged);
@@ -65,39 +65,96 @@ public class InternetAddressService {
 		
 		return original;
 	}
-	
-	public InternetAddress importAddress(String urlString, User user) throws ModelException, SecurityException, IllegalRequestException {
-		if (Strings.isBlank(urlString)) {
+
+	public InternetAddress create(String url, String title, User user) throws IllegalRequestException, ModelException, SecurityException {
+		if (Strings.isBlank(url)) {
 			throw new IllegalRequestException("The url is empty");
 		}
-		urlString = urlString.trim();
-		String url;
+		URI uri = asURI(url);
+
+		// First check if it exists
+		InternetAddress address = findExisting(user, url);
+		if (address != null) {
+			return address;
+		}
+
+		// Download and redirect
+		String resolvedUrl;
+		NetworkResponse response = null;
 		try {
-			URI uri = new URI(urlString);
-			verifyAsHttp(uri);
-			// TODO: We should keep the downloaded content
-			uri = networkService.resolveRedirects(uri);
+			response = networkService.get(uri);
+			uri = response.getUri();
 			uri = networkService.removeTrackingParameters(uri);
 			verifyAsHttp(uri);
-			url = uri.toString();
+			resolvedUrl = uri.toString();
+			
+			// If the URL has changed -> check again
+			if (!url.equals(resolvedUrl)) {
+				address = findExisting(user, resolvedUrl);
+				if (address != null) {
+					return address;
+				}
+			}
+		} catch (IOException e) {
+			resolvedUrl = uri.toString();
+		}
+		address = new InternetAddress();
+		address.setAddress(resolvedUrl);
+		
+		if (Strings.isNotBlank(title)) {
+			address.setName(title.trim());
+		} else if (response!=null) {
+			address.setName(getTitle(response, resolvedUrl));
+		}
+		if (response!=null && response.getEncoding() != null) {
+			address.overrideFirstProperty(Property.KEY_INTERNETADDRESS_ENCODING, response.getEncoding());
+		}
+		modelService.create(address, user);
+
+		inboxService.add(user, address);
+		if (response != null) {
+			changeOriginal(address,response.getFile());
+		}
+		return address;
+	}
+
+	private String getTitle(NetworkResponse response, String resolvedUrl) {
+		if (response != null) {
+			// TODO: Are we sure that a response has a file?
+			String html = Files.readString(response.getFile(), response.getEncoding());
+			if (Strings.isNotBlank(html)) {
+				// TODO: Try to cache the parsed XHTML
+				// TODO: Keep track of state of InternetAddress (downloaded, failed etc)
+				HTMLDocument doc = new HTMLDocument(html);
+				String title = doc.getTitle();
+				if (Strings.isNotBlank(title)) {
+					return title.trim();
+				}
+			}
+		}
+		return Strings.simplifyURL(resolvedUrl);
+	}
+
+	private boolean changeOriginal(InternetAddress address, File temp) {
+		File folder = storageService.getItemFolder(address);
+		File original = new File(folder, "original");
+		return Files.copy(temp, original);
+	}
+
+	private URI asURI(String url) throws IllegalRequestException {
+		URI uri;
+		try {
+			uri = new URI(url);
 		} catch (URISyntaxException e) {
 			throw new IllegalRequestException("Invalid URL syntax", e);
 		}
+		verifyAsHttp(uri);
+		return uri;
+	}
+	
+	private InternetAddress findExisting(User user, String url) {
 		Query<InternetAddress> query = Query.after(InternetAddress.class).as(user).withField(InternetAddress.FIELD_ADDRESS, url);
 		InternetAddress address = modelService.search(query).getFirst();
-		if (address == null) {
-			address = new InternetAddress();
-			address.setAddress(url);
-			HTMLDocument doc = htmlService.getDocumentSilently(url);
-			if (doc != null) {
-				address.setName(doc.getTitle());
-			} else {
-				address.setName(Strings.simplifyURL(url));
-			}
-			modelService.create(address, user);
-
-			inboxService.add(user, address);
-		}
 		return address;
 	}
 
@@ -125,7 +182,4 @@ public class InternetAddressService {
 		this.inboxService = inboxService;
 	}
 	
-	public void setHtmlService(HTMLService htmlService) {
-		this.htmlService = htmlService;
-	}
 }

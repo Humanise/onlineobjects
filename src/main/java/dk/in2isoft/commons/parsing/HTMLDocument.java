@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import nu.xom.Attribute;
@@ -24,7 +25,6 @@ public class HTMLDocument extends XMLDocument {
 	//private static Logger log = LogManager.getLogger(HTMLDocument.class);
 
 	private String title;
-    private String contentType;
     private String originalUrl;
 	
 	public HTMLDocument(String raw) {
@@ -33,55 +33,21 @@ public class HTMLDocument extends XMLDocument {
 	
 	public String getTitle() {
 		if (this.title==null) {
-			Document doc = getDOMDocument();
+			nu.xom.Document doc = getXOMDocument();
 			if (doc!=null) {
-				NodeList titles = doc.getElementsByTagName("title");
-				if (titles.getLength()>0) {
-					Node titleNode = titles.item(0);
-					Node text = titleNode.getFirstChild();
-					if (text!=null) {
-						this.title = text.getNodeValue().trim();
+				List<Element> titles = DOM.findElements(doc, node -> DOM.isAny(node, "title") );
+				for (Element element : titles) {
+					String text = DOM.getText(element);
+					if (Strings.isNotBlank(text)) {
+						this.title = text;
+						break;
 					}
 				}
 			}
 		}
 		return this.title;
 	}
-    
-    public String getMeta(String key) {
-        String value = null;
-        Document doc = getDOMDocument();
-		if (doc!=null) {
-	        NodeList metas = doc.getElementsByTagName("meta");
-	        for (int i=0;i<metas.getLength();i++) {
-	            Node meta = metas.item(i);
-	            if (getAttributeValue(meta,"name").equalsIgnoreCase(key)) {
-	                value=getAttributeValue(meta,"content");
-	            }
-	            else if (getAttributeValue(meta,"http-equiv").equalsIgnoreCase(key)) {
-	                value=getAttributeValue(meta,"content");
-	            }
-	        }
-		}
-        return value;
-    }
-	
-	public String getContentType() {
-		if (this.contentType==null) {
-			Document doc = getDOMDocument();
-			if (doc!=null) {
-				NodeList metas = doc.getElementsByTagName("meta");
-				for (int i=0;i<metas.getLength();i++) {
-					Node meta = metas.item(i);
-					if (getAttributeValue(meta,"http-equiv").equalsIgnoreCase("content-type")) {
-						contentType=getAttributeValue(meta,"content");
-					}
-				}
-			}
-		}
-		return this.contentType;
-	}
-        
+    	        
     public String getText() {
         nu.xom.Document doc = getXOMDocument();
         return new DocumentToText().getText(doc);
@@ -152,16 +118,6 @@ public class HTMLDocument extends XMLDocument {
 	    return refs;
 	}
 	
-	private String getAttributeValue(Node node, String name) {
-		String out="";
-    	NamedNodeMap atts = node.getAttributes();
-    	Node att = atts.getNamedItem(name);
-    	if (att!=null) {
-    		out=att.getNodeValue();
-    	}
-		return out;
-	}
-
 	public static HTMLDocument fromContent(String content) {
 		
 		return null;

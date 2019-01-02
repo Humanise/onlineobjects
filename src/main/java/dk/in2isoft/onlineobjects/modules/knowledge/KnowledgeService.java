@@ -65,11 +65,16 @@ public class KnowledgeService {
 	}
 
 	public InternetAddress createInternetAddress(String url, User user) throws ModelException, SecurityException, IllegalRequestException {
-		return internetAddressService.importAddress(url, user);
+		return internetAddressService.create(url, null, user);
 	}
 
-	public InternetAddress createInternetAddress(String url, String quote, Long questionId, User user) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
-		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
+	public InternetAddress createInternetAddress(AddressRequest request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		String url = request.getUrl();
+		User user = request.getUser();
+		Long questionId = request.getQuestionId();
+		String title = request.getTitle();
+		String quote = request.getQuote();
+		InternetAddress internetAddress = internetAddressService.create(url, title, user);
 
 		if (Strings.isNotBlank(quote)) {
 			Statement statement = addStatementToInternetAddress(quote, internetAddress, user);

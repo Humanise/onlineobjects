@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -133,18 +134,21 @@ public class NetworkService {
 	}
 
 	public NetworkResponse get(URI uri) throws IOException {
+		return get(uri, 5);
+	}
+
+	private NetworkResponse get(URI uri, int redirects) throws IOException {
 		NetworkResponse response = new NetworkResponse();
 		InputStream input = null;
 		InputStreamReader reader = null;
 		HttpGet method = null;
 		OutputStream output = null;
+		CloseableHttpClient client = null;
 		try {
-			File file = File.createTempFile("networkservice", "tmp");
-			file.deleteOnExit();
 			String encoding = null;
 			String contentType = null;
 			if (isHttpOrHttps(uri)) {
-				CloseableHttpClient client = HttpClients.createDefault();
+				client = HttpClients.createDefault();
 				method = new HttpGet(uri);
 				if (uri.getHost().endsWith("sundhed.dk")) {
 					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");					
@@ -152,6 +156,18 @@ public class NetworkService {
 					method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
 				}
 				CloseableHttpResponse res = client.execute(method);
+				if (redirects > 0) {
+					Header locationHeader = res.getFirstHeader("location");
+					if (locationHeader!=null) {
+						try {
+							URI red = new URI(locationHeader.getValue());
+							return get(red, redirects - 1);
+						} catch (URISyntaxException e) {
+							
+						}
+						
+					}
+				}
 				int code = res.getStatusLine().getStatusCode();
 				if (code == 200) {
 					org.apache.http.Header header = res.getFirstHeader("Content-Type");
@@ -170,12 +186,16 @@ public class NetworkService {
 				input = uri.toURL().openStream();
 				response.setState(State.SUCCESS);
 			}
+
+			File file = File.createTempFile("networkservice", "tmp");
+			file.deleteOnExit();
 			output = new FileOutputStream(file);
-			reader = new InputStreamReader(input,encoding==null ? "UTF-8" : encoding);
+			reader = new InputStreamReader(input,encoding==null ? Strings.UTF8 : encoding);
 			IOUtils.copy(input, output);
 			response.setMimeType(contentType);
 			response.setEncoding(encoding);
 			response.setFile(file);
+			response.setUri(uri);
 			return response;
 		} catch (IOException e) {
 			throw e;
@@ -185,6 +205,7 @@ public class NetworkService {
 			if (method!=null) {
 				method.releaseConnection();
 			}
+			if (client != null) client.close();
 		}		
 	}
 
