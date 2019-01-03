@@ -458,6 +458,7 @@ public class MemberService {
 		surveillanceService.audit().info("Request to send email confirmation to user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
 		if (email==null) {
+			surveillanceService.audit().warn("Tried sending email confirmation to user {} with no primary e-mail by privileged={}", user.getUsername(), privileged.getIdentity());
 			throw new IllegalRequestException("Tried sending email confirmation to user ("+user.getUsername()+") with no primary e-mail");
 		}
 		String name = getFullName(user, privileged);

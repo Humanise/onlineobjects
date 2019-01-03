@@ -60,6 +60,7 @@
         <property name="testMode" value="${testMode}"/>
         <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
         <property name="disableCache" value="${cache.disabled}"></property>
+        <property name="monitoringMails" value="${monitoring.mails}"/>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">

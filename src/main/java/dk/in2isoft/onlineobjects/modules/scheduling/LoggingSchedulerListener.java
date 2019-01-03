@@ -140,8 +140,12 @@ public class LoggingSchedulerListener implements SchedulerListener, JobListener,
 	}
 
 	public void triggerComplete(Trigger trigger, JobExecutionContext context, CompletedExecutionInstruction triggerInstructionCode) {
-		// TODO Auto-generated method stub
-		
+		log("Trigger complete",trigger.getKey());
+	}
+
+	@Override
+	public void schedulerStarting() {
+		log("Scheduler starting");
 	}
 
 }

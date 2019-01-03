@@ -41,6 +41,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean simulateSlowRequest;
 	private boolean testMode;
 	private String appleAppSiteAssociation;
+	private String monitoringMails;
 	
 	private File tempDir;
 
@@ -313,5 +314,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setAppleAppSiteAssociation(String appleAppSiteAssociation) {
 		this.appleAppSiteAssociation = appleAppSiteAssociation;
+	}
+
+	public String getMonitoringMails() {
+		return monitoringMails;
+	}
+
+	public void setMonitoringMails(String monitoringMails) {
+		this.monitoringMails = monitoringMails;
 	}
 }

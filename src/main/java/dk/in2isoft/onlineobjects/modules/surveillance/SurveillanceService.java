@@ -1,25 +1,34 @@
 package dk.in2isoft.onlineobjects.modules.surveillance;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.Session;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.LogLevel;
 import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import dk.in2isoft.onlineobjects.services.EmailService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class SurveillanceService {
@@ -30,12 +39,73 @@ public class SurveillanceService {
 	private RequestList requestsNotFound;
 	private final Logger auditLog = LogManager.getLogger("audit");
 	private ModelService modelService;
+	private EmailService emailService;
+	private ConfigurationService configurationService;
+	private SecurityService securityService;
 
 	public SurveillanceService() {
 		longestRunningRequests = new RequestList();
 		requestsNotFound = new RequestList();
 		exceptions = new ConcurrentLinkedQueue<String>();
 		logEntries = new ConcurrentLinkedQueue<LiveLogEntry>();
+	}
+	
+	public void sendReport() throws EndUserException {
+		String body = getReportBody();
+		sendMailToMonitors("OnlineObjects report", body);
+	}
+
+	public void sendReportInTransation() throws EndUserException {
+		try {
+			modelService.startThread();
+			sendReport();
+		} finally {
+			modelService.commitThread();
+		}
+	}
+
+	private void sendMailToMonitors(String subject, String body) throws EndUserException {
+		String[] mails = getMontorMails();
+		for (String mail : mails) {
+			emailService.sendMessage(subject, body, mail);				
+		}
+	}
+
+	private String getReportBody() throws ModelException {
+		StringBuilder body = new StringBuilder();
+		LogQuery query = new LogQuery().withSize(100);
+		List<LogEntry> list = modelService.list(query);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
+		for (LogEntry entry : list) {
+			body.append(format.format(entry.getTime()));
+			body.append(" | ");
+			body.append(StringUtils.rightPad(entry.getLevel().toString(), 8));
+			body.append(" | ");
+			String username = "-";
+			if (entry.getSubject() != null) {
+				@Nullable
+				User user = modelService.get(User.class, entry.getSubject(), securityService.getAdminPrivileged());
+				if (user!=null) {
+					username = user.getUsername();
+				} else {
+					username = "?: " + entry.getSubject();
+				}
+			}
+			body.append(StringUtils.rightPad(username, 20));
+			body.append(" | ");
+			body.append(entry.getType());
+			body.append("\n");
+		}
+
+		return body.toString();
+	}
+
+	private String[] getMontorMails() {
+		String string = configurationService.getMonitoringMails();
+		if (Strings.isNotBlank(string)) {
+			return string.split("[;, ]+");
+		}
+		return new String[]{};
 	}
 	
 	public void logInfo(String title,String details) {
@@ -130,5 +200,15 @@ public class SurveillanceService {
 		this.modelService = modelService;
 	}
 
-
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
+	
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

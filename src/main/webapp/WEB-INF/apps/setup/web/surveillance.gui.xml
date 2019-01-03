@@ -14,6 +14,7 @@
         <item label="Live">
           <checkbox name="live"/>
         </item>
+        <icon icon="common/email" text="Send report" name="sendReport"/>
       </toolbar>
     </top>
     <middle>

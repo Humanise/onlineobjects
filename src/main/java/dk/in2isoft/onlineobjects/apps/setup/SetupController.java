@@ -637,6 +637,11 @@ public class SetupController extends SetupControllerBase {
 			request.sendObject(data);
 		}
 	}
+
+	@Path
+	public void sendSurveillanceReport(Request request) throws EndUserException {
+		surveillanceService.sendReport();
+	}
 	
 	@Path
 	public void changeAdminPassword(Request request) throws EndUserException {
