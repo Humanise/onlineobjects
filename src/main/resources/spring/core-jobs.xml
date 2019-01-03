@@ -50,6 +50,7 @@
 		<property name="group" value="core"/>
 	</bean>
 
+<!-- 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordnetSourceCleanupJob"/>
 		<property name="name" value="wordnet-source-cleanup"/>
@@ -61,7 +62,8 @@
 		<property name="name" value="names-source-cleanup"/>
 		<property name="group" value="core"/>
 	</bean>
-	
+-->
+
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.user.UserHealthCheckJob"/>
 		<property name="name" value="user-health-check"/>
@@ -78,7 +80,7 @@
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.surveillance.SendReportJob"/>
 		<property name="name" value="sendreport"/>
 		<property name="group" value="monitoring"/>
-		<property name="repeatMinutes" value="1440"/><!-- 60*24 -->
+		<property name="repeatMinutes" value="360"/><!-- 60 * 6 -->
 	</bean>
 
 </beans>

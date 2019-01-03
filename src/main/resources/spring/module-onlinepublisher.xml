@@ -7,12 +7,13 @@
     ">
 
 	<bean class="dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherService" autowire="byType"/>
-
+<!-- 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherJob"/>
 		<property name="name" value="onlinepublisher-heartbeat"/>
 		<property name="group" value="core"/>
 		<property name="repeatMinutes" value="10"/>
 	</bean>
+ -->
 	
 </beans>
