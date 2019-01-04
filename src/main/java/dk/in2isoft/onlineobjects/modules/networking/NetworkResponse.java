@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.networking;
 
 import java.io.File;
+import java.net.URI;
 
 public class NetworkResponse {
 
@@ -10,6 +11,7 @@ public class NetworkResponse {
 	private String encoding;
 	private File file;
 	private State state;
+	private URI uri;
 	
 	public String getMimeType() {
 		return mimeType;
@@ -49,5 +51,13 @@ public class NetworkResponse {
 	
 	public void cleanUp() {
 		file.delete();
+	}
+
+	public URI getUri() {
+		return uri;
+	}
+
+	public void setUri(URI uri) {
+		this.uri = uri;
 	}
 }

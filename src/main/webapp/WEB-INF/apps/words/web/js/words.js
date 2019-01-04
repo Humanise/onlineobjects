@@ -52,24 +52,24 @@ hui.ui.listen({
     var values = form.getValues();
     var url = values.url;
     if (hui.isBlank(url)) {
-      hui.ui.showMessage({text:'The address must be filled in',duration:2000});
+      hui.ui.msg.fail({text:'The address must be filled in'});
       form.focus();
       return;
     }
     this._importWindow.hide();
 
-    hui.ui.showMessage({text:'Fetching data...',busy:true});
+    hui.ui.msg({text:'Fetching data...',busy:true});
     hui.ui.request({
       url : '/startImport',
       parameters : {url:url},
       $object : function(id) {
-        hui.ui.showMessage({text:'Complete, redirecting...'});
+        hui.ui.msg({text:'Complete, redirecting...'});
         hui.defer(function() {
           document.location = '/en/import/'+id+'/';
         })
       },
       $failure : function() {
-        hui.ui.showMessage({text:'The import failed',duration:2000});
+        hui.ui.msg.fail({text:'The import failed'});
       }
     })
   },

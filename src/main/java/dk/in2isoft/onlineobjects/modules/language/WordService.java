@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.flexible.standard.QueryParserUtil;
 import org.eclipse.jdt.annotation.NonNull;
-import org.hibernate.SQLQuery;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.LongType;
 
 import com.google.common.collect.Lists;
 
@@ -22,7 +23,6 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -249,7 +249,7 @@ public class WordService {
 		return impressions;
 	}
 	
-	public Word createWord(String languageCode,String category,String text, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
+	public Word createWord(String languageCode,String category,String text, User user) throws ModelException, IllegalRequestException, SecurityException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -275,15 +275,15 @@ public class WordService {
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.createItem(word, session);
-			securityService.grantPublicView(word, true, session);
-			Relation languageRelation = modelService.createRelation(language, word, session);
-			securityService.grantPublicView(languageRelation, true, session);
+			modelService.create(word, user);
+			securityService.grantPublicView(word, true, user);
+			Relation languageRelation = modelService.createRelation(language, word, user);
+			securityService.grantPublicView(languageRelation, true, user);
 			if (lexicalCategory!=null) {
-				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, session);
-				securityService.grantPublicView(categoryRelation, true, session);
+				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, user);
+				securityService.grantPublicView(categoryRelation, true, user);
 			}
-			ensureOriginator(word, session.getUser());
+			ensureOriginator(word, user);
 			return word;
 		} else {
 			return list.iterator().next();
@@ -372,7 +372,7 @@ public class WordService {
 			log.debug("No matches for " + modification.text);
 			word = new Word();
 			word.setText(modification.text);
-			modelService.createItem(word, privileged);
+			modelService.create(word, privileged);
 		}
 		updateWord(word,modification,source,privileged);
 	}
@@ -399,8 +399,8 @@ public class WordService {
 				}
 
 				@Override
-				public void setParameters(SQLQuery sql) {
-					sql.setLong("id", address.getId());
+				public void setParameters(NativeQuery<?> sql) {
+					sql.setParameter("id", address.getId(), LongType.INSTANCE);
 				}
 			};
 			List<Long> num = modelService.list(q);
@@ -411,7 +411,7 @@ public class WordService {
 		InternetAddress address = new InternetAddress();
 		address.setAddress(src);
 		address.setName(Strings.simplifyURL(src));
-		modelService.createItem(address, privileged);
+		modelService.create(address, privileged);
 		securityService.grantPublicView(address, true, privileged);
 		return address;
 	}
@@ -435,20 +435,20 @@ public class WordService {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_SEMANTICS_GLOSSARY);
 			word.addProperty(Property.KEY_SEMANTICS_GLOSSARY, modification.glossary);
-			modelService.updateItem(word, privileged);
+			modelService.update(word, privileged);
 		}
 		if (Strings.isNotBlank(modification.sourceId)) {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_DATA_SOURCE);
 			word.addProperty(Property.KEY_DATA_SOURCE, modification.sourceId);
-			modelService.updateItem(word, privileged);
+			modelService.update(word, privileged);
 		}
 		updateSource(word, source, privileged);
 		if (modification.clearOriginators) {
 			List<Relation> originators = modelService.find().relations(privileged).from(word).to(InternetAddress.class).withKind(Relation.KIND_COMMON_ORIGINATOR).list();
 			log.info("Word->InternetAddress originator count: " + originators.size());
 			for (Relation relation : originators) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			}
 		}
 		//modelService.getChildren(word, Relation.KIND_COMMON_ORIGINATOR, InternetAddress.class);
@@ -463,7 +463,7 @@ public class WordService {
 				create = true;
 			}
 			else if (existing.getTo().getId()!=source.getId()) {
-				modelService.deleteRelation(existing, privileged);
+				modelService.delete(existing, privileged);
 				create = true;
 			}
 
@@ -479,7 +479,7 @@ public class WordService {
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(language)) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			} else {
 				found = true;
 			}
@@ -495,7 +495,7 @@ public class WordService {
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(category)) {
-				modelService.deleteRelation(relation, privileged);
+				modelService.delete(relation, privileged);
 			} else {
 				found = true;
 			}

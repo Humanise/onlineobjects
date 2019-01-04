@@ -1,0 +1,75 @@
+.oo_aqua {
+  display: inline-block;
+  position: relative; }
+  .oo_aqua:focus {
+    outline-offset: 4px; }
+  .oo_aqua:before {
+    content: '';
+    box-shadow: 0 15px 30px 10px black;
+    transition: box-shadow .15s, opacity .15s;
+    background: #000;
+    opacity: .08;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    bottom: 10px;
+    border-radius: 30px;
+    z-index: 0; }
+  .oo_aqua_button {
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    height: 60px;
+    border-radius: 30px;
+    background: #40d8ff5c;
+    padding: 0 35px;
+    font-size: 30px;
+    font-family: 'Hind Vadodara', sans-serif;
+    box-shadow: inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #225eb6c2, inset 0px -1px 8px 2px #00317526;
+    color: rgba(4, 43, 70, 0.82);
+    position: relative;
+    font-weight: 500;
+    line-height: 56px;
+    text-shadow: 0 7px 5px rgba(0, 0, 0, 0.07);
+    transition: box-shadow .15s, transform .15s, filter .15s;
+    top: 0px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    animation-name: oo_aqua_bg;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    animation-direction: alternate; }
+  .oo_aqua_text {
+    z-index: 1;
+    position: relative; }
+  .oo_aqua_button:hover {
+    filter: brightness(1.2); }
+  .oo_aqua:active .oo_aqua_button {
+    /*
+      box-shadow: inset 0px 3px 7px 0 #f1d0ff69, inset 0px 20px 35px 6px #3566afc2, inset 0px -1px 8px 2px #00317526, 0 5px 20px rgba(0,0,0,.15);*/
+    transform: scale(0.95) translate(0, 10px); }
+  .oo_aqua:active:before {
+    box-shadow: 0 17px 10px 5px black;
+    opacity: .11; }
+  .oo_aqua_button:before {
+    content: '';
+    left: 16px;
+    right: 16px;
+    top: 5px;
+    height: 18px;
+    background: linear-gradient(#ffffff8f, #eefcff24);
+    position: absolute;
+    border-radius: 40px 40px 18px 18px;
+    pointer-events: none; }
+
+@keyframes oo_aqua_bg {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 205, 255, 0), inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #1d67d4c2, inset 0px -1px 8px 2px #00317526;
+    background: #40d8ff5c; }
+  100% {
+    box-shadow: 0 0 20px 3px rgba(0, 180, 255, 0.32), inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 10px 25px 6px #4d88e0c2, inset 0px -1px 8px 2px #00317526;
+    background: #8fe8ff5c; } }

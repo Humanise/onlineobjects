@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.hibernate.CacheMode;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
@@ -41,6 +37,8 @@ import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -82,6 +80,8 @@ public class ModelService implements InitializingBean {
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
 	private List<EntityValidator> entityValidators;
+
+	private Finder finder;
 	
 	private static final ThreadLocal<String> threadIsDirty = new ThreadLocal<String>();
 
@@ -114,7 +114,6 @@ public class ModelService implements InitializingBean {
 			log.fatal("Could not create session factory", t);
 			throw new ExceptionInInitializerError(t);
 		}
-
 		loadModelInfo();
 	}
 
@@ -160,8 +159,8 @@ public class ModelService implements InitializingBean {
 				Element item = items.get(i);
 				Element classElement = item.getFirstChildElement("class");
 				String className = classElement.getValue();
-				Class<?> clazz = Class.forName("dk.in2isoft.onlineobjects.model." + className);
-				ModelClassInfo info = new ModelClassInfo((Class<Item>) clazz);
+				Class<Item> clazz = Code.cast(Class.forName("dk.in2isoft.onlineobjects.model." + className));
+				ModelClassInfo info = new ModelClassInfo(clazz);
 				modelClassInfo.add(info);
 			}
 			log.debug("Model info loaded: " + modelClassInfo.size() + " items");
@@ -181,7 +180,8 @@ public class ModelService implements InitializingBean {
 
 			log.debug(clazz + " with super " + clazz.getSuperclass());
 			if (clazz.getSuperclass().equals(Entity.class)) {
-				entityClasses.add((Class<? extends Entity>) clazz);
+				Class<? extends Entity> entityClass = Code.cast(clazz);
+				entityClasses.add(entityClass);
 			}
 			classes.add(clazz);
 		}
@@ -258,8 +258,18 @@ public class ModelService implements InitializingBean {
 		}
 		return session;
 	}
+	
+	public Session newSession() {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		return session;
+	}
 
-	protected Query createQuery(String hql) {
+	protected <T> Query<T> createQuery(String hql, Class<T> type) {
+		return getSession().createQuery(hql, type);
+	}
+
+	protected Query<?> createQuery(String hql) {
 		return getSession().createQuery(hql);
 	}
 
@@ -273,7 +283,10 @@ public class ModelService implements InitializingBean {
 	}
 
 	public void commit() {
-		Session session = getSession();
+		commit(getSession());
+	}
+
+	public void commit(Session session) {
 		Transaction tx = session.getTransaction();
 		if (tx.isActive()) {
 			try {
@@ -285,6 +298,8 @@ public class ModelService implements InitializingBean {
 				tx.rollback();
 			}
 			log.debug("Commit transaction!");
+		} else {
+			log.error("Unable to commit inactive transaction");
 		}
 	}
 	
@@ -312,22 +327,30 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
-	public void createOrUpdateItem(Item item, Privileged privileged) throws ModelException, SecurityException {
+	public void createOrUpdate(Item item, Privileged privileged) throws ModelException, SecurityException {
 		if (item.isNew()) {
 			createItem(item, privileged, getSession());
 		} else {
-			updateItem(item, privileged);
+			update(item, privileged);
 		}
 	}
 
 	public void create(LogEntry entry) {
-		getSession().save(entry);
+		create(entry, getSession());
 	}
 
-	public void createItem(Item item, Privileged privileged) throws ModelException, SecurityException {
+	public void create(LogEntry entry, Session session) {
+		session.save(entry);
+	}
+
+	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 	}
 	
+	public void create(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
+		createItem(item, privileged, session);
+	}
+
 	public boolean isDirty() {
 		return getSession().isDirty();
 	}
@@ -340,6 +363,9 @@ public class ModelService implements InitializingBean {
 			if (!(item instanceof User)) {
 				throw new SecurityException("Public can only create new users");
 			}
+		}
+		if (!canCreate(item, privileged)) {
+			throw new SecurityException("The privileged is not allowed to create the item");
 		}
 		validate(item);
 		item.setCreated(new Date());
@@ -371,7 +397,15 @@ public class ModelService implements InitializingBean {
 		session.save(user);
 	}
 
-	public void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {
+	public void delete(Item item, Privileged privileged) throws ModelException, SecurityException {
+		if (item instanceof Entity) {
+			deleteEntity((Entity)item, privileged);
+		} else if (item instanceof Relation) {
+			deleteItem((Relation)item, privileged);
+		}
+	}
+
+	private void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {
 		if (!canDelete(entity, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot delete Entity=" + entity);
 		}
@@ -380,20 +414,21 @@ public class ModelService implements InitializingBean {
 	}
 
 	@Deprecated
+	// TODO: Deleting like this may 
 	private void removeAllRelations(Entity entity) {
 		
 		Session session = getSession();
 		{
 			String hql = "delete Privilege p where p.object in (select relation.id from Relation relation where relation.from=:entity or relation.to=:entity)";
-			Query q = session.createQuery(hql);
-			q.setEntity("entity", entity);
+			Query<?> q = session.createQuery(hql);
+			q.setParameter("entity", entity);
 			int count = q.executeUpdate();
 			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
 			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity";
-			Query q = session.createQuery(hql);
-			q.setEntity("entity", entity);
+			Query<?> q = session.createQuery(hql);
+			q.setParameter("entity", entity);
 			ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
 			while (results.next()) {
 				Relation rel = (Relation) results.get(0);
@@ -403,13 +438,9 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
-	public void deleteRelation(Relation relation, Privileged privileged) throws SecurityException, ModelException {
-		deleteItem(relation, privileged);
-	}
-
-	public void deleteRelations(List<Relation> parents, Privileged privileged) throws SecurityException, ModelException {
-		for (Relation relation : parents) {
-			deleteItem(relation, privileged);
+	public <T extends Item> void delete(List<T> items, Privileged privileged) throws SecurityException, ModelException {
+		for (Item item : items) {
+			deleteItem(item, privileged);
 		}
 	}
 
@@ -428,7 +459,7 @@ public class ModelService implements InitializingBean {
 	}
 
 	// TODO Change to update
-	public void updateItem(Item item, Privileged privileged) throws SecurityException,
+	public void update(Item item, Privileged privileged) throws SecurityException,
 			ModelException {
 		if (!canUpdate(item, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot update Item=" + item);
@@ -456,7 +487,7 @@ public class ModelService implements InitializingBean {
 		toAdd.addAll(ids);
 		for (Relation relation : relations) {
 			if (!ids.contains(relation.getTo().getId())) {
-				this.deleteRelation(relation, privileged);
+				this.delete(relation, privileged);
 			} else {
 				toAdd.remove(relation.getTo().getId());
 			}
@@ -469,6 +500,12 @@ public class ModelService implements InitializingBean {
 		}
 	}
 	
+	public boolean canCreate(Item item, Privileged privileged) {
+		if (privileged.getIdentity() < 1) {
+			return false;
+		}
+		return true;		
+	}
 	public boolean canUpdate(Item item, Privileged privileged) {
 		if (securityService.isAdminUser(privileged)) {
 			return true;
@@ -512,7 +549,7 @@ public class ModelService implements InitializingBean {
 			return null;
 		}
 		Relation relation = new Relation(from, to);
-		createItem(relation, privileged);
+		create(relation, privileged);
 		return relation;
 	}
 
@@ -523,7 +560,7 @@ public class ModelService implements InitializingBean {
 		}
 		Relation relation = new Relation(from, to);
 		relation.setKind(kind);
-		createItem(relation, privileged);
+		create(relation, privileged);
 		return relation;
 	}
 
@@ -533,10 +570,9 @@ public class ModelService implements InitializingBean {
 			throw new SecurityException("Only admin can get all relations");
 		}
 		String hql = "from Relation as relation where relation.from=:entity or relation.to=:entity order by relation.position";
-		Query q = createQuery(hql);
-		q.setEntity("entity", entity);
-		List<Relation> result = Code.cast(q.list());
-		return result;
+		Query<Relation> q = createQuery(hql, Relation.class);
+		q.setParameter("entity", entity);
+		return q.list();
 	}
 
 	public List<Relation> getRelationsFrom(Entity entity, Class<? extends Entity> clazz, Privileged privileged) throws ModelException {
@@ -605,11 +641,9 @@ public class ModelService implements InitializingBean {
 			} else {
 				session = getSession();
 				
-				Query q = session.createQuery("from User as user left join fetch user.properties where lower(user.username)=lower(:username)");
-				q.setString("username", username);
-				List<?> list = q.list();
-				for (Object object : list) {
-					User user = (User) object;
+				Query<User> q = session.createQuery("from User as user left join fetch user.properties where lower(user.username)=lower(:username)", User.class);
+				q.setParameter("username", username);
+				for (User user : q.list()) {
 					if (user != null) {
 						return getSubject(user);
 					}					
@@ -633,10 +667,11 @@ public class ModelService implements InitializingBean {
 		return getPriviledge(item, priviledged, getSession());
 	}
 
-	public Privilege getPriviledge(Item item, Privileged privileged, Session session) {
-		Query q = session.createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject");
-		q.setLong("object", item.getId());
-		q.setLong("subject", privileged.getIdentity());
+	private Privilege getPriviledge(Item item, Privileged privileged, Session session) {
+		String queryString = "from Privilege as priv where priv.object=:object and priv.subject=:subject";
+		Query<Privilege> q = session.createQuery(queryString, Privilege.class);
+		q.setParameter("object", item.getId());
+		q.setParameter("subject", privileged.getIdentity());
 		Privilege privilege = (Privilege) q.uniqueResult();
 		if (privilege != null) {
 			return privilege;
@@ -646,25 +681,23 @@ public class ModelService implements InitializingBean {
 	}
 
 	public List<Privilege> getPrivileges(Item item) {
-		Query q = createQuery("from Privilege as priv where priv.object=:object");
-		q.setLong("object", item.getId());
-		List<Privilege> list = Code.castList(q.list());
-		return list;
+		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object", Privilege.class);
+		q.setParameter("object", item.getId());
+		return q.list();
 	}
 	
 	public User getOwner(Item item, Privileged privileged) throws ModelException {
-		Query q = buildOwnerQuery(item, privileged);
+		Query<User> q = buildOwnerQuery(item, privileged);
 		q.setMaxResults(1);
-		return (User) getSubject(q.uniqueResult());
+		return getSubject(q.uniqueResult());
 	}
 
 	public List<User> getOwners(Item item, Privileged privileged) throws ModelException {
-		Query q = buildOwnerQuery(item, privileged);
-		List<User> object = Code.castList(q.list());
-		return getSubjects(object);
+		Query<User> q = buildOwnerQuery(item, privileged);
+		return getSubjects(q.list());
 	}
 
-	private Query buildOwnerQuery(Item item, Privileged privileged) {
+	private Query<User> buildOwnerQuery(Item item, Privileged privileged) {
 		String hql = "select user from User as user, Privilege as itemPriv";
 		if (!securityService.isAdminUser(privileged)) {
 			hql+=", Privilege as userPriv";
@@ -675,10 +708,10 @@ public class ModelService implements InitializingBean {
 			hql += " and userPriv.object=user and userPriv.subject in (:privileged)";
 		}
 		hql +=" order by itemPriv.id asc";
-		Query q = createQuery(hql);
-		q.setLong("object", item.getId());
-		q.setLong("public", securityService.getPublicUser().getId());
-		q.setLong("admin", securityService.getAdminPrivileged().getIdentity());
+		Query<User> q = createQuery(hql, User.class);
+		q.setParameter("object", item.getId());
+		q.setParameter("public", securityService.getPublicUser().getId());
+		q.setParameter("admin", securityService.getAdminPrivileged().getIdentity());
 		if (!securityService.isAdminUser(privileged)) {
 			List<Long> privs = new ArrayList<>();
 			privs.add(privileged.getIdentity());
@@ -704,11 +737,10 @@ public class ModelService implements InitializingBean {
 	}
 
 	private List<Privilege> getPrivileges(long object, long subject) {
-		Query q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject");
-		q.setLong("object", object);
-		q.setLong("subject", subject);
-		List<?> list = q.list();
-		return Code.castList(list);
+		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject", Privilege.class);
+		q.setParameter("object", object);
+		q.setParameter("subject", subject);
+		return q.list();
 	}
 
 	public void removePrivileges(Item object, Privileged subject) throws SecurityException {
@@ -719,28 +751,26 @@ public class ModelService implements InitializingBean {
 		if (!securityService.canModify(object, user)) {
 			throw new SecurityException("The user "+subject+" cannot modify "+object+" - so cannot remove privileges");
 		}
-		Query q = createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
-		q.setLong("object", object.getId());
-		q.setLong("subject", subject.getIdentity());
+		Query<?> q = createQuery("delete from Privilege as priv where priv.object=:object and priv.subject=:subject");
+		q.setParameter("object", object.getId());
+		q.setParameter("subject", subject.getIdentity());
 		int count = q.executeUpdate();
 		log.info("Deleting privileges for: " + object.getClass().getName() + "; count: " + count);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Long> listIds(IdQuery query) {
-		Query q = query.createIdQuery(getSession());
-		List<Long> items = q.list();
-		return items;
+		Query<Long> q = query.createIdQuery(getSession());
+		return q.list();
 	}
 
 	public <T> Results<T> scroll(ItemQuery<T> query) {
-		Query q = query.createItemQuery(getSession()).setReadOnly(true).setFetchSize(0).setCacheable(false).setCacheMode(CacheMode.IGNORE);
+		Query<T> q = query.createItemQuery(getSession()).setReadOnly(true).setFetchSize(0).setCacheable(false).setCacheMode(CacheMode.IGNORE);
 		return new Results<T>(q.scroll(ScrollMode.FORWARD_ONLY));
 	}
 	
 	public List<Object[]> querySQL(String sql) throws ModelException {
 		try {
-			SQLQuery query = getSession().createSQLQuery(sql);
+			NativeQuery<?> query = getSession().createSQLQuery(sql);
 			return Code.castList(query.list());
 		} catch (HibernateException e) {
 			log.error(e.getMessage(),e);
@@ -750,7 +780,7 @@ public class ModelService implements InitializingBean {
 
 	public <T> List<T> list(CustomQuery<T> query) throws ModelException {
 		try {
-			SQLQuery sql = getSession().createSQLQuery(query.getSQL());
+			NativeQuery<?> sql = getSession().createSQLQuery(query.getSQL());
 			query.setParameters(sql);
 			List<?> list = sql.list();
 			List<T> result = Lists.newArrayList();
@@ -771,16 +801,20 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
+	public Finder find() {
+		return finder;
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> SearchResult<T> search(CustomQuery<T> query) throws ModelException {
 		String sql = query.getSQL();
 		try {
 			int totalCount = count(query);
 
-			SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+			NativeQuery<T> sqlQuery = getSession().createSQLQuery(sql);
 			query.setParameters(sqlQuery);
 
-			List<Object[]> rows = sqlQuery.list();
+			List<Object[]> rows = Code.castList(sqlQuery.list());
 			List<T> result = Lists.newArrayList();
 			for (Object[] t : rows) {
 				result.add(query.convert(t));
@@ -792,12 +826,12 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
-	public int count(CustomQuery<?> query) {
+	public <T> int count(CustomQuery<T> query) {
 
 		String countSQL = query.getCountSQL();
 		int totalCount = 0;
 		if (countSQL!=null) {
-			SQLQuery countSqlQuery = getSession().createSQLQuery(countSQL);
+			NativeQuery<?> countSqlQuery = getSession().createSQLQuery(countSQL);
 			query.setParameters(countSqlQuery);
 			List<?> countRows = countSqlQuery.list();
 			Object next = countRows.iterator().next();
@@ -806,10 +840,9 @@ public class ModelService implements InitializingBean {
 		return totalCount;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> List<T> list(ItemQuery<T> query) {
-		Query q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Query<T> q = query.createItemQuery(getSession());
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<T> items = q.list();
 		for (int i = 0; i < items.size(); i++) {
 			T item = items.get(i);
@@ -818,26 +851,22 @@ public class ModelService implements InitializingBean {
 		return items;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> @Nullable T getFirst(ItemQuery<T> query) {
-		Query q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Query<T> q = query.createItemQuery(getSession());
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		q.setFetchSize(1);
 		ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
 		if (results.next()) {
-			return (T) getSubject(results.get(0));
+			return Code.cast(getSubject(results.get(0)));
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T> SearchResult<T> search(ItemQuery<T> query) {
-		Query cq = query.createCountQuery(getSession());
-		List<?> list = cq.list();
-		Object next = list.iterator().next();
-		Long count = (Long) next;
-		Query q = query.createItemQuery(getSession());
-		q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		Query<Long> cq = query.createCountQuery(getSession());
+		Long count = cq.list().iterator().next();
+		Query<T> q = query.createItemQuery(getSession());
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<T> items = q.list();
 		for (int i = 0; i < items.size(); i++) {
 			T item = items.get(i);
@@ -847,24 +876,23 @@ public class ModelService implements InitializingBean {
 	}
 
 	public Long count(ItemQuery<?> query) {
-		Query cq = query.createCountQuery(getSession());
-		List<?> list = cq.list();
-		Object next = list.iterator().next();
-		return (Long) next;
+		Query<Long> cq = query.createCountQuery(getSession());
+		return cq.list().iterator().next();
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T,U> PairSearchResult<T,U> searchPairs(PairQuery<T,U> query) {
-		Query cq = query.createCountQuery(getSession());
-		List<Object> list = cq.list();
-		Object next = list.iterator().next();
-		Long count = (Long) next;
-		Query q = query.createItemQuery(getSession());
+		Query<Long> cq = query.createCountQuery(getSession());
+		Long count = cq.list().iterator().next();
+		Query<?> q = query.createItemQuery(getSession());
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Pair<T, U>> map = new ArrayList<Pair<T, U>>();
-		for (Iterator<Object> i = q.iterate(); i.hasNext();) {
-			Object[] object = (Object[]) i.next();
-			map.add(new Pair<T,U>((T)getSubject(object[0]), (U)getSubject(object[1])));
+		try (ScrollableResults scroll = q.scroll(ScrollMode.FORWARD_ONLY)) {
+			while (scroll.next()) {
+				Object[] object = scroll.get();
+				T key = Code.cast(getSubject(object[0]));
+				U value = Code.cast(getSubject(object[1]));
+				map.add(new Pair<T,U>(key, value));
+			}
 		}
 		return new PairSearchResult<T,U>(map,count.intValue());
 	}
@@ -931,13 +959,13 @@ public class ModelService implements InitializingBean {
 
 	private void removeAllPrivileges(Item item) {
 
-		Query query = createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id");
-		query.setLong("object", item.getId());
-		List<User> users = Code.castList(query.list());
+		Query<User> query = createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id", User.class);
+		query.setParameter("object", item.getId());
+		List<User> users = query.list();
 		
 		String hql = "delete Privilege p where p.object = :id";
-		Query q = createQuery(hql);
-		q.setLong("id", item.getId());
+		Query<?> q = createQuery(hql);
+		q.setParameter("id", item.getId());
 		int count = q.executeUpdate();
 		log.info("Deleting privileges for: " + item.getClass().getName() + "; count: " + count);
 		
@@ -977,40 +1005,6 @@ public class ModelService implements InitializingBean {
 		setPrivileged(privileged, q);
 		return list(q);
 	}
-
-	@Deprecated
-	public Map<String, Float> getPropertyCloud(String key, String query, Class<? extends Entity> cls) {
-		Map<String, Float> cloud = new LinkedHashMap<String, Float>();
-		StringBuilder hql = new StringBuilder();
-		hql.append("select p.value as value,count(p.id) as count from ");
-		hql.append(cls.getSimpleName()).append(" as entity");
-		hql.append(" left join entity.properties as p where p.key=:key");
-		if (Strings.isNotBlank(query)) {
-			hql.append(" and lower(value) like lower(:query)");
-		}
-		hql.append(" group by p.value order by lower(value)");
-		Query q = createQuery(hql.toString());
-		q.setString("key", key);
-		if (Strings.isNotBlank(query)) {
-			q.setString("query", "%" + query + "%");
-		}
-		ScrollableResults scroll = q.scroll();
-		while (scroll.next()) {
-			cloud.put(scroll.getString(0), scroll.getLong(1).floatValue());
-		}
-		float max = 0;
-		for (Float count : cloud.values()) {
-			max = Math.max(max, count);
-		}
-		float min = max;
-		for (Float count : cloud.values()) {
-			min = Math.min(min, count);
-		}
-		for (Map.Entry<String, Float> entry : cloud.entrySet()) {
-			entry.setValue(((entry.getValue()-min) / (max-min)));
-		}
-		return cloud;
-	}
 	
 	public Map<String, Integer> getProperties(String key, Class<? extends Entity> cls, Privileged priviledged) {
 		StringBuilder hql = new StringBuilder();
@@ -1024,8 +1018,8 @@ public class ModelService implements InitializingBean {
 			hql.append(" and entity.id = priv.object and priv.subject=").append(priviledged.getIdentity());
 		}
 		hql.append(" group by p.value order by lower(value)");
-		Query q = createQuery(hql.toString());
-		q.setString("key", key);
+		Query<?> q = createQuery(hql.toString());
+		q.setParameter("key", key);
 		Map<String, Integer> list = new LinkedHashMap<String, Integer>();
 		ScrollableResults scroll = q.scroll();
 		while (scroll.next()) {
@@ -1060,6 +1054,7 @@ public class ModelService implements InitializingBean {
 		}
 		return obj;
 	}
+
 	public static <T> List<T> getSubjects(List<T> list) {
 		return list.stream().map(obj -> getSubject(obj)).collect(Collectors.toList());
 	}
@@ -1076,23 +1071,8 @@ public class ModelService implements InitializingBean {
 		this.securityService = securityService;
 	}
 	
-	public Finder find() {
-		return new Finder(this, securityService); // TODO only one instance
-	}
-	
-	public static class Finder {
-		
-		private ModelService modelService;
-		private SecurityService securityService;
-
-		public Finder(ModelService modelService, SecurityService securityService) {
-			this.modelService = modelService;
-			this.securityService = securityService;
-		}
-
-		public RelationQuery relations(Privileged privileged) {
-			return new RelationQuery(modelService, securityService).as(privileged);
-		}
+	public void setFinder(Finder finder) {
+		this.finder = finder;
 	}
 
 }

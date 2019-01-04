@@ -25,16 +25,6 @@ div.photos_photo_image:hover .photos_controls
 	opacity: 1;
 }
 
-body.oo_msie8 div.photos_controls
-{
-	display: none;
-}
-
-body.oo_msie8 div.photos_photo_image:hover div.photos_controls
-{
-	display: block;	
-}
-
 .photos_controller a
 {
 	vertical-align: middle;

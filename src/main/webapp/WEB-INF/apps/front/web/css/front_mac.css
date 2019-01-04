@@ -1,0 +1,89 @@
+.front_mac {
+  background: #fff;
+  padding: 10px; }
+  .front_mac_title {
+    text-align: center;
+    line-height: 1;
+    margin: 10px 0; }
+    .front_mac_title span {
+      display: block; }
+      .front_mac_title span:nth-child(1) {
+        font-size: 6vw;
+        font-weight: 300; }
+      .front_mac_title span:nth-child(2) {
+        font-size: 15vw;
+        font-weight: 600; }
+      .front_mac_title span:nth-child(3) {
+        font-size: 7vw;
+        font-weight: 600; }
+  .front_mac_icon {
+    background: url("/gfx/icon_512x512@2x.png") 50% no-repeat;
+    background-size: contain;
+    height: 45vh;
+    max-height: 512px;
+    margin: 0 auto; }
+  .front_mac_download {
+    margin: 40px auto;
+    text-align: center; }
+  .front_mac_text {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font-size: 14pt;
+    text-align: center; }
+    .front_mac_text p {
+      margin: 10px 0; }
+  .front_mac_screen {
+    background: 50% no-repeat;
+    background-size: contain;
+    height: 50vw;
+    min-height: 200px; }
+    .front_mac_screen-knowledge {
+      background-image: url("/gfx/screen.png");
+      max-height: 632px; }
+    .front_mac_screen-safari {
+      background-image: url("/gfx/safari_screen.png");
+      max-height: 582px; }
+  .front_mac_heading {
+    font-size: 10vw;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    margin: -0.2em 0 0; }
+  .front_mac_divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    max-width: 300px;
+    margin: 30px auto; }
+  .front_mac_colors span {
+    display: inline-block;
+    padding: 2px 1px;
+    line-height: 1;
+    text-align: center;
+    min-width: 12px;
+    box-sizing: border-box; }
+    .front_mac_colors span:nth-child(1) {
+      border-bottom: 4px solid #73C25C; }
+    .front_mac_colors span:nth-child(2) {
+      border-bottom: 4px solid #FDC333; }
+    .front_mac_colors span:nth-child(3) {
+      border-bottom: 4px solid #F99427; }
+    .front_mac_colors span:nth-child(4) {
+      border-bottom: 4px solid #E7524F; }
+    .front_mac_colors span:nth-child(5) {
+      border-bottom: 4px solid #A856A9; }
+    .front_mac_colors span:nth-child(6) {
+      border-bottom: 4px solid #26AEE3; }
+
+@media screen and (min-width: 600px) {
+  .front_mac_title span:nth-child(1) {
+    font-size: 36px; }
+  .front_mac_title span:nth-child(2) {
+    font-size: 90px; }
+  .front_mac_title span:nth-child(3) {
+    font-size: 42px; }
+  .front_mac_heading {
+    font-size: 60px; }
+  .front_mac_divider {
+    max-width: 300px;
+    margin: 60px auto; } }

@@ -51,7 +51,7 @@ public class PasswordRecoveryService {
 	public boolean sendRecoveryMail(User user, Person person, EmailAddress email) throws EndUserException {
 		String random = Strings.generateRandomString(30);
 		user.overrideFirstProperty(Property.KEY_PASSWORD_RECOVERY_CODE, random);
-		modelService.updateItem(user, securityService.getAdminPrivileged());
+		modelService.update(user, securityService.getAdminPrivileged());
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);

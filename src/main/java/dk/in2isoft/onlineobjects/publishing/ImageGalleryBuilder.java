@@ -84,18 +84,18 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 		// Create an image gallery
 		ImageGallery gallery = new ImageGallery();
 		gallery.setName("Mine billeder");
-		modelService.createItem(gallery, priviledged);
+		modelService.create(gallery, priviledged);
 
 		// Create gallery title
 		HeaderPart header = new HeaderPart();
 		header.setText("Mine billeder");
-		modelService.createItem(header, priviledged);
+		modelService.create(header, priviledged);
 		modelService.createRelation(gallery, header, priviledged);
 
 		// Create gallery title
 		HtmlPart text = new HtmlPart();
 		text.setHtml("Dette er nogle billeder jeg har taget");
-		modelService.createItem(text, priviledged);
+		modelService.create(text, priviledged);
 		modelService.createRelation(gallery, text, priviledged);
 
 		return gallery;

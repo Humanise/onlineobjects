@@ -11,7 +11,7 @@
    		<property name="contentExtractors">
    			<map>
    				<entry key="OnlineObjects">
-   					<bean class="dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor"/>
+   					<bean class="dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor"/>
    				</entry>
    				<entry key="Boilerpipe">
    					<bean class="dk.in2isoft.onlineobjects.modules.information.Boilerpipe"/>
@@ -30,8 +30,6 @@
    	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspectiveBuilder" autowire="byType"/>
 
    	<bean id="knowledgeController" class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeController" autowire="byType"/>
-   	
-   	<bean id="knowledgeModelService" class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeModelService" autowire="byType"/>
    	
    	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexer">
    		<property name="documentBuilder" ref="knowledgeIndexDocumentBuilder"/>
@@ -58,5 +56,11 @@
    	</bean>
    	
    	<bean id="knowledgeAnalyzeView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeAnalyzeView" autowire="byType"/>
+
    	<bean id="knowledgeExtractionView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeExtractionView" autowire="byType"/>
+
+   	<bean id="knowledgeIntroView" scope="request" class="dk.in2isoft.onlineobjects.apps.knowledge.views.KnowledgeIntroView">
+      <property name="configurationService" ref="configurationService"/>
+    </bean>
+
 </beans>

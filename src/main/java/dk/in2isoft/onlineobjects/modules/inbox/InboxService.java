@@ -57,7 +57,7 @@ public class InboxService implements InitializingBean {
 		if (inbox==null) {
 			inbox = new Pile();
 			inbox.setName("Inbox for "+privileged.getUsername());
-			modelService.createItem(inbox, privileged);
+			modelService.create(inbox, privileged);
 			modelService.createRelation(privileged, inbox, Relation.KIND_SYSTEM_USER_INBOX, privileged);
 		}
 		return inbox;
@@ -86,6 +86,7 @@ public class InboxService implements InitializingBean {
 	public int getCountSilently(User user) {
 		if (user==null) {
 			log.error("The user is null, will silently rebort zero");
+			return 0;
 		}
 		try {
 			return getCount(user);
@@ -102,7 +103,7 @@ public class InboxService implements InitializingBean {
 		if (!relation.isPresent()) {
 			return false;
 		}
-		modelService.deleteRelation(relation.get(), user);
+		modelService.delete(relation.get(), user);
 		return true;
 	}
 	

@@ -40,7 +40,7 @@ public class PhotosController extends PhotosControllerBase {
 		String title = request.getString("title");
 		Image image = getImage(id,session);
 		image.setName(title);
-		modelService.updateItem(image, session);
+		modelService.update(image, session);
 	}
 
 	@Path(start="updateDescription")
@@ -50,7 +50,7 @@ public class PhotosController extends PhotosControllerBase {
 		String description = request.getString("description");
 		Image image = getImage(id,session);
 		image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, description);
-		modelService.updateItem(image, session);
+		modelService.update(image, session);
 	}
 
 	@Path(start="updateLocation")
@@ -84,7 +84,7 @@ public class PhotosController extends PhotosControllerBase {
 		Word word = modelService.getRequired(Word.class, wordId, session);
 		Optional<Relation> relation = modelService.getRelation(image, word, session);
 		if (relation.isPresent()) {
-			modelService.deleteRelation(relation.get(), session);
+			modelService.delete(relation.get(), session);
 		}
 	}
 
@@ -157,7 +157,7 @@ public class PhotosController extends PhotosControllerBase {
 		String title = request.getString("title");
 		ImageGallery gallery = modelService.get(ImageGallery.class, id, session);
 		gallery.setName(title);
-		modelService.updateItem(gallery, session);
+		modelService.update(gallery, session);
 	}
 
 	@Path
@@ -177,7 +177,7 @@ public class PhotosController extends PhotosControllerBase {
 		
 		Optional<Relation> relation = modelService.getRelation(gallery, image, session);
 		if (relation.isPresent()) {
-			modelService.deleteRelation(relation.get(), session);
+			modelService.delete(relation.get(), session);
 		}
 	}
 	
@@ -197,7 +197,7 @@ public class PhotosController extends PhotosControllerBase {
 				num++;
 				Relation relation = new Relation(gallery, image);
 				relation.setPosition(position + num);
-				modelService.createItem(relation, session);
+				modelService.create(relation, session);
 			}
 		}
 	}

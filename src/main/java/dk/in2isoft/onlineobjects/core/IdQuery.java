@@ -4,5 +4,5 @@ import org.hibernate.Session;
 
 public interface IdQuery {
 
-	public org.hibernate.Query createIdQuery(Session session);
+	public org.hibernate.query.Query<Long> createIdQuery(Session session);
 }

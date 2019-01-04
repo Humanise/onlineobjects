@@ -6,8 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -71,7 +72,7 @@ public class RelationQuery {
 	}
 	
 	public String getHQL() {
-		StringBuilder hql = new StringBuilder("select rel from Relation as rel");
+		StringBuilder hql = new StringBuilder("select distinct rel from Relation as rel");
 		if (toClass!=null) {
 			hql.append(", " + toClass.getSimpleName() + " as toClass");
 		}
@@ -110,18 +111,18 @@ public class RelationQuery {
 		return hql.toString();
 	}
 	
-	private void decorate(Query query) {
+	private void decorate(Query<Relation> query) {
 		if (this.id!=null) {
-			query.setLong("id", this.id);
+			query.setParameter("id", this.id, LongType.INSTANCE);
 		}
 		if (this.fromEntity!=null) {
-			query.setLong("from", this.fromEntity.getId());
+			query.setParameter("from", this.fromEntity.getId(), LongType.INSTANCE);
 		}
 		if (this.toEntity!=null) {
-			query.setLong("to", this.toEntity.getId());
+			query.setParameter("to", this.toEntity.getId(), LongType.INSTANCE);
 		}
 		if (this.kind!=null) {
-			query.setString("kind", this.kind);
+			query.setParameter("kind", this.kind, StringType.INSTANCE);
 		}
 		if (!privileged.isEmpty()) {
 			List<Long> privIds = privileged.stream().map(priv -> priv.getIdentity()).collect(Collectors.toList());
@@ -129,35 +130,32 @@ public class RelationQuery {
 		}
 	}
 
-	public Optional<Relation> first() {
-		Query query = modelService.createQuery(getHQL());
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+	private Query<Relation> getQuery() {
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
 		decorate(query);
+		return query;
+	}
+
+	public Optional<Relation> first() {
+		Query<Relation> query = getQuery();
 		Relation unique = (Relation) query.uniqueResult();
 		return unique==null ? Optional.empty() : Optional.of(ModelService.getSubject(unique));
 	}
 
 	public Stream<Relation> stream(int max) {
-		Query query = modelService.createQuery(getHQL());
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		query.setMaxResults(max);
-		List<Relation> list = Code.castList(query.list());
-		return list.stream();
+		return query.stream();
 	}
 
 	public Stream<Relation> stream() {
-		Query query = modelService.createQuery(getHQL());
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		List<Relation> list = Code.castList(query.list());
 		return list.stream();
 	}
 
 	public List<Relation> list() {
-		Query query = modelService.createQuery(getHQL());
-		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		decorate(query);
+		Query<Relation> query = getQuery();
 		List<Relation> list = Code.castList(query.list());
 		return list;
 	}

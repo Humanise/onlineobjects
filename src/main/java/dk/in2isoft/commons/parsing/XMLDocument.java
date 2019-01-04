@@ -1,16 +1,11 @@
 package dk.in2isoft.commons.parsing;
 
-import java.io.IOException;
-import java.io.StringReader;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.xerces.dom.DOMImplementationImpl;
-import org.ccil.cowan.tagsoup.Parser;
 import org.w3c.dom.Document;
 
-import nu.xom.Builder;
-import nu.xom.ParsingException;
+import dk.in2isoft.commons.xml.DOM;
 import nu.xom.converters.DOMConverter;
 
 public class XMLDocument extends TextDocument {
@@ -40,17 +35,7 @@ public class XMLDocument extends TextDocument {
 	public nu.xom.Document getXOMDocument() {
 		if (XOMDocument == null) {
 			String rawString = getRawString();
-			if (rawString!=null) {
-				try (StringReader reader = new StringReader(rawString)){
-					Parser tagsoup = new Parser();
-					Builder bob = new Builder(tagsoup);
-					XOMDocument = bob.build(reader);
-				} catch (ParsingException e) {
-					log.error(e);
-				} catch (IOException e) {
-					log.error(e);
-				}
-			}
+			return DOM.parseWildHhtml(rawString);
 		}
 		return XOMDocument;
 	}

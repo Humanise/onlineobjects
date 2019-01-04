@@ -41,6 +41,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean simulateSlowRequest;
 	private boolean testMode;
 	private String appleAppSiteAssociation;
+	private String monitoringMails;
 	
 	private File tempDir;
 
@@ -56,6 +57,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean optimizeResources;
 
 	private boolean simulateHttps;
+	private boolean disableCache;
 
 
 	public void afterPropertiesSet() throws Exception {
@@ -116,6 +118,14 @@ public class ConfigurationService implements InitializingBean {
 			}
 		}
 		return file;
+	}
+	
+	public void setDisableCache(boolean disableCache) {
+		this.disableCache = disableCache;
+	}
+	
+	public boolean isDisableCache() {
+		return disableCache;
 	}
 	
 	public String getDeploymentId() {
@@ -304,5 +314,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setAppleAppSiteAssociation(String appleAppSiteAssociation) {
 		this.appleAppSiteAssociation = appleAppSiteAssociation;
+	}
+
+	public String getMonitoringMails() {
+		return monitoringMails;
+	}
+
+	public void setMonitoringMails(String monitoringMails) {
+		this.monitoringMails = monitoringMails;
 	}
 }

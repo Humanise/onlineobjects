@@ -138,7 +138,6 @@ public class XSLTUtil {
 		parameters.put("base-domain-context", request.getBaseDomainContext());
 		parameters.put("domain-is-ip", String.valueOf(request.isIP()));
 		parameters.put("base-context", request.getBaseContext());
-		parameters.put("user-name", request.getSession().getUser().getUsername());
 		parameters.put("development-mode", "false");
 		response.setCharacterEncoding(Strings.UTF8);
 		if (isXhtmlCapable(request.getRequest())) {

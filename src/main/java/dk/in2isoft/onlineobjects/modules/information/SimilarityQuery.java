@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.information;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.LongType;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.modules.information.SimilarityQuery.Similarity;
@@ -70,7 +71,7 @@ public class SimilarityQuery implements CustomQuery<Similarity> {
 	}
 
 	@Override
-	public void setParameters(SQLQuery sql) {
-		sql.setLong("id", id);
+	public void setParameters(NativeQuery<?> sql) {
+		sql.setParameter("id", id, LongType.INSTANCE);
 	}
 }

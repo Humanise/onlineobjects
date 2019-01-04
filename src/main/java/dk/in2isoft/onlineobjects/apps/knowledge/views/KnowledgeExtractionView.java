@@ -2,7 +2,7 @@ package dk.in2isoft.onlineobjects.apps.knowledge.views;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -13,7 +13,7 @@ import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import nu.xom.Document;
 
-public class KnowledgeExtractionView extends AbstractView implements InitializingBean {
+public class KnowledgeExtractionView extends LegacyAbstractView implements InitializingBean {
 	
 	private ModelService modelService;
 	private InternetAddressService internetAddressService;

@@ -17,8 +17,7 @@
     width: 100%;
     margin: 10px 0 0;
 
-    &_items
-    {
+    &_items {
       margin-right: 100px;
       position: relative;
       display: table-row;
@@ -34,8 +33,7 @@
       }
     }
 
-    &_input
-    {
+    &_input {
       display: block;
       width: 100%;
       margin-right: 70px;
@@ -53,8 +51,7 @@
       @include border-box;
     }
 
-    &_button
-    {
+    &_button {
       border: 1px solid #ddd;
       border-radius: 3px;
       height: 32px;
@@ -133,11 +130,11 @@
     }
   }
 
-  .words_search_query
-  {
+  .words_search_query {
     font-size: 9px;
     color: #ddd;
     font-family: Monaco;
+    margin-top: 10px;
 
     &:hover {
       color: #666;

@@ -6,6 +6,7 @@ import java.util.Locale;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.services.FeedService;
 import dk.in2isoft.onlineobjects.services.ImportService;
@@ -19,6 +20,7 @@ public class WordsControllerBase extends ApplicationController {
 	protected FeedService feedService;
 	protected HTMLService htmlService;
 	protected LanguageService languageService;
+	protected SecurityService securityService;
 
 	public WordsControllerBase() {
 		super("words");
@@ -74,4 +76,7 @@ public class WordsControllerBase extends ApplicationController {
 		this.languageService = languageService;
 	}
 
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

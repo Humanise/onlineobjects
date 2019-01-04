@@ -15,15 +15,15 @@
     <ui:define name="body">
       <o:box width="800" spacious="true">
         <o:header level="0" styleClass="account_heading">${msg.agreements_title}</o:header>
-        <c:if test="${!accountSettingsView.publicUser}">
+        <c:if test="${!accountAgreementsView.publicUser}">
         <p class="oo_space_top">
-          <o:link href="/${accountSettingsView.language}/">#{msg.back_to_account}</o:link>
+          <o:link href="/${accountAgreementsView.language}/">#{msg.back_to_account}</o:link>
         </p>
         </c:if>
         <div id="${agreement.key}" class="account_agreements">
           <div class="oo_text oo_space_top">
             <p>${msg.agreements_intro}</p>
-            <c:if test="${!accountSettingsView.publicUser}">
+            <c:if test="${!accountAgreementsView.publicUser}">
             <c:choose>
               <c:when test="${not accountAgreementsView.accepted}">
                 <div class="oo_space_top">

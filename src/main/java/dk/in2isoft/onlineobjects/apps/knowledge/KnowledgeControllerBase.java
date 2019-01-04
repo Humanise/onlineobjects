@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspect
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
@@ -43,13 +44,13 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	protected QuestionViewPerspectiveBuilder questionViewPerspectiveBuilder;
 	protected HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder;
 	protected PersonService personService;
-	protected KnowledgeModelService readerModelService;
+	protected KnowledgeService knowledgeService;
 	protected InternetAddressService internetAddressService;
+	protected SecurityService securityService;
 
 	public KnowledgeControllerBase() {
 		super("knowledge");
-		addJsfMatcher("/", "reader.xhtml");
-		addJsfMatcher("/<language>", "reader.xhtml");
+		addJsfMatcher("/<language>/app", "reader.xhtml");
 		addJsfMatcher("/<language>/analyze", "analyze.xhtml");
 		addJsfMatcher("/<language>/extract", "extract.xhtml");
 		addJsfMatcher("/<language>/intro", "intro.xhtml");
@@ -58,8 +59,14 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	@Override
 	public void unknownRequest(Request request) throws IOException,
 			EndUserException {
-		if (request.testLocalPathStart()) {
-			super.unknownRequest(request);
+		if (request.testLocalPathFull() || request.testLocalPathFull("en") || request.testLocalPathFull("da")) {
+			String language = getLanguage(request);
+			if (language == null) language = "en";
+			if (securityService.isPublicUser(request.getSession())) {
+				request.redirect("/" + language + "/intro");
+			} else {
+				request.redirect("/" + language + "/app");
+			}
 		} else {
 			super.unknownRequest(request);
 		}
@@ -85,10 +92,13 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	@Override
 	public boolean isAllowed(Request request) {
-		if (request.testLocalPathFull("en","intro") || request.testLocalPathStart("gfx")) {
+		if (request.testLocalPathFull() || request.testLocalPathFull("da") || request.testLocalPathFull("en")) {
 			return true;
 		}
-		return !request.isUser(SecurityService.PUBLIC_USERNAME);
+		if (request.testLocalPathFull("en","intro") || request.testLocalPathFull("da","intro") || request.testLocalPathStart("gfx")) {
+			return true;
+		}
+		return !securityService.isPublicUser(request.getSession());
 	}
 	
 	// Wiring...
@@ -153,11 +163,15 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		this.personService = personService;
 	}
 	
-	public void setReaderModelService(KnowledgeModelService readerModelService) {
-		this.readerModelService = readerModelService;
-	}
-	
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
+	}
+	
+	public void setKnowledgeService(KnowledgeService knowledgeService) {
+		this.knowledgeService = knowledgeService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

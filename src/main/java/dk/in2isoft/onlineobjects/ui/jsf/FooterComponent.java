@@ -65,7 +65,9 @@ public class FooterComponent extends AbstractComponent {
 		}
 		Locale locale = request.getLocale();
 		String agreementsUrl = configurationService.getApplicationContext(AccountController.MOUNT, "agreements", request);
-		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
+		if (locales!=null && !locales.isEmpty()) {
+			writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
+		}
 		writer.startVoidA("oo_link js-signup").withTestName("footerSignup").startSpan().text(msg.get("sign_up", locale)).endSpan().endA();
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
 		String aboutHref = configurationService.getApplicationContext("front", "about", request);

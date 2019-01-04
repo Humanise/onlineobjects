@@ -232,7 +232,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		String mimeType = fileService.getMimeType(file);
 		if (!StringUtils.equals(mimeType, image.getContentType())) {
 			image.setContentType(mimeType);
-			modelService.updateItem(image, priviledged);
+			modelService.update(image, priviledged);
 		}
 	}
 	
@@ -286,7 +286,7 @@ public class ImageService extends AbstractCommandLineInterface {
 			modified = true;
 		}
 		if (modified) {
-			modelService.updateItem(image, priviledged);
+			modelService.update(image, priviledged);
 		}
 		if (metaData.getLatitude()!=null && metaData.getLongitude()!=null) {
 			Location location = modelService.getParent(image, Location.class, priviledged);
@@ -294,7 +294,7 @@ public class ImageService extends AbstractCommandLineInterface {
 				location = new Location();
 				location.setLatitude(metaData.getLatitude());
 				location.setLongitude(metaData.getLongitude());
-				modelService.createItem(location, priviledged);
+				modelService.create(location, priviledged);
 				modelService.createRelation(location, image, null, priviledged);
 			}
 		}
@@ -324,26 +324,26 @@ public class ImageService extends AbstractCommandLineInterface {
 		image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, info.getDescription());
 		image.overrideFirstProperty(Property.KEY_PHOTO_TAKEN, info.getTaken());
 		image.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
-		modelService.updateItem(image, priviledged);
+		modelService.update(image, priviledged);
 		Location location = modelService.getParent(image, Location.class, priviledged);
 		if (info.getLocation()==null) {
 			if (location!=null) {
-				modelService.deleteEntity(location, priviledged);
+				modelService.delete(location, priviledged);
 			}
 			return;
 		}
 		if (info.getLocation()==null && location!=null) {
-			modelService.deleteEntity(location, priviledged);
+			modelService.delete(location, priviledged);
 		} else if (info.getLocation()!=null && location==null) {
 			location = new Location();
 			location.setLatitude(info.getLocation().getLatitude());
 			location.setLongitude(info.getLocation().getLongitude());
-			modelService.createItem(location, priviledged);
+			modelService.create(location, priviledged);
 			modelService.createRelation(location, image, priviledged);
 		} else {
 			location.setLatitude(info.getLocation().getLatitude());
 			location.setLongitude(info.getLocation().getLongitude());			
-			modelService.updateItem(location, priviledged);
+			modelService.update(location, priviledged);
 		}
 	}
 	
@@ -351,11 +351,11 @@ public class ImageService extends AbstractCommandLineInterface {
 		try {
 			ImageProperties properties = getImageProperties(file);
 			Image image = new Image();
-			modelService.createItem(image, privileged);
+			modelService.create(image, privileged);
 			image.setName(name);
 			changeImageFile(image, file, properties.getMimeType());
 			synchronizeMetaData(image, privileged);
-			modelService.updateItem(image, privileged);
+			modelService.update(image, privileged);
 			return image;
 		} catch (EndUserException e) {
 			log.error("Unable to create image from file",e);
@@ -370,19 +370,19 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		else if (imageLocation==null && existing!=null) {
 			// Delete
-			modelService.deleteEntity(existing, priviledged);
+			modelService.delete(existing, priviledged);
 		} else if (imageLocation!=null && existing==null) {
 			// Update
 			existing = new Location();
 			existing.setLatitude(imageLocation.getLatitude());
 			existing.setLongitude(imageLocation.getLongitude());
-			modelService.createItem(existing, priviledged);
+			modelService.create(existing, priviledged);
 			modelService.createRelation(existing, image, priviledged);
 		} else {
 			// Add
 			existing.setLatitude(imageLocation.getLatitude());
 			existing.setLongitude(imageLocation.getLongitude());			
-			modelService.updateItem(existing, priviledged);
+			modelService.update(existing, priviledged);
 		}		
 	}
 
@@ -444,8 +444,8 @@ public class ImageService extends AbstractCommandLineInterface {
 	public void deleteImage(Image image, Privileged privileged) throws ModelException, SecurityException {
 		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
-			modelService.deleteEntity(location, privileged);
+			modelService.delete(location, privileged);
 		}
-		modelService.deleteEntity(image, privileged);
+		modelService.delete(image, privileged);
 	}
 }

@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 
 
 public interface CustomQuery<T> {
@@ -11,5 +11,5 @@ public interface CustomQuery<T> {
 
 	public T convert(Object[] row);
 
-	public void setParameters(SQLQuery sql);
+	public void setParameters(NativeQuery<?> sql);
 }

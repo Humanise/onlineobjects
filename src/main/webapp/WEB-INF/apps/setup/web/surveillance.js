@@ -19,5 +19,14 @@ hui.ui.listen({
         listSource.refresh();
       },2000);
     }
+  },
+  $click$sendReport : function() {    
+    hui.ui.request({
+      url: '/sendSurveillanceReport',
+      message : {start:'Sending', success:'Sent!'},
+      $failure : function() {
+        hui.ui.msg.fail({text:'It did not work'})
+      }
+    })
   }
 });

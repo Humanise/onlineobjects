@@ -75,7 +75,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 	@Override
 	public Entity create(Privileged priviledged) throws EndUserException {
 		CompoundDocument document = new CompoundDocument();
-		modelService.createItem(document, priviledged);
+		modelService.create(document, priviledged);
 		return document;
 	}
 	

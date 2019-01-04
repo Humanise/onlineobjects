@@ -164,13 +164,25 @@ public class Strings {
 	}
 
 	public static boolean isNotBlank(String str) {
-		return StringUtils.isNotBlank(str);
+		return !isBlank(str);
 	}
-	
-	public static boolean isBlank(String str) {
-		return StringUtils.isBlank(str);
-	}
-	
+
+    public static boolean isBlank(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (str.charAt(i) == '\u00A0') {
+            	continue;
+            }
+            if ((Character.isWhitespace(str.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 	public static String fallback(String str, String defaultValue) {
 		if (Strings.isBlank(str)) {
 			return defaultValue;

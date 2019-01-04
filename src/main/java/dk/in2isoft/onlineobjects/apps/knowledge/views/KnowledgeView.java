@@ -7,13 +7,13 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
-public class KnowledgeView extends AbstractView implements InitializingBean {
+public class KnowledgeView extends LegacyAbstractView implements InitializingBean {
 	
 	private InternetAddressViewPerspectiveBuilder builder;
 	

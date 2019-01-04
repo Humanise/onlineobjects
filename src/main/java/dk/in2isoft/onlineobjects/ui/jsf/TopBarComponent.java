@@ -25,8 +25,10 @@ import dk.in2isoft.in2igui.jsf.MessageComponent;
 import dk.in2isoft.in2igui.jsf.PanelComponent;
 import dk.in2isoft.in2igui.jsf.SourceComponent;
 import dk.in2isoft.in2igui.jsf.TextInputComponent;
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
@@ -38,8 +40,8 @@ public class TopBarComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.topBar";
 
-	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people");
-	private static List<String> privateApps = Lists.newArrayList("knowledge", "desktop", "tools");
+	private static List<String> primaryApps = Lists.newArrayList("words", "photos", "people", "knowledge");
+	private static List<String> privateApps = Lists.newArrayList(); //, "desktop", "tools"
 	private static Map<String,String> icons = new HashMap<String, String>();
 
 	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;
@@ -69,13 +71,19 @@ public class TopBarComponent extends AbstractComponent {
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		ConfigurationService configurationService = Components.getBean(ConfigurationService.class);
+		SecurityService securityService = Components.getBean(SecurityService.class);
 		// boolean developmentMode = configurationService.isDevelopmentMode();
 		Request request = Request.get(context);
 		Messages msg = new Messages(this);
-		boolean publicUser = !request.isLoggedIn();
 		String texts = buildTexts(request.getLocale(), msg);
 
+		
 		out.startDiv("oo_topbar oo_faded").withId(getClientId()).withAttribute("data-texts", texts);
+		// TODO: Get this via application controller
+		if ("knowledge".equals(request.getApplication())) {
+			out.withAttribute("data-login-url", "/"+request.getLanguage()+"/app");
+			out.withAttribute("data-logout-url", "/"+request.getLanguage()+"/intro");
+		}
 		out.startA("oo_topbar_logo").withHref(configurationService.getApplicationContext("front", null, request));
 		out.startEm("oo_topbar_logo_icon oo_icon_onlineobjects").endEm();
 		out.startSpan("oo_topbar_logo_text").startSpan("oo_topbar_logo_part").text("Online").endSpan().text("Objects").endSpan();
@@ -102,6 +110,8 @@ public class TopBarComponent extends AbstractComponent {
 			out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
 		}
 
+		boolean publicUser = securityService.isPublicUser(request.getSession());
+		
 		if (!publicUser && !privateApps.isEmpty()) {
 			for (String app : privateApps) {
 				boolean selected = request.isApplication(app);
@@ -123,13 +133,18 @@ public class TopBarComponent extends AbstractComponent {
 		if (publicUser) {
 			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_login").withAttribute("data", "login").write("Log in").endA().endLi();
 		} else {
-			User user = request.getSession().getUser();
-			InboxService inboxService = Components.getBean(InboxService.class);
-			int count = inboxService.getCountSilently(user);
-			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
-			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
-			out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
-			out.write(user.getName()).endA().endLi();
+			//InboxService inboxService = Components.getBean(InboxService.class);
+			ModelService modelService = Components.getBean(ModelService.class);
+			try {
+				User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
+				//int count = inboxService.getCountSilently(user);
+				//out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
+				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
+				out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
+				out.write(user.getName()).endA().endLi();
+			} catch (EndUserException e) {
+				
+			}
 		}
 		out.endUl();
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.Agreement;
@@ -16,10 +17,13 @@ public class AccountAgreementsView extends AbstractManagedBean {
 
 	private MemberService memberService;
 	private ModelService modelService;
+	private SecurityService securityService;
 	
 	private boolean accepted;
 	private List<Agreement> agreements;
 	private Date acceptanceTime;
+	private boolean publicUser;
+	private String language;
 	
 	public void before(Request request) throws Exception {
 		Privileged privileged = request.getSession();
@@ -27,6 +31,8 @@ public class AccountAgreementsView extends AbstractManagedBean {
 		accepted = memberService.hasAcceptedTerms(user, user);
 		agreements = memberService.getAgreements(user, request.getLocale());
 		acceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
+		publicUser = securityService.isPublicUser(privileged);
+		language = request.getLanguage();
 	}
 		
 	public boolean isAccepted() {
@@ -39,7 +45,15 @@ public class AccountAgreementsView extends AbstractManagedBean {
 	
 	public Date getAcceptanceTime() {
 		return acceptanceTime;
-	}	
+	}
+	
+	public boolean isPublicUser() {
+		return publicUser;
+	}
+	
+	public String getLanguage() {
+		return language;
+	}
 		
 	// Wiring...
 	
@@ -49,5 +63,9 @@ public class AccountAgreementsView extends AbstractManagedBean {
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

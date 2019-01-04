@@ -23,7 +23,7 @@ public class PileService {
 			first = new Pile();
 			first.addProperty(Pile.PROPERTY_KEY, key);
 			first.setName(key);
-			modelService.createItem(first, privileged);
+			modelService.create(first, privileged);
 		}
 		return first;
 	}
@@ -35,7 +35,7 @@ public class PileService {
 			first = new Pile();
 			first.addProperty(Pile.PROPERTY_KEY, key);
 			first.setName(key);
-			modelService.createItem(first, user);
+			modelService.create(first, user);
 			modelService.createRelation(user, first, user);
 		}
 		return first;
@@ -47,7 +47,7 @@ public class PileService {
 		if (pile==null) {
 			pile = new Pile();
 			pile.setName(relationKind + " for "+user.getUsername());
-			modelService.createItem(pile, user);
+			modelService.create(pile, user);
 			modelService.createRelation(user, pile, relationKind, user);
 		}
 		return pile;
@@ -59,7 +59,7 @@ public class PileService {
 		if (add && !relation.isPresent()) {
 			modelService.createRelation(favorites, enity, user);
 		} else if (!add && relation.isPresent()) {
-			modelService.deleteRelation(relation.get(), user);
+			modelService.delete(relation.get(), user);
 		}
 		
 	}

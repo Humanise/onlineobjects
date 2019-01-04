@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.Query;
+import org.hibernate.query.Query;
+import org.hibernate.type.DoubleType;
+import org.hibernate.type.StringType;
 import org.hibernate.Session;
 
 import dk.in2isoft.commons.geo.GeoLatLng;
@@ -22,18 +24,43 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 		this.cls = cls;
 	}
 
-	public Query createCountQuery(Session session) {
+	public Query<Long> createCountQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select count(location) from ");
-		return createQuery(session, hql, true);
+		build(hql);
+		Query<Long> q = session.createQuery(hql.toString(), Long.class);
+		setParams(true, q);
+		return q;
 	}
 
-	public Query createItemQuery(Session session) {
+	public Query<?> createItemQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select location,entity from ");
-		return createQuery(session, hql, false);
+		build(hql);
+		hql.append(" order by entity.name");
+		Query<?> q = session.createQuery(hql.toString());
+		setParams(false, q);
+		return q;
 	}
 
-	public Query createQuery(Session session, StringBuilder hql,
-			boolean ignorePaging) {
+	private void setParams(boolean ignorePaging, Query<?> q) {
+		if (pageSize > 0 && !ignorePaging) {
+			q.setMaxResults(pageSize);
+			q.setFirstResult(pageNumber * pageSize);
+		}
+		if (Strings.isDefined(words)) {
+			for (int i = 0; i < words.length; i++) {
+				String word = words[i];
+				q.setParameter("word" + i, "%" + word + "%", StringType.INSTANCE);
+			}
+		}
+		if (northEast != null && southWest != null) {
+			q.setParameter("minLongitude", southWest.getLng(), DoubleType.INSTANCE);
+			q.setParameter("maxLongitude", northEast.getLng(), DoubleType.INSTANCE);
+			q.setParameter("minLatitude", southWest.getLat(), DoubleType.INSTANCE);
+			q.setParameter("maxLatitude", northEast.getLat(), DoubleType.INSTANCE);
+		}
+	}
+
+	private void build(StringBuilder hql) {
 		hql.append(Location.class.getName()).append(" as location");
 		hql.append(",").append(cls.getName()).append(" as entity");
 		hql.append(",").append(Relation.class.getName()).append(" as rel");
@@ -49,27 +76,6 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 			hql.append(" and location.latitude>:minLatitude and location.latitude<:maxLatitude");
 			hql.append(" and location.longitude>:minLongitude and location.longitude<:maxLongitude");
 		}
-		if (!ignorePaging) {
-			hql.append(" order by entity.name");
-		}
-		Query q = session.createQuery(hql.toString());
-		if (pageSize > 0 && !ignorePaging) {
-			q.setMaxResults(pageSize);
-			q.setFirstResult(pageNumber * pageSize);
-		}
-		if (Strings.isDefined(words)) {
-			for (int i = 0; i < words.length; i++) {
-				String word = words[i];
-				q.setString("word" + i, "%" + word + "%");
-			}
-		}
-		if (northEast != null && southWest != null) {
-			q.setDouble("minLongitude", southWest.getLng());
-			q.setDouble("maxLongitude", northEast.getLng());
-			q.setDouble("minLatitude", southWest.getLat());
-			q.setDouble("maxLatitude", northEast.getLat());
-		}
-		return q;
 	}
 
 	public LocationQuery<T> withWords(String query) {

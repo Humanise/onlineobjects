@@ -1,37 +1,37 @@
 package dk.in2isoft.onlineobjects.apps.words.views;
 
 import java.util.List;
-import java.util.Locale;
-
-import javax.faces.model.SelectItem;
-
-import org.springframework.beans.factory.InitializingBean;
-
-import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.core.Ability;
-import dk.in2isoft.onlineobjects.model.Language;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
-import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsLayoutView extends AbstractView implements InitializingBean {
+public class WordsLayoutView extends AbstractView {
 
-	private Messages msg;
 	private WordsInterfaceHelper wordsInterfaceHelper;
+	private SecurityService securityService;
+	private boolean front;
+	private String selectedMenuItem;
+	private String language;
+	private List<Option> alphabeth;
+	private boolean canModify;
+	private boolean loggedIn;
 	
-	public void afterPropertiesSet() throws Exception {
-		msg = new Messages(Language.class);
+	@Override
+	protected void before(Request request) throws Exception {
+		front = request.getLocalPath().length < 2;
+		selectedMenuItem = selectedMenuItem(request);
+		language = request.getLanguage();
+		alphabeth = wordsInterfaceHelper.getLetterOptions(request.getLocale());
+		canModify = request.getSession().has(Ability.modifyWords);
+		loggedIn = !securityService.isPublicUser(request.getSession());
 	}
-	
-	public boolean isFront() {
-		return getRequest().getLocalPath().length < 2;
-	}
-	
-	public String getSelectedMenuItem() {
-		String[] path = getRequest().getLocalPath();
+		
+	private String selectedMenuItem(Request request) {
+		String[] path = request.getLocalPath();
 		if (path.length==0 || path.length==1) {
 			return "front";
 		}
@@ -49,47 +49,39 @@ public class WordsLayoutView extends AbstractView implements InitializingBean {
 		}
 		return null;
 	}
-	
-	public List<SelectItem> getLanguages() {
-		List<SelectItem> items = Lists.newArrayList();
-		String[] languages = new String[] {"da","en"};
-		Request request = getRequest();
-		String[] path = request.getLocalPath();
-		for (String language : languages) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("/").append(language).append("/");
-			for (int i = 1; i < path.length; i++) {
-				String string = path[i];
-				
-				sb.append(string);
-				if (!string.contains(".")) {
-					sb.append("/");
-				}
-			}
-			Option option = new Option(sb.toString(),msg.get("code."+language, new Locale(language)));
-			option.setSelected(language.equals(request.getLanguage()));
-			items.add(option);
-		}
-		return items;
+
+	public boolean isFront() {
+		return front;
 	}
 	
+	public String getSelectedMenuItem() {
+		return selectedMenuItem;
+	}
+	
+	
 	public List<Option> getAlphabeth() {
-		return wordsInterfaceHelper.getLetterOptions(getLocale());
+		return alphabeth;
 	}
 
 	public boolean isCanModify() {
-		return getRequest().getSession().has(Ability.modifyWords);
+		return canModify;
 	}
 
 	public boolean isLoggedIn() {
-		return !isPublicUser();
+		return loggedIn;
 	}
 
 	public String getLanguage() {
-		return getRequest().getLanguage();
+		return language;
 	}
+
+	// Wiring...
 	
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {
 		this.wordsInterfaceHelper = wordsInterfaceHelper;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

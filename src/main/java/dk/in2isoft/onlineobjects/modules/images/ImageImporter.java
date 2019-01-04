@@ -35,11 +35,11 @@ public class ImageImporter implements ImportListener<Object> {
 			throw new IllegalRequestException("Unsupported mime type: "+mimeType);
 		}
 		Image image = new Image();
-		modelService.createItem(image, request.getSession());
+		modelService.create(image, request.getSession());
 		image.setName(name);
 		imageService.changeImageFile(image, file, mimeType);
 		imageService.synchronizeMetaData(image, request.getSession());
-		modelService.updateItem(image, request.getSession());
+		modelService.update(image, request.getSession());
 		importedImages.add(image);
 		image = modelService.get(Image.class, image.getId(), request.getSession());
 		postProcessImage(image, parameters, request);

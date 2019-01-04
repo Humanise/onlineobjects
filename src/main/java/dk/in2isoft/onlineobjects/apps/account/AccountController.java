@@ -42,7 +42,7 @@ public class AccountController extends AccountControllerBase {
 		person.setGivenName(request.getString("first"));
 		person.setAdditionalName(request.getString("middle"));
 		person.setFamilyName(request.getString("last"));
-		modelService.updateItem(person, privileged);
+		modelService.update(person, privileged);
 	}
 
 	@Path

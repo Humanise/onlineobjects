@@ -63,29 +63,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			try {
 				if (jobDescriptions!=null) {
 					for (JobDescription desc : jobDescriptions) {
-						JobDetail job = JobBuilder.newJob(desc.getJobClass())
-							    .withIdentity(desc.getName(), desc.getGroup()).storeDurably()
-							    .build();
-						if (desc.getProperties()!=null) {
-							job.getJobDataMap().putAll(desc.getProperties());
-						}
-						job.getJobDataMap().put("schedulingSupportFacade", schedulingSupportFacade);
-						scheduler.addJob(job, true);
-						if (Strings.isNotBlank(desc.getCron()) || desc.getRepeatMinutes()>0) {
-							if (Strings.isNotBlank(desc.getCron())) {
-								CronScheduleBuilder schedule = CronScheduleBuilder.cronSchedule(desc.getCron());
-								scheduler.scheduleJob(TriggerBuilder.newTrigger().forJob(job).withSchedule(schedule).build());
-								triggerDescriptions.put(job.getKey(), "cron: "+desc.getCron());
-							} else if (desc.getRepeatMinutes()>0) {
-								SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever(desc.getRepeatMinutes());
-								SimpleTrigger trigger = TriggerBuilder.newTrigger().forJob(job).withSchedule(schedule).withIdentity(desc.getName(), desc.getGroup()).build();
-								scheduler.scheduleJob(trigger);
-								triggerDescriptions.put(job.getKey(), "min:  "+desc.getRepeatMinutes());
-							}
-							if (desc.isPaused() || !configurationService.isStartScheduling()) {
-								scheduler.pauseJob(job.getKey());
-							}
-						}
+						initializeJob(desc);
 					}
 				}
 				scheduler.start();
@@ -102,6 +80,34 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 				} catch (SchedulerException e) {
 					log.error("Problem shutting down scheduler", e);
 				}
+			}
+		}
+	}
+
+
+
+	private void initializeJob(JobDescription desc) throws SchedulerException {
+		JobDetail job = JobBuilder.newJob(desc.getJobClass())
+			    .withIdentity(desc.getName(), desc.getGroup()).storeDurably()
+			    .build();
+		if (desc.getProperties()!=null) {
+			job.getJobDataMap().putAll(desc.getProperties());
+		}
+		job.getJobDataMap().put("schedulingSupportFacade", schedulingSupportFacade);
+		scheduler.addJob(job, true);
+		if (Strings.isNotBlank(desc.getCron()) || desc.getRepeatMinutes()>0) {
+			if (Strings.isNotBlank(desc.getCron())) {
+				CronScheduleBuilder schedule = CronScheduleBuilder.cronSchedule(desc.getCron());
+				scheduler.scheduleJob(TriggerBuilder.newTrigger().forJob(job).withSchedule(schedule).build());
+				triggerDescriptions.put(job.getKey(), "cron: "+desc.getCron());
+			} else if (desc.getRepeatMinutes()>0) {
+				SimpleScheduleBuilder schedule = SimpleScheduleBuilder.repeatMinutelyForever(desc.getRepeatMinutes());
+				SimpleTrigger trigger = TriggerBuilder.newTrigger().forJob(job).withSchedule(schedule).withIdentity(desc.getName(), desc.getGroup()).build();
+				scheduler.scheduleJob(trigger);
+				triggerDescriptions.put(job.getKey(), "min:  "+desc.getRepeatMinutes());
+			}
+			if (desc.isPaused() || !configurationService.isStartScheduling()) {
+				scheduler.pauseJob(job.getKey());
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.core;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +21,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.Item;
-import dk.in2isoft.onlineobjects.model.LogEntry;
-import dk.in2isoft.onlineobjects.model.LogLevel;
 import dk.in2isoft.onlineobjects.model.LogType;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -65,10 +62,10 @@ public class SecurityService {
 		}
 		User user = getUser(username, password);
 		if (user!=null) {
-			surveillanceService.audit().info("Changed to user={}", username);
 			Set<Ability> abilities = getAbilities(user);
 			userSession.setUser(user, abilities);
-			log(user, LogType.logIn);
+			surveillanceService.audit().info("Changed to user={}", username);
+			surveillanceService.log(user, LogType.logIn);
 			return true;
 		}
 		return false;
@@ -78,26 +75,7 @@ public class SecurityService {
 		Collection<String> properties = user.getPropertyValues(Property.KEY_ABILITY);
 		return Ability.convert(properties);
 	}
-
-	public void changeUserBySecret(UserSession userSession, String secret) throws SecurityException {
-		User user = getUserBySecret(secret);
-		if (user==null) {
-			throw new SecurityException("No user found with the secret");
-		}
-		log(user, LogType.logIn);
-		surveillanceService.audit().info("Changed (via secret) to user={}", user.getUsername());
-		userSession.setUser(user, getAbilities(user));
-	}
-	
-	private void log(User user, LogType type) {
-		LogEntry entry = new LogEntry();
-		entry.setSubject(user.getId());
-		entry.setTime(new Date());
-		entry.setType(type);
-		entry.setLevel(LogLevel.info);
-		modelService.create(entry);
-	}
-	
+		
 	public User getUser(String username, String password) {
 		User user = modelService.getUser(username);
 		if (user==null) {
@@ -125,7 +103,7 @@ public class SecurityService {
 		}
 		setSaltedPassword(user, password);
 		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
-		modelService.updateItem(user, privileged);
+		modelService.update(user, privileged);
 		surveillanceService.audit().info("Changed password of user={}", user.getUsername());
 	}
 
@@ -158,6 +136,7 @@ public class SecurityService {
 		if (user==null) {
 			return false;
 		} else {
+			surveillanceService.log(userSession, LogType.logOut);
 			userSession.setUser(user, new HashSet<>());
 			return true;
 		}
@@ -307,14 +286,14 @@ public class SecurityService {
 		if (client!=null) {
 			secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
 			syncClientInfo(info, client);
-			modelService.updateItem(client, user);
+			modelService.update(client, user);
 		} else {
 			secret = buildSecret();
 			Client newClient = new Client();
 			newClient.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
 			syncClientInfo(info, newClient);
 			newClient.setUUID(info.getUUID());
-			modelService.createItem(newClient, user);
+			modelService.create(newClient, user);
 			modelService.createRelation(user, newClient, user);
 		}
 		return secret;

@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.photos;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.LongType;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -56,7 +57,7 @@ public class SimplePhotoQuery implements CustomQuery<SimplePhotoPerspective> {
 		return item;
 	}
 
-	public void setParameters(SQLQuery sql) {
-		sql.setLong("viewer", viewer);
+	public void setParameters(NativeQuery<?> sql) {
+		sql.setParameter("viewer", viewer, LongType.INSTANCE);
 	}
 }

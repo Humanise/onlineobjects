@@ -20,9 +20,9 @@ public class TestUsersPersonQuery extends AbstractSpringTestCase {
 		User user = getNewTestUser();
 		Person person = new Person();
 		person.setGivenName("test89898897");
-		modelService.createItem(user, getAdminUser());
+		modelService.create(user, getAdminUser());
 		Privileged priviledged = user;
-		modelService.createItem(person, priviledged);
+		modelService.create(person, priviledged);
 		modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, priviledged);
 		{
 			UsersPersonQuery query = new UsersPersonQuery().withUsername(user.getUsername());
@@ -35,8 +35,8 @@ public class TestUsersPersonQuery extends AbstractSpringTestCase {
 			assertEquals(1, pairs.getTotalCount());
 			assertEquals(pairs.getFirst().getKey().getId(),user.getId());
 		}
-		modelService.deleteEntity(person, priviledged);
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(person, priviledged);
+		modelService.delete(user, getAdminUser());
 		{
 			UsersPersonQuery query = new UsersPersonQuery().withUsername("unitTestUser");
 			PairSearchResult<User,Person> pairs = modelService.searchPairs(query);

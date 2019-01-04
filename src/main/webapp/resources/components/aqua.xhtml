@@ -1,0 +1,16 @@
+<html xmlns = "http://www.w3.org/1999/xhtml"
+ xmlns:h = "http://java.sun.com/jsf/html"
+ xmlns:f = "http://java.sun.com/jsf/core"
+ xmlns:o="http://www.onlineobjects.com/jsf"
+ xmlns:composite = "http://java.sun.com/jsf/composite"
+>
+  <composite:interface>
+    <composite:attribute name="text" />
+    <composite:attribute name="href" />
+  </composite:interface>
+
+  <composite:implementation>
+    <a class="oo_aqua" href="#{cc.attrs.href}"><span class="oo_aqua_button"><span class="oo_aqua_text">#{cc.attrs.text}</span></span></a>
+    <o:dependency src="/WEB-INF/core/web/css/oo_aqua.css"/>
+  </composite:implementation>
+</html>

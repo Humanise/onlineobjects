@@ -28,14 +28,14 @@ public class TestPerson extends AbstractSpringTestCase {
 		person.setAdditionalName(additionalName);
 		person.setFamilyName(familyName);
 		assertEquals(givenName+" "+additionalName+" "+familyName, person.getName());
-		modelService.createItem(person, priviledged);
+		modelService.create(person, priviledged);
 		{
 			Query<Person> query = Query.of(Person.class).withName(givenName+" "+additionalName+" "+familyName);
 			List<Person> list = modelService.list(query);
 			assertEquals(1, list.size());
 		}
 		
-		modelService.deleteEntity(person, priviledged);
+		modelService.delete(person, priviledged);
 		modelService.commit();
 	}
 	

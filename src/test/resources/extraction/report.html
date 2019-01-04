@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="report.css">
+    <script src="report.js"></script>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Min</th>
+          <th>Max</th>
+          <th>Average</th>
+          <th>Missing</th>
+          <th>Extra</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th><a href="#readability">readability</a></th>
+        <td>8.06%<td>99.48%<td>64.55%<td>300<td>44</tr>
+      <tr>
+        <th><a href="#simple">simple</a></th>
+        <td>54.66%<td>95.28%<td>80.17%<td>237<td>148</tr>
+      <tr>
+        <th><a href="#boilerpipe">boilerpipe</a></th>
+        <td>0.00%<td>98.95%<td>60.59%<td>411<td>34</tr>
+      <tr>
+        <th><a href="#crux">crux</a></th>
+        <td>6.93%<td>99.08%<td>67.51%<td>453<td>66</tr>
+      <tr>
+        <th><a href="#mercury">mercury</a></th>
+        <td>0.00%<td>96.64%<td>19.33%<td>569<td>6</tr>
+      <tr>
+        <th><a href="#none">none</a></th>
+        <td>54.66%<td>95.28%<td>79.45%<td>237<td>174</tr>
+      <tr>
+        <th><a href="#recognize">recognize</a></th>
+        <td>79.95%<td>98.89%<td>93.22%<td>237<td>64</tr>
+      <tr>
+        <th><a href="#recognize.debug">recognize.debug</a></th>
+        <td>54.66%<td>95.28%<td>79.45%<td>237<td>174</tr>
+      </tbody>
+    </table>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Comparison</th>
+            <th>Missing</th>
+            <th>Extra</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th><a href="#daringfireball-net-linked-2018-02-26-apple-park-visitor-center-accessibility">daringfireball-net-linked-2018-02-26-apple-park-visitor-center-accessibility</a></th>
+          <td>79.9465%<td>0<td>2</tr>
+        <tr>
+          <th><a href="#wiki-apache-org-solr-SimpleFacetParameters">wiki-apache-org-solr-SimpleFacetParameters</a></th>
+          <td>92.9753%<td>237<td>43</tr>
+        <tr>
+          <th><a href="#tfcbooks-com-tesla-1926-01-30-htm">tfcbooks-com-tesla-1926-01-30-htm</a></th>
+          <td>96.8789%<td>0<td>9</tr>
+        <tr>
+          <th><a href="#alistapart-com-article-long-term-design-rewriting-the-design-sales-pitch">alistapart-com-article-long-term-design-rewriting-the-design-sales-pitch</a></th>
+          <td>97.4269%<td>0<td>7</tr>
+        <tr>
+          <th><a href="#lawsofux-com">lawsofux-com</a></th>
+          <td>98.8885%<td>0<td>3</tr>
+        </tbody>
+      </table>
+    </section>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <section>
+      <hr/>
+      <h2 id="none">none</h2>
+      
+      
+      
+      
+      <div>
+        <h3>wiki-apache-org-solr-SimpleFacetParameters</h3>
+        <h4>Missing</h4>
+        <div>  facet.limit=10</div>
+        <div>  f.category.facet.limit=5</div>
+        <div>This parameter can be specified multiple times to indicate that multiple queries should be used as separate facet constraints. It can be particularly useful for numeric range based facets, or prefix based facets -- see example below (i.e. price:[* TO 500] and  price:[501 TO *]).</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.4</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr4.5</div>
+        <div>&lt;!&gt; Solr1.3 Several params can be used to trigger faceting based on Date ranges computed using simple DateMathParser expressions.</div>
+        <div>&lt;!&gt; Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>&lt;!&gt; Solr3.1</div>
+        <div>&lt;!&gt; Solr3.1</div>
+        <div>&lt;!&gt; Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>&lt;!&gt; Solr1.4 The LocalParams syntax provides a method of adding meta-data to other parameter values, much like XML attributes.</div>
+        <div>=== Document Type ===</div>
+        <div>  [ ] Word (42)</div>
+        <div>  [x] PDF  (96)</div>
+        <div>  [ ] Excel(11)</div>
+        <div>  [ ] HTML (63)</div>
+        <div>&lt;!&gt; Solr3.1 Starting with Solr 3.1, the primary relevance query (i.e. the one normally specified by the q parameter) may also be excluded.</div>
+        <div>&lt;!&gt; Solr4.0 Pivot faceting allows you to facet within the results of the parent facet</div>
+        <div>&lt;!&gt; Solr4.10 Another supported form of faceting is “Interval Faceting”. This sounds similar to “Range Faceting”, but the functionality is really closer to doing “Facet Queries” with range queries. Interval Faceting allows you to set variable intervals and count the number of documents that have values within those intervals in the specified field. Before &lt;!&gt; Solr5.2, fields used for Interval Faceting had to have “docValues” enabled, but this is no longer a restriction. DocValues will be used if present, but fieldCache will be used otherwise.</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;2&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;search&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;memory&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;graphics&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;card&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;software&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;copier&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;multifunction&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;camera&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;hard&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;scanner&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;monitor&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;drive&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;printer&quot;&gt;0&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;4&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;12&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;10&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;memory&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;drive&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;hard&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;monitor&quot;&gt;2&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;11&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;3&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;&gt;</div>
+        <div>  &lt;int name=&quot;price:[* TO 500]&quot;&gt;2&lt;/int&gt;</div>
+        <div>  &lt;int name=&quot;price:[500 TO *]&quot;&gt;1&lt;/int&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>{</div>
+        <div>&#39;responseHeader&#39;=&gt;{</div>
+        <div>  &#39;status&#39;=&gt;0,</div>
+        <div>  &#39;QTime&#39;=&gt;88,</div>
+        <div>  &#39;params&#39;=&gt;{</div>
+        <div>        &#39;facet.limit&#39;=&gt;&#39;5&#39;,</div>
+        <div>        &#39;wt&#39;=&gt;&#39;ruby&#39;,</div>
+        <div>        &#39;rows&#39;=&gt;&#39;0&#39;,</div>
+        <div>        &#39;facet&#39;=&gt;&#39;on&#39;,</div>
+        <div>        &#39;facet.mincount&#39;=&gt;&#39;1&#39;,</div>
+        <div>        &#39;facet.field&#39;=&gt;&#39;text&#39;,</div>
+        <div>        &#39;indent&#39;=&gt;&#39;on&#39;,</div>
+        <div>        &#39;facet.prefix&#39;=&gt;&#39;xx&#39;,</div>
+        <div>        &#39;q&#39;=&gt;&#39;hatcher&#39;}},</div>
+        <div>&#39;response&#39;=&gt;{&#39;numFound&#39;=&gt;90,&#39;start&#39;=&gt;0,&#39;docs&#39;=&gt;[]</div>
+        <div>},</div>
+        <div>&#39;facet_counts&#39;=&gt;{</div>
+        <div>  &#39;facet_queries&#39;=&gt;{},</div>
+        <div>  &#39;facet_fields&#39;=&gt;{</div>
+        <div>        &#39;text&#39;=&gt;[</div>
+        <div>         &#39;xx&#39;,7,</div>
+        <div>         &#39;xxxviii&#39;,2,</div>
+        <div>         &#39;xx909337&#39;,1,</div>
+        <div>         &#39;xxvi&#39;,1] } } }</div>
+        <div>&lt;!&gt; Solr1.3</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;lst name=&quot;responseHeader&quot;&gt;</div>
+        <div> &lt;int name=&quot;status&quot;&gt;0&lt;/int&gt;</div>
+        <div> &lt;int name=&quot;QTime&quot;&gt;5&lt;/int&gt;</div>
+        <div> &lt;lst name=&quot;params&quot;&gt;</div>
+        <div>  &lt;str name=&quot;facet.date&quot;&gt;timestamp&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.end&quot;&gt;NOW/DAY+1DAY&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.gap&quot;&gt;+1DAY&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;rows&quot;&gt;0&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet&quot;&gt;true&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.start&quot;&gt;NOW/DAY-5DAYS&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;indent&quot;&gt;true&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;q&quot;&gt;*:*&lt;/str&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;result name=&quot;response&quot; numFound=&quot;42&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_dates&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;timestamp&quot;&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-11T00:00:00.000Z&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-12T00:00:00.000Z&quot;&gt;5&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-13T00:00:00.000Z&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-14T00:00:00.000Z&quot;&gt;7&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-15T00:00:00.000Z&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-16T00:00:00.000Z&quot;&gt;16&lt;/int&gt;</div>
+        <div>        &lt;str name=&quot;gap&quot;&gt;+1DAY&lt;/str&gt;</div>
+        <div>        &lt;date name=&quot;end&quot;&gt;2007-08-17T00:00:00Z&lt;/date&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;!&gt; Solr4.0</div>
+        <div>&quot;facet_pivot&quot;:{</div>
+        <div>      &quot;cat,popularity,inStock&quot;:[{</div>
+        <div>          &quot;field&quot;:&quot;cat&quot;,</div>
+        <div>          &quot;value&quot;:&quot;electronics&quot;,</div>
+        <div>          &quot;count&quot;:14,</div>
+        <div>          &quot;pivot&quot;:[{</div>
+        <div>              &quot;field&quot;:&quot;popularity&quot;,</div>
+        <div>              &quot;value&quot;:&quot;6&quot;,</div>
+        <div>              &quot;count&quot;:5,</div>
+        <div>              &quot;pivot&quot;:[{</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;true&quot;,</div>
+        <div>                  &quot;count&quot;:5}]},</div>
+        <div>            {</div>
+        <div>              &quot;field&quot;:&quot;popularity&quot;,</div>
+        <div>              &quot;value&quot;:&quot;7&quot;,</div>
+        <div>              &quot;count&quot;:4,</div>
+        <div>              &quot;pivot&quot;:[{</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;false&quot;,</div>
+        <div>                  &quot;count&quot;:2},</div>
+        <div>                {</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;true&quot;,</div>
+        <div>                  &quot;count&quot;:2}]},</div>
+        <div>            {</div>
+        <div>...</div>
+        <div>...</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_dates&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_ranges&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_intervals&quot;&gt;</div>
+        <div>    &lt;lst name=&quot;price&quot;&gt;</div>
+        <div>      &lt;int name=&quot;[0,10]&quot;&gt;3&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;(10,100]&quot;&gt;4&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;(100,*]&quot;&gt;9&lt;/int&gt;</div>
+        <div>    &lt;/lst&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>...</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_dates&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_ranges&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_intervals&quot;&gt;</div>
+        <div>    &lt;lst name=&quot;price&quot;&gt;</div>
+        <div>      &lt;int name=&quot;cheap&quot;&gt;3&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;average&quot;&gt;4&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;expensive&quot;&gt;9&lt;/int&gt;</div>
+        <div>    &lt;/lst&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+      </div>
+    </section>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <section>
+      <hr/>
+      <h2 id="recognize">recognize</h2>
+      <div>
+        <h3 id="alistapart-com-article-long-term-design-rewriting-the-design-sales-pitch">alistapart-com-article-long-term-design-rewriting-the-design-sales-pitch</h3>
+        <h4>Missing</h4>
+        
+        <h4>Extra</h4>
+        <div>Article Continues Below</div>
+        <div>Want the best way to store and serve images and videos? Try Cloudinary. Get your own free account.</div>
+        <div>A Book Apart:</div>
+        <div>Brief books for people who make websites.</div>
+        <div>An Event Apart:</div>
+        <div>3 days of design, code, and content for web &amp; UX designers &amp; devs.</div>
+        <div>Want the best way to store and serve images and videos? Try Cloudinary. Get your own free account.</div>
+      </div>
+      <div>
+        <h3 id="daringfireball-net-linked-2018-02-26-apple-park-visitor-center-accessibility">daringfireball-net-linked-2018-02-26-apple-park-visitor-center-accessibility</h3>
+        <h4>Missing</h4>
+        
+        <h4>Extra</h4>
+        <div>Display Preferences</div>
+        <div>Copyright © 2002–2018 The Daring Fireball Company LLC.</div>
+      </div>
+      <div>
+        <h3 id="lawsofux-com">lawsofux-com</h3>
+        <h4>Missing</h4>
+        
+        <h4>Extra</h4>
+        <div>Scroll Down</div>
+        <div>Back to top</div>
+        <div>Close</div>
+      </div>
+      <div>
+        <h3 id="tfcbooks-com-tesla-1926-01-30-htm">tfcbooks-com-tesla-1926-01-30-htm</h3>
+        <h4>Missing</h4>
+        
+        <h4>Extra</h4>
+        <div>Previous | Next | TOC</div>
+        <div>Top | Previous | Next | TOC</div>
+        <div>Home | Tesla Writings | Tesla Patents | Tesla FAQ | Tesla On AC | Tesla Books | Glossary | Links</div>
+        <div>Bookstore | Newsletter | Wholesale Book List | Contact Us | Reference Section | | Site Map</div>
+        <div>21st Century Books</div>
+        <div>Post Office Box 2001</div>
+        <div>Breckenridge, CO 80424-2001</div>
+        <div>� 1998-2013 Twenty-First Century Books, Colorado</div>
+        <div>All Rights Reserved</div>
+      </div>
+      <div>
+        <h3 id="wiki-apache-org-solr-SimpleFacetParameters">wiki-apache-org-solr-SimpleFacetParameters</h3>
+        <h4>Missing</h4>
+        <div>  facet.limit=10</div>
+        <div>  f.category.facet.limit=5</div>
+        <div>This parameter can be specified multiple times to indicate that multiple queries should be used as separate facet constraints. It can be particularly useful for numeric range based facets, or prefix based facets -- see example below (i.e. price:[* TO 500] and  price:[501 TO *]).</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr1.4</div>
+        <div>&lt;!&gt; Solr1.2</div>
+        <div>&lt;!&gt; Solr4.5</div>
+        <div>&lt;!&gt; Solr1.3 Several params can be used to trigger faceting based on Date ranges computed using simple DateMathParser expressions.</div>
+        <div>&lt;!&gt; Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>&lt;!&gt; Solr3.1</div>
+        <div>&lt;!&gt; Solr3.1</div>
+        <div>&lt;!&gt; Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>&lt;!&gt; Solr1.4 The LocalParams syntax provides a method of adding meta-data to other parameter values, much like XML attributes.</div>
+        <div>=== Document Type ===</div>
+        <div>  [ ] Word (42)</div>
+        <div>  [x] PDF  (96)</div>
+        <div>  [ ] Excel(11)</div>
+        <div>  [ ] HTML (63)</div>
+        <div>&lt;!&gt; Solr3.1 Starting with Solr 3.1, the primary relevance query (i.e. the one normally specified by the q parameter) may also be excluded.</div>
+        <div>&lt;!&gt; Solr4.0 Pivot faceting allows you to facet within the results of the parent facet</div>
+        <div>&lt;!&gt; Solr4.10 Another supported form of faceting is “Interval Faceting”. This sounds similar to “Range Faceting”, but the functionality is really closer to doing “Facet Queries” with range queries. Interval Faceting allows you to set variable intervals and count the number of documents that have values within those intervals in the specified field. Before &lt;!&gt; Solr5.2, fields used for Interval Faceting had to have “docValues” enabled, but this is no longer a restriction. DocValues will be used if present, but fieldCache will be used otherwise.</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;2&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;search&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;memory&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;graphics&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;card&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;software&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;copier&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;multifunction&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;camera&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;hard&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;scanner&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;monitor&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;drive&quot;&gt;0&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;printer&quot;&gt;0&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;4&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;12&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;cat&quot;&gt;</div>
+        <div>        &lt;int name=&quot;electronics&quot;&gt;10&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;memory&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;drive&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;hard&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;monitor&quot;&gt;2&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;11&lt;/QTime&gt;&lt;/responseHeader&gt;</div>
+        <div>&lt;result numFound=&quot;3&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;&gt;</div>
+        <div>  &lt;int name=&quot;price:[* TO 500]&quot;&gt;2&lt;/int&gt;</div>
+        <div>  &lt;int name=&quot;price:[500 TO *]&quot;&gt;1&lt;/int&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;inStock&quot;&gt;</div>
+        <div>        &lt;int name=&quot;false&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>{</div>
+        <div>&#39;responseHeader&#39;=&gt;{</div>
+        <div>  &#39;status&#39;=&gt;0,</div>
+        <div>  &#39;QTime&#39;=&gt;88,</div>
+        <div>  &#39;params&#39;=&gt;{</div>
+        <div>        &#39;facet.limit&#39;=&gt;&#39;5&#39;,</div>
+        <div>        &#39;wt&#39;=&gt;&#39;ruby&#39;,</div>
+        <div>        &#39;rows&#39;=&gt;&#39;0&#39;,</div>
+        <div>        &#39;facet&#39;=&gt;&#39;on&#39;,</div>
+        <div>        &#39;facet.mincount&#39;=&gt;&#39;1&#39;,</div>
+        <div>        &#39;facet.field&#39;=&gt;&#39;text&#39;,</div>
+        <div>        &#39;indent&#39;=&gt;&#39;on&#39;,</div>
+        <div>        &#39;facet.prefix&#39;=&gt;&#39;xx&#39;,</div>
+        <div>        &#39;q&#39;=&gt;&#39;hatcher&#39;}},</div>
+        <div>&#39;response&#39;=&gt;{&#39;numFound&#39;=&gt;90,&#39;start&#39;=&gt;0,&#39;docs&#39;=&gt;[]</div>
+        <div>},</div>
+        <div>&#39;facet_counts&#39;=&gt;{</div>
+        <div>  &#39;facet_queries&#39;=&gt;{},</div>
+        <div>  &#39;facet_fields&#39;=&gt;{</div>
+        <div>        &#39;text&#39;=&gt;[</div>
+        <div>         &#39;xx&#39;,7,</div>
+        <div>         &#39;xxxviii&#39;,2,</div>
+        <div>         &#39;xx909337&#39;,1,</div>
+        <div>         &#39;xxvi&#39;,1] } } }</div>
+        <div>&lt;!&gt; Solr1.3</div>
+        <div>&lt;response&gt;</div>
+        <div>&lt;lst name=&quot;responseHeader&quot;&gt;</div>
+        <div> &lt;int name=&quot;status&quot;&gt;0&lt;/int&gt;</div>
+        <div> &lt;int name=&quot;QTime&quot;&gt;5&lt;/int&gt;</div>
+        <div> &lt;lst name=&quot;params&quot;&gt;</div>
+        <div>  &lt;str name=&quot;facet.date&quot;&gt;timestamp&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.end&quot;&gt;NOW/DAY+1DAY&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.gap&quot;&gt;+1DAY&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;rows&quot;&gt;0&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet&quot;&gt;true&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;facet.date.start&quot;&gt;NOW/DAY-5DAYS&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;indent&quot;&gt;true&lt;/str&gt;</div>
+        <div>  &lt;str name=&quot;q&quot;&gt;*:*&lt;/str&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;result name=&quot;response&quot; numFound=&quot;42&quot; start=&quot;0&quot;/&gt;</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div> &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div> &lt;lst name=&quot;facet_dates&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;timestamp&quot;&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-11T00:00:00.000Z&quot;&gt;1&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-12T00:00:00.000Z&quot;&gt;5&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-13T00:00:00.000Z&quot;&gt;3&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-14T00:00:00.000Z&quot;&gt;7&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-15T00:00:00.000Z&quot;&gt;2&lt;/int&gt;</div>
+        <div>        &lt;int name=&quot;2007-08-16T00:00:00.000Z&quot;&gt;16&lt;/int&gt;</div>
+        <div>        &lt;str name=&quot;gap&quot;&gt;+1DAY&lt;/str&gt;</div>
+        <div>        &lt;date name=&quot;end&quot;&gt;2007-08-17T00:00:00Z&lt;/date&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div> &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>&lt;/response&gt;</div>
+        <div>&lt;!&gt; Solr4.0</div>
+        <div>&quot;facet_pivot&quot;:{</div>
+        <div>      &quot;cat,popularity,inStock&quot;:[{</div>
+        <div>          &quot;field&quot;:&quot;cat&quot;,</div>
+        <div>          &quot;value&quot;:&quot;electronics&quot;,</div>
+        <div>          &quot;count&quot;:14,</div>
+        <div>          &quot;pivot&quot;:[{</div>
+        <div>              &quot;field&quot;:&quot;popularity&quot;,</div>
+        <div>              &quot;value&quot;:&quot;6&quot;,</div>
+        <div>              &quot;count&quot;:5,</div>
+        <div>              &quot;pivot&quot;:[{</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;true&quot;,</div>
+        <div>                  &quot;count&quot;:5}]},</div>
+        <div>            {</div>
+        <div>              &quot;field&quot;:&quot;popularity&quot;,</div>
+        <div>              &quot;value&quot;:&quot;7&quot;,</div>
+        <div>              &quot;count&quot;:4,</div>
+        <div>              &quot;pivot&quot;:[{</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;false&quot;,</div>
+        <div>                  &quot;count&quot;:2},</div>
+        <div>                {</div>
+        <div>                  &quot;field&quot;:&quot;inStock&quot;,</div>
+        <div>                  &quot;value&quot;:&quot;true&quot;,</div>
+        <div>                  &quot;count&quot;:2}]},</div>
+        <div>            {</div>
+        <div>...</div>
+        <div>...</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_dates&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_ranges&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_intervals&quot;&gt;</div>
+        <div>    &lt;lst name=&quot;price&quot;&gt;</div>
+        <div>      &lt;int name=&quot;[0,10]&quot;&gt;3&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;(10,100]&quot;&gt;4&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;(100,*]&quot;&gt;9&lt;/int&gt;</div>
+        <div>    &lt;/lst&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <div>...</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt;</div>
+        <div>  &lt;lst name=&quot;facet_queries&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_fields&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_dates&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_ranges&quot;/&gt;</div>
+        <div>  &lt;lst name=&quot;facet_intervals&quot;&gt;</div>
+        <div>    &lt;lst name=&quot;price&quot;&gt;</div>
+        <div>      &lt;int name=&quot;cheap&quot;&gt;3&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;average&quot;&gt;4&lt;/int&gt;</div>
+        <div>      &lt;int name=&quot;expensive&quot;&gt;9&lt;/int&gt;</div>
+        <div>    &lt;/lst&gt;</div>
+        <div>  &lt;/lst&gt;</div>
+        <div>&lt;/lst&gt;</div>
+        <h4>Extra</h4>
+        <div>SimpleFacetParameters</div>
+        <div>Immutable Page</div>
+        <div>Info</div>
+        <div>Attachments</div>
+        <div>More Actions: Raw Text Print View Render as Docbook Delete Cache ------------------------ Check Spelling Like Pages Local Site Map ------------------------ Rename Page Copy Page Delete Page ------------------------ My Pages Subscribe User ------------------------ Remove Spam Revert to this revision Package Pages Sync Pages ------------------------ Load Save SlideShow</div>
+        <div>Solr provides a Simple Faceting toolkit which can be reused by various Request Handlers to include a &quot;Facet counts&quot; section within a search response. This extra section provides a breakdown or summary of the results based on some simple criteria, which can be used to help implement more advanced search interfaces. Use of faceting does not affect the results section of a search response. The SearchHandler uses these utilities via the FacetComponent, which supports the parameters listed here.</div>
+        <div>For More information on General Issues involved with Faceted searches in Solr, please read the SolrFacetingOverview.</div>
+        <div>Contents</div>
+        <div>facet.limit=10 f.category.facet.limit=5</div>
+        <div>This parameter can be specified multiple times to indicate that multiple queries should be used as separate facet constraints. It can be particularly useful for numeric range based facets, or prefix based facets -- see example below (i.e. price:[* TO 500] and price:[501 TO *]).</div>
+        <div>Solr1.2</div>
+        <div>Solr1.2</div>
+        <div>Solr1.2</div>
+        <div>Solr1.4</div>
+        <div>Solr1.2</div>
+        <div>Solr4.5</div>
+        <div>Solr1.3 Several params can be used to trigger faceting based on Date ranges computed using simple DateMathParser expressions.</div>
+        <div>Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>Solr3.1</div>
+        <div>Solr3.1</div>
+        <div>Solr3.6, Solr4.0 -- See https://issues.apache.org/jira/browse/SOLR-2366 The following section on variable width gaps discusses uncommitted code Gaps can also be variable width by passing in a comma separated list of the gap size to be used. The last gap specified will be used to fill out all remaining gaps if the number of gaps given does not go evenly into the range. Variable width gaps are useful, for example, in spatial applications where one might want to facet by distance into three buckets: walking (0-5KM), driving(5-100KM), other(100KM+).</div>
+        <div>Solr1.4 The LocalParams syntax provides a method of adding meta-data to other parameter values, much like XML attributes.</div>
+        <div>=== Document Type === [ ] Word (42) [x] PDF (96) [ ] Excel(11) [ ] HTML (63)</div>
+        <div>Solr3.1 Starting with Solr 3.1, the primary relevance query (i.e. the one normally specified by the q parameter) may also be excluded.</div>
+        <div>Solr4.0 Pivot faceting allows you to facet within the results of the parent facet</div>
+        <div>Solr4.10 Another supported form of faceting is “Interval Faceting”. This sounds similar to “Range Faceting”, but the functionality is really closer to doing “Facet Queries” with range queries. Interval Faceting allows you to set variable intervals and count the number of documents that have values within those intervals in the specified field. Before Solr5.2, fields used for Interval Faceting had to have “docValues” enabled, but this is no longer a restriction. DocValues will be used if present, but fieldCache will be used otherwise.</div>
+        <div>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;2&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;&gt; &lt;lst name=&quot;cat&quot;&gt; &lt;int name=&quot;search&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;memory&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;graphics&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;card&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt; &lt;int name=&quot;software&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;copier&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;multifunction&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;camera&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;hard&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;scanner&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;monitor&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;drive&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;printer&quot;&gt;0&lt;/int&gt; &lt;/lst&gt; &lt;lst name=&quot;inStock&quot;&gt; &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;&gt; &lt;lst name=&quot;cat&quot;&gt; &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt; &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt; &lt;/lst&gt; &lt;lst name=&quot;inStock&quot;&gt; &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;3&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound=&quot;4&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;&gt; &lt;lst name=&quot;cat&quot;&gt; &lt;int name=&quot;music&quot;&gt;1&lt;/int&gt; &lt;int name=&quot;connector&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;electronics&quot;&gt;3&lt;/int&gt; &lt;int&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;lst name=&quot;inStock&quot;&gt; &lt;int name=&quot;false&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;4&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound=&quot;12&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;&gt; &lt;lst name=&quot;cat&quot;&gt; &lt;int name=&quot;electronics&quot;&gt;10&lt;/int&gt; &lt;int name=&quot;memory&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;drive&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;hard&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;monitor&quot;&gt;2&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>&lt;response&gt; &lt;responseHeader&gt;&lt;status&gt;0&lt;/status&gt;&lt;QTime&gt;11&lt;/QTime&gt;&lt;/responseHeader&gt; &lt;result numFound=&quot;3&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;&gt; &lt;int name=&quot;price:[* TO 500]&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;price:[500 TO *]&quot;&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;lst name=&quot;facet_fields&quot;&gt; &lt;lst name=&quot;inStock&quot;&gt; &lt;int name=&quot;false&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;true&quot;&gt;1&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>{ &#39;responseHeader&#39;=&gt;{ &#39;status&#39;=&gt;0, &#39;QTime&#39;=&gt;88, &#39;params&#39;=&gt;{ &#39;facet.limit&#39;=&gt;&#39;5&#39;, &#39;wt&#39;=&gt;&#39;ruby&#39;, &#39;rows&#39;=&gt;&#39;0&#39;, &#39;facet&#39;=&gt;&#39;on&#39;, &#39;facet.mincount&#39;=&gt;&#39;1&#39;, &#39;facet.field&#39;=&gt;&#39;text&#39;, &#39;indent&#39;=&gt;&#39;on&#39;, &#39;facet.prefix&#39;=&gt;&#39;xx&#39;, &#39;q&#39;=&gt;&#39;hatcher&#39;}}, &#39;response&#39;=&gt;{&#39;numFound&#39;=&gt;90,&#39;start&#39;=&gt;0,&#39;docs&#39;=&gt;[] }, &#39;facet_counts&#39;=&gt;{ &#39;facet_queries&#39;=&gt;{}, &#39;facet_fields&#39;=&gt;{ &#39;text&#39;=&gt;[ &#39;xx&#39;,7, &#39;xxxviii&#39;,2, &#39;xx909337&#39;,1, &#39;xxvi&#39;,1] } } }</div>
+        <div>Solr1.3</div>
+        <div>&lt;response&gt; &lt;lst name=&quot;responseHeader&quot;&gt; &lt;int name=&quot;status&quot;&gt;0&lt;/int&gt; &lt;int name=&quot;QTime&quot;&gt;5&lt;/int&gt; &lt;lst name=&quot;params&quot;&gt; &lt;str name=&quot;facet.date&quot;&gt;timestamp&lt;/str&gt; &lt;str name=&quot;facet.date.end&quot;&gt;NOW/DAY+1DAY&lt;/str&gt; &lt;str name=&quot;facet.date.gap&quot;&gt;+1DAY&lt;/str&gt; &lt;str name=&quot;rows&quot;&gt;0&lt;/str&gt; &lt;str name=&quot;facet&quot;&gt;true&lt;/str&gt; &lt;str name=&quot;facet.date.start&quot;&gt;NOW/DAY-5DAYS&lt;/str&gt; &lt;str name=&quot;indent&quot;&gt;true&lt;/str&gt; &lt;str name=&quot;q&quot;&gt;*:*&lt;/str&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;result name=&quot;response&quot; numFound=&quot;42&quot; start=&quot;0&quot;/&gt; &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;/&gt; &lt;lst name=&quot;facet_dates&quot;&gt; &lt;lst name=&quot;timestamp&quot;&gt; &lt;int name=&quot;2007-08-11T00:00:00.000Z&quot;&gt;1&lt;/int&gt; &lt;int name=&quot;2007-08-12T00:00:00.000Z&quot;&gt;5&lt;/int&gt; &lt;int name=&quot;2007-08-13T00:00:00.000Z&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;2007-08-14T00:00:00.000Z&quot;&gt;7&lt;/int&gt; &lt;int name=&quot;2007-08-15T00:00:00.000Z&quot;&gt;2&lt;/int&gt; &lt;int name=&quot;2007-08-16T00:00:00.000Z&quot;&gt;16&lt;/int&gt; &lt;str name=&quot;gap&quot;&gt;+1DAY&lt;/str&gt; &lt;date name=&quot;end&quot;&gt;2007-08-17T00:00:00Z&lt;/date&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/response&gt;</div>
+        <div>Solr4.0</div>
+        <div>&quot;facet_pivot&quot;:{ &quot;cat,popularity,inStock&quot;:[{ &quot;field&quot;:&quot;cat&quot;, &quot;value&quot;:&quot;electronics&quot;, &quot;count&quot;:14, &quot;pivot&quot;:[{ &quot;field&quot;:&quot;popularity&quot;, &quot;value&quot;:&quot;6&quot;, &quot;count&quot;:5, &quot;pivot&quot;:[{ &quot;field&quot;:&quot;inStock&quot;, &quot;value&quot;:&quot;true&quot;, &quot;count&quot;:5}]}, { &quot;field&quot;:&quot;popularity&quot;, &quot;value&quot;:&quot;7&quot;, &quot;count&quot;:4, &quot;pivot&quot;:[{ &quot;field&quot;:&quot;inStock&quot;, &quot;value&quot;:&quot;false&quot;, &quot;count&quot;:2}, { &quot;field&quot;:&quot;inStock&quot;, &quot;value&quot;:&quot;true&quot;, &quot;count&quot;:2}]}, { ...</div>
+        <div>... &lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;/&gt; &lt;lst name=&quot;facet_dates&quot;/&gt; &lt;lst name=&quot;facet_ranges&quot;/&gt; &lt;lst name=&quot;facet_intervals&quot;&gt; &lt;lst name=&quot;price&quot;&gt; &lt;int name=&quot;[0,10]&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;(10,100]&quot;&gt;4&lt;/int&gt; &lt;int name=&quot;(100,*]&quot;&gt;9&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt; ...</div>
+        <div>&lt;lst name=&quot;facet_counts&quot;&gt; &lt;lst name=&quot;facet_queries&quot;/&gt; &lt;lst name=&quot;facet_fields&quot;/&gt; &lt;lst name=&quot;facet_dates&quot;/&gt; &lt;lst name=&quot;facet_ranges&quot;/&gt; &lt;lst name=&quot;facet_intervals&quot;&gt; &lt;lst name=&quot;price&quot;&gt; &lt;int name=&quot;cheap&quot;&gt;3&lt;/int&gt; &lt;int name=&quot;average&quot;&gt;4&lt;/int&gt; &lt;int name=&quot;expensive&quot;&gt;9&lt;/int&gt; &lt;/lst&gt; &lt;/lst&gt; &lt;/lst&gt;</div>
+        <div>SimpleFacetParameters (last edited 2015-04-25 19:33:00 by TomasFernandezLobbe)</div>
+        <div>Immutable Page</div>
+        <div>Info</div>
+        <div>Attachments</div>
+        <div>More Actions: Raw Text Print View Render as Docbook Delete Cache ------------------------ Check Spelling Like Pages Local Site Map ------------------------ Rename Page Copy Page Delete Page ------------------------ My Pages Subscribe User ------------------------ Remove Spam Revert to this revision Package Pages Sync Pages ------------------------ Load Save SlideShow</div>
+      </div>
+    </section>
+
+    
+  </body>
+</html>

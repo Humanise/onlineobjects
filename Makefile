@@ -7,6 +7,9 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 test:
 	mvn test -q
 
+extract:
+	mvn test -q -Dtest=TestExtractionComparison
+
 run:
 	mvn jetty:run -DskipTests=true
 

@@ -117,7 +117,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 					request.redirectFromBase("/service/authentication/?redirect="+request.getRequest().getRequestURI()+"&action=appAccessDenied");
 					return;
 				} else {
-					dk.in2isoft.onlineobjects.core.exceptions.SecurityException exception = new dk.in2isoft.onlineobjects.core.exceptions.SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getUser().getUsername()+"'");
+					SecurityException exception = new SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getIdentity()+"'");
 					throw exception;
 				}
 			}

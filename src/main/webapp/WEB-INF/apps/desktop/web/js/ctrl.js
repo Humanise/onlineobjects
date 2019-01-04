@@ -13,7 +13,7 @@ hui.ui.listen({
     })
   },
   login : function() {
-    hui.ui.showMessage({text:'You are not logged in'});
+    hui.ui.msg.success({text:'You are not logged in'});
   },
   init : function() {
     hui.drag.listen({
@@ -41,7 +41,7 @@ hui.ui.listen({
   },
   $select$keyboarder : function(obj) {
     window.open(obj.data.address)
-    hui.ui.showMessage({text:obj.data.address,duration:3000});
+    hui.ui.msg({text:obj.data.address});
   },
 
   loadWidget : function(options) {
@@ -52,7 +52,7 @@ hui.ui.listen({
         new desktop.widget[obj.type]({entity : obj.entity, position : options.position})
       },
       $failure : function() {
-        hui.ui.showMessage({text:'Not found',duration:2000})
+        hui.ui.msg.fail({text:'Not found'})
       }
     })
   },
@@ -85,11 +85,11 @@ hui.ui.listen({
       if (info.entity) {
         this.loadWidget({id:info.entity.id,position:pos});
       } else {
-        hui.ui.showMessage({text:'No object was created',icon:'common/warning',duration:4000});
+        hui.ui.msg.fail({text:'No object was created'});
       }
       this._removeProgress(progress);
     } else if (info.status=='failure') {
-      hui.ui.showMessage({text:'The import failed',duration:4000});
+      hui.ui.msg.fail({text:'The import failed'});
       this._removeProgress(progress);
     } else {
       window.setTimeout(function() {
@@ -166,7 +166,7 @@ hui.ui.listen({
         progress.setValue(current/total);
       },
       $load : function() {
-        //hui.ui.showMessage({text:'Uploading',busy:true})
+        //hui.ui.msg({text:'Uploading',busy:true})
       },
       $abort : function() {
         this._removeProgress(progress);
@@ -176,13 +176,13 @@ hui.ui.listen({
         if (info.entity) {
           this.loadWidget({id:info.entity.id,position:pos});
         } else {
-          hui.ui.showMessage({text:'The file could not be recognized', icon: 'common/warning',duration:3000})
+          hui.ui.msg.fail({text:'The file could not be recognized'})
         }
         this._removeProgress(progress);
       }.bind(this),
       $failure : function() {
         this._removeProgress(progress);
-        hui.ui.showMessage({text:'The upload failed',duration:3000})
+        hui.ui.msg.fail({text:'The upload failed'})
       }.bind(this)
     })
   },

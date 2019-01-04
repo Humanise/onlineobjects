@@ -46,7 +46,7 @@ oo.WordFinder.prototype = {
     this.form.setValues({
       text : text
     })
-    this.form.focus();    
+    this.form.focus();
   },
   $valueChanged$wordFinderSearch : function() {
     hui.ui.get('wordFinderList').resetState();
@@ -61,7 +61,7 @@ oo.WordFinder.prototype = {
   $submit$wordFinderForm : function(form) {
     var values = form.getValues();
     if (hui.isBlank(values.text) || hui.isBlank(values.language)) {
-      hui.ui.showMessage({text:'Please provide the text and language',duration:2000,icon:'common/warning'});
+      hui.ui.msg.fail({text:'Please provide the text and language'});
       form.focus();
       return;
     }
@@ -70,7 +70,7 @@ oo.WordFinder.prototype = {
       parameters : values,
       $object : this._found.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to add word',duration:2000,icon:'common/warning'});
+        hui.ui.msg.fail({text:'Unable to add word'});
       }
     })
   }

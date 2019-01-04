@@ -7,21 +7,21 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
-import dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeModelService;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
 
 public class EntityViewPerspectiveBuilder {
 
 	protected ModelService modelService;
-	protected KnowledgeModelService readerModelService;
+	protected KnowledgeService knowledgeService;
 
-	protected void writeList(HTMLWriter html, String header, List<Statement> answers, UserSession session) throws ModelException {
+	protected void writeList(HTMLWriter html, String header, List<Statement> answers, Privileged privileged) throws ModelException {
 		html.startDiv().withClass("reader_entity_list");
 		html.startH2().withClass("reader_entity_header").text(header).endH2();
 		if (Code.isEmpty(answers)) {
@@ -32,8 +32,8 @@ public class EntityViewPerspectiveBuilder {
 				html.startP().withClass("reader_entity_item_text").text(statement.getText());
 				html.startSpan().withClass("oo_icon oo_icon_16 oo_icon_info_light js-clickable").withDataMap("id",statement.getId(),"type",statement.getClass().getSimpleName()).endSpan();
 				html.endP();
-				List<Person> authors = modelService.getChildren(statement, Relation.KIND_COMMON_AUTHOR, Person.class, session);
-				List<InternetAddress> addresses = modelService.getParents(statement, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, session);
+				List<Person> authors = modelService.getChildren(statement, Relation.KIND_COMMON_AUTHOR, Person.class, privileged);
+				List<InternetAddress> addresses = modelService.getParents(statement, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, privileged);
 				if (!authors.isEmpty() || !addresses.isEmpty()) {
 					html.startP().withClass("reader_entity_item_info");
 					boolean first = true;
@@ -69,7 +69,7 @@ public class EntityViewPerspectiveBuilder {
 		this.modelService = modelService;
 	}
 	
-	public final void setReaderModelService(KnowledgeModelService readerModelService) {
-		this.readerModelService = readerModelService;
+	public void setKnowledgeService(KnowledgeService knowledgeService) {
+		this.knowledgeService = knowledgeService;
 	}
 }

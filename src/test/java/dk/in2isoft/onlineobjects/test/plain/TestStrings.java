@@ -26,6 +26,11 @@ public class TestStrings extends TestCase {
 	}
 	
 	@Test
+	public void testBlank() {
+		assertTrue(Strings.isBlank(" ")); // Non-breaking space		
+	}
+
+	@Test
 	public void testEquals() {
 		assertTrue(Strings.equals(null, null));
 		assertTrue(Strings.equals("", ""));

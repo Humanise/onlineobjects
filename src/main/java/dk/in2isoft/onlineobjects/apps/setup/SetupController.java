@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.setup;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
@@ -35,7 +37,6 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -48,6 +49,7 @@ import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
+import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -58,6 +60,7 @@ import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.PublisherPerspective;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobInfo;
 import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
+import dk.in2isoft.onlineobjects.modules.surveillance.LogQuery;
 import dk.in2isoft.onlineobjects.modules.surveillance.RequestInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
@@ -67,7 +70,7 @@ public class SetupController extends SetupControllerBase {
 	
 	@Override
 	public void unknownRequest(Request request) throws IOException,EndUserException {
-		if (!request.isUser(SecurityService.ADMIN_USERNAME)) {
+		if (!securityService.isAdminUser(request.getSession())) {
 			request.redirectFromBase("/service/authentication/?redirect=/app/setup/&action=appAccessDenied");
 		} else {
 			String path = request.getLocalPathAsString();
@@ -412,7 +415,7 @@ public class SetupController extends SetupControllerBase {
 			}
 		}
 		user.setName(perspective.getName());
-		modelService.updateItem(user, request.getSession());
+		modelService.update(user, request.getSession());
 		if (securityService.isAdminUser(user)) {
 			modelService.grantPrivileges(user, user, true, true, false, securityService.getAdminPrivileged());
 			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
@@ -545,7 +548,7 @@ public class SetupController extends SetupControllerBase {
 	}
 	
 	@Path
-	public void getSurveillanceList(Request request) throws IOException {
+	public void getSurveillanceList(Request request) throws IOException, ModelException {
 		String kind = request.getString("kind");
 		if ("longestRunningRequests".equals(kind)) {
 			ListData data = new ListData();
@@ -567,7 +570,7 @@ public class SetupController extends SetupControllerBase {
 				data.addCell(localizationService.formatMilis(info.getTotalRunningTime()));
 			}
 			request.sendObject(data);
-		} else if ("log".equals(kind)) {
+		} else if ("liveLog".equals(kind)) {
 			ListWriter writer = new ListWriter(request);
 			
 			writer.startList();
@@ -585,6 +588,41 @@ public class SetupController extends SetupControllerBase {
 				writer.endRow();
 			}
 			writer.endList();
+		} else if ("log".equals(kind)) {
+			ListWriter writer = new ListWriter(request);
+			
+			int page = request.getInt("page");
+			int size = 100;
+
+			LogQuery query = new LogQuery().withPage(page).withSize(size);
+			SearchResult<LogEntry> result = modelService.search(query);
+			writer.startList();
+			writer.window(result.getTotalCount(), size, page);
+			
+			writer.startHeaders().header("Time").header("Level").header("User").header("Type").endHeaders();
+			
+			Locale locale = request.getLocale();
+
+			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",locale);
+			for (LogEntry entry : result.getList()) {
+				writer.startRow();
+				writer.startCell().text(format.format(entry.getTime())).endCell();
+				writer.startCell().text(entry.getLevel()).endCell();
+				writer.startCell();
+				if (entry.getSubject() != null) {
+					@Nullable
+					User user = modelService.get(User.class, entry.getSubject(), request.getSession());
+					if (user!=null) {
+						writer.text(user.getUsername());
+					} else {
+						writer.text("Not found: " + entry.getSubject());
+					}
+				}
+				writer.endCell();
+				writer.startCell().text(entry.getType()).endCell();
+				writer.endRow();
+			}
+			writer.endList();
 			
 		} else {
 			ListData data = new ListData();
@@ -598,6 +636,11 @@ public class SetupController extends SetupControllerBase {
 			}
 			request.sendObject(data);
 		}
+	}
+
+	@Path
+	public void sendSurveillanceReport(Request request) throws EndUserException {
+		surveillanceService.sendReport();
 	}
 	
 	@Path
@@ -869,6 +912,9 @@ public class SetupController extends SetupControllerBase {
 		String password = request.getString("password", "No password");
 		String fullName = request.getString("name", "No full name");
 		String email = request.getString("email", "No e-mail");
+		if (username != null) {
+			username = username.toLowerCase();
+		}
 		memberService.createMember(session, username, password, fullName, email);
 	}
 	

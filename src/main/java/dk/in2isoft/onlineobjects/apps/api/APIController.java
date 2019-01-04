@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,14 +27,12 @@ import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
-import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
-import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
+import dk.in2isoft.onlineobjects.modules.knowledge.AddressRequest;
 import dk.in2isoft.onlineobjects.modules.knowledge.HypothesisApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
@@ -176,33 +173,10 @@ public class APIController extends APIControllerBase {
 		String url = request.getString("url", "An URL parameters must be provided");
 		String quote = request.getString("quote");
 
-		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
+		InternetAddress internetAddress = internetAddressService.create(url, null, user);
 		if (Strings.isNotBlank(quote)) {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
 		}
-	}
-
-	@Path(start={"v1.0","addImage"})
-	public void addImage(Request request) throws IOException, EndUserException {
-
-		DataImporter importer = importService.createImporter();
-		importer.setListener(new ImageImporter(modelService, imageService) {
-			@Override
-			protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {
-				String secret = parameters.get("secret");
-				if (Strings.isBlank(secret)) {
-					throw new IllegalRequestException("No secret");
-				}
-				securityService.changeUserBySecret(request.getSession(), secret);
-				return true;
-			}
-			
-			@Override
-			protected void postProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
-				
-			}
-		});
-		importer.importMultipart(this, request);
 	}
 	
 	/* ------- Knowledge ------- */
@@ -295,7 +269,7 @@ public class APIController extends APIControllerBase {
 		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
 		List<Relation> relations = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).list();
 		for (Relation relation : relations) {
-			modelService.deleteRelation(relation, user);
+			modelService.delete(relation, user);
 		}
 		modelService.commit();
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
@@ -315,6 +289,14 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
 	}
 
+	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "delete" })
+	public void deleteHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteHypothesis(id, user);
+	}
+
+	
 	@Path(exactly = { "v1.0", "knowledge", "statement" })
 	public StatementApiPerspective viewStatement(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
@@ -384,24 +366,23 @@ public class APIController extends APIControllerBase {
 	public InternetAddressApiPerspective addInternetAddress(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		String url = request.getString("url", "An URL parameters must be provided");
-		String quote = request.getString("quote");
-		Long questionId = request.getLong("questionId", null);
 
-		InternetAddress internetAddress = internetAddressService.importAddress(url, user);
+		AddressRequest addressRequest = new AddressRequest();
+		addressRequest.setUrl(url);
+		addressRequest.setUser(user);
+		addressRequest.setQuestionId(request.getLong("questionId", null));
+		addressRequest.setTitle(request.getString("title"));
+		addressRequest.setQuote(request.getString("quote"));
+		
+		InternetAddress internetAddress = knowledgeService.createInternetAddress(addressRequest);
+		return knowledgeService.getAddressPerspective(internetAddress, user);
+	}
 
-		if (Strings.isNotBlank(quote)) {
-			Statement statement = knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
-			if (questionId != null) {
-				Question question = modelService.getRequired(Question.class, questionId, user);
-				Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
-				if (!found.isPresent()) {
-					modelService.createRelation(statement, question, Relation.ANSWERS, user);
-					modelService.commit();
-				}
-			}
-
-		}
-		return knowledgeService.getAddressPerspective(internetAddress, new UserSession(user));
+	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "delete" })
+	public void deleteInternetAddress(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId(); 
+		knowledgeService.deleteInternetAddress(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "agreements" })

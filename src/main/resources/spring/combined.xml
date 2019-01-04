@@ -59,6 +59,8 @@
         <property name="simulateHttps" value="${development.simulateHttps}"/>
         <property name="testMode" value="${testMode}"/>
         <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
+        <property name="disableCache" value="${cache.disabled}"></property>
+        <property name="monitoringMails" value="${monitoring.mails}"/>
 	</bean>
 
 	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
@@ -80,7 +82,11 @@
 		<property name="surveillanceService" ref="surveillanceService"/>
 	</bean>
 
-	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType"/>
+	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType">
+      <property name="finder">
+        <bean class="dk.in2isoft.onlineobjects.core.Finder" autowire="byType"/>
+      </property>
+    </bean>
 	
 	<bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType"/>
 	

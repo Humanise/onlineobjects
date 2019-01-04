@@ -2,7 +2,6 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.html.HtmlBody;
@@ -25,27 +24,16 @@ public class BodyComponent extends HtmlBody {
 	public static final String TYPE = "onlineobjects.body";
 	
 	private boolean plain;
+	private boolean light;
 	
 	public java.lang.String getStyleClass() {
 		if (plain) {
 			return null;
 		}
 		String styleClass = super.getStyleClass();
-		Map<String, String> map = getFacesContext().getExternalContext().getRequestHeaderMap();
 		String cls = "oo_body";
-		if (map.containsKey("User-Agent")) {
-			String agent = map.get("User-Agent");
-			if (!agent.contains("Opera")) {
-				if (agent.contains("MSIE 6")) {
-					cls+= " oo_msie oo_msie6";
-				} else if (agent.contains("MSIE 7")) {
-					cls+= " oo_msie oo_msie7";
-				} else if (agent.contains("MSIE 8")) {
-					cls+= " oo_msie oo_msie8";
-				} else if (agent.contains("MSIE")) {
-					cls+= " oo_msie";
-				}
-			}
+		if (light) {
+			cls+=" oo_body-light";
 		}
 		if (cls!=null && Strings.isBlank(styleClass)) {
 			return cls;
@@ -97,5 +85,13 @@ public class BodyComponent extends HtmlBody {
 
 	public void setPlain(boolean plain) {
 		this.plain = plain;
+	}
+
+	public boolean isLight() {
+		return light;
+	}
+
+	public void setLight(boolean light) {
+		this.light = light;
 	}
 }

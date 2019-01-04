@@ -35,7 +35,7 @@ public abstract class SetupControllerBase extends ApplicationController {
 
 	@Override
 	public boolean isAllowed(Request request) {
-		return request.isUser(SecurityService.ADMIN_USERNAME);
+		return securityService.isAdminUser(request.getSession());
 	}
 	
 	@Override

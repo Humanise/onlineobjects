@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.tools;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.information.InformationService;
 import dk.in2isoft.onlineobjects.modules.user.InvitationService;
 import dk.in2isoft.onlineobjects.services.ImportService;
@@ -15,6 +16,7 @@ public abstract class ToolsControllerBase extends ApplicationController {
 	protected InformationService informationService;
 	protected InvitationService invitationService;
 	protected PersonService personService;
+	protected SecurityService securityService;
 	
 	public ToolsControllerBase() {
 		super("tools");
@@ -47,5 +49,9 @@ public abstract class ToolsControllerBase extends ApplicationController {
 	
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

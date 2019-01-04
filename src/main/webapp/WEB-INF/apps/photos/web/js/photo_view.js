@@ -27,7 +27,7 @@ var photoView = {
       url : '/updateTitle',
       parameters : {id:this.imageId,title:value},
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to update tile',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to update tile'});
       }
     })
   },
@@ -57,7 +57,7 @@ var photoView = {
         oo.render({id:'properties'})
       },
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to update location',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to update location'});
       }
     });
     panel.hide();
@@ -79,7 +79,7 @@ var photoView = {
         oo.update({id:'photos_photo_description'});
       },
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to update description',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to update description'});
       }
     })
   },
@@ -93,7 +93,7 @@ var photoView = {
         oo.update({id:'properties'});
       },
       $failure : function() {
-        hui.ui.msg({text:'Unable to synchronize metadata',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to synchronize metadata'});
       },
       $finally : function() {
         button.setEnabled(true)
@@ -112,7 +112,7 @@ var photoView = {
       parameters : {image : this.imageId, word : info.id},
       $success : info.callback,
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to add word',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to add word'});
         info.callback();
       }
     })
@@ -125,7 +125,7 @@ var photoView = {
       parameters : {image : this.imageId, word : info.id},
       $success : info.callback,
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to remove word',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to remove word'});
         info.callback();
       }
     })
@@ -137,7 +137,7 @@ var photoView = {
       url : '/changeAccess',
       parameters : {image : this.imageId, 'public' : value},
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to change access',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to change access'});
       }
     })
   },
@@ -149,7 +149,7 @@ var photoView = {
       json : {id : this.imageId, location : info.location},
       $success : info.callback,
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to change location',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to change location'});
         info.callback();
       }
     });
@@ -162,7 +162,7 @@ var photoView = {
         url : '/deleteImage',
         parameters : {imageId : this.imageId},
         $failure : function() {
-          hui.ui.showMessage({text:'Unable to delete photo',icon:'common/warning',duration:2000});
+          hui.ui.msg.fail({text:'Unable to delete photo'});
         },
         $success : function() {
           document.location = '/'+oo.language+'/users/'+this.username+'/'

@@ -26,7 +26,6 @@ import com.google.gson.JsonSyntaxException;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -413,11 +412,6 @@ public class Request {
 		return (UserSession) session;
 	}
 
-	@Deprecated
-	public boolean isUser(String username) {
-		return username.equals(getSession().getUser().getUsername());
-	}
-
 	public boolean hasDomain() {
 		return !request.getLocalName().equals(request.getLocalAddr());
 	}
@@ -503,9 +497,6 @@ public class Request {
 		}
 	}
 
-	public boolean isLoggedIn() {
-		return !isUser(SecurityService.PUBLIC_USERNAME);
-	}
 
 	public boolean isLocalRoot() {
 		return getLocalPath().length==0;

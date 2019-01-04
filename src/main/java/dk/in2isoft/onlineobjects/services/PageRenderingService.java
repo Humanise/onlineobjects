@@ -130,7 +130,6 @@ public class PageRenderingService {
 		parameters.put("base-context", request.getBaseContext());
 		parameters.put("base-domain", request.getBaseDomain());
 		parameters.put("base-domain-context", request.getBaseDomainContext());
-		parameters.put("session-user-name", request.getSession().getUser().getUsername());
 		parameters.put("development-mode", devmode);
 		parameters.put("edit-mode",request.getBoolean("edit") ? "true" : "false");
 		

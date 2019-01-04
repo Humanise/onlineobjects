@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -26,10 +26,11 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
-import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
+import nu.xom.DocType;
 import nu.xom.Document;
 
 public class TextDocumentAnalyzer {
@@ -42,12 +43,12 @@ public class TextDocumentAnalyzer {
 
 	private Document extract(HTMLDocument htmlDocument) {
 		Document xom = htmlDocument.getXOMDocument();
-		ContentExtractor extractor = new SimpleContentExtractor();
+		ContentExtractor extractor = new RecognizingContentExtractor();
 		if (xom == null) {
 			return null;
 		}
 		Document extracted = extractor.extract(xom);
-
+		extracted.setDocType(new DocType("html"));
 		DocumentCleaner cleaner = new DocumentCleaner();
 		cleaner.setUrl(htmlDocument.getOriginalUrl());
 		cleaner.clean(extracted);

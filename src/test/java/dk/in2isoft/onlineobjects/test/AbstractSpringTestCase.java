@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -48,7 +49,12 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		}
 		return file;
 	}
-	
+
+	protected void writeTestFile(String data, String name) throws IOException {
+		File file = context.getResource(name).getFile();
+		Files.overwriteTextFile(data, file);
+	}
+
 	protected String getTestFileAsString(String name) throws IOException {
 		File file = getTestFile(name);
 		try (FileReader reader = new FileReader(file)) {

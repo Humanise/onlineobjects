@@ -55,7 +55,7 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			assertEquals(100,propeties.getWidth());
 			assertEquals(75,propeties.getHeight());
 		}
-		modelService.deleteEntity(image, privileged);
+		modelService.delete(image, privileged);
 		modelService.commit();
 	}
 	

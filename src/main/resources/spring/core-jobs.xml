@@ -19,6 +19,7 @@
 		<property name="name" value="mailwatcher"/>
 		<property name="group" value="core"/>
 		<property name="repeatMinutes" value="1"/>
+		<property name="paused" value="true"/>
 	</bean>
 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
@@ -28,16 +29,11 @@
 	</bean>
 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.QuoteConversionJob"/>
-		<property name="name" value="quoteconversion"/>
-		<property name="group" value="core"/>
-	</bean>
-
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.InformationSpiderJob"/>
 		<property name="name" value="informationspider"/>
 		<property name="group" value="core"/>
 		<property name="repeatMinutes" value="30"/>
+		<property name="paused" value="true"/>
 	</bean>
 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
@@ -45,6 +41,7 @@
 		<property name="name" value="similaritycalculator"/>
 		<property name="group" value="core"/>
 		<property name="repeatMinutes" value="10"/>
+		<property name="paused" value="true"/>
 	</bean>
 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
@@ -53,6 +50,7 @@
 		<property name="group" value="core"/>
 	</bean>
 
+<!-- 
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordnetSourceCleanupJob"/>
 		<property name="name" value="wordnet-source-cleanup"/>
@@ -64,7 +62,8 @@
 		<property name="name" value="names-source-cleanup"/>
 		<property name="group" value="core"/>
 	</bean>
-	
+-->
+
 	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
 		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.user.UserHealthCheckJob"/>
 		<property name="name" value="user-health-check"/>
@@ -77,5 +76,11 @@
 		<property name="group" value="core"/>
 	</bean>
 	
+	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.surveillance.SendReportJob"/>
+		<property name="name" value="sendreport"/>
+		<property name="group" value="monitoring"/>
+		<property name="repeatMinutes" value="360"/><!-- 60 * 6 -->
+	</bean>
 
 </beans>

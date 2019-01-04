@@ -176,8 +176,8 @@ oo.TopBar.prototype = {
 
       var form = this._loginForm = hui.ui.Formula.create({name:'topBarLoginForm'});
       form.buildGroup(null,[
-        {type:'TextInput',label:this._text('username'),options:{key:'username'}},
-        {type:'TextInput',label:this._text('password'),options:{secret:true,key:'password'}}
+        {type: 'TextInput', label: this._text('username'), options: {key: 'username',testName: 'topUsername'}},
+        {type: 'TextInput', label: this._text('password'), options: {secret: true, key: 'password',testName: 'topPassword'}}
       ]);
       p.add(form);
       var login = hui.ui.Button.create({
@@ -192,7 +192,7 @@ oo.TopBar.prototype = {
         html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'
       });
       p.add(forgot);
-      hui.listen(forgot,'click',this._showPasswordRecovery.bind(this));
+      hui.listen(forgot, 'click', function() {oo.recover()});
     }
     return this._loginPanel;
   },
@@ -215,9 +215,7 @@ oo.TopBar.prototype = {
       parameters : {username:values.username,password:values.password},
       $success : function(response) {
         hui.ui.msg.success({text:this._text('you_are_logged_in')});
-        setTimeout(function() {
-          document.location.reload();
-        },500);
+        this._afterLogin();
       }.bind(this),
       $failure : function(t) {
         var obj = hui.string.fromJSON(t.responseText);
@@ -231,63 +229,35 @@ oo.TopBar.prototype = {
       }
     })
   },
+  _afterLogin : function() {
+    var path = this.element.getAttribute('data-login-url');
+    if (path) {
+      document.location = path;
+      return;
+    }
+    setTimeout(function() {
+      document.location.reload();
+    },500);
+  },
   _doLogout : function() {
     this._userPanel.setBusy(true);
     hui.ui.request({
       url : '/service/authentication/logout',
       $success : function() {
-        document.location.reload();
-      }
+        this._afterLogout();
+      }.bind(this)
     })
   },
-  _showPasswordRecovery : function() {
-    if (!this._passwordRecoveryBox) {
-      var box = this._passwordRecoveryBox = hui.ui.Box.create({modal:true,title:'I forgot my password',closable:true,absolute:true,width:400,padding:10});
-      box.add(hui.build('div.oo_topbar_forgot_intro',{text:'Please provide either your username or your e-mail. We will then mail you instructions on how to change your password.'}))
-      var form = this._passwordRecoveryForm = hui.ui.Formula.create();
-      var group = form.buildGroup(null,[
-        {type:'TextInput',label:'Username or e-mail:',options:{key:'usernameOrMail',name:'ooTopBarUsernameOrMail'}}
-      ]);
-      var buttons = group.createButtons();
-      var cancel = hui.ui.Button.create({text:'Cancel'});
-      buttons.add(cancel);
-      buttons.add(hui.ui.Button.create({text:'Go',highlighted:true,submit:true}));
-      box.add(form);
-      box.addToDocument();
-      form.listen({
-        $submit : function(vars) {
-          var values = form.getValues();
-          if (hui.isBlank(values.usernameOrMail)) {
-            form.focus();
-            hui.ui.stress(hui.ui.get('ooTopBarUsernameOrMail'));
-            return;
-          }
-
-          hui.ui.msg({text:'Let\'s see if we can find you...',busy:true});
-          hui.ui.request({
-            url : '/service/authentication/recoverPassword',
-            parameters : {usernameOrMail:values.usernameOrMail},
-            $success : function() {
-              hui.ui.msg.success({text:'Look in your inbox :-)'});
-              form.reset();
-              box.hide();
-            },
-            $failure : function() {
-              hui.ui.msg.fail({text:'We could not find you, please try something else'});
-              form.focus();
-            }
-          })
-        }
-      });
-      cancel.listen({
-        $click : function() {
-          form.reset();
-          box.hide();
-        }
-      })
+  _afterLogout : function() {
+    var path = this.element.getAttribute('data-logout-url');
+    if (path) {
+      document.location = path;
+      return;
     }
-    this._passwordRecoveryBox.show();
-    this._passwordRecoveryForm.focus();
+    document.location.reload();    
+  },
+  _showPasswordRecovery : function() {
+
   },
 
   _showInbox : function(a) {

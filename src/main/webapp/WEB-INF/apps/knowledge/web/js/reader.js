@@ -181,16 +181,16 @@ var reader = {
   $submit$newFeedForm : function(form) {
     hui.ui.get('newFeedPanel').hide();
     var url = form.getValues().url;
-    hui.ui.showMessage({text:'Adding feed',busy:true});
+    hui.ui.msg({text:'Adding feed',busy:true});
     hui.ui.request({
       url : '/addFeed',
       parameters : {url:url},
       $success : function() {
-        hui.ui.showMessage({text:'Feed added',icon:'common/success',duration:3000});
+        hui.ui.msg.success({text:'Feed added'});
         hui.ui.get('feedSource').refresh();
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Feed could not be added',icon:'common/warning',duration:3000});
+        hui.ui.msg.fail({text:'Feed could not be added'});
       }
     })
   },
@@ -225,7 +225,7 @@ var reader = {
       url : '/addInternetAddress',
       parameters : {url:options.url},
       $object : function(info) {
-        hui.ui.showMessage({text:'Address added',icon:'common/success',duration:3000});
+        hui.ui.msg.success({text:'Address added'});
         this._reloadList();
         this.view({
           id : info.id,
@@ -233,7 +233,7 @@ var reader = {
         });
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Address could not be added',icon:'common/warning',duration:3000});
+        hui.ui.msg.fail({text:'Address could not be added'});
       }
     })
   },

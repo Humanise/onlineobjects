@@ -1,8 +1,5 @@
 package dk.in2isoft.onlineobjects.tasks;
 
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.junit.Test;
 
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;

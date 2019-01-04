@@ -1,0 +1,146 @@
+Long-Term Design: Rewriting the Design Sales Pitch
+
+by Jarrod Drysdale March 02, 2017 Published in Design, Business
+
+We run our client service businesses just like door-to-door salespeople hawking vacuum cleaners. That may seem unfair, but it’s exactly how we sell design. We’re focused on short-term wins—but we’re teaching clients to see our work as disposable.
+
+Article Continues Below
+
+Want the best way to store and serve images and videos? Try Cloudinary. Get your own free account.
+
+A Book Apart:
+Brief books for people who make websites.
+
+An Event Apart:
+3 days of design, code, and content for web & UX designers & devs.
+
+I want to believe we’re better than that.
+
+We spend our entire careers knocking on doors and shilling our services. It’s just how we do business. Even if a potential client’s old design is working just fine, we might go for the hard sell. But that’s damaging, both to us and to our clients. This practice perpetuates the idea that design is only valuable when new.
+
+Consider the salesperson’s pitch:
+
+Your [design/vacuum] is old. Other people have newer ones. You’re going to lose out if you don’t buy a new one. Your family/business might even be unsafe with your current one.
+
+We believe that being a designer requires cycling through clients and booking new projects. Instead of talking about dust or maneuverability around furniture legs, the designer’s pitch is more like this:
+
+Your current design is not allowing your brand to resonate in the marketplace. It looks dated, and your competitors all recently launched new branding. You could lose market share to competitors without a more modern design.
+
+Short-term engagements are bad for our clients
+
+We write articles in phenomenal publications like this one about how design isn’t just about aesthetics—design should be a fundamental part of how a business operates, conducts market research, and creates products and services. Design is powerful and important. So we preach the doctrine of Design Thinking. We work to improve accessibility and web standards for the good of all. We preach user advocacy.
+
+However, when we pitch design work to clients, so often we’re only selling the aesthetics. And, when we book the gig, we try to ship that design and get that final invoice paid so we can bring in the next client.
+
+We designers rarely stick around to see how well the design works. We begin each project with design thinking, but rarely maintain it. And because of that, each client goes shopping for another new design (or succumbs to the pitch of another designer) much sooner than they need to.
+
+Design requires time in order to deliver its full value. For example, when a new website launches, we can measure changes in analytics immediately. But that design also carries the potential for further improvements—enhancements that can be unlocked through A/B testing, analysis, and optimization.
+
+Unfortunately, the vast majority of sites are never optimized. They launch, sit for a year or two, then get replaced. Our clients aren’t getting the full return on their investments.
+
+And if you think about that even further, this “cycle of redesign” makes design less valuable. In other words, if design is only valuable when new, it isn’t very valuable in the first place.
+
+New, cheaper solutions are encroaching upon our profession, such as logo-designing software, theming algorithms, and drag & drop design tools. We fear we are being replaced by these alternatives or that the perceived value of design is decreasing. And in the next breath, we tell our clients “Let’s make a fresh, new design for you.”
+
+We can’t blame clients for trying affordable new options; we’re the ones who taught them to value “new” design in the first place.
+
+Cycling through clients is less lucrative
+
+Finding a constant stream of new clients takes a lot of effort and is a constant challenge for many designers and agencies. Freelancers spend countless hours crawling job boards and submitting their portfolios in hopes of getting hired. Agencies spend considerable resources responding to RFPs, and many employ sales staff and account managers.
+
+When designers enter more senior-level positions, they eventually face the frustration that more time is spent selling, meaning less time to design.
+
+Sales isn’t bad and will always be necessary to some degree. That said, when we spend more time on sales than we need to, compensation suffers. Naturally, reducing the time and effort on sales so we can do more design work would be more lucrative. To do this, we only need to stop knocking on new doors and instead continue to serve the clients we already have. We need to change how we structure our services and start supporting clients over the long term.
+
+Long-term work can be personally and professionally satisfying
+
+Designers have a certain obsession with making new designs, and you might think that working with the same client for a year sounds boring.
+
+I’ll admit it: making new designs is fun. I love the act of creation and the satisfaction of making something fresh and cool. However, by cycling through clients, we’re missing out on some of the most satisfying design work there is.
+
+Few projects are as challenging or gratifying as redesigning a responsive web app that has four tiers of navigation. That might sound horribly tedious and painful at first, but solving a difficult design problem brings incredible satisfaction.
+
+Further, witnessing people benefit as a direct result of your design can be powerful and rewarding—much more rewarding than the temporary thrill of making something new. You see your design taking an active role in growing a business or in improving a person’s daily work. You see other people recognizing your design’s value. That’s a great feeling.
+
+This is often only possible when you stick around and serve the client over the long term.
+
+What it’s like working with clients over the long term
+
+For me, the idea of a long-term structure for my design services started when a client said this:
+
+I’m tired of signing a contract every 6 weeks. Can I just pay you every month instead?
+
+Now I only do retainer work. All my current clients have been with me for more than a year.
+
+In the early days of running my solo consulting business, I spent a lot of time crawling job boards, writing proposals, scheduling “nice to meet you” calls, and booked only a small fraction of projects. Some weeks, I only did sales work and didn’t get to spend even a minute on design.
+
+Fast forward a couple of years, and I can’t even remember the last time I glanced at a job board. I don’t do sales calls. I don’t respond to RFPs, search for leads, or write long proposals every week. I do more design work than ever. And, I rarely do revisions on my work because my clients trust me. My design business is completely different now that I work with clients for the long term. I find more satisfaction in my work. I solve difficult problems and enjoy seeing my clients thrive.
+
+I make more money this way, too, because I get paid for more of the time I spend at work. (I don’t bill by the hour, but another way to put this is: I’ve increased billable hours and decreased non-billable hours.)
+
+How to set up long-term client relationships
+
+If you are tired of needing a constant flow of new clients and investing in the long view sounds like a plan, here’s how to start.
+
+Look for long-term needs. Most design projects conclude when we deliver the design and the client pays the last invoice. It seems final. But this can be terrifying for the client. Many clients don’t know how to use the tools we produce for them—they don’t know how to use a website or marketing campaign, and they struggle to determine whether it’s successful.
+
+By offering support and advice after the first project concludes, you not only show that you are committed to helping the client succeed and get value from the investment (which is good for the client), but you are opening the door to future projects with that client (which is good for you).
+
+There are many, many opportunities for continuing design work with clients who have profitable and growing businesses. Long-term work doesn’t have to consist only of small updates and maintenance; it can include supporting new business initiatives and keeping the brand and assets in line. You can position yourself as a design director and advise on strategy and brand consistency. These are extremely valuable services to our clients and protect their investment in the original project.
+
+Most clients don’t know how to match all of their marketing efforts to the new brand you created for them. Or, they may want to launch a new feature or product, or weave a new ad campaign into the design you’ve created. These evolutions need design support. By sticking around after the first project and showing the value of your partnership, you can position yourself to get hired repeatedly.
+
+To be clear, long-term work is not unpaid work. Delivering a design doesn’t mean a designer should be on the hook for free support indefinitely. Depending on the client and the kind of work you do for them, there are many possible ways to structure a long-term relationship, such as:
+
+Monthly retainers
+
+Additional project phases, such as conversion rate optimization (CRO) and user testing
+
+Scheduling a check-in call a month after launching a new design
+
+Including a written analytics report in the project fee.
+
+Clients might see these as attempts to increase fees and the project scope. That’s because long-term structures can be as unfamiliar to clients as they are to designers. To address those concerns, designers need to educate our clients about the benefits and value of long-term engagements. Great ways to begin the conversation include:
+
+Explaining that optimization will help the client see the most return from their investment
+
+Explaining that optimization will help avoid the need for a redesign later.
+
+Design’s “old money”: Big agencies and bigger accounts
+
+Long-term client service is old hat to big ad agencies; they’ve been operating like this for decades. If you read AdAge.com, you’ll see announcements about big agencies landing accounts from bigger companies to the tune of hundreds of millions of dollars. Of course, the agency doesn’t get to keep all of that—much of it goes to TV networks for ad time, and websites and print media for ad placements. But it usually means everyone gets to keep their jobs for a year.
+
+When a big account changes hands, it’s news. As in, the kind of news serious journalists cover.
+
+Agencies pour a ton of resources into landing big accounts, and, when they do, they get a year to prove their worth. Changing agencies is a major decision for big companies because it is a big investment and substantially impacts marketing success.
+
+While I don’t advocate replicating every aspect of the big agency model (especially not spec work), small agencies and even freelancers can offer long-term services to smaller clients in the same way. Consistent income and long-term relationships aren’t only for huge agencies that date back to the Mad Men era. Even operating on a smaller scale, the benefits to both designers and clients are the same.
+
+Practical freelancing concerns
+
+For me, personally, there was a lot to learn when I decided to try long-term engagements. That investment has paid off by providing me a more consistent freelancing income, reducing administrative and sales tasks and increasing my total income.
+
+That said, there are risks and complicating factors in long-term relationships.
+
+For freelancers, the risk of working with clients over the long term is that if you lose a client, you will have to work harder to refill your work schedule because your lead pipeline for new clients is slower. Worse, if you only work with a single client for a long period, it’s like putting all your eggs in one basket. Losing your only client is obviously a serious concern.
+
+Because of that risk, keeping several engagements active simultaneously is important for earning consistent income and protecting yourself if you do lose an important client.
+
+Additionally, long-term freelancing carries tax implications. The legal distinction between a salaried employee and a full-time contract worker, or even an independent contractor, varies in many countries, and some countries, such as the UK, are suspicious of long-term, full-time contract work because it can be used as a strategy by companies to avoid tax liability or to avoid providing legally required benefits.
+
+If not just for the financial stability, but also to avoid tax headaches, I recommend keeping several long-term client relationships active at once or limiting full-time engagements to shorter periods that then transition into part-time work for each client. And, of course, consult your tax advisor.
+
+If you’re working full-time for a client for a long period, such as six months to a year, you deserve benefits. While long-term work is stable and attractive for many reasons, don’t let it become a way for someone who is essentially an employer (as opposed to a “client”) to withhold compensation you deserve.
+
+Finally, writing contracts for long-term work can be complex, especially for structures like retainers. It’s always a good idea to consult a lawyer and to buy errors and omissions and general business liability insurance to protect yourself.
+
+Respect for designers and profit for clients
+
+With long-term optimization, design works better and better. And when clients see their profit increasing and that business goals are being met, they place greater trust in their designers.
+
+A long-term partner who works month after month to support a client’s business is vastly different from the door-to-door salesman.
+
+When designers behave as long-term partners, we prove the value of design and earn more respect. It also sets the stage so we can make great money while avoiding the less desirable sales work that so often invades our calendars.
+
+Want the best way to store and serve images and videos? Try Cloudinary. Get your own free account.
+

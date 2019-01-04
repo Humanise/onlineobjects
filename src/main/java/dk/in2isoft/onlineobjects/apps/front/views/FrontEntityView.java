@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.commons.jsf.AbstractView;
+import dk.in2isoft.commons.jsf.LegacyAbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -21,7 +21,7 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class FrontEntityView extends AbstractView implements InitializingBean {
+public class FrontEntityView extends LegacyAbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private SecurityService securityService;

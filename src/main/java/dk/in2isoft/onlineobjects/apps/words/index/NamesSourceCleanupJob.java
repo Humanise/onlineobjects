@@ -2,7 +2,7 @@ package dk.in2isoft.onlineobjects.apps.words.index;
 
 import java.util.List;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
 import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -89,7 +89,7 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 		}
 
 		@Override
-		public void setParameters(SQLQuery sql) {
+		public void setParameters(NativeQuery<?> sql) {
 			
 		}
 		

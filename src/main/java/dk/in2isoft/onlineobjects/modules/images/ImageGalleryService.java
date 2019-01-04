@@ -31,18 +31,18 @@ public class ImageGalleryService {
 		// Create an image gallery
 		ImageGallery gallery = new ImageGallery();
 		gallery.setName("Mine billeder");
-		modelService.createItem(gallery, priviledged);
+		modelService.create(gallery, priviledged);
 
 		// Create gallery title
 		HeaderPart header = new HeaderPart();
 		header.setText("Mine billeder");
-		modelService.createItem(header, priviledged);
+		modelService.create(header, priviledged);
 		modelService.createRelation(gallery, header, priviledged);
 
 		// Create gallery title
 		HtmlPart text = new HtmlPart();
 		text.setHtml("Dette er nogle billeder jeg har taget");
-		modelService.createItem(text, priviledged);
+		modelService.create(text, priviledged);
 		modelService.createRelation(gallery, text, priviledged);
 
 		return gallery;
@@ -60,10 +60,10 @@ public class ImageGalleryService {
 		for (Class<T> type : parts) {
 			List<T> relations = modelService.getChildren(gallery, type, admin);
 			for (T relation : relations) {
-				modelService.deleteEntity(relation, privileged);
+				modelService.delete(relation, privileged);
 			}
 		}
-		modelService.deleteEntity(gallery, privileged);
+		modelService.delete(gallery, privileged);
 	}
 	
 	public void changeSequence(long galleryId, final List<Long> imageIds, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
@@ -83,7 +83,7 @@ public class ImageGalleryService {
 		for (Relation relation : relations) {
 			if (relation.getPosition()!=pos) {
 				relation.setPosition(pos);
-				modelService.updateItem(relation, privileged);
+				modelService.update(relation, privileged);
 			}
 			pos++;
 		}

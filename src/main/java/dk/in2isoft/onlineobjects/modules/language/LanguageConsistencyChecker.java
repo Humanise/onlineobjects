@@ -86,7 +86,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				Language language = new Language();
 				language.setCode(entry.getKey());
 				language.setName(entry.getValue());
-				modelService.createItem(language, adminUser);
+				modelService.create(language, adminUser);
 				log.info("Language ("+entry.getValue()+") created!");
 				securityService.makePublicVisible(language, adminUser);
 				modelService.commit();
@@ -111,7 +111,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				LexicalCategory category = new LexicalCategory();
 				category.setCode(entry.getKey());
 				category.setName(entry.getValue());
-				modelService.createItem(category, adminUser);
+				modelService.create(category, adminUser);
 				log.info("Lexical category ("+entry.getValue()+") created!");
 				securityService.makePublicVisible(category, adminUser);
 				modelService.commit();
@@ -121,7 +121,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				LexicalCategory category = list.get(0);
 				map.put(category.getCode(), category);
 				for (int i = 1; i < list.size(); i++) {
-					modelService.deleteEntity(list.get(i), adminUser);
+					modelService.delete(list.get(i), adminUser);
 					modelService.commit(); 
 				}
 			} else {

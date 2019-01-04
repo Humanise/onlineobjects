@@ -2,7 +2,8 @@ package dk.in2isoft.onlineobjects.modules.language;
 
 import java.util.List;
 
-import org.hibernate.SQLQuery;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
@@ -49,8 +50,8 @@ public class WordRelationsQuery implements CustomQuery<WordRelationRow> {
 		return item;
 	}
 
-	public void setParameters(SQLQuery sql) {
-		sql.setLong("wordId", wordId);
+	public void setParameters(NativeQuery<?> sql) {
+		sql.setParameter("wordId", wordId, LongType.INSTANCE);
 		sql.setParameterList("incomingKinds", incomingKinds, StringType.INSTANCE);
 		sql.setParameterList("outgoingKinds", outgoingKinds, StringType.INSTANCE);
 	}

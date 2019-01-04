@@ -9,7 +9,7 @@ hui.on(['hui'], function() {
     },
     "[href='#login']" : function(node, e) {
       hui.stop(e);
-      hui.ui.callSuperDelegates(window,'showLogin');
+      hui.ui.tell('showLogin');
     }
   });
 });

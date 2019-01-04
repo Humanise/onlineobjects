@@ -28,7 +28,7 @@ hui.ui.listen({
 
   _update : function(options) {
     oo.update({ id : 'word', $success : function() {
-      hui.ui.showMessage({text : options.text, icon : 'common/success', duration : 2000});
+      hui.ui.msg.success({text : options.text});
       this._attach();
     }.bind(this)});
   },
@@ -40,7 +40,7 @@ hui.ui.listen({
       okText : {en:'Yes, delete', da:'Ja, slet'},
       cancelText : {en:'No', da:'Nej'},
       $ok : function() {
-        hui.ui.showMessage({text:{en:'Deleting relation',da:'Sletter relation'},busy:true,delay:300});
+        hui.ui.msg({text:{en:'Deleting relation',da:'Sletter relation'},busy:true,delay:300});
 
         hui.ui.request({
           url : '/deleteRelation',
@@ -49,7 +49,7 @@ hui.ui.listen({
             this._update({en:'The relation is now deleted',da:'relationen er nu slettet'});
           }.bind(this),
           $failure : function() {
-            hui.ui.showMessage({text:{en:'Unable to delete relation',da:'Kunne ikke slettet relationen'},icon:'common/warning',duration:2000});
+            hui.ui.msg.fail({text:{en:'Unable to delete relation',da:'Kunne ikke slettet relationen'}});
           }
         });
       }.bind(this)
@@ -89,7 +89,7 @@ hui.ui.listen({
   },
 
   _createRelation : function(from,kind,to) {
-    hui.ui.showMessage({text:{en:'Adding relation...',da:'Tilføjer relation...'},busy:true,delay:300});
+    hui.ui.msg({text:{en:'Adding relation...',da:'Tilføjer relation...'},busy:true,delay:300});
     hui.ui.request({
       url : '/relateWords',
       parameters : { parentId : from, kind : kind, childId : to },
@@ -97,7 +97,7 @@ hui.ui.listen({
         this._update({text:'The relation is created'});
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to create relation',icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:'Unable to create relation'});
       }
     });
   },
@@ -119,7 +119,7 @@ hui.ui.listen({
     form.reset();
     panel.hide();
 
-    hui.ui.showMessage({text:{en:'Adding variant...',da:'Tilføjer variant...'},busy:true,delay:300});
+    hui.ui.msg({text:{en:'Adding variant...',da:'Tilføjer variant...'},busy:true,delay:300});
 
     hui.ui.request({
       url : '/createWord',
@@ -132,7 +132,7 @@ hui.ui.listen({
         this._update({text:{en:'The variant has been added',da:'Varianten er tilføjet'}});
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:{en:'Unable to add variant',da:'Kunne ikke tilføje variant'},icon:'common/warning',duration:2000});
+        hui.ui.msg.fail({text:{en:'Unable to add variant',da:'Kunne ikke tilføje variant'}});
       }
     });
   },
@@ -153,7 +153,7 @@ hui.ui.listen({
     panel.show();
   },
   _changeLanguage : function(language) {
-    hui.ui.showMessage({text:'Changing language...',busy:true});
+    hui.ui.msg({text:'Changing language...',busy:true});
     hui.ui.request({
       url : '/changeLanguage',
       parameters : { wordId : this.wordInfo.id , language : language },
@@ -161,7 +161,7 @@ hui.ui.listen({
         this._update({text:'The language is now changed'});
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to change language',duration:2000});
+        hui.ui.msg.fail({text:'Unable to change language'});
       }
     });
   },
@@ -182,7 +182,7 @@ hui.ui.listen({
     panel.show();
   },
   _changeCategory : function(category) {
-    hui.ui.showMessage({text:'Changing category...',busy:true});
+    hui.ui.msg({text:'Changing category...',busy:true});
     hui.ui.request({
       url : '/changeCategory',
       parameters : { wordId : this.wordInfo.id , category : category },
@@ -190,7 +190,7 @@ hui.ui.listen({
         this._update({text:'The category is now changed'});
       }.bind(this),
       $failure : function() {
-        hui.ui.showMessage({text:'Unable to change category',duration:2000});
+        hui.ui.msg.fail({text:'Unable to change category'});
       }
     });
   },
@@ -202,7 +202,7 @@ hui.ui.listen({
       okText : {en:'Yes, delete', da:'Ja, slet'},
       cancelText : {en:'No', da:'Nej'},
       $ok : function() {
-        hui.ui.showMessage({text:{en:'Deleting word',da:'Sletter ord'},busy:true,delay:300});
+        hui.ui.msg({text:{en:'Deleting word',da:'Sletter ord'},busy:true,delay:300});
         hui.ui.request({
           url : '/deleteWord',
           parameters : { wordId : info.id },
@@ -210,7 +210,7 @@ hui.ui.listen({
             this._update({text:{en:'The word is now deleted',da:'Ordet er nu slettet'}});
           }.bind(this),
           $failure : function() {
-            hui.ui.showMessage({text:{en:'Unable to delete word',da:'Kunne ikke slettet ord'},icon:'common/warning',duration:2000});
+            hui.ui.msg.fail({text:{en:'Unable to delete word',da:'Kunne ikke slettet ord'}});
           }
         });
       }.bind(this)

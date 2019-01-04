@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Scheduler" padding="10">
 
-	<controller url="surveillance.js"/>
+  <controller url="surveillance.js"/>
 
-	<source name="listSource" url="getSurveillanceList">
-		<parameter key="kind" value="@selection.value"/>
-	</source>
-	<structure>
-		<top>
-			<toolbar>
-				<icon icon="common/refresh" text="Opdater" name="refresh"/>
-				<item label="Live">
-					<checkbox name="live"/>
-				</item>
-			</toolbar>
-		</top>
-		<middle>
-			<left>
-				<overflow>
-					<selection value="longestRunningRequests" name="selection">
-						<option icon="common/time" text="Longest requests" value="longestRunningRequests"/>
-						<option icon="common/warning" text="Latest exceptions" value="latestExceptions"/>
-						<option icon="view/list" text="Log" value="log"/>
-					</selection>
-				</overflow>
-			</left>
-			<center>
-				<overflow>
-					<list name="list" source="listSource"/>
-				</overflow>
-			</center>
-		</middle>
-		<bottom></bottom>
-	</structure>
+  <source name="listSource" url="getSurveillanceList">
+    <parameter key="kind" value="@selection.value"/>
+    <parameter key="page" value="@list.window.page"/>
+  </source>
+  <structure>
+    <top>
+      <toolbar>
+        <icon icon="common/refresh" text="Opdater" name="refresh"/>
+        <item label="Live">
+          <checkbox name="live"/>
+        </item>
+        <icon icon="common/email" text="Send report" name="sendReport"/>
+      </toolbar>
+    </top>
+    <middle>
+      <left>
+        <overflow>
+          <selection value="longestRunningRequests" name="selection">
+            <option icon="common/time" text="Longest requests" value="longestRunningRequests"/>
+            <option icon="common/warning" text="Latest exceptions" value="latestExceptions"/>
+            <option icon="view/list" text="Runtime log" value="liveLog"/>
+            <option icon="view/list" text="Log" value="log"/>
+          </selection>
+        </overflow>
+      </left>
+      <center>
+        <overflow>
+          <list name="list" source="listSource"/>
+        </overflow>
+      </center>
+    </middle>
+    <bottom></bottom>
+  </structure>
 </gui>

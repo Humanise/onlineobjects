@@ -2,17 +2,22 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeSearcher;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -30,17 +35,20 @@ import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
+import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
+import dk.in2isoft.onlineobjects.services.PileService;
 
 public class KnowledgeService {
 	private ModelService modelService;
 	private KnowledgeSearcher readerSearcher;
 	private InternetAddressService internetAddressService;
+	private PileService pileService; 
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
 
@@ -52,18 +60,77 @@ public class KnowledgeService {
 		Question question = new Question();
 		question.setText(text);
 		question.setName(text);
-		modelService.createItem(question, user);
+		modelService.create(question, user);
 		return question;
+	}
+
+	public InternetAddress createInternetAddress(String url, User user) throws ModelException, SecurityException, IllegalRequestException {
+		return internetAddressService.create(url, null, user);
+	}
+
+	public InternetAddress createInternetAddress(AddressRequest request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		String url = request.getUrl();
+		User user = request.getUser();
+		Long questionId = request.getQuestionId();
+		String title = request.getTitle();
+		String quote = request.getQuote();
+		InternetAddress internetAddress = internetAddressService.create(url, title, user);
+
+		if (Strings.isNotBlank(quote)) {
+			Statement statement = addStatementToInternetAddress(quote, internetAddress, user);
+			if (questionId != null) {
+				Question question = modelService.getRequired(Question.class, questionId, user);
+				Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
+				if (!found.isPresent()) {
+					modelService.createRelation(statement, question, Relation.ANSWERS, user);
+					modelService.commit();
+				}
+			}
+
+		}
+
+		return internetAddress;
 	}
 
 	public void deleteQuestion(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, user);
-		modelService.deleteEntity(question, user);
+		modelService.delete(question, user);
 	}
 
 	public void deleteStatement(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Statement statement = modelService.getRequired(Statement.class, id, user);
-		modelService.deleteEntity(statement, user);
+		modelService.delete(statement, user);
+	}
+
+	public void deleteHypothesis(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
+		modelService.delete(hypothesis, user);
+	}
+
+	public void deleteInternetAddress(Long id, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, privileged);
+		List<Statement> children = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, privileged);
+
+		modelService.delete(address, privileged);
+
+		for (Statement htmlPart : children) {
+			modelService.delete(htmlPart, privileged);
+		}
+
+	}
+
+	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user) throws ModelException, SecurityException {
+		Pile inbox = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_INBOX);
+		Pile favorites = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_FAVORITES);
+
+		List<Pile> piles = modelService.getParents(entity, Pile.class, user);
+		for (Pile pile : piles) {
+			if (pile.getId() == inbox.getId()) {
+				perspective.setInbox(true);
+			} else if (pile.getId() == favorites.getId()) {
+				perspective.setFavorite(true);
+			}
+		}
 	}
 
 	public Statement addStatementToInternetAddress(String text, Long internetAddressId, User user) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
@@ -81,7 +148,7 @@ public class KnowledgeService {
 			Statement part = new Statement();
 			part.setName(StringUtils.abbreviate(text, 50));
 			part.setText(text);
-			modelService.createItem(part, user);
+			modelService.create(part, user);
 			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, user);
 			return part;
 		}
@@ -96,7 +163,7 @@ public class KnowledgeService {
 		Hypothesis hypothesis = new Hypothesis();
 		hypothesis.setText(text);
 		hypothesis.setName(text);
-		modelService.createItem(hypothesis, user);
+		modelService.create(hypothesis, user);
 		return hypothesis;
 	}
 
@@ -159,7 +226,7 @@ public class KnowledgeService {
 		Statement statement = new Statement();
 		statement.setText(text);
 		statement.setName(text);
-		modelService.createItem(statement, user);
+		modelService.create(statement, user);
 		Person person = memberService.getUsersPerson(user, user);
 		if (person != null) {
 			modelService.createRelation(statement, person, Relation.KIND_COMMON_AUTHOR, user);
@@ -209,22 +276,23 @@ public class KnowledgeService {
 		Question question = modelService.get(Question.class, dummy.getId(), privileged);
 		question.setText(dummy.getText());
 		question.setName(dummy.getText());
-		modelService.updateItem(question, privileged);
+		modelService.update(question, privileged);
 	}
 
 	public void updateStatement(Statement dummy, Privileged privileged) throws ModelException, SecurityException {
 		Statement statement = modelService.get(Statement.class, dummy.getId(), privileged);
 		statement.setText(dummy.getText());
 		statement.setName(dummy.getText());
-		modelService.updateItem(statement, privileged);		
+		modelService.update(statement, privileged);		
 	}
 
-	public InternetAddressApiPerspective getAddressPerspective(Long id, UserSession session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
+	public InternetAddressApiPerspective getAddressPerspective(Long id, Privileged session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, session);
-		return getAddressPerspective(address, session);
+		User user = modelService.getRequired(User.class, session.getIdentity(), session);
+		return getAddressPerspective(address, user);
 	}
 
-	public InternetAddressApiPerspective getAddressPerspective(InternetAddress address, UserSession session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
+	public InternetAddressApiPerspective getAddressPerspective(InternetAddress address, User user) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
 		InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
 		addressPerspective.setId(address.getId());
 		addressPerspective.setTitle(address.getName());
@@ -233,7 +301,7 @@ public class KnowledgeService {
 		Settings settings = new Settings();
 		settings.setExtractionAlgorithm("OnlineObjects"); // TODO Should be a constant
 		
-		InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, session);
+		InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user);
 		
 		addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
 		addressPerspective.setText(internetAddressViewPerspective.getText());
@@ -241,6 +309,49 @@ public class KnowledgeService {
 		return addressPerspective;
 	}
 	
+	public QuestionEditPerspective getQuestionEditPerspective(Long id, UserSession session) throws ModelException, ContentNotFoundException {
+		@Nullable
+		Question statement = modelService.get(Question.class, id, session);
+		if (statement == null) {
+			throw new ContentNotFoundException(Question.class, id);
+		}
+		QuestionEditPerspective perspective = new QuestionEditPerspective();
+		perspective.setText(statement.getText());
+		perspective.setId(id);
+		List<Person> people = getAuthors(statement, session);
+		perspective.setAuthors(buildItemData(people));
+		return perspective;
+	}
+
+	public HypothesisEditPerspective getHypothesisEditPerspective(Long id, UserSession session) throws ModelException, ContentNotFoundException {
+		@Nullable
+		Hypothesis hypothesis = modelService.get(Hypothesis.class, id, session);
+		if (hypothesis == null) {
+			throw new ContentNotFoundException(Question.class, id);
+		}
+		HypothesisEditPerspective perspective = new HypothesisEditPerspective();
+		perspective.setText(hypothesis.getText());
+		perspective.setId(id);
+		List<Person> people = getAuthors(hypothesis, session);
+		perspective.setAuthors(buildItemData(people));
+		return perspective;
+	}
+
+	private List<ItemData> buildItemData(List<Person> people) {
+		return people.stream().map((Person p) -> {
+			ItemData option = new ItemData();
+			option.setId(p.getId());
+			option.setText(p.getFullName());
+			option.setIcon(p.getIcon());
+			return option;
+		}).collect(Collectors.toList());
+	}
+
+	public List<Person> getAuthors(Entity entity, Privileged privileged) {
+		Query<Person> query = Query.of(Person.class).from(entity, Relation.KIND_COMMON_AUTHOR).as(privileged);
+		List<Person> people = modelService.list(query);
+		return people;
+	}
 	public ProfileApiPerspective getProfile(User user) throws ModelException {
 		ProfileApiPerspective profile = new ProfileApiPerspective();
 		profile.setUsername(user.getUsername());
@@ -313,5 +424,8 @@ public class KnowledgeService {
 		this.internetAddressViewPerspectiveBuilder = internetAddressViewPerspectiveBuilder;
 	}
 
+	public void setPileService(PileService pileService) {
+		this.pileService = pileService;
+	}
 
 }

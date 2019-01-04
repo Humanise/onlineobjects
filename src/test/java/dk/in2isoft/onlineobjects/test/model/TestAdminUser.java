@@ -23,10 +23,10 @@ public class TestAdminUser extends AbstractSpringTestCase {
 	public void testDeleteUser() throws EndUserException {
 		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
 		assertFalse(securityService.canDelete(admin, admin));
-		assertFails(() -> modelService.deleteEntity(admin, admin));
+		assertFails(() -> modelService.delete(admin, admin));
 
 		assertFalse(securityService.canDelete(admin, getPublicUser()));
-		assertFails(() -> modelService.deleteEntity(admin, getPublicUser()));
+		assertFails(() -> modelService.delete(admin, getPublicUser()));
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class TestAdminUser extends AbstractSpringTestCase {
 		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
 
 		assertFalse(securityService.canModify(admin, getPublicUser()));
-		assertFails(() -> modelService.updateItem(admin, getPublicUser()));
+		assertFails(() -> modelService.update(admin, getPublicUser()));
 	}
 
 }

@@ -22,23 +22,23 @@ public class TestModelThreading extends AbstractSpringTestCase {
 	public void testSingleThreading() throws EndUserException, InterruptedException {
 		Privileged admin = securityService.getAdminPrivileged();
 		User user = getNewTestUser();
-		modelService.createItem(user, admin);
+		modelService.create(user, admin);
 		securityService.grantPublicView(user, true, admin);
 
 		Image image = new Image();
-		modelService.createItem(image, user);
+		modelService.create(image, user);
 		modelService.createRelation(user, image, Relation.KIND_SYSTEM_USER_IMAGE, user);
 		assertTrue(securityService.canModify(image, user));
 		securityService.makePublicVisible(image, user);
 		List<Relation> list = modelService.getRelationsFrom(user, Image.class, Relation.KIND_SYSTEM_USER_IMAGE, user);
 		assertEquals(1, list.size());
 		for (Relation relation : list) {
-			modelService.deleteRelation(relation, admin);
+			modelService.delete(relation, admin);
 		}
 		modelService.createRelation(user, image, Relation.KIND_SYSTEM_USER_IMAGE, user);
 
-		modelService.deleteEntity(image, getAdminUser());
-		modelService.deleteEntity(user, getAdminUser());
+		modelService.delete(image, getAdminUser());
+		modelService.delete(user, getAdminUser());
 		modelService.commit();
 	}
 
@@ -48,11 +48,11 @@ public class TestModelThreading extends AbstractSpringTestCase {
 
 		// Create user
 		User user = getNewTestUser();
-		modelService.createItem(user, admin);
+		modelService.create(user, admin);
 		
 		// Create image
 		Image image = new Image();
-		modelService.createItem(image, user);
+		modelService.create(image, user);
 		modelService.createRelation(user, image, Relation.KIND_SYSTEM_USER_IMAGE, user);
 		modelService.commit();
 
@@ -66,12 +66,12 @@ public class TestModelThreading extends AbstractSpringTestCase {
 				securityService.makePublicVisible(reloadedImage, reloadedUser);
 				List<Relation> list = modelService.getRelationsFrom(reloadedUser, Image.class, Relation.KIND_SYSTEM_USER_IMAGE, reloadedUser);
 				for (Relation relation : list) {
-					modelService.deleteRelation(relation, admin);
+					modelService.delete(relation, admin);
 				}
 				modelService.createRelation(user, reloadedImage, Relation.KIND_SYSTEM_USER_IMAGE, reloadedUser);
 
-				modelService.deleteEntity(reloadedImage, admin);
-				modelService.deleteEntity(reloadedUser, admin);
+				modelService.delete(reloadedImage, admin);
+				modelService.delete(reloadedUser, admin);
 				modelService.commit();
 
 			} catch (Exception e) {

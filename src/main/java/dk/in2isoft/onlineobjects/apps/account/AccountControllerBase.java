@@ -41,6 +41,11 @@ public abstract class AccountControllerBase extends ApplicationController {
 		}
 		return securityService.getPublicUser().getId() != request.getSession().getIdentity();
 	}
+	
+	@Override
+	public boolean askForUserChange(Request request) {
+		return true;
+	}
 
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));

@@ -22,6 +22,7 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -60,7 +61,13 @@ public class ModelController extends ModelControllerBase {
 			}
 		}
 	}
-	
+
+	private User getUser(Request request) throws ModelException, ContentNotFoundException {
+		Privileged privileged = request.getSession();
+		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
+		return user;
+	}
+
 	@Path(start={"image","list"})
 	public void listImage(Request request) throws IOException, ModelException {
 		Query<Image> query = Query.after(Image.class).withPaging(0, 40).as(request.getSession()).orderByCreated().descending();
@@ -120,7 +127,7 @@ public class ModelController extends ModelControllerBase {
 			List<String> existingTags = entity.getPropertyValues(Property.KEY_COMMON_TAG);
 			if (!existingTags.contains(tag)) {
 				entity.addProperty(Property.KEY_COMMON_TAG, tag);
-				modelService.updateItem(entity, request.getSession());
+				modelService.update(entity, request.getSession());
 			}
 		}
 	}
@@ -130,8 +137,8 @@ public class ModelController extends ModelControllerBase {
 		String text = request.getString("text");
 		String language = request.getString("language");
 		String category = request.getString("category");
-		
-		Word word = wordService.createWord(language, category, text, request.getSession());
+		User user = getUser(request);
+		Word word = wordService.createWord(language, category, text, user);
 		request.sendObject(word);
 	}
 	
@@ -139,7 +146,7 @@ public class ModelController extends ModelControllerBase {
 	public void listInbox(Request request) throws IOException, EndUserException {
 		int page = request.getInt("page");
 		
-		User user = request.getSession().getUser();
+		User user = getUser(request);
 		Pile inbox = inboxService.getOrCreateInbox(user);
 		
 		List<Entity> items = modelService.getChildren(inbox, Entity.class, user);
@@ -170,14 +177,14 @@ public class ModelController extends ModelControllerBase {
 		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request.getSession());
 		Code.checkNotNull(entity, "Entity not found");
-		modelService.deleteEntity(entity, request.getSession());
+		modelService.delete(entity, request.getSession());
 	}
 
 	@Path
-	public void removeFromInbox(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public void removeFromInbox(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
 
 		long id = request.getLong("id");
-		User user = request.getSession().getUser();
+		User user = getUser(request);
 		inboxService.remove(user,id);
 	}
 	
@@ -335,7 +342,7 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text", "No question");
 			question.setText(text);
 			question.setName(text);
-			modelService.createItem(question, request.getSession());
+			modelService.create(question, request.getSession());
 			return question;
 		}
 		if (Hypothesis.class.getSimpleName().equals(type)) {
@@ -343,7 +350,7 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text", "No hypothesis");
 			hypothesis.setText(text);
 			hypothesis.setName(text);
-			modelService.createItem(hypothesis, request.getSession());
+			modelService.create(hypothesis, request.getSession());
 			return hypothesis;
 		}
 		throw new IllegalRequestException("Unknown type");

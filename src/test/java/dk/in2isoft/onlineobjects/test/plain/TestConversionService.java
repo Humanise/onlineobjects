@@ -26,14 +26,14 @@ public class TestConversionService extends AbstractSpringTestCase {
 	@Test
 	public void testIt() throws EndUserException, FileNotFoundException, IOException {
 		ImagePart part = new ImagePart();
-		modelService.createItem(part, getAdminUser());
+		modelService.create(part, getAdminUser());
 		EntityConverter converter = conversionService.getConverter(part);
 		assertEquals(ImagePartConverter.class, converter.getClass());
 		assertNotNull(converter);
 		
 		assertNotNull(converter.generateXML(part, getAdminUser()));
 		
-		modelService.deleteEntity(part, getAdminUser());
+		modelService.delete(part, getAdminUser());
 	}
 
 	public void setConversionService(ConversionService conversionService) {

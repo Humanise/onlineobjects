@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gui xmlns="uri:hui" title="Scheduler" padding="10"	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<gui xmlns="uri:hui" title="Scheduler" padding="10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="uri:hui http://www.humanise.dk/hui/xslt/schema.xsd"
 >
-	<controller url="applications.js"/>
-	<source name="listSource"/>
+  <controller url="applications.js"/>
+  <source name="listSource"/>
 
-	<structure>
-		<top>
-			<toolbar>
-				<icon icon="common/folder" overlay="new" text="New application" name="newApplication"/>
-			</toolbar>
-		</top>
-		<middle>
-			<left>
-			</left>
-			<center>
-				<overflow>
-					<list name="list" source="listSource"/>
-				</overflow>
-			</center>
-		</middle>
-	</structure>
+  <structure>
+    <top>
+      <toolbar>
+        <icon icon="common/folder" overlay="new" text="New application" name="newApplication"/>
+      </toolbar>
+    </top>
+    <middle>
+      <left>
+      </left>
+      <center>
+        <overflow>
+          <list name="list" source="listSource"/>
+        </overflow>
+      </center>
+    </middle>
+  </structure>
 
-	<window name="applicationWindow" title="Application" width="300" padding="5">
-		<formula name="applicationFormula">
-			<fields>
+  <window name="applicationWindow" title="Application" width="300" padding="5">
+    <formula name="applicationFormula">
+      <fields>
         <field label="Name">
           <text-input key="name"/>
         </field>
@@ -32,11 +32,11 @@ xsi:schemaLocation="uri:hui http://www.humanise.dk/hui/xslt/schema.xsd"
           <text-input key="domain"/>
         </field>
       </fields>
-			<buttons>
-				<button name="cancelApplication" text="Cancel"/>
-				<button name="deleteApplication" text="Delete"/>
-				<button text="Save" highlighted="true" submit="true"/>
-			</buttons>
-		</formula>
-	</window>
+      <buttons>
+        <button name="cancelApplication" text="Cancel"/>
+        <button name="deleteApplication" text="Delete"/>
+        <button text="Save" highlighted="true" submit="true"/>
+      </buttons>
+    </formula>
+  </window>
 </gui>
