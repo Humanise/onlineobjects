@@ -177,5 +177,9 @@ oo.recover = function() {
 }
 
 hui.on(['hui'],function() {
-  hui.on(hui.find('.js-signup'),'click',function() {oo.signUp()})
+  hui.on(hui.find('.js-signup'),'click',function(e) {
+    if (!hui.ui.Panel) return;
+    hui.stop(e);
+    oo.signUp();
+  })
 });

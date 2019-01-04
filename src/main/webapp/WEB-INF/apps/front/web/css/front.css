@@ -1,6 +1,3 @@
-body {
-  background: #fff !important; }
-
 .container {
   position: absolute;
   top: 50%;
@@ -9,12 +6,12 @@ body {
   right: 0;
   text-align: center; }
 
-#logo {
+.logo {
   width: 340px;
   height: 340px;
   display: inline-block;
   position: relative; }
-  #logo .oo_icon {
+  .logo .oo_icon {
     display: inline-block;
     width: 340px;
     height: 340px;
@@ -34,7 +31,7 @@ body {
   cursor: default;
   font-family: 'Work Sans'; }
 
-#slogan {
+.slogan {
   font-size: 24px;
   line-height: 24px;
   font-weight: 300;
@@ -48,14 +45,14 @@ body {
   margin-top: 20px;
   background: #fff; }
 
-ul {
+.icons {
   -webkit-user-select: none;
   display: block;
   list-style: none;
   margin: 0;
   text-align: center;
   position: fixed;
-  bottom: 4%;
+  bottom: 60px;
   width: 100%;
   padding: 0;
   font-size: 0; }
@@ -64,96 +61,86 @@ li {
   display: inline-block;
   text-align: center;
   width: 100px;
-  overflow: hidden;
   padding: 20px 0; }
 
-ul a {
+.icon {
   outline: none;
   display: block;
   text-decoration: none;
-  color: #aaa;
+  color: #777;
   transition-property: transform, color;
   transition-duration: 0.5s; }
-  ul a:focus {
+  .icon:focus {
     text-shadow: 0 0 5px #46f;
     color: #46a; }
-  ul a:hover {
+  .icon:hover {
     color: #46a;
     transform: scale(1.3); }
-  ul a strong {
+  .icon strong {
     font-weight: 400;
     font-size: 18px;
     display: block;
     -webkit-font-smoothing: antialiased; }
 
-.language {
+.footer {
   position: fixed;
-  bottom: 10px;
-  right: 15px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
   margin: 0;
-  font-size: 0; }
-  .language a {
-    font-size: 12px;
-    color: #eee;
-    color: rgba(0, 0, 0, 0.1);
-    padding: 7px; }
-    .language a span {
-      color: #666; }
-    .language a:hover,
-    .language a:hover span {
-      color: #333; }
+  opacity: .5; }
+  .footer .oo_footer_logo {
+    display: none; }
 
 @media screen and (max-height: 600px) {
   .container {
     margin-top: -250px; }
-  #logo {
+  .logo {
     width: 260px;
     height: 260px; }
-  #logo span.oo_icon {
-    width: 260px;
-    height: 260px;
-    font-size: 220px;
-    line-height: 260px; }
+    .logo .oo_icon {
+      width: 260px;
+      height: 260px;
+      font-size: 220px;
+      line-height: 260px; }
   .title {
     font-size: 80px; } }
 
 @media screen and (max-height: 500px) {
   .container {
     margin-top: -200px; }
-  #logo {
+  .logo {
     width: 200px;
     height: 200px; }
-  #logo span.oo_icon {
-    width: 200px;
-    height: 200px;
-    font-size: 180px;
-    line-height: 200px; }
+    .logo .oo_icon {
+      width: 200px;
+      height: 200px;
+      font-size: 180px;
+      line-height: 200px; }
   .title {
     font-size: 70px; } }
 
 @media screen and (max-height: 400px) {
   .container {
     margin-top: -180px; }
-  #logo {
+  .logo {
     width: 160px;
     height: 160px; }
-  #logo span.oo_icon {
-    width: 160px;
-    height: 160px;
-    font-size: 140px;
-    line-height: 160px; }
+    .logo .oo_icon {
+      width: 160px;
+      height: 160px;
+      font-size: 140px;
+      line-height: 160px; }
   .title {
     font-size: 60px; } }
 
 @media screen and (max-width: 600px) {
   .title {
     font-size: 70px; }
-  .language {
-    left: 0;
-    right: 0;
-    text-align: center; }
-  ul {
-    bottom: 7%; } }
+  .icons {
+    bottom: 70px; }
+  .footer {
+    bottom: 10px; } }
 
 @media screen and (max-width: 500px) {
   .title {
@@ -161,20 +148,22 @@ ul a {
 
 @media screen and (max-width: 400px) {
   .container {
-    margin-top: -200px; }
-  #logo {
+    margin-top: -220px; }
+  .logo {
     width: 200px;
     height: 200px; }
-  #logo .hui_drawing {
-    margin: 0;
-    top: 0;
-    left: 0; }
-  #logo span.oo_icon {
-    width: 200px;
-    height: 200px;
-    font-size: 180px;
-    line-height: 200px; }
+    .logo .hui_drawing {
+      margin: 0;
+      top: 0;
+      left: 0; }
+    .logo .oo_icon {
+      width: 200px;
+      height: 200px;
+      font-size: 180px;
+      line-height: 200px; }
+  .icons {
+    bottom: 100px; }
   .title {
     font-size: 42px; }
-  ul li {
+  li {
     width: 90px; } }

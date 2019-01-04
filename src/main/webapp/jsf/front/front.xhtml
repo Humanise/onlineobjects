@@ -18,39 +18,37 @@
     <title>OnlineObjects</title>
     <o:fonts additional="Work+Sans:100"/>
   </o:head>
-  <o:body>
+  <o:body light="true">
     <div class="container">
-      <div id="logo">
+      <div id="logo" class="logo">
         <span class="oo_icon">&#xa4;</span>
       </div>
       <h1 id="title" class="title">OnlineObjects</h1>
-      <p id="slogan">#{msg.subtitle}</p>
+      <p id="slogan" class="slogan">#{msg.subtitle}</p>
     </div>
-    <ul>
+    <ul class="icons">
       <li>
-        <o:link plain="true" app="people" href="/">
-          <o:icon size="48" icon="user"/>
-          <strong>#{msg.people}</strong>
+        <o:link plain="true" app="knowledge" href="/" styleClass="icon">
+          <o:icon size="48" icon="app_knowledge"/>
+          <strong>#{msg.knowledge}</strong>
         </o:link>
       </li>
       <li>
-        <o:link plain="true" app="words" href="/">
-          <o:icon size="48" icon="book"/>
+        <o:link plain="true" app="words" href="/" styleClass="icon">
+          <o:icon size="48" icon="app_words"/>
           <strong>#{msg.words}</strong>
         </o:link>
       </li>
       <li>
-        <o:link plain="true" app="photos" href="/">
-          <o:icon size="48" icon="camera"/>
+        <o:link plain="true" app="photos" href="/" styleClass="icon">
+          <o:icon size="48" icon="app_photos"/>
           <strong>#{msg.photos}</strong>
         </o:link>
       </li>
     </ul>
-    <p class="language">
-      <o:link href="/da/">Dansk</o:link>
-      <o:out value="#{' '}"/>
-      <o:link href="/en/">English</o:link>
-    </p>
+    <div class="footer">
+      <o:footer/>
+    </div>
     <o:analytics/>
 
     <o:dependency src="/hui/js/Drawing.js"/>

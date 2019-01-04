@@ -1,6 +1,4 @@
-body {
-  background: #fff !important;
-}
+@import '../../../../core/web/scss/shared';
 
 .container {
   position: absolute;
@@ -11,7 +9,7 @@ body {
   text-align: center;
 }
 
-#logo {
+.logo {
   width: 340px;
   height: 340px;
   display: inline-block;
@@ -42,7 +40,7 @@ body {
 }
 
 
-#slogan {
+.slogan {
   font-size: 24px;
   line-height: 24px;
   font-weight: 300;
@@ -57,14 +55,14 @@ body {
   background: #fff;
 }
 
-ul {
+.icons {
   -webkit-user-select: none;
   display: block;
   list-style: none;
   margin: 0;
   text-align: center;
   position: fixed;
-  bottom: 4%;
+  bottom: 60px;
   width: 100%;
   padding: 0;
   font-size: 0;
@@ -74,15 +72,14 @@ li {
   display: inline-block;
   text-align: center;
   width: 100px;
-  overflow: hidden;
   padding: 20px 0;
 }
 
-ul a {
+.icon {
   outline: none;
   display: block;
   text-decoration: none;
-  color: #aaa;
+  color: #777;
   transition-property: transform, color;
   transition-duration: 0.5s;
 
@@ -105,31 +102,15 @@ ul a {
 }
 
 
-
-
-
-
-.language {
+.footer {
   position: fixed;
-  bottom: 10px;
-  right: 15px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
   margin: 0;
-  font-size: 0;
-
-  a {
-    font-size: 12px;
-    color: #eee;
-    color: rgba(0,0,0,.1);
-    padding: 7px;
-
-    span {
-      color: #666;
-    }
-
-    &:hover,
-    &:hover span {
-      color: #333;
-    }
+  opacity: .5;
+  .oo_footer_logo {
+    display: none;
   }
 }
 
@@ -140,18 +121,16 @@ ul a {
     margin-top: -250px;
   }
 
-  #logo
-  {
+  .logo {
     width: 260px;
     height: 260px;
-  }
 
-  #logo span.oo_icon
-  {
-    width: 260px;
-    height: 260px;
-    font-size: 220px;
-    line-height: 260px;
+    .oo_icon {
+      width: 260px;
+      height: 260px;
+      font-size: 220px;
+      line-height: 260px;
+    }
   }
 
   .title {
@@ -165,18 +144,16 @@ ul a {
     margin-top: -200px;
   }
 
-  #logo
-  {
+  .logo {
     width: 200px;
     height: 200px;
-  }
 
-  #logo span.oo_icon
-  {
-    width: 200px;
-    height: 200px;
-    font-size: 180px;
-    line-height: 200px;
+    .oo_icon {
+      width: 200px;
+      height: 200px;
+      font-size: 180px;
+      line-height: 200px;
+    }
   }
 
   .title {
@@ -190,18 +167,16 @@ ul a {
     margin-top: -180px;
   }
 
-  #logo
-  {
+  .logo {
     width: 160px;
     height: 160px;
-  }
 
-  #logo span.oo_icon
-  {
-    width: 160px;
-    height: 160px;
-    font-size: 140px;
-    line-height: 160px;
+    .oo_icon {
+      width: 160px;
+      height: 160px;
+      font-size: 140px;
+      line-height: 160px;
+    }
   }
 
   .title {
@@ -214,13 +189,11 @@ ul a {
     font-size: 70px;
   }
 
-  .language {
-    left: 0;
-    right: 0;
-    text-align: center;
+  .icons {
+    bottom: 70px;
   }
-  ul {
-    bottom: 7%;
+  .footer {
+    bottom: 10px;
   }
 }
 
@@ -234,33 +207,36 @@ ul a {
 @media screen and (max-width: 400px) {
 
   .container {
-    margin-top: -200px;
+    margin-top: -220px;
   }
 
-  #logo
-  {
+  .logo {
     width: 200px;
     height: 200px;
+
+    .hui_drawing {
+      margin: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .oo_icon {
+      width: 200px;
+      height: 200px;
+      font-size: 180px;
+      line-height: 200px;
+    }
   }
 
-  #logo .hui_drawing {
-    margin: 0;
-    top: 0;
-    left: 0;
-  }
-
-  #logo span.oo_icon
-  {
-    width: 200px;
-    height: 200px;
-    font-size: 180px;
-    line-height: 200px;
+  .icons {
+    bottom: 100px;
   }
 
   .title {
     font-size: 42px;
   }
-  ul li {
+
+  li {
     width: 90px;
   }
 }

@@ -47,10 +47,10 @@ public class TopBarComponent extends AbstractComponent {
 	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;
 	
 	static {
-		icons.put("words", "book");
-		icons.put("people", "user");
-		icons.put("photos", "camera");
-		icons.put("knowledge", "star_line_selected");
+		icons.put("words", "app_words");
+		icons.put("people", "app_people");
+		icons.put("photos", "app_photos");
+		icons.put("knowledge", "app_knowledge");
 		icons.put("desktop", "view_grid");
 		icons.put("tools", "archive_line_selected");
 	}

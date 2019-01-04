@@ -4,7 +4,7 @@ hui.on(function() {
   var size = logo.clientWidth;
   var done = false;
 
-  if (isMobile() || hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
+  if (hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
     return;
   }
 

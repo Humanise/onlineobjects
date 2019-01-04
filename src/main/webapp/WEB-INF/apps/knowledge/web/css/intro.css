@@ -26,12 +26,15 @@
   .intro_points {
     display: inline-block;
     width: 50%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
     font-size: 14pt;
     text-align: center;
     font-weight: 500; }
+    .intro_points > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: inline-block;
+      text-align: left; }
   .intro_point {
     margin: 10px 0;
     line-height: 1;
@@ -47,13 +50,14 @@
       display: inline-block;
       width: 1em;
       vertical-align: top;
-      margin-right: 0.3em;
+      margin-right: 0.5em;
       text-align: center;
       color: #c286ff;
       font-size: 0.75em;
-      margin-top: 0.2em; }
+      margin-top: 0.1em; }
     .intro_point-check:before {
-      content: '\e918'; }
+      content: '\e918';
+      margin-top: 0.2em; }
   .intro_signup {
     text-align: center;
     margin: 20px 0; }
