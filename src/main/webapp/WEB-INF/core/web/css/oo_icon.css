@@ -45,7 +45,18 @@
 	width: 48px;
 	height: 48px;
 }
-
+.oo_icon_app_people:before {
+  content: "\e91a";
+}
+.oo_icon_app_knowledge:before {
+  content: "\e91b";
+}
+.oo_icon_app_photos:before {
+  content: "\e91c";
+}
+.oo_icon_app_words:before {
+  content: "\e91d";
+}
 .oo_icon_trash:before {
 	content: "\e900";
 }
