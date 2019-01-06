@@ -79,7 +79,7 @@ hui.on(function() {
   })
 
   window.setTimeout(function() {
-    window.setTimeout(animateTitle,2000)
+    window.setTimeout(animateTitle,100)
 
 
 
@@ -96,7 +96,7 @@ hui.on(function() {
           css : {
             opacity : 1, top : '0px'
           },
-          delay : 1500 + delay,
+          delay : 500 + delay,
           ease : hui.ease.elastic,
           duration: 2000 - delay
         });
@@ -192,7 +192,7 @@ hui.on(function() {
       done = true;
     },80000)
 
-  },1000);
+  },200);
 
   function isMobile() {
     return (function(a){
