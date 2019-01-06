@@ -35,7 +35,7 @@ import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.index.IndexSearchQuery;
 import dk.in2isoft.onlineobjects.modules.index.IndexSearchResult;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
-import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeAugmentationQuery;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeListQuery;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class KnowledgeSearcher {
@@ -64,7 +64,7 @@ public class KnowledgeSearcher {
 		if (ids.isEmpty()) {
 			return new SearchResult<KnowledgeListRow>(new ArrayList<>(), 0);
 		}
-		KnowledgeAugmentationQuery query = new KnowledgeAugmentationQuery(user);
+		KnowledgeListQuery query = new KnowledgeListQuery(user);
 		query.withIds(ids);
 		SearchResult<KnowledgeListRow> result = modelService.search(query);
 		List<KnowledgeListRow> list = result.getList();
