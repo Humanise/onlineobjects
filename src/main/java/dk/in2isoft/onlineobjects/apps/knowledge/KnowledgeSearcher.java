@@ -1,37 +1,49 @@
 package dk.in2isoft.onlineobjects.apps.knowledge;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.index.IndexSearchQuery;
 import dk.in2isoft.onlineobjects.modules.index.IndexSearchResult;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
+import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeAugmentationQuery;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class KnowledgeSearcher {
 
 	private ModelService modelService;
 	private IndexService indexService;
+	private static Logger log = LogManager.getLogger(KnowledgeSearcher.class);
 	
 	public SearchResult<Entity> search(Request request, int page, int pageSize) throws ExplodingClusterFuckException, SecurityException {
 		KnowledgeQuery readerQuery = new KnowledgeQuery();
@@ -47,11 +59,50 @@ public class KnowledgeSearcher {
 		return search(readerQuery, session);
 	}
 
+	public SearchResult<KnowledgeListRow> searchOptimized(KnowledgeQuery readerQuery, User user) throws ExplodingClusterFuckException, SecurityException, ModelException {
+		final Pair<Integer, ListMultimap<String, Long>> idsByType = find(user, readerQuery);
+		List<Long> ids = Lists.newArrayList(idsByType.getValue().values());
+		if (ids.isEmpty()) {
+			return new SearchResult<KnowledgeListRow>(new ArrayList<>(), 0);
+		}
+		KnowledgeAugmentationQuery query = new KnowledgeAugmentationQuery(user);
+		query.withIds(ids);
+		SearchResult<KnowledgeListRow> result = modelService.search(query);
+		List<KnowledgeListRow> list = result.getList();
+		if (list.size() != ids.size()) {
+			log.error("Inconsistent database results: actual={} vs expected={}", list.size(), ids.size());
+		}
+		for (Iterator<KnowledgeListRow> i = list.iterator(); i.hasNext();) {
+			KnowledgeListRow row = i.next();
+			if (Strings.isBlank(row.getType())) {
+				log.warn("Missing type: id={}, text={}", row.getId(), row.getText());
+				i.remove();
+			}
+		}
+		Collections.sort(list, new Comparator<KnowledgeListRow>() {
+
+			public int compare(KnowledgeListRow o1, KnowledgeListRow o2) {
+				int index1 = ids.indexOf(o1.getId());
+				int index2 = ids.indexOf(o2.getId());
+				if (index1 > index2) {
+					return 1;
+				} else if (index2 > index1) {
+					return -1;
+				}
+				return 0;
+			}
+		});
+
+		result.setTotalCount(idsByType.getKey());
+		return result;
+	}
+
 	public SearchResult<Entity> search(KnowledgeQuery readerQuery, Privileged privileged) throws ExplodingClusterFuckException, SecurityException {
 		if (privileged==null) {
 			throw new SecurityException("No privileged provided");
 		}
-		final ListMultimap<String, Long> idsByType = find(privileged, readerQuery);
+		Pair<Integer, ListMultimap<String, Long>> found = find(privileged, readerQuery);
+		final ListMultimap<String, Long> idsByType = found.getValue();
 		final List<Long> ids = Lists.newArrayList(idsByType.values());
 
 		List<Entity> list = Lists.newArrayList();
@@ -90,7 +141,7 @@ public class KnowledgeSearcher {
 
 		sortByIds(list, ids);
 
-		int totalCount = idsByType.get("total").iterator().next().intValue(); // TODO
+		int totalCount = found.getKey();
 		
 		
 		return new SearchResult<>(list, totalCount);
@@ -112,12 +163,11 @@ public class KnowledgeSearcher {
 		});
 	}
 
-	private ListMultimap<String, Long> find(Privileged privileged, KnowledgeQuery query) throws ExplodingClusterFuckException {
+	private Pair<Integer,ListMultimap<String, Long>> find(Privileged privileged, KnowledgeQuery query) throws ExplodingClusterFuckException {
 		IndexManager index = getIndex(privileged);
 		if (Strings.isBlank(query.getText()) && Strings.isBlank(query.getSubset())) {
 			ListMultimap<String, Long> idsByType = index.getIdsByType();
-			idsByType.put("total",Long.valueOf(idsByType.size()));
-			return idsByType;
+			return new Pair<Integer, ListMultimap<String,Long>>(idsByType.size(), idsByType);
 		}
 		final ListMultimap<String, Long> ids = LinkedListMultimap.create();
 
@@ -133,8 +183,7 @@ public class KnowledgeSearcher {
 			String type = row.getString("type");
 			ids.put(type, id);
 		}
-		ids.put("total", Long.valueOf(search.getTotalCount()));
-		return ids;
+		return new Pair<Integer, ListMultimap<String,Long>>(search.getTotalCount(), ids);
 	}
 
 	private IndexManager getIndex(Privileged privileged) {
@@ -150,4 +199,5 @@ public class KnowledgeSearcher {
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
 	}
+	
 }

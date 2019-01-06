@@ -25,6 +25,7 @@
         <icon icon="common/letter" text="Send password reset" name="passwordResetIcon" disabled="true"/>
         <icon icon="common/letter" text="Send e-mail confirmation" name="emailConfirmationIcon" disabled="true"/>
         <icon icon="common/letter" text="Check health" name="checkHealth" disabled="true"/>
+        <icon icon="common/close" text="Log out" name="logOut" disabled="true"/>
         <right>
           <item label="Search">
             <searchfield name="search" expanded-width="200"/>
@@ -116,5 +117,11 @@
       </buttons>
     </formula>
   </window>
+
+  <panel name="clientPanel" title="Client" padding="10" width="300">
+    <button text="Delete" name="deleteClient">
+      <confirm text="Are you sure?" ok="Yes, delete" cancel="No"/>
+    </button>
+  </panel>
 
 </gui>

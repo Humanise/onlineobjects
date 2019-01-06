@@ -17,8 +17,8 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPer
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
-import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -370,36 +370,8 @@ public class KnowledgeService {
 		return profile;
 	}
 
-	public SearchResult<KnowledgeListRow> search(KnowledgeQuery query, User user) throws ExplodingClusterFuckException, SecurityException {
-		SearchResult<Entity> searchResult = readerSearcher.search(query, user);
-		
-		List<KnowledgeListRow> list = new ArrayList<>();
-		for (Entity entity : searchResult.getList()) {
-			KnowledgeListRow row = new KnowledgeListRow();
-			row.id = entity.getId();
-			row.type = entity.getClass().getSimpleName();
-			if (entity instanceof InternetAddress) {
-				InternetAddress address = (InternetAddress) entity;
-				row.url = address.getAddress();
-				row.text = address.getName();
-			}
-			else if (entity instanceof Statement) {
-				row.text = ((Statement) entity).getText();
-				Query<InternetAddress> q = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).as(user);
-				InternetAddress addr = modelService.search(q).getFirst();
-				if (addr != null) {
-					row.url = addr.getAddress();
-				}
-			}
-			else if (entity instanceof Question) {
-				row.text = ((Question) entity).getText();
-			}
-			else if (entity instanceof Hypothesis) {
-				row.text = ((Hypothesis) entity).getText();
-			}
-			list.add(row);
-		}
-		return new SearchResult<>(list, searchResult.getTotalCount());
+	public SearchResult<KnowledgeListRow> search(KnowledgeQuery query, User user) throws ExplodingClusterFuckException, SecurityException, ModelException {
+		return readerSearcher.searchOptimized(query, user);
 	}
 	
 	// Wiring...
