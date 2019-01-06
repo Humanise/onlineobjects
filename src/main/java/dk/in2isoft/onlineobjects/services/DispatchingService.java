@@ -145,7 +145,7 @@ public class DispatchingService {
 			String accept = request.getRequest().getHeader("Accept");
 			if (accept != null && accept.contains("application/json") && !accept.contains("text/html")) {
 				response.setContentType("application/json");
-
+				response.setCharacterEncoding(Strings.UTF8);
 				Map<String, String> resp = new HashMap<>();
 				if (ex instanceof EndUserException) {
 					String code = ((EndUserException) ex).getCode();
