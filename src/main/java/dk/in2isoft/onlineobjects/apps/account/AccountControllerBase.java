@@ -39,7 +39,10 @@ public abstract class AccountControllerBase extends ApplicationController {
 		if (Pattern.matches("^/(da|en)/(signup|confirm|confirm\\-email\\-change$|password|agreements)", request.getLocalPathAsString())) {
 			return true;
 		}
-		return securityService.getPublicUser().getId() != request.getSession().getIdentity();
+		if ("/changePasswordUsingKey".equals(request.getLocalPathAsString())) {
+			return true;
+		}
+		return !securityService.isPublicUser(request.getSession());
 	}
 	
 	@Override
