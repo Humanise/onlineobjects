@@ -2,10 +2,14 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 
 import java.util.List;
 
-public class StatementApiPerspective {
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
+
+public class StatementApiPerspective implements CategorizableViewPerspective {
 
 	private String text;
 	private long id;
+	private boolean inbox;
+	private boolean favorite;
 	private List<PersonApiPerspective> authors;
 	private List<InternetAddressApiPerspective> addresses;
 	private List<QuestionApiPerspective> questions;
@@ -24,6 +28,22 @@ public class StatementApiPerspective {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public boolean isInbox() {
+		return inbox;
+	}
+
+	public void setInbox(boolean inbox) {
+		this.inbox = inbox;
+	}
+
+	public boolean isFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
 	}
 
 	public List<PersonApiPerspective> getAuthors() {

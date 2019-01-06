@@ -1,12 +1,16 @@
 package dk.in2isoft.onlineobjects.modules.knowledge;
 
-public class InternetAddressApiPerspective {
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
+
+public class InternetAddressApiPerspective implements CategorizableViewPerspective {
 
 	private long id;
 	private String title;
 	private String url;
 	private String html;
 	private String text;
+	private boolean inbox;
+	private boolean favorite;
 
 	public long getId() {
 		return id;
@@ -46,5 +50,21 @@ public class InternetAddressApiPerspective {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public boolean isInbox() {
+		return inbox;
+	}
+
+	public void setInbox(boolean inbox) {
+		this.inbox = inbox;
+	}
+
+	public boolean isFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
 	}
 }

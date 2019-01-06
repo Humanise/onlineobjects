@@ -2,10 +2,14 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 
 import java.util.List;
 
-public class HypothesisApiPerspective {
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
+
+public class HypothesisApiPerspective implements CategorizableViewPerspective {
 
 	private String text;
 	private long id;
+	private boolean inbox;
+	private boolean favorite;
 
 	private List<StatementApiPerspective> supporting;
 	private List<StatementApiPerspective> contradicting;
@@ -40,6 +44,22 @@ public class HypothesisApiPerspective {
 
 	public void setContradicting(List<StatementApiPerspective> contradicting) {
 		this.contradicting = contradicting;
+	}
+
+	public boolean isInbox() {
+		return inbox;
+	}
+
+	public void setInbox(boolean inbox) {
+		this.inbox = inbox;
+	}
+
+	public boolean isFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
 	}
 	
 }

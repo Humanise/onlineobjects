@@ -5,6 +5,9 @@ import java.util.Collection;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.type.LongType;
 
+import com.google.common.collect.Lists;
+
+import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -15,17 +18,17 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 
-public class KnowledgeAugmentationQuery implements CustomQuery<KnowledgeListRow> {
+public class KnowledgeListQuery implements CustomQuery<KnowledgeListRow> {
 
 	private long privileged;
 	private Collection<Long> ids;
 
-	public KnowledgeAugmentationQuery(Privileged privileged) {
+	public KnowledgeListQuery(Privileged privileged) {
 		super();
 		this.privileged = privileged.getIdentity();
 	}
 
-	public KnowledgeAugmentationQuery withIds(Collection<Long> ids) {
+	public KnowledgeListQuery withIds(Collection<Long> ids) {
 		this.ids = ids;
 		return this;
 	}
@@ -84,6 +87,7 @@ public class KnowledgeAugmentationQuery implements CustomQuery<KnowledgeListRow>
 
 	public void setParameters(NativeQuery<?> sql) {
 		sql.setParameter("privileged", privileged, LongType.INSTANCE);
+		Collection<Long> ids = Code.isEmpty(this.ids) ? Lists.newArrayList(-1l) : this.ids;
 		sql.setParameterList("ids", ids, LongType.INSTANCE);
 	}
 }

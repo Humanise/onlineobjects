@@ -167,7 +167,7 @@ public class KnowledgeService {
 		return hypothesis;
 	}
 
-	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
+	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
 		HypothesisApiPerspective perspective = new HypothesisApiPerspective();
 		perspective.setId(hypothesis.getId());
@@ -187,10 +187,11 @@ public class KnowledgeService {
 			addressPerspective.setText(address.getText());
 			return addressPerspective;
 		}).collect(Collectors.toList()));
+		categorize(hypothesis, perspective, user);
 		return perspective;
 	}
 
-	public StatementApiPerspective getStatementPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
+	public StatementApiPerspective getStatementPerspective(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Statement statement = modelService.getRequired(Statement.class, id, user);
 		StatementApiPerspective perspective = new StatementApiPerspective();
 		perspective.setId(statement.getId());
@@ -219,6 +220,7 @@ public class KnowledgeService {
 			authorPerspectives.add(personPerspective);
 		}
 		perspective.setAuthors(authorPerspectives);
+		categorize(statement, perspective, user);
 		return perspective;
 	}
 
@@ -234,7 +236,7 @@ public class KnowledgeService {
 		return statement;
 	}
 
-	public QuestionApiPerspective getQuestionPerspective(Long id, User user) throws ModelException, ContentNotFoundException {
+	public QuestionApiPerspective getQuestionPerspective(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, user);
 		QuestionApiPerspective questionPerspective = new QuestionApiPerspective();
 		questionPerspective.setId(question.getId());
@@ -268,6 +270,7 @@ public class KnowledgeService {
 			answerPerspectives.add(statementPerspective);
 		}
 		questionPerspective.setAnswers(answerPerspectives);
+		categorize(question, questionPerspective, user);
 		return questionPerspective;
 	}
 
@@ -305,7 +308,7 @@ public class KnowledgeService {
 		
 		addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
 		addressPerspective.setText(internetAddressViewPerspective.getText());
-		
+		categorize(address, addressPerspective, user);
 		return addressPerspective;
 	}
 	
