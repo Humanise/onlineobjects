@@ -101,7 +101,7 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("div"));
 
 		// TODO: This should be an option 
-		structureTags.addAll(Sets.newHashSet("section","article","aside","main","footer","nav","figure","figcaption"));
+		structureTags.addAll(Sets.newHashSet("section","article","aside","main","header","footer","nav","figure","figcaption","details","summary"));
 		
 		
 		bannedTags.add("script");

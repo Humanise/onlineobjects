@@ -67,7 +67,12 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 	
 	@Test
 	public void testArticleExtraction() throws Exception {
-		
+		List<String> tests = Lists.newArrayList();
+		//tests.add("greenmatch-dk");
+		//tests.add("trends");
+		//tests.add("nngroup-com-articles-redesign-competitive-testing");
+		//tests.add("eu-usatoday-com");
+
 		List<Extractor> extractors = Lists.newArrayList();
 		extractors.add(new Extractor("readability", new ReadabilityExtractor()));
 		extractors.add(new Extractor("simple", new SimpleContentExtractor()));
@@ -94,7 +99,11 @@ public class TestExtractionComparison extends AbstractSpringTestCase {
 		Arrays.sort(dirs);
 		
 		for (File dir : dirs) {
-			//if (!dir.getName().startsWith("en-wikipedia-org-wiki-Stigmergy")) continue;
+			if (!tests.isEmpty()) {
+				if (!tests.stream().anyMatch(prefix -> dir.getName().startsWith(prefix))) {
+					continue;
+				}
+			}
 			File infoFile = findByExtension(dir, "json");
 			if (infoFile==null) {
 				log.warn("Info file not found: {}", infoFile);

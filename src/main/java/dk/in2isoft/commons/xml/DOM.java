@@ -304,4 +304,10 @@ public class DOM {
 		}
 		return found;
 	}
+
+	public static int getPosition(Element element) {
+		List<Element> all = DOM.findElements(element.getDocument(), node -> true);
+		int i = all.indexOf(element);
+		return i;
+	}
 }

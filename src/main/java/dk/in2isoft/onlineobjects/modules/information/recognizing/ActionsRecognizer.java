@@ -22,6 +22,7 @@ public class ActionsRecognizer implements Recognizer {
 			"e-alert", "submit", "my account", "login", "☰",
 			"tweet","share","pin it",
 			"share on facebook","share on twitter","share on reddit","share on whatsapp","share on google+","share by email",
+			"share on linkedIn",
 			"share to twitter","blogthis!","share to facebook","share to pinterest","email this",
 			"follow me on twitter","click to follow", "advertisement"
 		};
