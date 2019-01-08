@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
@@ -95,11 +96,11 @@ public class TitleRecognizer implements Recognizer {
 		return str.toLowerCase().replaceAll("\\W", "");
 	}
 	
-	private Element findMain(List<Element> candidates, Set<String> titles) {
-		if (candidates.isEmpty()) return null;
+	private Element findMain(List<Element> elements, Set<String> titles) {
+		if (elements.isEmpty()) return null;
 		
 		if (!titles.isEmpty()) {
-			Optional<Element> found = candidates.stream().filter(el -> {
+			Optional<Element> found = elements.stream().filter(el -> {
 				return "h1".equals(el.getLocalName()) && titles.contains(normalize(DOM.getText(el)));
 			}).findFirst();
 			if (found.isPresent()) {
@@ -107,17 +108,35 @@ public class TitleRecognizer implements Recognizer {
 			}
 		}
 		
-		List<Candidate> cs = make(candidates);
-		compare(cs, titles);
+		List<Candidate> candidates = make(elements);
+		compare(candidates, titles);
 		
-		cs.sort((a,b) -> {
+		candidates.sort((a,b) -> {
 			int textComparison = b.comparison.compareTo(a.comparison);
 			if (textComparison != 0) {
 				return textComparison;
 			}
 			return b.rank.compareTo(a.rank);
 		});
-		return cs.get(0).element;
+		// TODO: Consider more than just the top compared if many have almost the same similarity (the lowest position among the top similarities)
+		// If top result has low rank and a single H1 exists then use the H1
+		Candidate topSimilar = candidates.get(0);
+		if (topSimilar.comparison < 0.8 && topSimilar.rank < 1.0) {
+			List<Candidate> topRankedBySimilarity = candidates.stream().
+			sorted((a,b) -> {
+				int compareTo = b.rank.compareTo(a.rank);
+				if (compareTo != 0) return compareTo; 
+				return b.comparison.compareTo(a.comparison);
+			}).collect(Collectors.toList());
+			
+			if (!topRankedBySimilarity.isEmpty()) {
+				Candidate topRank = topRankedBySimilarity.get(0);
+				if (topRank.position < topSimilar.position) {
+					return topRank.element;
+				}
+			}
+		}
+		return topSimilar.element;
 	}
 
 	private void compare(List<Candidate> cs, Set<String> titles) {
@@ -138,12 +157,20 @@ public class TitleRecognizer implements Recognizer {
 			Candidate candidate = new Candidate();
 			candidate.element = element;
 			candidate.text = normalize(DOM.getText(element));
-			candidate.rank = element.getLocalName().toLowerCase().equals("h1") ? 1.0 : 0.0;
+			candidate.rank = rank(element);
+			candidate.position = DOM.getPosition(element);
 			out.add(candidate);
 		}
 		return out;
 	}
-	
+
+	private double rank(Element element) {
+		double rank = element.getLocalName().toLowerCase().equals("h1") ? 1.0 : 0.0;
+		boolean isInsideMain = DOM.getAncestors(element).stream().anyMatch(node -> DOM.isAny(node, "article","main"));
+		if (isInsideMain) rank += 0.1;
+		return rank;
+	}
+
 	private String extractActualTitle(String title, String siteName) {
 		if (title == null) return null;
 		if (siteName != null) {
@@ -191,6 +218,7 @@ public class TitleRecognizer implements Recognizer {
 		String text;
 		Double comparison = 0.0;
 		Double rank = 0.0;
+		int position = 0;
 		
 		@Override
 		public String toString() {
