@@ -35,8 +35,11 @@ var passwordView = {
         },1000);
       },
       $failure : function(a,b) {
-        hui.log(a);
-        hui.ui.msg.fail({text:{da:'Det lykkedes ikke, ',en:'It failed'}});
+        var text = b ? b.message : null;
+        if (!text) {
+          text = {da:'Det lykkedes ikke, ',en:'It failed'};
+        }
+        hui.ui.msg.fail({text:text});
         form.focus();
       }
     })

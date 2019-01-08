@@ -317,6 +317,7 @@ public class SetupController extends SetupControllerBase {
 		writer.header("ID");
 		writer.header("Secret");
 		writer.header("Version");
+		writer.header("Created");
 		writer.endHeaders();
 		modelService.getChildren(user, Client.class, user).forEach(client -> {
 			String secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
@@ -326,7 +327,7 @@ public class SetupController extends SetupControllerBase {
 			String platformVersion = client.getPropertyValue(Property.KEY_CLIENT_PLATFORM_VERSION);
 			String hardwareVersion = client.getPropertyValue(Property.KEY_CLIENT_HARDWARE_VERSION);
 			String hardware = client.getPropertyValue(Property.KEY_CLIENT_HARDWARE);
-			writer.startRow();
+			writer.startRow().withKind("client").withId(client.getId());
 			writer.cell(client.getName());
 			writer.startCell().startWrap().text(client.getUUID()).endWrap().endCell();
 			writer.startCell().startWrap().text(secret).endWrap().endCell();
@@ -334,6 +335,7 @@ public class SetupController extends SetupControllerBase {
 			writer.lineBreak().text("Platform: " + platform + " / " + platformVersion);
 			writer.lineBreak().text("Hardware: " + hardware + " / " + hardwareVersion);
 			writer.endCell();
+			writer.cell(Dates.formatDurationFromNow(client.getCreated()));
 			writer.endRow();
 		});
 		writer.endList();
@@ -360,6 +362,25 @@ public class SetupController extends SetupControllerBase {
 		return perspective;
 	}
 	
+	@Path
+	public void deleteClient(Request request) throws EndUserException {
+		UserSession privileged = request.getSession();
+		Long id = request.getId();
+		Client client = modelService.getRequired(Client.class, id, privileged);
+		modelService.delete(client, privileged);
+	}
+
+	@Path
+	public void logUserOut(Request request) throws EndUserException {
+		UserSession privileged = request.getSession();
+		Long id = request.getId();
+		User user = modelService.getRequired(User.class, id, privileged);
+		List<Client> list = modelService.list(Query.after(Client.class).as(user));
+		for (Client client : list) {
+			modelService.delete(client, privileged);
+		}
+	}
+
 	@Path
 	public void deleteUser(Request request) throws EndUserException {
 		UserSession privileged = request.getSession();

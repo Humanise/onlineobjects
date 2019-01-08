@@ -68,6 +68,7 @@ public class SecurityService {
 			surveillanceService.log(user, LogType.logIn);
 			return true;
 		}
+		surveillanceService.audit().warn("Failed login request for username={}", username);
 		return false;
 	}
 	
@@ -124,11 +125,12 @@ public class SecurityService {
 
 	public void changePasswordUsingKey(String key, String password, UserSession session) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
 		User user = passwordRecoveryService.getUserByRecoveryKey(key);
-		if (user!=null) {
-			Privileged admin = getAdminPrivileged();
-			changePassword(user, password, admin);
-			changeUser(session, user.getUsername(), password);
+		if (user==null) {
+			throw new IllegalRequestException(Error.userNotFound);
 		}
+		Privileged admin = getAdminPrivileged();
+		changePassword(user, password, admin);
+		changeUser(session, user.getUsername(), password);
 	}
 	
 	public boolean logOut(UserSession userSession) {

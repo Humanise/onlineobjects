@@ -14,6 +14,7 @@ hui.ui.listen({
     passwordResetIcon.setEnabled(!!selection);
     emailConfirmationIcon.setEnabled(!!selection);
     checkHealth.setEnabled(!!selection);
+    logOut.setEnabled(!!selection);
   },
   $click$infoIcon : function() {
     var row = list.getFirstSelection();
@@ -60,6 +61,22 @@ hui.ui.listen({
         message: {start:'Sending...', success: 'Scheduled!'},
         url : 'checkHealth',
         parameters :{id : row.id},
+        $failure : function() {
+          hui.ui.msg.fail({text:'It failed'})
+        }
+      });
+    }
+  },
+  $click$logOut : function() {
+    var row = list.getFirstSelection();
+    if (row) {
+      hui.ui.request({
+        message: {start:'Logging out...', success: 'Done!'},
+        url : 'logUserOut',
+        parameters :{id : row.id},
+        $success : function() {
+          listObjectsSource.refresh();
+        },
         $failure : function() {
           hui.ui.msg.fail({text:'It failed'})
         }
@@ -130,6 +147,33 @@ hui.ui.listen({
     list.resetState();
   },
 
+  // Clients...
+  _clientId: null,
+  
+  $open$objectsList : function(row) {
+    if (row.kind == 'client') {
+      this._editClient({id: row.id});
+    }
+  },
+  _editClient : function(params) {
+    this._clientId = params.id;
+    clientPanel.show();
+  },
+  $click$deleteClient: function() {
+    clientPanel.setBusy(true);
+    hui.ui.request({
+      url: 'deleteClient',
+      parameters : {id: this._clientId},
+      $success : function() {
+        listObjectsSource.refresh();
+        clientPanel.hide();
+      },
+      $finally : function() {
+        clientPanel.setBusy(false);
+      },
+      message : {start:'Deleting...', success: 'Deleted'}
+    });
+  },
 
   // Members...
 

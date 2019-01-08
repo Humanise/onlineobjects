@@ -9,6 +9,8 @@ public interface CustomQuery<T> {
 	
 	public String getCountSQL();
 
+	// Convert to ResultRow
+	@Deprecated
 	public T convert(Object[] row);
 
 	public void setParameters(NativeQuery<?> sql);
