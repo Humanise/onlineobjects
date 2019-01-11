@@ -12,8 +12,35 @@ public class DocumentToText {
 	
 	private Set<String> ignore = Sets.newHashSet("script","head","style","noscript");
 
-	private Set<String> singleBlocks = Sets.newHashSet("div","br","li","dt","dd","tr");
-	private Set<String> doubleBlocks = Sets.newHashSet("p","h1","h2","h3","h4","h5","h6","ol","ul","dl");
+	private Set<String> singleBlocks = Sets.newHashSet(
+			"br",
+			"tr",
+			"address",
+			"article",
+			"aside",
+			"canvas",
+			"dd",
+			"div",
+			"dt",
+			"fieldset",
+			"figcaption",
+			"figure",
+			"footer",
+			"form",
+			"header",
+			"hr",
+			"li",
+			"main",
+			"nav",
+			"noscript",
+			"output",
+			"pre",
+			"section",
+			"table",
+			"tfoot",
+			"video");
+
+	private Set<String> doubleBlocks = Sets.newHashSet("p","h1","h2","h3","h4","h5","h6","ol","ul","dl","blockquote");
 	
 	private int newLines = 0;
 

@@ -27,6 +27,7 @@ public class DocumentCleaner {
 	private Set<String> structureTags = new HashSet<>();
 	private Set<String> validLeaves = new HashSet<>();
 	private Set<String> inlineTags = new HashSet<>();
+	private Set<String> blockTags = new HashSet<>();
 	
 	private Set<String> bannedTags = new HashSet<>();
 	private Set<String> semanticAttributes = new HashSet<>();
@@ -37,6 +38,7 @@ public class DocumentCleaner {
 	private boolean allowSemanticAttributes;
 	private boolean allowMetaTags;
 	private boolean allowStructureTags;
+	private boolean allowUnnecessaryTags;
 	
 	private static final Logger log = LoggerFactory.getLogger(DocumentCleaner.class);
 
@@ -87,6 +89,37 @@ public class DocumentCleaner {
 				"time",
 				"tt",
 				"var"));
+
+		blockTags.addAll(Sets.newHashSet("h1","h2","h3","h4","h5","h6"));
+		blockTags.addAll(Sets.newHashSet("address",
+				"article",
+				"aside",
+				"blockquote",
+				"canvas",
+				"dd",
+				"div",
+				"dl",
+				"dt",
+				"fieldset",
+				"figcaption",
+				"figure",
+				"footer",
+				"form",
+				"header",
+				"hr",
+				"li",
+				"main",
+				"nav",
+				"noscript",
+				"ol",
+				"output",
+				"p",
+				"pre",
+				"section",
+				"table",
+				"tfoot",
+				"ul",
+				"video"));
 		
 		validTags.addAll(Sets.newHashSet("html","head","body","title"));
 		validTags.addAll(Sets.newHashSet("h1","h2","h3","h4","h5","h6","p"));
@@ -280,7 +313,7 @@ public class DocumentCleaner {
 	}
 
 	private boolean isUnnecessary(Element element) {
-		Set<String> blocks = Sets.newHashSet("ul","p","h1","h2","h3","h4","h5","h6");
+		if (allowUnnecessaryTags) return false;
 		if (element.getLocalName().toLowerCase().equals("div")) {
 			int childElementCount = element.getChildElements().size();
 			for (int i = 0; i < element.getChildCount(); i++) {
@@ -292,10 +325,11 @@ public class DocumentCleaner {
 					}
 				} else if (child instanceof Element) {
 					Element ce = (Element) child;
-					if (childElementCount == 1 && blocks.contains(ce.getLocalName().toLowerCase())) {
+					String tagName = ce.getLocalName().toLowerCase();
+					if (childElementCount == 1 && blockTags.contains(tagName)) {
 						return true;
 					}
-					if (!ce.getLocalName().toLowerCase().equals("div")) {
+					if (!blockTags.contains(tagName)) {
 						return false;
 					}
 				}
@@ -424,5 +458,9 @@ public class DocumentCleaner {
 		} else {
 			this.validTags.remove("span");
 		}
+	}
+
+	public void setAllowUnnecessary(boolean b) {
+		this.allowUnnecessaryTags = b;
 	}
 }
