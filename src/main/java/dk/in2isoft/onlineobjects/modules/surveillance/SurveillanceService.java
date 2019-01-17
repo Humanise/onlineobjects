@@ -38,6 +38,7 @@ public class SurveillanceService {
 	private ConcurrentLinkedQueue<LiveLogEntry> logEntries;
 	private RequestList requestsNotFound;
 	private final Logger auditLog = LogManager.getLogger("audit");
+	private final Logger requestLog = LogManager.getLogger("requests");
 	private ModelService modelService;
 	private EmailService emailService;
 	private ConfigurationService configurationService;
@@ -146,6 +147,7 @@ public class SurveillanceService {
 		if (!request.getRequest().getRequestURI().startsWith("/service/image")) {
 			this.longestRunningRequests.register(request);
 		}
+		requestLog.info("time={}|domain={}|app={}|dur={}|path={}", System.currentTimeMillis(),request.getDomainName(), request.getApplication()==null ? "none" : request.getApplication(), request.getRunningTime(), request.getRequest().getRequestURI());
 	}
 	
 	public void surveyNotFound(Request request) {

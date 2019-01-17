@@ -585,10 +585,10 @@ public class SetupController extends SetupControllerBase {
 				data.newRow();
 				data.addCell(info.getUri());
 				data.addCell(String.valueOf(info.getCounts()));
-				data.addCell(String.valueOf(info.getAverageRunningTime()));
-				data.addCell(String.valueOf(info.getMaxRunningTime()));
-				data.addCell(String.valueOf(info.getMinRunningTime()));
-				data.addCell(localizationService.formatMilis(info.getTotalRunningTime()));
+				data.addCell(String.valueOf(info.getAverageRunningTime()/1000000));
+				data.addCell(String.valueOf(info.getMaxRunningTime()/1000000));
+				data.addCell(String.valueOf(info.getMinRunningTime()/1000000));
+				data.addCell(localizationService.formatMilis(info.getTotalRunningTime()/1000000));
 			}
 			request.sendObject(data);
 		} else if ("liveLog".equals(kind)) {

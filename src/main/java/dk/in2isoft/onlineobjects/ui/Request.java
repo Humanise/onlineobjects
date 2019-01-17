@@ -65,7 +65,7 @@ public class Request {
 		this.request = request;
 		this.decode();
 		this.localContext = new String[] {};
-		this.startTime = System.currentTimeMillis();
+		this.startTime = System.nanoTime();
 		//debug();
 	}
 	
@@ -446,7 +446,7 @@ public class Request {
 	}
 
 	public long getRunningTime() {
-		return System.currentTimeMillis()-startTime;
+		return System.nanoTime()-startTime;
 	}
 
 	public static Request get(FacesContext context) {
