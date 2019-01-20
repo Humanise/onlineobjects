@@ -190,7 +190,6 @@ public class APIController extends APIControllerBase {
 		if (pageSize == 0) {
 			pageSize = 60;
 		}
-		request.getStrings("type");
 		String type = request.getString("type");
 		ArrayList<String> types;
 		if (type.equals(Statement.class.getSimpleName())) {
