@@ -81,7 +81,7 @@
     height: 100%;
     background-color: rgba(255,255,255,.95);
     transition-property: top, background-color;
-    transition-duration: .7s;
+    transition-duration: .4s;
     overflow: auto;
     box-sizing: border-box;
     font-size: 0;
@@ -93,7 +93,7 @@
     &.is-visible {
       top: 0%;
       background-color: rgba(255,255,255,.95);
-      transition-duration: .3s;
+      transition-duration: .2s;
       .oo_topbar_drop_link {
         transform: scale(1);
         opacity: 1;
@@ -122,10 +122,10 @@
     &_link {
       box-sizing: border-box;
       display: inline-block;
-      padding: 20px 10px;
+      padding: 20px 20px;
       color: #666;
       text-decoration: none;
-      width: 100px;
+      width: 140px;
       text-align: center;
       transform: scale(.5);
       opacity: .5;
@@ -136,15 +136,16 @@
 
     &_icon {
       display: inline-block;
-      font-size: 42px;
-      width: 42px;
-      height: 42px;
+      font-size: 56px;
+      width: 56px;
+      height: 56px;
+      line-height: 1;
     }
 
     &_label {
-      margin-top: 10px;
+      margin-top: 5px;
       display: block;
-      font-size: 16px;
+      font-size: 18px;
     }
   }
 
