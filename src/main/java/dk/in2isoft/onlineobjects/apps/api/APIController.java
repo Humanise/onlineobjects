@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,15 +24,20 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
+import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
+import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
+import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.knowledge.AddressRequest;
 import dk.in2isoft.onlineobjects.modules.knowledge.HypothesisApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
@@ -179,12 +185,53 @@ public class APIController extends APIControllerBase {
 		}
 	}
 	
+	@Path(exactly={"v1.0", "image", "add"})
+	public void addImage(Request request) throws IOException, EndUserException {
+
+		DataImporter importer = importService.createImporter();
+		importer.setListener(new ImageImporter(modelService, imageService) {
+			@Override
+			protected Privileged getUser(Map<String, String> parameters, Request request) throws EndUserException {
+				String secret = parameters.get("secret");
+				if (Strings.isBlank(secret)) {
+					throw new IllegalRequestException("No secret");
+				}
+				User user = securityService.getUserBySecret(secret);
+				if (user == null) {
+					throw new SecurityException(Error.userNotFound);
+				}
+				return user;
+			}
+			
+			@Override
+			protected void preProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
+				String tags = parameters.get("tags");
+				if (Strings.isNotBlank(tags)) {
+					String[] splitted = tags.split(",");
+					for (String token : splitted) {
+						if (Strings.isNotBlank(token)) {
+							image.addProperty(Property.KEY_COMMON_TAG, token.trim());
+						}
+					}
+				}
+				String url = parameters.get("url");
+				if (Strings.isNotBlank(url)) {
+					image.addProperty(Property.KEY_DATA_SOURCE, url);
+				}
+				String description = parameters.get("description");
+				if (Strings.isNotBlank(description)) {
+					image.addProperty(Image.PROPERTY_DESCRIPTION, description);
+				}
+			}
+		});
+		importer.importMultipart(this, request);
+	}
+	
 	/* ------- Knowledge ------- */
 	
 	@Path(start = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
-		
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
 		if (pageSize == 0) {
