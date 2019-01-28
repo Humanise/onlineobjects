@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:oc = "http://java.sun.com/jsf/composite/components"
+>
+
+  <ui:composition template="templates/plain.xhtml">
+
+    <ui:define name="body">
+      <o:box>
+        <o:header styleClass="oo_space_bottom">Welcome to OnlineObjects</o:header>
+        <oc:text>
+          <p>We have <strong>sent you an e-mail</strong> where we ask you to <strong>confirm your account</strong>.</p>
+          <p>Please do so soon so we can <strong>trust that you are the owner</strong> of the e-mail account.</p>
+          <p>You can already use <o:link app="knowledge" href="/app">the web interface of the Knowledge app</o:link>.</p>
+          <p>If you use a Mac you can get the <o:link app="front" href="/mac">Mac App for OnlineObjects</o:link>.</p>
+        </oc:text>
+      </o:box>
+    </ui:define>
+
+  </ui:composition>
+
+</html>

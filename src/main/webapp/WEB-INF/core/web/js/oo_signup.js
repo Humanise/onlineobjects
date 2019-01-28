@@ -68,6 +68,11 @@
       this._form.focus();
     },
 
+    _getWelcomeUrl() {
+      var match = document.location.href.match(/(http[s]:\/\/)[a-z]+(\.[a-z]+\.[a-z]+)/);
+      return match[1] + "account" + match[2] + "/" + oo.language + "/welcome";
+    },
+
     _submit : function(vars) {
       var form = this._form, box = this._box;
       var values = form.getValues();
@@ -89,7 +94,7 @@
         form.focus();
         return
       }
-
+      var welcomeUrl = this._getWelcomeUrl();
       hui.ui.msg({text:'Signing up...',busy:true});
       hui.ui.request({
         url : '/service/authentication/signup',
@@ -106,8 +111,8 @@
           form.reset();
           box.hide();
           setTimeout(function() {
-            document.location.reload();
-          },2000);
+            document.location = welcomeUrl;
+          }, 2000);
         },
         $failure : function(t, e) {
           var msg = (e ? e.message : null) || 'An unexpected error occurred'

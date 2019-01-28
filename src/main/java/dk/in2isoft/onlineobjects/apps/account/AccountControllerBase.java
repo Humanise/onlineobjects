@@ -29,6 +29,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 		addJsfMatcher("/<language>/password", "password.xhtml");
 		addJsfMatcher("/<language>/delete", "delete.xhtml");
 		addJsfMatcher("/<language>/signup", "signup.xhtml");
+		addJsfMatcher("/<language>/welcome", "welcome.xhtml");
 		addJsfMatcher("/<language>/agreements", "agreements.xhtml");
 		addJsfMatcher("/<language>/" + AccountController.EMAIL_CONFIRM_PATH, "confirm.xhtml");
 		addJsfMatcher("/<language>/confirm\\-email\\-change", "confirm-email-change.xhtml");
