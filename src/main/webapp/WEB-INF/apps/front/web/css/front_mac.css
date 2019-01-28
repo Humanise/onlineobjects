@@ -25,6 +25,17 @@
   .front_mac_download {
     margin: 40px auto;
     text-align: center; }
+  .front_mac_store {
+    margin: 40px auto;
+    text-align: center;
+    font-size: 0; }
+    .front_mac_store_button {
+      display: inline-block;
+      height: 48px;
+      width: 188px;
+      background: url("/gfx/mac_app_store.svg") 50% no-repeat;
+      background-size: contain;
+      color: transparent; }
   .front_mac_text {
     max-width: 800px;
     margin: 20px auto;

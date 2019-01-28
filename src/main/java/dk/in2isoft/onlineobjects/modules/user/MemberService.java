@@ -568,6 +568,9 @@ public class MemberService {
 		if (person != null) {
 			name = person.getFullName();
 		}
+		if (Strings.isBlank(name)) {
+			name = user.getUsername();
+		}
 		return Pair.of(email, name);
 	}
 
