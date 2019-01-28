@@ -131,19 +131,30 @@ public class APIController extends APIControllerBase {
 	public AuthenticationResponse authentication(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
+		if (Strings.isBlank(username)) {
+			surveillanceService.audit().warn("Failed to authenticate because of missing username");
+			throw new IllegalRequestException(Error.noUsername);
+		}
+		if (Strings.isBlank(password)) {
+			surveillanceService.audit().warn("Failed to authenticate because of missing password");
+			throw new IllegalRequestException(Error.noPassword);
+		}
 		
 		ClientInfo info = getClientInfo(request);
 		
 		User user = securityService.getUser(username, password);
 		if (user==null) {
+			surveillanceService.audit().warn("Failed to authenticate username={}", username);
 			securityService.randomDelay();
 			throw new SecurityException("User not found");
 		}
 		String secret = securityService.getSecret(info, user);
 		if (Strings.isBlank(secret)) {
+			surveillanceService.audit().warn("Failed to authenticate username={}", username);
 			throw new SecurityException("Unable to perform request");
 		}
 
+		surveillanceService.audit().info("Authenticated username={}", username);
 		AuthenticationResponse response = new AuthenticationResponse();
 		response.setSecret(secret);
 		return response;

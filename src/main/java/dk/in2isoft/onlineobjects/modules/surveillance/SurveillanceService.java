@@ -3,8 +3,10 @@ package dk.in2isoft.onlineobjects.modules.surveillance;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -147,7 +149,14 @@ public class SurveillanceService {
 		if (!request.getRequest().getRequestURI().startsWith("/service/image")) {
 			this.longestRunningRequests.register(request);
 		}
-		requestLog.info("time={}|domain={}|app={}|dur={}|path={}", System.currentTimeMillis(),request.getDomainName(), request.getApplication()==null ? "none" : request.getApplication(), request.getRunningTime(), request.getRequest().getRequestURI());
+		Map<String,Object> entry = new HashMap<>();
+		entry.put("time", System.currentTimeMillis());
+		entry.put("domain", request.getDomainName());
+		entry.put("app", request.getApplication()==null ? "none" : request.getApplication());
+		entry.put("duration", request.getRunningTime());
+		entry.put("agent", request.getRequest().getHeader("User-Agent"));
+		entry.put("path", request.getRequest().getRequestURI());
+		requestLog.info(Strings.toJSON(entry));
 	}
 	
 	public void surveyNotFound(Request request) {

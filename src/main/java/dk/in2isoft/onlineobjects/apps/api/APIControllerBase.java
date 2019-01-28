@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
+import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
@@ -32,6 +33,7 @@ public abstract class APIControllerBase extends ApplicationController {
 	protected KnowledgeService knowledgeService;
 	protected MemberService memberService;
 	protected PasswordRecoveryService passwordRecoveryService;
+	protected SurveillanceService surveillanceService;
 	
 	public APIControllerBase() {
 		super("api");
@@ -92,5 +94,9 @@ public abstract class APIControllerBase extends ApplicationController {
 	
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
+	}
+	
+	public void setSurveillanceService(SurveillanceService surveillanceService) {
+		this.surveillanceService = surveillanceService;
 	}
 }
