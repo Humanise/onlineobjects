@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<f:view contentType="text/html"
+  xmlns="http://www.w3.org/1999/xhtml"
   xmlns:o="http://www.onlineobjects.com/jsf"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:gui="http://www.in2isoft.dk/in2igui"
-  xmlns:c="http://java.sun.com/jsp/jstl/core">
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  locale="#{authenticationLoginView.locale}"
+  >
 
   <f:loadBundle basename="dk.in2isoft.onlineobjects.service.authentication.views.msg.AuthenticationLoginView" var="msg"/>
+
+<o:doctype/>
+<o:html>
 
   <o:head>
     <o:metatags/>
@@ -19,11 +22,13 @@
 
   <o:body>
     <o:topBar/>
-    <o:box width="600">
-      <o:header>#{msg.access_control}</o:header>
-      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName} <o:link href="/logout">#{msg.log_out}</o:link></p>
+    <o:box width="500">
+      <o:header level="0" styleClass="oo_space_bottom-2">#{msg.access_control}</o:header>
+      <c:if test="#{authenticationLoginView.loggedIn}">
+      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName} <o:link href="#{authenticationLoginView.logOutLink}">#{msg.log_out}</o:link></p>
+      </c:if>
       <c:if test="#{not empty authenticationLoginView.message}">
-        <p class="message">#{authenticationLoginView.message}</p>
+        <p class="oo_message oo_space_bottom">#{authenticationLoginView.message}</p>
       </c:if>
       <gui:formula action="authenticate" name="formula">
         <gui:field label="#{msg.username}">
@@ -33,14 +38,18 @@
           <gui:textInput inputName="password" name="password" secret="true"/>
         </gui:field>
         <p class="buttons">
+          <o:link name="forgotLink">#{msg.i_forgot}</o:link>
           <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
           <gui:button text="#{msg.log_in}" submit="true"/>
         </p>
       </gui:formula>
     </o:box>
     <o:footer/>
+    <o:dependency src="/WEB-INF/core/web/css/oo_message.css"/>
+    <o:dependency src="/WEB-INF/core/web/css/oo_space.css"/>
     <o:dependency src="/WEB-INF/services/authentication/web/css/style.css"/>
     <o:dependency src="/WEB-INF/services/authentication/web/js/login.js"/>
   </o:body>
+</o:html>
 
-</html>
+</f:view>

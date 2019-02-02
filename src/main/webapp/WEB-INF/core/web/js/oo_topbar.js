@@ -256,9 +256,6 @@ oo.TopBar.prototype = {
     }
     document.location.reload();    
   },
-  _showPasswordRecovery : function() {
-
-  },
 
   _showInbox : function(a) {
     if (!this._inboxPanel) {

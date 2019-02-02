@@ -104,10 +104,6 @@ public abstract class ApplicationController extends AbstractController implement
 		return true;
 	}
 
-	public String getLanguage(Request request) {
-		return null;
-	}
-
 	public boolean askForUserChange(Request request) {
 		return false;
 	}

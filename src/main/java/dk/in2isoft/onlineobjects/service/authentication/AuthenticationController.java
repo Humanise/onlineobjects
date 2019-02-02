@@ -27,6 +27,17 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	private static Logger log = LogManager.getLogger(AuthenticationController.class);
 
+	
+	@Override
+	public String getLanguage(Request request) {
+		String lang = request.getRequest().getLocale().getLanguage();
+		if (!"da".equals(lang) && !"en".equals(lang)) {
+			lang = "en";
+		}
+		return lang;
+
+	}
+
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {
 		request.redirect("/");
@@ -122,6 +133,11 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	public void logout(Request request) throws IOException, EndUserException {
 		securityService.logOut(request.getSession());
-		request.redirect(".?action=loggedOut");
+		String redirect = request.getString("redirect");
+		String url = ".?action=loggedOut";
+		if (Strings.isNotBlank(redirect)) {
+			url += "&redirect=" + redirect;
+		}
+ 		request.redirect(url);
 	}
 }

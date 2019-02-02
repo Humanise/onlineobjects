@@ -10,5 +10,8 @@ hui.ui.listen({
   },
   $submit$formula : function(formula) {
     formula.element.submit();
+  },
+  $click$forgotLink : function() {
+    oo.recover()
   }
 })

@@ -30,7 +30,11 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		ServiceController controller = getServiceController(request,path[1]);
 		if (controller == null) {
 			throw new ContentNotFoundException("No controller found!");
-		}			
+		}
+		String language = controller.getLanguage(request);
+		if (language!=null) {
+			request.setLanguage(language);
+		}
 		RequestDispatcher dispatcher = controller.getDispatcher(request);
 		if (dispatcher != null) {
 			request.getResponse().setContentType("text/html");

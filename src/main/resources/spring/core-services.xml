@@ -19,6 +19,7 @@
 
 	<bean id="authenticationLoginView" class="dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView" scope="request">
         <property name="modelService" ref="modelService"/>
+        <property name="securityService" ref="securityService"/>
     </bean>
 	
 	<bean id="languageController" class="dk.in2isoft.onlineobjects.service.language.LanguageController" autowire="byType"/>

@@ -38,6 +38,10 @@ public abstract class AbstractController {
 		jsfMatchers.put(RestUtil.compile(pattern), "/jsf/"+getName()+"/"+path);
 	}
 
+	public String getLanguage(Request request) {
+		return null;
+	}
+
 	public void unknownRequest(Request request) throws IOException, EndUserException {
 		Method[] methods = getClass().getDeclaredMethods();
 		for (Method method : methods) {
