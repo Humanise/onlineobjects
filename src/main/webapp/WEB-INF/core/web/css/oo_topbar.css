@@ -242,6 +242,14 @@
     margin: 5px 0 20px;
     color: #333; }
 
+.oo_topbar_signup {
+  border-top: 1px solid #eee;
+  margin-top: 12px;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  font-size: 11pt; }
+
 @media screen and (min-width: 500px) {
   .oo_topbar_item {
     padding: 0 10px; }

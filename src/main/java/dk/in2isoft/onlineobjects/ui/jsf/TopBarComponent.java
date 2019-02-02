@@ -44,7 +44,7 @@ public class TopBarComponent extends AbstractComponent {
 	private static List<String> privateApps = Lists.newArrayList(); //, "desktop", "tools"
 	private static Map<String,String> icons = new HashMap<String, String>();
 
-	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in"};;
+	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in","create_account"};;
 	
 	static {
 		icons.put("words", "app_words");
@@ -75,7 +75,8 @@ public class TopBarComponent extends AbstractComponent {
 		// boolean developmentMode = configurationService.isDevelopmentMode();
 		Request request = Request.get(context);
 		Messages msg = new Messages(this);
-		String texts = buildTexts(request.getLocale(), msg);
+		Locale locale = request.getLocale();
+		String texts = buildTexts(locale, msg);
 
 		
 		out.startDiv("oo_topbar oo_faded").withId(getClientId()).withAttribute("data-texts", texts);
@@ -107,7 +108,7 @@ public class TopBarComponent extends AbstractComponent {
 			}
 			out.startA(cls).withAttribute("data-icon", icons.get(app));;
 			out.withHref(configurationService.getApplicationContext(app, null, request));
-			out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
+			out.text(msg.get("app_" + app, locale)).endA().endLi();
 		}
 
 		boolean publicUser = securityService.isPublicUser(request.getSession());
@@ -122,7 +123,7 @@ public class TopBarComponent extends AbstractComponent {
 				}
 				out.startA(cls).withAttribute("data-icon", icons.get(app));
 				out.withHref(configurationService.getApplicationContext(app, null, request));
-				out.text(msg.get("app_" + app, request.getLocale())).endA().endLi();
+				out.text(msg.get("app_" + app, locale)).endA().endLi();
 			}
 		}
 
@@ -131,7 +132,7 @@ public class TopBarComponent extends AbstractComponent {
 
 		out.startUl("oo_topbar_right");
 		if (publicUser) {
-			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_login").withAttribute("data", "login").write("Log in").endA().endLi();
+			out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_login").withAttribute("data", "login").write(msg.get("log_in", locale)).endA().endLi();
 		} else {
 			//InboxService inboxService = Components.getBean(InboxService.class);
 			ModelService modelService = Components.getBean(ModelService.class);
@@ -149,7 +150,7 @@ public class TopBarComponent extends AbstractComponent {
 		out.endUl();
 	}
 
-private String buildTexts(Locale locale, Messages msg) {
+	private String buildTexts(Locale locale, Messages msg) {
 		Map<String,String> texts = new HashMap<>();
 		for (String key : textKeys) {
 			texts.put(key, msg.get(key, locale));

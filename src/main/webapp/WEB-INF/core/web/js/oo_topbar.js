@@ -191,8 +191,13 @@ oo.TopBar.prototype = {
       var forgot = hui.build('div.oo_topbar_forgot',{
         html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'
       });
-      p.add(forgot);
       hui.listen(forgot, 'click', function() {oo.recover()});
+      p.add(forgot);
+      var signup = hui.build('div.oo_topbar_signup',{
+        html:'<a class="oo_link" href="javascript://"><span>' + this._text('create_account') + '</span></a>'
+      });
+      p.add(signup);
+      hui.listen(signup, 'click', function() {oo.signUp()});
     }
     return this._loginPanel;
   },

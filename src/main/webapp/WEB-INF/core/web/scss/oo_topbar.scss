@@ -298,8 +298,7 @@
 
   /************ Login *************/
 
-  .oo_topbar_login_success
-  {
+  .oo_topbar_login_success {
     height: 50px;
     font-size: 12pt;
     color: #999;
@@ -307,8 +306,7 @@
     line-height: 50px;
   }
 
-  .oo_topbar_forgot
-  {
+  .oo_topbar_forgot {
     font-size: 11pt;
     float: right;
     margin-top: 10px;
@@ -321,6 +319,14 @@
       margin: 5px 0 20px;
       color: #333;
     }
+  }
+  .oo_topbar_signup {
+    border-top: 1px solid #eee;
+    margin-top: 12px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 11pt;
   }
 
 }
