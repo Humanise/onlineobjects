@@ -13,5 +13,8 @@ hui.ui.listen({
   },
   $click$forgotLink : function() {
     oo.recover()
+  },
+  $click$signUpLink : function() {
+    oo.signUp()
   }
 })

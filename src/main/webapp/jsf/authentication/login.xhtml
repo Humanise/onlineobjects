@@ -38,6 +38,7 @@
           <gui:textInput inputName="password" name="password" secret="true"/>
         </gui:field>
         <p class="buttons">
+          <o:link name="signUpLink">#{msg.create_account}</o:link>
           <o:link name="forgotLink">#{msg.i_forgot}</o:link>
           <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
           <gui:button text="#{msg.log_in}" submit="true"/>
