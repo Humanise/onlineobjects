@@ -295,7 +295,17 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "question", "add" })
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
-		Question question = knowledgeService.createQuestion(request.getString("text"), user);
+		String string = request.getString("text");
+		Long statementId = request.getLong("statementId");
+		Question question = knowledgeService.createQuestion(string, user);
+		if (statementId!=null) {
+			Statement statement = modelService.getRequired(Statement.class, statementId, user);
+			Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
+			if (!found.isPresent()) {
+				modelService.createRelation(statement, question, Relation.ANSWERS, user);
+				modelService.commit();
+			}
+		}
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
 	}
 
@@ -402,6 +412,19 @@ public class APIController extends APIControllerBase {
 		Statement statement = knowledgeService.addPersonalStatement(text, user);
 		if (statement == null) {
 			throw new IllegalRequestException("The statement could not be added");
+		}
+		return knowledgeService.getStatementPerspective(statement.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "statement", "add", "question" })
+	public StatementApiPerspective addQuestionToStatement(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(statement, question, Relation.ANSWERS, user);
+			modelService.commit();
 		}
 		return knowledgeService.getStatementPerspective(statement.getId(), user);
 	}
