@@ -326,7 +326,7 @@ public class KnowledgeService {
 		return perspective;
 	}
 
-	public HypothesisEditPerspective getHypothesisEditPerspective(Long id, UserSession session) throws ModelException, ContentNotFoundException {
+	public HypothesisEditPerspective getHypothesisEditPerspective(Long id, Privileged session) throws ModelException, ContentNotFoundException {
 		@Nullable
 		Hypothesis hypothesis = modelService.get(Hypothesis.class, id, session);
 		if (hypothesis == null) {

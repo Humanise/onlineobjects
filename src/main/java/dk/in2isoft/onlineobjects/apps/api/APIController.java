@@ -300,11 +300,7 @@ public class APIController extends APIControllerBase {
 		Question question = knowledgeService.createQuestion(string, user);
 		if (statementId!=null) {
 			Statement statement = modelService.getRequired(Statement.class, statementId, user);
-			Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
-			if (!found.isPresent()) {
-				modelService.createRelation(statement, question, Relation.ANSWERS, user);
-				modelService.commit();
-			}
+			relate(user, question, statement);
 		}
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
 	}
@@ -317,19 +313,26 @@ public class APIController extends APIControllerBase {
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add", "answer" })
+	@Deprecated
 	public QuestionApiPerspective addAnswerToQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
-		Optional<Relation> found = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).first();
-		if (!found.isPresent()) {
-			modelService.createRelation(answer, question, Relation.ANSWERS, user);
-			modelService.commit();
-		}
+		relate(user, question, answer);
+		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "question", "add", "statement" })
+	public QuestionApiPerspective addStatementToQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		relate(user, question, statement);
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "remove", "answer" })
+	@Deprecated
 	public QuestionApiPerspective removeAnswerFromQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
@@ -340,6 +343,45 @@ public class APIController extends APIControllerBase {
 		}
 		modelService.commit();
 		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "question", "remove", "statement" })
+	public QuestionApiPerspective removeStatementFromQuestion(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		List<Relation> relations = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).list();
+		for (Relation relation : relations) {
+			modelService.delete(relation, user);
+		}
+		modelService.commit();
+		return knowledgeService.getQuestionPerspective(question.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "remove", "statement" })
+	public HypothesisApiPerspective removeStatementFromHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		String kind = getHypothesisRelation(request.getString("relation"));
+		List<Relation> relations = modelService.find().relations(user).from(statement).to(hypothesis).withKind(kind).list();
+		for (Relation relation : relations) {
+			modelService.delete(relation, user);
+		}
+		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "statement", "remove", "question" })
+	public StatementApiPerspective removeQuestionFromStatement(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		List<Relation> relations = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).list();
+		for (Relation relation : relations) {
+			modelService.delete(relation, user);
+		}
+		modelService.commit();
+		return knowledgeService.getStatementPerspective(statement.getId(), user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis" })
@@ -354,6 +396,34 @@ public class APIController extends APIControllerBase {
 		User user = getUserForSecretKey(request);
 		Hypothesis hypothesis = knowledgeService.createHypothesis(request.getString("text"), user);
 		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
+	}
+
+	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "add", "statement" })
+	public HypothesisApiPerspective addStatementToHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		String relation = request.getString("relation");
+		String kind = getHypothesisRelation(relation);
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), user);
+		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		relate(user, kind, hypothesis, statement);
+
+		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
+	}
+
+	private String getHypothesisRelation(String relation) throws IllegalRequestException {
+		if (!"supports".equals(relation) && !"contradicts".equals(relation)) {
+			throw new IllegalRequestException("Invalid relation: " + relation);
+		}
+		String kind = "supports".equals(relation) ? Relation.SUPPORTS : Relation.CONTRADTICS;
+		return kind;
+	}
+
+	private void relate(User user, String kind, Hypothesis hypothesis, Statement statement)
+			throws ModelException, SecurityException {
+		Optional<Relation> found = modelService.find().relations(user).from(statement).to(hypothesis).withKind(kind).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(statement, hypothesis, kind, user);
+		}
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "delete" })
@@ -393,12 +463,26 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add" })
 	public StatementApiPerspective addStatement(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
-		Long id = request.getLong("internetAddressId");
-		if (id==null) {
-			throw new IllegalRequestException("No internet address ID");
-		}
 		String text = request.getString("text", "No text provided");
-		Statement statement = knowledgeService.addStatementToInternetAddress(text, id, user);
+		Long addressId = request.getLong("internetAddressId", null);
+		Long hypothesisId = request.getLong("hypothesisId", null);
+		Long questionId = request.getLong("questionId", null);
+		Statement statement = null;
+		if (addressId!=null) {
+			statement = knowledgeService.addStatementToInternetAddress(text, addressId, user);
+		} else {
+			statement = knowledgeService.addPersonalStatement(text, user);
+		}
+		if (hypothesisId!=null) {
+			Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, user);
+			String relation = request.getString("hypothesisRelation");
+			String kind = getHypothesisRelation(relation);
+			relate(user, kind, hypothesis, statement);
+		}
+		if (questionId!=null) {
+			Question question = modelService.getRequired(Question.class, questionId, user);
+			relate(user, question, statement);
+		}
 		if (statement == null) {
 			throw new IllegalRequestException("The statement could not be added");
 		}
@@ -421,12 +505,16 @@ public class APIController extends APIControllerBase {
 		User user = getUserForSecretKey(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
+		relate(user, question, statement);
+		return knowledgeService.getStatementPerspective(statement.getId(), user);
+	}
+
+	private void relate(User user, Question question, Statement statement) throws ModelException, SecurityException {
 		Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
 		if (!found.isPresent()) {
 			modelService.createRelation(statement, question, Relation.ANSWERS, user);
 			modelService.commit();
 		}
-		return knowledgeService.getStatementPerspective(statement.getId(), user);
 	}
 
 	@Path(start = { "v1.0", "knowledge", "profile" })
