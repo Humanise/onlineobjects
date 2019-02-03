@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -50,12 +51,15 @@ public class PeoplePersonView extends AbstractManagedBean {
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
 		PairSearchResult<User,Person> result = modelService.searchPairs(query);
 		if (result.getTotalCount()==0) {
-			return;
+			throw new ContentNotFoundException();
 		}
 		Pair<User, Person> next = result.iterator().next();
 		user = next.getKey();
 		person = next.getValue();
 		Privileged privileged = request.getSession();
+		if (!securityService.canView(user, privileged)) {
+			throw new ContentNotFoundException();
+		}
 		canModify = securityService.canModify(person, privileged);
 		try {
 			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class,  privileged);
