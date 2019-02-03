@@ -125,7 +125,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		}
 		List<Option> links = new ArrayList<>();
 		links.add(Option.of("account", configurationService.getApplicationContext("account", null, request)));
-		links.add(Option.of("profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
+		if (securityService.isPublicView(user)) {
+			links.add(Option.of("profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
+		}
 		info.setLinks(links);
 		request.sendObject(info);
 	}
