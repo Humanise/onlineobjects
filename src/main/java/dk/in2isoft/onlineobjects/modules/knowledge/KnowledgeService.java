@@ -174,19 +174,26 @@ public class KnowledgeService {
 		perspective.setText(hypothesis.getText());
 
 		List<Statement> supports = modelService.getParents(hypothesis, Relation.SUPPORTS, Statement.class, user);
-		perspective.setSupporting(supports.stream().map(statement -> {
+		List<StatementApiPerspective> supportsPerspectives = new ArrayList<>();
+		for (Statement c : supports) {
 			StatementApiPerspective statementPerspective = new StatementApiPerspective();
-			statementPerspective.setId(statement.getId());
-			statementPerspective.setText(statement.getText());
-			return statementPerspective;
-		}).collect(Collectors.toList()));
+			statementPerspective.setId(c.getId());
+			statementPerspective.setText(c.getText());
+			populateStatement(user, c, statementPerspective);
+			supportsPerspectives.add(statementPerspective);
+		}
+		perspective.setSupporting(supportsPerspectives);
+		
 		List<Statement> contradicts = modelService.getParents(hypothesis, Relation.CONTRADTICS, Statement.class, user);
-		perspective.setContradicting(contradicts.stream().map(address -> {
-			StatementApiPerspective addressPerspective = new StatementApiPerspective();
-			addressPerspective.setId(address.getId());
-			addressPerspective.setText(address.getText());
-			return addressPerspective;
-		}).collect(Collectors.toList()));
+		List<StatementApiPerspective> contradictsPerspectives = new ArrayList<>();
+		for (Statement c : contradicts) {
+			StatementApiPerspective statementPerspective = new StatementApiPerspective();
+			statementPerspective.setId(c.getId());
+			statementPerspective.setText(c.getText());
+			populateStatement(user, c, statementPerspective);
+			contradictsPerspectives.add(statementPerspective);
+		}
+		perspective.setContradicting(contradictsPerspectives);
 		categorize(hypothesis, perspective, user);
 		return perspective;
 	}
@@ -247,31 +254,36 @@ public class KnowledgeService {
 			StatementApiPerspective statementPerspective = new StatementApiPerspective();
 			statementPerspective.setId(answer.getId());
 			statementPerspective.setText(answer.getText());
-			List<Person> authors = modelService.getChildren(answer, Relation.KIND_COMMON_AUTHOR, Person.class, user);
-			List<PersonApiPerspective> authorPerspectives = new ArrayList<>();
-			for (Person person : authors) {
-				PersonApiPerspective personPerspective = new PersonApiPerspective();
-				personPerspective.setName(person.getFullName());
-				personPerspective.setId(person.getId());
-				authorPerspectives.add(personPerspective);
-			}
-			statementPerspective.setAuthors(authorPerspectives);
-
-			List<InternetAddressApiPerspective> addressPerspectives = new ArrayList<InternetAddressApiPerspective>();
-			List<InternetAddress> addresses = modelService.getParents(answer, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, user);
-			for (InternetAddress address : addresses) {
-				InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
-				addressPerspective.setId(address.getId());
-				addressPerspective.setTitle(address.getName());
-				addressPerspective.setUrl(address.getAddress());
-				addressPerspectives.add(addressPerspective);
-			}
-			statementPerspective.setAddresses(addressPerspectives);
+			populateStatement(user, answer, statementPerspective);
 			answerPerspectives.add(statementPerspective);
 		}
 		questionPerspective.setAnswers(answerPerspectives);
 		categorize(question, questionPerspective, user);
 		return questionPerspective;
+	}
+
+	private void populateStatement(User user, Statement answer, StatementApiPerspective statementPerspective)
+			throws ModelException {
+		List<Person> authors = modelService.getChildren(answer, Relation.KIND_COMMON_AUTHOR, Person.class, user);
+		List<PersonApiPerspective> authorPerspectives = new ArrayList<>();
+		for (Person person : authors) {
+			PersonApiPerspective personPerspective = new PersonApiPerspective();
+			personPerspective.setName(person.getFullName());
+			personPerspective.setId(person.getId());
+			authorPerspectives.add(personPerspective);
+		}
+		statementPerspective.setAuthors(authorPerspectives);
+
+		List<InternetAddressApiPerspective> addressPerspectives = new ArrayList<InternetAddressApiPerspective>();
+		List<InternetAddress> addresses = modelService.getParents(answer, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, user);
+		for (InternetAddress address : addresses) {
+			InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
+			addressPerspective.setId(address.getId());
+			addressPerspective.setTitle(address.getName());
+			addressPerspective.setUrl(address.getAddress());
+			addressPerspectives.add(addressPerspective);
+		}
+		statementPerspective.setAddresses(addressPerspectives);
 	}
 
 	public void updateQuestion(Question dummy, Privileged privileged) throws ModelException, SecurityException {
@@ -287,6 +299,13 @@ public class KnowledgeService {
 		statement.setText(dummy.getText());
 		statement.setName(dummy.getText());
 		modelService.update(statement, privileged);		
+	}
+
+	public void updateHypothesis(Hypothesis dummy, Privileged privileged) throws ModelException, SecurityException {
+		Hypothesis hypothesis = modelService.get(Hypothesis.class, dummy.getId(), privileged);
+		hypothesis.setText(dummy.getText());
+		hypothesis.setName(dummy.getText());
+		modelService.update(hypothesis, privileged);		
 	}
 
 	public InternetAddressApiPerspective getAddressPerspective(Long id, Privileged session) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {

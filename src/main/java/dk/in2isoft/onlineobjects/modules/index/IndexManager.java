@@ -9,6 +9,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.commons.pool.impl.StackObjectPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
@@ -35,8 +39,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -54,11 +56,48 @@ public class IndexManager {
 	private ConfigurationService configurationService;
 	private String directoryName = "index";
 	private StandardAnalyzer analyzer;
+	private StackObjectPool<IndexReader> pool;
 	
 	private static final Logger log = LogManager.getLogger(IndexManager.class);
 	
 	public IndexManager() {
 		analyzer = new StandardAnalyzer(Version.LUCENE_40, CharArraySet.EMPTY_SET);
+		PoolableObjectFactory<IndexReader> factory = new PoolableObjectFactory<IndexReader>() {
+
+			public void activateObject(IndexReader arg0) throws Exception {
+			}
+
+			public void destroyObject(IndexReader reader) throws Exception {
+				if (reader!=null) {
+					try {
+						reader.close();
+					} catch (IOException e) {
+						
+					}
+				}
+			}
+
+			public IndexReader makeObject() throws Exception {
+				Directory directory = getIndexFile();
+				try {
+					ensureIndex();
+					return DirectoryReader.open(directory);
+				} catch (CorruptIndexException e) {
+					throw new ExplodingClusterFuckException(e);
+				} catch (IOException e) {
+					throw new ExplodingClusterFuckException(e);
+				}
+			}
+
+			public void passivateObject(IndexReader arg0) throws Exception {
+			}
+
+			public boolean validateObject(IndexReader reader) {
+				return true;
+			}
+			
+		};
+		pool = new StackObjectPool<IndexReader>(factory, 2);
 	}
 	
 	public IndexManager(String directoryName) {
@@ -87,23 +126,19 @@ public class IndexManager {
 	}
 	
 	private IndexReader openReader() throws ExplodingClusterFuckException {
-		Directory directory = getIndexFile();
 		try {
-			ensureIndex();
-			return DirectoryReader.open(directory);
-		} catch (CorruptIndexException e) {
-			throw new ExplodingClusterFuckException(e);
-		} catch (IOException e) {
+			//log.info("active: {}, idle: {}",pool.getNumActive(),pool.getNumIdle());
+			return pool.borrowObject();
+		} catch (Exception e) {
 			throw new ExplodingClusterFuckException(e);
 		}
 	}
 	
 	private void closeReader(IndexReader reader) {
-		if (reader!=null) {
-			try {
-				reader.close();
-			} catch (IOException e) {
-			}
+		try {
+			pool.returnObject(reader);
+		} catch (Exception e) {
+			log.error(e);
 		}
 	}
 	
@@ -371,8 +406,13 @@ public class IndexManager {
 			try {
 				writer.commit();
 				writer.close();
+				pool.clear();
 			} catch (IOException e) {
-				
+				log.error(e);
+			} catch (UnsupportedOperationException e) {
+				log.error(e);
+			} catch (Exception e) {
+				log.error(e);
 			}
 		}
 	}

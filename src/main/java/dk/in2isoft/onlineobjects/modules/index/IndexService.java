@@ -29,6 +29,7 @@ public class IndexService {
 		}
 		IndexManager indexManager = new IndexManager(name);
 		indexManager.setConfigurationService(configurationService);
+		managers.add(indexManager);
 		return indexManager;
 	}
 	

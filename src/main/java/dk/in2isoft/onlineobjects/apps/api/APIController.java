@@ -460,6 +460,17 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getStatementPerspective(id, user);
 	}
 
+	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "update" })
+	public HypothesisApiPerspective updateHypothesis(Request request) throws IOException, EndUserException {
+		User user = getUserForSecretKey(request);
+		Long id = request.getId();
+		Hypothesis dummy = new Hypothesis();
+		dummy.setId(id);
+		dummy.setText(request.getString("text", "Text is required"));
+		knowledgeService.updateHypothesis(dummy, user);
+		return knowledgeService.getHypothesisPerspective(id, user);
+	}
+
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add" })
 	public StatementApiPerspective addStatement(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
