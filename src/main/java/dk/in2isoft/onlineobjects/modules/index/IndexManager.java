@@ -97,7 +97,7 @@ public class IndexManager {
 			}
 			
 		};
-		pool = new StackObjectPool<IndexReader>(factory, 2);
+		pool = new StackObjectPool<IndexReader>(factory);
 	}
 	
 	public IndexManager(String directoryName) {

@@ -167,15 +167,25 @@ public class KnowledgeService {
 		return hypothesis;
 	}
 
+	public int compare(Relation a, Relation b) {
+		float comp = a.getPosition() - b.getPosition();
+		if (comp == 0) {
+			return (int) (a.getId() - b.getId());
+		}
+		return (int)comp;
+	}
+
 	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user) throws ModelException, ContentNotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, user);
 		HypothesisApiPerspective perspective = new HypothesisApiPerspective();
 		perspective.setId(hypothesis.getId());
 		perspective.setText(hypothesis.getText());
 
-		List<Statement> supports = modelService.getParents(hypothesis, Relation.SUPPORTS, Statement.class, user);
+		List<Relation> supports = modelService.find().relations(user).from(Statement.class).to(hypothesis).withKind(Relation.SUPPORTS).list();
+		supports.sort((a,b) -> compare(a,b));
 		List<StatementApiPerspective> supportsPerspectives = new ArrayList<>();
-		for (Statement c : supports) {
+		for (Relation relation : supports) {
+			Statement c = (Statement) relation.getFrom();
 			StatementApiPerspective statementPerspective = new StatementApiPerspective();
 			statementPerspective.setId(c.getId());
 			statementPerspective.setText(c.getText());
@@ -183,10 +193,11 @@ public class KnowledgeService {
 			supportsPerspectives.add(statementPerspective);
 		}
 		perspective.setSupporting(supportsPerspectives);
-		
-		List<Statement> contradicts = modelService.getParents(hypothesis, Relation.CONTRADTICS, Statement.class, user);
+		List<Relation> contradicts = modelService.find().relations(user).from(Statement.class).to(hypothesis).withKind(Relation.CONTRADTICS).list();
+		contradicts.sort((a,b) -> compare(a,b));
 		List<StatementApiPerspective> contradictsPerspectives = new ArrayList<>();
-		for (Statement c : contradicts) {
+		for (Relation relation : contradicts) {
+			Statement c = (Statement) relation.getFrom();
 			StatementApiPerspective statementPerspective = new StatementApiPerspective();
 			statementPerspective.setId(c.getId());
 			statementPerspective.setText(c.getText());
@@ -211,8 +222,10 @@ public class KnowledgeService {
 			addressPerspective.setUrl(address.getAddress());
 			return addressPerspective;
 		}).collect(Collectors.toList()));
-		List<Question> questions = modelService.getChildren(statement, Relation.ANSWERS, Question.class, user);
-		perspective.setQuestions(questions.stream().map(question -> {
+		List<Relation> questions = modelService.find().relations(user).from(statement).to(Question.class).withKind(Relation.ANSWERS).list();
+		questions.sort((a,b) -> compare(a, b));
+		perspective.setQuestions(questions.stream().map(relation -> {
+			Question question = (Question) relation.getTo();
 			QuestionApiPerspective p = new QuestionApiPerspective();
 			p.setId(question.getId());
 			p.setText(question.getText());
@@ -248,9 +261,12 @@ public class KnowledgeService {
 		QuestionApiPerspective questionPerspective = new QuestionApiPerspective();
 		questionPerspective.setId(question.getId());
 		questionPerspective.setText(question.getText());
-		List<Statement> answers = modelService.getParents(question, Relation.ANSWERS, Statement.class, user);
+
+		List<Relation> answers = modelService.find().relations(user).from(Statement.class).to(question).withKind(Relation.ANSWERS).list();
+		answers.sort((a,b) -> compare(a, b));
 		List<StatementApiPerspective> answerPerspectives = new ArrayList<>();
-		for (Statement answer : answers) {
+		for (Relation relation : answers) {
+			Statement answer = (Statement) relation.getFrom();
 			StatementApiPerspective statementPerspective = new StatementApiPerspective();
 			statementPerspective.setId(answer.getId());
 			statementPerspective.setText(answer.getText());
