@@ -54,7 +54,7 @@ public class DispatchingService {
 
 		if (sleep) {
 			try {
-				Thread.sleep(1500);
+				Thread.sleep((long) (Math.random()*1000) + 300);
 			} catch (InterruptedException e) {
 				
 			}
