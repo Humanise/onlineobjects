@@ -296,7 +296,7 @@ public class APIController extends APIControllerBase {
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		String string = request.getString("text");
-		Long statementId = request.getLong("statementId");
+		Long statementId = request.getLong("statementId", null);
 		Question question = knowledgeService.createQuestion(string, user);
 		if (statementId!=null) {
 			Statement statement = modelService.getRequired(Statement.class, statementId, user);
