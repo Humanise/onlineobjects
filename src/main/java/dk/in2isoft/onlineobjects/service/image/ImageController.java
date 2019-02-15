@@ -46,11 +46,6 @@ public class ImageController extends ServiceController {
 
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {
-		if (configurationService.isSimulateSlowRequest()) {
-			try {
-				Thread.sleep(Math.round(Math.random()*3000+1000));
-			} catch (InterruptedException ignore) {}
-		}
 		String[] path = request.getLocalPath();
 		Parameters param = new Parameters();
 		if (path.length>0) {

@@ -8,14 +8,9 @@ import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.services.ImportService;
 import dk.in2isoft.onlineobjects.ui.Request;
-import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public class DeveloperController extends ApplicationController {
-
-	private ImportService importService;
-	private ImageService imageService;
 	
 	public DeveloperController() {
 		super("developer");
@@ -37,21 +32,12 @@ public class DeveloperController extends ApplicationController {
 		throw new ContentNotFoundException();
 	}
 	
+	@Path(exactly={"toggleSlow"})
+	public String toggleSlowRequests(Request request) {
+		configurationService.setSimulateSlowRequest(!configurationService.isSimulateSlowRequest());
+		return "Slow requests are now:" + configurationService.isSimulateSlowRequest();
+	}
+	
 	// Injection...
 
-	public void setImportService(ImportService importService) {
-		this.importService = importService;
-	}
-
-	public ImportService getImportService() {
-		return importService;
-	}
-
-	public void setImageService(ImageService imageService) {
-		this.imageService = imageService;
-	}
-
-	public ImageService getImageService() {
-		return imageService;
-	}
 }

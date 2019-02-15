@@ -343,7 +343,6 @@ public class SetupController extends SetupControllerBase {
 
 	@Path
 	public UserPerspective loadUser(Request request) throws IOException,EndUserException {
-		try {Thread.sleep(1000);} catch (InterruptedException e) {}
 		Long id = request.getLong("id");
 		User user = modelService.get(User.class, id, request.getSession());
 		if (user==null) {

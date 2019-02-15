@@ -47,17 +47,12 @@ public class DispatchingService {
 
 	private List<Responder> responders;
 	
-	private boolean sleep;
-		
-	
 	public boolean doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 
-		if (sleep) {
+		if (configurationService.isSimulateSlowRequest()) {
 			try {
-				Thread.sleep((long) (Math.random()*1000) + 300);
-			} catch (InterruptedException e) {
-				
-			}
+				Thread.sleep(Math.round(Math.random()*1000+1000));
+			} catch (InterruptedException ignore) {}
 		}
 		modelService.startThread();
 		
