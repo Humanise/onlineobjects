@@ -165,6 +165,12 @@ public class SecurityService {
 		return privs;
 	}
 	
+	public boolean isOnlyPrivileged(Item item,Privileged privileged) {
+		
+		List<Long> ids = modelService.getPrivilegedUsers(item.getId());
+		return ids.size() == 1 && ids.get(0) == privileged.getIdentity();
+	}
+
 	public boolean canView(Item item,Privileged privileged) {
 		if (isAdminUser(privileged)) {
 			return true;

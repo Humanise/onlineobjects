@@ -736,6 +736,13 @@ public class ModelService implements InitializingBean {
 		}
 	}
 
+	public List<Long> getPrivilegedUsers(long object) {
+		Query<Long> q = createQuery("select subject from Privilege as priv where priv.object=:object and priv.subject!=:public", Long.class);
+		q.setParameter("object", object);
+		q.setParameter("public", securityService.getPublicUser().getId());
+		return q.list();
+	}
+
 	private List<Privilege> getPrivileges(long object, long subject) {
 		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject", Privilege.class);
 		q.setParameter("object", object);
@@ -963,7 +970,7 @@ public class ModelService implements InitializingBean {
 		query.setParameter("object", item.getId());
 		List<User> users = query.list();
 		
-		String hql = "delete Privilege p where p.object = :id";
+		String hql = "delete Privilege p where p.object = :id or p.subject = :id";
 		Query<?> q = createQuery(hql);
 		q.setParameter("id", item.getId());
 		int count = q.executeUpdate();

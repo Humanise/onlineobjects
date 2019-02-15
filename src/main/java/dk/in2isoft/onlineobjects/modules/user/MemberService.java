@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.user;
 import java.io.File;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -215,12 +216,19 @@ public class MemberService {
 			throw new SecurityException("Deletion of user not allowed");
 		}
 		surveillanceService.audit().info("Starting to delete user={} by privileged={}", user.getUsername(), privileged.getIdentity());
-		List<Entity> list = modelService.list(Query.of(Entity.class).as(user));
-		// TODO check that an item is not shared with others
-		for (Entity entity : list) {
-			if (!entity.equals(user)) {
-				modelService.delete(entity, privileged);
+		Collection<Class<? extends Entity>> types = modelService.getEntityClasses();
+		for (Class<? extends Entity> type : types) {
+			log.debug("Getting users objects of type: {}", type.getSimpleName());
+			List<? extends Entity> list = modelService.list(Query.of(type).as(user));
+			// TODO check that an item is not shared with others
+			for (Entity entity : list) {
+				if (!entity.equals(user)) {
+					if (securityService.isOnlyPrivileged(entity, user)) {
+						modelService.delete(entity, privileged);
+					}
+				}
 			}
+			
 		}
 		modelService.delete(user, privileged);
 		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), privileged.getIdentity());
