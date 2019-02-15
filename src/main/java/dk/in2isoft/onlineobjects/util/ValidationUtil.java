@@ -44,6 +44,9 @@ public class ValidationUtil {
 				return false;
 			}
 		}
+		if (password.chars().distinct().count() < 2) {
+			return false;
+		}
 		return password.length() > 7;
 		//return PASSWORD.matcher(password).matches();
 	}

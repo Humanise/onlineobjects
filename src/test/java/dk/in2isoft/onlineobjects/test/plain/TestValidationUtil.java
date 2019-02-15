@@ -1,15 +1,12 @@
 package dk.in2isoft.onlineobjects.test.plain;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
+import junit.framework.TestCase;
 
-public class TestValidationUtil extends AbstractSpringTestCase {
+public class TestValidationUtil extends TestCase {
 	
 	//private static Logger log = LogManager.getLogger(TestLangUtil.class);
 	
@@ -51,7 +48,11 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isValidUsername("a"));
 		assertFalse(ValidationUtil.isValidUsername("1"));
 		assertFalse(ValidationUtil.isValidUsername("12"));
+		assertFalse(ValidationUtil.isValidUsername("a."));
+		assertFalse(ValidationUtil.isValidUsername("Abcde"));
+		assertFalse(ValidationUtil.isValidUsername("12"));
 
+		assertTrue(ValidationUtil.isValidUsername("1a"));
 		assertTrue(ValidationUtil.isValidUsername("ab"));
 		assertTrue(ValidationUtil.isValidUsername("abc"));
 		assertTrue(ValidationUtil.isValidUsername("abc123"));
@@ -64,16 +65,21 @@ public class TestValidationUtil extends AbstractSpringTestCase {
 		assertFalse(ValidationUtil.isValidPassword(" "));
 		assertFalse(ValidationUtil.isValidPassword("          "));
 		assertFalse(ValidationUtil.isValidPassword("\n\n\n\n\n\n\n\n\n\n\n"));
+		assertFalse(ValidationUtil.isValidPassword("abcd12_x\n"));
 		assertFalse(ValidationUtil.isValidPassword("     abcABC123-+&     "));
 		assertFalse(ValidationUtil.isValidPassword(" abcABC123-+&"));
 		assertFalse(ValidationUtil.isValidPassword("abcABC123-+& "));
 		assertFalse(ValidationUtil.isValidPassword("abBC12+"));
 		assertFalse(ValidationUtil.isValidPassword("abcAB C123-+&"));
+		assertFalse(ValidationUtil.isValidPassword("asdfghj"));
+		assertFalse(ValidationUtil.isValidPassword("--------"));
+		assertFalse(ValidationUtil.isValidPassword("aaaaaaaa"));
 
 		assertTrue(ValidationUtil.isValidPassword("abcABC123-+&"));
 		assertTrue(ValidationUtil.isValidPassword("new$ecr8p4$s"));
 		assertTrue(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
 		assertTrue(ValidationUtil.isValidPassword("abcdefgh"));
+		assertTrue(ValidationUtil.isValidPassword("12345678"));
 		
 		// TODO
 		
