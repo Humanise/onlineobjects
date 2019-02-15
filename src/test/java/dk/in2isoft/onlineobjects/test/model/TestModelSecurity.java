@@ -80,12 +80,16 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 		assertFalse(modelService.find().relations(someoneElse).from(question).to(Comment.class).first().isPresent());
 		assertFalse(modelService.find().relations(someoneElse).to(comment).from(Question.class).first().isPresent());
 
+		assertTrue(securityService.isOnlyPrivileged(question, mainUser));
+		
 		// Someone else still cannot load since only one has access
 		securityService.grantFullPrivileges(question, someoneElse, getAdminUser());
 		assertFalse(modelService.getRelation(questionCommentRelation.getId(), someoneElse).isPresent());
 		assertFalse(modelService.getRelation(question, comment, null, someoneElse).isPresent());
 		assertFalse(modelService.find().relations(someoneElse).from(question).to(Comment.class).first().isPresent());
 		assertFalse(modelService.find().relations(someoneElse).to(comment).from(Question.class).first().isPresent());
+
+		assertFalse(securityService.isOnlyPrivileged(question, mainUser));
 
 		// Now someone else has access since he has access to all three
 		securityService.grantFullPrivileges(comment, someoneElse, getAdminUser());
@@ -95,8 +99,17 @@ public class TestModelSecurity extends AbstractSpringTestCase {
 		assertEquals(questionCommentRelation, modelService.find().relations(someoneElse).to(comment).from(Question.class).first().get());
 		
 		modelService.delete(comment, getAdminUser());
-		modelService.delete(mainUser, getAdminUser());
 		modelService.delete(someoneElse, getAdminUser());
+
+		assertTrue(securityService.isOnlyPrivileged(question, mainUser));
+
+		securityService.grantPublicView(question, true, mainUser);
+		
+		assertTrue(securityService.isOnlyPrivileged(question, mainUser));
+
+		modelService.delete(mainUser, getAdminUser());
+
+		assertFalse(securityService.isOnlyPrivileged(question, mainUser));
 		modelService.commit();
 	}
 
