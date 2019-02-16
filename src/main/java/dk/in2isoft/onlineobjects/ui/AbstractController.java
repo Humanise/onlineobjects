@@ -4,15 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
-import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
+import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -23,11 +25,31 @@ public abstract class AbstractController {
 
 	protected ConfigurationService configurationService;
 	protected Map<Pattern,String> jsfMatchers = new LinkedHashMap<Pattern, String>();
+	protected List<Pair<String[],Method>> exactMethodPaths = new ArrayList<>();
+	protected List<Pair<Pattern,Method>> expressionMethodPaths = new ArrayList<>();
+	protected List<Pair<String,Method>> methodsByName = new ArrayList<>();
 
 	private String name;
 
 	public AbstractController(String name) {
 		this.name = name;
+		Method[] methods = getClass().getDeclaredMethods();
+		for (Method method : methods) {
+			Path annotation = method.getAnnotation(Path.class);
+			
+			if (annotation!=null) {
+				String[] exactly = annotation.exactly();
+				if (exactly.length > 0) {
+					exactMethodPaths.add(Pair.of(exactly, method));
+				}
+				else if (annotation.expression() != null) {
+					expressionMethodPaths.add(Pair.of(Pattern.compile(annotation.expression()), method));
+				}
+				else {
+					methodsByName.add(Pair.of(method.getName(), method));
+				}
+			}
+		}
 	}
 
 	public final String getName() {
@@ -43,37 +65,25 @@ public abstract class AbstractController {
 	}
 
 	public void unknownRequest(Request request) throws IOException, EndUserException {
-		Method[] methods = getClass().getDeclaredMethods();
-		for (Method method : methods) {
-			Path annotation = method.getAnnotation(Path.class);
-			
-			if (annotation!=null) {
-
-				String[] exactly = annotation.exactly();
-				if (exactly.length > 0) {
-					if (request.testLocalPathFull(exactly)) {
-						invokeMothod(request, method);
-						return;
-					}
-				}
+		for (Pair<String[], Method> exact : exactMethodPaths) {
+			if (request.testLocalPathFull(exact.getKey())) {
+				invokeMothod(request, exact.getValue());
+				return;
+				
+			}			
+		}
+		for (Pair<Pattern,Method> exp : expressionMethodPaths) {
+			if (exp.getKey().matcher(request.getLocalPathAsString()).matches()) {
+				invokeMothod(request, exp.getValue());
+				return;
 			}
 		}
-		for (Method method : methods) {
-			Path annotation = method.getAnnotation(Path.class);
-			
-			if (annotation!=null) {
-				if (Strings.isNotBlank(annotation.expression())) {
-					if (request.getLocalPathAsString().matches(annotation.expression())) {
-						invokeMothod(request, method);
-						return;
-					}
-				} else {
-					if (request.testLocalPathStart(method.getName())) {
-						invokeMothod(request, method);
-						return;
-					}
-				}
-			}
+		for (Pair<String, Method> exact : methodsByName) {
+			if (request.testLocalPathFull(exact.getKey())) {
+				invokeMothod(request, exact.getValue());
+				return;
+				
+			}			
 		}
 		throw new ContentNotFoundException("The content could not be found");
 	}
