@@ -20,7 +20,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class LanguageController extends LanguageControllerBase {
 
-	@Path(start="analyse")
+	@Path(exactly="analyse")
 	public void analyse(Request request) throws IOException, ModelException {
 		String text = request.getString("text");
 		

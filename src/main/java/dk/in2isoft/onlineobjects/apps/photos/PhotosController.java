@@ -33,7 +33,7 @@ import dk.in2isoft.onlineobjects.util.images.ImageMetaData;
 
 public class PhotosController extends PhotosControllerBase {
 
-	@Path(start="updateTitle")
+	@Path(exactly="updateTitle")
 	public void updateImageTitle(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		UserSession session = request.getSession();
 		long id = request.getInt("id");
@@ -43,7 +43,7 @@ public class PhotosController extends PhotosControllerBase {
 		modelService.update(image, session);
 	}
 
-	@Path(start="updateDescription")
+	@Path(exactly="updateDescription")
 	public void updateImageDescription(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		UserSession session = request.getSession();
 		long id = request.getInt("id");
@@ -53,7 +53,7 @@ public class PhotosController extends PhotosControllerBase {
 		modelService.update(image, session);
 	}
 
-	@Path(start="updateLocation")
+	@Path(exactly="updateLocation")
 	public void updateImageLocation(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		UserSession session = request.getSession();
 		long id = request.getInt("id");
@@ -62,7 +62,7 @@ public class PhotosController extends PhotosControllerBase {
 		imageService.updateImageLocation(image, location, session);
 	}
 
-	@Path(start="relateWord")
+	@Path(exactly="relateWord")
 	public void relateWordToImage(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		UserSession session = request.getSession();
 		long imageId = request.getInt("image");
@@ -75,7 +75,7 @@ public class PhotosController extends PhotosControllerBase {
 		}
 	}
 
-	@Path(start="removeWord")
+	@Path(exactly="removeWord")
 	public void removeWordFromImage(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		UserSession session = request.getSession();
 		long imageId = request.getInt("image");

@@ -68,14 +68,14 @@ public class ModelController extends ModelControllerBase {
 		return user;
 	}
 
-	@Path(start={"image","list"})
+	@Path(exactly={"image","list"})
 	public void listImage(Request request) throws IOException, ModelException {
 		Query<Image> query = Query.after(Image.class).withPaging(0, 40).as(request.getSession()).orderByCreated().descending();
 		SearchResult<Image> result = modelService.search(query);
 		request.sendObject(result.getList());
 	}
 	
-	@Path(start="listWords")
+	@Path(exactly="listWords")
 	public void listWords(Request request) throws IOException, ModelException, ExplodingClusterFuckException {
 		String text = request.getString("text");
 		int page = request.getInt("page");
@@ -142,7 +142,7 @@ public class ModelController extends ModelControllerBase {
 		request.sendObject(word);
 	}
 	
-	@Path(start="listInbox")
+	@Path(exactly="listInbox")
 	public void listInbox(Request request) throws IOException, EndUserException {
 		int page = request.getInt("page");
 		

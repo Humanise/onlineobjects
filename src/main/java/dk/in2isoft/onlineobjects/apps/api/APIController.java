@@ -59,7 +59,7 @@ public class APIController extends APIControllerBase {
 		ui.render(request.getRequest(), request.getResponse());
 	}
 
-	@Path(start = { "v1.0", "language", "analyse" })
+	@Path(exactly = { "v1.0", "language", "analyse" })
 	public TextAnalysis analyse(Request request) throws IOException, EndUserException {
 		String text = request.getString("text");
 		String url = request.getString("url");
@@ -69,7 +69,7 @@ public class APIController extends APIControllerBase {
 		return languageService.analyse(text);
 	}
 
-	@Path(start = { "v1.0", "html", "extract" })
+	@Path(exactly = { "v1.0", "html", "extract" })
 	public void extractText(Request request) throws IOException, EndUserException {
 		String url = request.getString("url", "An URL parameters must be provided");
 		HttpServletResponse response = request.getResponse();
@@ -111,7 +111,7 @@ public class APIController extends APIControllerBase {
 		return response;
 	}
 
-	@Path(start={"v1.0","changePassword"})
+	@Path(exactly={"v1.0","changePassword"})
 	public void changePassword(Request request) throws IOException, EndUserException {
 		String username = request.getString("username", "No username");
 		String existingPassword = request.getString("existingPassword", "No existing password");
@@ -119,7 +119,7 @@ public class APIController extends APIControllerBase {
 		securityService.changePassword(username, existingPassword, newPassword, request.getSession());
 	}
 
-	@Path(start={"v1.0","recover"})
+	@Path(exactly={"v1.0","recover"})
 	public void recover(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
 		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail)) {
@@ -127,7 +127,7 @@ public class APIController extends APIControllerBase {
 		}
 	}
 
-	@Path(start={"v1.0","authentication"})
+	@Path(exactly={"v1.0","authentication"})
 	public AuthenticationResponse authentication(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
@@ -173,7 +173,7 @@ public class APIController extends APIControllerBase {
 		return info;
 	}
 	
-	@Path(start={"v1.0","validateClient"})
+	@Path(exactly={"v1.0","validateClient"})
 	public void validateClient(Request request) throws IOException, EndUserException {
 		String clientId = request.getString("client");
 		// TODO (jm) This makes no sense
@@ -183,7 +183,7 @@ public class APIController extends APIControllerBase {
 		}
 	}
 	
-	@Path(start={"v1.0","bookmark"})
+	@Path(exactly={"v1.0","bookmark"})
 	@Deprecated
 	public void bookmark(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
@@ -240,7 +240,7 @@ public class APIController extends APIControllerBase {
 	
 	/* ------- Knowledge ------- */
 	
-	@Path(start = { "v1.0", "knowledge", "list" })
+	@Path(exactly = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		int page = request.getInt("page");
@@ -528,7 +528,7 @@ public class APIController extends APIControllerBase {
 		}
 	}
 
-	@Path(start = { "v1.0", "knowledge", "profile" })
+	@Path(exactly = { "v1.0", "knowledge", "profile" })
 	public ProfileApiPerspective getProfile(Request request) throws IOException, EndUserException {
 		User user = getUserForSecretKey(request);
 		return knowledgeService.getProfile(user);
@@ -583,7 +583,7 @@ public class APIController extends APIControllerBase {
 		return user;
 	}
 
-	@Path(start = { "v1.0", "words", "import" })
+	@Path(exactly = { "v1.0", "words", "import" })
 	public void importWord(Request request) throws IOException, EndUserException {
 		getUserForSecretKey(request);
 		Privileged privileged = securityService.getAdminPrivileged();

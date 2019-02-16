@@ -67,15 +67,6 @@ public abstract class AbstractController {
 						invokeMothod(request, method);
 						return;
 					}
-				} else {
-					String[] start = annotation.start();
-					if (start.length==0) {
-						start = new String[] {method.getName()};
-					}
-					if (request.testLocalPathStart(start)) {
-						invokeMothod(request, method);
-						return;
-					}
 				}
 			}
 		}

@@ -73,7 +73,7 @@ public class ToolsController extends ToolsControllerBase {
 		}
 	}
 
-	@Path(start="uploadImage")
+	@Path(exactly="uploadImage")
 	public void importImage(Request request) throws IOException, EndUserException {
 		DataImporter dataImporter = importService.createImporter();
 		dataImporter.setListener(new ImageImporter(modelService,imageService));

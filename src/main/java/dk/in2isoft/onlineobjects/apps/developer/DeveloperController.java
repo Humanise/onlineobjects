@@ -27,7 +27,7 @@ public class DeveloperController extends ApplicationController {
 		return configurationService.isDevelopmentMode();
 	}
 
-	@Path(start={"test"})
+	@Path(exactly={"test"})
 	public void importVideo(Request request) throws IOException, EndUserException {
 		throw new ContentNotFoundException();
 	}

@@ -48,7 +48,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class WordsController extends WordsControllerBase {
 	
 	
-	@Path(start="importUpload")
+	@Path(exactly="importUpload")
 	public void upload(Request request) throws IOException, EndUserException {
 		ImportSession session = importService.createImportSession(request.getSession());
 		DataImporter importer = importService.createImporter();
@@ -73,7 +73,7 @@ public class WordsController extends WordsControllerBase {
 		return false;
 	}
 	
-	@Path(start="diagram.json")
+	@Path(exactly="diagram.json")
 	public void getDiagram(Request request) throws ModelException, IOException {
 		String text = request.getString("word");
 		
@@ -82,7 +82,7 @@ public class WordsController extends WordsControllerBase {
 		request.sendObject(diagram);
 	}
 	
-	@Path(start="startImport")
+	@Path(exactly="startImport")
 	public void startImport(Request request) throws NetworkException, IOException {
 		String url = request.getString("url");
 		ImportSession session = importService.createImportSession(request.getSession());
