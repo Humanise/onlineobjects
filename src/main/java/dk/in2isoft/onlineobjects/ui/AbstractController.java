@@ -67,6 +67,11 @@ public abstract class AbstractController {
 						invokeMothod(request, method);
 						return;
 					}
+				} else {
+					if (request.testLocalPathStart(method.getName())) {
+						invokeMothod(request, method);
+						return;
+					}
 				}
 			}
 		}

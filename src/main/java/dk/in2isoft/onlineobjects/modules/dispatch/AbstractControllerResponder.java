@@ -78,6 +78,11 @@ public class AbstractControllerResponder {
 							return true;
 						}
 					}
+					
+					if (request.testLocalPathStart(method.getName())) {
+						invokeMothod(controller, request, method);
+						return true;
+					}
 				}
 			}
 			for (Method method : methods) {
