@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
@@ -42,7 +43,7 @@ public abstract class AbstractController {
 				if (exactly.length > 0) {
 					exactMethodPaths.add(Pair.of(exactly, method));
 				}
-				else if (annotation.expression() != null) {
+				else if (Strings.isNotBlank(annotation.expression())) {
 					expressionMethodPaths.add(Pair.of(Pattern.compile(annotation.expression()), method));
 				}
 				else {
