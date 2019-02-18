@@ -11,6 +11,7 @@ import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -66,12 +67,11 @@ public class InternetAddressService {
 		return original;
 	}
 
-	public InternetAddress create(String url, String title, User user) throws IllegalRequestException, ModelException, SecurityException {
+	public InternetAddress create(String url, String title, User user) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
 		if (Strings.isBlank(url)) {
 			throw new IllegalRequestException("The url is empty");
 		}
 		URI uri = asURI(url);
-
 		// First check if it exists
 		InternetAddress address = findExisting(user, url);
 		if (address != null) {
@@ -110,7 +110,6 @@ public class InternetAddressService {
 			address.overrideFirstProperty(Property.KEY_INTERNETADDRESS_ENCODING, response.getEncoding());
 		}
 		modelService.create(address, user);
-
 		inboxService.add(user, address);
 		if (response != null) {
 			changeOriginal(address,response.getFile());
@@ -152,7 +151,7 @@ public class InternetAddressService {
 		return uri;
 	}
 	
-	private InternetAddress findExisting(User user, String url) {
+	private InternetAddress findExisting(Privileged user, String url) {
 		Query<InternetAddress> query = Query.after(InternetAddress.class).as(user).withField(InternetAddress.FIELD_ADDRESS, url);
 		InternetAddress address = modelService.search(query).getFirst();
 		return address;

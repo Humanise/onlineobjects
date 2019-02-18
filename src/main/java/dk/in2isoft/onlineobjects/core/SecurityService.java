@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +32,7 @@ import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
+import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class SecurityService {
@@ -350,12 +354,40 @@ public class SecurityService {
 		modelService.grantPrivileges(item, user, true, true, true, granter);
 	}
 
-	public UserSession ensureUserSession(HttpSession session) {
-		if (session.getAttribute(UserSession.SESSION_ATTRIBUTE) == null) {
-			log.trace("Creating new user session");
-			session.setAttribute(UserSession.SESSION_ATTRIBUTE, new UserSession(getInitialUser()));
+	private String getKey(HttpServletRequest servletRequest) {
+		String auth = servletRequest.getHeader("Authorization");
+		if (auth !=null) {
+			
+			Pattern pattern = Pattern.compile("Bearer (.*)");
+			Matcher matcher = pattern.matcher(auth);
+			if (matcher.matches()) {
+				String key = matcher.group(1);
+				return key;
+			}
 		}
-		return UserSession.get(session);
+		return null;
+	}
+
+	public void ensureUserSession(Request request) throws SecurityException {
+		String key = getKey(request.getRequest());
+		if (key!=null) {
+			User user = getUserBySecret(key);
+			if (user==null) {
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {}
+				throw new SecurityException(Error.userNotFound);
+			}
+			request.setSession(new UserSession(user));
+		}
+		else {
+			HttpSession session = request.getRequest().getSession();
+			if (session.getAttribute(UserSession.SESSION_ATTRIBUTE) == null) {
+				log.trace("Creating new user session");
+				session.setAttribute(UserSession.SESSION_ATTRIBUTE, new UserSession(getInitialUser()));
+			}
+			request.setSession(UserSession.get(session));
+		}
 	}
 
 

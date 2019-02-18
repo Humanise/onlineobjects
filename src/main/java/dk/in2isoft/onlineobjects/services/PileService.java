@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.services;
 import java.util.Optional;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -49,6 +50,18 @@ public class PileService {
 			pile.setName(relationKind + " for "+user.getUsername());
 			modelService.create(pile, user);
 			modelService.createRelation(user, pile, relationKind, user);
+		}
+		return pile;
+	}
+
+	public Pile getOrCreatePileByRelation(User user, Operator operator, String relationKind) throws ModelException, SecurityException {
+		Query<Pile> query = Query.after(Pile.class).from(user, relationKind).as(user);
+		Pile pile = modelService.getFirst(query, operator);
+		if (pile==null) {
+			pile = new Pile();
+			pile.setName(relationKind + " for "+user.getUsername());
+			modelService.create(pile, operator);
+			modelService.createRelation(user, pile, relationKind, operator);
 		}
 		return pile;
 	}

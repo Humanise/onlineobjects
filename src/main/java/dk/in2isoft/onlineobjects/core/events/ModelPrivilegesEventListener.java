@@ -8,4 +8,5 @@ import dk.in2isoft.onlineobjects.model.User;
 public interface ModelPrivilegesEventListener extends ModelEventListener {
 
 	public void allPrivilegesWasRemoved(Item item, List<User> users);
+
 }

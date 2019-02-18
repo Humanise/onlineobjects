@@ -22,7 +22,6 @@ import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -186,10 +185,11 @@ public class APIController extends APIControllerBase {
 	@Path(exactly={"v1.0","bookmark"})
 	@Deprecated
 	public void bookmark(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		String url = request.getString("url", "An URL parameters must be provided");
 		String quote = request.getString("quote");
 
+		User user = modelService.getUser(request);
 		InternetAddress internetAddress = internetAddressService.create(url, null, user);
 		if (Strings.isNotBlank(quote)) {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, user);
@@ -198,6 +198,7 @@ public class APIController extends APIControllerBase {
 	
 	@Path(exactly={"v1.0", "image", "add"})
 	public void addImage(Request request) throws IOException, EndUserException {
+		checkUser(request);
 
 		DataImporter importer = importService.createImporter();
 		importer.setListener(new ImageImporter(modelService, imageService) {
@@ -240,9 +241,15 @@ public class APIController extends APIControllerBase {
 	
 	/* ------- Knowledge ------- */
 	
+	private void checkUser(Request request) throws SecurityException {
+		if (securityService.isPublicUser(request)) {
+			throw new SecurityException(Error.userNotFound);
+		}
+	}
+	
 	@Path(exactly = { "v1.0", "knowledge", "list" })
 	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
 		if (pageSize == 0) {
@@ -270,19 +277,21 @@ public class APIController extends APIControllerBase {
 		query.setText(request.getString("text"));
 		query.setInbox(request.getBoolean("inbox", null));
 		query.setFavorite(request.getBoolean("favorite", null));
-		return knowledgeService.search(query, user);
+		return knowledgeService.search(query, request.getSession());
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question" })
 	public QuestionApiPerspective viewQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId();
+		User user = modelService.getUser(request);
 		return knowledgeService.getQuestionPerspective(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "update" })
 	public QuestionApiPerspective updateQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Long id = request.getId();
 		Question dummy = new Question();
 		dummy.setId(id);
@@ -294,7 +303,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add" })
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		String string = request.getString("text");
 		Long statementId = request.getLong("statementId", null);
 		Question question = knowledgeService.createQuestion(string, user);
@@ -307,15 +317,16 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "delete" })
 	public void deleteQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId(); 
-		knowledgeService.deleteQuestion(id, user);
+		knowledgeService.deleteQuestion(id, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add", "answer" })
 	@Deprecated
 	public QuestionApiPerspective addAnswerToQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
 		relate(user, question, answer);
@@ -324,7 +335,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add", "statement" })
 	public QuestionApiPerspective addStatementToQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
 		relate(user, question, statement);
@@ -334,7 +346,8 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "question", "remove", "answer" })
 	@Deprecated
 	public QuestionApiPerspective removeAnswerFromQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement answer = modelService.getRequired(Statement.class, request.getLong("answerId"), user);
 		List<Relation> relations = modelService.find().relations(user).from(answer).to(question).withKind(Relation.ANSWERS).list();
@@ -347,7 +360,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "remove", "statement" })
 	public QuestionApiPerspective removeStatementFromQuestion(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
 		List<Relation> relations = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).list();
@@ -360,7 +374,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "remove", "statement" })
 	public HypothesisApiPerspective removeStatementFromHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
 		String kind = getHypothesisRelation(request.getString("relation"));
@@ -373,7 +388,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "remove", "question" })
 	public StatementApiPerspective removeQuestionFromStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
 		List<Relation> relations = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).list();
@@ -386,21 +402,24 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis" })
 	public HypothesisApiPerspective viewHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Long id = request.getId();
 		return knowledgeService.getHypothesisPerspective(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "add" })
 	public HypothesisApiPerspective addHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Hypothesis hypothesis = knowledgeService.createHypothesis(request.getString("text"), user);
 		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "add", "statement" })
 	public HypothesisApiPerspective addStatementToHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		String relation = request.getString("relation");
 		String kind = getHypothesisRelation(relation);
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), user);
@@ -428,29 +447,31 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "delete" })
 	public void deleteHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId(); 
-		knowledgeService.deleteHypothesis(id, user);
+		knowledgeService.deleteHypothesis(id, request);
 	}
 
 	
 	@Path(exactly = { "v1.0", "knowledge", "statement" })
 	public StatementApiPerspective viewStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Long id = request.getId();
 		return knowledgeService.getStatementPerspective(id, user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "delete" })
 	public void deleteStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId(); 
-		knowledgeService.deleteStatement(id, user);
+		knowledgeService.deleteStatement(id, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "update" })
 	public StatementApiPerspective updateStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Long id = request.getId();
 		Statement dummy = new Statement();
 		dummy.setId(id);
@@ -462,7 +483,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "update" })
 	public HypothesisApiPerspective updateHypothesis(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Long id = request.getId();
 		Hypothesis dummy = new Hypothesis();
 		dummy.setId(id);
@@ -473,7 +495,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add" })
 	public StatementApiPerspective addStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		String text = request.getString("text", "No text provided");
 		Long addressId = request.getLong("internetAddressId", null);
 		Long hypothesisId = request.getLong("hypothesisId", null);
@@ -502,7 +525,8 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add", "personal" })
 	public StatementApiPerspective addPersonalStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		String text = request.getString("text", "No text provided");
 		Statement statement = knowledgeService.addPersonalStatement(text, user);
 		if (statement == null) {
@@ -513,37 +537,40 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add", "question" })
 	public StatementApiPerspective addQuestionToStatement(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), user);
 		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), user);
 		relate(user, question, statement);
 		return knowledgeService.getStatementPerspective(statement.getId(), user);
 	}
 
-	private void relate(User user, Question question, Statement statement) throws ModelException, SecurityException {
-		Optional<Relation> found = modelService.find().relations(user).from(statement).to(question).withKind(Relation.ANSWERS).first();
+	private void relate(Privileged privileged, Question question, Statement statement) throws ModelException, SecurityException {
+		Optional<Relation> found = modelService.find().relations(privileged).from(statement).to(question).withKind(Relation.ANSWERS).first();
 		if (!found.isPresent()) {
-			modelService.createRelation(statement, question, Relation.ANSWERS, user);
+			modelService.createRelation(statement, question, Relation.ANSWERS, privileged);
 			modelService.commit();
 		}
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "profile" })
 	public ProfileApiPerspective getProfile(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		return knowledgeService.getProfile(user);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress" })
 	public InternetAddressApiPerspective viewAddress(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId();
-		return knowledgeService.getAddressPerspective(id, new UserSession(user));
+		return knowledgeService.getAddressPerspective(id, request);
 	}	
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "add" })
 	public InternetAddressApiPerspective addInternetAddress(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
 		String url = request.getString("url", "An URL parameters must be provided");
 
 		AddressRequest addressRequest = new AddressRequest();
@@ -559,9 +586,9 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "delete" })
 	public void deleteInternetAddress(Request request) throws IOException, EndUserException {
-		User user = getUserForSecretKey(request);
+		checkUser(request);
 		Long id = request.getId(); 
-		knowledgeService.deleteInternetAddress(id, user);
+		knowledgeService.deleteInternetAddress(id, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "agreements" })
@@ -571,22 +598,13 @@ public class APIController extends APIControllerBase {
 		return memberService.getAgreements(user, locale);
 	}	
 
-	private User getUserForSecretKey(Request request) throws SecurityException {
-		String secret = request.getString("secret");
-		User user = securityService.getUserBySecret(secret);
-		if (user==null) {
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {}
-			throw new SecurityException("User not found");
-		}
-		return user;
-	}
-
 	@Path(exactly = { "v1.0", "words", "import" })
 	public void importWord(Request request) throws IOException, EndUserException {
-		getUserForSecretKey(request);
+		if (!securityService.isAdminUser(request)) {
+			throw new SecurityException();
+		}
 		Privileged privileged = securityService.getAdminPrivileged();
+		
 		WordModification modification = request.getObject("modification", WordModification.class);
 		Type listType = new TypeToken<List<WordModification>>() {}.getType();
 		List<WordModification> modifications = request.getObject("modifications", listType);

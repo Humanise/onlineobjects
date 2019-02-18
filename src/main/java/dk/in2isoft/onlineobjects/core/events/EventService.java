@@ -5,20 +5,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.event.spi.PostCommitDeleteEventListener;
+import org.hibernate.event.spi.PostCommitInsertEventListener;
+import org.hibernate.event.spi.PostCommitUpdateEventListener;
+import org.hibernate.event.spi.PostDeleteEvent;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.hibernate.event.spi.PostUpdateEvent;
+import org.hibernate.persister.entity.EntityPersister;
 
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 
-public class EventService {
+public class EventService implements PostCommitUpdateEventListener, PostCommitInsertEventListener, PostCommitDeleteEventListener {
+
+	private static final long serialVersionUID = 1L;
 
 	private List<ModelEventListener> modelEventListeners = new CopyOnWriteArrayList<ModelEventListener>();
 	private static Logger log = LogManager.getLogger(EventService.class);
-	
-	
-	public EventService() {
-	}
 	
 	public void setModelEventListeners(List<ModelEventListener> modelEventListeners) {
 		this.modelEventListeners.addAll(modelEventListeners);
@@ -65,28 +70,48 @@ public class EventService {
 	}
 
 	public void firePrivilegesRemoved(Item item, List<User> users) {
+		log.info("Privileges was removed: "+item);
 		for (ModelEventListener listener : modelEventListeners) {
 			if (listener instanceof ModelPrivilegesEventListener) {
 				((ModelPrivilegesEventListener) listener).allPrivilegesWasRemoved(item, users);
 			}
 		}
 	}
-/*
+
 	@Override
-	public void onPostDelete(PostDeleteEvent event) {
-		Object object = event.getEntity();
-		log.info("Post deleted: "+object.getClass().getSimpleName()+"; "+object);
+	public boolean requiresPostCommitHanding(EntityPersister persister) {
+		return true;
 	}
 
 	@Override
 	public void onPostUpdate(PostUpdateEvent event) {
-		Object object = event.getEntity();
-		log.info("Post updated: "+object);
+		log.debug("onPostUpdate: {}" ,event.getEntity());
+	}
+
+	@Override
+	public void onPostUpdateCommitFailed(PostUpdateEvent event) {
+		
 	}
 
 	@Override
 	public void onPostInsert(PostInsertEvent event) {
-		Object object = event.getEntity();
-		log.info("Post insert: "+object);
-	}*/
+		log.debug("onPostInsert: {}" ,event.getEntity());
+	}
+
+	@Override
+	public void onPostDelete(PostDeleteEvent event) {
+		log.debug("onPostDelete: {}" ,event.getEntity());
+	}
+
+	@Override
+	public void onPostInsertCommitFailed(PostInsertEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPostDeleteCommitFailed(PostDeleteEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
 }

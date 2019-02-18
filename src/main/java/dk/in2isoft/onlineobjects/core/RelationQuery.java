@@ -25,10 +25,17 @@ public class RelationQuery {
 	private String kind;
 	private ModelService modelService;
 	private SecurityService securityService;
+	private Operation operation;
 	
 	public RelationQuery(ModelService modelService, SecurityService securityService) {
 		this.modelService = modelService;
 		this.securityService = securityService;
+	}
+
+	public RelationQuery(ModelService modelService, SecurityService securityService, Operation operation) {
+		this.modelService = modelService;
+		this.securityService = securityService;
+		this.operation = operation;
 	}
 
 	public RelationQuery withId(Long id) {
@@ -131,7 +138,12 @@ public class RelationQuery {
 	}
 
 	private Query<Relation> getQuery() {
-		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class);
+		Query<Relation> query;
+		if (operation != null) {
+			query = modelService.createQuery(getHQL(), Relation.class, operation);
+		} else {
+			query = modelService.createQuery(getHQL(), Relation.class);
+		}
 		decorate(query);
 		return query;
 	}

@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.modules.dispatch;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

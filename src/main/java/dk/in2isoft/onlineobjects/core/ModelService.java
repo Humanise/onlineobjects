@@ -30,15 +30,22 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.BootstrapServiceRegistry;
+import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.event.service.spi.EventListenerRegistry;
+import org.hibernate.event.spi.EventType;
 import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
+import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -47,6 +54,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.events.EventService;
+import dk.in2isoft.onlineobjects.core.events.ModelEventType;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -66,7 +74,7 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
-public class ModelService implements InitializingBean {
+public class ModelService implements InitializingBean, OperationProvider {
 
 	private static Logger log = LogManager.getLogger(ModelService.class);
 
@@ -100,15 +108,6 @@ public class ModelService implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		try {
-			Configuration configuration = new Configuration();
-			configuration.configure("hibernate.cfg.xml");
-			//configuration.getEventListeners().setPostDeleteEventListeners(postDeleteEventListener);
-			//PostDeleteEventListener[] postDeleteEventListener = ;
-			/*
-			EventListeners events = configuration.getEventListeners();
-			events.setPostCommitDeleteEventListeners(new PostDeleteEventListener[] {eventService});
-			events.setPostCommitInsertEventListeners(new PostInsertEventListener[] {eventService});
-			events.setPostCommitUpdateEventListeners(new PostUpdateEventListener[] {eventService});*/
 			sessionFactory = getSessionFactory();
 		} catch (Throwable t) {
 			log.fatal("Could not create session factory", t);
@@ -120,22 +119,44 @@ public class ModelService implements InitializingBean {
 	public SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
 			try {
-				// Create registry
+				/*
+	            BootstrapServiceRegistry bootstrapRegistry =
+	                    new BootstrapServiceRegistryBuilder()
+	                    .applyIntegrator(new Integrator() {
+							
+							@Override
+							public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
+									SessionFactoryServiceRegistry serviceRegistry) {
+							    EventListenerRegistry eventListenerRegistry = 
+							    serviceRegistry.getService(EventListenerRegistry.class);
+							    //eventListenerRegistry.appendListeners(EventType.PERSIST, eventService);
+							    eventListenerRegistry.appendListeners(EventType.POST_COMMIT_UPDATE, eventService);
+							    eventListenerRegistry.appendListeners(EventType.POST_COMMIT_INSERT, eventService);
+							    eventListenerRegistry.appendListeners(EventType.POST_COMMIT_DELETE, eventService);
+							    //eventListenerRegistry.appendListeners(EventType.SAVE, eventService);
+							    //eventListenerRegistry.appendListeners(EventType.POST_UPDATE, eventService);
+							    
+							}
+							
+							@Override
+							public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
+								
+							}
+						})
+	                    .build();
+	              
+	            StandardServiceRegistryBuilder registryBuilder = 
+	                    new StandardServiceRegistryBuilder(bootstrapRegistry);
+
+				registry = registryBuilder.configure().build();
+				*/
 				registry = new StandardServiceRegistryBuilder().configure().build();
 
-				// Create MetadataSources
 				MetadataSources sources = new MetadataSources(registry);
 
-				// Create Metadata
 				Metadata metadata = sources.getMetadataBuilder().build();
-				/*
-				 * new SchemaExport() // .setOutputFile("db-schema.hibernate5.ddl") //
-				 * .create(EnumSet.of(TargetType.SCRIPT), metadata);
-				 */
 
-				// Create SessionFactory
 				sessionFactory = metadata.getSessionFactoryBuilder().build();
-
 			} catch (Exception e) {
 				log.error(e);
 				if (registry != null) {
@@ -231,6 +252,54 @@ public class ModelService implements InitializingBean {
 		}
 		return null;
 	}
+	
+	@Override
+	public Operation newOperation() {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		return new Operation(session);
+	}
+	
+	@Override
+	public void execute(Operation operation) {
+		Session session = operation.getSession();
+		Transaction tx = session.getTransaction();
+		if (tx.isActive()) {
+			try {
+				session.flush();
+				session.clear();
+				log.info("Commit transaction!");
+				tx.commit();
+				for (Pair<ModelEventType, Object> event : operation.getEvents()) {
+					ModelEventType type = event.getKey();
+					Object object = event.getValue();
+					if (object instanceof Item && type == ModelEventType.update) {
+						eventService.fireItemWasUpdated((Item) object);
+					}
+				}
+				log.info("Did commit transaction!");
+			} catch (HibernateException e) {
+				log.error("Rolling back!", e);
+				tx.rollback();
+			}
+			log.debug("Commit transaction!");
+		} else {
+			log.error("Unable to commit inactive transaction");
+		}
+	}
+
+	public void rollBack(Operation operation) {
+		Session session = operation.getSession();
+		Transaction tx = session.getTransaction();
+		if (tx.isActive()) {
+			try {
+				tx.rollback();
+				log.warn("Rolling back!");
+			} catch (HibernateException e) {
+				log.error("Could not roll back!", e);
+			}
+		}
+	}
 
 	private Session getSession() {
 		threadIsDirty.set("started");
@@ -265,6 +334,10 @@ public class ModelService implements InitializingBean {
 		return session;
 	}
 
+	protected <T> Query<T> createQuery(String hql, Class<T> type, Operation operation) {
+		return operation.getSession().createQuery(hql, type);
+	}
+
 	protected <T> Query<T> createQuery(String hql, Class<T> type) {
 		return getSession().createQuery(hql, type);
 	}
@@ -292,7 +365,9 @@ public class ModelService implements InitializingBean {
 			try {
 				session.flush();
 				session.clear();
+				log.debug("Commit transaction!");
 				tx.commit();
+				log.debug("Did commit transaction!");
 			} catch (HibernateException e) {
 				log.error("Rolling back!", e);
 				tx.rollback();
@@ -346,7 +421,11 @@ public class ModelService implements InitializingBean {
 	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 	}
-	
+
+	public void create(Item item, Operator operator) throws ModelException, SecurityException {
+		createItem(item, operator, operator.getOperation().getSession());
+	}
+
 	public void create(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
 		createItem(item, privileged, session);
 	}
@@ -458,7 +537,21 @@ public class ModelService implements InitializingBean {
 		eventService.fireItemWasDeleted(item);
 	}
 
-	// TODO Change to update
+	
+	public void update(Item item, Operator operational) throws SecurityException,
+	ModelException {
+		if (!canUpdate(item, operational)) {
+			throw new SecurityException("Privilieged=" + operational.getIdentity() + " cannot update Item=" + item);
+		}
+		validate(item);
+		Operation operation = operational.getOperation();
+		Session session = operation.getSession();
+		item.setUpdated(new Date());
+		session.update(item);
+		operation.addChangeEvent(item);
+		
+	}
+
 	public void update(Item item, Privileged privileged) throws SecurityException,
 			ModelException {
 		if (!canUpdate(item, privileged)) {
@@ -506,6 +599,21 @@ public class ModelService implements InitializingBean {
 		}
 		return true;		
 	}
+
+	public boolean canUpdate(Item item, Operator privileged) {
+		if (securityService.isAdminUser(privileged)) {
+			return true;
+		}
+		if (item.getId() == privileged.getIdentity()) {
+			return true;
+		}
+		Privilege privilege = getPriviledge(item, privileged, privileged.getOperation().getSession());
+		if (privilege != null && privilege.isAlter()) {
+			return true;
+		}
+		return false;
+	}
+
 	public boolean canUpdate(Item item, Privileged privileged) {
 		if (securityService.isAdminUser(privileged)) {
 			return true;
@@ -533,6 +641,22 @@ public class ModelService implements InitializingBean {
 		return found;
 	}
 	
+	public <T extends Entity> @NonNull T getRequired(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Operator operator) throws ModelException,ContentNotFoundException {
+		@Nullable
+		T found = get(entityClass, id, operator);
+		if (found==null) {
+			throw new ContentNotFoundException(entityClass, id);
+		}
+		return found;
+	}
+
+	public <T extends Entity> @Nullable T get(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Operator operator) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(entityClass);
+		setPrivileged(operator, query);
+		query.withIds(id);
+		return getFirst(query, operator);
+	}
+
 	public <T extends Entity> @Nullable T get(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(entityClass);
 		setPrivileged(privileged, query);
@@ -561,6 +685,16 @@ public class ModelService implements InitializingBean {
 		Relation relation = new Relation(from, to);
 		relation.setKind(kind);
 		create(relation, privileged);
+		return relation;
+	}
+
+	public Relation createRelation(Entity from, Entity to, String kind, Operator operator) throws ModelException, SecurityException {
+		if (from==null || to==null) {
+			return null;
+		}
+		Relation relation = new Relation(from, to);
+		relation.setKind(kind);
+		create(relation, operator);
 		return relation;
 	}
 
@@ -599,6 +733,13 @@ public class ModelService implements InitializingBean {
 		q.to(entity,kind);
 		setPrivileged(privileged, q);
 		return list(q);
+	}
+
+	public <T> List<T> getParents(Entity entity, String kind, Class<T> classObj, Operator operator) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.to(entity,kind);
+		setPrivileged(operator, q);
+		return list(q, operator);
 	}
 
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
@@ -661,6 +802,10 @@ public class ModelService implements InitializingBean {
 			log.error("SQL: "+e.getSQL());
 		}
 		return null;
+	}
+
+	public User getUser(Privileged request) throws ModelException, ContentNotFoundException {
+		return getRequired(User.class, request.getIdentity(), request);
 	}
 
 	public Privilege getPriviledge(Item item, Privileged priviledged) {
@@ -785,9 +930,17 @@ public class ModelService implements InitializingBean {
 		return null;
 	}
 
+	public <T> List<T> list(CustomQuery<T> query, Operator operator) throws ModelException {
+		return list(query, operator.getOperation().getSession());
+	}
+
 	public <T> List<T> list(CustomQuery<T> query) throws ModelException {
+		return list(query, getSession());
+	}
+
+	private <T> List<T> list(CustomQuery<T> query, Session session) throws ModelException {
 		try {
-			NativeQuery<?> sql = getSession().createSQLQuery(query.getSQL());
+			NativeQuery<?> sql = session.createSQLQuery(query.getSQL());
 			query.setParameters(sql);
 			List<?> list = sql.list();
 			List<T> result = Lists.newArrayList();
@@ -847,6 +1000,17 @@ public class ModelService implements InitializingBean {
 		return totalCount;
 	}
 
+	public <T> List<T> list(ItemQuery<T> query, Operator operator) {
+		Query<T> q = query.createItemQuery(operator.getOperation().getSession());
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<T> items = q.list();
+		for (int i = 0; i < items.size(); i++) {
+			T item = items.get(i);
+			items.set(i, getSubject(item));
+		}
+		return items;
+	}
+
 	public <T> List<T> list(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession());
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -856,6 +1020,17 @@ public class ModelService implements InitializingBean {
 			items.set(i, getSubject(item));
 		}
 		return items;
+	}
+
+	public <T> @Nullable T getFirst(ItemQuery<T> query, Operator operational) {
+		Query<T> q = query.createItemQuery(operational.getOperation().getSession());
+		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		q.setFetchSize(1);
+		List<T> list = q.list();
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	public <T> @Nullable T getFirst(ItemQuery<T> query) {
@@ -970,11 +1145,15 @@ public class ModelService implements InitializingBean {
 		query.setParameter("object", item.getId());
 		List<User> users = query.list();
 		
-		String hql = "delete Privilege p where p.object = :id or p.subject = :id";
-		Query<?> q = createQuery(hql);
+		String hql = "from Privilege as p where p.object = :id or p.subject = :id";
+		Query<Privilege> q = createQuery(hql, Privilege.class);
 		q.setParameter("id", item.getId());
-		int count = q.executeUpdate();
-		log.info("Deleting privileges for: " + item.getClass().getName() + "; count: " + count);
+		List<Privilege> list = q.list();
+		for (Privilege privilege : list) {
+			getSession().delete(privilege);
+		}
+		
+		log.info("Deleting privileges for: " + item.getClass().getName() + "; count: " + list.size());
 		
 		eventService.firePrivilegesRemoved(item,users);
 	}
@@ -984,6 +1163,13 @@ public class ModelService implements InitializingBean {
 		q.from(item,relationKind);
 		setPrivileged(privileged, q);
 		return list(q);
+	}
+
+	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj, Operator operator) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		query.from(item,relationKind);
+		setPrivileged(operator, query);
+		return list(query, operator);
 	}
 
 	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj, Privileged privileged) throws ModelException {

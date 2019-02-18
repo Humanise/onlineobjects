@@ -24,6 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.Operation;
+import dk.in2isoft.onlineobjects.core.OperationProvider;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
@@ -31,7 +34,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 
-public class Request {
+public class Request implements Operator {
 
 	private static Logger log = LogManager.getLogger(Request.class);
 
@@ -403,13 +406,15 @@ public class Request {
 	public void redirect(String url) throws IOException {
 		response.sendRedirect(url);
 	}
+	
+	private UserSession session;
+	
+	public void setSession(UserSession session) {
+		this.session = session;
+	}
 
 	public UserSession getSession() {
-		Object session = request.getSession().getAttribute(UserSession.SESSION_ATTRIBUTE);
-		if (session==null) {
-			log.error("The user session is not set!");
-		}
-		return (UserSession) session;
+		return session;
 	}
 
 	public boolean hasDomain() {
@@ -520,5 +525,42 @@ public class Request {
 		}
 		return sb.toString();
 	}
+	
+	private OperationProvider operationProvider;
 
+	private Operation operation;
+	
+	public void setOperationProvider(OperationProvider operationProvider) {
+		this.operationProvider = operationProvider;
+	}
+	
+	@Override
+	public Operation getOperation() {
+		if (operation == null) {
+			operation = operationProvider.newOperation();
+		}
+		return operation;
+	}
+	
+	@Override
+	public void commit() {
+		if (operation != null) {
+			operationProvider.execute(operation);
+			operation = null;
+		}
+	}
+	
+	@Override
+	public void rollBack() {
+		if (operation != null) {
+			operationProvider.rollBack(operation);
+			operation = null;
+		}
+	}
+	
+	
+	@Override
+	public long getIdentity() {
+		return getSession().getIdentity();
+	}
 }

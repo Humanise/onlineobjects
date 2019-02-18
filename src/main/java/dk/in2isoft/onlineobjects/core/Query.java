@@ -261,7 +261,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 	}
 
 	public org.hibernate.query.Query<T> createItemQuery(Session session) {
-		StringBuilder hql = new StringBuilder("select obj");
+		StringBuilder hql = new StringBuilder("select distinct obj");
 		return Code.cast(createQuery(hql, clazz, session, false));
 	}
 

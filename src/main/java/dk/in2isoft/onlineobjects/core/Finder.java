@@ -9,6 +9,10 @@ public class Finder {
 		return new RelationQuery(modelService, securityService).as(privileged);
 	}
 	
+	public RelationQuery relations(Operator operator) {
+		return new RelationQuery(modelService, securityService, operator.getOperation()).as(operator);
+	}
+
 	// Wiring...
 	
 	public void setModelService(ModelService modelService) {

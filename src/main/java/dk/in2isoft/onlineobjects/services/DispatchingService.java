@@ -46,7 +46,7 @@ public class DispatchingService {
 	private ConversionService conversionService;
 
 	private List<Responder> responders;
-	
+		
 	public boolean doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 
 		if (configurationService.isSimulateSlowRequest()) {
@@ -60,9 +60,15 @@ public class DispatchingService {
 		stopWatch.start();
 		boolean handled = false;
 		Request request = Request.get(servletRequest, servletResponse);
+		request.setOperationProvider(modelService);
 		Boolean shouldCommit = null;		
-
-		securityService.ensureUserSession(servletRequest.getSession());
+		
+		try {
+			securityService.ensureUserSession(request);
+		} catch (SecurityException ex) {
+			displayError(request, ex);
+			return true;
+		}
 		
 		for (Responder responder : responders) {
 			if (!handled && responder.applies(request)) {
@@ -77,12 +83,13 @@ public class DispatchingService {
 			}
 		}
 		
-
 		if (shouldCommit!=null) {
 			if (shouldCommit) {
 				modelService.commitThread();
+				request.commit();
 			} else {
-				modelService.rollBack();				
+				modelService.rollBack();
+				request.rollBack();
 			}
 		}
 		stopWatch.stop();

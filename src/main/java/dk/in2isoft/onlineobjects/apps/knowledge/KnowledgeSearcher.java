@@ -58,7 +58,7 @@ public class KnowledgeSearcher {
 		return search(readerQuery, session);
 	}
 
-	public SearchResult<KnowledgeListRow> searchOptimized(KnowledgeQuery readerQuery, User user) throws ExplodingClusterFuckException, SecurityException, ModelException {
+	public SearchResult<KnowledgeListRow> searchOptimized(KnowledgeQuery readerQuery, Privileged user) throws ExplodingClusterFuckException, SecurityException, ModelException {
 		final Pair<Integer, ListMultimap<String, Long>> idsByType = find(user, readerQuery);
 		List<Long> ids = Lists.newArrayList(idsByType.getValue().values());
 		if (ids.isEmpty()) {
