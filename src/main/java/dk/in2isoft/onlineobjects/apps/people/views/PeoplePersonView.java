@@ -1,9 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.people.views;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
@@ -17,22 +13,18 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.RemoteAccount;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 import dk.in2isoft.onlineobjects.services.PersonService;
-import dk.in2isoft.onlineobjects.services.RemoteDataService;
 import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
-import dk.in2isoft.onlineobjects.util.remote.RemoteAccountInfo;
 
 public class PeoplePersonView extends AbstractManagedBean {
 	
 	private PersonService personService;
 	private ModelService modelService;
-	private RemoteDataService remoteDataService;
 	private SecurityService securityService;
 	
 	private User user;
@@ -41,7 +33,6 @@ public class PeoplePersonView extends AbstractManagedBean {
 	private ListModel<Image> listModel;
 	private UserProfileInfo profileInfo;
 	private ListModel<Image> latestImages;
-	private List<RemoteAccountInfo> remoteAccountInfo;
 	private boolean canModify;
 	private String usersName;
 	
@@ -140,18 +131,6 @@ public class PeoplePersonView extends AbstractManagedBean {
 	public boolean isFound() {
 		return user!=null;
 	}
-	
-	public List<RemoteAccountInfo> getRemoteAccountInfo() {
-		if (remoteAccountInfo==null) {
-			remoteAccountInfo = Lists.newArrayList();
-			Query<RemoteAccount> query = Query.of(RemoteAccount.class).as(user);
-			List<RemoteAccount> accounts = modelService.list(query);
-			for (RemoteAccount account : accounts) {
-				remoteAccountInfo.add(remoteDataService.getInfo(account));
-			}
-		}
-		return remoteAccountInfo;
-	}
 
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -163,14 +142,6 @@ public class PeoplePersonView extends AbstractManagedBean {
 
 	public ModelService getModelService() {
 		return modelService;
-	}
-
-	public void setRemoteDataService(RemoteDataService remoteDataService) {
-		this.remoteDataService = remoteDataService;
-	}
-
-	public RemoteDataService getRemoteDataService() {
-		return remoteDataService;
 	}
 
 	public void setSecurityService(SecurityService securityService) {

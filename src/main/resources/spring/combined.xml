@@ -149,7 +149,6 @@
 	
 	<bean id="indexService" class="dk.in2isoft.onlineobjects.modules.index.IndexService" autowire="byType"/>
 	
-	<bean id="remoteDataService" class="dk.in2isoft.onlineobjects.services.RemoteDataService" autowire="byType"/>
 	<bean id="personService" class="dk.in2isoft.onlineobjects.services.PersonService" autowire="byType"/>
 	
 	<bean id="feedService" class="dk.in2isoft.onlineobjects.services.FeedService" autowire="byType"/>
