@@ -22,7 +22,6 @@ public abstract class ApplicationController extends AbstractController implement
 
 	protected EventService eventService;
 	protected ModelService modelService;
-	protected HUIService huiService;
 	
 	public ApplicationController(String name) {
 		super(name);
@@ -63,10 +62,6 @@ public abstract class ApplicationController extends AbstractController implement
 	}
 
 	public void relationWasUpdated(Relation relation) {
-	}
-	
-	public void setHuiService(HUIService huiService) {
-		this.huiService = huiService;
 	}
 
 	public boolean showGui(Request request) throws IOException {

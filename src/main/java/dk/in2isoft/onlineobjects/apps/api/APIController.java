@@ -17,11 +17,11 @@ import com.google.gson.reflect.TypeToken;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
-import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -52,10 +52,8 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class APIController extends APIControllerBase {
 
 	@Path(expression = "/")
+	@View(ui = {"web", "front.gui.xml"})
 	public void front(Request request) throws IOException {
-
-		FileBasedInterface ui = new FileBasedInterface(getFile("web", "front.gui.xml"), huiService);
-		ui.render(request.getRequest(), request.getResponse());
 	}
 
 	@Path(exactly = { "v1.0", "language", "analyse" })

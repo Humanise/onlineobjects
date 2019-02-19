@@ -15,8 +15,10 @@ import javax.servlet.ServletContext;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
+import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
@@ -25,6 +27,8 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 public abstract class AbstractController {
 
 	protected ConfigurationService configurationService;
+	protected HUIService huiService;
+
 	protected Map<Pattern,String> jsfMatchers = new LinkedHashMap<Pattern, String>();
 	protected List<Pair<String[],Method>> exactMethodPaths = new ArrayList<>();
 	protected List<Pair<Pattern,Method>> expressionMethodPaths = new ArrayList<>();
@@ -120,7 +124,12 @@ public abstract class AbstractController {
 		try {
 			Object result = method.invoke(this, new Object[] { request });
 			Class<?> returnType = method.getReturnType();
-			if (!returnType.equals(Void.TYPE)) {
+			View view = method.getDeclaredAnnotation(View.class);
+			if (view.ui().length > 0) {
+				FileBasedInterface ui = new FileBasedInterface(getFile(view.ui()), huiService);
+				ui.render(request.getRequest(), request.getResponse());
+			}
+			else if (!returnType.equals(Void.TYPE)) {
 				request.sendObject(result);
 			}
 			return;
@@ -166,5 +175,9 @@ public abstract class AbstractController {
 	
 	public boolean logAccessExceptions() {
 		return true;
+	}
+	
+	public void setHuiService(HUIService huiService) {
+		this.huiService = huiService;
 	}
 }
