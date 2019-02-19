@@ -19,7 +19,7 @@ public class TestQuery extends AbstractSpringTestCase {
 		
 		Query<Person> query = Query.of(Person.class);
 		String hql = queryToHql(query);
-		assertEquals("select obj from dk.in2isoft.onlineobjects.model.Person as obj where obj.id>0 order by obj.name asc", hql);
+		assertEquals("select distinct obj from dk.in2isoft.onlineobjects.model.Person as obj where obj.id>0 order by obj.name asc", hql);
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class TestQuery extends AbstractSpringTestCase {
 		
 		Query<Word> query = Query.of(Word.class).withFieldIn(Word.TEXT_FIELD, new String[] {"eat","my","pants"});
 		String hql = queryToHql(query);
-		assertEquals("select obj from dk.in2isoft.onlineobjects.model.Word as obj where obj.id>0 and text in (:text) order by obj.name asc", hql);
+		assertEquals("select distinct obj from dk.in2isoft.onlineobjects.model.Word as obj where obj.id>0 and text in (:text) order by obj.name asc", hql);
 	}
 
 	private String queryToHql(Query<?> query) {
