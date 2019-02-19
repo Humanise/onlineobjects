@@ -97,7 +97,12 @@ public class NetworkService {
 				// obtain redirect target
 				Header locationHeader = response.getFirstHeader("location");
 				if (locationHeader!=null) {
-					url = new URI(locationHeader.getValue());
+					String value = locationHeader.getValue();
+					if (value.startsWith("/")) {
+						url = new URIBuilder().setPath(value).setScheme(url.getScheme()).setHost(url.getHost()).setPort(url.getPort()).build();
+					} else {
+						url = new URI(locationHeader.getValue());
+					}
 					log.info("Redirect: "+url);
 				} else {
 					break;
