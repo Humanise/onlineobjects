@@ -30,22 +30,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.BootstrapServiceRegistry;
-import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.EventType;
 import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.exception.SQLGrammarException;
-import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
-import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 import org.hibernate.type.LongType;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -804,8 +797,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 
+	@Deprecated
 	public User getUser(Privileged request) throws ModelException, ContentNotFoundException {
 		return getRequired(User.class, request.getIdentity(), request);
+	}
+
+	public User getUser2(Operator operator) throws ModelException, ContentNotFoundException {
+		return getRequired(User.class, operator.getIdentity(), operator);
 	}
 
 	public Privilege getPriviledge(Item item, Privileged priviledged) {

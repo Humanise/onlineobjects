@@ -282,8 +282,8 @@ public class APIController extends APIControllerBase {
 	public QuestionApiPerspective viewQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		Long id = request.getId();
-		User user = modelService.getUser(request);
-		return knowledgeService.getQuestionPerspective(id, user);
+		User user = modelService.getUser2(request);
+		return knowledgeService.getQuestionPerspective(id, user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "update" })

@@ -139,8 +139,7 @@ public class KnowledgeService {
 		}
 	}
 
-	public void categorize(Entity entity, CategorizableViewPerspective perspective, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
-		User user = modelService.getRequired(User.class, operator.getIdentity(), operator);
+	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
 
 		Pile inbox = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_FAVORITES);
@@ -278,7 +277,7 @@ public class KnowledgeService {
 		return statement;
 	}
 
-	public QuestionApiPerspective getQuestionPerspective(Long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public QuestionApiPerspective getQuestionPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, operator);
 		QuestionApiPerspective questionPerspective = new QuestionApiPerspective();
 		questionPerspective.setId(question.getId());
@@ -296,7 +295,7 @@ public class KnowledgeService {
 			answerPerspectives.add(statementPerspective);
 		}
 		questionPerspective.setAnswers(answerPerspectives);
-		categorize(question, questionPerspective, operator);
+		categorize(question, questionPerspective, user, operator);
 		return questionPerspective;
 	}
 
