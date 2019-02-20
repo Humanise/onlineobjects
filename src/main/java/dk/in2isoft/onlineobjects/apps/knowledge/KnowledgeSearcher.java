@@ -17,6 +17,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -52,20 +53,19 @@ public class KnowledgeSearcher {
 		readerQuery.setPageSize(pageSize);
 		readerQuery.setWordIds(request.getLongs("tags"));
 		readerQuery.setAuthorIds(request.getLongs("authors"));
-		UserSession session = request.getSession();
 		
-		return search(readerQuery, session);
+		return search(readerQuery, request);
 	}
 
-	public SearchResult<KnowledgeListRow> searchOptimized(KnowledgeQuery readerQuery, Privileged user) throws ExplodingClusterFuckException, SecurityException, ModelException {
-		final Pair<Integer, ListMultimap<String, Long>> idsByType = find(user, readerQuery);
+	public SearchResult<KnowledgeListRow> searchOptimized(KnowledgeQuery readerQuery, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException {
+		final Pair<Integer, ListMultimap<String, Long>> idsByType = find(operator, readerQuery);
 		List<Long> ids = Lists.newArrayList(idsByType.getValue().values());
 		if (ids.isEmpty()) {
 			return new SearchResult<KnowledgeListRow>(new ArrayList<>(), 0);
 		}
-		KnowledgeListQuery query = new KnowledgeListQuery(user);
+		KnowledgeListQuery query = new KnowledgeListQuery(operator);
 		query.withIds(ids);
-		SearchResult<KnowledgeListRow> result = modelService.search(query);
+		SearchResult<KnowledgeListRow> result = modelService.search(query, operator);
 		List<KnowledgeListRow> list = result.getList();
 		if (list.size() != ids.size()) {
 			log.error("Inconsistent database results: actual={} vs expected={}", list.size(), ids.size());
@@ -95,7 +95,7 @@ public class KnowledgeSearcher {
 		return result;
 	}
 
-	public SearchResult<Entity> search(KnowledgeQuery readerQuery, Privileged privileged) throws ExplodingClusterFuckException, SecurityException {
+	public SearchResult<Entity> search(KnowledgeQuery readerQuery, Operator privileged) throws ExplodingClusterFuckException, SecurityException {
 		if (privileged==null) {
 			throw new SecurityException("No privileged provided");
 		}
@@ -109,7 +109,7 @@ public class KnowledgeSearcher {
 			if (!addressIds.isEmpty()) {
 				Query<InternetAddress> query = Query.after(InternetAddress.class).withIds(addressIds).as(privileged);
 
-				list.addAll(modelService.list(query));
+				list.addAll(modelService.list(query, privileged));
 			}
 		}
 		{
@@ -117,7 +117,7 @@ public class KnowledgeSearcher {
 			if (!partIds.isEmpty()) {
 				Query<Statement> query = Query.after(Statement.class).withIds(partIds).as(privileged);
 
-				list.addAll(modelService.list(query));
+				list.addAll(modelService.list(query, privileged));
 			}
 		}
 		{
@@ -125,7 +125,7 @@ public class KnowledgeSearcher {
 			if (!partIds.isEmpty()) {
 				Query<Question> query = Query.after(Question.class).withIds(partIds).as(privileged);
 
-				list.addAll(modelService.list(query));
+				list.addAll(modelService.list(query, privileged));
 			}
 		}
 		{
@@ -133,7 +133,7 @@ public class KnowledgeSearcher {
 			if (!partIds.isEmpty()) {
 				Query<Hypothesis> query = Query.after(Hypothesis.class).withIds(partIds).as(privileged);
 
-				list.addAll(modelService.list(query));
+				list.addAll(modelService.list(query, privileged));
 			}
 		}
 

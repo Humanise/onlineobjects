@@ -5,6 +5,7 @@ public class Finder {
 	private ModelService modelService;
 	private SecurityService securityService;
 
+	@Deprecated
 	public RelationQuery relations(Privileged privileged) {
 		return new RelationQuery(modelService, securityService).as(privileged);
 	}

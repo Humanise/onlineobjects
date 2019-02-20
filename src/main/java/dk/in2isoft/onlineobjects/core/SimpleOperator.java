@@ -42,4 +42,8 @@ public class SimpleOperator implements Operator {
 		}
 	}
 
+	public void change(Privileged privileged) {
+		identity = privileged.getIdentity();
+	}
+
 }

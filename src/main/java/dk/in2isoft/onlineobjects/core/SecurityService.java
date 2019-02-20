@@ -156,6 +156,7 @@ public class SecurityService {
 		return false;
 	}
 	
+	@Deprecated
 	public Privilege getPrivilege(long id,Privileged priviledged) {
 		return modelService.getPrivilege(id, priviledged.getIdentity());
 	}
@@ -188,6 +189,7 @@ public class SecurityService {
 		return false;
 	}
 	
+	@Deprecated
 	public boolean canDelete(Item item,Privileged privileged) {
 		if (item instanceof User) {
 			User user = (User) item;
@@ -213,6 +215,31 @@ public class SecurityService {
 		return false;
 	}
 	
+	public boolean canDelete(Item item,Operator operator) {
+		if (item instanceof User) {
+			User user = (User) item;
+			if (isAdminUser(user)) {
+				return false;
+			}
+			if (isPublicUser(user)) {
+				return false;
+			}
+		}
+		if (isPublicUser(operator)) {
+			return false;
+		}
+		if (isAdminUser(operator)) {
+			return true;
+		}
+		List<Privileged> expand = expand(operator);
+		for (Privileged priv : expand) {
+			if (canExactlyDelete(item, priv, operator)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean canModify(Item item,Privileged privileged) {
 		if (isAdminUser(privileged)) {
 			return true;
@@ -238,6 +265,7 @@ public class SecurityService {
 		}
 	}
 	
+	@Deprecated
 	private boolean canExactlyDelete(Item item, Privileged privileged) {
 		Privilege privilege = getPrivilege(item.getId(), privileged);
 		if (privilege==null) {
@@ -246,7 +274,16 @@ public class SecurityService {
 			return privilege.isDelete();
 		}
 	}
-	
+
+	private boolean canExactlyDelete(Item item, Privileged other, Operator operator) {
+		Privilege privilege = modelService.getPrivilege(item.getId(), other.getIdentity(), operator.getOperation());
+		if (privilege==null) {
+			return false;
+		} else {
+			return privilege.isDelete();
+		}
+	}
+
 	private boolean canExactlyModify(Item item, Privileged privileged) {
 		Privilege privilege = getPrivilege(item.getId(), privileged);
 		if (privilege==null) {

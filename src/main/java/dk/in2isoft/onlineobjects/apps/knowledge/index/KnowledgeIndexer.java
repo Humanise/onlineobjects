@@ -85,12 +85,12 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		}).collect(Collectors.toList());
 	}
 	
-	public void reIndex(Privileged privileged) throws EndUserException {
+	public void reIndex(Operator operator) throws EndUserException {
 
-		clear(privileged);
+		clear(operator);
 		{
-			Query<InternetAddress> query = Query.after(InternetAddress.class).as(privileged);
-			Results<InternetAddress> scroll = modelService.scroll(query);
+			Query<InternetAddress> query = Query.after(InternetAddress.class).as(operator);
+			Results<InternetAddress> scroll = modelService.scroll(query, operator);
 			try {
 				while (scroll.next()) {
 					InternetAddress address = scroll.get();
@@ -101,8 +101,8 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			}
 		}
 		{
-			Query<Statement> query = Query.after(Statement.class).as(privileged);
-			Results<Statement> scroll = modelService.scroll(query);
+			Query<Statement> query = Query.after(Statement.class).as(operator);
+			Results<Statement> scroll = modelService.scroll(query, operator);
 			try {
 				while (scroll.next()) {
 					Statement statement = scroll.get();
@@ -113,8 +113,8 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			}
 		}
 		{
-			Query<Question> query = Query.after(Question.class).as(privileged);
-			Results<Question> scroll = modelService.scroll(query);
+			Query<Question> query = Query.after(Question.class).as(operator);
+			Results<Question> scroll = modelService.scroll(query, operator);
 			try {
 				while (scroll.next()) {
 					Question question = scroll.get();
@@ -125,8 +125,8 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			}
 		}
 		{
-			Query<Hypothesis> query = Query.after(Hypothesis.class).as(privileged);
-			Results<Hypothesis> scroll = modelService.scroll(query);
+			Query<Hypothesis> query = Query.after(Hypothesis.class).as(operator);
+			Results<Hypothesis> scroll = modelService.scroll(query, operator);
 			try {
 				while (scroll.next()) {
 					Hypothesis question = scroll.get();

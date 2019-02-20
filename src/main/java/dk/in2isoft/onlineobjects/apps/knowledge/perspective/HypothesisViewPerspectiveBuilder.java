@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -17,9 +17,9 @@ import dk.in2isoft.onlineobjects.model.User;
 public class HypothesisViewPerspectiveBuilder extends EntityViewPerspectiveBuilder {
 
 
-	public HypothesisViewPerspective build(long id, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
+	public HypothesisViewPerspective build(long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
 		@Nullable
-		Hypothesis question = modelService.get(Hypothesis.class, id, privileged);
+		Hypothesis question = modelService.get(Hypothesis.class, id, operator);
 		if (question == null) {
 			throw new ContentNotFoundException(Hypothesis.class, id);
 		}
@@ -27,17 +27,17 @@ public class HypothesisViewPerspectiveBuilder extends EntityViewPerspectiveBuild
 		perspective.setId(id);
 		perspective.setText(question.getText());
 
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
-		knowledgeService.categorize(question, perspective, user);
+		User user = modelService.getRequired(User.class, operator.getIdentity(), operator);
+		knowledgeService.categorize(question, perspective, user, operator);
 
-		List<Statement> supports = modelService.getParents(question, Relation.SUPPORTS, Statement.class, privileged);
-		List<Statement> contradicts = modelService.getParents(question, Relation.CONTRADTICS, Statement.class, privileged);
+		List<Statement> supports = modelService.getParents(question, Relation.SUPPORTS, Statement.class, operator);
+		List<Statement> contradicts = modelService.getParents(question, Relation.CONTRADTICS, Statement.class, operator);
 
 		HTMLWriter html = new HTMLWriter();
 
-		writeList(html, "Supporting", supports, privileged);
+		writeList(html, "Supporting", supports, operator);
 
-		writeList(html, "Contradicting", contradicts, privileged);
+		writeList(html, "Contradicting", contradicts, operator);
 		
 		perspective.setRendering(html.toString());
 		return perspective;

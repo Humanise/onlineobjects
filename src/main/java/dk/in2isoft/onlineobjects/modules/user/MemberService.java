@@ -29,6 +29,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.account.AccountController;
 import dk.in2isoft.onlineobjects.core.EntitylistSynchronizer;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -110,12 +111,22 @@ public class MemberService {
 		return ValidationUtil.isWellFormedEmail(email);
 	}
 
+	@Deprecated
 	public Image getUsersProfilePhoto(User user, Privileged privileged) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, privileged);
 	}
 	
+	public Image getUsersProfilePhoto(User user, Operator operator) throws ModelException {
+		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, operator);
+	}
+
+	@Deprecated
 	public Person getUsersPerson(User user, Privileged privileged) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, privileged);
+	}
+
+	public Person getUsersPerson(User user, Operator operator) throws ModelException {
+		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, operator);
 	}
 
 

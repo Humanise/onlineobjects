@@ -25,8 +25,10 @@ import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DecoratedDocument;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -72,11 +74,11 @@ public class InternetAddressViewPerspectiveBuilder {
 	private KnowledgeService knowledgeService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 
-	public InternetAddressViewPerspective build(Long id, Settings settings, User user) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
+	public InternetAddressViewPerspective build(Long id, Settings settings, User user, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException, SecurityException, ContentNotFoundException, SecurityException {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		watch.split();
-		InternetAddress address = modelService.get(InternetAddress.class, id, user);
+		InternetAddress address = modelService.get(InternetAddress.class, id, operator);
 		if (address == null) {
 			throw new IllegalRequestException("Not found");
 		}
@@ -97,7 +99,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setUrlText(Strings.simplifyURL(address.getAddress()));
 		article.setAuthors(getAuthors(address, user));
 
-		knowledgeService.categorize(address, article, user);
+		knowledgeService.categorize(address, article, user, operator);
 		trace("Categorize", watch);
 
 		loadStatements(address, article, user);
@@ -477,7 +479,6 @@ public class InternetAddressViewPerspectiveBuilder {
 	
 	public static class Settings {
 		private boolean highlight;
-		private String extractionAlgorithm;
 		private String cssNamespace;
 		
 		public Settings() {
@@ -490,14 +491,6 @@ public class InternetAddressViewPerspectiveBuilder {
 
 		public void setHighlight(boolean highlight) {
 			this.highlight = highlight;
-		}
-
-		public String getExtractionAlgorithm() {
-			return extractionAlgorithm;
-		}
-
-		public void setExtractionAlgorithm(String extractionAlgorithm) {
-			this.extractionAlgorithm = extractionAlgorithm;
 		}
 
 		public String getCssNamespace() {

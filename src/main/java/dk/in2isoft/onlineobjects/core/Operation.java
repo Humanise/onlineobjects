@@ -7,6 +7,7 @@ import org.hibernate.Session;
 
 import dk.in2isoft.onlineobjects.core.events.ModelEventType;
 import dk.in2isoft.onlineobjects.model.Item;
+import dk.in2isoft.onlineobjects.model.User;
 
 public class Operation {
 
@@ -32,6 +33,14 @@ public class Operation {
 
 	public void addCreateEvent(Item item) {
 		events.add(Pair.of(ModelEventType.create, item));
+	}
+
+	public void addPrivilegesRemoved(Item item, List<User> users) {
+		events.add(Pair.of(ModelEventType.privilegesRemoved, Pair.of(item, users)));
+	}
+
+	public void addDeleteEvent(Item item) {
+		events.add(Pair.of(ModelEventType.delete, item));		
 	}
 }
 
