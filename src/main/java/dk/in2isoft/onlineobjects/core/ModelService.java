@@ -261,7 +261,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			try {
 				session.flush();
 				session.clear();
-				log.info("Commit transaction!");
+				log.debug("Commit transaction!");
 				tx.commit();
 				for (Pair<ModelEventType, Object> event : operation.getEvents()) {
 					ModelEventType type = event.getKey();
@@ -269,8 +269,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 					if (object instanceof Item && type == ModelEventType.update) {
 						eventService.fireItemWasUpdated((Item) object);
 					}
+					if (object instanceof Item && type == ModelEventType.create) {
+						eventService.fireItemWasCreated((Item) object);
+					}
 				}
-				log.info("Did commit transaction!");
+				log.debug("Did commit transaction!");
 			} catch (HibernateException e) {
 				log.error("Rolling back!", e);
 				tx.rollback();
@@ -327,8 +330,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return session;
 	}
 
-	protected <T> Query<T> createQuery(String hql, Class<T> type, Operation operation) {
-		return operation.getSession().createQuery(hql, type);
+	protected <T> Query<T> createQuery(String hql, Class<T> type, Session session) {
+		return session.createQuery(hql, type);
 	}
 
 	protected <T> Query<T> createQuery(String hql, Class<T> type) {
@@ -398,6 +401,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	public void createOrUpdate(Item item, Privileged privileged) throws ModelException, SecurityException {
 		if (item.isNew()) {
 			createItem(item, privileged, getSession());
+			eventService.fireItemWasCreated(item);
 		} else {
 			update(item, privileged);
 		}
@@ -413,14 +417,12 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
+		eventService.fireItemWasCreated(item);
 	}
 
 	public void create(Item item, Operator operator) throws ModelException, SecurityException {
 		createItem(item, operator, operator.getOperation().getSession());
-	}
-
-	public void create(Item item, Privileged privileged, Session session) throws ModelException, SecurityException {
-		createItem(item, privileged, session);
+		operator.getOperation().addCreateEvent(item);
 	}
 
 	public boolean isDirty() {
@@ -444,9 +446,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		item.setUpdated(new Date());
 		session.save(item);
 		if (!securityService.isAdminUser(privileged)) {
-			grantPrivilegesPrivately(item, privileged, true, true, true);
+			grantPrivilegesPrivately(item, privileged, true, true, true, session);
 		}
-		eventService.fireItemWasCreated(item);
 	}
 	
 
@@ -867,7 +868,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 	
 	public Privilege getPrivilege(long object, long subject) {
-		List<Privilege> list = getPrivileges(object, subject);
+		List<Privilege> list = getPrivileges(object, subject, getSession());
 		if (list.size()>1) {
 			log.error("Got multiple privileges for object="+object+", subject="+subject);
 		}
@@ -886,8 +887,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return q.list();
 	}
 
-	private List<Privilege> getPrivileges(long object, long subject) {
-		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject", Privilege.class);
+	private List<Privilege> getPrivileges(long object, long subject, Session session) {
+		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject", Privilege.class, session);
 		q.setParameter("object", object);
 		q.setParameter("subject", subject);
 		return q.list();
@@ -1043,9 +1044,17 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	public <T> SearchResult<T> search(ItemQuery<T> query) {
-		Query<Long> cq = query.createCountQuery(getSession());
+		return search(query, getSession());
+	}
+
+	public <T> SearchResult<T> search(ItemQuery<T> query, Operator operator) {
+		return search(query, operator.getOperation().getSession());
+	}
+
+	private <T> SearchResult<T> search(ItemQuery<T> query, Session session) {
+		Query<Long> cq = query.createCountQuery(session);
 		Long count = cq.list().iterator().next();
-		Query<T> q = query.createItemQuery(getSession());
+		Query<T> q = query.createItemQuery(session);
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<T> items = q.list();
 		for (int i = 0; i < items.size(); i++) {
@@ -1113,13 +1122,12 @@ public class ModelService implements InitializingBean, OperationProvider {
 				}
 			}
 		}
-		grantPrivilegesPrivately(item, user, view, alter, delete);
+		grantPrivilegesPrivately(item, user, view, alter, delete, getSession());
 	}
 
-	private void grantPrivilegesPrivately(Item item, Privileged user, boolean view, boolean alter, boolean delete) throws ModelException, SecurityException {
+	private void grantPrivilegesPrivately(Item item, Privileged user, boolean view, boolean alter, boolean delete, Session session) throws ModelException, SecurityException {
 
-		Session session = getSession();
-		List<Privilege> list = getPrivileges(item.getId(), user.getIdentity());
+		List<Privilege> list = getPrivileges(item.getId(), user.getIdentity(), session);
 		Privilege privilege;
 		if (list.size()==0) {
 			privilege = new Privilege(user.getIdentity(), item.getId());

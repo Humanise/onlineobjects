@@ -281,6 +281,8 @@ public class SecurityService {
 		return admin!=null && privileged.getIdentity() == admin.getIdentity();
 	}
 
+	@Deprecated
+	// Should use operator
 	public User getUserBySecret(String secret) {
 		if (Strings.isBlank(secret)) {
 			return null;
@@ -290,7 +292,17 @@ public class SecurityService {
 		SearchResult<User> result = modelService.search(q);
 		return result.getFirst();		
 	}
-	
+
+	public User getUserBySecret(String secret, Operator operator) {
+		if (Strings.isBlank(secret)) {
+			return null;
+		}
+		UserQuery q = new UserQuery();
+		q.setSecret(secret);
+		SearchResult<User> result = modelService.search(q, operator);
+		return result.getFirst();		
+	}
+
 	public String getSecret(ClientInfo info, User user) throws ModelException, SecurityException {
 		String secret;
 		Query<Client> q = Query.after(Client.class).withField("UUID", info.getUUID()).as(user).withPaging(0, 1);
@@ -371,7 +383,7 @@ public class SecurityService {
 	public void ensureUserSession(Request request) throws SecurityException {
 		String key = getKey(request.getRequest());
 		if (key!=null) {
-			User user = getUserBySecret(key);
+			User user = getUserBySecret(key, request);
 			if (user==null) {
 				try {
 					Thread.sleep(1500);

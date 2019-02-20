@@ -53,7 +53,7 @@ public class KnowledgeService {
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
 
-	public Question createQuestion(String text, Privileged user) throws ModelException, SecurityException, IllegalRequestException {
+	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("The question is empty");
 		}
@@ -61,7 +61,7 @@ public class KnowledgeService {
 		Question question = new Question();
 		question.setText(text);
 		question.setName(text);
-		modelService.create(question, user);
+		modelService.create(question, operator);
 		return question;
 	}
 
@@ -94,11 +94,6 @@ public class KnowledgeService {
 	}
 
 	public void deleteQuestion(Long id, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
-		Question question = modelService.getRequired(Question.class, id, privileged);
-		modelService.delete(question, privileged);
-	}
-
-	public void deleteQuestion(Long id, Operator privileged) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, privileged);
 		modelService.delete(question, privileged);
 	}
@@ -141,10 +136,10 @@ public class KnowledgeService {
 
 	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
 
-		Pile inbox = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_INBOX);
-		Pile favorites = pileService.getOrCreatePileByRelation(user, Relation.KIND_SYSTEM_USER_FAVORITES);
+		Pile inbox = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_INBOX);
+		Pile favorites = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_FAVORITES);
 
-		List<Pile> piles = modelService.getParents(entity, Pile.class, operator);
+		List<Pile> piles = modelService.getParents(entity, null, Pile.class, operator);
 		for (Pile pile : piles) {
 			if (pile.getId() == inbox.getId()) {
 				perspective.setInbox(true);

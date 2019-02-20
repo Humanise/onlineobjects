@@ -15,7 +15,6 @@ import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.ui.AbstractController;
-import dk.in2isoft.onlineobjects.ui.HUIService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class ApplicationController extends AbstractController implements ModelEventListener,InitializingBean {

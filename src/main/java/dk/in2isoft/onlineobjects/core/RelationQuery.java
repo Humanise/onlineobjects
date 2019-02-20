@@ -140,7 +140,7 @@ public class RelationQuery {
 	private Query<Relation> getQuery() {
 		Query<Relation> query;
 		if (operation != null) {
-			query = modelService.createQuery(getHQL(), Relation.class, operation);
+			query = modelService.createQuery(getHQL(), Relation.class, operation.getSession());
 		} else {
 			query = modelService.createQuery(getHQL(), Relation.class);
 		}

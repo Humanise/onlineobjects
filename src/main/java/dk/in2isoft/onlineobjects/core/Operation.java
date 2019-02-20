@@ -29,5 +29,9 @@ public class Operation {
 	public List<Pair<ModelEventType, Object>> getEvents() {
 		return events;
 	}
+
+	public void addCreateEvent(Item item) {
+		events.add(Pair.of(ModelEventType.create, item));
+	}
 }
 

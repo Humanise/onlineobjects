@@ -289,28 +289,28 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "question", "update" })
 	public QuestionApiPerspective updateQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		User user = modelService.getUser(request);
+		User user = modelService.getUser2(request);
 		Long id = request.getId();
 		Question dummy = new Question();
 		dummy.setId(id);
 		dummy.setText(request.getString("text", "Text is required"));
-		knowledgeService.updateQuestion(dummy, user);
-		modelService.commit();
-		return knowledgeService.getQuestionPerspective(id, user);
+		knowledgeService.updateQuestion(dummy, request);
+		request.commit();
+		return knowledgeService.getQuestionPerspective(id, user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "add" })
 	public QuestionApiPerspective addQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		User user = modelService.getUser(request);
+		User user = modelService.getUser2(request);
 		String string = request.getString("text");
 		Long statementId = request.getLong("statementId", null);
-		Question question = knowledgeService.createQuestion(string, user);
+		Question question = knowledgeService.createQuestion(string, request);
 		if (statementId!=null) {
-			Statement statement = modelService.getRequired(Statement.class, statementId, user);
+			Statement statement = modelService.getRequired(Statement.class, statementId, request);
 			relate(user, question, statement);
 		}
-		return knowledgeService.getQuestionPerspective(question.getId(), user);
+		return knowledgeService.getQuestionPerspective(question.getId(), user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question", "delete" })

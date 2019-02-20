@@ -125,7 +125,7 @@ public abstract class AbstractController {
 			Object result = method.invoke(this, new Object[] { request });
 			Class<?> returnType = method.getReturnType();
 			View view = method.getDeclaredAnnotation(View.class);
-			if (view.ui().length > 0) {
+			if (view != null && view.ui().length > 0) {
 				FileBasedInterface ui = new FileBasedInterface(getFile(view.ui()), huiService);
 				ui.render(request.getRequest(), request.getResponse());
 			}
