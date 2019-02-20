@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.Duration;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.google.common.collect.Lists;
 import com.hp.hpl.jena.graph.Graph;
@@ -23,7 +24,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 import dk.in2isoft.onlineobjects.test.AbstractTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestWordNetRDF extends AbstractTestCase {
 
 	private static final Logger log = LogManager.getLogger(TestWordNetRDF.class);

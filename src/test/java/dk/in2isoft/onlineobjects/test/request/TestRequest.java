@@ -9,13 +9,16 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
 
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import dk.in2isoft.onlineobjects.ui.Request;
 
+@Category(EssentialTests.class)
 public class TestRequest extends AbstractSpringTestCase {
 
 	@Test

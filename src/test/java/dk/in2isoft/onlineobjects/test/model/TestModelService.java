@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -19,7 +20,9 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestModelService extends AbstractSpringTestCase {
 	
 	@Test

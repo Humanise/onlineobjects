@@ -2,11 +2,14 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentToText;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import junit.framework.TestCase;
 
+@Category(EssentialTests.class)
 public class TestDocumentToText extends TestCase {
 
 	@Test

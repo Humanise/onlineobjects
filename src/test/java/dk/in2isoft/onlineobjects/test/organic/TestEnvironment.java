@@ -1,12 +1,15 @@
 package dk.in2isoft.onlineobjects.test.organic;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.onlineobjects.modules.organic.Cell;
 import dk.in2isoft.onlineobjects.modules.organic.ChattyCell;
 import dk.in2isoft.onlineobjects.modules.organic.Environment;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestEnvironment extends AbstractSpringTestCase {
 	
 	@Test

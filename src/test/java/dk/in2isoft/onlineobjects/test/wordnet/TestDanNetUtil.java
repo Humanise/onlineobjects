@@ -3,11 +3,14 @@ package dk.in2isoft.onlineobjects.test.wordnet;
 import java.util.Iterator;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetGlossary;
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetUtil;
 import dk.in2isoft.onlineobjects.test.AbstractTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestDanNetUtil extends AbstractTestCase {
 
 	//private static final Logger log = LogManager.getLogger(TestDanNetUtil.class);

@@ -1,11 +1,14 @@
 package dk.in2isoft.onlineobjects.test.plain;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 import junit.framework.TestCase;
 
+@Category(EssentialTests.class)
 public class TestValidationUtil extends TestCase {
 	
 	//private static Logger log = LogManager.getLogger(TestLangUtil.class);

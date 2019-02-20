@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mozilla.javascript.ErrorReporter;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
@@ -13,7 +14,9 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestCompression extends AbstractSpringTestCase {
 	
 	@Test

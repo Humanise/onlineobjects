@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Files;
@@ -16,7 +17,9 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestNetworkService extends AbstractSpringTestCase {
 	
 	//private static Logger log = LogManager.getLogger(TestNetworkService.class);

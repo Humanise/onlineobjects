@@ -5,14 +5,17 @@ import java.util.Map.Entry;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.onlineobjects.modules.information.recognizing.TitleRecognizer;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 import junit.framework.TestCase;
 import nu.xom.Document;
 import nu.xom.Element;
 
+@Category(EssentialTests.class)
 public class TestTitleRecognizer extends TestCase {
 
 	@Test

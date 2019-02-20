@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.test.model;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -9,7 +10,9 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestModelPerformance extends AbstractSpringTestCase {
 
 	@Autowired

@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.test.model;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -12,7 +13,9 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestUsersPersonQuery extends AbstractSpringTestCase {
     	
 	@Test

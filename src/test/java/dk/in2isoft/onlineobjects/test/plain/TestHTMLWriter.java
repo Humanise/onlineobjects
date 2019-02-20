@@ -4,9 +4,12 @@ import junit.framework.TestCase;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestHTMLWriter extends TestCase {
 
 	@Test

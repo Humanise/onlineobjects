@@ -5,10 +5,13 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import junit.framework.TestCase;
 
+@Category(EssentialTests.class)
 public class TestStrings extends TestCase {
 	
 	private static Logger log = LogManager.getLogger(TestStrings.class);

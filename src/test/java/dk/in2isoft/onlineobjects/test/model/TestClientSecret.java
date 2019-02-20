@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -22,7 +23,9 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestClientSecret extends AbstractSpringTestCase {
     
 	@Autowired
@@ -34,7 +37,7 @@ public class TestClientSecret extends AbstractSpringTestCase {
 	@Test
 	public void testGettingSecret() throws EndUserException {
 		try {
-		User user = createMemeber();
+		User user = createMember();
 		
 		String clientId = UUID.randomUUID().toString();
 		ClientInfo clientInfo = new ClientInfo("Test client");
@@ -62,7 +65,7 @@ public class TestClientSecret extends AbstractSpringTestCase {
 
 		assertEquals(secret, secretAgain);
 
-		User otherUser = createMemeber();
+		User otherUser = createMember();
 		ClientInfo otherClientInfo = new ClientInfo("Test client");
 		otherClientInfo.setUUID(UUID.randomUUID().toString());
 		String otherSecret = securityService.getSecret(otherClientInfo, otherUser);
@@ -93,7 +96,7 @@ public class TestClientSecret extends AbstractSpringTestCase {
 		//apiController.authentication(request);
 	}
 
-	private User createMemeber() throws IllegalRequestException, EndUserException, ModelException {
+	private User createMember() throws IllegalRequestException, EndUserException, ModelException {
 		String username = getUniqueTestUserName();
 		String password = "zup4$seKr8";
 		String fullName = "Dummy Test User";

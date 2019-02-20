@@ -7,13 +7,16 @@ import junit.framework.TestCase;
 
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
 import dk.in2isoft.commons.lang.StringSearcher;
 import dk.in2isoft.commons.lang.StringSearcher.Result;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestStringSearcher extends TestCase {
 	
 	private static final Logger log = LogManager.getLogger(TestStringSearcher.class);

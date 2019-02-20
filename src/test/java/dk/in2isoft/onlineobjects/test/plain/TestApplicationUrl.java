@@ -2,10 +2,14 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import java.util.Collection;
 
+import org.junit.experimental.categories.Category;
+
 import junit.framework.TestCase;
 import dk.in2isoft.onlineobjects.model.Application;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestApplicationUrl extends TestCase {
 	
 	public void test() {

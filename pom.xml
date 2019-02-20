@@ -15,15 +15,9 @@
 
   <profiles>
       <profile>
-          <id>SlowTests</id>
+          <id>EssentialTests</id>
           <properties>
-              <testcase.groups>dk.in2isoft.onlineobjects.test.SlowTests</testcase.groups>
-          </properties>
-      </profile>
-      <profile>
-          <id>FastTests</id>
-          <properties>
-              <testcase.groups>dk.in2isoft.onlineobjects.test.FastTests</testcase.groups>
+              <testcase.groups>dk.in2isoft.onlineobjects.test.EssentialTests</testcase.groups>
           </properties>
       </profile>
   </profiles>
@@ -727,18 +721,5 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Get rid of this... -->
-    <!--
-    <dependency>
-      <groupId>org.directwebremoting</groupId>
-      <artifactId>dwr</artifactId>
-      <version>3.0.0-rc3-RELEASE</version>
-    </dependency>-->
-    <!-- Geography -->
-    <dependency>
-      <groupId>org.geonames</groupId>
-      <artifactId>geonames</artifactId>
-      <version>1.0</version>
-    </dependency>
   </dependencies>
 </project>

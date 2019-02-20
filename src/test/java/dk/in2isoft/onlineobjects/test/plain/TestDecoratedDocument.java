@@ -11,14 +11,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.xml.DecoratedDocument;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+@Category(EssentialTests.class)
 public class TestDecoratedDocument extends AbstractSpringTestCase {
 
 	private Logger log = LogManager.getLogger(TestDecoratedDocument.class);

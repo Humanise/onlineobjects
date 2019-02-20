@@ -2,12 +2,15 @@ package dk.in2isoft.onlineobjects.test.plain;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.services.PersonService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestPersonName extends AbstractSpringTestCase {
 
 	@Autowired

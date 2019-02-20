@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.MimeTypes;
@@ -17,10 +18,12 @@ import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Location;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import dk.in2isoft.onlineobjects.util.images.ImageMetaData;
 import dk.in2isoft.onlineobjects.util.images.ImageProperties;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
+@Category(EssentialTests.class)
 public class TestImageService extends AbstractSpringTestCase {
 	
 	@Autowired

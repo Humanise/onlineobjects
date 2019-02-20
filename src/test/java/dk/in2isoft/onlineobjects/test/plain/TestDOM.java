@@ -9,14 +9,17 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.w3c.dom.Document;
 
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.Serializing;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import junit.framework.TestCase;
 
+@Category(EssentialTests.class)
 public class TestDOM extends TestCase {
 
 	@Test

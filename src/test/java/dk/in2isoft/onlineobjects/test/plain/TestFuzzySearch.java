@@ -10,10 +10,13 @@ import nu.xom.ValidityException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.lang.StringSearcher;
 import dk.in2isoft.commons.lang.StringSearcher.Result;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 
+@Category(EssentialTests.class)
 public class TestFuzzySearch extends TestCase {
 
 	//private Logger log = LogManager.getLogger(TestFuzzySearch.class);

@@ -2,11 +2,14 @@ package dk.in2isoft.onlineobjects.test.hui;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import dk.in2isoft.onlineobjects.ui.HUIService;
 
+@Category(EssentialTests.class)
 public class TestRendering extends AbstractSpringTestCase {
 	
 	//private static Logger log = LogManager.getLogger(TestRendering.class);

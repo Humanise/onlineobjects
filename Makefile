@@ -5,6 +5,9 @@ include Makefile.config
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 test:
+	mvn test -q -P EssentialTests
+
+test-all:
 	mvn test -q
 
 extract:

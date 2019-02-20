@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -54,10 +55,12 @@ import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.HTMLService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 import nu.xom.Document;
 import nu.xom.Serializer;
 
+@Category(EssentialTests.class)
 public class TestExtractionComparison extends AbstractSpringTestCase {
 	
 	@Autowired

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -45,6 +46,9 @@ public class TestComparison extends AbstractSpringTestCase {
 	}
 
 	private void compareUrls(File[] urls, Language language) {
+		StopWatch watch = new StopWatch();
+		log.info("Reading files...");
+		watch.start();
 		Map<String,String> docs = Maps.newHashMap();
 		for (File url : urls) {
 			HTMLDocument document = htmlService.getDocumentSilently(url, Strings.UTF8);
@@ -53,15 +57,27 @@ public class TestComparison extends AbstractSpringTestCase {
 				if (text == null) {
 					throw new IllegalStateException("No text for "+url);
 				}
-				docs.put(document.getTitle()+" : "+url, text);
+				docs.put(document.getTitle().replace(" - Wikipedia", ""), text);
 			}
 		}
+		watch.split();
+		log.info("Files read: " + watch.getSplitTime());
 		
 		Matrix<String, String, Double> matrix = new Matrix<String, String, Double>();
 		for (Entry<String, String> doc1 : docs.entrySet()) {
 			for (Entry<String, String> doc2 : docs.entrySet()) {
+				if (matrix.getValue(doc1.getKey(), doc2.getKey()) != null) {
+					continue;
+				}
+				if (matrix.getValue(doc2.getKey(), doc1.getKey()) != null) {
+					continue;
+				}
+				watch.reset();
+				watch.start();
 				double comparison = semanticService.compare(doc1.getValue(), doc2.getValue(),language);
 				matrix.put(doc1.getKey(), doc2.getKey(), comparison);
+				watch.stop();
+				log.info("Comparing: {} to {} in {}", doc1.getKey(), doc2.getKey(), watch.getTime());
 			}
 		}
 		

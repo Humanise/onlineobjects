@@ -6,7 +6,11 @@ import java.util.regex.Pattern;
 import junit.framework.TestCase;
 
 import org.junit.Assert;
+import org.junit.experimental.categories.Category;
 
+import dk.in2isoft.onlineobjects.test.EssentialTests;
+
+@Category(EssentialTests.class)
 public class TestRegExp extends TestCase {
 
 	public void test() {

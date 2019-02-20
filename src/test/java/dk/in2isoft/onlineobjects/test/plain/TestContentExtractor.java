@@ -5,14 +5,17 @@ import java.net.MalformedURLException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.onlineobjects.modules.information.SimpleContentExtractor;
 import dk.in2isoft.onlineobjects.modules.information.recognizing.ListRecognizer;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
+import dk.in2isoft.onlineobjects.test.EssentialTests;
 import nu.xom.Document;
 import nu.xom.Element;
 
+@Category(EssentialTests.class)
 public class TestContentExtractor extends AbstractSpringTestCase {
 	
 	@Test
