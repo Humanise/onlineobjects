@@ -297,6 +297,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	private Session getSession() {
 		threadIsDirty.set("started");
 		Session session = sessionFactory.getCurrentSession();
@@ -323,38 +324,46 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 		return session;
 	}
-	
+
+	@Deprecated
 	public Session newSession() {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		return session;
 	}
 
+	@Deprecated
 	protected <T> Query<T> createQuery(String hql, Class<T> type, Session session) {
 		return session.createQuery(hql, type);
 	}
 
+	@Deprecated
 	protected <T> Query<T> createQuery(String hql, Class<T> type) {
 		return getSession().createQuery(hql, type);
 	}
 
+	@Deprecated
 	protected Query<?> createQuery(String hql) {
 		return getSession().createQuery(hql);
 	}
 
+	@Deprecated
 	public void addToSession(Item item) {
 		getSession().merge(item);
 	}
-	
+
+	@Deprecated
 	public void clearAndFlush() {
 		getSession().clear();
 		getSession().flush();
 	}
 
+	@Deprecated
 	public void commit() {
 		commit(getSession());
 	}
 
+	@Deprecated
 	public void commit(Session session) {
 		Transaction tx = session.getTransaction();
 		if (tx.isActive()) {
@@ -373,11 +382,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 			log.error("Unable to commit inactive transaction");
 		}
 	}
-	
+
+	@Deprecated
 	public void startThread() {
 		threadIsDirty.set("newborn");
 	}
-	
+
+	@Deprecated
 	public void commitThread() {
 		String dirty = threadIsDirty.get();
 		if ("started".equals(dirty)) {
@@ -385,6 +396,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public void rollBack() {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
@@ -398,6 +410,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public void createOrUpdate(Item item, Privileged privileged) throws ModelException, SecurityException {
 		if (item.isNew()) {
 			createItem(item, privileged, getSession());
@@ -407,14 +420,17 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public void create(LogEntry entry) {
 		create(entry, getSession());
 	}
 
+	@Deprecated
 	public void create(LogEntry entry, Session session) {
 		session.save(entry);
 	}
 
+	@Deprecated
 	public void create(Item item, Privileged privileged) throws ModelException, SecurityException {
 		createItem(item, privileged, getSession());
 		eventService.fireItemWasCreated(item);
@@ -425,6 +441,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		operator.getOperation().addCreateEvent(item);
 	}
 
+	@Deprecated
 	public boolean isDirty() {
 		return getSession().isDirty();
 	}
@@ -456,6 +473,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	 * @param user
 	 * @throws SecurityException
 	 */
+	@Deprecated
 	public void createCoreUser(User user) throws SecurityException {
 		if (!securityService.isCoreUser(user)) {
 			throw new SecurityException("The user is not a core user");
@@ -470,6 +488,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		session.save(user);
 	}
 
+	@Deprecated
 	public void delete(Item item, Privileged privileged) throws ModelException, SecurityException {
 		if (item instanceof Entity) {
 			deleteEntity((Entity)item, privileged);
@@ -478,6 +497,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	private void deleteEntity(Entity entity, Privileged privileged) throws ModelException, SecurityException {
 		if (!canDelete(entity, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot delete Entity=" + entity);
@@ -511,12 +531,14 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public <T extends Item> void delete(List<T> items, Privileged privileged) throws SecurityException, ModelException {
 		for (Item item : items) {
 			deleteItem(item, privileged);
 		}
 	}
 
+	@Deprecated
 	private void deleteItem(Item item, Privileged privileged) throws SecurityException, ModelException {
 		if (!canDelete(item, privileged)) {
 			throw new SecurityException("Privilieged=" + privileged + " cannot delete Item=" + item);
@@ -546,6 +568,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		
 	}
 
+	@Deprecated
 	public void update(Item item, Privileged privileged) throws SecurityException,
 			ModelException {
 		if (!canUpdate(item, privileged)) {
@@ -567,7 +590,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
-	
+
+	@Deprecated
 	public <T extends Entity> void syncRelationsFrom(Entity fromEntity, String relationKind, Class<T> toType, Collection<Long> ids, Privileged privileged) throws ModelException, SecurityException {
 		List<Relation> relations = this.getRelationsFrom(fromEntity, toType, relationKind, privileged);
 		List<Long> toAdd = Lists.newArrayList();
@@ -586,8 +610,10 @@ public class ModelService implements InitializingBean, OperationProvider {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public boolean canCreate(Item item, Privileged privileged) {
+		// TODO: What does this mean...
 		if (privileged.getIdentity() < 1) {
 			return false;
 		}
@@ -608,6 +634,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return false;
 	}
 
+	@Deprecated
 	public boolean canUpdate(Item item, Privileged privileged) {
 		if (securityService.isAdminUser(privileged)) {
 			return true;
@@ -621,11 +648,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 		return false;
 	}
-	
+
+	@Deprecated
 	private boolean canDelete(Item item, Privileged privileged) {
 		return securityService.canDelete(item, privileged);
 	}
 
+	@Deprecated
 	public <T extends Entity> @NonNull T getRequired(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Privileged privileged) throws ModelException,ContentNotFoundException {
 		@Nullable
 		T found = get(entityClass, id, privileged);
@@ -651,6 +680,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return getFirst(query, operator);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T get(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(entityClass);
 		setPrivileged(privileged, query);
@@ -662,6 +692,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 
+	@Deprecated
 	public Relation createRelation(Entity from, Entity to, Privileged privileged) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;
@@ -672,6 +703,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	// TODO make kind the second argument
+	@Deprecated
 	public Relation createRelation(Entity from, Entity to, String kind, Privileged privileged) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;
@@ -692,6 +724,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return relation;
 	}
 
+	@Deprecated
 	public List<Relation> getRelations(Entity entity, Privileged privileged) throws ModelException, SecurityException {
 		// TODO: Extend RelationQuery to support this
 		if (!securityService.isAdminUser(privileged)) {
@@ -703,18 +736,22 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return q.list();
 	}
 
+	@Deprecated
 	public List<Relation> getRelationsFrom(Entity entity, Class<? extends Entity> clazz, Privileged privileged) throws ModelException {
 		return find().relations(privileged).from(entity).to(clazz).list();
 	}
 
+	@Deprecated
 	public List<Relation> getRelationsFrom(Entity entity, Class<? extends Entity> clazz, String relationKind, Privileged privileged) throws ModelException {
 		return find().relations(privileged).from(entity).to(clazz).withKind(relationKind).list();
 	}
 
+	@Deprecated
 	public List<Relation> getRelationsTo(Entity entity, Class<? extends Entity> clazz, String relationKind, Privileged privileged) throws ModelException {
 		return find().relations(privileged).to(entity).from(clazz).withKind(relationKind).list();
 	}
 
+	@Deprecated
 	public <T> List<T> getParents(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity);
@@ -722,6 +759,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getParents(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind);
@@ -736,10 +774,12 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(q, operator);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		return getParent(entity, null, classObj, privileged);
 	}
 
+	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, String kind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.to(entity,kind).withPaging(0, 1);
@@ -768,6 +808,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public User getUser(String username) {
 		Session session = null;
 		try {
@@ -807,6 +848,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return getRequired(User.class, operator.getIdentity(), operator);
 	}
 
+	@Deprecated
 	public Privilege getPriviledge(Item item, Privileged priviledged) {
 		return getPriviledge(item, priviledged, getSession());
 	}
@@ -824,23 +866,27 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public List<Privilege> getPrivileges(Item item) {
 		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object", Privilege.class);
 		q.setParameter("object", item.getId());
 		return q.list();
 	}
-	
+
+	@Deprecated
 	public User getOwner(Item item, Privileged privileged) throws ModelException {
 		Query<User> q = buildOwnerQuery(item, privileged);
 		q.setMaxResults(1);
 		return getSubject(q.uniqueResult());
 	}
 
+	@Deprecated
 	public List<User> getOwners(Item item, Privileged privileged) throws ModelException {
 		Query<User> q = buildOwnerQuery(item, privileged);
 		return getSubjects(q.list());
 	}
 
+	@Deprecated
 	private Query<User> buildOwnerQuery(Item item, Privileged privileged) {
 		String hql = "select user from User as user, Privilege as itemPriv";
 		if (!securityService.isAdminUser(privileged)) {
@@ -866,7 +912,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 		return q;
 	}
-	
+
+	@Deprecated
 	public Privilege getPrivilege(long object, long subject) {
 		List<Privilege> list = getPrivileges(object, subject, getSession());
 		if (list.size()>1) {
@@ -880,6 +927,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public List<Long> getPrivilegedUsers(long object) {
 		Query<Long> q = createQuery("select subject from Privilege as priv where priv.object=:object and priv.subject!=:public", Long.class);
 		q.setParameter("object", object);
@@ -887,6 +935,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return q.list();
 	}
 
+	@Deprecated
 	private List<Privilege> getPrivileges(long object, long subject, Session session) {
 		Query<Privilege> q = createQuery("from Privilege as priv where priv.object=:object and priv.subject=:subject", Privilege.class, session);
 		q.setParameter("object", object);
@@ -894,10 +943,12 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return q.list();
 	}
 
+	@Deprecated
 	public void removePrivileges(Item object, Privileged subject) throws SecurityException {
 		removePrivileges(object, subject, subject);
 	}
 
+	@Deprecated
 	public void removePrivileges(Item object, Privileged subject, Privileged user) throws SecurityException {
 		if (!securityService.canModify(object, user)) {
 			throw new SecurityException("The user "+subject+" cannot modify "+object+" - so cannot remove privileges");
@@ -909,16 +960,19 @@ public class ModelService implements InitializingBean, OperationProvider {
 		log.info("Deleting privileges for: " + object.getClass().getName() + "; count: " + count);
 	}
 
+	@Deprecated
 	public List<Long> listIds(IdQuery query) {
 		Query<Long> q = query.createIdQuery(getSession());
 		return q.list();
 	}
 
+	@Deprecated
 	public <T> Results<T> scroll(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession()).setReadOnly(true).setFetchSize(0).setCacheable(false).setCacheMode(CacheMode.IGNORE);
 		return new Results<T>(q.scroll(ScrollMode.FORWARD_ONLY));
 	}
-	
+
+	@Deprecated
 	public List<Object[]> querySQL(String sql) throws ModelException {
 		try {
 			NativeQuery<?> query = getSession().createSQLQuery(sql);
@@ -933,6 +987,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(query, operator.getOperation().getSession());
 	}
 
+	@Deprecated
 	public <T> List<T> list(CustomQuery<T> query) throws ModelException {
 		return list(query, getSession());
 	}
@@ -965,6 +1020,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public <T> SearchResult<T> search(CustomQuery<T> query) throws ModelException {
 		String sql = query.getSQL();
 		try {
@@ -985,6 +1041,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	@Deprecated
 	public <T> int count(CustomQuery<T> query) {
 
 		String countSQL = query.getCountSQL();
@@ -1010,6 +1067,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return items;
 	}
 
+	@Deprecated
 	public <T> List<T> list(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession());
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -1032,6 +1090,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 
+	@Deprecated
 	public <T> @Nullable T getFirst(ItemQuery<T> query) {
 		Query<T> q = query.createItemQuery(getSession());
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -1043,6 +1102,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 
+	@Deprecated
 	public <T> SearchResult<T> search(ItemQuery<T> query) {
 		return search(query, getSession());
 	}
@@ -1064,11 +1124,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return new SearchResult<T>(items,count.intValue());
 	}
 
+	@Deprecated
 	public Long count(ItemQuery<?> query) {
 		Query<Long> cq = query.createCountQuery(getSession());
 		return cq.list().iterator().next();
 	}
 
+	@Deprecated
 	public <T,U> PairSearchResult<T,U> searchPairs(PairQuery<T,U> query) {
 		Query<Long> cq = query.createCountQuery(getSession());
 		Long count = cq.list().iterator().next();
@@ -1086,6 +1148,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return new PairSearchResult<T,U>(map,count.intValue());
 	}
 
+	@Deprecated
 	public void grantPrivileges(Item item, Privileged user, boolean view, boolean alter, boolean delete, Privileged granter) throws ModelException, SecurityException {
 		if (!securityService.canModify(item, granter)) {
 			throw new SecurityException("The granter cannot modify the privileges");
@@ -1145,6 +1208,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		session.save(privilege);
 	}
 
+	@Deprecated
 	private void removeAllPrivileges(Item item) {
 
 		Query<User> query = createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id", User.class);
@@ -1164,6 +1228,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		eventService.firePrivilegesRemoved(item,users);
 	}
 
+	@Deprecated
 	public List<Entity> getChildren(Entity item, String relationKind, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<Entity> q = dk.in2isoft.onlineobjects.core.Query.of(Entity.class);
 		q.from(item,relationKind);
@@ -1178,6 +1243,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(query, operator);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildren(Entity item, String relationKind, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		query.from(item,relationKind);
@@ -1190,7 +1256,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 			query.as(privileged,securityService.getPublicUser());
 		}
 	}
-	
+
+	@Deprecated
 	public <T> List<T> getChildren(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity);
@@ -1198,13 +1265,15 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(q);
 	}
 
+	@Deprecated
 	public <T> List<T> getChildrenOrdered(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
 		q.from(entity).inPosition();
 		setPrivileged(privileged, q);
 		return list(q);
 	}
-	
+
+	@Deprecated
 	public Map<String, Integer> getProperties(String key, Class<? extends Entity> cls, Privileged priviledged) {
 		StringBuilder hql = new StringBuilder();
 		hql.append("select p.value as value,count(p.id) as count from ");
@@ -1227,14 +1296,17 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list;
 	}
 
+	@Deprecated
 	public Optional<Relation> getRelation(long id, Privileged privileged) {
 		return find().relations(privileged).withId(id).first();
 	}
 
+	@Deprecated
 	public Optional<Relation> getRelation(Entity from, Entity to, String kind, Privileged privileged) {
 		return find().relations(privileged).from(from).to(to).withKind(kind).first();
 	}
 
+	@Deprecated
 	public Optional<Relation> getRelation(Entity from, Entity to, Privileged privileged) {
 		return find().relations(privileged).from(from).to(to).first();
 	}
@@ -1258,6 +1330,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list.stream().map(obj -> getSubject(obj)).collect(Collectors.toList());
 	}
 
+	// Wiring...
+	
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
