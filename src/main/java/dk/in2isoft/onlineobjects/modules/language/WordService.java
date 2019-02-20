@@ -216,6 +216,7 @@ public class WordService {
 		return isq;
 	}
 	
+	@Deprecated
 	public WordImpression getImpression(Word word, Privileged privileged) throws ModelException {
 		WordImpression impression = new WordImpression();
 		if (trademarks.contains(word.getText().toLowerCase())) {

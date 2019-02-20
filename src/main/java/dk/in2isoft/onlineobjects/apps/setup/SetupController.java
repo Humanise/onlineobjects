@@ -857,7 +857,7 @@ public class SetupController extends SetupControllerBase {
 	public List<ItemData> getIndexOptions(Request request) {
 		List<ItemData> options = Lists.newArrayList();
 		indexService.getIndexers().forEach(indexer -> {
-			indexer.getIndexInstances().forEach(name -> {
+			indexer.getIndexInstances(request).forEach(name -> {
 				ItemData item = new ItemData();
 				item.setText(name.getName());
 				item.setValue(Strings.toJSON(name));
@@ -921,7 +921,7 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Value");
 		writer.endHeaders();
 		writer.startRow().cell("Index count").cell(manager.getDocumentCount()).endRow();
-		writer.startRow().cell("Database count").cell(indexService.getObjectCount(desc)).endRow();
+		writer.startRow().cell("Database count").cell(indexService.getObjectCount(desc, request)).endRow();
 		writer.endList();
 	}
 	

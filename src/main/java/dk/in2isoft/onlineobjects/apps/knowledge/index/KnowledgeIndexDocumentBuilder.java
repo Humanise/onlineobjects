@@ -13,9 +13,8 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -32,10 +31,9 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 
 	private StorageService storageService;
 	private ModelService modelService;
-	private SecurityService securityService;
 	private PileService pileService;
 	
-	public Document build(InternetAddress address) throws EndUserException {
+	public Document build(InternetAddress address, Operator operator) throws EndUserException {
 		
 		Document doc = new Document();
 		doc.add(new TextField("title", Strings.asNonBlank(address.getName(),"blank"), Field.Store.YES));
@@ -45,8 +43,7 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 			text.append(html.getExtractedText());
 		}
 		
-		Privileged admin = securityService.getAdminPrivileged();
-		List<Word> words = modelService.getChildren(address, Word.class,admin);
+		List<Word> words = modelService.getChildren(address, Word.class, operator);
 		StringBuilder wordText = new StringBuilder();
 		for (Word word : words) {
 			if (wordText.length()>0) {
@@ -57,10 +54,10 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 		}
 		doc.add(new TextField("words", wordText.toString(), Field.Store.NO));
 
-		User owner = modelService.getOwner(address, admin);
+		User owner = modelService.getOwner(address, operator);
 
 		Query<Person> authors = Query.of(Person.class).from(address, Relation.KIND_COMMON_AUTHOR).as(owner);
-		List<Person> people = modelService.list(authors);
+		List<Person> people = modelService.list(authors, operator);
 		for (Person person : people) {
 			doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
 			text.append(" ").append(person.getFullName());
@@ -74,7 +71,7 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 		boolean inboxed = false;
 		boolean favorited = false;
 		
-		List<Pile> piles = modelService.getParents(address, Pile.class, owner);
+		List<Pile> piles = modelService.getParents(address, Pile.class, operator);
 		for (Pile pile : piles) {
 			if (pile.getId()==inbox.getId()) {
 				inboxed = true;
@@ -111,10 +108,6 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
-	}
-	
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 	public void setPileService(PileService pilService) {

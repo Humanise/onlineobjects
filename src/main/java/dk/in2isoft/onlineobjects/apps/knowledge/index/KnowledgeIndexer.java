@@ -14,6 +14,7 @@ import org.apache.lucene.document.TextField;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.DummyPrivileged;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.Results;
@@ -63,20 +64,20 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	}
 	
 	@Override
-	public long getObjectCount(IndexDescription description) {
+	public long getObjectCount(IndexDescription description, Operator operator) {
 		DummyPrivileged privileged = new DummyPrivileged(description.getUserId());
 		long count = 0;
 		Class<?>[] types = {InternetAddress.class, Question.class, Statement.class, Hypothesis.class};
 		for (Class<?> type : types) {
-			count += modelService.count(Query.after(type).as(privileged));
+			count += modelService.count(Query.after(type).as(privileged), operator);
 		}
 		return count;
 	}
 	
 	@Override
-	public List<IndexDescription> getIndexInstances() {
+	public List<IndexDescription> getIndexInstances(Operator operator) {
 		Query<User> query = Query.after(User.class);
-		return modelService.search(query).getList().stream().map(user -> {
+		return modelService.search(query, operator).getList().stream().map(user -> {
 			IndexDescription desc = new IndexDescription();
 			desc.setName(getIndexName(user));
 			desc.setUserId(user.getId());
@@ -138,21 +139,27 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	}
 	
 	public void index(InternetAddress address) {
+		Privileged privileged = securityService.getAdminPrivileged();
+		Operator operator = modelService.newOperator(privileged);
 		try {
-			User owner = modelService.getOwner(address, securityService.getAdminPrivileged());
+			User owner = modelService.getOwner(address, operator);
 			if (owner!=null) {
-				Document document = documentBuilder.build(address);
+				Document document = documentBuilder.build(address, operator);
 				log.debug("Re-indexing : "+address);
 				getIndexManager(owner).update(address, document);
 			}
+			operator.commit();
 		} catch (EndUserException e) {
 			log.error("Unable to reindex: "+address, e);
+			operator.rollBack();
 		}
 	}
 	
 	public void index(Question question) {
+		Privileged privileged = securityService.getAdminPrivileged();
+		Operator operator = modelService.newOperator(privileged);
 		try {
-			User owner = modelService.getOwner(question, securityService.getAdminPrivileged());
+			User owner = modelService.getOwner(question, operator);
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (question.getText()!=null) {
@@ -160,10 +167,10 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 				}
 				Document doc = new Document();
 				doc.add(new TextField("title", Strings.asNonBlank(question.getName(),"blank"), Field.Store.YES));
-				indexStatus(doc, question, owner);
+				indexStatus(doc, question, owner, operator);
 
 				Query<Person> authors = Query.of(Person.class).from(question, Relation.KIND_COMMON_AUTHOR).as(owner);
-				List<Person> people = modelService.list(authors);
+				List<Person> people = modelService.list(authors, operator);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
 					text.append(" ").append(person.getFullName());
@@ -172,14 +179,18 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 
 				getIndexManager(owner).update(question, doc);
 			}
+			operator.commit();
 		} catch (EndUserException e) {
 			log.error("Unable to reindex: "+question, e);
+			operator.rollBack();
 		}
 	}
 	
 	public void index(Hypothesis hypothesis) {
+		Privileged privileged = securityService.getAdminPrivileged();
+		Operator operator = modelService.newOperator(privileged);
 		try {
-			User owner = modelService.getOwner(hypothesis, securityService.getAdminPrivileged());
+			User owner = modelService.getOwner(hypothesis, operator);
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (hypothesis.getText()!=null) {
@@ -187,10 +198,10 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 				}
 				Document doc = new Document();
 				doc.add(new TextField("title", Strings.asNonBlank(hypothesis.getName(),"blank"), Field.Store.YES));
-				indexStatus(doc, hypothesis, owner);
+				indexStatus(doc, hypothesis, owner, operator);
 
 				Query<Person> authors = Query.of(Person.class).from(hypothesis, Relation.KIND_COMMON_AUTHOR).as(owner);
-				List<Person> people = modelService.list(authors);
+				List<Person> people = modelService.list(authors, operator);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
 					text.append(" ").append(person.getFullName());
@@ -199,14 +210,18 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 
 				getIndexManager(owner).update(hypothesis, doc);
 			}
+			operator.commit();
 		} catch (EndUserException e) {
 			log.error("Unable to reindex: "+hypothesis, e);
+			operator.rollBack();
 		}
 	}
 	
 	public void index(Statement statement) {
+		Privileged privileged = securityService.getAdminPrivileged();
+		Operator operator = modelService.newOperator(privileged);
 		try {
-			User owner = modelService.getOwner(statement, securityService.getAdminPrivileged());
+			User owner = modelService.getOwner(statement, operator);
 			if (owner!=null) {
 				StringBuilder text = new StringBuilder();
 				if (statement.getText()!=null) {
@@ -214,10 +229,10 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 				}
 				Document doc = new Document();
 				doc.add(new TextField("title", Strings.asNonBlank(statement.getName(),"blank"), Field.Store.YES));
-				indexStatus(doc, statement, owner);
+				indexStatus(doc, statement, owner, operator);
 
 				Query<Person> authors = Query.of(Person.class).from(statement, Relation.KIND_COMMON_AUTHOR).as(owner);
-				List<Person> people = modelService.list(authors);
+				List<Person> people = modelService.list(authors, operator);
 				for (Person person : people) {
 					doc.add(new StringField("author", String.valueOf(person.getId()), Field.Store.NO));
 					text.append(" ").append(person.getFullName());
@@ -226,12 +241,14 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 
 				getIndexManager(owner).update(statement, doc);
 			}
+			operator.commit();
 		} catch (EndUserException e) {
 			log.error("Unable to reindex: "+statement, e);
+			operator.rollBack();
 		}
 	}
 	
-	private void indexStatus(Document doc, Entity entity, User owner) throws ModelException, SecurityException {
+	private void indexStatus(Document doc, Entity entity, User owner, Operator operator) throws ModelException, SecurityException {
 
 		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES);
@@ -239,7 +256,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		boolean inboxed = false;
 		boolean favorited = false;
 		
-		List<Pile> piles = modelService.getParents(entity, Pile.class, owner);
+		List<Pile> piles = modelService.getParents(entity, Pile.class, operator);
 		for (Pile pile : piles) {
 			if (pile.getId()==inbox.getId()) {
 				inboxed = true;

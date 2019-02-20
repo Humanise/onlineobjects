@@ -5,6 +5,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -21,7 +22,7 @@ public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 	private WordService wordService;
 	private SecurityService securityService;
 
-	public Document build(Word word) throws ModelException {
+	public Document build(Word word, Operator operator) throws ModelException {
 		
 		WordImpression impression = wordService.getImpression(word, securityService.getAdminPrivileged());
 		StringBuilder text = new StringBuilder();

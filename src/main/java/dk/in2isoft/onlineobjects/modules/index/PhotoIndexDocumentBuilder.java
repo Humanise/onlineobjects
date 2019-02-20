@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -26,7 +27,7 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 	private ModelService modelService;
 	private SecurityService securityService;
 	
-	public Document build(Image image) throws ModelException {
+	public Document build(Image image, Operator operator) throws ModelException {
 		Privileged adminPrivileged = securityService.getAdminPrivileged();
 		image = modelService.get(Image.class, image.getId(), adminPrivileged);
 		StringBuilder text = new StringBuilder();

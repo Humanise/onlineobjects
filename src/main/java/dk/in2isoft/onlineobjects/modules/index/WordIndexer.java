@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -35,7 +36,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	}
 	
 	@Override
-	public List<IndexDescription> getIndexInstances() {
+	public List<IndexDescription> getIndexInstances(Operator operator) {
 		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
 	}
 	
@@ -45,8 +46,8 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	}
 	
 	@Override
-	public long getObjectCount(IndexDescription description) {
-		return modelService.count(Query.after(Word.class));
+	public long getObjectCount(IndexDescription description, Operator operator) {
+		return modelService.count(Query.after(Word.class), operator);
 	}
 	
 	public void indexWord(Word word) {
@@ -54,7 +55,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 			return;
 		}
 		try {
-			Document document = documentBuilder.build(word);
+			Document document = documentBuilder.build(word, null);
 			log.debug("Re-indexing : "+word);
 			indexManager.update(word, document);
 		} catch (EndUserException e) {
@@ -90,7 +91,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 		try {
 			Map<Entity,Document> map = Maps.newHashMap();
 			for (Word word : words) {
-				Document document = documentBuilder.build(word);
+				Document document = documentBuilder.build(word, null);
 				log.debug("Re-indexing : "+word);
 				map.put(word, document);
 			}

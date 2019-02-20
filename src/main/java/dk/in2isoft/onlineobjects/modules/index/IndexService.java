@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
@@ -50,10 +51,10 @@ public class IndexService {
 		return indexers;
 	}
 	
-	public Long getObjectCount(IndexDescription description) {
+	public Long getObjectCount(IndexDescription description, Operator operator) {
 		for (Indexer indexer : indexers) {
 			if (indexer.is(description)) {
-				return indexer.getObjectCount(description);
+				return indexer.getObjectCount(description, operator);
 			}
 		}
 		return null;

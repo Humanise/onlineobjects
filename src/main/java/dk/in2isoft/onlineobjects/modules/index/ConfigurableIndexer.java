@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -34,7 +35,7 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	}
 	
 	@Override
-	public List<IndexDescription> getIndexInstances() {
+	public List<IndexDescription> getIndexInstances(Operator operator) {
 		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
 	}
 
@@ -45,8 +46,8 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	}
 	
 	@Override
-	public long getObjectCount(IndexDescription description) {
-		return modelService.count(Query.after(type));
+	public long getObjectCount(IndexDescription description, Operator operator) {
+		return modelService.count(Query.after(type), operator);
 	}
 	
 	public void clear() throws EndUserException {
@@ -62,7 +63,7 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	public void index(Entity entity) {
 		try {
 			E ent = Code.cast(entity);
-			Document document = documentBuilder.build(ent);
+			Document document = documentBuilder.build(ent, null);
 			log.debug("Re-indexing : "+entity);
 			indexManager.update(entity, document);
 		} catch (EndUserException e) {
@@ -74,7 +75,7 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 		try {
 			Map<Entity,Document> map = Maps.newHashMap();
 			for (E word : words) {
-				Document document = documentBuilder.build(word);
+				Document document = documentBuilder.build(word, null);
 				log.debug("Re-indexing : "+word);
 				map.put(word, document);
 			}

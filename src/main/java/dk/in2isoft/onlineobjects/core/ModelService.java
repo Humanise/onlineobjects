@@ -246,6 +246,10 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 	
+	public Operator newOperator(Privileged privileged) {
+		return new SimpleOperator(privileged.getIdentity(), this);
+	}
+	
 	@Override
 	public Operation newOperation() {
 		Session session = sessionFactory.openSession();
@@ -332,7 +336,6 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return session;
 	}
 
-	@Deprecated
 	protected <T> Query<T> createQuery(String hql, Class<T> type, Session session) {
 		return session.createQuery(hql, type);
 	}
@@ -774,6 +777,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return list(q, operator);
 	}
 
+	public <T> List<T> getParents(Entity entity, Class<T> classObj, Operator operator) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> q = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		q.to(entity);
+		setPrivileged(operator, q);
+		return list(q, operator);
+	}
+
 	@Deprecated
 	public <T extends Entity> @Nullable T getParent(Entity entity, Class<T> classObj, Privileged privileged) throws ModelException {
 		return getParent(entity, null, classObj, privileged);
@@ -873,21 +883,31 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return q.list();
 	}
 
+	public User getOwner(Item item, Operator privileged) throws ModelException {
+		Query<User> q = buildOwnerQuery(item, privileged, privileged.getOperation().getSession());
+		q.setMaxResults(1);
+		return getSubject(q.uniqueResult());
+	}
+
+	public List<User> getOwners(Item item, Operator privileged) throws ModelException {
+		Query<User> q = buildOwnerQuery(item, privileged, privileged.getOperation().getSession());
+		return getSubjects(q.list());
+	}
+
 	@Deprecated
 	public User getOwner(Item item, Privileged privileged) throws ModelException {
-		Query<User> q = buildOwnerQuery(item, privileged);
+		Query<User> q = buildOwnerQuery(item, privileged, getSession());
 		q.setMaxResults(1);
 		return getSubject(q.uniqueResult());
 	}
 
 	@Deprecated
 	public List<User> getOwners(Item item, Privileged privileged) throws ModelException {
-		Query<User> q = buildOwnerQuery(item, privileged);
+		Query<User> q = buildOwnerQuery(item, privileged, getSession());
 		return getSubjects(q.list());
 	}
 
-	@Deprecated
-	private Query<User> buildOwnerQuery(Item item, Privileged privileged) {
+	private Query<User> buildOwnerQuery(Item item, Privileged privileged, Session session) {
 		String hql = "select user from User as user, Privilege as itemPriv";
 		if (!securityService.isAdminUser(privileged)) {
 			hql+=", Privilege as userPriv";
@@ -898,7 +918,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			hql += " and userPriv.object=user and userPriv.subject in (:privileged)";
 		}
 		hql +=" order by itemPriv.id asc";
-		Query<User> q = createQuery(hql, User.class);
+		Query<User> q = createQuery(hql, User.class, session);
 		q.setParameter("object", item.getId());
 		q.setParameter("public", securityService.getPublicUser().getId());
 		q.setParameter("admin", securityService.getAdminPrivileged().getIdentity());
@@ -1130,6 +1150,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return cq.list().iterator().next();
 	}
 
+	public Long count(ItemQuery<?> query, Operator operator) {
+		Query<Long> cq = query.createCountQuery(operator.getOperation().getSession());
+		return cq.list().iterator().next();
+	}
+
 	@Deprecated
 	public <T,U> PairSearchResult<T,U> searchPairs(PairQuery<T,U> query) {
 		Query<Long> cq = query.createCountQuery(getSession());
@@ -1263,6 +1288,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		q.from(entity);
 		setPrivileged(privileged, q);
 		return list(q);
+	}
+
+	public <T> List<T> getChildren(Entity item, Class<T> classObj, Operator operator) throws ModelException {
+		dk.in2isoft.onlineobjects.core.Query<T> query = dk.in2isoft.onlineobjects.core.Query.of(classObj);
+		query.from(item);
+		setPrivileged(operator, query);
+		return list(query, operator);
 	}
 
 	@Deprecated
