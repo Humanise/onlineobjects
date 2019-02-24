@@ -17,11 +17,9 @@ import dk.in2isoft.onlineobjects.apps.desktop.perspectives.ImportPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.UserInfoPerspective;
 import dk.in2isoft.onlineobjects.apps.desktop.perspectives.WidgetPerspective;
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -38,12 +36,6 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DesktopController extends DesktopControlerBase {
 
-	private User getUser(Request request) throws ModelException, ContentNotFoundException {
-		Privileged privileged = request.getSession();
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
-		return user;
-	}
-
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {
 		String[] localPath = request.getLocalPath();
@@ -57,7 +49,7 @@ public class DesktopController extends DesktopControlerBase {
 	
 	@Path
 	public void getUserInfo(Request request) throws IOException, EndUserException {
-		User user = getUser(request);
+		User user = modelService.getUser(request);
 		if (SecurityService.PUBLIC_USERNAME.equals(user.getUsername())) {
 			throw new SecurityException("This user does not have access");
 		}
@@ -70,7 +62,6 @@ public class DesktopController extends DesktopControlerBase {
 	public void importUrl(Request request) throws IOException {
 		final String url = request.getString("url");
 		GenericImportListener listener = new GenericImportListener();
-		listener.setPrivileged(request.getSession());
 		listener.setImageService(imageService);
 		listener.setHtmlService(htmlService);
 
@@ -88,7 +79,6 @@ public class DesktopController extends DesktopControlerBase {
 	@Path
 	public void uploadFile(Request request) throws IOException, EndUserException {
 		GenericImportListener listener = new GenericImportListener();
-		listener.setPrivileged(request.getSession());
 		listener.setImageService(imageService);
 
 		ImportSession session = importService.createImportSession(request.getSession());
@@ -132,7 +122,7 @@ public class DesktopController extends DesktopControlerBase {
 		}
 		InternetAddress address;
 		if (info.getId()!=null) {
-			address = modelService.get(InternetAddress.class, info.getId(), request.getSession());
+			address = modelService.get(InternetAddress.class, info.getId(), request);
 			if (address==null) {
 				throw new IllegalRequestException("Not found");
 			}
@@ -143,12 +133,12 @@ public class DesktopController extends DesktopControlerBase {
 		address.setName(info.getName());
 		address.overrideFirstProperty(Property.KEY_COMMON_DESCRIPTION, info.getDescription());
 		address.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
-		modelService.createOrUpdate(address, request.getSession());
+		modelService.createOrUpdate(address, request);
 	}
 	
 	@Path
 	public void getWidget(Request request) throws ModelException, IOException {
-		Entity entity = modelService.get(Entity.class, request.getLong("id"), request.getSession());
+		Entity entity = modelService.get(Entity.class, request.getLong("id"), request);
 		request.sendObject(new WidgetPerspective(entity));
 	}
 	
@@ -157,7 +147,7 @@ public class DesktopController extends DesktopControlerBase {
 		String text = request.getString("text");
 		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
-		List<InternetAddress> result = modelService.search(query).getList();
+		List<InternetAddress> result = modelService.search(query, request).getList();
 		
 		WidgetList list = new WidgetList();
 		for (InternetAddress address : result) {
@@ -174,7 +164,7 @@ public class DesktopController extends DesktopControlerBase {
 		String text = request.getString("text");
 		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
-		SearchResult<InternetAddress> result = modelService.search(query);
+		SearchResult<InternetAddress> result = modelService.search(query, request);
 		
 		List<InternetAddress> addresses = result.getList();
 		List<KeyboardNavigatorItem> items = Lists.newArrayList();

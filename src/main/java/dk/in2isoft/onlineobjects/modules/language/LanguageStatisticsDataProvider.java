@@ -14,6 +14,7 @@ import com.google.common.collect.Multimap;
 
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -39,13 +40,14 @@ public class LanguageStatisticsDataProvider extends CachedDataProvider<LanguageS
 	@Override
 	protected LanguageStatistics buildData() {
 		LanguageStatistics statistics = new LanguageStatistics();
+		Operator operator = modelService.newAdminOperator();
 		try {
 			Map<Locale,List<LanguageStatistic>> temp = Maps.newHashMap();
 			Messages lexMsg = new Messages(LexicalCategory.class);
 			Messages langMsg = new Messages(Language.class);
 			Counter<String> counter = new Counter<String>();
 			Multimap<String,WordStatistic> byLang = HashMultimap.create();
-			List<WordStatistic> result = modelService.list(new WordStatisticsQuery().distinct());
+			List<WordStatistic> result = modelService.list(new WordStatisticsQuery().distinct(), operator);
 			for (WordStatistic statistic : result) {
 				byLang.put(statistic.getLanguage(), statistic);
 				counter.add(statistic.getLanguage(),statistic.getCount());
@@ -80,8 +82,9 @@ public class LanguageStatisticsDataProvider extends CachedDataProvider<LanguageS
 				});
 			}
 			statistics.setCategoriesByLanguage(temp);
-			
+			operator.commit();
 		} catch (ModelException e) {
+			operator.rollBack();
 			return null;
 		}
 		return statistics;

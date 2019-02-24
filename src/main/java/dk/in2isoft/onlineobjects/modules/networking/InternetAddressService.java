@@ -9,7 +9,7 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -28,7 +28,7 @@ public class InternetAddressService {
 	private ModelService modelService;
 	private InboxService inboxService;
 
-	public HTMLDocument getHTMLDocument(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
+	public HTMLDocument getHTMLDocument(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		File original = getContent(address, privileged);
 		if (original == null) {
 			return null;
@@ -42,7 +42,7 @@ public class InternetAddressService {
 		return htmlDocument;
 	}
 	
-	public File getContent(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
+	public File getContent(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		File folder = storageService.getItemFolder(address);
 		File original = new File(folder, "original");
 		if (!original.exists()) {
@@ -67,13 +67,13 @@ public class InternetAddressService {
 		return original;
 	}
 
-	public InternetAddress create(String url, String title, User user) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public InternetAddress create(String url, String title, User user, Operator operator) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
 		if (Strings.isBlank(url)) {
 			throw new IllegalRequestException("The url is empty");
 		}
 		URI uri = asURI(url);
 		// First check if it exists
-		InternetAddress address = findExisting(user, url);
+		InternetAddress address = findExisting(operator, url);
 		if (address != null) {
 			return address;
 		}
@@ -90,7 +90,7 @@ public class InternetAddressService {
 			
 			// If the URL has changed -> check again
 			if (!url.equals(resolvedUrl)) {
-				address = findExisting(user, resolvedUrl);
+				address = findExisting(operator, resolvedUrl);
 				if (address != null) {
 					return address;
 				}
@@ -109,8 +109,8 @@ public class InternetAddressService {
 		if (response!=null && response.getEncoding() != null) {
 			address.overrideFirstProperty(Property.KEY_INTERNETADDRESS_ENCODING, response.getEncoding());
 		}
-		modelService.create(address, user);
-		inboxService.add(user, address);
+		modelService.create(address, operator);
+		inboxService.add(user, address, operator);
 		if (response != null) {
 			changeOriginal(address,response.getFile());
 		}
@@ -151,9 +151,9 @@ public class InternetAddressService {
 		return uri;
 	}
 	
-	private InternetAddress findExisting(Privileged user, String url) {
-		Query<InternetAddress> query = Query.after(InternetAddress.class).as(user).withField(InternetAddress.FIELD_ADDRESS, url);
-		InternetAddress address = modelService.search(query).getFirst();
+	private InternetAddress findExisting(Operator operator, String url) {
+		Query<InternetAddress> query = Query.after(InternetAddress.class).as(operator).withField(InternetAddress.FIELD_ADDRESS, url);
+		InternetAddress address = modelService.search(query, operator).getFirst();
 		return address;
 	}
 

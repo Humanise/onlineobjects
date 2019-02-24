@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.model.validation;
 import java.util.List;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -20,8 +21,10 @@ public class UserValidator implements EntityValidator {
 			if (!ValidationUtil.isValidUsername(user.getUsername())) {
 				throw new ModelException("Invalid username");
 			}
+			Operator operator = modelService.newAdminOperator();
 			Query<User> query = Query.after(User.class).withField(User.FIELD_USERNAME, user.getUsername());
-			List<User> users = modelService.list(query);
+			List<User> users = modelService.list(query, operator);
+			operator.commit();
 			for (User other : users) {
 				if (other.getId() != user.getId()) {
 					throw new ModelException("The username already exists");

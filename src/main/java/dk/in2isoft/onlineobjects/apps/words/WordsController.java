@@ -21,10 +21,7 @@ import dk.in2isoft.onlineobjects.apps.words.perspectives.WordEnrichmentPerspecti
 import dk.in2isoft.onlineobjects.apps.words.perspectives.WordsImportRequest;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -34,7 +31,6 @@ import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
@@ -77,7 +73,7 @@ public class WordsController extends WordsControllerBase {
 	public void getDiagram(Request request) throws ModelException, IOException {
 		String text = request.getString("word");
 		
-		Diagram diagram = wordsModelService.getDiagram(text, request.getSession());
+		Diagram diagram = wordsModelService.getDiagram(text, request);
 		
 		request.sendObject(diagram);
 	}
@@ -96,32 +92,32 @@ public class WordsController extends WordsControllerBase {
 
 	@Path
 	public void createWord(Request request) throws IOException, EndUserException {
-		wordsModelService.createWord(request.getString("language"), request.getString("category"), request.getString("text"), getUser(request));
+		wordsModelService.createWord(request.getString("language"), request.getString("category"), request.getString("text"), request);
 	}
 
 	@Path
 	public void relateWords(Request request) throws IOException, EndUserException {
-		wordsModelService.relateWords(request.getLong("parentId"), request.getString("kind"), request.getLong("childId"), request.getSession());
+		wordsModelService.relateWords(request.getLong("parentId"), request.getString("kind"), request.getLong("childId"), request);
 	}
 
 	@Path
 	public void changeLanguage(Request request) throws IOException, EndUserException {
-		wordsModelService.changeLanguage(request.getLong("wordId"), request.getString("language"), getUser(request));
+		wordsModelService.changeLanguage(request.getLong("wordId"), request.getString("language"), request);
 	}
 
 	@Path
 	public void changeCategory(Request request) throws IOException, EndUserException {
-		wordsModelService.changeCategory(request.getLong("wordId"), request.getString("category"), getUser(request));
+		wordsModelService.changeCategory(request.getLong("wordId"), request.getString("category"), request);
 	}
 
 	@Path
 	public void deleteWord(Request request) throws IOException, EndUserException {
-		wordsModelService.deleteWord(request.getLong("wordId"), request.getSession());
+		wordsModelService.deleteWord(request.getLong("wordId"), request);
 	}
 
 	@Path
 	public void deleteRelation(Request request) throws IOException, EndUserException {
-		wordsModelService.deleteRelation(request.getLong("relationId"), request.getSession());
+		wordsModelService.deleteRelation(request.getLong("relationId"), request);
 	}
 	
 	@Path
@@ -130,7 +126,7 @@ public class WordsController extends WordsControllerBase {
 		Long wordId = request.getLong("wordId");
 		Locale locale = new Locale(request.getString("language"));
 		
-		Relation relation = modelService.getRelation(relationid, request.getSession()).orElseThrow(() -> new IllegalRequestException("Word not found"));
+		Relation relation = modelService.getRelation(relationid, request).orElseThrow(() -> new IllegalRequestException("Word not found"));
 		Entity to = relation.getTo();
 		Entity from = relation.getFrom();
 		Entity word = null;
@@ -143,7 +139,7 @@ public class WordsController extends WordsControllerBase {
 		}
 		
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery().withWord(word);
-		WordListPerspective perspective = modelService.search(query).getFirst();
+		WordListPerspective perspective = modelService.search(query, request).getFirst();
 		Map<String,Object> map = Maps.newHashMap();
 		map.put("word", perspective);
 		
@@ -179,7 +175,7 @@ public class WordsController extends WordsControllerBase {
 	public String performImport(Request request) throws IOException, EndUserException {
 		WordsImportRequest object = request.getObject("data", WordsImportRequest.class);
 		Auditor auditor = new VoidAuditor();
-		wordsModelService.importWords(object, auditor , getUser(request));
+		wordsModelService.importWords(object, auditor , request);
 		return ""; // TODO: Too much to return
 	}
 
@@ -190,9 +186,8 @@ public class WordsController extends WordsControllerBase {
 		query.withPaging(0, 1).orderByField("id");
 		StopWatch watch = new StopWatch();
 		watch.start();
-		List<WordEnrichmentPerspective> list = modelService.list(new WordEnrichmentQuery());
+		List<WordEnrichmentPerspective> list = modelService.list(new WordEnrichmentQuery(), request);
 		watch.stop();
-		//System.out.println(watch.toString());
 		if (!list.isEmpty()) {
 			WordEnrichmentPerspective perspective = list.get(0);
 			ArrayList<Option> enrichments = Lists.newArrayList();
@@ -205,11 +200,6 @@ public class WordsController extends WordsControllerBase {
 		}
 		return null;
 	}
-	private User getUser(Request request) throws ModelException, ContentNotFoundException {
-		Privileged privileged = request.getSession();
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
-		return user;
-	}
 
 	@Path
 	public void enrich(Request request) throws IOException, EndUserException {
@@ -218,18 +208,16 @@ public class WordsController extends WordsControllerBase {
 		if (enrichment==null || enrichment.getKey()==null) {
 			throw new IllegalRequestException("No enrichment provided");
 		}
-		User user = getUser(request);
-		UserSession session = request.getSession();
-		Word word = modelService.getRequired(Word.class, id, session);
+		Word word = modelService.getRequired(Word.class, id, request);
 		
 		if (enrichment.getKey().equals("postpone")) {
 			wordsModelService.addToPostponed(word);
 		}
 		else if (enrichment.getKey().equals("language")) {
 			String lang = enrichment.getValue()==null ? null : enrichment.getValue().toString();
-			wordsModelService.changeLanguage(word, lang, user, session);
+			wordsModelService.changeLanguage(word, lang, request);
 			word.removeProperties(Property.KEY_WORD_SUGGESTION_LANGUAGE);
-			modelService.update(word, modelService.getUser("admin"));
+			modelService.update(word, request);
 		}
 		
 	}

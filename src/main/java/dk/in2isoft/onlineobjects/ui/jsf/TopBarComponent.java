@@ -137,7 +137,7 @@ public class TopBarComponent extends AbstractComponent {
 			//InboxService inboxService = Components.getBean(InboxService.class);
 			ModelService modelService = Components.getBean(ModelService.class);
 			try {
-				User user = modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
+				User user = modelService.getUser(request);
 				//int count = inboxService.getCountSilently(user);
 				//out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
 				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");

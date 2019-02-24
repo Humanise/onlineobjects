@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.onlineobjects.core.ConsistencyChecker;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -23,7 +24,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.User;
 
 public class LanguageConsistencyChecker implements ConsistencyChecker {
 
@@ -76,86 +76,86 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 	
 	@Override
 	public void check() throws ModelException, SecurityException {
-		User adminUser = modelService.getUser(SecurityService.ADMIN_USERNAME);
-		
-		for (Entry<String, String> entry : languages.entrySet()) {
-			Query<Language> query = Query.of(Language.class).withField(Language.CODE, entry.getKey());
-			SearchResult<Language> result = modelService.search(query);
-			if (result.getTotalCount()==0) {
-				log.warn("No language ("+entry.getValue()+"), creating it...");
-				Language language = new Language();
-				language.setCode(entry.getKey());
-				language.setName(entry.getValue());
-				modelService.create(language, adminUser);
-				log.info("Language ("+entry.getValue()+") created!");
-				securityService.makePublicVisible(language, adminUser);
-				modelService.commit();
-			} else {
-				for (Language item : result.getList()) {
+		Operator adminUser = modelService.newAdminOperator();
+		try {
+			for (Entry<String, String> entry : languages.entrySet()) {
+				Query<Language> query = Query.of(Language.class).withField(Language.CODE, entry.getKey());
+				SearchResult<Language> result = modelService.search(query,adminUser);
+				if (result.getTotalCount()==0) {
+					log.warn("No language ("+entry.getValue()+"), creating it...");
+					Language language = new Language();
+					language.setCode(entry.getKey());
+					language.setName(entry.getValue());
+					modelService.create(language, adminUser);
+					log.info("Language ("+entry.getValue()+") created!");
+					securityService.makePublicVisible(language, adminUser);
+				} else {
+					for (Language item : result.getList()) {
+						securityService.makePublicVisible(item, adminUser);
+					}
+				}
+			}
+			adminUser.commit();
+			Map<String,LexicalCategory> map = Maps.newHashMap();
+			
+			for (Entry<String, String> entry : categories.entrySet()) {
+				Query<LexicalCategory> query = Query.of(LexicalCategory.class).withField(LexicalCategory.CODE, entry.getKey());
+				SearchResult<LexicalCategory> result = modelService.search(query, adminUser);
+				for (LexicalCategory item : result.getList()) {
 					securityService.makePublicVisible(item, adminUser);
-					modelService.commit();
+				}
+				if (result.getTotalCount()==0) {
+					log.warn("No lexical category ("+entry.getValue()+"), creating it...");
+					LexicalCategory category = new LexicalCategory();
+					category.setCode(entry.getKey());
+					category.setName(entry.getValue());
+					modelService.create(category, adminUser);
+					log.info("Lexical category ("+entry.getValue()+") created!");
+					securityService.makePublicVisible(category, adminUser);
+					map.put(category.getCode(), category);
+				} else if (result.getTotalCount()>1) {
+					List<LexicalCategory> list = result.getList();
+					LexicalCategory category = list.get(0);
+					map.put(category.getCode(), category);
+					for (int i = 1; i < list.size(); i++) {
+						modelService.delete(list.get(i), adminUser);
+					}
+				} else {
+					LexicalCategory category = result.getFirst();
+					map.put(category.getCode(), category);
 				}
 			}
-		}
-		Map<String,LexicalCategory> map = Maps.newHashMap();
-		
-		for (Entry<String, String> entry : categories.entrySet()) {
-			Query<LexicalCategory> query = Query.of(LexicalCategory.class).withField(LexicalCategory.CODE, entry.getKey());
-			SearchResult<LexicalCategory> result = modelService.search(query);
-			for (LexicalCategory item : result.getList()) {
-				securityService.makePublicVisible(item, adminUser);
-				modelService.commit(); 
-			}
-			if (result.getTotalCount()==0) {
-				log.warn("No lexical category ("+entry.getValue()+"), creating it...");
-				LexicalCategory category = new LexicalCategory();
-				category.setCode(entry.getKey());
-				category.setName(entry.getValue());
-				modelService.create(category, adminUser);
-				log.info("Lexical category ("+entry.getValue()+") created!");
-				securityService.makePublicVisible(category, adminUser);
-				modelService.commit();
-				map.put(category.getCode(), category);
-			} else if (result.getTotalCount()>1) {
-				List<LexicalCategory> list = result.getList();
-				LexicalCategory category = list.get(0);
-				map.put(category.getCode(), category);
-				for (int i = 1; i < list.size(); i++) {
-					modelService.delete(list.get(i), adminUser);
-					modelService.commit(); 
+			adminUser.commit();
+			LexicalCategory noun = map.get(LexicalCategory.CODE_NOMEN);
+			LexicalCategory proprium = map.get(LexicalCategory.CODE_PROPRIUM);
+			LexicalCategory appellativ = map.get(LexicalCategory.CODE_PROPRIUM);		
+	
+			LexicalCategory firstName = map.get(LexicalCategory.CODE_PROPRIUM_FIRST);		
+			LexicalCategory middleName = map.get(LexicalCategory.CODE_PROPRIUM_MIDDLE);	
+			LexicalCategory lastName = map.get(LexicalCategory.CODE_PROPRIUM_LAST);
+			
+			List<Pair<LexicalCategory, LexicalCategory>> relations = Lists.newArrayList();
+			relations.add(Pair.of(noun, proprium));
+			relations.add(Pair.of(noun, appellativ));
+			relations.add(Pair.of(proprium, firstName));
+			relations.add(Pair.of(proprium, middleName));
+			relations.add(Pair.of(proprium, lastName));
+			
+			for (Iterator<Pair<LexicalCategory, LexicalCategory>> i = relations.iterator(); i.hasNext();) {
+				Pair<LexicalCategory, LexicalCategory> pair = i.next();
+				LexicalCategory parent = pair.getKey();
+				LexicalCategory child = pair.getValue();
+				Optional<Relation> relation = modelService.getRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
+				if (!relation.isPresent()) {
+					log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");		
+					modelService.createRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
 				}
-			} else {
-				LexicalCategory category = result.getFirst();
-				map.put(category.getCode(), category);
 			}
+			adminUser.commit();
+		} catch (ModelException | SecurityException e) {
+			adminUser.rollBack();
+			throw e;
 		}
-		LexicalCategory noun = map.get(LexicalCategory.CODE_NOMEN);
-		LexicalCategory proprium = map.get(LexicalCategory.CODE_PROPRIUM);
-		LexicalCategory appellativ = map.get(LexicalCategory.CODE_PROPRIUM);		
-
-		LexicalCategory firstName = map.get(LexicalCategory.CODE_PROPRIUM_FIRST);		
-		LexicalCategory middleName = map.get(LexicalCategory.CODE_PROPRIUM_MIDDLE);	
-		LexicalCategory lastName = map.get(LexicalCategory.CODE_PROPRIUM_LAST);
-		
-		List<Pair<LexicalCategory, LexicalCategory>> relations = Lists.newArrayList();
-		relations.add(Pair.of(noun, proprium));
-		relations.add(Pair.of(noun, appellativ));
-		relations.add(Pair.of(proprium, firstName));
-		relations.add(Pair.of(proprium, middleName));
-		relations.add(Pair.of(proprium, lastName));
-		
-		for (Iterator<Pair<LexicalCategory, LexicalCategory>> i = relations.iterator(); i.hasNext();) {
-			Pair<LexicalCategory, LexicalCategory> pair = i.next();
-			LexicalCategory parent = pair.getKey();
-			LexicalCategory child = pair.getValue();
-			Optional<Relation> relation = modelService.getRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
-			if (!relation.isPresent()) {
-				log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");		
-				modelService.createRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
-				modelService.commit();
-			}
-		}		
-		modelService.commit();
 	}
 
 	public void setModelService(ModelService modelService) {

@@ -64,7 +64,7 @@ public class APIController extends APIControllerBase {
 		if (Strings.isNotBlank(url)) {
 			text = extractText(url);
 		}
-		return languageService.analyse(text);
+		return languageService.analyse(text, request);
 	}
 
 	@Path(exactly = { "v1.0", "html", "extract" })
@@ -83,9 +83,9 @@ public class APIController extends APIControllerBase {
 		String password = request.getString("password");
 		String email = request.getString("email");
 		MemberCheckResponse response = new MemberCheckResponse();
-		response.setEmailTaken(memberService.isPrimaryEmailTaken(email));
+		response.setEmailTaken(memberService.isPrimaryEmailTaken(email, request));
 		response.setEmailValid(memberService.isWellFormedEmail(email));
-		response.setUsernameTaken(memberService.isUsernameTaken(username));
+		response.setUsernameTaken(memberService.isUsernameTaken(username, request));
 		response.setUsernameValid(memberService.isValidUsername(username));
 		response.setPasswordValid(memberService.isValidPassword(password));
 		return response;
@@ -98,8 +98,8 @@ public class APIController extends APIControllerBase {
 		String fullName = request.getString("fullName");
 		String email = request.getString("email");
 		ClientInfo info = getClientInfo(request);
-		User user = memberService.signUp(request.getSession(), username, password, fullName, email);
-		String secret = securityService.getSecret(info, user);
+		User user = memberService.signUp(request.getSession(), username, password, fullName, email, request);
+		String secret = securityService.getSecret(info, user, request);
 		if (Strings.isBlank(secret)) {
 			throw new SecurityException("Unable to perform request");
 		}
@@ -114,13 +114,13 @@ public class APIController extends APIControllerBase {
 		String username = request.getString("username", "No username");
 		String existingPassword = request.getString("existingPassword", "No existing password");
 		String newPassword = request.getString("newPassword", "No new password");
-		securityService.changePassword(username, existingPassword, newPassword, request.getSession());
+		securityService.changePassword(username, existingPassword, newPassword, request);
 	}
 
 	@Path(exactly={"v1.0","recover"})
 	public void recover(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
-		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail)) {
+		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
 			throw new IllegalRequestException("Username or e-mail not found");
 		}
 	}
@@ -140,13 +140,13 @@ public class APIController extends APIControllerBase {
 		
 		ClientInfo info = getClientInfo(request);
 		
-		User user = securityService.getUser(username, password);
+		User user = securityService.getUser(username, password, request);
 		if (user==null) {
 			surveillanceService.audit().warn("Failed to authenticate username={}", username);
 			securityService.randomDelay();
 			throw new SecurityException("User not found");
 		}
-		String secret = securityService.getSecret(info, user);
+		String secret = securityService.getSecret(info, user, request);
 		if (Strings.isBlank(secret)) {
 			surveillanceService.audit().warn("Failed to authenticate username={}", username);
 			throw new SecurityException("Unable to perform request");
@@ -189,7 +189,7 @@ public class APIController extends APIControllerBase {
 		String quote = request.getString("quote");
 
 		User user = modelService.getUser(request);
-		InternetAddress internetAddress = internetAddressService.create(url, null, user);
+		InternetAddress internetAddress = internetAddressService.create(url, null, user, request);
 		if (Strings.isNotBlank(quote)) {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, request);
 		}
@@ -598,16 +598,15 @@ public class APIController extends APIControllerBase {
 		if (!securityService.isAdminUser(request)) {
 			throw new SecurityException();
 		}
-		Privileged privileged = securityService.getAdminPrivileged();
 		
 		WordModification modification = request.getObject("modification", WordModification.class);
 		Type listType = new TypeToken<List<WordModification>>() {}.getType();
 		List<WordModification> modifications = request.getObject("modifications", listType);
 		if (modification!=null) {
-			wordService.updateWord(modification , privileged);
+			wordService.updateWord(modification , request);
 		} else if (Code.isNotEmpty(modifications)) {
 			for (WordModification wordModification : modifications) {
-				wordService.updateWord(wordModification , privileged);
+				wordService.updateWord(wordModification , request);
 			}
 		} else {
 			throw new IllegalRequestException("No modifications provided");

@@ -6,13 +6,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.importing.TextImporter;
@@ -29,7 +28,7 @@ import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class WordsImportView extends LegacyAbstractView implements InitializingBean {
+public class WordsImportView extends AbstractView {
 
 	private ModelService modelService;
 	private LanguageService languageService;
@@ -47,29 +46,29 @@ public class WordsImportView extends LegacyAbstractView implements InitializingB
 	private List<Pair<String, Integer>> languages;
 	private long queryTime;
 	
-	private Language findLanguage(String fromContent) throws IllegalRequestException {
-		Request request = getRequest();
+	private Language findLanguage(String fromContent, Request request) throws IllegalRequestException {
 		String[] path = request.getLocalPath();
 		String pathLang = path[0];
 		String queryLang = request.getString("language");
 		Language language = null;
 		if (Strings.isNotBlank(queryLang)) {
-			language = languageService.getLanguageForCode(queryLang);			
+			language = languageService.getLanguageForCode(queryLang, request);			
 		}
 		if (language==null) {
-			language = languageService.getLanguageForCode(fromContent);
+			language = languageService.getLanguageForCode(fromContent, request);
 		}
 		if (language==null) {
-			language = languageService.getLanguageForCode(pathLang);
+			language = languageService.getLanguageForCode(pathLang, request);
 		}
 		if (language == null) {
 			throw new IllegalRequestException("Unsupported language");
 		}
 		return language;
 	}
-	
-	public void afterPropertiesSet() throws Exception {
-		String[] path = getRequest().getLocalPath();
+
+	@Override
+	protected void before(Request request) throws Exception {
+		String[] path = request.getLocalPath();
 		if (path.length==3) {
 			id = path[2];
 			ImportSession session = importService.getImportSession(id);
@@ -89,7 +88,7 @@ public class WordsImportView extends LegacyAbstractView implements InitializingB
 			WordListPerspectiveQuery perspectiveQuery = new WordListPerspectiveQuery().withWords(words).orderByText();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			this.impressions = modelService.list(perspectiveQuery);
+			this.impressions = modelService.list(perspectiveQuery, request);
 			watch.stop();
 			this.queryTime = watch.getTime();
 			
@@ -108,7 +107,7 @@ public class WordsImportView extends LegacyAbstractView implements InitializingB
 					languageCounts.addOne(lang);
 				}
 			}
-			language = findLanguage(languageCounts.getTop());
+			language = findLanguage(languageCounts.getTop(), request);
 			
 			languages = Lists.newArrayList();
 			

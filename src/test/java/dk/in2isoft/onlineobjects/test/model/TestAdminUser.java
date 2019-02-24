@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.User;
@@ -17,27 +18,33 @@ public class TestAdminUser extends AbstractSpringTestCase {
 	
 	@Test
 	public void testLoadUser() throws EndUserException {
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
+		Operator operator = modelService.newAdminOperator();
+		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME, operator);
 		Assert.assertNotNull(admin);
 		Assert.assertEquals(SecurityService.ADMIN_USERNAME, admin.getUsername());
+		operator.commit();
 	}
 	
 	@Test
 	public void testDeleteUser() throws EndUserException {
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
-		assertFalse(securityService.canDelete(admin, admin));
-		assertFails(() -> modelService.delete(admin, admin));
+		Operator adminOperator = modelService.newAdminOperator();
+		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME, adminOperator);
+		assertFalse(securityService.canDelete(admin, adminOperator));
+		assertFails(() -> modelService.delete(admin, adminOperator));
 
-		assertFalse(securityService.canDelete(admin, getPublicUser()));
-		assertFails(() -> modelService.delete(admin, getPublicUser()));
+		assertFalse(securityService.canDelete(admin, adminOperator.as(getPublicUser())));
+		assertFails(() -> modelService.delete(admin, adminOperator.as(getPublicUser())));
+		adminOperator.commit();
 	}
 
 	@Test
 	public void testModifyUser() throws EndUserException {
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
+		Operator adminOperator = modelService.newAdminOperator();
+		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME, adminOperator);
 
-		assertFalse(securityService.canModify(admin, getPublicUser()));
-		assertFails(() -> modelService.update(admin, getPublicUser()));
+		assertFalse(securityService.canModify(admin, adminOperator.as(getPublicUser())));
+		assertFails(() -> modelService.update(admin, adminOperator.as(getPublicUser())));
+		adminOperator.commit();
 	}
 
 }

@@ -111,7 +111,7 @@ public class ImageController extends ServiceController {
 
 	private void process(Request request, Parameters parameters) throws IOException, EndUserException {		
 		File file;
-		Image image = modelService.get(Image.class, parameters.id, request.getSession());
+		Image image = modelService.get(Image.class, parameters.id, request);
 		if (image==null) {
 			throw new ContentNotFoundException("The image could not be found, id="+parameters.id);
 		}

@@ -1,12 +1,12 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PasswordRecoveryService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class AccountPasswordView extends AbstractManagedBean {
+public class AccountPasswordView extends AbstractView {
 
 	private PasswordRecoveryService passwordRecoveryService;
 
@@ -20,7 +20,7 @@ public class AccountPasswordView extends AbstractManagedBean {
 		
 		key = request.getString("key");
 		if (Strings.isNotBlank(key)) {
-			user = passwordRecoveryService.getUserByRecoveryKey(key);
+			user = passwordRecoveryService.getUserByRecoveryKey(key, request);
 			found = user!=null;
 		}
 	}

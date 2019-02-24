@@ -7,4 +7,6 @@ public interface Operator extends Privileged {
 	public void commit();
 
 	public void rollBack();
+	
+	public Operator as(Privileged privileged);
 }

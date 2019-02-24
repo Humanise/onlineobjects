@@ -5,17 +5,10 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import nu.xom.Attribute;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.Node;
-import nu.xom.Nodes;
-import nu.xom.XPathContext;
-
 import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.xml.XSLTUtil;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.CompoundDocument;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -27,6 +20,14 @@ import dk.in2isoft.onlineobjects.publishing.CompoundDocumentBuilder;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.PageRenderingService;
 import dk.in2isoft.onlineobjects.ui.AbstractRemotingFacade;
+import dk.in2isoft.onlineobjects.ui.Request;
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.Nodes;
+import nu.xom.XPathContext;
 
 public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 	
@@ -34,23 +35,23 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 	private ConfigurationService configurationService;
 	private CompoundDocumentBuilder compoundDocumentBuilder;
 
-	public String getStructure(long documentId) throws EndUserException {
-		CompoundDocument doc = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public String getStructure(long documentId, Operator operator) throws EndUserException {
+		CompoundDocument doc = modelService.get(CompoundDocument.class, documentId, operator);
 		return doc.getStructure();
 	}
 
-	public void addRow(long documentId) throws EndUserException {
-		CompoundDocument compound = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void addRow(long documentId, Operator operator) throws EndUserException {
+		CompoundDocument compound = modelService.get(CompoundDocument.class, documentId, operator);
 		Document doc = compound.getStructureDocument();
 		Element row = new Element("row", CompoundDocument.CONTENT_NAMESPACE);
 		row.appendChild(new Element("column", CompoundDocument.CONTENT_NAMESPACE));
 		doc.getRootElement().appendChild(row);
 		compound.setStructure(doc.toXML());
-		modelService.update(compound, getUserSession());
+		modelService.update(compound, operator);
 	}
 
-	public void addColumn(long documentId,int rowIndex,int position) throws EndUserException {
-		CompoundDocument compound = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void addColumn(long documentId,int rowIndex,int position, Operator operator) throws EndUserException {
+		CompoundDocument compound = modelService.get(CompoundDocument.class, documentId, operator);
 		Document structure = compound.getStructureDocument();
 
 		XPathContext context = new XPathContext("doc", CompoundDocument.CONTENT_NAMESPACE);
@@ -65,24 +66,24 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		}
 		row.appendChild(new Element("column", CompoundDocument.CONTENT_NAMESPACE));
 		compound.setStructure(structure.toXML());
-		modelService.update(compound, getUserSession());
+		modelService.update(compound, operator);
 	}
 
-	public String getStructureHTML(long documentId) throws EndUserException, UnsupportedEncodingException {
-		CompoundDocument doc = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public String getStructureHTML(long documentId, Request request) throws EndUserException, UnsupportedEncodingException {
+		CompoundDocument doc = modelService.get(CompoundDocument.class, documentId, request);
 		Document input = doc.getStructureDocument();
-		compoundDocumentBuilder.insertParts(input, getUserSession());
+		compoundDocumentBuilder.insertParts(input, request);
 		File stylsheet = configurationService.getFile(
 				new String[] { "WEB-INF", "apps", "community", "web", "documents", "CompoundDocument", "xslt",
 						"stylesheet.xsl" });
 		ByteArrayOutputStream x = new ByteArrayOutputStream();
-		Map<String, String> parameters = pageRenderingService.buildParameters(getRequest());
+		Map<String, String> parameters = pageRenderingService.buildParameters(request);
 		XSLTUtil.applyXSLT(input.toXML(), stylsheet, x, parameters);
 		return x.toString("UTF-8");
 	}
 
-	public void addPart(long documentId, int row, int columnIndex, int position, String type) throws EndUserException {
-		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void addPart(long documentId, int row, int columnIndex, int position, String type, Operator operator) throws EndUserException {
+		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, operator);
 		Document structure = document.getStructureDocument();
 		XPathContext context = new XPathContext("doc", CompoundDocument.CONTENT_NAMESPACE);
 		Nodes columns = structure.query("//doc:row[position()=" + (row + 1) + "]/doc:column[position()="
@@ -96,20 +97,20 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			}
 			
 			Entity part = createPart(type);
-			modelService.create(part, getUserSession());
+			modelService.create(part, operator);
 			Relation relation = new Relation(document, part);
 			relation.setKind("document.contains");
-			modelService.create(relation, getUserSession());
+			modelService.create(relation, operator);
 			Element section = new Element("section", CompoundDocument.CONTENT_NAMESPACE);
 			section.addAttribute(new Attribute("part-id", String.valueOf(part.getId())));
 			column.insertChild(section, position);
 			document.setStructure(structure.toXML());
-			modelService.update(document, getUserSession());
+			modelService.update(document, operator);
 		}
 	}
 
-	public void updateColumn(long documentId, int row, int columnIndex, String width, String left, String right) throws EndUserException {
-		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void updateColumn(long documentId, int row, int columnIndex, String width, String left, String right, Operator operator) throws EndUserException {
+		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, operator);
 		Document structure = document.getStructureDocument();
 		XPathContext context = new XPathContext("doc", CompoundDocument.CONTENT_NAMESPACE);
 		Nodes columns = structure.query("//doc:row[position()=" + (row + 1) + "]/doc:column[position()="
@@ -122,7 +123,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			setAttribute(column, "left", left);
 			setAttribute(column, "right", right);
 			document.setStructure(structure.toXML());
-			modelService.update(document, getUserSession());
+			modelService.update(document, operator);
 		}
 	}
 	
@@ -154,8 +155,8 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		}
 	}
 
-	public void removeColumn(long documentId, int rowIndex, int columnIndex) throws EndUserException {
-		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void removeColumn(long documentId, int rowIndex, int columnIndex, Operator operator) throws EndUserException {
+		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, operator);
 		Document structure = document.getStructureDocument();
 		XPathContext context = new XPathContext("doc", CompoundDocument.CONTENT_NAMESPACE);
 		Nodes columns = structure.query("//doc:row[position()=" + (rowIndex + 1) + "]/doc:column[position()="
@@ -171,19 +172,19 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			for (int i = 0; i < sections.size(); i++) {
 				Element section = (Element) sections.get(i);
 				long id = Long.valueOf(section.getAttribute("part-id").getValue());
-				Entity part = modelService.get(Entity.class, id, getUserSession());
+				Entity part = modelService.get(Entity.class, id, operator);
 				if (part != null) {
-					modelService.delete(part, getUserSession());
+					modelService.delete(part, operator);
 				}
 			}
 			columnOrRow.detach();
 			document.setStructure(structure.toXML());
-			modelService.update(document, getUserSession());
+			modelService.update(document, operator);
 		}
 	}
 
-	public void removePart(long documentId, long partId) throws EndUserException {
-		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, getUserSession());
+	public void removePart(long documentId, long partId, Operator operator) throws EndUserException {
+		CompoundDocument document = modelService.get(CompoundDocument.class, documentId, operator);
 		Document structure = document.getStructureDocument();
 		XPathContext context = new XPathContext("doc", CompoundDocument.CONTENT_NAMESPACE);
 		Nodes sections = structure.query("//doc:section[@part-id='" + partId + "']", context);
@@ -192,9 +193,9 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 		}
 		sections.get(0).detach();
 		document.setStructure(structure.toXML());
-		modelService.update(document, getUserSession());
-		Entity part = modelService.get(Entity.class, partId, getUserSession());
-		modelService.delete(part, getUserSession());
+		modelService.update(document, operator);
+		Entity part = modelService.get(Entity.class, partId, operator);
+		modelService.delete(part, operator);
 	}
 
 	public void setPageRenderingService(PageRenderingService pageRenderingService) {

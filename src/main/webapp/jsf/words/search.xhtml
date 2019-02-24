@@ -34,7 +34,7 @@
           </c:otherwise>
         </c:choose>
 
-        <form class="words_search_form" method="get" action="#{wordsSearchView.localContext}/#{wordsLayoutView.language}/search/">
+        <form class="words_search_form" method="get" action="/#{wordsLayoutView.language}/search/">
           <p class="words_search_form_items">
             <span class="words_search_form_item">
               <input type="text" name="text" value="#{wordsSearchView.text}" class="words_search_form_input"/>
@@ -73,15 +73,6 @@
         </c:if>
         <div class="words_search_body">
         <c:choose>
-          <c:when test="${wordsSearchView.clean}">
-          <ui:remove>
-            <p class="words_search_filters">
-              <c:forEach items="#{wordsSearchView.letterOptions}" var="option">
-                <o:link href="#{option.value}" plain="true">#{option.label}</o:link>
-              </c:forEach>
-            </p>
-            </ui:remove>
-          </c:when>
           <c:when test="${wordsSearchView.blank}">
             <p class="words_search_empty">#{msg.nothing_found}</p>
           </c:when>

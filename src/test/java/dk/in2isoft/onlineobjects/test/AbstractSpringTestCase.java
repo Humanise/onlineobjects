@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.test;
 
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +43,21 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 
 	@Autowired
 	protected SecurityService securityService;
+	
+	@After
+	public void after() {
+		long x = System.currentTimeMillis() + 2000;
+		while (System.currentTimeMillis() < x) {
+			if (modelService.getActiveOperationCount() > 0) {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {}
+			} else {
+				break;
+			}
+		}
+		assertEquals(0, modelService.getActiveOperationCount());
+	}
 
 	protected File getTestFile(String name) throws IOException {
 		File file = context.getResource(name).getFile();

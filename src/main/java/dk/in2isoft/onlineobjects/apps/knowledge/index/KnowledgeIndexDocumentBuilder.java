@@ -65,8 +65,8 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 		doc.add(new TextField("text", Strings.asNonBlank(text.toString(),""), Field.Store.NO));
 
 		
-		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX);
-		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES);
+		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX, operator.as(owner));
+		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES, operator.as(owner));
 		
 		boolean inboxed = false;
 		boolean favorited = false;

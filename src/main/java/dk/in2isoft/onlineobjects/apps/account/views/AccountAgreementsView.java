@@ -3,17 +3,16 @@ package dk.in2isoft.onlineobjects.apps.account.views;
 import java.util.Date;
 import java.util.List;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.Agreement;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class AccountAgreementsView extends AbstractManagedBean {
+public class AccountAgreementsView extends AbstractView {
 
 	private MemberService memberService;
 	private ModelService modelService;
@@ -26,12 +25,11 @@ public class AccountAgreementsView extends AbstractManagedBean {
 	private String language;
 	
 	public void before(Request request) throws Exception {
-		Privileged privileged = request.getSession();
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
+		User user = modelService.getUser(request);
 		accepted = memberService.hasAcceptedTerms(user, user);
 		agreements = memberService.getAgreements(user, request.getLocale());
 		acceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
-		publicUser = securityService.isPublicUser(privileged);
+		publicUser = securityService.isPublicUser(request);
 		language = request.getLanguage();
 	}
 		

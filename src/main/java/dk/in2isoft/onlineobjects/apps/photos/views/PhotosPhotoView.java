@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.photos.PhotosController;
@@ -18,7 +19,6 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
@@ -28,7 +28,6 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.services.PersonService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MapPoint;
 import dk.in2isoft.onlineobjects.util.Dates;
@@ -36,7 +35,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 import dk.in2isoft.onlineobjects.util.images.ImageInfo;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
-public class PhotosPhotoView extends AbstractManagedBean {
+public class PhotosPhotoView extends AbstractView {
 
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -64,54 +63,53 @@ public class PhotosPhotoView extends AbstractManagedBean {
 	private Long imageId;
 	
 	public void before(Request request) throws Exception {
-		UserSession session = request.getSession();
 		{
 			String[] path = request.getLocalPath();
 			String string = path[path.length-1];
 			String[] split = string.split("\\.");
 			imageId = Long.valueOf(split[0]);
 		}
-		image = modelService.get(Image.class, getImageId(), session);
+		image = modelService.get(Image.class, getImageId(), request);
 		if (image!=null) {
 			Messages msg = new Messages(PhotosController.class);
 			
-			if (!securityService.canView(image, session)) {
+			if (!securityService.canView(image, request)) {
 				image = null;
 				return;
 			}
 			vertical = ((float)image.getHeight())/((float)image.getWidth()) > 0.8;
 			
-			canModify = securityService.canModify(image, session) && session.has(Ability.usePhotosApp);
+			canModify = securityService.canModify(image, request) && request.getSession().has(Ability.usePhotosApp);
 			if (canModify) {
-				secret = !securityService.canView(image, securityService.getPublicUser());
+				secret = !securityService.canView(image, request.as(securityService.getPublicUser()));
 			}
 			
-			imageInfo = imageService.getImageInfo(image, session);
+			imageInfo = imageService.getImageInfo(image, request);
 			
 			if (imageInfo.getRotation()!=null && (Math.abs(imageInfo.getRotation())==90)) {
 				vertical=!vertical;
 			}
 			
-			location = modelService.getParent(image, Location.class, session);
+			location = modelService.getParent(image, Location.class, request);
 
-			user = modelService.getOwner(image, session);
+			user = modelService.getOwner(image, request);
 			if (user!=null) {
 				UsersPersonQuery query = new UsersPersonQuery().withUsername(user.getUsername());
-				PairSearchResult<User,Person> searchPairs = modelService.searchPairs(query);
+				PairSearchResult<User,Person> searchPairs = modelService.searchPairs(query, request);
 				Pair<User,Person> first = searchPairs.getFirst();
 				if (first!=null) {
 					user = first.getKey();
 					person = first.getValue();
-					personImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, session);
+					personImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request);
 					fullPersonName = personService.getFullPersonName(person, 14);
 				}
 			}
 			
 			Query<Image> allQuery = Query.after(Image.class).as(user).orderByCreated();
-			if (user==null || user.getId()!=session.getIdentity()) {
+			if (user==null || user.getId() != request.getIdentity()) {
 				allQuery.withPublicView();
 			}
-			List<Long> ids = modelService.listIds(allQuery);
+			List<Long> ids = modelService.listIds(allQuery, request);
 			int position = ids.indexOf(image.getId());
 			int previous = position>0 ? position-1 : ids.size()-1;
 			int next = position<ids.size()-1 ? position+1 : 0;
@@ -141,7 +139,7 @@ public class PhotosPhotoView extends AbstractManagedBean {
 				mapPoint.setLatitude(location.getLatitude());
 				mapPoint.setLongitude(location.getLongitude());
 			}
-			List<Word> wordChildren = modelService.getChildren(image, null, Word.class, session);
+			List<Word> wordChildren = modelService.getChildren(image, null, Word.class, request);
 			words = Lists.newArrayList();
 			for (Word word : wordChildren) {
 				String link = "";
@@ -154,7 +152,7 @@ public class PhotosPhotoView extends AbstractManagedBean {
 			String[] path = request.getLocalPath();
 			language = path[0];
 			
-			galleries = modelService.getParents(image, ImageGallery.class,session);
+			galleries = modelService.getParents(image, ImageGallery.class, request);
 		}
 	}
 	

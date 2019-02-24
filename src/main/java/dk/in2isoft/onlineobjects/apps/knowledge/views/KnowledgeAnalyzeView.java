@@ -14,10 +14,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -31,7 +31,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class KnowledgeAnalyzeView extends LegacyAbstractView implements InitializingBean {
+public class KnowledgeAnalyzeView extends AbstractView implements InitializingBean {
 	
 	private ModelService modelService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
@@ -52,13 +52,11 @@ public class KnowledgeAnalyzeView extends LegacyAbstractView implements Initiali
 	}
 	
 	@Override
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
+	protected void before(Request request) throws Exception {
 		Long id = request.getId();
-		Privileged privileged = request.getSession();
-		internetAddress = modelService.getRequired(InternetAddress.class, id, privileged);
+		internetAddress = modelService.getRequired(InternetAddress.class, id, request);
 		
-		analytics = textDocumentAnalyzer.analyze(internetAddress, privileged);
+		analytics = textDocumentAnalyzer.analyze(internetAddress, request);
 		
 		properties.add(Pair.of("Entity name", internetAddress.getName()));
 		properties.add(Pair.of("Entity address", internetAddress.getAddress()));
@@ -74,18 +72,17 @@ public class KnowledgeAnalyzeView extends LegacyAbstractView implements Initiali
 		);
 		wordsByPartOfSpeech = textByPOS.asMap();
 		
-		compare();
-		
-		findPeople();
+		compare(request);
+		findPeople(request);
 	}
 	
-	private void findPeople() throws ModelException, ExplodingClusterFuckException {
+	private void findPeople(Operator operator) throws ModelException, ExplodingClusterFuckException {
 		List<List<String>> nameCandidates = analytics.getNameCandidates();
 		Set<String> uniques = Sets.newHashSet();
 		for (List<String> list : nameCandidates) {
 			uniques.addAll(list);
 		}
-		List<WordListPerspective> perspectives = findNames(uniques);
+		List<WordListPerspective> perspectives = findNames(uniques, operator);
 		List<String> names = perspectives.stream().map((a) -> a.getText()).collect(Collectors.toList());
 		this.names = new ArrayList<String>();
 		for (List<String> words : nameCandidates) {
@@ -107,13 +104,12 @@ public class KnowledgeAnalyzeView extends LegacyAbstractView implements Initiali
 		return names;
 	}
 	
-	private void compare() throws ModelException {
-		Privileged privileged = getRequest().getSession();
+	private void compare(Operator operator) throws ModelException {
 		
 		List<Pair<InternetAddress,Double>> similarities = new ArrayList<>();
 		
-		List<Relation> relationsFrom = modelService.getRelationsFrom(internetAddress, InternetAddress.class, Kind.similarity.toString(), privileged);
-		List<Relation> relationsTo = modelService.getRelationsTo(internetAddress, InternetAddress.class, Kind.similarity.toString(), privileged);
+		List<Relation> relationsFrom = modelService.getRelationsFrom(internetAddress, InternetAddress.class, Kind.similarity.toString(), operator);
+		List<Relation> relationsTo = modelService.getRelationsTo(internetAddress, InternetAddress.class, Kind.similarity.toString(), operator);
 		
 		for (Relation relation : relationsFrom) {
 			if (relation.getTo() instanceof InternetAddress && relation.getStrength()!=null) {
@@ -129,10 +125,10 @@ public class KnowledgeAnalyzeView extends LegacyAbstractView implements Initiali
 		
 	}
 	
-	private List<WordListPerspective> findNames(Collection<String> words) throws ModelException, ExplodingClusterFuckException {
+	private List<WordListPerspective> findNames(Collection<String> words, Operator operator) throws ModelException, ExplodingClusterFuckException {
 		WordCategoryPerspectiveQuery query = new WordCategoryPerspectiveQuery().withWords(words);
 		query.withCategories(LexicalCategory.CODE_PROPRIUM_FIRST, LexicalCategory.CODE_PROPRIUM_MIDDLE, LexicalCategory.CODE_PROPRIUM_LAST);
-		return modelService.search(query).getList();
+		return modelService.search(query, operator).getList();
 	}
 
 	

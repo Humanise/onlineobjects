@@ -2,19 +2,19 @@ package dk.in2isoft.onlineobjects.apps.account.views;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Invitation;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.InvitationService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 
-public class AccountInvitationView extends AbstractManagedBean {
+public class AccountInvitationView extends AbstractView {
 	
 	private ModelService modelService;
 	private InvitationService invitationService;
@@ -29,8 +29,8 @@ public class AccountInvitationView extends AbstractManagedBean {
 
 	public void before(Request request) throws Exception {
 		// TODO: Use a more safe perspective 
-		Privileged admin = securityService.getAdminPrivileged();
-		invitation = invitationService.getInvitation(getCode());
+		Operator admin = request.as(securityService.getAdminPrivileged());
+		invitation = invitationService.getInvitation(getCode(), admin);
 		if (invitation!=null) {
 			inviterUser = modelService.getParent(invitation, null, User.class, admin);
 			inviterPerson = modelService.getChild(inviterUser, Person.class, admin);

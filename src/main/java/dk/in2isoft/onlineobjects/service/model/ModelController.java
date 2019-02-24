@@ -19,7 +19,6 @@ import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.in2igui.data.Node;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -53,25 +52,23 @@ public class ModelController extends ModelControllerBase {
 		long id = request.getLong("entityId");
 		Boolean publicView = request.getBoolean("publicView",null);
 		if (publicView!=null) {
-			Entity entity = modelService.get(Entity.class, id, request.getSession());
+			Entity entity = modelService.get(Entity.class, id, request);
 			if (publicView) {
-				securityService.makePublicVisible(entity,request.getSession());			
+				securityService.makePublicVisible(entity,request);			
 			} else {
-				securityService.makePublicHidden(entity,request.getSession());
+				securityService.makePublicHidden(entity,request);
 			}
 		}
 	}
 
 	private User getUser(Request request) throws ModelException, ContentNotFoundException {
-		Privileged privileged = request.getSession();
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
-		return user;
+		return modelService.getUser(request);
 	}
 
 	@Path(exactly={"image","list"})
 	public void listImage(Request request) throws IOException, ModelException {
 		Query<Image> query = Query.after(Image.class).withPaging(0, 40).as(request.getSession()).orderByCreated().descending();
-		SearchResult<Image> result = modelService.search(query);
+		SearchResult<Image> result = modelService.search(query, request);
 		request.sendObject(result.getList());
 	}
 	
@@ -84,7 +81,7 @@ public class ModelController extends ModelControllerBase {
 		
 		int pageSize = 20;
 		WordQuery query = new WordQuery().withPage(page).withPageSize(pageSize).withText(text);
-		SearchResult<WordListPerspective> result = wordService.search(query);
+		SearchResult<WordListPerspective> result = wordService.search(query, request);
 		
 		Messages msg = new Messages(WordsController.class);
 		Messages langMsg = new Messages(Language.class);
@@ -122,12 +119,12 @@ public class ModelController extends ModelControllerBase {
 	public void addTag(Request request) throws ModelException, SecurityException, IllegalRequestException {
 		String tag = request.getString("tag", "No tag provided");
 		Long id = request.getId();
-		Entity entity = modelService.get(Entity.class, id, request.getSession());
+		Entity entity = modelService.get(Entity.class, id, request);
 		if (entity!=null) {
 			List<String> existingTags = entity.getPropertyValues(Property.KEY_COMMON_TAG);
 			if (!existingTags.contains(tag)) {
 				entity.addProperty(Property.KEY_COMMON_TAG, tag);
-				modelService.update(entity, request.getSession());
+				modelService.update(entity, request);
 			}
 		}
 	}
@@ -137,8 +134,7 @@ public class ModelController extends ModelControllerBase {
 		String text = request.getString("text");
 		String language = request.getString("language");
 		String category = request.getString("category");
-		User user = getUser(request);
-		Word word = wordService.createWord(language, category, text, user);
+		Word word = wordService.createWord(language, category, text, request);
 		request.sendObject(word);
 	}
 	
@@ -147,9 +143,9 @@ public class ModelController extends ModelControllerBase {
 		int page = request.getInt("page");
 		
 		User user = getUser(request);
-		Pile inbox = inboxService.getOrCreateInbox(user);
+		Pile inbox = inboxService.getOrCreateInbox(user, request);
 		
-		List<Entity> items = modelService.getChildren(inbox, Entity.class, user);
+		List<Entity> items = modelService.getChildren(inbox, Entity.class, request.as(user));
 
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
@@ -175,9 +171,9 @@ public class ModelController extends ModelControllerBase {
 	public void removeEntity(Request request) throws IllegalRequestException, ModelException, SecurityException {
 
 		Long id = request.getId();
-		Entity entity = modelService.get(Entity.class, id, request.getSession());
+		Entity entity = modelService.get(Entity.class, id, request);
 		Code.checkNotNull(entity, "Entity not found");
-		modelService.delete(entity, request.getSession());
+		modelService.delete(entity, request);
 	}
 
 	@Path
@@ -185,16 +181,15 @@ public class ModelController extends ModelControllerBase {
 
 		long id = request.getLong("id");
 		User user = getUser(request);
-		inboxService.remove(user,id);
+		inboxService.remove(user,id, request);
 	}
 	
 	@Path
 	public Diagram diagram(Request request) throws IllegalRequestException, ModelException, SecurityException {
 		Long id = request.getLong("id");
-		Privileged privileged = request.getSession();
 		Diagram diagram = new Diagram();
 		
-		Entity entity = modelService.get(Entity.class, id, request.getSession());
+		Entity entity = modelService.get(Entity.class, id, request);
 		if (entity==null) {
 			throw new IllegalRequestException("Not found");
 		}
@@ -209,7 +204,7 @@ public class ModelController extends ModelControllerBase {
 			return Kind.similarity.toString().equals(e.getKind()) ? e.getStrength() > 0.5 : true;
 		};
 		// TODO build filtering+limit into query 
-		modelService.find().relations(privileged).from(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
+		modelService.find().relations(request).from(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getTo();
 
 			Node otherNode = new Node();
@@ -220,7 +215,7 @@ public class ModelController extends ModelControllerBase {
 			diagram.addEdge(center, relation.getKind(), otherNode);			
 		});;
 		// TODO build filtering+limit into query 
-		modelService.find().relations(privileged).to(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
+		modelService.find().relations(request).to(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getFrom();
 
 			Node otherNode = new Node();
@@ -308,7 +303,7 @@ public class ModelController extends ModelControllerBase {
 		int page = request.getInt("windowPage");
 		
 		Query<? extends Entity> query = Query.after(entityClass).withPaging(page, 20).withWords(text).as(request.getSession());
-		SearchResult<? extends Entity> result = modelService.search(query);
+		SearchResult<? extends Entity> result = modelService.search(query, request);
 
 
 		ListWriter out = new ListWriter(request);
@@ -335,14 +330,14 @@ public class ModelController extends ModelControllerBase {
 		String type = request.getString("type", "No type provided");
 		if (Person.class.getSimpleName().equals(type)) {
 			String name = request.getString("fullName", "No name");
-			return personService.getOrCreatePerson(name, request.getSession());
+			return personService.getOrCreatePerson(name, request);
 		}
 		if (Question.class.getSimpleName().equals(type)) {
 			Question question = new Question();
 			String text = request.getString("text", "No question");
 			question.setText(text);
 			question.setName(text);
-			modelService.create(question, request.getSession());
+			modelService.create(question, request);
 			return question;
 		}
 		if (Hypothesis.class.getSimpleName().equals(type)) {
@@ -350,7 +345,7 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text", "No hypothesis");
 			hypothesis.setText(text);
 			hypothesis.setName(text);
-			modelService.create(hypothesis, request.getSession());
+			modelService.create(hypothesis, request);
 			return hypothesis;
 		}
 		throw new IllegalRequestException("Unknown type");

@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.collect.ImmutableMap;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.CompoundDocument;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -36,7 +36,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 	}
 
 	@Override
-	public Node build(Document document, Privileged privileged) throws EndUserException {
+	public Node build(Document document, Operator privileged) throws EndUserException {
 		CompoundDocument compound = (CompoundDocument)document;
 		Element root = new Element("CompoundDocument", CompoundDocument.CONTENT_NAMESPACE);
 		nu.xom.Document structure = compound.getStructureDocument();
@@ -47,7 +47,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 		return root;
 	}
 
-	public void insertParts(nu.xom.Document document, Privileged privileged) throws EndUserException {
+	public void insertParts(nu.xom.Document document, Operator privileged) throws EndUserException {
 		XPathContext context = new XPathContext("doc",CompoundDocument.CONTENT_NAMESPACE);
 		Nodes sections = document.query("//doc:section",context);
 		for (int i = 0; i < sections.size(); i++) {
@@ -73,7 +73,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 	
 
 	@Override
-	public Entity create(Privileged priviledged) throws EndUserException {
+	public Entity create(Operator priviledged) throws EndUserException {
 		CompoundDocument document = new CompoundDocument();
 		modelService.create(document, priviledged);
 		return document;

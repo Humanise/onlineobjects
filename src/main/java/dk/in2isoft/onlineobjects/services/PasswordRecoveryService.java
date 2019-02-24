@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -26,32 +27,34 @@ public class PasswordRecoveryService {
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
 	
-	public boolean sendRecoveryMail(String usernameOrEmail) throws EndUserException {
-		User user = modelService.getUser(usernameOrEmail);
+	public boolean sendRecoveryMail(String usernameOrEmail, Operator operator) throws EndUserException {
+		User user = modelService.getUser(usernameOrEmail, operator);
 		if (user==null) {
-			user = memberService.getUserByPrimaryEmail(usernameOrEmail, securityService.getAdminPrivileged());
+			user = memberService.getUserByPrimaryEmail(usernameOrEmail, operator.as(securityService.getAdminPrivileged()));
 		}
 		if (user!=null) {
-			return sendRecoveryMail(user);
+			return sendRecoveryMail(user, operator);
 		}
 		return false;
 	}
 	
-	public boolean sendRecoveryMail(User user) throws EndUserException {
+	public boolean sendRecoveryMail(User user, Operator operator) throws EndUserException {
 		surveillanceService.audit().info("Request to recover password for user={}", user.getUsername());
 		Privileged admin = securityService.getAdminPrivileged();
-		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, admin);
-		Person person = memberService.getUsersPerson(user, admin);
+		operator = operator.as(admin);
+		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, operator);
+		Person person = memberService.getUsersPerson(user, operator);
 		if (usersPrimaryEmail!=null && person!=null) {
-			return sendRecoveryMail(user, person, usersPrimaryEmail);			
+			return sendRecoveryMail(user, person, usersPrimaryEmail, operator);			
 		}
 		return false;
 	}
 	
-	public boolean sendRecoveryMail(User user, Person person, EmailAddress email) throws EndUserException {
+	public boolean sendRecoveryMail(User user, Person person, EmailAddress email, Operator operator) throws EndUserException {
 		String random = Strings.generateRandomString(30);
 		user.overrideFirstProperty(Property.KEY_PASSWORD_RECOVERY_CODE, random);
-		modelService.update(user, securityService.getAdminPrivileged());
+		operator = operator.as(securityService.getAdminPrivileged());
+		modelService.update(user, operator);
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);
@@ -69,9 +72,9 @@ public class PasswordRecoveryService {
 		return true;
 	}
 
-	public User getUserByRecoveryKey(String key) {
-
-		SearchResult<User> result = modelService.search(Query.of(User.class).withCustomProperty(Property.KEY_PASSWORD_RECOVERY_CODE, key));
+	public User getUserByRecoveryKey(String key, Operator operator) {
+		Query<User> query = Query.of(User.class).withCustomProperty(Property.KEY_PASSWORD_RECOVERY_CODE, key);
+		SearchResult<User> result = modelService.search(query, operator);
 		return result.getFirst();
 	}
 	

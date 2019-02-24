@@ -1,13 +1,12 @@
 package dk.in2isoft.onlineobjects.services;
 
-import nu.xom.Node;
-
 import java.util.List;
 
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.conversion.EntityConverter;
+import nu.xom.Node;
 
 
 public class ConversionService {
@@ -29,7 +28,7 @@ public class ConversionService {
 		return getConverter(entity.getClass());
 	}
 		
-	public final Node generateXML(Entity entity, Privileged privileged) throws ModelException {
+	public final Node generateXML(Entity entity, Operator privileged) throws ModelException {
 		EntityConverter converter = getConverter(entity);
 		return converter.generateXML(entity, privileged);
 	}

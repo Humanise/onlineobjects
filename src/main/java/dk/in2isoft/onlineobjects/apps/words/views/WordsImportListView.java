@@ -6,13 +6,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
@@ -32,7 +31,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsImportListView extends LegacyAbstractView implements InitializingBean {
+public class WordsImportListView extends AbstractView {
 
 	private ModelService modelService;
 	private LanguageService languageService;
@@ -48,30 +47,43 @@ public class WordsImportListView extends LegacyAbstractView implements Initializ
 	private List<Option> languageOptions;
 	
 	private List<WordImportProspectPerspective> list;
+
+
+	public List<Option> getCategories() {
+		return categories;
+	}
+
+	public List<Option> getLanguageOptions() {
+		return languageOptions;
+	}
 	
-	private Language findLanguage(String fromContent) throws IllegalRequestException {
-		Request request = getRequest();
-		String[] path = request.getLocalPath();
-		String pathLang = path[0];
-		String queryLang = request.getString("language");
-		Language language = null;
-		if (Strings.isNotBlank(queryLang)) {
-			language = languageService.getLanguageForCode(queryLang);			
-		}
-		if (language==null) {
-			language = languageService.getLanguageForCode(fromContent);
-		}
-		if (language==null) {
-			language = languageService.getLanguageForCode(pathLang);
-		}
-		if (language == null) {
-			throw new IllegalRequestException("Unsupported language");
-		}
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public long getQueryTime() {
+		return queryTime;
+	}
+		
+	public Language getLanguage() {
 		return language;
 	}
 	
-	public void afterPropertiesSet() throws Exception {
-		String[] path = getRequest().getLocalPath();
+	public String getStatus() {
+		return status;
+	}
+	
+	public List<WordImportProspectPerspective> getList() {
+		return list;
+	}
+
+	@Override
+	protected void before(Request request) throws Exception {
+		String[] path = request.getLocalPath();
 		if (path.length==3) {
 			StopWatch watch = new StopWatch();
 			watch.start();
@@ -88,11 +100,13 @@ public class WordsImportListView extends LegacyAbstractView implements Initializ
 			
 			List<String> words = semanticService.getUniqueNoEmptyLines(text);
 			List<String> lowercaseWords = semanticService.lowercaseWordsCopy(words);
+			categories = buildCategories(request);
+			languageOptions = buildLanguageOptions(request);
 			
 			if (words.size()<100) {
 			
 				WordListPerspectiveQuery perspectiveQuery = new WordListPerspectiveQuery().withWords(lowercaseWords).orderByText();
-				List<WordListPerspective> found = modelService.list(perspectiveQuery);
+				List<WordListPerspective> found = modelService.list(perspectiveQuery, request);
 	
 				for (String word : words) {
 					WordImportProspectPerspective perspective = new WordImportProspectPerspective();
@@ -130,27 +144,44 @@ public class WordsImportListView extends LegacyAbstractView implements Initializ
 						languageCounts.addOne(lang);
 					}
 				}
-				language = findLanguage(languageCounts.getTop());
+				language = findLanguage(languageCounts.getTop(), request);
 			}
 			watch.stop();
 			this.queryTime = watch.getTime();
 		}
 	}
-	
 
+	private Language findLanguage(String fromContent, Request request) throws IllegalRequestException {
+		String[] path = request.getLocalPath();
+		String pathLang = path[0];
+		String queryLang = request.getString("language");
+		Language language = null;
+		if (Strings.isNotBlank(queryLang)) {
+			language = languageService.getLanguageForCode(queryLang, request);			
+		}
+		if (language==null) {
+			language = languageService.getLanguageForCode(fromContent, request);
+		}
+		if (language==null) {
+			language = languageService.getLanguageForCode(pathLang, request);
+		}
+		if (language == null) {
+			throw new IllegalRequestException("Unsupported language");
+		}
+		return language;
+	}	
 	
-	public List<Option> getCategories() {
-		if (categories!=null) return categories;
-		Locale locale = getLocale();
+	private List<Option> buildCategories(Request request) {
+		Locale locale = request.getLocale();
 
 		Messages msg = new Messages(LexicalCategory.class);
-		categories = Lists.newArrayList();
+		List<Option> categories = Lists.newArrayList();
 
 		Option unknown = new Option(null,msg.get("code","none", locale));
 		categories.add(unknown);
 		
 		Query<LexicalCategory> query = Query.of(LexicalCategory.class).orderByName();
-		List<LexicalCategory> list = modelService.list(query);
+		List<LexicalCategory> list = modelService.list(query, request);
 		for (LexicalCategory category : list) {
 			Option option = new Option();
 			option.setValue(category.getCode());
@@ -160,16 +191,14 @@ public class WordsImportListView extends LegacyAbstractView implements Initializ
 		}
 		return categories;
 	}
-
 	
-	public List<Option> getLanguageOptions() {
-		if (languageOptions!=null) return languageOptions;
+	private List<Option> buildLanguageOptions(Request request) {
 
 		Messages msg = new Messages(Language.class);
-		languageOptions = Lists.newArrayList();
+		List<Option> languageOptions = Lists.newArrayList();
 		Query<Language> query = Query.of(Language.class).orderByName();
-		List<Language> list = modelService.list(query);
-		Locale locale = getLocale();
+		List<Language> list = modelService.list(query, request);
+		Locale locale = request.getLocale();
 		for (Language category : list) {
 			Option option = new Option();
 			option.setValue(category.getCode());
@@ -177,30 +206,6 @@ public class WordsImportListView extends LegacyAbstractView implements Initializ
 			languageOptions.add(option);
 		}
 		return languageOptions;
-	}
-		
-	public String getTitle() {
-		return title;
-	}
-	
-	public String getId() {
-		return id;
-	}
-	
-	public long getQueryTime() {
-		return queryTime;
-	}
-		
-	public Language getLanguage() {
-		return language;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-	
-	public List<WordImportProspectPerspective> getList() {
-		return list;
 	}
 	
 	// Services...

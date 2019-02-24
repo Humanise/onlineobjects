@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.SubSession;
 
 public class SessionService {
@@ -21,8 +20,6 @@ public class SessionService {
 	
 	private List<SubSession> subSessions = Lists.newArrayList();
 	
-	private SecurityService securityService;
-
 	public void sessionCreated(HttpSessionEvent event) {
 		HttpSession session = event.getSession();
 		//session.setMaxInactiveInterval(10);
@@ -35,10 +32,6 @@ public class SessionService {
 	
 	public void registerSubSession(SubSession subSession) {
 		this.subSessions.add(subSession);
-	}
-
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
 	}
 
 	@Deprecated

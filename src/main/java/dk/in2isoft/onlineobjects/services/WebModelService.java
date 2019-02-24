@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.services;
 import java.util.List;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -19,7 +19,7 @@ public class WebModelService {
 	private ModelService modelService;
 	private PageRenderingService pageRenderingService;
 	
-	public WebPage getWebSiteFrontPage(WebSite site, Privileged privileged) throws ModelException {
+	public WebPage getWebSiteFrontPage(WebSite site, Operator privileged) throws ModelException {
 		WebPage page = null;
 		WebNode node = modelService.getChild(site, WebNode.class, privileged);
 		if (node!=null) {
@@ -28,12 +28,12 @@ public class WebModelService {
 		return page;
 	}
 
-	public WebSite getUsersWebSite(User user, Privileged privileged) throws ModelException {
+	public WebSite getUsersWebSite(User user, Operator privileged) throws ModelException {
 		WebSite site = modelService.getChild(user, WebSite.class, privileged);
 		return site;
 	}
 	
-	public WebSite getWebSiteOfPage(WebPage page, Privileged privileged) throws ModelException {
+	public WebSite getWebSiteOfPage(WebPage page, Operator privileged) throws ModelException {
 		WebNode node = modelService.getParent(page, WebNode.class, privileged);
 		if (node==null) {
 			return null;
@@ -42,7 +42,7 @@ public class WebModelService {
 		return site;
 	}
 
-	public WebPage getPageForWebNode(long id, Privileged privileged) throws ModelException {
+	public WebPage getPageForWebNode(long id, Operator privileged) throws ModelException {
 		WebPage page = null;
 		WebNode node = modelService.get(WebNode.class, id, privileged);
 		if (node!=null) {
@@ -51,7 +51,7 @@ public class WebModelService {
 		return page;
 	}
 	
-	public long createWebPageOnSite(long webSiteId, Class<? extends Entity> clazz, Privileged priviledged) throws EndUserException {
+	public long createWebPageOnSite(long webSiteId, Class<? extends Entity> clazz, Operator priviledged) throws EndUserException {
 		WebSite site = modelService.get(WebSite.class, webSiteId, priviledged);
 		
 		// Create a web page
@@ -94,7 +94,7 @@ public class WebModelService {
 		
 	}
 
-	public void moveNodeUp(WebNode node, Privileged privileged) throws ModelException, SecurityException {
+	public void moveNodeUp(WebNode node, Operator privileged) throws ModelException, SecurityException {
 
 		WebSite site = modelService.getParent(node, WebSite.class, privileged);
 		List<Relation> relations = modelService.getRelationsFrom(site,WebNode.class, privileged);
@@ -106,7 +106,7 @@ public class WebModelService {
 		}
 	}
 
-	public void moveNodeDown(WebNode node, Privileged privileged) throws ModelException, SecurityException {
+	public void moveNodeDown(WebNode node, Operator privileged) throws ModelException, SecurityException {
 
 		WebSite site = modelService.getParent(node, WebSite.class, privileged);
 		List<Relation> relations = modelService.getRelationsFrom(site, WebNode.class, privileged);
@@ -118,7 +118,7 @@ public class WebModelService {
 		}
 	}
 	
-	private void updatePositions(List<Relation> relations, Privileged priviledged) throws SecurityException, ModelException {
+	private void updatePositions(List<Relation> relations, Operator priviledged) throws SecurityException, ModelException {
 		int position = 1;
 		for (Relation relation : relations) {
 			relation.setPosition(position);
@@ -136,7 +136,7 @@ public class WebModelService {
 		return -1;
 	}
 	
-	public boolean isLastPageOnSite(long pageId,Privileged privileged) throws EndUserException {
+	public boolean isLastPageOnSite(long pageId, Operator privileged) throws EndUserException {
 		WebPage page = modelService.get(WebPage.class, pageId, privileged);
 		if (page == null) {
 			throw new EndUserException("The page does not exist");
@@ -151,7 +151,7 @@ public class WebModelService {
 		return nodes.size()==1;
 	}
 	
-	public void deleteWebPage(long pageId,Privileged privileged) throws EndUserException {
+	public void deleteWebPage(long pageId, Operator privileged) throws EndUserException {
 		WebPage page = modelService.get(WebPage.class, pageId, privileged);
 		if (page == null) {
 			throw new EndUserException("The page does not exist");

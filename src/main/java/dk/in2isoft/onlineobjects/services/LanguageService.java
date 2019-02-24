@@ -17,6 +17,7 @@ import com.google.common.collect.Sets;
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -33,12 +34,12 @@ public class LanguageService {
 	
 	private Set<Locale> locales = Sets.newHashSet(new Locale("en","US"),new Locale("da","DK"));
 		
-	public Language getLanguageForCode(String code) {
+	public Language getLanguageForCode(String code, Operator operator) {
 		if (Strings.isBlank(code)) {
 			return null;
 		}
 		Query<Language> query = Query.of(Language.class).withField(Language.CODE, code);
-		return modelService.search(query).getFirst();
+		return modelService.search(query, operator).getFirst();
 	}
 	
 	public Locale getLocaleForCode(String language) {
@@ -50,12 +51,12 @@ public class LanguageService {
 		return new Locale(language);
 	}
 
-	public LexicalCategory getLexcialCategoryForCode(String code) {
+	public LexicalCategory getLexcialCategoryForCode(String code, Operator operator) {
 		if (Strings.isBlank(code)) {
 			return null;
 		}
 		Query<LexicalCategory> query = Query.of(LexicalCategory.class).withField(LexicalCategory.CODE, code);
-		return modelService.search(query).getFirst();
+		return modelService.search(query, operator).getFirst();
 	}
 	
 	public Counter<String> countLanguages(List<WordListPerspective> perspectives) {
@@ -103,7 +104,7 @@ public class LanguageService {
 		return getLocaleForCode("en");
 	}
 
-	public TextAnalysis analyse(String text) throws ModelException {
+	public TextAnalysis analyse(String text, Operator operator) throws ModelException {
 		String[] words = semanticService.getWords(text);
 		
 		semanticService.lowercaseWords(words);
@@ -112,7 +113,7 @@ public class LanguageService {
 		
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery().withWords(uniqueWords);
 		
-		List<WordListPerspective> list = modelService.list(query);
+		List<WordListPerspective> list = modelService.list(query, operator);
 		
 		List<String> unknownWords = Lists.newArrayList();
 		

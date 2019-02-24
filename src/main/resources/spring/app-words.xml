@@ -15,11 +15,11 @@
 	<bean id="wordIndexer" class="dk.in2isoft.onlineobjects.modules.index.WordIndexer">
 		<property name="indexManager" ref="wordsIndex" />
 		<property name="modelService" ref="modelService" />
+        <property name="securityService" ref="securityService" />
 		<property name="documentBuilder">
 			<bean
 				class="dk.in2isoft.onlineobjects.modules.index.WordIndexDocumentBuilder">
 				<property name="wordService" ref="wordService" />
-				<property name="securityService" ref="securityService" />
 			</bean>
 		</property>
 	</bean>
@@ -74,9 +74,8 @@
 		autowire="byType" />
 
 	<bean id="wordsFrontView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsFrontView">
-		<property name="modelService" ref="modelService" />
-		<property name="eventService" ref="eventService" />
+		class="dk.in2isoft.onlineobjects.apps.words.views.WordsFrontView"
+      scope="request">
 		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
 	</bean>
 
@@ -93,7 +92,8 @@
 	</bean>
 
 	<bean id="wordsStatisticsView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsStatisticsView">
+		class="dk.in2isoft.onlineobjects.apps.words.views.WordsStatisticsView"
+		scope="request">
 		<property name="statisticsDataProvider" ref="languageStatisticsDataProvider" />
 	</bean>
 

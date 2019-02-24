@@ -11,7 +11,7 @@ import org.joda.time.Period;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.EntitylistSynchronizer;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -29,17 +29,17 @@ public class PersonService {
 
 	private ModelService modelService;
 		
-	public Address getPersonsPreferredAddress(Person person, Privileged privileged) throws ModelException {
+	public Address getPersonsPreferredAddress(Person person, Operator privileged) throws ModelException {
 		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class, privileged);
 	}
 	
-	public Person getOrCreatePerson(String text, Privileged privileged) throws ModelException, SecurityException {
+	public Person getOrCreatePerson(String text, Operator privileged) throws ModelException, SecurityException {
 		if (Strings.isBlank(text) || privileged == null) {
 			return null;
 		}
 		text = text.replaceAll("[\\s]+", " ").trim();
 		Query<Person> query = Query.after(Person.class).withName(text).as(privileged);
-		Person person = modelService.getFirst(query);
+		Person person = modelService.getFirst(query, privileged);
 		if (person==null) {
 			person = new Person();
 			person.setFullName(text);
@@ -82,7 +82,7 @@ public class PersonService {
 		return name.trim().substring(0, 1).toUpperCase()+".";
 	}
 	
-	public void updatePersonsPreferredAddress(Person person, Address address, Privileged privileged) throws ModelException, SecurityException {
+	public void updatePersonsPreferredAddress(Person person, Address address, Operator privileged) throws ModelException, SecurityException {
 		Address existing = getPersonsPreferredAddress(person, privileged);
 		if (existing!=null) {
 			existing.setStreet(address.getStreet());
@@ -97,7 +97,7 @@ public class PersonService {
 		}
 	}
 
-	public UserProfileInfo getProfileInfo(Person person,Privileged priviledged) throws ModelException {
+	public UserProfileInfo getProfileInfo(Person person,Operator priviledged) throws ModelException {
 		UserProfileInfo info = new UserProfileInfo();
 		info.setGivenName(person.getGivenName());
 		info.setFamilyName(person.getFamilyName());
@@ -115,7 +115,7 @@ public class PersonService {
 		return info;
 	}
 	
-	public void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Privileged session) throws EndUserException {
+	public void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Operator session) throws EndUserException {
 		
 		// Remove empty addresses
 		for (Iterator<EmailAddress> i = addresses.iterator(); i.hasNext();) {
@@ -146,7 +146,7 @@ public class PersonService {
 	}
 
 	
-	public void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Privileged priviledged) throws EndUserException {
+	public void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Operator priviledged) throws EndUserException {
 
 		// Remove empty addresses
 		for (Iterator<PhoneNumber> i = phones.iterator(); i.hasNext();) {

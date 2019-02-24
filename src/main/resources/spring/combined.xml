@@ -14,7 +14,6 @@
 
 	<bean class="dk.in2isoft.onlineobjects.core.ApplicationConsistencyChecker">
     	<property name="modelService" ref="modelService"/>
-    	<property name="securityService" ref="securityService"/>
     </bean>
     
     <import resource="core-scheduling.xml"/>

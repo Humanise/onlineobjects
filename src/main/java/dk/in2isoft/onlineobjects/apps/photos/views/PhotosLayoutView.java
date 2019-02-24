@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
@@ -17,11 +18,10 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PersonService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class PhotosLayoutView extends AbstractManagedBean {
+public class PhotosLayoutView extends AbstractView {
 
 	private ModelService modelService;
 	private PhotosGalleryView photosGalleryView;
@@ -52,7 +52,7 @@ public class PhotosLayoutView extends AbstractManagedBean {
 			username = photosGalleryView.getUser().getUsername();
 		}
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
-		Pair<User, Person> pair = modelService.searchPairs(query).getFirst();
+		Pair<User, Person> pair = modelService.searchPairs(query, request).getFirst();
 		if (pair == null) {
 			throw new ContentNotFoundException("User not found");
 		}
@@ -66,14 +66,14 @@ public class PhotosLayoutView extends AbstractManagedBean {
 			if (user.getId() != session.getIdentity()) {
 				galleryQuery.withPublicView();
 			}
-			List<ImageGallery> imageGalleries = modelService.list(galleryQuery);
+			List<ImageGallery> imageGalleries = modelService.list(galleryQuery, request);
 			for (ImageGallery gallery : imageGalleries) {
 				Option option = Option.of(gallery.getName(), gallery.getId());
 				option.setSelected(gallery.getId()==selected);
 				galleries.add(option);
 			}
 			modifiable = this.user.getId() == session.getIdentity() && session.has(Ability.usePhotosApp);
-			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, session);
+			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request);
 		}
 	}
 	

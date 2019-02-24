@@ -25,11 +25,15 @@ public class UserSession implements Privileged {
 	private Set<Ability> abilities;
 
 	public UserSession(User user) {
-		this.id = Strings.generateRandomString(50);
-		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
-		changeUser(user, new HashSet<Ability>());
+		this(user, new HashSet<>());
 	}
 	
+	public UserSession(User user, Set<Ability> abilities) {
+		this.id = Strings.generateRandomString(50);
+		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
+		changeUser(user, abilities);
+	}
+
 	public String getId() {
 		return id;
 	}

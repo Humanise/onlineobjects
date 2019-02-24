@@ -3,41 +3,40 @@ package dk.in2isoft.onlineobjects.apps.people.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
-public class PeopleListView extends AbstractManagedBean {
+public class PeopleListView extends AbstractView {
 
 	private ModelService modelService;
 
 	private ListModel<UserInfo> model;
 
 	public void before(Request request) throws Exception {
-		Privileged privileged = request.getSession();
 		model = new ListModel<UserInfo>() {
 			@Override
 			public ListModelResult<UserInfo> getResult() {
 				UsersPersonQuery query = new UsersPersonQuery().withPaging(getPage(), getPageSize()).withPublicView();
-				PairSearchResult<User, Person> search = modelService.searchPairs(query);
-				return new ListModelResult<UserInfo>(convert(search.getList(), privileged),search.getTotalCount());
+				PairSearchResult<User, Person> search = modelService.searchPairs(query, request);
+				return new ListModelResult<UserInfo>(convert(search.getList(), request),search.getTotalCount());
 			}
 			
 		};
 		model.setPageSize(10);
 	}
 	
-	private List<UserInfo> convert(List<Pair<User,Person>> list, Privileged privileged) {
+	private List<UserInfo> convert(List<Pair<User,Person>> list, Operator privileged) {
 		List<UserInfo> result = new ArrayList<UserInfo>();
 		for (Pair<User, Person> pair : list) {
 			UserInfo info = new UserInfo();

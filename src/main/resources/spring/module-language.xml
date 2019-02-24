@@ -13,5 +13,5 @@
 	<bean class="dk.in2isoft.onlineobjects.modules.language.TextDocumentAnalyzer" autowire="byType"/>
 	
 	<!-- App scoped bean to support wordfinder.xhtml -->
-	<bean id="wordFinderView" class="dk.in2isoft.onlineobjects.ui.controllers.WordFinderView" scope="application" autowire="byType"/>
+	<bean id="wordFinderView" class="dk.in2isoft.onlineobjects.ui.controllers.WordFinderView" scope="request" autowire="byType"/>
 </beans>

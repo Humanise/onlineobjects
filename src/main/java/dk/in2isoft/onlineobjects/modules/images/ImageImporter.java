@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -36,8 +37,8 @@ public class ImageImporter implements ImportListener<Object> {
 			throw new IllegalRequestException("Unsupported mime type: "+mimeType);
 		}
 		Image image = new Image();
-		Privileged privileged = getUser(parameters, request);
-		modelService.create(image, privileged);
+		Operator privileged = request.as(getUser(parameters, request));
+		modelService.create(image, request);
 		image.setName(name);
 		imageService.changeImageFile(image, file, mimeType);
 		imageService.synchronizeMetaData(image, privileged);
@@ -46,7 +47,7 @@ public class ImageImporter implements ImportListener<Object> {
 		importedImages.add(image);
 		image = modelService.get(Image.class, image.getId(), privileged);
 		postProcessImage(image, parameters, request);
-		modelService.commit();
+		privileged.commit();
 	}
 	
 	protected void preProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {

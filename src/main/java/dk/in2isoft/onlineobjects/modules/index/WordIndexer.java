@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.events.ModelEventListener;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -24,6 +25,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 		
 	private WordIndexDocumentBuilder documentBuilder;
 	private ModelService modelService;
+	private SecurityService securityService;
 	
 	private IndexManager indexManager;
 	
@@ -50,16 +52,20 @@ public class WordIndexer implements ModelEventListener, Indexer {
 		return modelService.count(Query.after(Word.class), operator);
 	}
 	
-	public void indexWord(Word word) {
+	private void indexWord(Word word) {
 		if (!enabled) {
 			return;
 		}
+		Operator operator = modelService.newOperator(securityService.getAdminPrivileged());
 		try {
-			Document document = documentBuilder.build(word, null);
+			Document document = documentBuilder.build(word, operator);
 			log.debug("Re-indexing : "+word);
 			indexManager.update(word, document);
 		} catch (EndUserException e) {
 			log.error("Unable to reindex: "+word, e);
+			operator.rollBack();
+		} finally {
+			operator.commit();
 		}
 	}
 
@@ -76,23 +82,6 @@ public class WordIndexer implements ModelEventListener, Indexer {
 				word.setText(perspective.getText());
 				word.setName(perspective.getText());
 				word.setId(perspective.getId());
-				map.put(word, document);
-			}
-			indexManager.update(map);
-		} catch (EndUserException e) {
-			log.error("Unable to reindex", e);
-		}			
-	}
-
-	public void indexWords(List<Word> words) {
-		if (!enabled) {
-			return;
-		}
-		try {
-			Map<Entity,Document> map = Maps.newHashMap();
-			for (Word word : words) {
-				Document document = documentBuilder.build(word, null);
-				log.debug("Re-indexing : "+word);
 				map.put(word, document);
 			}
 			indexManager.update(map);
@@ -170,5 +159,9 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

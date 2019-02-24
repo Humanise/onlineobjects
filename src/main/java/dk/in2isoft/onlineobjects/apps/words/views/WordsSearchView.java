@@ -8,12 +8,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
@@ -29,7 +28,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.Filters.Variant;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsSearchView extends LegacyAbstractView implements InitializingBean {
+public class WordsSearchView extends AbstractView {
 
 	private static final int PAGING = 10;
 	private WordService wordService;
@@ -56,9 +55,6 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 	private String nextPage;
 	private String previousPage;
 	
-	private List<Option> languageOptions;
-	private List<Option> categoryOptions;
-	private List<Option> letterOptions;
 	private String effectiveQuery;
 	private Messages wordsMsg;
 	private Messages languageMsg;
@@ -66,9 +62,10 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 	private String description;
 
 	private List<Option> suggestions;
-			
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
+	private Filters filters;
+
+	@Override
+	protected void before(Request request) throws Exception {
 		text = request.getString("text");
 		letter = request.getString("letter");
 		language = request.getString("language");
@@ -86,31 +83,30 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		languageMsg = wordsInterfaceHelper.getLanguageMessages();
 		categoryMsg = wordsInterfaceHelper.getCategoryMessages();
 		
-		languageOptions = buildLanguageOptions(request);
-		categoryOptions = buildCategoryOptions(request);
-		
 		WordQuery query = new WordQuery().withText(text).withLetter(letter).withCategory(category).withLanguage(language).withSource(source).withPage(page).withPageSize(20);
 		if ("validated".equals(state)) {
 			query.setSourceDefined(true);
 		}
 		query.cached(request.getBoolean("cached"));
-		SearchResult<WordListPerspective> result = wordService.search(query);
+		SearchResult<WordListPerspective> result = wordService.search(query, request);
 
-		this.list = result.getList();
-		this.count = result.getTotalCount();
+		list = result.getList();
+		count = result.getTotalCount();
 
 		highlight();
 		
 		effectiveQuery = result.getDescription();
 		
-		buildTitle();
-		buildPages();
-		buildSuggestions(request);
+		title = buildTitle(request);
+		description = title;
+		pages = buildPages(request);
+		suggestions = buildSuggestions(request);
+		filters = buildFilters(request);
 	}
 	
-	private void buildSuggestions(Request request) {
-		suggestions = Lists.newArrayList();
-		Locale locale = getLocale();
+	private List<Option> buildSuggestions(Request request) {
+		List<Option> suggestions = Lists.newArrayList();
+		Locale locale = request.getLocale();
 		String textLetter = text.toLowerCase(locale);
 		if (wordsInterfaceHelper.isLetter(textLetter)) {
 
@@ -134,6 +130,7 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 			option.setLabel(wordsMsg.get("search_for_validated_words", locale));
 			suggestions.add(option);
 		}
+		return suggestions;
 	}
 	
 	private LinkedHashSet<String> getLanguages(Request request) {
@@ -167,11 +164,10 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 			
 	}
 	
-	private void buildTitle() {
-		Locale locale = getLocale();
+	private String buildTitle(Request request) {
+		Locale locale = request.getLocale();
 		if (Strings.isBlank(language) && Strings.isBlank(category) && Strings.isBlank(letter) && Strings.isBlank(text)) {
-			this.title = wordsMsg.get("searching", locale);
-			return;
+			return wordsMsg.get("searching", locale);
 		}
 		StringBuilder title = new StringBuilder();
 		if (Strings.isNotBlank(category)) {
@@ -216,8 +212,7 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		if ("validated".equals(state)) {
 			title.append(" ").append(wordsMsg.get("that_are_validated", locale));
 		}
-		this.title = title.toString();
-		this.description = title.toString();
+		return title.toString();
 	}
 	
 	public String getTitle() {
@@ -243,7 +238,7 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		
 	private List<Option> buildCategoryOptions(Request request) {
 		List<Option> options = Lists.newArrayList();
-		Locale locale = getLocale();
+		Locale locale = request.getLocale();
 		{
 			Option option = new Option();
 			option.setValue(buildUrl(request, text, language, null,letter, state));
@@ -276,7 +271,7 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 
 	private List<Option> buildLanguageOptions(Request request) {
 		List<Option> options = Lists.newArrayList();
-		Locale locale = getLocale();
+		Locale locale = request.getLocale();
 		{
 			Option option = new Option();
 			option.setValue(buildUrl(request, text, null, category,letter, state));
@@ -297,16 +292,17 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 	}
 	
 	private List<Option> buildLetterOptions(Request request) {
+		Locale locale = request.getLocale();
 		List<Option> options = Lists.newArrayList();
 		{
 			Option option = new Option();
-			option.setLabel(translate("any"));
+			option.setLabel(translate("any", locale));
 			option.setKey("default");
 			option.setSelected(Strings.isBlank(letter));
 			option.setValue(buildUrl(request, text, language, category, null, state));
 			options.add(option);
 		}
-		List<Option> letters = wordsInterfaceHelper.getLetterOptions(getLocale());
+		List<Option> letters = wordsInterfaceHelper.getLetterOptions(locale);
 		for (Option character : letters) {
 			Option option = new Option();
 			option.setLabel(character.getLabel());
@@ -317,15 +313,8 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		return options;
 	}
 
-	private String translate(String key) {
-		return wordsMsg.get(key, getLocale());
-	}
-	
-	public List<Option> getLetterOptions() {
-		if (letterOptions==null) {
-			letterOptions = buildLetterOptions(getRequest());
-		}
-		return letterOptions;
+	private String translate(String key, Locale locale) {
+		return wordsMsg.get(key, locale);
 	}
 
 	public List<WordListPerspective> getList() throws ModelException {
@@ -348,14 +337,6 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		return category;
 	}
 	
-	public List<Option> getLanguageOptions() {
-		return languageOptions;
-	}
-	
-	public List<Option> getCategoryOptions() {
-		return categoryOptions;
-	}
-	
 	public String getEffectiveQuery() {
 		return effectiveQuery;
 	}
@@ -363,15 +344,20 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 	public String getLetter() {
 		return letter;
 	}
-	
+
 	public Filters getFilters() {
+		return filters;
+	}
+	
+	private Filters buildFilters(Request request) {
+		Locale locale = request.getLocale();
 		Filters filters = new Filters();
 		{
-			Filter filter = new Filter(getLetterOptions());
+			Filter filter = new Filter(buildLetterOptions(request));
 			filter.setVariant(Variant.index);
-			filter.setTitle(translate("letters"));
+			filter.setTitle(translate("letters", locale));
 			if (Strings.isBlank(letter)) {
-				filter.setLabel(translate("letter"));
+				filter.setLabel(translate("letter", locale));
 			} else {
 				filter.setActive(true);
 				if ("number".equals(letter)) {
@@ -387,59 +373,59 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 			filters.addFilter(filter);
 		}
 		{
-			Filter filter = new Filter(getLanguageOptions());
-			filter.setTitle(translate("languages"));
+			Filter filter = new Filter(buildLanguageOptions(request));
+			filter.setTitle(translate("languages", locale));
 			if (Strings.isBlank(language)) {
-				filter.setLabel(translate("language"));
+				filter.setLabel(translate("language", locale));
 			} else {
 				filter.setActive(true);
-				filter.setLabel(languageMsg.get("code", language, getLocale()));
+				filter.setLabel(languageMsg.get("code", language, locale));
 			}
 			filters.addFilter(filter);
 		}
 		{
-			Filter filter = new Filter(getCategoryOptions());
-			filter.setTitle(translate("categories"));
+			Filter filter = new Filter(buildCategoryOptions(request));
+			filter.setTitle(translate("categories", locale));
 			if (Strings.isBlank(category)) {
-				filter.setLabel(translate("category"));
+				filter.setLabel(translate("category", locale));
 			} else {
 				filter.setActive(true);
-				filter.setLabel(categoryMsg.get("code", category, getLocale()));
+				filter.setLabel(categoryMsg.get("code", category, locale));
 			}
 			filters.addFilter(filter);
 		}
 		return filters;
 	}
 	
-	private void buildPages() {
-		pages = Lists.newArrayList();
+	private List<Option> buildPages(Request request) {
+		List<Option> pages = Lists.newArrayList();
 		int pageCount = (int) Math.ceil((float)count/(float)pageSize);
 		if (pageCount>1) {
 			int min = Math.max(1,page-PAGING);
 			int max = Math.min(pageCount, page+PAGING);
 			if (min>1) {
-				pages.add(buildOption(1));
+				pages.add(buildOption(1, request));
 			}
 			if (min>2) {
 				pages.add(null);
 			}
 			for (int i = min; i <= max; i++) {
-				pages.add(buildOption(i));
+				pages.add(buildOption(i, request));
 			}
 			if (max<pageCount-1) {
 				pages.add(null);
 			}
 			if (max<pageCount) {
-				pages.add(buildOption(pageCount));
+				pages.add(buildOption(pageCount, request));
 			}
 			if (page>0) {
-				previousPage = buildOption(page).getValue().toString();
+				previousPage = buildOption(page, request).getValue().toString();
 			}
 			if (page+1<max) {
-				nextPage = buildOption(page+2).getValue().toString();
+				nextPage = buildOption(page+2, request).getValue().toString();
 			}
 		}
-		
+		return pages;
 	}
 	
 	public List<Option> getPages() {
@@ -454,9 +440,9 @@ public class WordsSearchView extends LegacyAbstractView implements InitializingB
 		return previousPage;
 	}
 	
-	private Option buildOption(int num) {
+	private Option buildOption(int num, Request request) {
 		Option option = new Option();
-		UrlBuilder url = new UrlBuilder(getRequest().getBaseContext()).folder(getRequest().getLanguage()).folder("search");
+		UrlBuilder url = new UrlBuilder(request.getBaseContext()).folder(request.getLanguage()).folder("search");
 		if (num>1) {
 			url.folder(num);
 		}

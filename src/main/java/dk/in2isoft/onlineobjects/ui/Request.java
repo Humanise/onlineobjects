@@ -24,11 +24,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.DelegatingOperator;
 import dk.in2isoft.onlineobjects.core.Operation;
 import dk.in2isoft.onlineobjects.core.OperationProvider;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -562,5 +564,11 @@ public class Request implements Operator {
 	@Override
 	public long getIdentity() {
 		return getSession().getIdentity();
+	}
+	
+	@Override
+	public Operator as(Privileged privileged) {
+		if (privileged.getIdentity() == this.getIdentity()) return this;
+		return new DelegatingOperator(this, privileged);
 	}
 }

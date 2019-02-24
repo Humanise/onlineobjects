@@ -50,7 +50,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (username != null) {
 			username = username.toLowerCase();
 		}
-		boolean success = securityService.changeUser(request.getSession(), username, password);
+		boolean success = securityService.changeUser(request.getSession(), username, password, request);
 		if (success) {
 			if (Strings.isNotBlank(redirect)) {
 				request.redirectFromBase(redirect);
@@ -74,7 +74,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (!StringUtils.isNotBlank(password)) {
 			throw new IllegalRequestException(Error.noPassword);
 		}
-		boolean success = securityService.changeUser(request.getSession(), username, password);
+		boolean success = securityService.changeUser(request.getSession(), username, password, request);
 		if (!success) {
 			securityService.randomDelay();
 			throw new SecurityException(Error.userNotFound);
@@ -84,7 +84,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	public void recoverPassword(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
-		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail)) {
+		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
 			
 		} else {
 			throw new IllegalRequestException("Username or e-mail not found");
@@ -100,17 +100,17 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (username != null) {
 			username = username.toLowerCase();
 		}
-		memberService.signUp(request.getSession(), username, password, fullName, email);
+		memberService.signUp(request.getSession(), username, password, fullName, email, request);
 	}
 
 	public void getUserInfo(Request request) throws ModelException, IOException, IllegalRequestException {
 		UserSession session = request.getSession();
-		User user = modelService.get(User.class, session.getIdentity(), session);
+		User user = modelService.get(User.class, session.getIdentity(), request);
 		if (user==null) {
 			throw new IllegalRequestException();
 		}
-		Image image = memberService.getUsersProfilePhoto(user, session);
-		Person person = memberService.getUsersPerson(user, session);
+		Image image = memberService.getUsersProfilePhoto(user, request);
+		Person person = memberService.getUsersPerson(user, request);
 		String language = request.getString("language");
 		request.setLanguage(language);
 		UserInfoPerspective info = new UserInfoPerspective();
@@ -125,7 +125,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		}
 		List<Option> links = new ArrayList<>();
 		links.add(Option.of("account", configurationService.getApplicationContext("account", null, request)));
-		if (securityService.isPublicView(user)) {
+		if (securityService.isPublicView(user, request)) {
 			links.add(Option.of("profile", configurationService.getApplicationContext("people", user.getUsername(), request)));
 		}
 		info.setLinks(links);

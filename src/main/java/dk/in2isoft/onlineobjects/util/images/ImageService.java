@@ -30,7 +30,7 @@ import dk.in2isoft.commons.geo.GeoDistance;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -227,7 +227,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		return decimal;
 	}
 	
-	public void synchronizeContentType(Image image, Privileged priviledged) throws EndUserException {
+	public void synchronizeContentType(Image image, Operator priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		String mimeType = fileService.getMimeType(file);
 		if (!StringUtils.equals(mimeType, image.getContentType())) {
@@ -236,7 +236,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 	
-	public void synchronizeMetaData(Image image, Privileged priviledged) throws EndUserException {
+	public void synchronizeMetaData(Image image, Operator priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		ImageMetaData metaData = getMetaData(file);
 		boolean modified = false;
@@ -300,7 +300,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 
-	public ImageInfo getImageInfo(Image image, Privileged privileged) throws ModelException {
+	public ImageInfo getImageInfo(Image image, Operator privileged) throws ModelException {
 		ImageInfo info = new ImageInfo();
 		info.setId(image.getId());
 		info.setName(image.getName());
@@ -317,7 +317,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		return info;
 	}
 	
-	public void updateImageInfo(ImageInfo info, Privileged priviledged) throws ModelException, SecurityException {
+	public void updateImageInfo(ImageInfo info, Operator priviledged) throws ModelException, SecurityException {
 
 		Image image = modelService.get(Image.class, info.getId(),priviledged);
 		image.setName(info.getName());
@@ -347,7 +347,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 	
-	public Image createImageFromFile(File file, String name, Privileged privileged) throws ModelException {
+	public Image createImageFromFile(File file, String name, Operator privileged) throws ModelException {
 		try {
 			ImageProperties properties = getImageProperties(file);
 			Image image = new Image();
@@ -363,7 +363,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		return null;
 	}
 	
-	public void updateImageLocation(Image image, ImageLocation imageLocation, Privileged priviledged) throws ModelException, SecurityException {
+	public void updateImageLocation(Image image, ImageLocation imageLocation, Operator priviledged) throws ModelException, SecurityException {
 		Location existing = modelService.getParent(image, Location.class, priviledged);
 		if (imageLocation==null && existing==null) {
 			return;
@@ -441,7 +441,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		file.renameTo(new File(folder,"original"));
 	}
 
-	public void deleteImage(Image image, Privileged privileged) throws ModelException, SecurityException {
+	public void deleteImage(Image image, Operator privileged) throws ModelException, SecurityException {
 		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
 			modelService.delete(location, privileged);

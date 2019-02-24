@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Numbers;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Ability;
@@ -17,14 +18,13 @@ import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 import dk.in2isoft.onlineobjects.util.Dates;
 
-public class PhotosGalleryView extends AbstractManagedBean {
+public class PhotosGalleryView extends AbstractView {
 	
 	private ModelService modelService;
 	
@@ -53,15 +53,15 @@ public class PhotosGalleryView extends AbstractManagedBean {
 		long id = Numbers.parseLong(path[2]);
 		final UserSession session = request.getSession();
 		if (id>0) {
-			imageGallery = modelService.get(ImageGallery.class, id, session);
+			imageGallery = modelService.get(ImageGallery.class, id, request);
 			if (imageGallery==null) {
 				throw new ContentNotFoundException("The gallery does not exist");
 			}
 			title = imageGallery.getName();
-			user = modelService.getOwner(imageGallery, session);
+			user = modelService.getOwner(imageGallery, request);
 			username = user.getUsername();
 			modifiable = user!=null && user.getId()==session.getIdentity() && session.has(Ability.usePhotosApp);
-			List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, session);
+			List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, request);
 			images = Lists.newArrayList();
 			for (Relation relation : childRelations) {
 				Image image = (Image) relation.getTo();

@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
@@ -21,7 +19,7 @@ import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -48,7 +46,7 @@ import dk.in2isoft.onlineobjects.services.SemanticService;
 
 public class InformationService {
 
-	private static final Logger log = LogManager.getLogger(InformationService.class);
+	//private static final Logger log = LogManager.getLogger(InformationService.class);
 
 	private FeedService feedService;
 	private SemanticService semanticService;
@@ -61,23 +59,9 @@ public class InformationService {
 
 	private Set<String> supportedLanguages = Sets.newHashSet("da", "en");
 
-	public void clearUnvalidatedWords() throws ModelException {
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
-		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_VALIDATED, "false");
-		List<Word> list = modelService.list(query);
-		for (Word word : list) {
-			try {
-				modelService.delete(word, admin);
-				modelService.commit();
-			} catch (SecurityException e) {
-				log.warn("Unable to delete word: " + word);
-			}
-		}
-	}
-
 	public void importInformation(String feed, JobStatus status) {
+		Operator admin = modelService.newAdminOperator();
 		try {
-			User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
 			surveillanceService.logInfo("Checking feed", feed);
 			List<Item> items = feedService.getFeedItems(feed);
 			if (items == null) {
@@ -94,18 +78,16 @@ public class InformationService {
 				String abreviated = StringUtils.abbreviateMiddle(link, "...", 100);
 
 				Long num = modelService
-						.count(Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, link));
+						.count(Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, link), admin);
 
 				if (num > 0) {
 					status.log("Internet address already exists: " + abreviated);
-					modelService.commit();
 					continue;
 				}
 				status.log("Fetching: " + abreviated);
 				HTMLDocument doc = htmlService.getDocumentSilently(link);
 				if (doc == null) {
 					status.log("Unable to get HTML document: " + abreviated);
-					modelService.commit();
 					continue;
 				}
 				String contents = doc.getExtractedText();
@@ -139,7 +121,7 @@ public class InformationService {
 
 							WordListPerspectiveQuery perspectiveQuery = new WordListPerspectiveQuery()
 									.withWords(uniqueWords).orderByText();
-							List<WordListPerspective> list = modelService.list(perspectiveQuery);
+							List<WordListPerspective> list = modelService.list(perspectiveQuery, admin);
 							Set<String> found = Sets.newHashSet();
 							for (WordListPerspective perspective : list) {
 								found.add(perspective.getText().toLowerCase());
@@ -169,21 +151,22 @@ public class InformationService {
 					surveillanceService.logInfo("Imported webpage", "Title: "
 							+ StringUtils.abbreviateMiddle(doc.getTitle(), "...", 50) + " - words: " + wordsCreated);
 				}
-				modelService.commit();
 				// break;
 			}
+			admin.commit();
 		} catch (NetworkException e) {
 			status.error("Unable to fetch feed: " + feed, e);
+			admin.rollBack();
 		} catch (ModelException e) {
 			status.error("Failed to persist something", e);
+			admin.rollBack();
 		} catch (SecurityException e) {
 			status.error("Permissions problem", e);
-		} finally {
-			modelService.commit();
+			admin.rollBack();
 		}
 	}
 
-	public InternetAddress addInternetAddress(String url, Privileged privileged) throws ModelException, SecurityException {
+	public InternetAddress addInternetAddress(String url, Operator privileged) throws ModelException, SecurityException {
 		if (!URLUtil.isValidHttpUrl(url)) {
 			throw new IllegalArgumentException("URL not valid: " + url);
 		}
@@ -200,12 +183,11 @@ public class InformationService {
 	}
 
 	public void calculateNextMissingSimilary(JobStatus status) {
+		Operator admin = modelService.newAdminOperator();
 		try {
 			@NonNull
-			Privileged admin = securityService.getAdminPrivileged();
 			MissingSimilarityQuery simQuery = new MissingSimilarityQuery();
-			List<SimilarityResult> results = modelService.list(simQuery);
-			modelService.commit();
+			List<SimilarityResult> results = modelService.list(simQuery, admin);
 			int index = 0;
 			int total = results.size();
 			for (SimilarityResult pair : results) {
@@ -213,16 +195,17 @@ public class InformationService {
 					break;
 				}
 				User privileged = modelService.get(User.class, pair.getUserId(), admin);
+				Operator userOperator = admin.as(privileged);
 				status.log("Found missing similarity (user=" + privileged.getUsername() + ")");
 				status.setProgress(index, total);
 				status.log("Loading entities");
-				InternetAddress a = modelService.get(InternetAddress.class, pair.getFirstId(), privileged);
-				InternetAddress b = modelService.get(InternetAddress.class, pair.getSecondId(), privileged);
+				InternetAddress a = modelService.get(InternetAddress.class, pair.getFirstId(), userOperator);
+				InternetAddress b = modelService.get(InternetAddress.class, pair.getSecondId(), userOperator);
 
 				status.log("Building analytics: "+a.getAddress());
-				TextDocumentAnalytics analyticsA = textDocumentAnalyzer.analyze(a, privileged);
+				TextDocumentAnalytics analyticsA = textDocumentAnalyzer.analyze(a, userOperator);
 				status.log("Building analytics: "+b.getAddress());
-				TextDocumentAnalytics analyticsB = textDocumentAnalyzer.analyze(b, privileged);
+				TextDocumentAnalytics analyticsB = textDocumentAnalyzer.analyze(b, userOperator);
 				double similarity;
 				if (analyticsA!=null && analyticsB!=null) {
 					List<String> tokensA = getTokens(analyticsA);
@@ -237,20 +220,19 @@ public class InformationService {
 				}
 
 				status.log("Saving similarity");
-				createSimilarity(a, b, similarity, privileged);
+				createSimilarity(a, b, similarity, userOperator);
 
 				status.log(a.getName() + " vs " + b.getName() + " = " + similarity);
 				index++;
-				modelService.commit();
+				admin.commit();
 			}
 		} catch (EndUserException e) {
 			status.error("Error while calculating similarity", e);
-		} finally {
-			modelService.commit();
+			admin.rollBack();
 		}
 	}
 
-	private void createSimilarity(InternetAddress a, InternetAddress b, double similarity, Privileged privileged)
+	private void createSimilarity(InternetAddress a, InternetAddress b, double similarity, Operator privileged)
 			throws ModelException, SecurityException {
 		Optional<Relation> a2b = modelService.getRelation(a, b, Kind.similarity.toString(), privileged);
 		Optional<Relation> b2a = modelService.getRelation(b, a, Kind.similarity.toString(), privileged);

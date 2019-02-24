@@ -6,7 +6,7 @@ import java.util.Locale;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -47,8 +47,8 @@ public class PhotosControllerBase extends ApplicationController {
 		return super.getLanguage(request);
 	}
 
-	protected Image getImage(long id, Privileged privileged) throws ModelException, ContentNotFoundException {
-		Image image = modelService.get(Image.class, id,privileged);
+	protected Image getImage(long id, Operator operator) throws ModelException, ContentNotFoundException {
+		Image image = modelService.get(Image.class, id, operator);
 		if (image==null) {
 			throw new ContentNotFoundException("The image was not found");
 		}

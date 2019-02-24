@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
-public class ComponentTestView extends AbstractManagedBean {
+public class ComponentTestView extends AbstractView {
 	
 
 	public Date getDate() {

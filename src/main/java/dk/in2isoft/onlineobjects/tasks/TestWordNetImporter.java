@@ -13,18 +13,17 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -56,7 +55,6 @@ public class TestWordNetImporter extends AbstractSpringTask {
 	private static final Logger log = LogManager.getLogger(TestWordNetImporter.class);
 	
 	private WordService wordService;
-	private SecurityService securityService;
 	
 	private Set<String> words = Sets.newHashSet(); //"acacia"
 	int skip = 0;
@@ -86,7 +84,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		IDictionary dict = new Dictionary(file);
 		dict.open();
 		
-		Privileged privileged = securityService.getAdminPrivileged();
+		Operator operator = modelService.newAdminOperator();
 		int total = 0;
 		{
 			Iterator<IIndexWord> wordIterator = dict.getIndexWordIterator(category);
@@ -132,8 +130,8 @@ public class TestWordNetImporter extends AbstractSpringTask {
 					mod.lexicalCategory = categoryCode;
 					mod.glossary = word.getSynset().getGloss();
 					if (updateLocally) {
-						wordService.updateWord(mod,privileged);
-						modelService.commit();
+						wordService.updateWord(mod,operator);
+						operator.commit();
 					} else {
 						wordModifications.add(mod);
 						if (wordModifications.size()>=10) {
@@ -153,8 +151,8 @@ public class TestWordNetImporter extends AbstractSpringTask {
 						print("· · Synonym: " + getText(wordFromSynset.getLemma()));
 						
 						WordRelationModification modification = WordRelationModification.create(getSourceId(word.getID()),Relation.KIND_SEMANTICS_SYNONYMOUS,getSourceId(wordFromSynset.getID()));
-						update(modification);
-						modelService.commit();
+						update(modification, operator);
+						operator.commit();
 					}
 					Collection<Pointer> pointers = Pointer.values();
 					for (Pointer pointer : pointers) {
@@ -182,6 +180,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 				callServer(wordModifications);
 			}
 		}
+		operator.commit();
 	}
 	
     private String getSourceId(IWordID wordID) {
@@ -197,8 +196,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
         return sb.toString();
     }
 	
-	private void update(WordRelationModification modification) throws ModelException, SecurityException {
-		Privileged admin = securityService.getAdminPrivileged();
+	private void update(WordRelationModification modification, Operator admin) throws ModelException, SecurityException {
 		Word from = wordService.getWordBySourceId(modification.getFromSourceId(), admin);
 		if (from==null) {
 			return;
@@ -278,8 +276,4 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		this.wordService = wordService;
 	}
 	
-	@Autowired
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
 }

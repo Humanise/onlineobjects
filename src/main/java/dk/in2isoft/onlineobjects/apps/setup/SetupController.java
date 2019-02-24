@@ -33,11 +33,11 @@ import dk.in2isoft.onlineobjects.apps.setup.perspectives.InternetAddressPerspect
 import dk.in2isoft.onlineobjects.apps.setup.perspectives.SchedulerStatusPerspective;
 import dk.in2isoft.onlineobjects.apps.setup.perspectives.UserPerspective;
 import dk.in2isoft.onlineobjects.core.Ability;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
@@ -86,11 +86,10 @@ public class SetupController extends SetupControllerBase {
 	public void listUsers(Request request) throws IOException,EndUserException {
 		User publicUser = securityService.getPublicUser();
 		Privileged admin = securityService.getAdminPrivileged();
-		Privileged privileged = request.getSession();
 		int page = request.getInt("page");
 		int pageSize = 40;
 		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
-		SearchResult<User> result = modelService.search(query);
+		SearchResult<User> result = modelService.search(query, request);
 		
 		ListWriter writer = new ListWriter(request);
 		
@@ -108,8 +107,8 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Admin",1);
 		writer.endHeaders();
 		for (User user : result.getList()) {
-			Person person = modelService.getChild(user, Person.class, privileged);
-			EmailAddress email = memberService.getUsersPrimaryEmail(user, privileged);
+			Person person = modelService.getChild(user, Person.class, request);
+			EmailAddress email = memberService.getUsersPrimaryEmail(user, request);
 			writer.startRow().withId(user.getId()).withKind("user");
 			writer.startCell().withIcon(user.getIcon()).text(user.getName()).endCell();
 			writer.cell(user.getUsername());
@@ -129,35 +128,35 @@ public class SetupController extends SetupControllerBase {
 			writer.endCell();
 			writer.cell(user.getUpdated().toString());
 			writer.startCell().startIcons();
-			if (securityService.canView(user, publicUser)) {
+			if (securityService.canView(user, publicUser, request)) {
 				writer.icon("monochrome/view");
 			}
-			if (securityService.canModify(user, publicUser)) {
+			if (securityService.canModify(user, publicUser, request)) {
 				writer.icon("monochrome/edit");
 			}
-			if (securityService.canDelete(user, publicUser)) {
+			if (securityService.canDelete(user, publicUser, request)) {
 				writer.icon("monochrome/delete");
 			}
 			writer.endIcons().endCell();
 			writer.startCell().startIcons();
-			if (securityService.canView(user, user)) {
+			if (securityService.canView(user, user, request)) {
 				writer.icon("monochrome/view");
 			}
-			if (securityService.canModify(user, user)) {
+			if (securityService.canModify(user, user, request)) {
 				writer.icon("monochrome/edit");
 			}
-			if (securityService.canDelete(user, user)) {
+			if (securityService.canDelete(user, user, request)) {
 				writer.icon("monochrome/delete");
 			}
 			writer.endIcons().endCell();
 			writer.startCell().startIcons();
-			if (securityService.canView(user, admin)) {
+			if (securityService.canView(user, admin, request)) {
 				writer.icon("monochrome/view");
 			}
-			if (securityService.canModify(user, admin)) {
+			if (securityService.canModify(user, admin, request)) {
 				writer.icon("monochrome/edit");
 			}
-			if (securityService.canDelete(user, admin)) {
+			if (securityService.canDelete(user, admin, request)) {
 				writer.icon("monochrome/delete");
 			}
 			writer.endIcons().endCell();
@@ -171,7 +170,7 @@ public class SetupController extends SetupControllerBase {
 		long id = request.getLong("userId");
 		String type = request.getString("type");
 		
-		User user = modelService.get(User.class, id, request.getSession());
+		User user = modelService.get(User.class, id, request);
 		if (user==null) {
 			return;
 		}
@@ -193,7 +192,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		int page = request.getInt("page");
 		Query<? extends Entity> query = Query.of(typeClass).as(user).withPaging(page, 30);
-		SearchResult<? extends Entity> result = modelService.search(query);
+		SearchResult<? extends Entity> result = modelService.search(query, request);
 
 		User publicUser = securityService.getPublicUser();
 
@@ -209,8 +208,8 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Public grants",1);
 		writer.endHeaders();
 		for (Entity entity : result.getList()) {
-			Privilege privilege = securityService.getPrivilege(entity.getId(), user);
-			Privilege publicPrivilege = securityService.getPrivilege(entity.getId(), publicUser);
+			Privilege privilege = securityService.getPrivilege(entity.getId(), user, request);
+			Privilege publicPrivilege = securityService.getPrivilege(entity.getId(), publicUser, request);
 			writer.startRow();
 			writer.startCell().withIcon(entity.getIcon()).startWrap().text(entity.getName()).endWrap().endCell();
 			writer.startCell().text(entity.getClass().getSimpleName()).endCell();
@@ -246,9 +245,8 @@ public class SetupController extends SetupControllerBase {
 
 	private void listUserInfo(Request request, User user) throws IOException, ModelException {
 		
-		UserSession privileged = request.getSession();
-		Person person = memberService.getUsersPerson(user, privileged);
-		EmailAddress email = memberService.getUsersPrimaryEmail(user, privileged);
+		Person person = memberService.getUsersPerson(user, request);
+		EmailAddress email = memberService.getUsersPrimaryEmail(user, request);
 		ListWriter writer = new ListWriter(request);
 		
 		writer.startList();
@@ -259,7 +257,7 @@ public class SetupController extends SetupControllerBase {
 		writer.startRow().cell("ID").cell(user.getId()).endRow();
 		writer.startRow().cell("Password").cell((Strings.isNotBlank(user.getPassword()) ? "Yes" : "No")).endRow();
 		writer.startRow().cell("Secret").cell(user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
-		modelService.getChildren(user, Client.class, user).forEach(client -> {
+		modelService.getChildren(user, Client.class, request).forEach(client -> {
 			writer.startRow().cell("Client: "+client.getName()).cell(client.getUUID() + " / " + client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET)).endRow();
 		});
 		if (email != null) {
@@ -284,7 +282,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		if (person!=null) {
 			writer.startRow().cell("Person").cell(person.getFullName()).endRow();
-			List<EmailAddress> emails = modelService.getChildren(person, EmailAddress.class, privileged);
+			List<EmailAddress> emails = modelService.getChildren(person, EmailAddress.class, request);
 			if (!emails.isEmpty()) {
 				writer.startRow().cell("E-mails").startCell();
 				for (Iterator<EmailAddress> i = emails.iterator(); i.hasNext();) {
@@ -295,7 +293,7 @@ public class SetupController extends SetupControllerBase {
 				writer.endCell().endRow();
 			}
 		}
-		Image image = modelService.getChild(user, Image.class, privileged);
+		Image image = modelService.getChild(user, Image.class, request);
 		if (image != null) {
 			writer.startRow().cell("Profile image").cell(image.getName()).endRow();
 		}
@@ -319,7 +317,7 @@ public class SetupController extends SetupControllerBase {
 		writer.header("Version");
 		writer.header("Created");
 		writer.endHeaders();
-		modelService.getChildren(user, Client.class, user).forEach(client -> {
+		modelService.getChildren(user, Client.class, request).forEach(client -> {
 			String secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
 			String version = client.getPropertyValue(Property.KEY_CLIENT_VERSION);
 			String build = client.getPropertyValue(Property.KEY_CLIENT_BUILD);
@@ -344,7 +342,7 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public UserPerspective loadUser(Request request) throws IOException,EndUserException {
 		Long id = request.getLong("id");
-		User user = modelService.get(User.class, id, request.getSession());
+		User user = modelService.get(User.class, id, request);
 		if (user==null) {
 			throw new ContentNotFoundException("User not found (id="+id+")");
 		}
@@ -352,47 +350,44 @@ public class SetupController extends SetupControllerBase {
 		UserPerspective perspective = new UserPerspective();
 		perspective.setUsername(user.getUsername());
 		perspective.setName(user.getName());
-		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, request.getSession());
+		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, request);
 		if (usersPrimaryEmail != null) {
 			perspective.setEmail(usersPrimaryEmail.getAddress());
 		}
-		perspective.setPublicView(securityService.canView(user, publicUser));
+		perspective.setPublicView(securityService.canView(user, publicUser, request));
 		perspective.setAbilities(Ability.convert(user.getPropertyValues(Property.KEY_ABILITY)));
 		return perspective;
 	}
 	
 	@Path
 	public void deleteClient(Request request) throws EndUserException {
-		UserSession privileged = request.getSession();
 		Long id = request.getId();
-		Client client = modelService.getRequired(Client.class, id, privileged);
-		modelService.delete(client, privileged);
+		Client client = modelService.getRequired(Client.class, id, request);
+		modelService.delete(client, request);
 	}
 
 	@Path
 	public void logUserOut(Request request) throws EndUserException {
-		UserSession privileged = request.getSession();
 		Long id = request.getId();
-		User user = modelService.getRequired(User.class, id, privileged);
-		List<Client> list = modelService.list(Query.after(Client.class).as(user));
+		User user = modelService.getRequired(User.class, id, request);
+		List<Client> list = modelService.list(Query.after(Client.class).as(user), request);
 		for (Client client : list) {
-			modelService.delete(client, privileged);
+			modelService.delete(client, request);
 		}
 	}
 
 	@Path
 	public void deleteUser(Request request) throws EndUserException {
-		UserSession privileged = request.getSession();
 		Long id = request.getId();
-		User user = modelService.getRequired(User.class, id, privileged);
-		memberService.deleteMember(user, privileged);
+		User user = modelService.getRequired(User.class, id, request);
+		memberService.deleteMember(user, request);
 	}
 	
 	@Path
 	public void sendPasswordReset(Request request) throws EndUserException {
 		Long id = request.getId();
-		User user = modelService.getRequired(User.class, id, request.getSession());
-		if (!passwordRecoveryService.sendRecoveryMail(user)) {
+		User user = modelService.getRequired(User.class, id, request);
+		if (!passwordRecoveryService.sendRecoveryMail(user, request)) {
 			throw new EndUserException("Unable to send recovery mail");
 		}
 	}
@@ -400,14 +395,14 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void sendEmailConfirmation(Request request) throws EndUserException {
 		Long id = request.getId();
-		User user = modelService.getRequired(User.class, id, request.getSession());
-		memberService.sendEmailConfirmation(user, request.getSession());
+		User user = modelService.getRequired(User.class, id, request);
+		memberService.sendEmailConfirmation(user, request);
 	}
 
 	@Path
 	public void checkHealth(Request request) throws EndUserException {
 		Long id = request.getId();
-		User user = modelService.getRequired(User.class, id, request.getSession());
+		User user = modelService.getRequired(User.class, id, request);
 		memberService.scheduleHealthCheck(user);
 	}
 
@@ -417,7 +412,7 @@ public class SetupController extends SetupControllerBase {
 		if (perspective==null) {
 			throw new IllegalRequestException("No user provider");
 		}
-		User user = modelService.get(User.class, perspective.getId(), request.getSession());
+		User user = modelService.get(User.class, perspective.getId(), request);
 		if (user==null) {
 			throw new ContentNotFoundException("User not found (id="+perspective.getId()+")");
 		}
@@ -425,7 +420,7 @@ public class SetupController extends SetupControllerBase {
 			user.setUsername(perspective.getUsername());			
 		}
 		if (Strings.isNotBlank(perspective.getEmail())) {
-			memberService.changePrimaryEmail(user, perspective.getEmail(), request.getSession());
+			memberService.changePrimaryEmail(user, perspective.getEmail(), request);
 		}
 		Set<Ability> abilities = perspective.getAbilities();
 		user.removeProperties(Property.KEY_ABILITY);
@@ -435,17 +430,18 @@ public class SetupController extends SetupControllerBase {
 			}
 		}
 		user.setName(perspective.getName());
-		modelService.update(user, request.getSession());
+		modelService.update(user, request);
+		Operator admin = request.as(securityService.getAdminPrivileged());
 		if (securityService.isAdminUser(user)) {
-			modelService.grantPrivileges(user, user, true, true, false, securityService.getAdminPrivileged());
-			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
+			modelService.grantPrivileges(user, user, true, true, false, admin);
+			securityService.grantPublicView(user, perspective.isPublicView(), request);
 		} else if (securityService.isPublicUser(user)) {
-			securityService.makePublicVisible(user, request.getSession());
+			securityService.makePublicVisible(user, request);
 			// TODO: Does it make sense to grant administrator privileges?
-			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false, securityService.getAdminPrivileged());
+			modelService.grantPrivileges(user, securityService.getAdminPrivileged(), true, true, false, admin);
 		} else {
-			modelService.grantPrivileges(user, user, true, true, true, securityService.getAdminPrivileged());
-			securityService.grantPublicView(user, perspective.isPublicView(), request.getSession());
+			modelService.grantPrivileges(user, user, true, true, true, admin);
+			securityService.grantPublicView(user, perspective.isPublicView(), request);
 		}
 	}
 	
@@ -615,7 +611,7 @@ public class SetupController extends SetupControllerBase {
 			int size = 100;
 
 			LogQuery query = new LogQuery().withPage(page).withSize(size);
-			SearchResult<LogEntry> result = modelService.search(query);
+			SearchResult<LogEntry> result = modelService.search(query, request);
 			writer.startList();
 			writer.window(result.getTotalCount(), size, page);
 			
@@ -631,7 +627,7 @@ public class SetupController extends SetupControllerBase {
 				writer.startCell();
 				if (entry.getSubject() != null) {
 					@Nullable
-					User user = modelService.get(User.class, entry.getSubject(), request.getSession());
+					User user = modelService.get(User.class, entry.getSubject(), request);
 					if (user!=null) {
 						writer.text(user.getUsername());
 					} else {
@@ -683,16 +679,16 @@ public class SetupController extends SetupControllerBase {
 		list.addHeader("Public delete");
 		if (className!=null) {
 			Query<? extends Entity> query = Query.of(className).withWords(text).withPaging(page, 50);
-			SearchResult<? extends Entity> result = modelService.search(query);
+			SearchResult<? extends Entity> result = modelService.search(query, request);
 			list.setWindow(result.getTotalCount(), 50, page);
 			for (Entity entity : result.getList()) {
 				String kind = entity.getClass().getSimpleName().toLowerCase();
 				list.newRow(entity.getId(),kind);
 				list.addCell(entity.getName(), entity.getIcon());
 				list.addCell(entity.getType());
-				list.addCell(securityService.canView(entity, publicUser));
-				list.addCell(securityService.canModify(entity, publicUser));
-				list.addCell(securityService.canDelete(entity, publicUser));
+				list.addCell(securityService.canView(entity, publicUser, request));
+				list.addCell(securityService.canModify(entity, publicUser, request));
+				list.addCell(securityService.canDelete(entity, publicUser, request));
 			}
 		}
 		return list;
@@ -722,7 +718,7 @@ public class SetupController extends SetupControllerBase {
 		long id = request.getLong("id");
 		EntityInfo info = new EntityInfo();
 		info.setId(id);
-		Privilege privilege = securityService.getPrivilege(id,securityService.getPublicUser());
+		Privilege privilege = securityService.getPrivilege(id,securityService.getPublicUser(), request);
 		if (privilege!=null) {
 			info.setPublicAlter(privilege.isAlter());
 			info.setPublicDelete(privilege.isDelete());
@@ -734,8 +730,8 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void updateEntityInfo(Request request) throws ModelException, SecurityException {
 		EntityInfo info = request.getObject("data", EntityInfo.class);
-		Entity entity = modelService.get(Entity.class, info.getId(), request.getSession());
-		securityService.grantPublicView(entity, info.isPublicView(), request.getSession());
+		Entity entity = modelService.get(Entity.class, info.getId(), request);
+		securityService.grantPublicView(entity, info.isPublicView(), request);
 	}
 	
 	@Path
@@ -747,12 +743,12 @@ public class SetupController extends SetupControllerBase {
 		if (Strings.isNotBlank(tag)) {
 			query.withCustomProperty(Property.KEY_COMMON_TAG, tag);
 		}
-		return modelService.list(query);
+		return modelService.list(query, request);
 	}
 
 	@Path
 	public List<ItemData> getImageTags(Request request) throws EndUserException {
-		Map<String, Integer> properties = modelService.getProperties(Property.KEY_COMMON_TAG, Image.class, null);
+		Map<String, Integer> properties = modelService.getProperties(Property.KEY_COMMON_TAG, Image.class, request);
 		List<ItemData> items = Lists.newArrayList();
 		for (Entry<String, Integer> itemData : properties.entrySet()) {
 			ItemData data = new ItemData();
@@ -768,7 +764,7 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void listPublishers(Request request) throws EndUserException, IOException {
 		
-		List<InternetAddress> sites = onlinePublisherService.getSites(request.getSession());
+		List<InternetAddress> sites = onlinePublisherService.getSites(request);
 		
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
@@ -785,18 +781,17 @@ public class SetupController extends SetupControllerBase {
 	@Path
 	public void savePublisher(Request request) throws IOException,EndUserException {
 		PublisherPerspective perspective = request.getObject("publisher", PublisherPerspective.class);
-		Privileged privileged = request.getSession();
-		onlinePublisherService.createOrUpdatePublisher(perspective, privileged);
+		onlinePublisherService.createOrUpdatePublisher(perspective, request);
 	}
 
 	@Path
 	public PublisherPerspective loadPublisher(Request request) throws IOException,EndUserException {
-		return onlinePublisherService.getPublisherPerspective(request.getLong("id"), request.getSession());
+		return onlinePublisherService.getPublisherPerspective(request.getLong("id"), request);
 	}
 
 	@Path
 	public void deletePublisher(Request request) throws IOException,EndUserException {
-		onlinePublisherService.deletePublisher(request.getLong("id"), request.getSession());
+		onlinePublisherService.deletePublisher(request.getLong("id"), request);
 	}
 
 	@Path
@@ -804,7 +799,8 @@ public class SetupController extends SetupControllerBase {
 		int page = request.getInt("page");
 		int size = 50;
 		
-		SearchResult<InternetAddress> result = modelService.search(Query.after(InternetAddress.class).withPaging(page, 50));
+		Query<InternetAddress> query = Query.after(InternetAddress.class).withPaging(page, 50);
+		SearchResult<InternetAddress> result = modelService.search(query, request);
 		
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
@@ -823,7 +819,7 @@ public class SetupController extends SetupControllerBase {
 	public InternetAddressPerspective getInternetAddressesInfo(Request request) throws IOException,EndUserException {
 		Long id = request.getLong("id");
 		InternetAddressPerspective perspective = new InternetAddressPerspective();
-		InternetAddress address = modelService.get(InternetAddress.class, id, request.getSession());
+		InternetAddress address = modelService.get(InternetAddress.class, id, request);
 		if (address==null) {
 			throw new ContentNotFoundException("The address could not be found, id = "+id);
 		}
@@ -927,7 +923,6 @@ public class SetupController extends SetupControllerBase {
 	
 	@Path
 	public void createMember(Request request) throws IOException, EndUserException {
-		UserSession session = request.getSession();
 		String username = request.getString("username", "No username");
 		String password = request.getString("password", "No password");
 		String fullName = request.getString("name", "No full name");
@@ -935,7 +930,7 @@ public class SetupController extends SetupControllerBase {
 		if (username != null) {
 			username = username.toLowerCase();
 		}
-		memberService.createMember(session, username, password, fullName, email);
+		memberService.createMember(request, username, password, fullName, email);
 	}
 	
 	@Path

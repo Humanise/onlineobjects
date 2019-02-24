@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.events.AnyModelChangeListener;
@@ -48,62 +49,63 @@ public class InboxService implements InitializingBean {
 		});
 	}
 
-	public Pile getOrCreateInbox(User privileged) throws ModelException, SecurityException {
-		Query<Pile> query = Query.after(Pile.class).from(privileged, Relation.KIND_SYSTEM_USER_INBOX);
-		if (!securityService.isAdminUser(privileged)) {
-			query.as(privileged);
+	public Pile getOrCreateInbox(User user, Operator operator) throws ModelException, SecurityException {
+		operator = operator.as(user);
+		Query<Pile> query = Query.after(Pile.class).from(user, Relation.KIND_SYSTEM_USER_INBOX);
+		if (!securityService.isAdminUser(user)) {
+			query.as(user);
 		}
-		Pile inbox = modelService.getFirst(query);
+		Pile inbox = modelService.getFirst(query, operator);
 		if (inbox==null) {
 			inbox = new Pile();
-			inbox.setName("Inbox for "+privileged.getUsername());
-			modelService.create(inbox, privileged);
-			modelService.createRelation(privileged, inbox, Relation.KIND_SYSTEM_USER_INBOX, privileged);
+			inbox.setName("Inbox for "+user.getUsername());
+			modelService.create(inbox, operator);
+			modelService.createRelation(user, inbox, Relation.KIND_SYSTEM_USER_INBOX, operator);
 		}
 		return inbox;
 	}
 	
-	public void add(User user, Entity entity) throws ModelException, SecurityException {
-		if (!modelService.getRelation(user, entity, user).isPresent()) {
-			modelService.createRelation(getOrCreateInbox(user), entity, user);
+	public void add(User user, Entity entity, Operator operator) throws ModelException, SecurityException {
+		if (!modelService.getRelation(user, entity, operator).isPresent()) {
+			modelService.createRelation(getOrCreateInbox(user, operator), entity, operator);
 		}
 	}
 	
-	public int getCount(User user) throws ModelException, SecurityException {
+	public int getCount(User user, Operator operator) throws ModelException, SecurityException {
 		if (counts.containsKey(user.getId())) {
 			return counts.get(user.getId());
 		}
 		
 		// TODO Optimize this by caching id=count
-		Pile inbox = getOrCreateInbox(user);
+		Pile inbox = getOrCreateInbox(user, operator);
 		Query<Entity> query = Query.after(Entity.class).from(inbox).as(user);
 		//List<Entity> list = modelService.list(query);
-		int count = modelService.count(query).intValue();
+		int count = modelService.count(query, operator).intValue();
 		counts.put(user.getId(), count);
 		return count;
 	}
 	
-	public int getCountSilently(User user) {
+	public int getCountSilently(User user, Operator operator) {
 		if (user==null) {
 			log.error("The user is null, will silently rebort zero");
 			return 0;
 		}
 		try {
-			return getCount(user);
+			return getCount(user, operator);
 		} catch (EndUserException e) {
 			log.error("Unable to get inbox count for user="+user+", will silently rebort zero",e);
 			return 0;
 		}
 	}
 	
-	public boolean remove(User user, long id) throws ModelException, SecurityException {
-		Pile inbox = getOrCreateInbox(user);
-		Entity entity = modelService.get(Entity.class, id, user);
-		Optional<Relation> relation = modelService.getRelation(inbox, entity, user);
+	public boolean remove(User user, long id, Operator operator) throws ModelException, SecurityException {
+		Pile inbox = getOrCreateInbox(user, operator);
+		Entity entity = modelService.get(Entity.class, id, operator);
+		Optional<Relation> relation = modelService.getRelation(inbox, entity, operator);
 		if (!relation.isPresent()) {
 			return false;
 		}
-		modelService.delete(relation.get(), user);
+		modelService.delete(relation.get(), operator);
 		return true;
 	}
 	

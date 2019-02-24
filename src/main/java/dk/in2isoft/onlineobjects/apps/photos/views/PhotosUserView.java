@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.apps.photos.views;
 
 import java.util.List;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -15,13 +16,12 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordCloudQuery;
 import dk.in2isoft.onlineobjects.modules.photos.PhotoIndexQuery;
 import dk.in2isoft.onlineobjects.modules.photos.PhotoService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.CloudItem;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
-public class PhotosUserView extends AbstractManagedBean {
+public class PhotosUserView extends AbstractView {
 
 	private ModelService modelService;
 	private PhotoService photoService; 
@@ -40,7 +40,7 @@ public class PhotosUserView extends AbstractManagedBean {
 		String[] path = request.getLocalPath();
 		username = path[2];
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
-		Pair<User, Person> pair = modelService.searchPairs(query).getFirst();
+		Pair<User, Person> pair = modelService.searchPairs(query, request).getFirst();
 		if (pair == null) {
 			throw new ContentNotFoundException("User not found");
 		}
@@ -55,7 +55,7 @@ public class PhotosUserView extends AbstractManagedBean {
 		if (user.getIdentity()!=request.getSession().getIdentity()) {
 			cloudQuery.withViewId(securityService.getPublicUser().getIdentity());
 		}
-		this.cloud = modelService.list(cloudQuery);
+		this.cloud = modelService.list(cloudQuery, request);
 		int max = Integer.MIN_VALUE;
 		int min = Integer.MAX_VALUE;
 		for (CloudItem<Word> item : cloud) {
@@ -79,7 +79,7 @@ public class PhotosUserView extends AbstractManagedBean {
 				if (wordId!=null) {
 					query.withWordId(wordId);
 				}
-				SearchResult<Image> searchResult = photoService.search(query);
+				SearchResult<Image> searchResult = photoService.search(query, request);
 				return new ListModelResult<Image>(searchResult.getList(),searchResult.getTotalCount());
 			}
 			

@@ -14,15 +14,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.Nullable;
-import org.hibernate.Session;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.LogEntry;
@@ -44,7 +43,6 @@ public class SurveillanceService {
 	private ModelService modelService;
 	private EmailService emailService;
 	private ConfigurationService configurationService;
-	private SecurityService securityService;
 
 	public SurveillanceService() {
 		longestRunningRequests = new RequestList();
@@ -58,15 +56,6 @@ public class SurveillanceService {
 		sendMailToMonitors("OnlineObjects report", body);
 	}
 
-	public void sendReportInTransation() throws EndUserException {
-		try {
-			modelService.startThread();
-			sendReport();
-		} finally {
-			modelService.commitThread();
-		}
-	}
-
 	private void sendMailToMonitors(String subject, String body) throws EndUserException {
 		String[] mails = getMontorMails();
 		for (String mail : mails) {
@@ -75,9 +64,10 @@ public class SurveillanceService {
 	}
 
 	private String getReportBody() throws ModelException {
+		Operator operator = modelService.newAdminOperator();
 		StringBuilder body = new StringBuilder();
 		LogQuery query = new LogQuery().withSize(100);
-		List<LogEntry> list = modelService.list(query);
+		List<LogEntry> list = modelService.list(query, operator);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
 		for (LogEntry entry : list) {
 			body.append(format.format(entry.getTime()));
@@ -87,7 +77,7 @@ public class SurveillanceService {
 			String username = "-";
 			if (entry.getSubject() != null) {
 				@Nullable
-				User user = modelService.get(User.class, entry.getSubject(), securityService.getAdminPrivileged());
+				User user = modelService.get(User.class, entry.getSubject(), operator);
 				if (user!=null) {
 					username = user.getUsername();
 				} else {
@@ -99,7 +89,7 @@ public class SurveillanceService {
 			body.append(entry.getType());
 			body.append("\n");
 		}
-
+		operator.commit();
 		return body.toString();
 	}
 
@@ -122,22 +112,24 @@ public class SurveillanceService {
 	}
 	
 	public void log(Privileged user, LogType type) {
+		Operator operator = modelService.newAdminOperator();
 		LogEntry entry = new LogEntry();
 		entry.setSubject(user.getIdentity());
 		entry.setTime(new Date());
 		entry.setType(type);
 		entry.setLevel(LogLevel.info);
-		modelService.create(entry);
+		modelService.create(entry, operator);
+		operator.commit();
 	}
 
 	public void log(LogType startup) {
-		Session session = modelService.newSession();
+		Operator operator = modelService.newAdminOperator();
 		LogEntry entry = new LogEntry();
 		entry.setLevel(LogLevel.info);
 		entry.setTime(new Date());
 		entry.setType(LogType.startUp);
-		modelService.create(entry, session);
-		modelService.commit(session);
+		modelService.create(entry, operator);
+		operator.commit();
 	}
 
 	public void logSignUp(User user) {
@@ -219,7 +211,4 @@ public class SurveillanceService {
 		this.configurationService = configurationService;
 	}
 	
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
 }

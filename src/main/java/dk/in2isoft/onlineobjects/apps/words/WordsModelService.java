@@ -21,10 +21,9 @@ import dk.in2isoft.in2igui.data.Node;
 import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
 import dk.in2isoft.onlineobjects.apps.words.perspectives.WordsImportRequest;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -64,13 +63,13 @@ public class WordsModelService {
 		return data;
 	}
 
-	public Diagram getDiagram(String text, Privileged privileged) throws ModelException {
+	public Diagram getDiagram(String text, Operator operator) throws ModelException {
 		Messages msg = new Messages(WordsController.class);
 		boolean showLanguage = !false;
 		Diagram diagram = new Diagram();
 		diagram.setMaxNodeCount(100);
 		Query<Word> query = Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text);
-		List<Word> words = modelService.search(query).getList();
+		List<Word> words = modelService.search(query, operator).getList();
 		for (Word word : words) {
 			if (diagram.isFull()) {
 				break;
@@ -83,7 +82,7 @@ public class WordsModelService {
 			diagram.addNode(wordNode);
 			Locale locale = new Locale("en");
 			
-			List<Relation> relationsAwayFrom = modelService.find().relations(privileged).from(word).to(Word.class).list();
+			List<Relation> relationsAwayFrom = modelService.find().relations(operator).from(word).to(Word.class).list();
 			for (Relation relation : relationsAwayFrom) {
 				if (diagram.isFull()) {
 					break;
@@ -98,7 +97,7 @@ public class WordsModelService {
 				diagram.addEdge(wordNode,msg.get(relation.getKind(), locale),childNode);
 				
 				if (!diagram.isFull() && showLanguage) {
-					Language language = modelService.getParent(child, Language.class, privileged);
+					Language language = modelService.getParent(child, Language.class, operator);
 					if (language!=null) {
 						Node langNode = new Node();
 						langNode.setId(language.getId());
@@ -110,7 +109,7 @@ public class WordsModelService {
 				}
 			}
 			
-			List<Relation> parentRelations = modelService.find().relations(privileged).to(word).from(Word.class).list();
+			List<Relation> parentRelations = modelService.find().relations(operator).to(word).from(Word.class).list();
 			for (Relation relation : parentRelations) {
 				if (diagram.isFull()) {
 					break;
@@ -125,7 +124,7 @@ public class WordsModelService {
 				diagram.addEdge(wordNode,msg.get(relation.getKind()+".reverse", locale),childNode);
 
 				if (!diagram.isFull() && showLanguage) {
-					Language language = modelService.getParent(parent, Language.class, privileged);
+					Language language = modelService.getParent(parent, Language.class, operator);
 					if (language!=null) {
 						Node langNode = new Node();
 						langNode.setId(language.getId());
@@ -138,7 +137,7 @@ public class WordsModelService {
 			}
 
 			if (!diagram.isFull() && showLanguage) {
-				Language language = modelService.getParent(word, Language.class, privileged);
+				Language language = modelService.getParent(word, Language.class, operator);
 				if (language!=null) {
 					Node langNode = new Node();
 					langNode.setId(language.getId());
@@ -149,7 +148,7 @@ public class WordsModelService {
 				}
 			}
 			if (!diagram.isFull()) {
-				LexicalCategory category = modelService.getParent(word, LexicalCategory.class, privileged);
+				LexicalCategory category = modelService.getParent(word, LexicalCategory.class, operator);
 				if (category!=null) {
 					Node categoryNode = new Node();
 					categoryNode.setId(category.getId());
@@ -159,7 +158,7 @@ public class WordsModelService {
 					diagram.addEdge(wordNode,"Category",categoryNode);
 
 					if (!diagram.isFull()) {
-						LexicalCategory superCategory = modelService.getParent(category, Relation.KIND_STRUCTURE_SPECIALIZATION, LexicalCategory.class, privileged);
+						LexicalCategory superCategory = modelService.getParent(category, Relation.KIND_STRUCTURE_SPECIALIZATION, LexicalCategory.class, operator);
 						if (superCategory!=null) {
 							Node superNode = new Node();
 							superNode.setId(superCategory.getId());
@@ -172,7 +171,7 @@ public class WordsModelService {
 				}
 			}
 			if (!diagram.isFull()) {
-				User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, privileged);
+				User user = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, operator);
 				if (user!=null) {
 					Node userNode = new Node();
 					userNode.setId(user.getId());
@@ -186,7 +185,7 @@ public class WordsModelService {
 		return diagram;
 	}
 	
-	public void createWord(String languageCode, String category, String text, User user) throws ModelException, IllegalRequestException, SecurityException {
+	public void createWord(String languageCode, String category, String text, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -195,12 +194,12 @@ public class WordsModelService {
 		}
 		LexicalCategory lexicalCategory = null;
 		if (StringUtils.isNotBlank(category)) {
-			lexicalCategory = languageService.getLexcialCategoryForCode(category);
+			lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 			if (lexicalCategory==null) {
 				throw new IllegalRequestException("Unsupported category ("+category+")");
 			}
 		}
-		Language language = languageService.getLanguageForCode(languageCode);
+		Language language = languageService.getLanguageForCode(languageCode, operator);
 		if (language==null) {
 			throw new IllegalRequestException("Unsupported language ("+languageCode+")");
 		}
@@ -208,32 +207,32 @@ public class WordsModelService {
 		if (lexicalCategory!=null) {
 			query.from(lexicalCategory);
 		}
-		List<Word> list = modelService.list(query);
+		List<Word> list = modelService.list(query, operator);
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.create(word, user);
-			securityService.makePublicVisible(word, user);
-			Relation languageRelation = modelService.createRelation(language, word, user);
-			securityService.makePublicVisible(languageRelation, user);
+			modelService.create(word, operator);
+			securityService.makePublicVisible(word, operator);
+			Relation languageRelation = modelService.createRelation(language, word, operator);
+			securityService.makePublicVisible(languageRelation, operator);
 			if (lexicalCategory!=null) {
-				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, user);
-				securityService.makePublicVisible(categoryRelation, user);
+				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, operator);
+				securityService.makePublicVisible(categoryRelation, operator);
 			}
-			wordService.ensureOriginator(word, user);
+			wordService.ensureOriginator(word, operator);
 		}
 	}
 
-	public void deleteRelation(long id, UserSession session) throws IllegalRequestException, SecurityException, ModelException {
-		Relation relation = modelService.getRelation(id, session).orElseThrow(() -> 
+	public void deleteRelation(long id, Operator operator) throws IllegalRequestException, SecurityException, ModelException {
+		Relation relation = modelService.getRelation(id, operator).orElseThrow(() -> 
 			new IllegalRequestException("Relation not found (id="+id+")")
 		);
-		modelService.delete(relation, session);
+		modelService.delete(relation, operator);
 	}
 
-	public void relateWords(long parentId,String kind, long childId, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
-		Word parentWord = modelService.get(Word.class, parentId, session);
-		Word childWord = modelService.get(Word.class, childId, session);
+	public void relateWords(long parentId,String kind, long childId, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+		Word parentWord = modelService.get(Word.class, parentId, operator);
+		Word childWord = modelService.get(Word.class, childId, operator);
 		if (parentWord==null || childWord==null) {
 			throw new IllegalRequestException("Word not found");
 		}
@@ -242,26 +241,26 @@ public class WordsModelService {
 			throw new IllegalRequestException("Illegal relation: "+kind);
 		}
 		
-		Optional<Relation> relation = modelService.getRelation(parentWord, childWord, kind, session);
+		Optional<Relation> relation = modelService.getRelation(parentWord, childWord, kind, operator);
 		if (!relation.isPresent()) {
-			Relation newRelation = modelService.createRelation(parentWord, childWord, kind, session);
-			securityService.makePublicVisible(newRelation, session);
+			Relation newRelation = modelService.createRelation(parentWord, childWord, kind, operator);
+			securityService.makePublicVisible(newRelation, operator);
 			
 		}
 	}
 	
-	public void changeLanguage(long wordId, String languageCode, User user) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
-		Word word = getWord(wordId, user);
+	public void changeLanguage(long wordId, String languageCode, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+		Word word = getWord(wordId, operator);
 		if (word==null) {
 			throw new ContentNotFoundException(Word.class, wordId);
 		}
-		changeLanguage(word, languageCode, user, user);
+		changeLanguage(word, languageCode, operator);
 	}
 	
-	public void changeLanguage(Word word, String languageCode, User originator, Privileged privileged) throws ModelException, IllegalRequestException, SecurityException {
+	public void changeLanguage(Word word, String languageCode, Operator privileged) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
 		Language language = null;
 		if (languageCode!=null) {
-			language = languageService.getLanguageForCode(languageCode);
+			language = languageService.getLanguageForCode(languageCode, privileged);
 			if (language==null) {
 				throw new IllegalRequestException("Unsupported language ("+languageCode+")");
 			}
@@ -272,35 +271,35 @@ public class WordsModelService {
 			Relation relation = modelService.createRelation(language, word, privileged);
 			securityService.makePublicVisible(relation, privileged);
 		}
-		wordService.ensureOriginator(word,originator);
+		wordService.ensureOriginator(word, privileged);
 	}
 
-	public void changeCategory(long wordId, String category, User user) throws ModelException, IllegalRequestException, SecurityException {
-		Word word = getWord(wordId, user);
-		changeCategory(word, category, user, user);
+	public void changeCategory(long wordId, String category, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+		Word word = getWord(wordId, operator);
+		changeCategory(word, category, operator);
 	}
 
-	public void changeCategory(Word word, String category, User originator, Privileged privileged) throws IllegalRequestException, ModelException, SecurityException {
-		LexicalCategory lexicalCategory = languageService.getLexcialCategoryForCode(category);
+	public void changeCategory(Word word, String category, Operator operator) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+		LexicalCategory lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 		if (lexicalCategory==null) {
 			throw new IllegalRequestException("Unsupported category ("+category+")");
 		}
-		List<Relation> parents = modelService.find().relations(privileged).to(word).from(LexicalCategory.class).list();
-		modelService.delete(parents, privileged);
-		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, privileged);
-		securityService.makePublicVisible(categoryRelation, privileged);
-		wordService.ensureOriginator(word,originator);		
+		List<Relation> parents = modelService.find().relations(operator).to(word).from(LexicalCategory.class).list();
+		modelService.delete(parents, operator);
+		Relation categoryRelation = modelService.createRelation(lexicalCategory, word, operator);
+		securityService.makePublicVisible(categoryRelation, operator);
+		wordService.ensureOriginator(word, operator);		
 	}
 
 	
 	
-	public void deleteWord(long wordId, UserSession session) throws ModelException, IllegalRequestException, SecurityException {
-		Word word = getWord(wordId, session);
-		modelService.delete(word, session);
+	public void deleteWord(long wordId, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+		Word word = getWord(wordId, operator);
+		modelService.delete(word, operator);
 	}
 
-	private Word getWord(long wordId, Privileged session) throws ModelException, IllegalRequestException {
-		Word word = modelService.get(Word.class, wordId, session);
+	private Word getWord(long wordId, Operator operator) throws ModelException, IllegalRequestException {
+		Word word = modelService.get(Word.class, wordId, operator);
 		if (word==null) {
 			throw new IllegalRequestException("Word not found (id="+wordId+")");
 		}
@@ -308,17 +307,21 @@ public class WordsModelService {
 	}
 
 	public void addToPostponed(Word word) throws ModelException, SecurityException {
-		User admin = modelService.getUser("admin");
-		Pile pile = pileService.getOrCreateGlobalPile("words.postponed", admin);
-		Optional<Relation> relation = modelService.getRelation(pile, word, admin);
-		if (!relation.isPresent()) {
-			modelService.createRelation(pile, word, admin);
+		Operator operator = modelService.newAdminOperator();
+		try {
+			Pile pile = pileService.getOrCreateGlobalPile("words.postponed", operator);
+			Optional<Relation> relation = modelService.getRelation(pile, word, operator);
+			if (!relation.isPresent()) {
+				modelService.createRelation(pile, word, operator);
+			}
+		} finally {
+			operator.commit();
 		}
 	}
 	
-	public void importWords(WordsImportRequest object, Auditor auditor, User user) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
-		Language language = languageService.getLanguageForCode(object.getLanguage());
-		LexicalCategory category = languageService.getLexcialCategoryForCode(object.getCategory());
+	public void importWords(WordsImportRequest object, Auditor auditor, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+		Language language = languageService.getLanguageForCode(object.getLanguage(), operator);
+		LexicalCategory category = languageService.getLexcialCategoryForCode(object.getCategory(), operator);
 		
 		Code.checkNotNull(language, "Unsupported language: "+object.getLanguage());
 		Code.checkNotNull(category, "Unsupported category: "+object.getCategory());
@@ -339,7 +342,8 @@ public class WordsModelService {
 		int num = 0;
 		
 		for (String word : words) {
-			List<WordListPerspective> list = modelService.list(new WordListPerspectiveQuery().withWord(word.toLowerCase()));
+			WordListPerspectiveQuery query = new WordListPerspectiveQuery().withWord(word.toLowerCase());
+			List<WordListPerspective> list = modelService.list(query, operator);
 			List<WordListPerspective> candidates = Lists.newArrayList();
 			for (WordListPerspective perspective : list) {
 				// If no or same language
@@ -352,33 +356,34 @@ public class WordsModelService {
 				}
 			}
 			if (candidates.size()==0) {
-				createWord(language.getCode(), category.getCode(), word, user);
+				createWord(language.getCode(), category.getCode(), word, operator);
 				auditor.info("Created word: '"+word+"'");
 			} else {
 				WordListPerspective perspective = candidates.get(0);
 				if (!perspective.getText().equals(word)) {
-					Word loaded = modelService.get(Word.class, perspective.getId(),user);
+					Word loaded = modelService.get(Word.class, perspective.getId(),operator);
 					if (loaded!=null) {
 						loaded.setText(word);
 						auditor.info("Changed text from '"+perspective.getText()+"' to '"+word+"'");
 					}
 				}
 				if (perspective.getLanguage()==null) {
-					changeLanguage(perspective.getId(), language.getCode(), user);
+					changeLanguage(perspective.getId(), language.getCode(), operator);
 					auditor.info("Changed language of '"+word+"' to "+language.getCode());
 				}
 				if (perspective.getLexicalCategory()==null) {
-					changeCategory(perspective.getId(), category.getCode(), user);
+					changeCategory(perspective.getId(), category.getCode(), operator);
 					auditor.info("Changed category of '"+word+"' to "+category.getCode());
 				}
 			}
 			num++;
 			if (num>100) {
-				modelService.commit();
+				operator.commit();
 				//System.out.println(Math.round(((float) num)/(float) words.size()*100)+"%");
 				num=0;
 			}
 		}
+		operator.commit();
 	}
 
 	

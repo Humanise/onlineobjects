@@ -6,9 +6,8 @@ import java.util.List;
 
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -25,20 +24,19 @@ public class OnlinePublisherService {
 
 	private ModelService modelService;
 	private PileService pileService;
-	private SecurityService securityService;
 	private NetworkService networkService;
 
-	public List<InternetAddress> getSites(Privileged privileged) throws ModelException, SecurityException {
+	public List<InternetAddress> getSites(Operator privileged) throws ModelException, SecurityException {
 		Pile pile = getPile(privileged);
 		Query<InternetAddress> query = Query.after(InternetAddress.class).from(pile);
-		return modelService.list(query);
+		return modelService.list(query, privileged);
 	}
 
 	public void callAllPublishers(JobStatus status) {
 		status.log("Performing heart massage");
-		Privileged privileged = securityService.getPublicUser();
+		Operator operator = modelService.newPublicOperator();
 		try {
-			List<InternetAddress> sites = getSites(privileged);
+			List<InternetAddress> sites = getSites(operator);
 			int index = 0;
 			for (InternetAddress internetAddress : sites) {
 				UrlBuilder url = new UrlBuilder(internetAddress.getAddress());
@@ -64,14 +62,16 @@ public class OnlinePublisherService {
 				status.setProgress(index, sites.size());
 				index++;
 			}
+			operator.commit();
 		} catch (EndUserException e) {
+			operator.rollBack();
 			status.error("A problem happened in the model or secuity", e);
 		}
 		status.setProgress(1);
 		status.log("Heart massage finished");
 	}
 
-	public void createOrUpdatePublisher(PublisherPerspective perspective, Privileged privileged) throws IllegalRequestException, ModelException, ContentNotFoundException, SecurityException {
+	public void createOrUpdatePublisher(PublisherPerspective perspective, Operator privileged) throws IllegalRequestException, ModelException, ContentNotFoundException, SecurityException {
 		if (perspective == null) {
 			throw new IllegalRequestException("No publisher provider");
 		}
@@ -93,7 +93,7 @@ public class OnlinePublisherService {
 		}
 	}
 
-	public PublisherPerspective getPublisherPerspective(Long id, Privileged privileged) throws ModelException, ContentNotFoundException {
+	public PublisherPerspective getPublisherPerspective(Long id, Operator privileged) throws ModelException, ContentNotFoundException {
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, id, privileged);
 		if (internetAddress!=null) {
 			PublisherPerspective perspective = new PublisherPerspective();
@@ -105,14 +105,14 @@ public class OnlinePublisherService {
 		throw new ContentNotFoundException("The internet address does not exists: id="+id);
 	}
 
-	public void deletePublisher(Long id, Privileged privileged) throws ModelException, SecurityException {
+	public void deletePublisher(Long id, Operator privileged) throws ModelException, SecurityException {
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, id, privileged);
 		if (internetAddress!=null) {
 			modelService.delete(internetAddress, privileged);
 		}
 	}
 
-	private Pile getPile(Privileged privileged) throws ModelException, SecurityException {
+	private Pile getPile(Operator privileged) throws ModelException, SecurityException {
 		return pileService.getOrCreateGlobalPile("onlinepublisher.sites", privileged);
 	}
 	
@@ -126,10 +126,6 @@ public class OnlinePublisherService {
 		this.pileService = pileService;
 	}
 
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
-	
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}

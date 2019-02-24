@@ -28,7 +28,7 @@ public class AuthenticationLoginView extends AbstractView {
 		super.before(request);
 		redirect = request.getString("redirect");
 		UserSession session = request.getSession();
-		User user = modelService.get(User.class, session.getIdentity(), session);
+		User user = modelService.getUser(request);
 		if (user != null) {
 			currentUserName = user.getUsername();
 		}

@@ -12,7 +12,7 @@ import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.MimeTypes;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Location;
@@ -58,9 +58,9 @@ public class TestImageService extends AbstractSpringTestCase {
 		File copy = File.createTempFile("testImage", "jpg");
 		org.apache.commons.io.FileUtils.copyFile(file, copy);
 		Assert.assertTrue(copy.exists());
-		Privileged privileged = getAdminUser();
+		Operator operator = modelService.newAdminOperator();
 		
-		Image image = imageService.createImageFromFile(copy, "test image", privileged);
+		Image image = imageService.createImageFromFile(copy, "test image", operator);
 		Assert.assertNotNull(image);
 		assertEquals(1600,image.getWidth());
 		assertEquals(1200,image.getHeight());
@@ -68,16 +68,16 @@ public class TestImageService extends AbstractSpringTestCase {
 		assertEquals("iPhone",image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MODEL));
 
 		// Check the location
-		Location location = modelService.getParent(image, Location.class, privileged);
+		Location location = modelService.getParent(image, Location.class, operator);
 		Assert.assertNotNull(location);
 		assertEquals(new Double(57.225833333333334),new Double(location.getLatitude()));
 		assertEquals(new Double(9.515666666666666),new Double(location.getLongitude()));
 		
 		// Clean up
-		modelService.delete(image, privileged);
-		modelService.delete(location, privileged);
+		modelService.delete(image, operator);
+		modelService.delete(location, operator);
 		
-		modelService.commit();
+		operator.commit();
 	}
 	
 	public void setImageService(ImageService imageService) {

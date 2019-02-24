@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -30,16 +30,16 @@ public class ImageGalleryImporter extends ImageImporter {
 
 		int index = Integer.parseInt(parameters.get("index"));
 		long imageGalleryId = Long.parseLong(parameters.get("galleryId"));
-		ImageGallery gallery = modelService.get(ImageGallery.class, imageGalleryId, request.getSession());
+		ImageGallery gallery = modelService.get(ImageGallery.class, imageGalleryId, request);
 		
 		Relation relation = new Relation(gallery, image);
-		relation.setPosition(getMaxImagePosition(gallery, request.getSession()) + 1 + index);
-		modelService.create(relation, request.getSession());
+		relation.setPosition(getMaxImagePosition(gallery, request) + 1 + index);
+		modelService.create(relation, request);
 
 		imported.add(SimpleEntityPerspective.create(image));
 	}
 
-	private float getMaxImagePosition(Entity gallery, Privileged privileged) throws EndUserException {
+	private float getMaxImagePosition(Entity gallery, Operator privileged) throws EndUserException {
 		float max = 0;
 		List<Relation> relations = modelService.getRelationsFrom(gallery,Image.class, privileged);
 		for (Relation relation : relations) {

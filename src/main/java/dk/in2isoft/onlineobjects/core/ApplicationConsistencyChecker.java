@@ -15,13 +15,12 @@ public class ApplicationConsistencyChecker implements ConsistencyChecker {
 	private static Logger log = LogManager.getLogger(ApplicationConsistencyChecker.class);
 
 	private ModelService modelService;
-	private SecurityService securityService;
 
 	@Override
 	public void check() throws ModelException, SecurityException, ExplodingClusterFuckException {
-
+		Operator operator = modelService.newAdminOperator();
 		Query<Application> query = Query.of(Application.class);
-		List<Application> apps = modelService.list(query);
+		List<Application> apps = modelService.list(query, operator);
 		boolean found = false;
 		for (Application application : apps) {
 			if ("setup".equals(application.getName())) {
@@ -32,18 +31,14 @@ public class ApplicationConsistencyChecker implements ConsistencyChecker {
 			log.warn("No setup application present!");
 			Application setup = new Application();
 			setup.setName("setup");
-			modelService.create(setup, securityService.getAdminPrivileged());
-			modelService.commit();
+			modelService.create(setup, operator);
 			log.info("Created setup application");
 		}
-		modelService.commit();
+		operator.commit();
 	}
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
 	
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
 }

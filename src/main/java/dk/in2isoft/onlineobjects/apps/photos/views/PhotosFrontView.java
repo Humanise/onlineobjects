@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -15,14 +16,13 @@ import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.photos.SimplePhotoPerspective;
 import dk.in2isoft.onlineobjects.modules.photos.SimplePhotoQuery;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 import dk.in2isoft.onlineobjects.ui.jsf.model.GalleryItem;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 
-public class PhotosFrontView extends AbstractManagedBean {
+public class PhotosFrontView extends AbstractView {
 
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -32,7 +32,7 @@ public class PhotosFrontView extends AbstractManagedBean {
 	@Override
 	public void before(Request request) throws Exception {
 		SimplePhotoQuery simplePhotoQuery = new SimplePhotoQuery(securityService.getPublicUser());
-		List<SimplePhotoPerspective> list = modelService.list(simplePhotoQuery);
+		List<SimplePhotoPerspective> list = modelService.list(simplePhotoQuery, request);
 		String language = request.getLanguage();
 		
 		
@@ -58,8 +58,8 @@ public class PhotosFrontView extends AbstractManagedBean {
 			@Override
 			public ListModelResult<GalleryItem> getResult() {
 				Query<Image> query = Query.of(Image.class).orderByCreated().withPaging(getPage(), getPageSize()).as(securityService.getPublicUser()).descending();
-				SearchResult<Image> result = modelService.search(query);
-				List<GalleryItem> list = convert(result.getList(), request.getSession());
+				SearchResult<Image> result = modelService.search(query, request);
+				List<GalleryItem> list = convert(result.getList(), request);
 				return new ListModelResult<GalleryItem>(list,result.getTotalCount());
 			}
 			
@@ -72,7 +72,7 @@ public class PhotosFrontView extends AbstractManagedBean {
 		return this.model;
 	}
 	
-	private List<GalleryItem> convert(List<Image> images, Privileged privileged) {
+	private List<GalleryItem> convert(List<Image> images, Operator privileged) {
 		List<GalleryItem> list = new ArrayList<GalleryItem>();
 		for (Image image : images) {
 			User user = null;

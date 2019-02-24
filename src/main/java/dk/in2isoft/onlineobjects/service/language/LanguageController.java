@@ -32,7 +32,7 @@ public class LanguageController extends LanguageControllerBase {
 		
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery().withWords(uniqueWords).withPaging(0, 500);
 		
-		List<WordListPerspective> list = modelService.list(query);
+		List<WordListPerspective> list = modelService.list(query, request);
 		
 		List<String> unknownWords = Lists.newArrayList();
 		

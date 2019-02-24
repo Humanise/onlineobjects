@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,30 +30,19 @@ public abstract class AbstractSpringTask extends AbstractJUnit4SpringContextTest
 	@Autowired
 	protected ModelService modelService;
 
+	@Autowired
+	protected SecurityService securityService;
+
 	protected File getTestFile(String name) throws IOException {
 		File file = context.getResource(name).getFile();
 		return file;
 	}
 
 	protected Privileged getPublicUser() {
-		return modelService.getUser("public");
+		return securityService.getPublicUser();
 	}
 	
-	public void setModelService(ModelService modelService) {
-		this.modelService = modelService;
-	}
 
-	public ModelService getModelService() {
-		return modelService;
-	}
-
-	public void setConfigurationService(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
-	}
 
 	public void setContext(ApplicationContext context) {
 		this.context = context;
@@ -78,4 +68,15 @@ public abstract class AbstractSpringTask extends AbstractJUnit4SpringContextTest
 		return null;
 	}
 	
+	public final void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
+
+	public final void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+
+	public final void setModelService(ModelService modelService) {
+		this.modelService = modelService;
+	}
 }

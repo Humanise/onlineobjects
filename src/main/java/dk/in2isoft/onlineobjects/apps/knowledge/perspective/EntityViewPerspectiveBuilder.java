@@ -8,7 +8,7 @@ import com.google.common.collect.Maps;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -21,7 +21,7 @@ public class EntityViewPerspectiveBuilder {
 	protected ModelService modelService;
 	protected KnowledgeService knowledgeService;
 
-	protected void writeList(HTMLWriter html, String header, List<Statement> answers, Privileged privileged) throws ModelException {
+	protected void writeList(HTMLWriter html, String header, List<Statement> answers, Operator privileged) throws ModelException {
 		html.startDiv().withClass("reader_entity_list");
 		html.startH2().withClass("reader_entity_header").text(header).endH2();
 		if (Code.isEmpty(answers)) {

@@ -1,8 +1,8 @@
 package dk.in2isoft.onlineobjects.apps.account;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
@@ -31,35 +31,35 @@ public class AccountController extends AccountControllerBase {
 		String username = user.getUsername();
 		String currentPassword = request.getString("currentPassword", Error.missingCurrentPassword);
 		String newPassword = request.getString("newPassword", Error.missingNewPassword);
-		securityService.changePassword(username, currentPassword, newPassword, request.getSession());
+		securityService.changePassword(username, currentPassword, newPassword, request);
 	}
 
 	@Path
 	public void changeName(Request request) throws ModelException, ContentNotFoundException, SecurityException {
 		UserSession privileged = request.getSession();
-		User user = modelService.getRequired(User.class, privileged.getIdentity(), privileged);
-		Person person = memberService.getUsersPerson(user, privileged);
+		User user = modelService.getRequired(User.class, privileged.getIdentity(), request);
+		Person person = memberService.getUsersPerson(user, request);
 		person.setGivenName(request.getString("first"));
 		person.setAdditionalName(request.getString("middle"));
 		person.setFamilyName(request.getString("last"));
-		modelService.update(person, privileged);
+		modelService.update(person, request);
 	}
 
 	@Path
 	public void confirmEmail(Request request) throws EndUserException {
 		User user = getUser(request);
-		memberService.sendEmailConfirmation(user, request.getSession());
+		memberService.sendEmailConfirmation(user, request);
 	}
 
 	@Path
 	public void changePrimaryEmail(Request request) throws EndUserException {
 		String email = request.getString("email", Error.invalidEmail);
 		User user = getUser(request);
-		memberService.sendEmailChangeRequest(user, email, request.getSession());
+		memberService.sendEmailChangeRequest(user, email, request);
 	}
 
 	private @NonNull User getUser(Request request) throws ModelException, ContentNotFoundException {
-		return modelService.getRequired(User.class, request.getSession().getIdentity(), request.getSession());
+		return modelService.getRequired(User.class, request.getIdentity(), request);
 	}
 
 	
@@ -67,13 +67,13 @@ public class AccountController extends AccountControllerBase {
 	public void changePasswordUsingKey(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
 		String key = request.getString("key", "Key must be provided");
 		String password = request.getString("password", "Password must be provided");
-		securityService.changePasswordUsingKey(key, password, request.getSession());
+		securityService.changePasswordUsingKey(key, password, request.getSession(), request);
 	}
 
 	@Path
 	public void acceptTerms(Request request) throws ContentNotFoundException, ModelException, SecurityException {
 		User user = getUser(request);
-		memberService.markTermsAcceptance(user, request.getSession());
+		memberService.markTermsAcceptance(user, request);
 	}
 
 	@Path
@@ -84,12 +84,11 @@ public class AccountController extends AccountControllerBase {
 			String username = request.getString("username", "Username is required");
 			String email = request.getString("email", "E-mail is required");
 			String password = request.getString("password", "Password is required");
-			invitationService.signUpFromInvitation(request.getSession(), code, username, email, password);
+			invitationService.signUpFromInvitation(request.getSession(), code, username, email, password, request);
 			response.setSuccess(true);
 		} catch (EndUserException e) {
 			log.warn(e.getMessage(), e);
 			response.setDescription(e.getMessage());
-			modelService.rollBack(); // TODO is this the wrong place to do this?
 		}
 		return response;
 	}
@@ -99,16 +98,16 @@ public class AccountController extends AccountControllerBase {
 		String username = request.getString("username", Error.noUsername);
 		String password = request.getString("password", Error.noPassword);
 		UserSession session = request.getSession();
-		User user = modelService.get(User.class, session.getIdentity(), session);
+		User user = modelService.get(User.class, session.getIdentity(), request);
 		if (!username.equals(user.getUsername())) {
 			throw new IllegalRequestException(Error.userNotCurrent);
 		}
-		boolean userChanged = securityService.changeUser(session, username, password);
+		boolean userChanged = securityService.changeUser(session, username, password, request);
 		if (!userChanged) {
 			throw new SecurityException(Error.userNotFound);
 		}
 		
-		memberService.deleteMember(user, session);
+		memberService.deleteMember(user, request);
 		securityService.logOut(session);
 	}
 	

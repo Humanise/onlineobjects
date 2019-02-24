@@ -60,11 +60,11 @@ public class SecurityService {
 	 * @param password The password
 	 * @return True if user was changed
 	 */
-	public boolean changeUser(UserSession userSession, String username, String password) {
+	public boolean changeUser(UserSession userSession, String username, String password, Operator operator) {
 		if (userSession==null || username==null || password==null) {
 			throw new IllegalArgumentException("session, username or password is null");
 		}
-		User user = getUser(username, password);
+		User user = getUser(username, password, operator);
 		if (user!=null) {
 			Set<Ability> abilities = getAbilities(user);
 			userSession.setUser(user, abilities);
@@ -81,8 +81,8 @@ public class SecurityService {
 		return Ability.convert(properties);
 	}
 		
-	public User getUser(String username, String password) {
-		User user = modelService.getUser(username);
+	public User getUser(String username, String password, Operator operator) {
+		User user = modelService.getUser(username, operator);
 		if (user==null) {
 			return null;
 		}
@@ -94,21 +94,21 @@ public class SecurityService {
 		return null;
 	}
 	
-	public void changePassword(String username, String existingPassword,String newPassword, Privileged privileged) throws SecurityException, ModelException, IllegalRequestException, ExplodingClusterFuckException {
-		User user = getUser(username, existingPassword);
+	public void changePassword(String username, String existingPassword,String newPassword, Operator operator) throws SecurityException, ModelException, IllegalRequestException, ExplodingClusterFuckException {
+		User user = getUser(username, existingPassword, operator);
 		if (user==null) {
 			throw new IllegalRequestException(Error.incorrectCurrentPassword);
 		}
-		changePassword(user, newPassword, privileged);
+		changePassword(user, newPassword, operator);
 	}
 
-	private void changePassword(User user, String password, Privileged privileged) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
+	private void changePassword(User user, String password, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
 		if (!ValidationUtil.isValidPassword(password)) {
 			throw new IllegalRequestException(Error.invalidNewPassword);
 		}
 		setSaltedPassword(user, password);
 		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
-		modelService.update(user, privileged);
+		modelService.update(user, operator);
 		surveillanceService.audit().info("Changed password of user={}", user.getUsername());
 	}
 
@@ -127,18 +127,18 @@ public class SecurityService {
 		user.setSalt(salt);
 	}
 
-	public void changePasswordUsingKey(String key, String password, UserSession session) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
-		User user = passwordRecoveryService.getUserByRecoveryKey(key);
+	public void changePasswordUsingKey(String key, String password, UserSession session, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
+		User user = passwordRecoveryService.getUserByRecoveryKey(key, operator);
 		if (user==null) {
 			throw new IllegalRequestException(Error.userNotFound);
 		}
-		Privileged admin = getAdminPrivileged();
-		changePassword(user, password, admin);
-		changeUser(session, user.getUsername(), password);
+		Operator usersOperator = operator.as(user);
+		changePassword(user, password, usersOperator);
+		changeUser(session, user.getUsername(), password, usersOperator);
 	}
 	
 	public boolean logOut(UserSession userSession) {
-		User user = modelService.getUser("public");
+		User user = getPublicUser();
 		if (user==null) {
 			return false;
 		} else {
@@ -148,17 +148,16 @@ public class SecurityService {
 		}
 	}
 
-	public boolean isPublicView(Item item) {
-		Privilege privilege = modelService.getPrivilege(item.getId(), getPublicUser().getId());
+	public boolean isPublicView(Item item, Operator operator) {
+		Privilege privilege = modelService.getPrivilege(item.getId(), getPublicUser().getId(), operator.getOperation());
 		if (privilege!=null) {
 			return privilege.isView();
 		}
 		return false;
 	}
 	
-	@Deprecated
-	public Privilege getPrivilege(long id,Privileged priviledged) {
-		return modelService.getPrivilege(id, priviledged.getIdentity());
+	public Privilege getPrivilege(long id,Privileged priviledged, Operator operator) {
+		return modelService.getPrivilege(id, priviledged.getIdentity(), operator.getOperation());
 	}
 	
 	public List<Privileged> expand(Privileged priviledged) {
@@ -170,27 +169,30 @@ public class SecurityService {
 		return privs;
 	}
 	
-	public boolean isOnlyPrivileged(Item item,Privileged privileged) {
+	public boolean isOnlyPrivileged(Item item,Privileged privileged, Operator operator) {
 		
-		List<Long> ids = modelService.getPrivilegedUsers(item.getId());
+		List<Long> ids = modelService.getPrivilegedUsers(item.getId(), operator);
 		return ids.size() == 1 && ids.get(0) == privileged.getIdentity();
 	}
 
-	public boolean canView(Item item,Privileged privileged) {
+	public boolean canView(Item item, Operator operator) {
+		return canView(item, operator, operator);
+	}
+
+	public boolean canView(Item item, Privileged privileged, Operator operator) {
 		if (isAdminUser(privileged)) {
 			return true;
 		}
 		List<Privileged> expand = expand(privileged);
 		for (Privileged priv : expand) {
-			if (canExactlyView(item, priv)) {
+			if (canExactlyView(item, priv, operator)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	@Deprecated
-	public boolean canDelete(Item item,Privileged privileged) {
+	public boolean canDelete(Item item,Privileged privileged, Operator operator) {
 		if (item instanceof User) {
 			User user = (User) item;
 			if (isAdminUser(user)) {
@@ -207,31 +209,6 @@ public class SecurityService {
 			return true;
 		}
 		List<Privileged> expand = expand(privileged);
-		for (Privileged priv : expand) {
-			if (canExactlyDelete(item, priv)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean canDelete(Item item,Operator operator) {
-		if (item instanceof User) {
-			User user = (User) item;
-			if (isAdminUser(user)) {
-				return false;
-			}
-			if (isPublicUser(user)) {
-				return false;
-			}
-		}
-		if (isPublicUser(operator)) {
-			return false;
-		}
-		if (isAdminUser(operator)) {
-			return true;
-		}
-		List<Privileged> expand = expand(operator);
 		for (Privileged priv : expand) {
 			if (canExactlyDelete(item, priv, operator)) {
 				return true;
@@ -239,8 +216,16 @@ public class SecurityService {
 		}
 		return false;
 	}
+	
+	public boolean canDelete(Item item, Operator operator) {
+		return canDelete(item, operator, operator);
+	}
 
-	public boolean canModify(Item item,Privileged privileged) {
+	public boolean canModify(Item item, Operator operator) {
+		return canModify(item, operator, operator);
+	}
+
+	public boolean canModify(Item item, Privileged privileged, Operator operator) {
 		if (isAdminUser(privileged)) {
 			return true;
 		}
@@ -249,15 +234,15 @@ public class SecurityService {
 		}
 		List<Privileged> expand = expand(privileged);
 		for (Privileged priv : expand) {
-			if (canExactlyModify(item, priv)) {
+			if (canExactlyModify(item, priv, operator)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	private boolean canExactlyView(Item item, Privileged privileged) {
-		Privilege privilege = getPrivilege(item.getId(), privileged);
+	private boolean canExactlyView(Item item, Privileged privileged, Operator operator) {
+		Privilege privilege = getPrivilege(item.getId(), privileged, operator);
 		if (privilege==null) {
 			return false;
 		} else {
@@ -265,16 +250,6 @@ public class SecurityService {
 		}
 	}
 	
-	@Deprecated
-	private boolean canExactlyDelete(Item item, Privileged privileged) {
-		Privilege privilege = getPrivilege(item.getId(), privileged);
-		if (privilege==null) {
-			return false;
-		} else {
-			return privilege.isDelete();
-		}
-	}
-
 	private boolean canExactlyDelete(Item item, Privileged other, Operator operator) {
 		Privilege privilege = modelService.getPrivilege(item.getId(), other.getIdentity(), operator.getOperation());
 		if (privilege==null) {
@@ -284,8 +259,8 @@ public class SecurityService {
 		}
 	}
 
-	private boolean canExactlyModify(Item item, Privileged privileged) {
-		Privilege privilege = getPrivilege(item.getId(), privileged);
+	private boolean canExactlyModify(Item item, Privileged privileged, Operator operator) {
+		Privilege privilege = getPrivilege(item.getId(), privileged, operator);
 		if (privilege==null) {
 			return false;
 		} else {
@@ -295,7 +270,9 @@ public class SecurityService {
 	
 	public User getPublicUser() {
 		if (publicUser==null) {
-			publicUser = modelService.getUser(SecurityService.PUBLIC_USERNAME);
+			Operation operation = modelService.newOperation();
+			publicUser = modelService.getUser(SecurityService.PUBLIC_USERNAME, operation);
+			modelService.execute(operation);
 		}
 		return publicUser;
 	}
@@ -307,27 +284,20 @@ public class SecurityService {
 
 	public Privileged getAdminPrivileged() {
 		if (adminPrivileged==null) {
-			User user = modelService.getUser(SecurityService.ADMIN_USERNAME);
+			Operation operation = modelService.newOperation();
+			User user = modelService.getUser(SecurityService.ADMIN_USERNAME, operation);
 			adminPrivileged = new DummyPrivileged(user.getId());
+			modelService.execute(operation);
 		}
 		return adminPrivileged;
 	}
 
 	public boolean isAdminUser(Privileged privileged) {
 		Privileged admin = getAdminPrivileged();
-		return admin!=null && privileged.getIdentity() == admin.getIdentity();
-	}
-
-	@Deprecated
-	// Should use operator
-	public User getUserBySecret(String secret) {
-		if (Strings.isBlank(secret)) {
-			return null;
+		if (admin == null) {
+			log.error("No admin user while checking");
 		}
-		UserQuery q = new UserQuery();
-		q.setSecret(secret);
-		SearchResult<User> result = modelService.search(q);
-		return result.getFirst();		
+		return admin!=null && privileged.getIdentity() == admin.getIdentity();
 	}
 
 	public User getUserBySecret(String secret, Operator operator) {
@@ -340,22 +310,22 @@ public class SecurityService {
 		return result.getFirst();		
 	}
 
-	public String getSecret(ClientInfo info, User user) throws ModelException, SecurityException {
+	public String getSecret(ClientInfo info, User user, Operator operator) throws ModelException, SecurityException {
 		String secret;
 		Query<Client> q = Query.after(Client.class).withField("UUID", info.getUUID()).as(user).withPaging(0, 1);
-		final Client client = modelService.getFirst(q);
+		final Client client = modelService.getFirst(q, operator);
 		if (client!=null) {
 			secret = client.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
 			syncClientInfo(info, client);
-			modelService.update(client, user);
+			modelService.update(client, operator);
 		} else {
 			secret = buildSecret();
 			Client newClient = new Client();
 			newClient.overrideFirstProperty(Property.KEY_AUTHENTICATION_SECRET, secret);
 			syncClientInfo(info, newClient);
 			newClient.setUUID(info.getUUID());
-			modelService.create(newClient, user);
-			modelService.createRelation(user, newClient, user);
+			modelService.create(newClient, operator);
+			modelService.createRelation(user, newClient, operator);
 		}
 		return secret;
 	}
@@ -370,36 +340,36 @@ public class SecurityService {
 		newClient.setName(info.getNickname());
 	}
 
-	private User getInitialUser() {
+	private UserSession getInitialUser(Operator operator) {
 		if (configurationService.isDevelopmentMode()) {
 			String developmentUser = configurationService.getDevelopmentUser();
 			if (Strings.isNotBlank(developmentUser)) {
-				User user = modelService.getUser(developmentUser);
+				User user = modelService.getUser(developmentUser, operator);
 				if (user!=null) {
-					return user;
+					return new UserSession(user, getAbilities(user));
 				}
 			}
 		}
-		return getPublicUser();
+		return new UserSession(getPublicUser());
 	}
 
-	public void makePublicVisible(Item item, Privileged privileged) throws SecurityException, ModelException {
-		modelService.grantPrivileges(item, getPublicUser(), true, false, false, privileged);
+	public void makePublicVisible(Item item, Operator operator) throws SecurityException, ModelException {
+		modelService.grantPrivileges(item, getPublicUser(), true, false, false, operator);
 	}
 	
-	public void makePublicHidden(Item item, Privileged privileged) throws SecurityException {
-		if (!canModify(item, privileged)) {
+	public void makePublicHidden(Item item, Operator operator) throws SecurityException {
+		if (!canModify(item, operator)) {
 			throw new SecurityException("The user cannot make this non public");
 		}
 		User publicUser = getPublicUser();
-		modelService.removePrivileges(item, publicUser, privileged);
+		modelService.removePrivileges(item, publicUser, operator);
 	}
 
-	public void grantPublicView(Item item, boolean view, Privileged granter) throws ModelException, SecurityException {
+	public void grantPublicView(Item item, boolean view, Operator granter) throws ModelException, SecurityException {
 		modelService.grantPrivileges(item, getPublicUser(), view, false, false, granter);		
 	}
 
-	public void grantFullPrivileges(Item item, Privileged user, Privileged granter) throws ModelException, SecurityException {
+	public void grantFullPrivileges(Item item, Privileged user, Operator granter) throws ModelException, SecurityException {
 		modelService.grantPrivileges(item, user, true, true, true, granter);
 	}
 
@@ -433,7 +403,7 @@ public class SecurityService {
 			HttpSession session = request.getRequest().getSession();
 			if (session.getAttribute(UserSession.SESSION_ATTRIBUTE) == null) {
 				log.trace("Creating new user session");
-				session.setAttribute(UserSession.SESSION_ATTRIBUTE, new UserSession(getInitialUser()));
+				session.setAttribute(UserSession.SESSION_ATTRIBUTE, getInitialUser(request));
 			}
 			request.setSession(UserSession.get(session));
 		}

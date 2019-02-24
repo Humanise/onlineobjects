@@ -10,7 +10,7 @@ import org.quartz.UnableToInterruptJobException;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -27,13 +27,13 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 		JobStatus status = getStatus(context);
 		ModelService modelService = schedulingSupportFacade.getModelService();
 		WordService wordService = schedulingSupportFacade.getWordService();
+		Operator operator = schedulingSupportFacade.getModelService().newAdminOperator();
 		try {
 
 			String src = "http://www.danskernesnavne.navneforskning.ku.dk/";
-			Privileged admin = schedulingSupportFacade.getSecurityService().getAdminPrivileged();
-			InternetAddress source = wordService.getSource(src, admin);
+			InternetAddress source = wordService.getSource(src, operator);
 			
-			List<Long> ids = modelService.list(new Quer());
+			List<Long> ids = modelService.list(new Quer(), operator);
 			{
 				int total = ids.size();
 				int pageSize = 500;
@@ -42,15 +42,15 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 				for (int i = 0; i < pages; i++) {
 					List<Long> subIds = ids.subList(i*pageSize, Math.min((i+1)*pageSize, total-1));
 					Query<Word> query = Query.after(Word.class).withIds(subIds);
-					List<Word> list = modelService.search(query).getList();
+					List<Word> list = modelService.search(query, operator).getList();
 					for (Word word : list) {
 						if (interrupted) {
-							modelService.commit();
+							operator.commit();
 							break;
 						}
-						wordService.updateSource(word, source, admin);
+						wordService.updateSource(word, source, operator);
 					}
-					modelService.commit();
+					operator.commit();
 					status.setProgress(i, pages);
 					if (interrupted) {
 						break;
@@ -60,6 +60,7 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 
 		} catch (EndUserException e) {
 			status.error("Error while updating sources", e);
+			operator.rollBack();
 		}
 	}
 

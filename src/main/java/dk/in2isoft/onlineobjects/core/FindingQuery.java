@@ -12,7 +12,7 @@ public class FindingQuery<T> extends Query<T> {
 		as(privileged);
 	}
 
-	public List<T> list() {
-		return modelService.list(this);
+	public List<T> list(Operator operator) {
+		return modelService.list(this, operator);
 	}
 }

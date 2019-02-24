@@ -1,15 +1,15 @@
 package dk.in2isoft.onlineobjects.model.conversion;
 
-import nu.xom.Element;
-import nu.xom.Node;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Person;
+import nu.xom.Element;
+import nu.xom.Node;
 
 public class PersonConverter extends EntityConverter {
 
 	@Override
-	protected Node generateSubXML(Entity entity, Privileged privileged) {
+	protected Node generateSubXML(Entity entity, Operator privileged) {
 		Person person = (Person) entity;
 		Element root = new Element("Person",Person.NAMESPACE);
 		addSimpleNode(root,"namePrefix",person.getNamePrefix(),Person.NAMESPACE);

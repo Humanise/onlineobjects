@@ -63,8 +63,8 @@ public class KnowledgeService {
 		return question;
 	}
 
-	public InternetAddress createInternetAddress(String url, User user) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
-		return internetAddressService.create(url, null, user);
+	public InternetAddress createInternetAddress(String url, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		return internetAddressService.create(url, null, user, operator);
 	}
 
 	public InternetAddress createInternetAddress(AddressRequest request, Operator operator) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
@@ -73,7 +73,7 @@ public class KnowledgeService {
 		Long questionId = request.getQuestionId();
 		String title = request.getTitle();
 		String quote = request.getQuote();
-		InternetAddress internetAddress = internetAddressService.create(url, title, user);
+		InternetAddress internetAddress = internetAddressService.create(url, title, user, operator);
 
 		if (Strings.isNotBlank(quote)) {
 			Statement statement = addStatementToInternetAddress(quote, internetAddress, operator);
@@ -390,7 +390,7 @@ public class KnowledgeService {
 	public ProfileApiPerspective getProfile(User user, Operator operator) throws ModelException {
 		ProfileApiPerspective profile = new ProfileApiPerspective();
 		profile.setUsername(user.getUsername());
-		EmailAddress email = memberService.getUsersPrimaryEmail(user, user);
+		EmailAddress email = memberService.getUsersPrimaryEmail(user, operator);
 		if (email!=null) {
 			profile.setEmail(email.getAddress());			
 		}

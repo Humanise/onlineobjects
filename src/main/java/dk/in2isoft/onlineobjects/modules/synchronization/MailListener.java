@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.User;
@@ -113,9 +113,9 @@ public class MailListener {
 	private void handleImage(String usersEmail, String mimeType, String fileName, String subject, InputStream inputStream, JobStatus status) {
 		status.log("Image from: " + usersEmail + " of type: " + mimeType + "...");
 		FileOutputStream output = null;
+		Operator adminOperator = modelService.newAdminOperator();
 		try {
-			User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
-			User user = memberService.getUserByPrimaryEmail(usersEmail, admin);
+			User user = memberService.getUserByPrimaryEmail(usersEmail, adminOperator);
 			if (user!=null) {
 				File tempFile = File.createTempFile(usersEmail, null);
 				tempFile.deleteOnExit();
@@ -129,20 +129,22 @@ public class MailListener {
 				} else {
 					title = fileService.cleanFileName(fileName);
 				}
-				Image image = imageService.createImageFromFile(tempFile, title, user);
-				inboxService.add(user, image);
+				Image image = imageService.createImageFromFile(tempFile, title, adminOperator.as(user));
+				inboxService.add(user, image, adminOperator.as(user));
 				status.log("Created image "+image.getName()+" for the user "+user.getUsername()+", Image-ID: "+image.getId());
 			} else {
 				status.warn("Ignoring email since no user found: "+usersEmail);
 			}
+			adminOperator.commit();
 		} catch (IOException e) {
 			status.error("Unable to get stream", e);
+			adminOperator.rollBack();
 		} catch (EndUserException e) {
 			status.error("Unable to create image", e);
+			adminOperator.rollBack();
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(inputStream);
-			modelService.commit();
 		}
 	}
 	

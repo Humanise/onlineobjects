@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import dk.in2isoft.commons.lang.Files;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
@@ -17,7 +16,6 @@ import dk.in2isoft.onlineobjects.util.images.ImageService;
 public class GenericImportListener implements ImportListener<Entity> {
 	
 	private ImageService imageService;
-	private Privileged privileged;
 	private HTMLService htmlService;
 	
 	private Entity result;
@@ -27,7 +25,7 @@ public class GenericImportListener implements ImportListener<Entity> {
 		ImageProperties properties = imageService.getImageProperties(file);
 		if (properties!=null) {
 			name = Files.cleanFileName(name);
-			result = imageService.createImageFromFile(file, name, privileged);
+			result = imageService.createImageFromFile(file, name, request);
 			return;
 		}
 		htmlService.getDocumentSilently(file,null);
@@ -37,11 +35,7 @@ public class GenericImportListener implements ImportListener<Entity> {
 	public Entity getResponse() {
 		return result;
 	}
-	
-	public void setPrivileged(Privileged privileged) {
-		this.privileged = privileged;
-	}
-	
+		
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}

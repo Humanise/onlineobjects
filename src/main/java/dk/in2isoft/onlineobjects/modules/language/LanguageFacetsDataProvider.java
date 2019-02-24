@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Word;
@@ -26,14 +27,16 @@ public class LanguageFacetsDataProvider extends CachedDataProvider<Multimap<Stri
 		
 	@Override
 	protected Multimap<String,String> buildData() {
+		Operator adminOperator = modelService.newAdminOperator();
 		Multimap<String,String> categoriesByLanguage = HashMultimap.create();
 		try {
-			List<WordStatistic> result = modelService.list(new WordFacetsQuery());
+			List<WordStatistic> result = modelService.list(new WordFacetsQuery(), adminOperator);
 			for (WordStatistic statistic : result) {
 				categoriesByLanguage.put(statistic.getLanguage(), statistic.getCategory());
 			}
-			
+			adminOperator.commit();
 		} catch (ModelException e) {
+			adminOperator.rollBack();
 			return null;
 		}
 		return categoriesByLanguage;

@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -28,7 +29,7 @@ public class PhotoService {
 	private ModelService modelService;
 	private SecurityService securityService;
 
-	public SearchResult<Image> search(PhotoIndexQuery query) {
+	public SearchResult<Image> search(PhotoIndexQuery query, Operator operator) {
 		Query<Image> modelQuery = Query.of(Image.class).withPaging(query.getPage(), query.getPageSize()).orderByCreated().descending();
 		try {
 			BooleanQuery combined = new BooleanQuery();
@@ -66,7 +67,7 @@ public class PhotoService {
 			//query.withPublicView();
 		//}
 		//query.withPrivileged(user);
-		return modelService.search(modelQuery);
+		return modelService.search(modelQuery, operator);
 	}
 	
 	// Wiring...

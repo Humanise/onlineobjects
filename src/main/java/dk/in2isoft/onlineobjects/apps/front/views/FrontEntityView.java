@@ -7,11 +7,10 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -21,7 +20,7 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class FrontEntityView extends LegacyAbstractView implements InitializingBean {
+public class FrontEntityView extends AbstractView implements InitializingBean {
 
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -33,10 +32,8 @@ public class FrontEntityView extends LegacyAbstractView implements InitializingB
 	private List<RelationPerspective> relationsTo = new ArrayList<>();
 	
 	@Override
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
-		UserSession privileged = request.getSession();
-		if (!securityService.isAdminUser(privileged)) {
+	protected void before(Request request) throws Exception {
+		if (!securityService.isAdminUser(request)) {
 			throw new ContentNotFoundException();
 		}
 		String[] path = request.getLocalPath();
@@ -46,12 +43,12 @@ public class FrontEntityView extends LegacyAbstractView implements InitializingB
 		if (typeClass==null) {
 			throw new IllegalRequestException("Unknown type: "+type);
 		}
-		Entity entity = modelService.getRequired(typeClass, id, privileged);
-		Locale locale = getLocale();
+		Entity entity = modelService.getRequired(typeClass, id, request);
+		Locale locale = request.getLocale();
 		this.title = entity.getName();
-		for (Privilege privilege : modelService.getPrivileges(entity)) {
+		for (Privilege privilege : modelService.getPrivileges(entity, request)) {
 			PrivilegePerspective perspective = new PrivilegePerspective();
-			User user = modelService.get(User.class, privilege.getSubject(), privileged);
+			User user = modelService.get(User.class, privilege.getSubject(), request);
 			perspective.user = user == null ? EntityPerspective.from(User.class, privilege.getSubject(), locale) : EntityPerspective.from(user, locale);
 			perspective.permissions = "" + (privilege.isAlter() ? "A" : "") + (privilege.isView() ? "V" : "") + (privilege.isDelete() ? "D" : "") + (privilege.isReference() ? "R" : "");
 			this.privileges.add(perspective);
@@ -66,14 +63,14 @@ public class FrontEntityView extends LegacyAbstractView implements InitializingB
 		}
 		entity.getProperties();
 		
-		modelService.find().relations(privileged).from(entity).stream(50).forEach(relation -> {
+		modelService.find().relations(request).from(entity).stream(50).forEach(relation -> {
 			RelationPerspective pers = new RelationPerspective();
 			pers.entity = EntityPerspective.from(relation.getTo(), locale);
 			pers.kind = relation.getKind();
 			relationsFrom.add(pers);
 		});
 
-		modelService.find().relations(privileged).to(entity).stream(50).forEach(relation -> {
+		modelService.find().relations(request).to(entity).stream(50).forEach(relation -> {
 			RelationPerspective pers = new RelationPerspective();
 			pers.entity = EntityPerspective.from(relation.getFrom(), locale);
 			pers.kind = relation.getKind();

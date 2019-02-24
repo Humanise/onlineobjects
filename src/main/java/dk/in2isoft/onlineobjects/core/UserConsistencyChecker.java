@@ -17,17 +17,26 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 
 	@Override
 	public void check() throws ModelException, SecurityException, ExplodingClusterFuckException {
-		User publicUser = modelService.getUser(SecurityService.PUBLIC_USERNAME);
+		Operation operation = modelService.newOperation();
+		try {
+			ensureCoreUsers(operation);
+			modelService.execute(operation);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private void ensureCoreUsers(Operation operation) throws SecurityException, ExplodingClusterFuckException {
+		User publicUser = modelService.getUser(SecurityService.PUBLIC_USERNAME, operation);
 		if (publicUser == null) {
 			log.warn("No public user present!");
 			User user = new User();
 			user.setUsername(SecurityService.PUBLIC_USERNAME);
 			user.setName("Public user");
-			modelService.createCoreUser(user);
-			modelService.commit();
+			modelService.createCoreUser(user, operation);
 			log.info("Public user created!");
 		}
-		User adminUser = modelService.getUser(SecurityService.ADMIN_USERNAME);
+		User adminUser = modelService.getUser(SecurityService.ADMIN_USERNAME, operation);
 		if (adminUser == null) {
 			log.warn("No admin user present!");
 			User user = new User();
@@ -38,11 +47,9 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 			String encryptedPassword = passwordEncryptionService.getEncryptedPassword(password, salt);
 			user.setPassword(encryptedPassword);
 			user.setSalt(salt);
-			modelService.createCoreUser(user);
-			modelService.commit();
+			modelService.createCoreUser(user, operation);
 			log.info("Administrator created!");
 		}
-		modelService.commit();
 	}
 
 	public void setModelService(ModelService modelService) {

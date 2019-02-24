@@ -1,9 +1,9 @@
 package dk.in2isoft.onlineobjects.apps.people.views;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.PairSearchResult;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -16,12 +16,11 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 import dk.in2isoft.onlineobjects.services.PersonService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
-public class PeoplePersonView extends AbstractManagedBean {
+public class PeoplePersonView extends AbstractView {
 	
 	private PersonService personService;
 	private ModelService modelService;
@@ -30,7 +29,6 @@ public class PeoplePersonView extends AbstractManagedBean {
 	private User user;
 	private Person person;
 	private Image image;
-	private ListModel<Image> listModel;
 	private UserProfileInfo profileInfo;
 	private ListModel<Image> latestImages;
 	private boolean canModify;
@@ -40,68 +38,49 @@ public class PeoplePersonView extends AbstractManagedBean {
 		String[] path = request.getLocalPath();
 		usersName = path.length==2 ? path[1] : path[0];
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
-		PairSearchResult<User,Person> result = modelService.searchPairs(query);
+		PairSearchResult<User,Person> result = modelService.searchPairs(query, request);
 		if (result.getTotalCount()==0) {
 			throw new ContentNotFoundException();
 		}
 		Pair<User, Person> next = result.iterator().next();
 		user = next.getKey();
 		person = next.getValue();
-		Privileged privileged = request.getSession();
-		if (!securityService.canView(user, privileged)) {
+		if (!securityService.canView(user, request)) {
 			throw new ContentNotFoundException();
 		}
-		canModify = securityService.canModify(person, privileged);
+		canModify = securityService.canModify(person, request);
 		try {
-			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class,  privileged);
+			image = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request);
 		} catch (ModelException e) {
 			// TODO: Do something usefull
 		}
-		this.profileInfo = personService.getProfileInfo(getPerson(),request.getSession());
+		this.profileInfo = personService.getProfileInfo(getPerson(), request);
+		latestImages = buildLatestImages(request);
 	}
-	
+
 	public ListModel<Image> getLatestImages() {
-		if (latestImages==null) {
-			latestImages = new ListModel<Image>() {
-				private ListModelResult<Image> result;
-				
-				@Override
-				public ListModelResult<Image> getResult() {
-					if (result!=null) return result;
-					User user = modelService.getUser(getUsersName());
-					Query<Image> query = Query.of(Image.class).as(user).orderByCreated().withPaging(0, getPageSize()).descending();
-					if (!canModify) {
-						query.withPublicView();
-					}
-					SearchResult<Image> search = modelService.search(query);
-					result = new ListModelResult<Image>(search.getList(),search.getList().size());
-					return result;
-				}
-			};
-			latestImages.setPageSize(16);
-		}
 		return latestImages;
 	}
 	
-	public ListModel<Image> getImageList() {
-		if (listModel!=null) return listModel;
-		ListModel<Image> model = new ListModel<Image>() {
-
+	private ListModel<Image> buildLatestImages(Request request) {
+		ListModel<Image> latestImages = new ListModel<Image>() {
+			private ListModelResult<Image> result;
+			
 			@Override
 			public ListModelResult<Image> getResult() {
-				User user = modelService.getUser(getUsersName());
-				Query<Image> query = Query.of(Image.class).as(user).orderByCreated().withPaging(getPage(), getPageSize()).descending();
+				if (result!=null) return result;
+				User user = modelService.getUser(getUsersName(), request);
+				Query<Image> query = Query.of(Image.class).as(user).orderByCreated().withPaging(0, getPageSize()).descending();
 				if (!canModify) {
 					query.withPublicView();
 				}
-				SearchResult<Image> search = modelService.search(query);
-				return new ListModelResult<Image>(search.getList(),search.getTotalCount());
+				SearchResult<Image> search = modelService.search(query, request);
+				result = new ListModelResult<Image>(search.getList(),search.getList().size());
+				return result;
 			}
-			
 		};
-		model.setPageSize(24);
-		listModel = model;
-		return model;
+		latestImages.setPageSize(16);
+		return latestImages;
 	}
 	
 	private String getUsersName() {

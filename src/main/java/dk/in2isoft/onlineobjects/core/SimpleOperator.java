@@ -6,9 +6,9 @@ public class SimpleOperator implements Operator {
 	private OperationProvider operationProvider;
 	private Operation operation;
 	
-	public SimpleOperator(long identity, OperationProvider operationProvider) {
+	public SimpleOperator(Privileged privileged, OperationProvider operationProvider) {
 		super();
-		this.identity = identity;
+		this.identity = privileged.getIdentity();
 		this.operationProvider = operationProvider;
 	}
 
@@ -42,8 +42,10 @@ public class SimpleOperator implements Operator {
 		}
 	}
 
-	public void change(Privileged privileged) {
-		identity = privileged.getIdentity();
+	@Override
+	public Operator as(Privileged privileged) {
+		if (privileged.getIdentity() == this.identity) return this;
+		return new DelegatingOperator(this, privileged);
 	}
 
 }

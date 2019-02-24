@@ -19,10 +19,11 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -54,7 +55,7 @@ public class WordService {
 
 	private List<String> trademarks = Lists.newArrayList("rockwool");
 	
-	public SearchResult<WordListPerspective> search(WordQuery query) throws ExplodingClusterFuckException, ModelException {
+	public SearchResult<WordListPerspective> search(WordQuery query, Operator operator) throws ExplodingClusterFuckException, ModelException {
 		
 		if (enableMaterializedView && Strings.isBlank(query.getText())) {
 			WordListPerspectiveViewQuery listQuery = new WordListPerspectiveViewQuery().withPaging(query.getPage(), query.getPageSize()).orderByText();
@@ -66,7 +67,7 @@ public class WordService {
 				letter = "#";
 			}
 			listQuery.startingWith(letter).withLanguage(query.getLanguage()).withCategory(query.getCategory());
-			return modelService.search(listQuery);
+			return modelService.search(listQuery, operator);
 		}
 		StopWatch watch = new StopWatch();
 		final List<Long> ids = Lists.newArrayList();
@@ -93,13 +94,13 @@ public class WordService {
 			if (!ids.isEmpty()) {
 				listQuery.withIds(ids);
 			}
-			result = modelService.search(listQuery);
+			result = modelService.search(listQuery, operator);
 		} else {
 			WordListPerspectiveQuery listQuery = new WordListPerspectiveQuery().withPaging(0, query.getPageSize()).orderByText();
 			if (!ids.isEmpty()) {
 				listQuery.withIds(ids);
 			}
-			result = modelService.search(listQuery);
+			result = modelService.search(listQuery, operator);
 		}
 		watch.stop();
 		log.trace("Database query time="+watch.getTime());
@@ -216,17 +217,16 @@ public class WordService {
 		return isq;
 	}
 	
-	@Deprecated
-	public WordImpression getImpression(Word word, Privileged privileged) throws ModelException {
+	public WordImpression getImpression(Word word, Operator operator) throws ModelException {
 		WordImpression impression = new WordImpression();
 		if (trademarks.contains(word.getText().toLowerCase())) {
 			impression.setTrademark(true);
 		}
 		impression.setWord(word);
-		impression.setLanguage(modelService.getParent(word, Language.class, privileged));
-		impression.setLexicalCategory(modelService.getParent(word, LexicalCategory.class, privileged));
-		impression.setOriginator(modelService.getChild(word, User.class, privileged));
-		impression.setSource(modelService.getChild(word, Relation.KIND_COMMON_SOURCE, InternetAddress.class, privileged));
+		impression.setLanguage(modelService.getParent(word, Language.class, operator));
+		impression.setLexicalCategory(modelService.getParent(word, LexicalCategory.class, operator));
+		impression.setOriginator(modelService.getChild(word, User.class, operator));
+		impression.setSource(modelService.getChild(word, Relation.KIND_COMMON_SOURCE, InternetAddress.class, operator));
 		impression.setGlossary(word.getPropertyValue(Property.KEY_SEMANTICS_GLOSSARY));
 		impression.setExamples(word.getPropertyValues(Property.KEY_SEMANTICS_EXAMPLE));
 		String dataSource = word.getPropertyValue(Property.KEY_DATA_SOURCE);
@@ -238,19 +238,19 @@ public class WordService {
 	}
 
 
-	public List<WordImpression> getImpressions(Query<Word> query, Privileged privileged) throws ModelException {
-		return getImpressions(modelService.list(query), privileged);
+	public List<WordImpression> getImpressions(Query<Word> query, Operator operator) throws ModelException {
+		return getImpressions(modelService.list(query, operator), operator);
 	}
 
-	public List<WordImpression> getImpressions(List<Word> list, Privileged privileged) throws ModelException {
+	public List<WordImpression> getImpressions(List<Word> list, Operator operator) throws ModelException {
 		List<WordImpression> impressions = Lists.newArrayList();
 		for (Word word : list) {
-			impressions.add(getImpression(word, privileged));
+			impressions.add(getImpression(word, operator));
 		}
 		return impressions;
 	}
 	
-	public Word createWord(String languageCode,String category,String text, User user) throws ModelException, IllegalRequestException, SecurityException {
+	public Word createWord(String languageCode, String category, String text, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new IllegalRequestException("No language provided");
 		}
@@ -259,12 +259,12 @@ public class WordService {
 		}
 		LexicalCategory lexicalCategory = null;
 		if (StringUtils.isNotBlank(category)) {
-			lexicalCategory = languageService.getLexcialCategoryForCode(category);
+			lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 			if (lexicalCategory==null) {
 				throw new IllegalRequestException("Unsupported category ("+category+")");
 			}
 		}
-		Language language = languageService.getLanguageForCode(languageCode);
+		Language language = languageService.getLanguageForCode(languageCode, operator);
 		if (language==null) {
 			throw new IllegalRequestException("Unsupported language ("+languageCode+")");
 		}
@@ -272,32 +272,32 @@ public class WordService {
 		if (lexicalCategory!=null) {
 			query.from(lexicalCategory);
 		}
-		List<Word> list = modelService.list(query);
+		List<Word> list = modelService.list(query, operator);
 		if (list.size()==0) {
 			Word word = new Word();
 			word.setText(text);
-			modelService.create(word, user);
-			securityService.grantPublicView(word, true, user);
-			Relation languageRelation = modelService.createRelation(language, word, user);
-			securityService.grantPublicView(languageRelation, true, user);
+			modelService.create(word, operator);
+			securityService.grantPublicView(word, true, operator);
+			Relation languageRelation = modelService.createRelation(language, word, operator);
+			securityService.grantPublicView(languageRelation, true, operator);
 			if (lexicalCategory!=null) {
-				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, user);
-				securityService.grantPublicView(categoryRelation, true, user);
+				Relation categoryRelation = modelService.createRelation(lexicalCategory, word, operator);
+				securityService.grantPublicView(categoryRelation, true, operator);
 			}
-			ensureOriginator(word, user);
+			ensureOriginator(word, operator);
 			return word;
 		} else {
 			return list.iterator().next();
 		}
 	}
 
-	public void updateWord(WordModification modification, Privileged privileged) throws ModelException, IllegalRequestException, SecurityException {
+	public void updateWord(WordModification modification, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
 		StopWatch watch = new StopWatch();
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery();
 		query.withWord(modification.text.toLowerCase());
 		log.debug("Searching for: " + modification.text);
 		watch.start();
-		List<WordListPerspective> list = modelService.list(query);
+		List<WordListPerspective> list = modelService.list(query, operator);
 		watch.stop();
 		log.info("Found: " + list.size() + ", time=" + watch.getTime());
 		watch.reset();
@@ -305,7 +305,7 @@ public class WordService {
 		InternetAddress source = null;
 		if (Strings.isNotBlank(modification.source)) {
 			if (ValidationUtil.isWellFormedURI(modification.source)) {
-				source = getSource(modification.source, privileged);
+				source = getSource(modification.source, operator);
 			}
 		}
 		watch.stop();
@@ -339,7 +339,7 @@ public class WordService {
 				match.category = Strings.isBlank(perspective.getLexicalCategory()) || Strings.equals(modification.lexicalCategory, perspective.getLexicalCategory());
 			}
 			
-			Word word = modelService.get(Word.class, perspective.getId(), privileged);
+			Word word = modelService.get(Word.class, perspective.getId(), operator);
 			match.word = word;
 			String sourceId = word.getPropertyValue(Property.KEY_DATA_SOURCE);
 			if (Strings.isNotBlank(sourceId)) {
@@ -373,14 +373,14 @@ public class WordService {
 			log.debug("No matches for " + modification.text);
 			word = new Word();
 			word.setText(modification.text);
-			modelService.create(word, privileged);
+			modelService.create(word, operator);
 		}
-		updateWord(word,modification,source,privileged);
+		updateWord(word,modification,source,operator);
 	}
 
-	public @NonNull InternetAddress getSource(String src, Privileged privileged) throws ModelException, SecurityException {
+	public @NonNull InternetAddress getSource(String src, Operator operator) throws ModelException, SecurityException {
 		Query<InternetAddress> query = Query.after(InternetAddress.class).withField(InternetAddress.FIELD_ADDRESS, src);
-		List<InternetAddress> list = modelService.list(query);
+		List<InternetAddress> list = modelService.list(query, operator);
 		for (InternetAddress address : list) {
 			CustomQuery<Long> q = new CustomQuery<Long>() {
 
@@ -404,7 +404,7 @@ public class WordService {
 					sql.setParameter("id", address.getId(), LongType.INSTANCE);
 				}
 			};
-			List<Long> num = modelService.list(q);
+			List<Long> num = modelService.list(q, operator);
 			if (!num.isEmpty() && num.get(0) > 0) {
 				return address;
 			}
@@ -412,98 +412,98 @@ public class WordService {
 		InternetAddress address = new InternetAddress();
 		address.setAddress(src);
 		address.setName(Strings.simplifyURL(src));
-		modelService.create(address, privileged);
-		securityService.grantPublicView(address, true, privileged);
+		modelService.create(address, operator);
+		securityService.grantPublicView(address, true, operator);
 		return address;
 	}
 	
-	private void updateWord(Word word, WordModification modification, InternetAddress source, Privileged privileged) throws ModelException, IllegalRequestException, SecurityException {
-		Language language = languageService.getLanguageForCode(modification.language);
+	private void updateWord(Word word, WordModification modification, InternetAddress source, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+		Language language = languageService.getLanguageForCode(modification.language, operator);
 		if (language == null) {
 			throw new IllegalRequestException("No language in modification");
 		}
 		LexicalCategory category = null;
 		String categoryCode = modification.lexicalCategory;
 		if (Strings.isNotBlank(categoryCode)) {
-			category = languageService.getLexcialCategoryForCode(categoryCode);
+			category = languageService.getLexcialCategoryForCode(categoryCode, operator);
 			if (category==null) {
 				throw new IllegalRequestException("Unsupported category: " + categoryCode);
 			}
-			changeCategory(word, category, privileged);
+			changeCategory(word, category, operator);
 		}
-		changeLanguage(word, language, privileged);
+		changeLanguage(word, language, operator);
 		if (Strings.isNotBlank(modification.glossary)) {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_SEMANTICS_GLOSSARY);
 			word.addProperty(Property.KEY_SEMANTICS_GLOSSARY, modification.glossary);
-			modelService.update(word, privileged);
+			modelService.update(word, operator);
 		}
 		if (Strings.isNotBlank(modification.sourceId)) {
 			// TODO: Only modify if needed + remove others
 			word.removeProperties(Property.KEY_DATA_SOURCE);
 			word.addProperty(Property.KEY_DATA_SOURCE, modification.sourceId);
-			modelService.update(word, privileged);
+			modelService.update(word, operator);
 		}
-		updateSource(word, source, privileged);
+		updateSource(word, source, operator);
 		if (modification.clearOriginators) {
-			List<Relation> originators = modelService.find().relations(privileged).from(word).to(InternetAddress.class).withKind(Relation.KIND_COMMON_ORIGINATOR).list();
+			List<Relation> originators = modelService.find().relations(operator).from(word).to(InternetAddress.class).withKind(Relation.KIND_COMMON_ORIGINATOR).list();
 			log.info("Word->InternetAddress originator count: " + originators.size());
 			for (Relation relation : originators) {
-				modelService.delete(relation, privileged);
+				modelService.delete(relation, operator);
 			}
 		}
 		//modelService.getChildren(word, Relation.KIND_COMMON_ORIGINATOR, InternetAddress.class);
-		securityService.grantPublicView(word, true, privileged);
+		securityService.grantPublicView(word, true, operator);
 	}
 
-	public void updateSource(Word word, Entity source, Privileged privileged) throws ModelException, SecurityException {
+	public void updateSource(Word word, Entity source, Operator operator) throws ModelException, SecurityException {
 		if (source!=null) {
-			Relation existing = modelService.getRelation(word, source, Relation.KIND_COMMON_SOURCE, privileged).orElse(null);
+			Relation existing = modelService.getRelation(word, source, Relation.KIND_COMMON_SOURCE, operator).orElse(null);
 			boolean create = false;
 			if (existing==null) {
 				create = true;
 			}
 			else if (existing.getTo().getId()!=source.getId()) {
-				modelService.delete(existing, privileged);
+				modelService.delete(existing, operator);
 				create = true;
 			}
 
 			if (create) {
-				Relation relation = modelService.createRelation(word, source, Relation.KIND_COMMON_SOURCE, privileged);
-				securityService.grantPublicView(relation, true, privileged);
+				Relation relation = modelService.createRelation(word, source, Relation.KIND_COMMON_SOURCE, operator);
+				securityService.grantPublicView(relation, true, operator);
 			}
 		}
 	}
 	
-	private void changeLanguage(Word word, Language language, Privileged privileged) throws ModelException, SecurityException {
-		List<Relation> parents = modelService.find().relations(privileged).to(word).from(Language.class).list();
+	private void changeLanguage(Word word, Language language, Operator operator) throws ModelException, SecurityException {
+		List<Relation> parents = modelService.find().relations(operator).to(word).from(Language.class).list();
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(language)) {
-				modelService.delete(relation, privileged);
+				modelService.delete(relation, operator);
 			} else {
 				found = true;
 			}
 		}
 		if (!found) {
-			Relation relation = modelService.createRelation(language, word, privileged);
-			securityService.grantPublicView(relation, true, privileged);
+			Relation relation = modelService.createRelation(language, word, operator);
+			securityService.grantPublicView(relation, true, operator);
 		}
 	}
 
-	private void changeCategory(Word word, LexicalCategory category, Privileged privileged) throws ModelException, SecurityException {
-		List<Relation> parents = modelService.find().relations(privileged).to(word).from(LexicalCategory.class).list();
+	private void changeCategory(Word word, LexicalCategory category, Operator operator) throws ModelException, SecurityException {
+		List<Relation> parents = modelService.find().relations(operator).to(word).from(LexicalCategory.class).list();
 		boolean found = false;
 		for (Relation relation : parents) {
 			if (!relation.getFrom().equals(category)) {
-				modelService.delete(relation, privileged);
+				modelService.delete(relation, operator);
 			} else {
 				found = true;
 			}
 		}
 		if (!found) {
-			Relation relation = modelService.createRelation(category, word, privileged);
-			securityService.grantPublicView(relation, true, privileged);
+			Relation relation = modelService.createRelation(category, word, operator);
+			securityService.grantPublicView(relation, true, operator);
 		}
 	}
 
@@ -530,9 +530,9 @@ public class WordService {
 		}
 	}
 	
-	public Word getWordBySourceId(String sourceId, Privileged privileged) {
+	public Word getWordBySourceId(String sourceId, Operator privileged) {
 		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId).as(privileged);
-		List<Word> list = modelService.list(query);
+		List<Word> list = modelService.list(query, privileged);
 		if (!list.isEmpty()) {
 			if (list.size() > 1) {
 				log.warn("Found " + list.size() + " word with source ID=" + sourceId + ", max 1 expected");
@@ -542,11 +542,11 @@ public class WordService {
 		return null;
 	}
 	
-	public void ensureOriginator(Word word, User user) throws ModelException, SecurityException {
-
-		User existing = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, securityService.getAdminPrivileged());
+	public void ensureOriginator(Word word, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		User user = modelService.getUser(operator);
+		User existing = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, operator.as(securityService.getAdminPrivileged()));
 		if (existing==null) {
-			modelService.createRelation(word, user, Relation.KIND_COMMON_ORIGINATOR, user);
+			modelService.createRelation(word, user, Relation.KIND_COMMON_ORIGINATOR, operator);
 		}
 	}
 	

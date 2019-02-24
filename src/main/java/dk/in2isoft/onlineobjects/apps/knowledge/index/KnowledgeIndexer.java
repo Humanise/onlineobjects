@@ -250,8 +250,8 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	
 	private void indexStatus(Document doc, Entity entity, User owner, Operator operator) throws ModelException, SecurityException {
 
-		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX);
-		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES);
+		Pile inbox = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_INBOX, operator);
+		Pile favorites = pileService.getOrCreatePileByRelation(owner, Relation.KIND_SYSTEM_USER_FAVORITES, operator);
 		
 		boolean inboxed = false;
 		boolean favorited = false;

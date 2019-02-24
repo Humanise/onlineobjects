@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -22,24 +22,25 @@ public class TestPerson extends AbstractSpringTestCase {
 
 	@Test
 	public void testCreate() throws EndUserException {
+		Operator adminOperator = modelService.newAdminOperator();
+
 		String givenName = Strings.generateRandomString(5);
 		String additionalName = Strings.generateRandomString(5);
 		String familyName = Strings.generateRandomString(5);
-		Privileged priviledged = getAdminUser();
 		Person person = new Person();
 		person.setGivenName(givenName);
 		person.setAdditionalName(additionalName);
 		person.setFamilyName(familyName);
 		assertEquals(givenName+" "+additionalName+" "+familyName, person.getName());
-		modelService.create(person, priviledged);
+		modelService.create(person, adminOperator);
 		{
 			Query<Person> query = Query.of(Person.class).withName(givenName+" "+additionalName+" "+familyName);
-			List<Person> list = modelService.list(query);
+			List<Person> list = modelService.list(query, adminOperator);
 			assertEquals(1, list.size());
 		}
 		
-		modelService.delete(person, priviledged);
-		modelService.commit();
+		modelService.delete(person, adminOperator);
+		adminOperator.commit();
 	}
 	
 	@Test

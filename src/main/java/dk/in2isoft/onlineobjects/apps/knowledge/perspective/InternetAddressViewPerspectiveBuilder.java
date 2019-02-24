@@ -84,12 +84,12 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 		trace("Load", watch);
 
-		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyze(address, user);
+		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyze(address, operator);
 		trace("Get analytics", watch);
 		Document xom = DOM.parseXOM(analytics.getXml());
 		trace("Parse dom", watch);
 		
-		ArticleData data = buildData(address, user);
+		ArticleData data = buildData(address, operator);
 		trace("Build data", watch);
 
 		InternetAddressViewPerspective article = new InternetAddressViewPerspective();
@@ -97,12 +97,12 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setTitle(address.getName());
 		article.setUrl(address.getAddress());
 		article.setUrlText(Strings.simplifyURL(address.getAddress()));
-		article.setAuthors(getAuthors(address, user));
+		article.setAuthors(getAuthors(address, operator));
 
 		knowledgeService.categorize(address, article, user, operator);
 		trace("Categorize", watch);
 
-		loadStatements(address, article, user);
+		loadStatements(address, article, operator);
 		trace("Load statements", watch);
 
 		article.setHeader(buildHeader(address));
@@ -111,16 +111,16 @@ public class InternetAddressViewPerspectiveBuilder {
 
 		trace("Build info", watch);
 		if (xom != null) {
-			buildRendering(xom, analytics, data, article, settings, watch, user);
+			buildRendering(xom, analytics, data, article, settings, watch, operator);
 		}
 
 		trace("Total", watch);
 		return article;
 	}
 
-	private List<ItemData> getAuthors(Entity address, Privileged session) {
-		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).as(session);
-		List<Person> people = modelService.list(query);
+	private List<ItemData> getAuthors(Entity address, Operator operator) {
+		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).as(operator);
+		List<Person> people = modelService.list(query, operator);
 		List<ItemData> authors = people.stream().map((Person p) -> {
 			ItemData option = new ItemData();
 			option.setId(p.getId());
@@ -130,7 +130,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return authors;
 	}
 
-	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Privileged session) throws ModelException {
+	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Operator session) throws ModelException {
 		List<Statement> statements = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, session);
 		List<StatementPerspective> quoteList = Lists.newArrayList();
 		for (Statement statement : statements) {
@@ -153,7 +153,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setHypotheses(perpectives);
 	}
 	
-	private ArticleData buildData(InternetAddress address, Privileged session) throws ModelException {
+	private ArticleData buildData(InternetAddress address, Operator session) throws ModelException {
 		ArticleData data = new ArticleData();
 		data.address = address;
 		data.keywords = modelService.getChildren(address, Word.class, session);
@@ -189,7 +189,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		return writer.toString();
 	}
 
-	private void buildRendering(Document xom, TextDocumentAnalytics analytics, ArticleData data, InternetAddressViewPerspective perspective, Settings settings, StopWatch watch, Privileged session) throws ModelException,
+	private void buildRendering(Document xom, TextDocumentAnalytics analytics, ArticleData data, InternetAddressViewPerspective perspective, Settings settings, StopWatch watch, Operator session) throws ModelException,
 			ExplodingClusterFuckException {
 
 		{
@@ -202,7 +202,7 @@ public class InternetAddressViewPerspectiveBuilder {
 
 			watch.split();
 			
-			Document annotated = annotate(perspective, data, settings, xom, watch);
+			Document annotated = annotate(perspective, data, settings, xom, watch, session);
 			trace("Annotated", watch);
 
 			HTMLWriter formatted = new HTMLWriter();
@@ -225,12 +225,12 @@ public class InternetAddressViewPerspectiveBuilder {
 		
 	}
 
-	private void renderSimilar(ArticleData data, Privileged session, InternetAddressViewPerspective perspetive, StopWatch watch) throws ModelException {
-		List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()));
+	private void renderSimilar(ArticleData data, Operator session, InternetAddressViewPerspective perspetive, StopWatch watch) throws ModelException {
+		List<Similarity> list = modelService.list(new SimilarityQuery().withId(data.address.getId()), session);
 		trace("Similarity query", watch);
 
 		List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
-		List<InternetAddress> addresses = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids));
+		List<InternetAddress> addresses = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids), session);
 		trace("List similar", watch);
 		
 		Function<Long,InternetAddress> find = id -> {
@@ -253,7 +253,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		perspetive.setSimilar(similarities);
 	}
 
-	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch) throws ModelException, ExplodingClusterFuckException {
+	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch, Operator operator) throws ModelException, ExplodingClusterFuckException {
 		
 		List<StatementPerspective> statements = article.getQuotes();
 
@@ -266,7 +266,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		trace("Locale", watch);
 		if (settings.isHighlight() && locale!=null) {
 			if (locale.getLanguage().equals("da") || locale.getLanguage().equals("en")) {
-				annotatePeople(watch, decorated, text, locale);
+				annotatePeople(watch, decorated, text, locale, operator);
 				trace("Annotate people", watch);
 			}
 		}
@@ -393,7 +393,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 	}
 
-	private void annotatePeople(StopWatch watch, DecoratedDocument decorated, String text, Locale locale) throws ExplodingClusterFuckException, ModelException {
+	private void annotatePeople(StopWatch watch, DecoratedDocument decorated, String text, Locale locale, Operator operator) throws ExplodingClusterFuckException, ModelException {
 		List<Span> nounSpans = Lists.newArrayList();
 
 		List<String> nouns = Lists.newArrayList();
@@ -435,7 +435,7 @@ public class InternetAddressViewPerspectiveBuilder {
 
 		trace("Part of speech", watch);
 
-		List<WordListPerspective> names = findNames(nouns);
+		List<WordListPerspective> names = findNames(nouns, operator);
 
 		trace("Find names", watch);
 
@@ -448,13 +448,13 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 	}
 
-	private List<WordListPerspective> findNames(List<String> words) throws ModelException, ExplodingClusterFuckException {
+	private List<WordListPerspective> findNames(List<String> words, Operator operator) throws ModelException, ExplodingClusterFuckException {
 		if (Code.isEmpty(words)) {
-
+			return new ArrayList<>();
 		}
 		WordCategoryPerspectiveQuery query = new WordCategoryPerspectiveQuery().withWords(words);
 		query.withCategories(LexicalCategory.CODE_PROPRIUM_FIRST, LexicalCategory.CODE_PROPRIUM_MIDDLE, LexicalCategory.CODE_PROPRIUM_LAST);
-		return modelService.search(query).getList();
+		return modelService.search(query, operator).getList();
 	}
 
 	private boolean isPerson(String token, List<WordListPerspective> words) {

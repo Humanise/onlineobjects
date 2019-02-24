@@ -12,15 +12,27 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
+import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.events.AnyModelChangeListener;
+import dk.in2isoft.onlineobjects.core.events.EventService;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
+import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.LanguageFacetsDataProvider;
+import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
+import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class WordsInterfaceHelper implements InitializingBean {
 
 	private LanguageFacetsDataProvider languageFacetsDataProvider;
+	private EventService eventService;
+	private ModelService modelService;
 
 	private Map<String,List<Option>> languagesCache = Maps.newHashMap();
 	private Map<String,List<Option>> categoriesCache = Maps.newHashMap();
@@ -28,6 +40,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 	Messages languageMessages = new Messages(Language.class);
 	Messages categoryMessages = new Messages(LexicalCategory.class);
 	Messages wordsMessages = new Messages(WordsController.class);
+	private List<WordListPerspective> latestWords;
 
 	private List<Option> alphabeth;
 	
@@ -46,8 +59,30 @@ public class WordsInterfaceHelper implements InitializingBean {
 			languagesCache.clear();
 			categoriesCache.clear();
 		});
+		eventService.addModelEventListener(new AnyModelChangeListener(Word.class) {
+			@Override
+			public void itemWasChanged(Item item) {
+				latestWords = null;
+			}
+		});
 	}
 
+	public List<WordListPerspective> getLatestWords() {
+		if (latestWords==null) {
+			WordListPerspectiveQuery query = new WordListPerspectiveQuery().withPaging(0, 30).orderById();
+			SearchResult<WordListPerspective> result;
+			Operator operator = modelService.newPublicOperator();
+			try {
+				result = modelService.search(query, operator);
+				latestWords = result.getList();
+				operator.commit();
+			} catch (ModelException e) {
+				operator.rollBack();
+			}
+		}
+		return latestWords;
+	}
+	
 	public List<Option> getLanguageOptions(Locale locale) {
 		String language = locale.getLanguage();
 		if (!languagesCache.containsKey(language)) {
@@ -85,11 +120,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 			return option;
 		}).sorted((a,b) -> a.getLabel().compareTo(b.getLabel())).collect(Collectors.toList());
 	}
-	
-	public void setLanguageFacetsDataProvider(LanguageFacetsDataProvider languageFacetsDataProvider) {
-		this.languageFacetsDataProvider = languageFacetsDataProvider;
-	}
-	
+		
 	public List<Option> getLetterOptions(Locale locale) {
 		return alphabeth;
 	}
@@ -108,5 +139,19 @@ public class WordsInterfaceHelper implements InitializingBean {
 	
 	public Messages getCategoryMessages() {
 		return categoryMessages;
+	}
+	
+	// Wiring...
+
+	public void setEventService(EventService eventService) {
+		this.eventService = eventService;
+	}
+
+	public void setLanguageFacetsDataProvider(LanguageFacetsDataProvider languageFacetsDataProvider) {
+		this.languageFacetsDataProvider = languageFacetsDataProvider;
+	}
+	
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
 	}
 }

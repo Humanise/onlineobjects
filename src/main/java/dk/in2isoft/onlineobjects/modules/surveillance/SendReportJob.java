@@ -19,7 +19,7 @@ public class SendReportJob extends ServiceBackedJob {
 		JobStatus status = getStatus(context);
 		try {
 			status.log("Sending report");
-			schedulingSupportFacade.getSurveillanceService().sendReportInTransation();
+			schedulingSupportFacade.getSurveillanceService().sendReport();
 			status.log("The report was sent");
 		} catch (EndUserException e) {
 			status.error(e.getMessage());

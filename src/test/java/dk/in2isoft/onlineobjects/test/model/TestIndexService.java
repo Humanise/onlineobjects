@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -50,11 +51,12 @@ public class TestIndexService extends AbstractSpringTestCase {
 	
 	//@Test
 	public void testInternetAddress() throws EndUserException {
+		Operator operator = modelService.newAdminOperator();
 		IndexManager index = indexService.getIndex("testIndex");
 		index.clear();
 		assertEquals(0, index.getDocumentCount());
 		Query<InternetAddress> query = Query.of(InternetAddress.class).withPaging(0, 20).orderByName();
-		List<InternetAddress> list = modelService.list(query);
+		List<InternetAddress> list = modelService.list(query, operator);
 		for (InternetAddress address : list) {
 			log.info(address.getAddress());
 			Document doc = new Document();
@@ -69,6 +71,7 @@ public class TestIndexService extends AbstractSpringTestCase {
 			index.update(address, doc);
 		}
 		assertEquals(list.size(), index.getDocumentCount());
+		operator.commit();
 	}
 	
 	

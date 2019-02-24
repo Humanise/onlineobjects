@@ -8,7 +8,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.PropertyLimitation.Comparison;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -27,14 +27,14 @@ public class WordnetSourceCleanupJob extends ServiceBackedJob implements Interru
 		JobStatus status = getStatus(context);
 		ModelService modelService = schedulingSupportFacade.getModelService();
 		WordService wordService = schedulingSupportFacade.getWordService();
+		Operator admin = schedulingSupportFacade.getModelService().newAdminOperator();
 		try {
 		
 			String src = "http://wordnet.dk/";
-			Privileged admin = schedulingSupportFacade.getSecurityService().getAdminPrivileged();
 			InternetAddress source = wordService.getSource(src , admin );
 			//select word.id,relation.kind from word inner join property on property.entity_id=word.id and property.key='data.source' and property.value like 'http://www.wordnet.dk/%' left join relation on relation.super_entity_id=word.id and relation.kind='common.source' where relation.kind is null
 			Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_SOURCE, Comparison.LIKE, "http://www.wordnet.dk/%");
-			int total = modelService.count(query).intValue();
+			int total = modelService.count(query, admin).intValue();
 
 			int pageSize = 500;
 			int pages = (int) Math.ceil((double)total/(double)pageSize);
@@ -42,15 +42,15 @@ public class WordnetSourceCleanupJob extends ServiceBackedJob implements Interru
 				for (int i = 0; i < pages; i++) {
 					status.setProgress(i, pages);
 					query.withPaging(i, pageSize);
-					List<Word> list = modelService.search(query).getList();
+					List<Word> list = modelService.search(query, admin).getList();
 					for (Word word : list) {
 						if (interrupted) {
-							modelService.commit();
+							admin.commit();
 							break;
 						}
 						wordService.updateSource(word, source, admin);
 					}
-					modelService.commit();
+					admin.commit();
 					if (interrupted) {
 						break;
 					}
@@ -58,6 +58,7 @@ public class WordnetSourceCleanupJob extends ServiceBackedJob implements Interru
 								
 		} catch (EndUserException e) {
 			status.error("Error while updating sources", e);
+			admin.rollBack();
 		}
 	}
 

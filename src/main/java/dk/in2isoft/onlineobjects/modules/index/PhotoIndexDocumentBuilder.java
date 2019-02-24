@@ -14,7 +14,6 @@ import com.google.common.collect.Sets;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -28,8 +27,8 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 	private SecurityService securityService;
 	
 	public Document build(Image image, Operator operator) throws ModelException {
-		Privileged adminPrivileged = securityService.getAdminPrivileged();
-		image = modelService.get(Image.class, image.getId(), adminPrivileged);
+		Operator admin = operator.as(securityService.getAdminPrivileged());
+		image = modelService.get(Image.class, image.getId(), operator.as(admin));
 		StringBuilder text = new StringBuilder();
 		text.append(image.getName());
 		String glossary = image.getPropertyValue(Image.PROPERTY_DESCRIPTION);
@@ -44,7 +43,7 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		doc.add(new IntField("height", image.getHeight(), Field.Store.YES));
 
 		Set<Long> viewers = Sets.newHashSet();
-		List<Privilege> priviledges = modelService.getPrivileges(image);
+		List<Privilege> priviledges = modelService.getPrivileges(image, admin);
 		for (Privilege privilege : priviledges) {
 			if (privilege.isView()) {
 				viewers.add(privilege.getSubject());
@@ -54,16 +53,16 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 			doc.add(new LongField("viewerId",id,Field.Store.YES));
 		}
 		// TODO: Is it ok to load this using admin?
-		List<Word> words = modelService.getChildren(image, null, Word.class, adminPrivileged);
+		List<Word> words = modelService.getChildren(image, null, Word.class, admin);
 		for (Word word : words) {
 			doc.add(new TextField("word", word.getText(), Field.Store.YES));
 			doc.add(new LongField("wordId",word.getId(),Field.Store.YES));
 		}
-		User owner = modelService.getOwner(image, adminPrivileged);
+		User owner = modelService.getOwner(image, admin);
 		if (owner!=null) {
 			doc.add(new LongField("ownerId",owner.getId(),Field.Store.YES));
 		}
-		boolean publico = securityService.isPublicView(image);
+		boolean publico = securityService.isPublicView(image, admin);
 		doc.add(new TextField("public",publico ? "true" : "false",Field.Store.YES));
 		return doc;
 	}

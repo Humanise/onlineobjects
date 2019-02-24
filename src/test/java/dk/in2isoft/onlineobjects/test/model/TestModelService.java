@@ -1,9 +1,7 @@
 package dk.in2isoft.onlineobjects.test.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
@@ -27,101 +26,107 @@ public class TestModelService extends AbstractSpringTestCase {
 	
 	@Test
 	public void testGenerally() throws EndUserException {
+		Operator publicOperator = modelService.newPublicOperator();
+		Operator adminOperator = publicOperator.as(getAdminUser());
+
 		User user = getNewTestUser();
-		modelService.create(user, getPublicUser());
+		modelService.create(user, publicOperator);
+		Operator userOperator = publicOperator.as(user);
 		
 		Question question = new Question();
 		question.setText("My question");
-		modelService.create(question, user);
+		modelService.create(question, userOperator);
 
 		Statement statement = new Statement();
 		statement.setText("My statement");
-		modelService.createOrUpdate(statement, user);
+		modelService.createOrUpdate(statement, userOperator);
 		
-		modelService.createRelation(question, statement, user);
+		modelService.createRelation(question, statement, userOperator);
 
-		List<Relation> statementRelations = modelService.getRelations(statement, getAdminUser());
+		List<Relation> statementRelations = modelService.getRelations(statement, adminOperator);
 		assertEquals(1, statementRelations.size());
-		List<Relation> questionRelations = modelService.getRelations(question, getAdminUser());
+		List<Relation> questionRelations = modelService.getRelations(question, adminOperator);
 		assertEquals(1, questionRelations.size());
 
-		Privilege privilege = modelService.getPriviledge(question, user);
+		Privilege privilege = modelService.getPriviledge(question, userOperator);
 		assertNotNull(privilege);
-		assertEquals(1, modelService.getPrivileges(question).size());
+		assertEquals(1, modelService.getPrivileges(question,adminOperator).size());
 		
-		assertEquals(1, modelService.getOwners(question, getAdminUser()).size());
-		assertEquals(1, modelService.getOwners(question, user).size());
+		assertEquals(1, modelService.getOwners(question, adminOperator).size());
+		assertEquals(1, modelService.getOwners(question, userOperator).size());
 
-		modelService.removePrivileges(question, user);
-		modelService.grantPrivileges(question, user, true, true, true, getAdminUser());
+		modelService.removePrivileges(question, user, userOperator);
+		modelService.grantPrivileges(question, user, true, true, true, adminOperator);
 		
 		question.addProperty("myKey", "theValue");
-		modelService.update(question, user);
-		Map<String, Integer> properties = modelService.getProperties("myKey", Question.class, user);
+		modelService.update(question, userOperator);
+		Map<String, Integer> properties = modelService.getProperties("myKey", Question.class, userOperator);
 		assertEquals(1, properties.size());
 		
-		List<Relation> relationsFromQuestion = modelService.find().relations(user).from(question).list();
+		List<Relation> relationsFromQuestion = modelService.find().relations(userOperator).from(question).list();
 		assertEquals(1, relationsFromQuestion.size());
 		
-		modelService.delete(question, user);
-		modelService.delete(statement, user);
-		modelService.delete(user, getAdminUser());
+		modelService.delete(question, userOperator);
+		modelService.delete(statement, userOperator);
+		modelService.delete(user, adminOperator);
 
-		assertTrue(modelService.isDirty());
-		modelService.commit();
-		assertFalse(modelService.isDirty());
+		publicOperator.commit();
 	}
 
 
 	@Test
 	public void testDistinct() throws EndUserException {
+		Operator publicOperator = modelService.newPublicOperator();
+		Operator adminOperator = publicOperator.as(getAdminUser());
+
 		User user = getNewTestUser();
-		modelService.create(user, getPublicUser());
+		modelService.create(user, publicOperator);
+		
+		Operator userOperator = publicOperator.as(user);
 		
 		Question question = new Question();
 		question.addProperty("test-prop", "test-value");
 		question.setName("My question");
-		modelService.create(question, user);
+		modelService.create(question, userOperator);
 
 		Statement statement = new Statement();
 		statement.setText("My statement");
-		modelService.create(statement, user);
+		modelService.create(statement, userOperator);
 
 		Statement statement2 = new Statement();
 		statement2.setText("My other statement");
-		modelService.create(statement2, user);
+		modelService.create(statement2, userOperator);
 		Hypothesis hypothesis = new Hypothesis();
 		hypothesis.setName("My hypothesis");
-		modelService.create(hypothesis, user);
+		modelService.create(hypothesis, userOperator);
 		
-		modelService.createRelation(question, statement, user);
-		modelService.createRelation(question, statement2, user);
-		modelService.createRelation(hypothesis, question, user);
+		modelService.createRelation(question, statement, userOperator);
+		modelService.createRelation(question, statement2, userOperator);
+		modelService.createRelation(hypothesis, question, userOperator);
 		
-		securityService.makePublicVisible(question, user);
+		securityService.makePublicVisible(question, userOperator);
 		
-		modelService.commit();
+		publicOperator.commit();
 
-		List<Relation> relations = modelService.getRelationsFrom(question, Statement.class, user);
+		List<Relation> relations = modelService.getRelationsFrom(question, Statement.class, userOperator);
 		assertEquals(2, relations.size());
 
 		Query<Question> query = Query.of(Question.class).as(user).from(hypothesis).to(statement).to(statement2).withPublicView();
 		query.withCustomProperty("test-prop", "test-value");
 		query.withWords("question");
-		List<Question> list = modelService.list(query);
+		List<Question> list = modelService.list(query, userOperator);
 		assertEquals(1, list.size());
 		
-		question = modelService.getRequired(Question.class, question.getId(), getAdminUser());
-		statement = modelService.getRequired(Statement.class, statement.getId(), getAdminUser());
-		statement2 = modelService.getRequired(Statement.class, statement2.getId(), getAdminUser());
-		user = modelService.getRequired(User.class, user.getId(), getAdminUser());
+		question = modelService.getRequired(Question.class, question.getId(), adminOperator);
+		statement = modelService.getRequired(Statement.class, statement.getId(), adminOperator);
+		statement2 = modelService.getRequired(Statement.class, statement2.getId(), adminOperator);
+		user = modelService.getRequired(User.class, user.getId(), adminOperator);
 		
-		modelService.delete(question, user);
-		modelService.delete(statement, user);
-		modelService.delete(statement2, user);
-		modelService.delete(user, getAdminUser());
+		modelService.delete(question, userOperator);
+		modelService.delete(statement, userOperator);
+		modelService.delete(statement2, userOperator);
+		modelService.delete(user, adminOperator);
 
-		assertTrue(modelService.isDirty());
-		modelService.commit();
-}
+		publicOperator.commit();
+	}
 }

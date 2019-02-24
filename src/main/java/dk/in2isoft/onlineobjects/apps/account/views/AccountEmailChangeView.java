@@ -1,12 +1,12 @@
 package dk.in2isoft.onlineobjects.apps.account.views;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 
-public class AccountEmailChangeView extends AbstractManagedBean {
+public class AccountEmailChangeView extends AbstractView {
 
 	private MemberService memberService;
 
@@ -17,8 +17,8 @@ public class AccountEmailChangeView extends AbstractManagedBean {
 	public void before(Request request) throws Exception {
 		
 		String key = request.getString("key");
-		User user = memberService.performEmailChangeByKey(key);
-		Person person = memberService.getUsersPerson(user, user);
+		User user = memberService.performEmailChangeByKey(key, request);
+		Person person = memberService.getUsersPerson(user, request.as(user));
 		if (person != null) {
 			name = person.getFullName();
 		}

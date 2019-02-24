@@ -29,16 +29,15 @@ public class KnowledgeIndexJob extends ServiceBackedJob implements Interruptable
 		ModelService modelService = schedulingSupportFacade.getModelService();
 		SecurityService securityService = schedulingSupportFacade.getSecurityService();
 		
-		SimpleOperator operator = new SimpleOperator(securityService.getAdminPrivileged().getIdentity(), modelService);
+		SimpleOperator operator = new SimpleOperator(securityService.getAdminPrivileged(), modelService);
 		List<User> users = modelService.list(Query.of(User.class), operator);
 		status.log("Starting re-index of knowledge");
 		int num=0;	
 		for (User user : users) {
 			if (!interrupted && !securityService.isCoreUser(user)) {
 				try {
-					operator.change(user);
 					status.log("Re-indexing: " + user.getUsername());
-					indexer.reIndex(operator);
+					indexer.reIndex(operator.as(user));
 					status.log("Done re-indexing: " + user.getUsername());
 				} catch (EndUserException e) {
 					status.error("Problem while re-indexing", e);

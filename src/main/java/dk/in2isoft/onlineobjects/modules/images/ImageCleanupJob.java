@@ -6,7 +6,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -20,10 +20,10 @@ public class ImageCleanupJob extends ServiceBackedJob {
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		ModelService modelService = schedulingSupportFacade.getModelService();
+		Operator operator = modelService.newAdminOperator();
 		ImageService imageService = schedulingSupportFacade.getImageService();
 		FileService fileService = schedulingSupportFacade.getFileService();
-		Privileged admin = schedulingSupportFacade.getSecurityService().getAdminPrivileged();
-		List<Image> list = modelService.list(Query.of(Image.class));
+		List<Image> list = modelService.list(Query.of(Image.class), operator);
 		JobStatus status = getStatus(context);
 		status.log("Starting image cleanup");
 		for (int i = 0; i < list.size(); i++) {
@@ -32,14 +32,15 @@ public class ImageCleanupJob extends ServiceBackedJob {
 				String name = image.getName();
 				if (name!=null && name.toLowerCase().endsWith(".jpg")) {
 					image.setName(fileService.cleanFileName(name));
-					modelService.update(image, admin);
+					modelService.update(image, operator);
 				}
-				imageService.synchronizeContentType(image, admin);
-				imageService.synchronizeMetaData(image, admin);
-				modelService.commit();
+				imageService.synchronizeContentType(image, operator);
+				imageService.synchronizeMetaData(image, operator);
+				operator.commit();
 				status.setProgress(i, list.size());
 			} catch (EndUserException e) {
 				status.error(e.getMessage(), e);
+				operator.rollBack();
 			}
 		}
 		status.log("Finished image cleanup");

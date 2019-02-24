@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.ui;
 
 import org.apache.xerces.dom.DOMImplementationImpl;
 
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -37,11 +38,11 @@ public abstract class XSLTInterfaceAdapter extends XSLTInterface {
 		return doc;
 	}
 
-	protected String convertToXML(Entity entity, Privileged privileged) throws ModelException {
+	protected String convertToXML(Entity entity, Operator privileged) throws ModelException {
 		return this.conversionService.generateXML(entity, privileged).toXML();
 	}
 
-	protected Node convertToNode(Entity entity, Privileged privileged) throws ModelException {
+	protected Node convertToNode(Entity entity, Operator privileged) throws ModelException {
 		return this.conversionService.generateXML(entity, privileged);
 	}
 	

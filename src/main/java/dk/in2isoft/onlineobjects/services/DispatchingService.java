@@ -54,7 +54,6 @@ public class DispatchingService {
 				Thread.sleep(Math.round(Math.random()*1000+1000));
 			} catch (InterruptedException ignore) {}
 		}
-		modelService.startThread();
 		
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
@@ -85,10 +84,8 @@ public class DispatchingService {
 		
 		if (shouldCommit!=null) {
 			if (shouldCommit) {
-				modelService.commitThread();
 				request.commit();
 			} else {
-				modelService.rollBack();
 				request.rollBack();
 			}
 		}

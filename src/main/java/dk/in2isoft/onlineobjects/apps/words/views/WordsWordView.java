@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.apps.words.views.util.RelationOption;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -34,7 +34,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordsWordView extends LegacyAbstractView implements InitializingBean {
+public class WordsWordView extends AbstractView {
 
 	private ModelService modelService;
 	private WordService wordService;
@@ -42,6 +42,7 @@ public class WordsWordView extends LegacyAbstractView implements InitializingBea
 	private String text;
 	private List<WordImpression> words;
 	private Language language;
+	private Locale locale;
 	
 	private List<RelationOption> relationOptions;
 	private List<String> RELATIONS_UNDIRECTED = Lists.newArrayList(Relation.KIND_SEMANTICS_EQUIVALENT, Relation.KIND_SEMANTICS_SYNONYMOUS, Relation.KIND_SEMANTICS_ANTONYMOUS);
@@ -52,18 +53,18 @@ public class WordsWordView extends LegacyAbstractView implements InitializingBea
 	
 	private static final Comparator<WordRelation> ORDERING = Ordering.natural().onResultOf(relation -> relation.getWord().getText());
 	
-	public void afterPropertiesSet() throws Exception {
+	@Override
+	protected void before(Request request) throws Exception {
 		StopWatch watch = new StopWatch();
 		watch.start();
-		Request request = getRequest();
 		String[] path = request.getLocalPath();
-		Locale locale = request.getLocale();
+		locale = request.getLocale();
 		text = getWord(path);
 		if (text!=null) {
 			Query<Word> query = Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text);
-			words = wordService.getImpressions(query, request.getSession());
+			words = wordService.getImpressions(query, request);
 			for (WordImpression impression : words) {
-				Multimap<String, WordRelation> map = getRelations(impression);
+				Multimap<String, WordRelation> map = getRelations(impression, request);
 				List<WordRelationGroup> relationsList = Lists.newArrayList();
 				for (String kind : map.keySet()) {
 					WordRelationGroup group = new WordRelationGroup();
@@ -136,13 +137,13 @@ public class WordsWordView extends LegacyAbstractView implements InitializingBea
 		return null;
 	}
 
-	private Multimap<String, WordRelation> getRelations(WordImpression impression) throws ModelException {
+	private Multimap<String, WordRelation> getRelations(WordImpression impression, Operator operator) throws ModelException {
 		Multimap<String, WordRelation> map = HashMultimap.create();
 		
 		WordRelationsQuery query = new WordRelationsQuery(impression.getWord());
 		query.setOutgoingKinds(RELATIONS_OUTGOING);
 		query.setIncomingKinds(RELATIONS_INCOMING);
-		List<WordRelationRow> rows = modelService.list(query);
+		List<WordRelationRow> rows = modelService.list(query, operator);
 		for (WordRelationRow row : rows) {
 			WordRelation relation = new WordRelation();
 			relation.setId(row.getRelationId());
@@ -216,7 +217,6 @@ public class WordsWordView extends LegacyAbstractView implements InitializingBea
 		
 		Messages msg = new Messages(WordsController.class);
 		relationOptions = Lists.newArrayList();
-		Locale locale = getLocale();
 		for (String kind : RELATIONS_UNDIRECTED) {
 			RelationOption option = new RelationOption();
 			option.setKind(kind);

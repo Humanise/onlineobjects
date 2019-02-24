@@ -1,16 +1,16 @@
 package dk.in2isoft.onlineobjects.model.conversion;
 
+import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.model.Entity;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
-import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.model.Entity;
 
 public class EntityConverter {
 	
-	public final Node generateXML(Entity entity, Privileged privileged) throws ModelException {
+	public final Node generateXML(Entity entity, Operator privileged) throws ModelException {
 		Element root = new Element("Entity",Entity.NAMESPACE);
 		root.addAttribute(new Attribute("id",String.valueOf(entity.getId())));
 		root.addAttribute(new Attribute("type",entity.getType()));
@@ -28,7 +28,7 @@ public class EntityConverter {
 		return Entity.class;
 	}
 	
-	protected Node generateSubXML(Entity entity, Privileged privileged) throws ModelException {
+	protected Node generateSubXML(Entity entity, Operator privileged) throws ModelException {
 		return null;
 	}
 

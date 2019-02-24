@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
@@ -35,9 +35,9 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 		File copy = File.createTempFile("testImage", "jpg");
 		org.apache.commons.io.FileUtils.copyFile(file, copy);
 		Assert.assertTrue(copy.exists());
-		Privileged privileged = getAdminUser();
+		Operator operator = modelService.newAdminOperator();
 		
-		Image image = imageService.createImageFromFile(copy, "test image", privileged);
+		Image image = imageService.createImageFromFile(copy, "test image", operator);
 		Assert.assertNotNull(image);
 		{
 			ImageTransformation transformation = new ImageTransformation();
@@ -58,8 +58,8 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			assertEquals(100,propeties.getWidth());
 			assertEquals(75,propeties.getHeight());
 		}
-		modelService.delete(image, privileged);
-		modelService.commit();
+		modelService.delete(image, operator);
+		operator.commit();
 	}
 	
 	@Test

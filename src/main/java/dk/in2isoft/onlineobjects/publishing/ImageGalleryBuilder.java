@@ -5,7 +5,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.HeaderPart;
@@ -38,7 +38,7 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 	}
 
 	@Override
-	public Node build(Document document, Privileged priviledged) throws EndUserException {
+	public Node build(Document document, Operator operator) throws EndUserException {
 		ImageGallery gallery = (ImageGallery) document;
 
 		String style = gallery.getPropertyValue(ImageGallery.PROPERTY_FRAMESTYLE);
@@ -52,34 +52,34 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 		settings.addAttribute(new Attribute("style", style));
 		root.appendChild(settings);
 
-		HeaderPart header = modelService.getChild(gallery, HeaderPart.class, priviledged);
+		HeaderPart header = modelService.getChild(gallery, HeaderPart.class, operator);
 		if (header != null) {
-			root.appendChild(conversionService.generateXML(header,priviledged));
+			root.appendChild(conversionService.generateXML(header, operator));
 		}
 
-		HtmlPart html = modelService.getChild(gallery, HtmlPart.class, priviledged);
+		HtmlPart html = modelService.getChild(gallery, HtmlPart.class, operator);
 		if (html != null) {
-			root.appendChild(conversionService.generateXML(html,priviledged));
+			root.appendChild(conversionService.generateXML(html, operator));
 		}
 
 		Element tiled = new Element("tiled", NAMESPACE);
 		root.appendChild(tiled);
 		Element row = new Element("row", NAMESPACE);
 		int columns = gallery.getTiledColumns();
-		List<Image> images = modelService.getChildrenOrdered(gallery, Image.class, priviledged);
+		List<Image> images = modelService.getChildrenOrdered(gallery, Image.class, operator);
 		for (int i = 0; i < images.size(); i++) {
 			if (i % columns == 0) {
 				row = new Element("row", NAMESPACE);
 				tiled.appendChild(row);
 			}
 			Entity image = images.get(i);
-			row.appendChild(conversionService.generateXML(image,priviledged));
+			row.appendChild(conversionService.generateXML(image, operator));
 		}
 		return root;
 	}
 
 	@Override
-	public Entity create(Privileged priviledged) throws EndUserException {
+	public Entity create(Operator priviledged) throws EndUserException {
 
 		// Create an image gallery
 		ImageGallery gallery = new ImageGallery();
@@ -101,7 +101,8 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 		return gallery;
 	}
 
-	public void buildFeed(Document document, FeedWriter writer, Privileged privileged) throws EndUserException {
+	@Override
+	public void buildFeed(Document document, FeedWriter writer, Operator privileged) throws EndUserException {
 		ImageGallery gallery = (ImageGallery) document;
 		List<Image> images = modelService.getChildren(gallery, Image.class, privileged);
 		try {

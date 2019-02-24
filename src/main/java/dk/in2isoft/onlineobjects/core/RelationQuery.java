@@ -27,11 +27,6 @@ public class RelationQuery {
 	private SecurityService securityService;
 	private Operation operation;
 	
-	public RelationQuery(ModelService modelService, SecurityService securityService) {
-		this.modelService = modelService;
-		this.securityService = securityService;
-	}
-
 	public RelationQuery(ModelService modelService, SecurityService securityService, Operation operation) {
 		this.modelService = modelService;
 		this.securityService = securityService;
@@ -138,12 +133,7 @@ public class RelationQuery {
 	}
 
 	private Query<Relation> getQuery() {
-		Query<Relation> query;
-		if (operation != null) {
-			query = modelService.createQuery(getHQL(), Relation.class, operation.getSession());
-		} else {
-			query = modelService.createQuery(getHQL(), Relation.class);
-		}
+		Query<Relation> query = modelService.createQuery(getHQL(), Relation.class, operation.getSession());
 		decorate(query);
 		return query;
 	}

@@ -19,8 +19,8 @@ import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.commons.xml.DocumentToText;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -55,11 +55,11 @@ public class TextDocumentAnalyzer {
 		return extracted;
 	}
 
-	public TextDocumentAnalytics analyze(InternetAddress address, Privileged privileged) {
+	public TextDocumentAnalytics analyze(InternetAddress address, Operator privileged) {
 		return cacheService.getCached(address, TextDocumentAnalytics.class, () -> buildAnalytics(address, privileged));
 	}
 	
-	private TextDocumentAnalytics buildAnalytics(InternetAddress address, Privileged privileged) throws SecurityException, ModelException {
+	private TextDocumentAnalytics buildAnalytics(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		
 		HTMLDocument htmlDocument = internetAddressService.getHTMLDocument(address, privileged);
 

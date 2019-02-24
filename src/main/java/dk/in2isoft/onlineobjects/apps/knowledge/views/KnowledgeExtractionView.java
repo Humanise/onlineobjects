@@ -2,18 +2,17 @@ package dk.in2isoft.onlineobjects.apps.knowledge.views;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import dk.in2isoft.commons.jsf.LegacyAbstractView;
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.modules.information.InspectingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import nu.xom.Document;
 
-public class KnowledgeExtractionView extends LegacyAbstractView implements InitializingBean {
+public class KnowledgeExtractionView extends AbstractView implements InitializingBean {
 	
 	private ModelService modelService;
 	private InternetAddressService internetAddressService;
@@ -22,18 +21,13 @@ public class KnowledgeExtractionView extends LegacyAbstractView implements Initi
 	private String rawHtml;
 	private String cleaned;
 	private String extracted;
-		
-	public KnowledgeExtractionView() {
-	}
 	
 	@Override
-	public void afterPropertiesSet() throws Exception {
-		Request request = getRequest();
+	protected void before(Request request) throws Exception {
 		Long id = request.getId();
-		Privileged privileged = request.getSession();
-		internetAddress = modelService.getRequired(InternetAddress.class, id, privileged);
+		internetAddress = modelService.getRequired(InternetAddress.class, id, request);
 		
-		HTMLDocument htmlDocument = internetAddressService.getHTMLDocument(internetAddress, privileged);
+		HTMLDocument htmlDocument = internetAddressService.getHTMLDocument(internetAddress, request);
 		
 		DocumentCleaner cleaner = new DocumentCleaner();
 		cleaner.setUrl(htmlDocument.getOriginalUrl());

@@ -80,7 +80,7 @@ public class MemberService {
 		return ValidationUtil.isValidUsername(username);
 	}
 
-	public void validateNewMember(String username, String password, String email) throws IllegalRequestException, ModelException {
+	public void validateNewMember(String username, String password, String email, Operator operator) throws IllegalRequestException, ModelException {
 		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalRequestException(Error.noUsername);
 		}
@@ -99,10 +99,10 @@ public class MemberService {
 		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
-		if (isUsernameTaken(username)) {
+		if (isUsernameTaken(username, operator)) {
 			throw new IllegalRequestException(Error.userExists);
 		}
-		if (isPrimaryEmailTaken(email)) {
+		if (isPrimaryEmailTaken(email, operator)) {
 			throw new IllegalRequestException(Error.emailExists);
 		}
 	}
@@ -111,18 +111,8 @@ public class MemberService {
 		return ValidationUtil.isWellFormedEmail(email);
 	}
 
-	@Deprecated
-	public Image getUsersProfilePhoto(User user, Privileged privileged) throws ModelException {
-		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, privileged);
-	}
-	
 	public Image getUsersProfilePhoto(User user, Operator operator) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, operator);
-	}
-
-	@Deprecated
-	public Person getUsersPerson(User user, Privileged privileged) throws ModelException {
-		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, privileged);
 	}
 
 	public Person getUsersPerson(User user, Operator operator) throws ModelException {
@@ -130,21 +120,21 @@ public class MemberService {
 	}
 
 
-	public User signUp(UserSession session, String username, String password, String fullName, String email) throws EndUserException {
+	public User signUp(UserSession session, String username, String password, String fullName, String email, Operator operator) throws EndUserException {
 		if (username != null) {
 			username = username.toLowerCase();
 		}
 		
-		User user = createMember(session, username, password, fullName, email);
+		User user = createMember(operator, username, password, fullName, email);
 		
-		markTermsAcceptance(user, user);
+		markTermsAcceptance(user, operator.as(user));
 
-		securityService.changeUser(session, username, password);
+		securityService.changeUser(session, username, password, operator);
 		
 		return user;
 	}
 
-	public User createMember(Privileged creator, String username,
+	public User createMember(Operator creator, String username,
 			String password, String fullName, String email)
 			throws IllegalRequestException, EndUserException, ModelException {
 		surveillanceService.audit().info("Request to create user with username={}", username);
@@ -155,9 +145,10 @@ public class MemberService {
 			throw new IllegalRequestException("Cannot create member without an email");
 		}
 		// TODO: Figure out how to synch both username + email
+		Operator adminOperator = creator.as(securityService.getAdminPrivileged());
 		synchronized(email.intern()) {
 			// TODO: Move this to the core
-			validateNewMember(username, password, email);
+			validateNewMember(username, password, email, adminOperator);
 			
 			// Create a user
 			User user = new User();
@@ -166,30 +157,31 @@ public class MemberService {
 			modelService.create(user, creator);
 	
 			// Make sure only the user has access to itself
-			modelService.removePrivileges(user, creator, securityService.getAdminPrivileged());
-			securityService.grantFullPrivileges(user, user, securityService.getAdminPrivileged());
+			modelService.removePrivileges(user, creator, adminOperator);
+			securityService.grantFullPrivileges(user, user, adminOperator);
 			
-			// Make sure we do not accidentally use it agin
+			Operator userOperator = creator.as(user);
+			// Make sure we do not accidentally use it again
 			creator = null;
 	
 			// Create a person
 			Person person = new Person();
 			person.setFullName(fullName);
-			modelService.create(person, user);
+			modelService.create(person, userOperator);
 			
 			// Create email
 			EmailAddress emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
-			modelService.create(emailAddress, user);
+			modelService.create(emailAddress, userOperator);
 			
 			// Create relation between person and email
-			modelService.createRelation(person, emailAddress, user);
+			modelService.createRelation(person, emailAddress, userOperator);
 	
 			// Create relation between person and email
-			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, user);
+			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, userOperator);
 	
 			// Create relation between user and person
-			modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, user);
+			modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, userOperator);
 			/*
 			TODO Disabled web site creation for now
 			// Create a web site
@@ -203,46 +195,46 @@ public class MemberService {
 	
 			webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
 			*/
-			modelService.commit();
+			userOperator.commit();
 			scheduleHealthCheck(user);
-			user = modelService.get(User.class, user.getId(), user);
+			user = modelService.get(User.class, user.getId(), userOperator);
 			surveillanceService.logSignUp(user);
 			return user;
 		}
 	}
 
-	public boolean isUsernameTaken(String username) {
-		return modelService.getUser(username) != null;
+	public boolean isUsernameTaken(String username, Operator operator) {
+		return modelService.getUser(username, operator) != null;
 	}
 
-	public void deleteMember(User user, Privileged privileged) throws ModelException, SecurityException {
+	public void deleteMember(User user, Operator operator) throws ModelException, SecurityException {
 		if (user==null) {
 			throw new SecurityException("Tried to delete null user");
 		}
-		surveillanceService.audit().info("Request to delete user={} by privileged={}", user.getUsername(), privileged.getIdentity());
+		surveillanceService.audit().info("Request to delete user={} by privileged={}", user.getUsername(), operator.getIdentity());
 		if (securityService.isCoreUser(user)) {
 			throw new SecurityException("This type of member cannot be deleted");
 		}
-		if (!securityService.canDelete(user, privileged)) {
+		if (!securityService.canDelete(user, operator)) {
 			throw new SecurityException("Deletion of user not allowed");
 		}
-		surveillanceService.audit().info("Starting to delete user={} by privileged={}", user.getUsername(), privileged.getIdentity());
+		surveillanceService.audit().info("Starting to delete user={} by privileged={}", user.getUsername(), operator.getIdentity());
 		Collection<Class<? extends Entity>> types = modelService.getEntityClasses();
 		for (Class<? extends Entity> type : types) {
 			log.debug("Getting users objects of type: {}", type.getSimpleName());
-			List<? extends Entity> list = modelService.list(Query.of(type).as(user));
+			List<? extends Entity> list = modelService.list(Query.of(type).as(user), operator);
 			// TODO check that an item is not shared with others
 			for (Entity entity : list) {
 				if (!entity.equals(user)) {
-					if (securityService.isOnlyPrivileged(entity, user)) {
-						modelService.delete(entity, privileged);
+					if (securityService.isOnlyPrivileged(entity, user, operator)) {
+						modelService.delete(entity, operator);
 					}
 				}
 			}
 			
 		}
-		modelService.delete(user, privileged);
-		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), privileged.getIdentity());
+		modelService.delete(user, operator);
+		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), operator.getIdentity());
 	}
 
 	/**
@@ -255,7 +247,7 @@ public class MemberService {
 	 * @throws SecurityException
 	 * @throws IllegalRequestException 
 	 */
-	public EmailAddress changePrimaryEmail(User user, String email, Privileged privileged) throws ModelException, SecurityException, IllegalRequestException {
+	public EmailAddress changePrimaryEmail(User user, String email, Operator privileged) throws ModelException, SecurityException, IllegalRequestException {
 		surveillanceService.audit().info("Request to change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
 		email = email.trim();
 		if (!isWellFormedEmail(email)) {
@@ -267,14 +259,14 @@ public class MemberService {
 				return emailAddress;
 				//throw new IllegalRequestException("The email is the same");
 			}
-			if (isPrimaryEmailTaken(email)) {
+			if (isPrimaryEmailTaken(email, privileged)) {
 				throw new IllegalRequestException(Error.emailExists);
 			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.update(emailAddress, privileged);
 		} else {
-			if (isPrimaryEmailTaken(email)) {
+			if (isPrimaryEmailTaken(email, privileged)) {
 				throw new IllegalRequestException(Error.emailExists);
 			}
 			emailAddress = new EmailAddress();
@@ -287,8 +279,8 @@ public class MemberService {
 		return emailAddress;
 	}
 	
-	public boolean isPrimaryEmailTaken(String email) throws ModelException {
-		return getUserByPrimaryEmail(email, securityService.getAdminPrivileged()) != null;
+	public boolean isPrimaryEmailTaken(String email, Operator operator) throws ModelException {
+		return getUserByPrimaryEmail(email, operator.as(securityService.getAdminPrivileged())) != null;
 	}
 
 	/**
@@ -298,10 +290,10 @@ public class MemberService {
 	 * @return
 	 * @throws ModelException
 	 */
-	public User getUserByPrimaryEmail(String email, Privileged privileged) throws ModelException {
+	public User getUserByPrimaryEmail(String email, Operator privileged) throws ModelException {
 		Query<EmailAddress> query = Query.after(EmailAddress.class).withField(EmailAddress.ADDRESS_PROPERTY, email).orderByCreated();
 		
-		List<EmailAddress> list = modelService.list(query);
+		List<EmailAddress> list = modelService.list(query, privileged);
 		for (EmailAddress emailAddress : list) {
 			User user = modelService.getParent(emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
 			if (user!=null) {
@@ -311,11 +303,11 @@ public class MemberService {
 		return null;
 	}
 	
-	public EmailAddress getUsersPrimaryEmail(User user, Privileged privileged) throws ModelException {
+	public EmailAddress getUsersPrimaryEmail(User user, Operator privileged) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 	}
 	
-	public User getUserOfPrimaryEmail(EmailAddress email, Privileged privileged) throws ModelException {
+	public User getUserOfPrimaryEmail(EmailAddress email, Operator privileged) throws ModelException {
 		return modelService.getParent(email, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
 	}
 
@@ -330,7 +322,7 @@ public class MemberService {
 		return fullName+" hjemmeside";
 	}*/
 
-	public UserProfileInfo build(Person person,Privileged priviledged) throws ModelException {
+	public UserProfileInfo build(Person person,Operator priviledged) throws ModelException {
 		UserProfileInfo info = new UserProfileInfo();
 		info.setGivenName(person.getGivenName());
 		info.setFamilyName(person.getFamilyName());
@@ -348,7 +340,7 @@ public class MemberService {
 		return info;
 	}
 	
-	public void save(UserProfileInfo info,Person person,Privileged priviledged) throws EndUserException {
+	public void save(UserProfileInfo info,Person person,Operator priviledged) throws EndUserException {
 		person.setGivenName(info.getGivenName());
 		person.setAdditionalName(info.getAdditionalName());
 		person.setFamilyName(info.getFamilyName());
@@ -365,7 +357,7 @@ public class MemberService {
 		updateDummyInternetAddresses(person, info.getUrls(), priviledged);
 	}
 	
-	private void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Privileged session) throws EndUserException {
+	private void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Operator session) throws EndUserException {
 		
 		// Remove empty addresses
 		for (Iterator<EmailAddress> i = addresses.iterator(); i.hasNext();) {
@@ -396,7 +388,7 @@ public class MemberService {
 	}
 
 	
-	private void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Privileged priviledged) throws EndUserException {
+	private void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Operator priviledged) throws EndUserException {
 
 		// Remove empty addresses
 		for (Iterator<PhoneNumber> i = phones.iterator(); i.hasNext();) {
@@ -425,7 +417,7 @@ public class MemberService {
 		}
 	}
 
-	private void updateDummyInternetAddresses(Entity parent, List<InternetAddress> urls, Privileged priviledged) throws ModelException, SecurityException {
+	private void updateDummyInternetAddresses(Entity parent, List<InternetAddress> urls, Operator priviledged) throws ModelException, SecurityException {
 
 		// Remove empty addresses
 		for (Iterator<InternetAddress> i = urls.iterator(); i.hasNext();) {
@@ -460,20 +452,20 @@ public class MemberService {
 		schedulingService.runJob(UserHealthCheckJob.NAME, UserHealthCheckJob.GROUP, data);
 	}
 
-	public void checkUserHealth(long userId) throws EndUserException {
-		Privileged privileged = securityService.getAdminPrivileged();
+	public void checkUserHealth(long userId, Operator operator) throws EndUserException {
+		operator = operator.as(securityService.getAdminPrivileged());
 		@NonNull
-		User user = modelService.getRequired(User.class, userId, privileged);
-		EmailAddress primaryEmail = getUsersPrimaryEmail(user, privileged);
+		User user = modelService.getRequired(User.class, userId, operator);
+		EmailAddress primaryEmail = getUsersPrimaryEmail(user, operator);
 		if (primaryEmail != null) {
 			Date time = primaryEmail.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
 			if (time == null) {
-				sendEmailConfirmation(user, privileged);
+				sendEmailConfirmation(user, operator);
 			}
 		}
 	}
 
-	public void sendEmailConfirmation(User user, Privileged privileged) throws EndUserException {
+	public void sendEmailConfirmation(User user, Operator privileged) throws EndUserException {
 		surveillanceService.audit().info("Request to send email confirmation to user={} by privileged={}", user.getUsername(), privileged.getIdentity());
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
 		if (email==null) {
@@ -483,7 +475,7 @@ public class MemberService {
 		String name = getFullName(user, privileged);
 		String random = Strings.generateRandomString(30);
 		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, random);
-		modelService.update(email, user);
+		modelService.update(email, privileged.as(user));
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);
@@ -503,7 +495,7 @@ public class MemberService {
 		surveillanceService.audit().info("Did send email confirmation to user={} via mail={}", user.getUsername(), email.getAddress());
 	}
 
-	private String getFullName(User user, Privileged privileged) throws ModelException {
+	private String getFullName(User user, Operator privileged) throws ModelException {
 		Person person = getUsersPerson(user, privileged);
 		String name = user.getUsername();
 		if (person != null && Strings.isNotBlank(person.getFullName())) {
@@ -512,21 +504,21 @@ public class MemberService {
 		return name;
 	}
 
-	public void sendEmailChangeRequest(User user, String newEmail, Privileged privileged) throws EndUserException {
-		surveillanceService.audit().info("Request to send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, privileged.getIdentity());
+	public void sendEmailChangeRequest(User user, String newEmail, Operator operator) throws EndUserException {
+		surveillanceService.audit().info("Request to send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, operator.getIdentity());
 		if (!isWellFormedEmail(newEmail)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
-		EmailAddress email = getUsersPrimaryEmail(user, privileged);
+		EmailAddress email = getUsersPrimaryEmail(user, operator);
 		if (email!=null && newEmail.equals(email.getAddress())) {
 			throw new IllegalRequestException(Error.emailSameAsCurrent);
 		}
-		if (isPrimaryEmailTaken(newEmail)) {
+		if (isPrimaryEmailTaken(newEmail,operator)) {
 			throw new IllegalRequestException(Error.emailExists);
 		}
 		String key = Strings.generateRandomString(30) + "|" + newEmail;
 		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
-		modelService.update(user, user);
+		modelService.update(user, operator.as(user));
 		StringBuilder url = new StringBuilder();
 		String context = configurationService.getApplicationContext("account");
 		url.append(context);
@@ -535,17 +527,17 @@ public class MemberService {
 		url.append(key);
 
 		Map<String,Object> parms = new HashMap<>();
-		String fullName = getFullName(user, privileged);
+		String fullName = getFullName(user, operator);
 		parms.put("name", fullName);
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
 		
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail, fullName);
-		surveillanceService.audit().info("Did send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, privileged.getIdentity());
+		surveillanceService.audit().info("Did send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, operator.getIdentity());
 	}
 
-	public User performEmailChangeByKey(String key) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
+	public User performEmailChangeByKey(String key, Operator operator) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
 		String[] parts = key.split("\\|");
 		if (parts.length != 2) {
 			throw new IllegalRequestException();
@@ -554,9 +546,9 @@ public class MemberService {
 		if (!isWellFormedEmail(email)) {
 			throw new IllegalRequestException(Error.invalidEmail);
 		}
-		Privileged admin = securityService.getAdminPrivileged();
+		Operator admin = operator.as(securityService.getAdminPrivileged());
 		Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
-		User user = modelService.getFirst(query);
+		User user = modelService.getFirst(query, admin);
 		if (user==null) {
 			throw new ContentNotFoundException("A user with the key could not be found");
 		}
@@ -565,25 +557,25 @@ public class MemberService {
 			throw new IllegalRequestException("The e-mail was already changed");
 		}
 		EmailAddress emailAddress = changePrimaryEmail(user, email, admin);
-		markCondifirmed(emailAddress, user);
+		markConfirmed(emailAddress, operator.as(user));
 		surveillanceService.audit().info("Changed email for user={} to email={} via key", user.getUsername(), email);
 		return user;
 	}
 
-	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key) throws ContentNotFoundException, ModelException, SecurityException {
-		Privileged privileged = securityService.getAdminPrivileged();
+	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key, final Operator operator) throws ContentNotFoundException, ModelException, SecurityException {
+		Operator admin = operator.as(securityService.getAdminPrivileged());
 		Query<EmailAddress> query = Query.after(EmailAddress.class).withCustomProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, key);
 		@Nullable
-		EmailAddress email = modelService.getFirst(query);
+		EmailAddress email = modelService.getFirst(query, admin);
 		if (email == null) {
 			throw new ContentNotFoundException("Could not find the email with the confirmation code: "+key);
 		}
-		User user = getUserOfPrimaryEmail(email, privileged);
+		User user = getUserOfPrimaryEmail(email, admin);
 		if (user == null) {
 			throw new ContentNotFoundException("Could not find the user for the email with the confirmation code: "+key);
 		}
 		String name = user.getUsername();
-		Person person = getUsersPerson(user, privileged);
+		Person person = getUsersPerson(user, admin);
 		if (person != null) {
 			name = person.getFullName();
 		}
@@ -593,15 +585,15 @@ public class MemberService {
 		return Pair.of(email, name);
 	}
 
-	public void markCondifirmed(EmailAddress email, Privileged privileged) throws SecurityException, ModelException {
+	public void markConfirmed(EmailAddress email, final Operator operator) throws SecurityException, ModelException {
 		// TODO: Use key to make sure this is legal
-		Privileged admin = securityService.getAdminPrivileged();
+		Operator admin = operator.as(securityService.getAdminPrivileged());
 		email.overrideFirstProperty(Property.KEY_CONFIRMATION_TIME, new Date());
 		modelService.update(email, admin);
-		surveillanceService.audit().info("Marked email={} confirmed for privileged={}", email, privileged.getIdentity());
+		surveillanceService.audit().info("Marked email={} confirmed for privileged={}", email, operator.getIdentity());
 	}
 
-	public void markTermsAcceptance(User user, Privileged privileged) throws SecurityException, ModelException {
+	public void markTermsAcceptance(User user, Operator privileged) throws SecurityException, ModelException {
 		user.overrideFirstProperty(Property.KEY_TERMS_ACCEPTANCE_TIME, new Date());
 		modelService.update(user, privileged);
 		surveillanceService.audit().info("Marked terms accepted for user={}", user.getUsername());

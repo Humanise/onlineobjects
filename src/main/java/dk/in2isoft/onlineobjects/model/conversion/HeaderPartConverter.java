@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.model.conversion;
 
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.HeaderPart;
 import nu.xom.Element;
@@ -9,7 +9,7 @@ import nu.xom.Node;
 public class HeaderPartConverter extends EntityConverter {
 
 	@Override
-	protected Node generateSubXML(Entity entity, Privileged privileged) {
+	protected Node generateSubXML(Entity entity, Operator privileged) {
 		HeaderPart header = (HeaderPart) entity;
 		Element root = new Element("HeaderPart",HeaderPart.NAMESPACE);
 		Element text = new Element("text",HeaderPart.NAMESPACE);

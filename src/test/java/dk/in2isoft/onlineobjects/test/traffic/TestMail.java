@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
@@ -135,21 +135,24 @@ public class TestMail extends AbstractSpringTestCase {
 	private void handleImage(String usersEmail, String mimeType, InputStream inputStream) {
 		log.info("Image from: "+usersEmail+" of type: "+mimeType+"...");
 		FileOutputStream output = null;
+		Operator operator = modelService.newAdminOperator();
 		try {
 			File tempFile = File.createTempFile(usersEmail, null);
 			tempFile.deleteOnExit();
 			output = new FileOutputStream(tempFile);
 			IOUtils.copy(inputStream, output);
-			imageService.createImageFromFile(tempFile, "Imported from mail", modelService.getUser(SecurityService.ADMIN_USERNAME));
+			imageService.createImageFromFile(tempFile, "Imported from mail", operator);
 			//log.info(IOUtils.toString(inputStream));
+			operator.commit();
 		} catch (IOException e) {
 			log.error("Unable to get stream");
+			operator.rollBack();
 		} catch (ModelException e) {
 			log.error("Unable to create image",e);
+			operator.rollBack();
 		} finally {
 			IOUtils.closeQuietly(output);
 			IOUtils.closeQuietly(inputStream);
-			modelService.commit();
 		}
 	}
 	

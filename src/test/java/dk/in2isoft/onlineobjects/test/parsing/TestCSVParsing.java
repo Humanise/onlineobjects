@@ -17,11 +17,11 @@ import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.WordsModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordImportRow;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
@@ -50,7 +50,7 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 	}
 	
 	@Test
-	public void testToModel() throws FileNotFoundException, IOException, ModelException, IllegalRequestException, SecurityException {
+	public void testToModel() throws FileNotFoundException, IOException, ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
 		ColumnPositionMappingStrategy<WordImportRow> strat = new ColumnPositionMappingStrategy<WordImportRow>();
 		strat.setType(WordImportRow.class);
 		String[] columns = new String[] {"text", "category", "language"}; // the fields to bind do in your JavaBean
@@ -58,21 +58,21 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 		
 		CsvToBean<WordImportRow> csv = new CsvToBean<WordImportRow>();
 		
-		User admin = modelService.getUser("admin");
+		Operator operator = modelService.newAdminOperator();
 
 		FileReader fileReader = new FileReader(getTestFile("language/names.csv"));
 		CSVReader reader = new CSVReader(fileReader,';');
 		
 		List<WordImportRow> list = csv.parse(strat, reader);
 		list.remove(0);
-		importWords(list, admin);
+		importWords(list, operator);
 		
 		reader.close();
 		fileReader.close();
-		modelService.commit();
+		operator.commit();
 	}
 
-	private void importWords(List<WordImportRow> list, User admin) throws ModelException, IllegalRequestException, SecurityException {
+	private void importWords(List<WordImportRow> list, Operator admin) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
 		for (WordImportRow row : list) {
 			WordListPerspective found = findWordToEnrich(row,admin);
 			if (found==null) {
@@ -83,21 +83,21 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 			} else {
 				Word word = modelService.get(Word.class, found.getId(), admin);
 				if (Strings.isBlank(found.getLanguage())) {
-					wordsModelService.changeLanguage(word, row.getLanguage(), admin, admin);
+					wordsModelService.changeLanguage(word, row.getLanguage(), admin);
 				}
 				if (Strings.isBlank(found.getLexicalCategory())) {
-					wordsModelService.changeCategory(word, row.getCategory(), admin,admin);
+					wordsModelService.changeCategory(word, row.getCategory(), admin);
 				}
 			}
 			
 		}
 	}
 	
-	private WordListPerspective findWordToEnrich(WordImportRow row, Privileged privileged) throws ModelException {
+	private WordListPerspective findWordToEnrich(WordImportRow row, Operator operator) throws ModelException {
 		
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery();
 		query.withWord(row.getText().toLowerCase());
-		List<WordListPerspective> found = modelService.list(query);
+		List<WordListPerspective> found = modelService.list(query, operator);
 		
 		int topHits = -1;
 		WordListPerspective topHit = null;
@@ -123,7 +123,7 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 		
 		if (topHit!=null) {
 			log.info("Top hit for: "+row+" is "+topHit);
-			modelService.get(Word.class, topHit.getId(), privileged);
+			modelService.get(Word.class, topHit.getId(), operator);
 		} else {
 			log.info("No hit for: "+row);
 		}

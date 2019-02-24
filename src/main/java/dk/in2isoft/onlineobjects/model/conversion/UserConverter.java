@@ -1,16 +1,16 @@
 package dk.in2isoft.onlineobjects.model.conversion;
 
+import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.model.Entity;
+import dk.in2isoft.onlineobjects.model.User;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Text;
-import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.model.Entity;
-import dk.in2isoft.onlineobjects.model.User;
 
 public class UserConverter extends EntityConverter {
 
 	@Override
-	protected Node generateSubXML(Entity entity, Privileged privileged) {
+	protected Node generateSubXML(Entity entity, Operator privileged) {
 		User user = (User) entity;
 		Element root = new Element("User",User.NAMESPACE);
 		Element username = new Element("username",User.NAMESPACE);

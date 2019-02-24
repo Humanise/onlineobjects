@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.ImagePart;
 import dk.in2isoft.onlineobjects.model.conversion.EntityConverter;
@@ -28,15 +29,17 @@ public class TestConversionService extends AbstractSpringTestCase {
 	
 	@Test
 	public void testIt() throws EndUserException, FileNotFoundException, IOException {
+		Operator operator = modelService.newAdminOperator();
 		ImagePart part = new ImagePart();
-		modelService.create(part, getAdminUser());
+		modelService.create(part, operator);
 		EntityConverter converter = conversionService.getConverter(part);
 		assertEquals(ImagePartConverter.class, converter.getClass());
 		assertNotNull(converter);
 		
-		assertNotNull(converter.generateXML(part, getAdminUser()));
+		assertNotNull(converter.generateXML(part, operator));
 		
-		modelService.delete(part, getAdminUser());
+		modelService.delete(part, operator);
+		operator.commit();
 	}
 
 	public void setConversionService(ConversionService conversionService) {

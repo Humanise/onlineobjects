@@ -33,9 +33,8 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -43,12 +42,10 @@ import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetGlossary;
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetUtil;
 import dk.in2isoft.onlineobjects.modules.index.WordIndexer;
-import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
 
@@ -106,8 +103,6 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	// State...
 	private Language danish;
 	private HashMap<String, LexicalCategory> lexicalCategories;
-	private Privileged adminUser;
-	private User publicUser;
 	
 	@BeforeClass
 	public static void beforeClass() throws Exception {
@@ -124,14 +119,6 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	@Before
 	public void setup() throws Exception {
 
-		danish = languageService.getLanguageForCode("da");
-		lexicalCategories = Maps.newHashMap();
-		List<LexicalCategory> list = modelService.list(Query.after(LexicalCategory.class));
-		for (LexicalCategory lexicalCategory : list) {
-			lexicalCategories.put(lexicalCategory.getCode(), lexicalCategory);
-		}
-		adminUser = modelService.getUser(SecurityService.ADMIN_USERNAME);
-		publicUser = modelService.getUser(SecurityService.PUBLIC_USERNAME);
 		
 		wordIndexer.setEnabled(false);
 	}
@@ -139,7 +126,14 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	@Test
 	public void testIt() throws Exception {
 		
-		
+		Operator adminOperator = modelService.newAdminOperator();
+		danish = languageService.getLanguageForCode("da", adminOperator);
+		lexicalCategories = Maps.newHashMap();
+		List<LexicalCategory> list = modelService.list(Query.after(LexicalCategory.class), adminOperator);
+		for (LexicalCategory lexicalCategory : list) {
+			lexicalCategories.put(lexicalCategory.getCode(), lexicalCategory);
+		}
+
 		int total = Lists.newArrayList(graph.find(null, RDF.type.asNode(), wordURI)).size();
 
 		int start = 0;
@@ -205,13 +199,13 @@ public class TestDanNetImporter extends AbstractSpringTask {
 					String label = getLabel(sense);
 					
 					
-					Word localWord = findLocalWord(sense, label);
+					Word localWord = findLocalWord(sense, label, adminOperator);
 					
 					// Lexical category...
-					updateCategory(type, localWord);
+					updateCategory(type, localWord, adminOperator);
 					
 					// Language...
-					updateLanguage(danish, localWord);
+					updateLanguage(danish, localWord, adminOperator);
 					
 					print(" - sense - label",label);
 					print(" - sense - out", getRelations(sense, null));
@@ -226,18 +220,18 @@ public class TestDanNetImporter extends AbstractSpringTask {
 						print(" - sense - synset - in", getRelations(null, synset));
 						
 						if (updateProperties) {
-							updateWordProperties(localWord, synset);
+							updateWordProperties(localWord, synset, adminOperator);
 						}
 						
 						if (clearSynonyms) {
-							removeExistingSynonyms(localWord);
+							removeExistingSynonyms(localWord, adminOperator);
 						}
 						
 						if (clearDisciplines) {
-							removeExistingDisciplines(localWord);							
+							removeExistingDisciplines(localWord, adminOperator);							
 						}
 						if (clearGeneralizations) {
-							removeExistingGeneralizations(localWord);
+							removeExistingGeneralizations(localWord, adminOperator);
 						}
 						if (createDisciplines ) {
 							ExtendedIterator<Node> domains = query.objectsFor(synset,domain);
@@ -248,7 +242,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 								while (wordSensesInDomain.hasNext()) {
 									Node wordSenseInDomain = wordSensesInDomain.next();
 									print(" - sense - synset - domain - sense", getLabel(wordSenseInDomain));
-									createDiscipline(localWord, wordSenseInDomain);
+									createDiscipline(localWord, wordSenseInDomain, adminOperator);
 								}
 							}
 						}
@@ -256,23 +250,23 @@ public class TestDanNetImporter extends AbstractSpringTask {
 							List<Node> partOfs = getRelatedSenses(synset, partMeronymOf, Direction.out);
 							for (Node node : partOfs) {
 								print(" - sense - synset - contains - sense", getLabel(node));
-								createPartOf(localWord, node);
+								createPartOf(localWord, node, adminOperator);
 							}
 							List<Node> antiPartOfs = getRelatedSenses(synset, partMeronymOf, Direction.in);
 							for (Node node : antiPartOfs) {
 								print(" - sense - synset - contains - sense", getLabel(node));
-								createContains(localWord, node);
+								createContains(localWord, node, adminOperator);
 								
 							}
 							List<Node> holonyms = getRelatedSenses(synset, partHolonymOf, Direction.out);
 							for (Node holonym : holonyms) {
 								print(" - sense - synset - holonym - sense", getLabel(holonym));
-								createContains(localWord, holonym);
+								createContains(localWord, holonym, adminOperator);
 							}
 							List<Node> antiHolonyms = getRelatedSenses(synset, partHolonymOf, Direction.in);
 							for (Node antiHolonym : antiHolonyms) {
 								print(" - sense - synset - anti-holonym - sense", getLabel(antiHolonym));
-								createPartOf(localWord, antiHolonym);
+								createPartOf(localWord, antiHolonym, adminOperator);
 							}
 						}
 						
@@ -283,7 +277,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 							List<Node> specializations = getRelatedSenses(synset, hyponymOf, Direction.in);
 							for (Node specialization : specializations) {
 								print(" - sense - synset - specialization - synset - sense", getLabel(specialization));
-								createSpecialization(localWord, specialization);
+								createSpecialization(localWord, specialization, adminOperator);
 							}
 							
 							// Anti-hyponym = Hypernym / Generalization / Superordinate
@@ -291,7 +285,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 							List<Node> generalizations = getRelatedSenses(synset, hyponymOf, Direction.out);
 							for (Node specialization : generalizations) {
 								print(" - sense - synset - generalization - synset - sense", getLabel(specialization));
-								createGeneralization(localWord, specialization);
+								createGeneralization(localWord, specialization, adminOperator);
 							}
 						}
 						if (createSynonyms) {
@@ -299,13 +293,13 @@ public class TestDanNetImporter extends AbstractSpringTask {
 							for (Node synonym : synonyms) {
 
 								print(" - sense - synset - synonym", getLabel(synonym));
-								createSynonym(localWord, synonym, true);
+								createSynonym(localWord, synonym, true, adminOperator);
 							}
 							List<Node> antiSynonyms = getRelatedSenses(synset, nearSynonym, Direction.out);
 							for (Node synonym : antiSynonyms) {
 
 								print(" - sense - synset - anti-synonym", getLabel(synonym));
-								createSynonym(localWord, synonym, false);
+								createSynonym(localWord, synonym, false, adminOperator);
 							}
 							
 							// Create synonyms for the other words in the same synset
@@ -317,17 +311,16 @@ public class TestDanNetImporter extends AbstractSpringTask {
 								}
 								print(" - sense - synset - sense", getLabel(wordsenseOfSynset));
 								
-								createSynonym(localWord, wordsenseOfSynset, true);
+								createSynonym(localWord, wordsenseOfSynset, true, adminOperator);
 								
 							}
 						}
 						if (synSets.hasNext()) {
-							localWord = findLocalWord(sense, label);
+							localWord = findLocalWord(sense, label, adminOperator);
 						}
 					}
 					//print(" - sense - in",Lists.newArrayList());
-					modelService.commit();
-					modelService.clearAndFlush();
+					adminOperator.commit();
 				}
 				print((Math.round((float) num)/((float) total)*100)+"%");
 			}
@@ -350,43 +343,43 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		return found;
 	}
 
-	private void createSynonym(Word localWord, Node sense, boolean outgoing) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_SYNONYMOUS, outgoing);
+	private void createSynonym(Word localWord, Node sense, boolean outgoing, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_SYNONYMOUS, outgoing, operator);
 	}
 
-	private void createDiscipline(Word localWord, Node sense) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_DISCIPLINE, true);
+	private void createDiscipline(Word localWord, Node sense, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_DISCIPLINE, true, operator);
 	}
 
-	private void createGeneralization(Word localWord, Node sense) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, true);
+	private void createGeneralization(Word localWord, Node sense, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, true, operator);
 	}
 
-	private void createSpecialization(Word localWord, Node sense) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, false);
+	private void createSpecialization(Word localWord, Node sense, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_GENRALTIZATION, false, operator);
 	}
 
-	private void createPartOf(Word localWord, Node sense) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, false);
+	private void createPartOf(Word localWord, Node sense, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, false, operator);
 	}
 
-	private void createContains(Word localWord, Node sense) throws ModelException, SecurityException {
-		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, true);
+	private void createContains(Word localWord, Node sense, Operator operator) throws ModelException, SecurityException {
+		createRelation(localWord, sense, Relation.KIND_SEMANTICS_CONTAINS, true, operator);
 	}
 
-	private void createRelation(Word localWord, Node sense, String kind, boolean outgoing) throws ModelException, SecurityException {
+	private void createRelation(Word localWord, Node sense, String kind, boolean outgoing, Operator operator) throws ModelException, SecurityException {
 		String label = getLabel(sense);
 		if (Strings.isBlank(label)) {
 			print("Will not create relation since the label is null : " + getSimpleURI(sense));
 			return;
 		}
-		Word foundSynonym = findWord(label, sense.getURI());
+		Word foundSynonym = findWord(label, sense.getURI(), operator);
 		if (foundSynonym!=null) {
 			List<Word> existingSynonyms;
 			if (outgoing) {
-				existingSynonyms = modelService.getChildren(localWord, kind,Word.class, adminUser);
+				existingSynonyms = modelService.getChildren(localWord, kind,Word.class, operator);
 			} else {
-				existingSynonyms = modelService.getParents(localWord, kind,Word.class, adminUser);
+				existingSynonyms = modelService.getParents(localWord, kind,Word.class, operator);
 			}
 			for (Word existing : existingSynonyms) {
 				if (existing.getId()==foundSynonym.getId()) {
@@ -397,11 +390,11 @@ public class TestDanNetImporter extends AbstractSpringTask {
 				print("Something new happened!");
 			}
 			if (outgoing) {
-				modelService.createRelation(localWord, foundSynonym, kind, publicUser);
+				modelService.createRelation(localWord, foundSynonym, kind, operator.as(getPublicUser()));
 			} else {
-				modelService.createRelation(foundSynonym, localWord, kind, publicUser);
+				modelService.createRelation(foundSynonym, localWord, kind, operator.as(getPublicUser()));
 			}
-			modelService.commit();
+			operator.commit();
 		} else {
 			print("Unable to find existing sense");
 		}
@@ -439,28 +432,28 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		return node.toString();
 	}
 
-	private void removeExistingSynonyms(Word localWord) throws ModelException, SecurityException {
-		List<Relation> outgoingSynonyms = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
-		modelService.delete(outgoingSynonyms, adminUser);
-		List<Relation> indcomingSynonyms = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, adminUser);
-		modelService.delete(indcomingSynonyms, adminUser);
+	private void removeExistingSynonyms(Word localWord, Operator operator) throws ModelException, SecurityException {
+		List<Relation> outgoingSynonyms = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, operator);
+		modelService.delete(outgoingSynonyms, operator);
+		List<Relation> indcomingSynonyms = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_SYNONYMOUS, operator);
+		modelService.delete(indcomingSynonyms, operator);
 	}
 
-	private void removeExistingGeneralizations(Word localWord) throws ModelException, SecurityException {
-		List<Relation> from = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
-		modelService.delete(from, adminUser);
-		List<Relation> to = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, adminUser);
-		modelService.delete(to, adminUser);
+	private void removeExistingGeneralizations(Word localWord, Operator operator) throws ModelException, SecurityException {
+		List<Relation> from = modelService.getRelationsFrom(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, operator);
+		modelService.delete(from, operator);
+		List<Relation> to = modelService.getRelationsTo(localWord, Word.class, Relation.KIND_SEMANTICS_GENRALTIZATION, operator);
+		modelService.delete(to, operator);
 	}
 
-	private void removeExistingDisciplines(Word localWord) throws ModelException, SecurityException {
+	private void removeExistingDisciplines(Word localWord, Operator operator) throws ModelException, SecurityException {
 		{
-			List<Relation> relations = modelService.getRelationsFrom(localWord, Word.class,Relation.KIND_SEMANTICS_DISCIPLINE, adminUser);
-			modelService.delete(relations, adminUser);
+			List<Relation> relations = modelService.getRelationsFrom(localWord, Word.class,Relation.KIND_SEMANTICS_DISCIPLINE, operator);
+			modelService.delete(relations, operator);
 		}
 	}
 
-	private void updateWordProperties(Word localWord, Node synset) throws SecurityException, ModelException {
+	private void updateWordProperties(Word localWord, Node synset, Operator operator) throws SecurityException, ModelException {
 		Node glossary = first(query.objectsFor(synset, GLOSSARY));
 		if (glossary!=null) {
 			print(" - sense - synset - glossary",glossary.getLiteralLexicalForm());
@@ -477,32 +470,32 @@ public class TestDanNetImporter extends AbstractSpringTask {
 				localWord.addProperty(Property.KEY_SEMANTICS_EXAMPLE, example);
 			}
 		}
-		modelService.update(localWord, publicUser);
-		modelService.commit();
+		modelService.update(localWord, operator.as(getPublicUser()));
+		operator.commit();
 	}
 
-	private Word findLocalWord(Node sense, String label) throws ModelException, SecurityException {
-		Word localWord = findWord(label, sense.getURI());
+	private Word findLocalWord(Node sense, String label, Operator operator) throws ModelException, SecurityException {
+		Word localWord = findWord(label, sense.getURI(), operator);
 		if (localWord==null) {
 			localWord = new Word();
 			localWord.setText(label);
 			localWord.addProperty(Property.KEY_DATA_SOURCE, sense.getURI());
-			modelService.create(localWord, publicUser);
+			modelService.create(localWord, operator.as(getPublicUser()));
 		} else {
 			//print("found",localWord);
 		}
 		return localWord;
 	}
 
-	private void updateCategory(Node type, Word localWord) throws ModelException, SecurityException {
-		LexicalCategory lexicalCategory = modelService.getParent(localWord, LexicalCategory.class, adminUser);
+	private void updateCategory(Node type, Word localWord, Operator operator) throws ModelException, SecurityException {
+		LexicalCategory lexicalCategory = modelService.getParent(localWord, LexicalCategory.class, operator);
 		if (lexicalCategory==null) {
 			String code = map.get(type.getURI());
 			if (code!=null) {
 				lexicalCategory = lexicalCategories.get(code);
 				if (lexicalCategory!=null) {
-					modelService.createRelation(lexicalCategory, localWord, publicUser);
-					modelService.commit();
+					modelService.createRelation(lexicalCategory, localWord, operator.as(getPublicUser()));
+					operator.commit();
 				}
 			} else {
 				log.error("Code not found: "+type.getURI());
@@ -512,19 +505,20 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		}
 	}
 
-	private void updateLanguage(Entity danish, Word localWord) throws ModelException, SecurityException {
-		Language language = modelService.getParent(localWord, Language.class, adminUser);
+	private void updateLanguage(Entity danish, Word localWord, Operator operator) throws ModelException, SecurityException {
+		Language language = modelService.getParent(localWord, Language.class, operator);
 		if (language==null) {
-			modelService.createRelation(danish, localWord, publicUser);
-			modelService.commit();
+			modelService.createRelation(danish, localWord, operator.as(getPublicUser()));
+			operator.commit();
 		} else if (logModelWarnings) {
 			log.error("Language exists: "+language.getName());
 		}
 	}
 	
 
-	private Word findWord(String text, String sourceId) {
-		List<Word> list = modelService.list(Query.after(Word.class).withField(Word.TEXT_FIELD, text).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId));
+	private Word findWord(String text, String sourceId, Operator operator) {
+		Query<Word> query2 = Query.after(Word.class).withField(Word.TEXT_FIELD, text).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId);
+		List<Word> list = modelService.list(query2, operator);
 		for (Word word : list) {
 			if (word.getPropertyValues(Property.KEY_DATA_SOURCE).contains(sourceId)) {
 				return word;
@@ -602,8 +596,4 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		this.wordIndexer = wordIndexer;
 	}
 	
-	@Override
-	public void setConfigurationService(ConfigurationService configurationService) {
-		super.setConfigurationService(configurationService);
-	}
 }

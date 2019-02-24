@@ -8,8 +8,7 @@ import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.Privileged;
-import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -20,13 +19,12 @@ import dk.in2isoft.onlineobjects.model.HtmlPart;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.User;
 
 public class ImageGalleryService {
 
 	private ModelService modelService;
 	
-	public ImageGallery createGallery(Privileged priviledged) throws EndUserException {
+	public ImageGallery createGallery(Operator priviledged) throws EndUserException {
 
 		// Create an image gallery
 		ImageGallery gallery = new ImageGallery();
@@ -48,7 +46,7 @@ public class ImageGalleryService {
 		return gallery;
 	}
 
-	public <T extends Entity>void deleteGallery(long id, Privileged privileged) throws ModelException, SecurityException, ContentNotFoundException {
+	public <T extends Entity>void deleteGallery(long id, Operator privileged) throws ModelException, SecurityException, ContentNotFoundException {
 		ImageGallery gallery = modelService.get(ImageGallery.class, id, privileged);
 		if (gallery==null) {
 			throw new ContentNotFoundException(ImageGallery.class, id);
@@ -56,9 +54,8 @@ public class ImageGalleryService {
 		List<Class<T>> parts = Lists.newArrayList();
 		parts.add(Code.<Class<T>>cast(HtmlPart.class));
 		parts.add(Code.<Class<T>>cast(HeaderPart.class));
-		User admin = modelService.getUser(SecurityService.ADMIN_USERNAME);
 		for (Class<T> type : parts) {
-			List<T> relations = modelService.getChildren(gallery, type, admin);
+			List<T> relations = modelService.getChildren(gallery, type, privileged);
 			for (T relation : relations) {
 				modelService.delete(relation, privileged);
 			}
@@ -66,7 +63,7 @@ public class ImageGalleryService {
 		modelService.delete(gallery, privileged);
 	}
 	
-	public void changeSequence(long galleryId, final List<Long> imageIds, Privileged privileged) throws ModelException, ContentNotFoundException, SecurityException {
+	public void changeSequence(long galleryId, final List<Long> imageIds, Operator privileged) throws ModelException, ContentNotFoundException, SecurityException {
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, galleryId, privileged);
 		
 		List<Relation> relations = modelService.getRelationsFrom(gallery, Image.class, privileged);

@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.apps.account.views;
 import java.util.Date;
 import java.util.Locale;
 
+import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.account.AccountController;
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -13,12 +14,11 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
-import dk.in2isoft.onlineobjects.ui.AbstractManagedBean;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class AccountSettingsView extends AbstractManagedBean {
+public class AccountSettingsView extends AbstractView {
 
 	private ModelService modelService;
 	
@@ -48,7 +48,7 @@ public class AccountSettingsView extends AbstractManagedBean {
 	
 	public void before(Request request) throws Exception {
 		Messages msg = new Messages(AccountController.class);
-		user = modelService.get(User.class, request.getSession().getIdentity(), request.getSession());
+		user = modelService.getUser(request);
 		if (user==null) {
 			return;
 		}
@@ -57,14 +57,14 @@ public class AccountSettingsView extends AbstractManagedBean {
 		}
 		Locale locale = request.getLocale();
 		allowed = true;
-		person = modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, user);
+		person = modelService.getChild(user, Relation.KIND_SYSTEM_USER_SELF, Person.class, request);
 		if (person!=null && Strings.isNotBlank(person.getFullName())) {
 			fullName = person.getFullName();
 		} else {
 			fullName = msg.get("no_name", locale);
 		}
 		
-		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, user);
+		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, request);
 		Date emailConfirmationTime = null;
 		if (email!=null) {
 			primaryEmail = email.getAddress();

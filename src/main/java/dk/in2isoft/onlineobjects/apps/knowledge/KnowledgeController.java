@@ -260,7 +260,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path
 	public List<FeedPerspective> getFeeds(Request request) throws EndUserException {
 		User user = modelService.getUser(request);
-		Pile pile = getFeedPile(user);
+		Pile pile = getFeedPile(user, request);
 		List<InternetAddress> children = modelService.getChildren(pile, InternetAddress.class, request);
 		List<FeedPerspective> options = Lists.newArrayList();
 		for (InternetAddress internetAddress : children) {
@@ -290,8 +290,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return options;
 	}
 
-	private Pile getFeedPile(User user) throws ModelException, SecurityException {
-		return pileService.getOrCreatePileByKey("feeds", user);
+	private Pile getFeedPile(User user, Operator operator) throws ModelException, SecurityException {
+		return pileService.getOrCreatePileByKey("feeds", user, operator);
 	}
 
 	@Path
@@ -303,7 +303,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 			if (response.isSuccess()) {
 				Feed feed = feedService.parse(response.getFile());
 				User user = modelService.getUser(request);
-				Pile feeds = getFeedPile(user);
+				Pile feeds = getFeedPile(user, request);
 				InternetAddress address = new InternetAddress();
 				address.setName(feed.getTitle());
 				address.setAddress(url);
@@ -343,10 +343,10 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Code.checkNotNull(entity, "Item not found");
 
 		if (favorite!=null) {
-			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite);
+			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite, request);
 		}
 		if (inbox!=null) {
-			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox);
+			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox, request);
 		}
 	}
 
@@ -359,7 +359,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
 		
-		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, address, favorite);
+		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, address, favorite, request);
 	}
 
 	@Path
@@ -370,7 +370,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		User user = modelService.getUser(request);
 
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
-		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, address, inbox);
+		pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, address, inbox, request);
 	}
 
 	@Path
@@ -486,7 +486,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		}
 		
 		User user = modelService.getUser(request);
-		InternetAddress internetAddress = knowledgeService.createInternetAddress(url, user);
+		InternetAddress internetAddress = knowledgeService.createInternetAddress(url, user, request);
 
 		return SimpleEntityPerspective.create(internetAddress);
 	}

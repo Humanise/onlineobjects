@@ -41,7 +41,7 @@ public class PermissionsComponent extends AbstractComponent {
 		Entity entity = Components.getExpressionValue(this, "entity", context);
 		
 		out.startDiv().withClass("oo_permissions").withId(getClientId());
-		boolean publicView = securityService.canView(entity, securityService.getPublicUser());
+		boolean publicView = securityService.canView(entity, securityService.getPublicUser(), getRequest());
 		CheckboxComponent check = new CheckboxComponent();
 		check.setLabel("Anyone can view it");
 		check.setValue(publicView);

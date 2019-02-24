@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.api.APIController;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -27,85 +28,89 @@ import dk.in2isoft.onlineobjects.test.EssentialTests;
 
 @Category(EssentialTests.class)
 public class TestClientSecret extends AbstractSpringTestCase {
-    
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private APIController apiController;
-	
+
 	@Test
 	public void testGettingSecret() throws EndUserException {
+		Operator publicOperator = modelService.newPublicOperator();
 		try {
-		User user = createMember();
-		
-		String clientId = UUID.randomUUID().toString();
-		ClientInfo clientInfo = new ClientInfo("Test client");
-		clientInfo.setUUID(clientId);
-		String secret = securityService.getSecret(clientInfo, user);
-		assertNotNull(secret);
+			User user = createMember(publicOperator);
+			Operator userOperator = publicOperator.as(user);
 
-		String altClientId = UUID.randomUUID().toString();
-		ClientInfo altClientInfo = new ClientInfo("Test client");
-		altClientInfo.setUUID(altClientId);
-		String altSecret = securityService.getSecret(altClientInfo, user);
-		assertNotNull(altSecret);
-		
-		UserQuery q = new UserQuery();
-		q.setSecret(altSecret);
-		{
-			User found = modelService.getFirst(q);
-			assertEquals(user.getId(),found.getId());
-		}
-		{
-			List<Client> clients = modelService.getChildren(user, Client.class, user);
-			assertEquals(clients.size(), 2);
-		}
-		String secretAgain = securityService.getSecret(clientInfo, user);
+			String clientId = UUID.randomUUID().toString();
+			ClientInfo clientInfo = new ClientInfo("Test client");
+			clientInfo.setUUID(clientId);
+			String secret = securityService.getSecret(clientInfo, user, userOperator);
+			assertNotNull(secret);
 
-		assertEquals(secret, secretAgain);
+			String altClientId = UUID.randomUUID().toString();
+			ClientInfo altClientInfo = new ClientInfo("Test client");
+			altClientInfo.setUUID(altClientId);
+			String altSecret = securityService.getSecret(altClientInfo, user, userOperator);
+			assertNotNull(altSecret);
 
-		User otherUser = createMember();
-		ClientInfo otherClientInfo = new ClientInfo("Test client");
-		otherClientInfo.setUUID(UUID.randomUUID().toString());
-		String otherSecret = securityService.getSecret(otherClientInfo, otherUser);
+			UserQuery q = new UserQuery();
+			q.setSecret(altSecret);
+			{
+				User found = modelService.getFirst(q, userOperator);
+				assertEquals(user.getId(), found.getId());
+			}
+			{
+				List<Client> clients = modelService.getChildren(user, Client.class, userOperator);
+				assertEquals(clients.size(), 2);
+			}
+			String secretAgain = securityService.getSecret(clientInfo, user, userOperator);
 
-		assertNotEquals(secret, otherSecret);
+			assertEquals(secret, secretAgain);
 
-		User otherReloaded = securityService.getUserBySecret(otherSecret);
-		assertEquals(otherReloaded.getId(), otherUser.getId());
+			User otherUser = createMember(publicOperator);
+			Operator otherOperator = publicOperator.as(otherUser);
+			ClientInfo otherClientInfo = new ClientInfo("Test client");
+			otherClientInfo.setUUID(UUID.randomUUID().toString());
+			String otherSecret = securityService.getSecret(otherClientInfo, otherUser, otherOperator);
 
-		{
-			List<Client> clients = modelService.getChildren(user, Client.class, user);
-			assertEquals(clients.size(), 2);
-		}
+			assertNotEquals(secret, otherSecret);
 
-		modelService.delete(user, getAdminUser());
-		modelService.delete(otherUser, getAdminUser());
+			User otherReloaded = securityService.getUserBySecret(otherSecret, publicOperator);
+			assertEquals(otherReloaded.getId(), otherUser.getId());
+
+			{
+				List<Client> clients = modelService.getChildren(user, Client.class, userOperator);
+				assertEquals(clients.size(), 2);
+			}
+
+			modelService.delete(user, publicOperator.as(getAdminUser()));
+			modelService.delete(otherUser, publicOperator.as(getAdminUser()));
+			publicOperator.commit();
 		} catch (Exception e) {
-			modelService.rollBack();
+			publicOperator.rollBack();
 		}
 	}
 
 	@Test
 	public void testAPI() throws EndUserException, IOException {
 		assertNotNull(apiController);
-		
+
 		// TODO Test the API endpoint
-		//Request request = null;
-		//apiController.authentication(request);
+		// Request request = null;
+		// apiController.authentication(request);
 	}
 
-	private User createMember() throws IllegalRequestException, EndUserException, ModelException {
+	private User createMember(Operator operator) throws IllegalRequestException, EndUserException, ModelException {
 		String username = getUniqueTestUserName();
 		String password = "zup4$seKr8";
 		String fullName = "Dummy Test User";
-		String email = Strings.generateRandomString(5)+"@domain.com";
+		String email = Strings.generateRandomString(5) + "@domain.com";
 
-		User user = memberService.createMember(getPublicUser(), username, password, fullName, email);
+		User user = memberService.createMember(operator, username, password, fullName, email);
 		return user;
 	}
-	
+
 	// Wiring
 
 	public void setMemberService(MemberService memberService) {

@@ -6,6 +6,7 @@ import org.quartz.JobExecutionException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
@@ -22,10 +23,12 @@ public class UserHealthCheckJob extends ServiceBackedJob {
 		log.info(map.toString());
 		long userId = map.getLong(USER_ID);
 		if (userId > 0) {
+			Operator adminOperator = schedulingSupportFacade.getModelService().newAdminOperator();
 			try {
-				schedulingSupportFacade.getMemberService().checkUserHealth(userId);
-				schedulingSupportFacade.getModelService().commit();
+				schedulingSupportFacade.getMemberService().checkUserHealth(userId, adminOperator);
+				adminOperator.commit();
 			} catch (EndUserException e) {
+				adminOperator.rollBack();
 				throw new JobExecutionException(e);
 			}
 		}
