@@ -146,7 +146,7 @@ public class APIController extends APIControllerBase {
 			securityService.randomDelay();
 			throw new SecurityException("User not found");
 		}
-		String secret = securityService.getSecret(info, user, request);
+		String secret = securityService.getSecret(info, user, request.as(user));
 		if (Strings.isBlank(secret)) {
 			surveillanceService.audit().warn("Failed to authenticate username={}", username);
 			throw new SecurityException("Unable to perform request");

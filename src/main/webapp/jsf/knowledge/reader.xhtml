@@ -18,13 +18,13 @@
             <gui:row height="content">
               <div class="reader_sidebar_block">
                 <o:selection name="subsets" value="everything">
-                  <gui:source name="contextsSource" url="#{knowledgeView.baseContext}/getContextOptions"/>
+                  <gui:source name="contextsSource" url="/getContextOptions"/>
                 </o:selection>
               </div>
               <div class="reader_sidebar_block">
                 <h3 class="reader_sidebar_title">Types</h3>
                 <o:selection name="types" value="any">
-                  <gui:source name="typesSource" url="#{knowledgeView.baseContext}/getTypeOptions"/>
+                  <gui:source name="typesSource" url="/getTypeOptions"/>
                 </o:selection>
               </div>
               <div class="reader_sidebar_block reader_sidebar_feeds">
@@ -33,7 +33,7 @@
                   <o:icon icon="add_line"/>
                 </o:link>
                 <o:selection name="feeds">
-                  <gui:source name="feedSource" url="#{knowledgeView.baseContext}/getFeeds"/>
+                  <gui:source name="feedSource" url="/getFeeds"/>
                 </o:selection>
               </div>
             </gui:row>
@@ -44,7 +44,7 @@
                   <div style="margin: 0 -10px">
                     <div style="padding: 0 10px">
                       <o:selection name="tags">
-                        <gui:source name="tagSource" url="#{knowledgeView.baseContext}/getWordCloud"/>
+                        <gui:source name="tagSource" url="/getWordCloud"/>
                       </o:selection>
                     </div>
                   </div>
@@ -56,7 +56,7 @@
       </f:facet>
 
       <f:facet name="results">
-        <gui:source name="listSource" url="#{knowledgeView.baseContext}/list">
+        <gui:source name="listSource" url="/list">
           <gui:parameter key="page" value="@listView.page"/>
           <gui:parameter key="pageSize" value="@listView.pageSize"/>
           <gui:parameter key="text" value="@search.value"/>
