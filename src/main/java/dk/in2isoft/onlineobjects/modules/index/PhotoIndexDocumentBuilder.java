@@ -29,6 +29,9 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 	public Document build(Image image, Operator operator) throws ModelException {
 		Operator admin = operator.as(securityService.getAdminPrivileged());
 		image = modelService.get(Image.class, image.getId(), operator.as(admin));
+		if (image == null) {
+			return null;
+		}
 		StringBuilder text = new StringBuilder();
 		text.append(image.getName());
 		String glossary = image.getPropertyValue(Image.PROPERTY_DESCRIPTION);

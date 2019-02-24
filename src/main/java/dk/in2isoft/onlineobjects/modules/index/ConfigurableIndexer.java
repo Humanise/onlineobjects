@@ -65,10 +65,12 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 		try {
 			E ent = Code.cast(entity);
 			Document document = documentBuilder.build(ent, operator);
-			log.debug("Re-indexing : "+entity);
-			indexManager.update(entity, document);
+			if (document != null) {
+				log.debug("Re-indexing : "+entity);
+				indexManager.update(entity, document);
+			}
 			operator.commit();
-		} catch (EndUserException e) {
+		} catch (Exception e) {
 			operator.rollBack();
 			log.error("Unable to reindex: "+entity, e);
 		}

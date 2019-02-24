@@ -46,7 +46,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 	
 	@After
 	public void after() {
-		long x = System.currentTimeMillis() + 2000;
+		long x = System.currentTimeMillis() + 5000;
 		while (System.currentTimeMillis() < x) {
 			if (modelService.getActiveOperationCount() > 0) {
 				try {

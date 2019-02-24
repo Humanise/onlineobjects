@@ -304,10 +304,20 @@ public class ModelService implements InitializingBean, OperationProvider {
 	private List<Pair<ModelEventType, Object>> getEffectiveEvents(Operation operation) {
 		List<Pair<ModelEventType, Object>> copy = new ArrayList<>();
 		for (Pair<ModelEventType, Object> pair : operation.getEvents()) {
-			copy.removeIf(x -> x.equals(pair.getValue()));
+			copy.removeIf(x -> equals(pair, x));
 			copy.add(pair);
 		}
 		return copy;
+	}
+
+	private boolean equals(Pair<ModelEventType, Object> pair, Pair<ModelEventType, Object> x) {
+		
+		Object a = x.getValue();
+		Object b = pair.getValue();
+		if (a instanceof Item && b instanceof Item) {
+			return ((Item)a).getId() == ((Item)b).getId();
+		}
+		return a.equals(b);
 	}
 
 	public void rollBack(Operation operation) {
