@@ -7,11 +7,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,18 +70,21 @@ public class DataImporter {
 
 		// Parse the request
 		try {
-			List<DiskFileItem> items = upload.parseRequest(request.getRequest());
+			List<FileItem> items = upload.parseRequest(request.getRequest());
 			Map<String,String> parameters = Maps.newHashMap();
-			for (DiskFileItem item : items) {
+			for (FileItem item : items) {
 				if (item.isFormField()) {
 					parameters.put(item.getFieldName(), item.getString());
 				}
 			}
-			for (DiskFileItem item : items) {
+			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					try {
-						File file = item.getStoreLocation();
-						listener.processFile(file,fileService.getMimeType(file),fileService.cleanFileName(item.getName()), parameters, request);
+						item.getInputStream();
+						if (item instanceof DiskFileItem) {
+							File file = ((DiskFileItem)item).getStoreLocation();
+							listener.processFile(file,fileService.getMimeType(file),fileService.cleanFileName(item.getName()), parameters, request);
+						}
 					} catch (Exception e) {
 						process.setError(true);
 						throw new EndUserException(e);
