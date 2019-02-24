@@ -303,7 +303,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	private List<Pair<ModelEventType, Object>> getEffectiveEvents(Operation operation) {
 		List<Pair<ModelEventType, Object>> copy = new ArrayList<>();
-		for (Pair<ModelEventType, Object> pair : copy) {
+		for (Pair<ModelEventType, Object> pair : operation.getEvents()) {
 			copy.removeIf(x -> x.equals(pair.getValue()));
 			copy.add(pair);
 		}
