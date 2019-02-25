@@ -39,7 +39,6 @@ public class DataImporter {
 		this.fileService = fileService;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void importMultipart(ApplicationController controller,Request request) throws IOException, EndUserException {
 		if (listener==null) {
 			throw new StupidProgrammerException("No one ever listens!");
