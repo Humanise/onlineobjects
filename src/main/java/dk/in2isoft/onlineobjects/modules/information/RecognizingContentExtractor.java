@@ -5,9 +5,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import dk.in2isoft.commons.xml.DocumentCleaner;
@@ -26,7 +31,7 @@ import nu.xom.Element;
 
 public class RecognizingContentExtractor implements ContentExtractor {
 
-	//private static final Logger log = LogManager.getLogger(RecognizingContentExtractor.class);
+	private static final Logger log = LogManager.getLogger(RecognizingContentExtractor.class);
 
 	private List<Recognizer> recognizers;
 	private boolean debug = false;
@@ -50,9 +55,18 @@ public class RecognizingContentExtractor implements ContentExtractor {
 	}
 
 	public Document extract(Document document) {
+
+		StopWatch watch = new StopWatch();
+		watch.start();
 		document = (Document) document.copy();
+		watch.split();
+		log.trace("Copy: {}", watch.getSplitTime());
+		watch.unsplit();
 		simplify(document);
-		recognize(document);
+		watch.split();
+		log.trace("Simplify: {}", watch.getSplitTime());
+		watch.unsplit();
+		recognize(document, watch);
 		if (!debug) {
 			clean(document);
 		}
@@ -91,18 +105,32 @@ public class RecognizingContentExtractor implements ContentExtractor {
 		DOM.removeDeep(toRemove);
 	}
 
-	private void recognize(Document document) {
+	private void recognize(Document document, StopWatch watch) {
+		Counter<Recognizer> counter = new Counter<>();
 		DOM.travel(document.getRootElement(), node -> {
 			if (node instanceof Element) {
 				Element p = (Element) node;
 				for (Recognizer recognizer : recognizers) {
+					long start = System.currentTimeMillis();
 					double value = recognizer.recognize(p);
 					if (value != 0) {
 						p.addAttribute(new Attribute("data-" + recognizer.getName(), String.valueOf(value)));
 					}
+					long dur = System.currentTimeMillis() - start;
+					if (log.isDebugEnabled()) {
+						counter.add(recognizer, (int) dur);
+					}
 				}
 			}
 		});
+		if (log.isDebugEnabled()) {
+			counter.getMap().entrySet().forEach(entry -> {
+				log.trace("Timings: {} = {}", entry.getKey().getName(), entry.getValue());
+			});
+		}
+		watch.split();
+		log.trace("Recognized by node: {}", watch.getSplitTime());
+		watch.unsplit();
 		for (Recognizer recognizer : recognizers) {
 			Map<Element, Double> map = recognizer.recognize(document);
 			if (map!=null) {

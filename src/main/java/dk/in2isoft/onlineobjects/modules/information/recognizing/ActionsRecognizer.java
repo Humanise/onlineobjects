@@ -37,7 +37,7 @@ public class ActionsRecognizer implements Recognizer {
 	@Override
 	public double recognize(Element element) {
 		if (element.getChildElements().size() > 0) {
-			String text = DOM.getText(element).toLowerCase().trim();
+			String text = DOM.getTextStart(element, 20).toLowerCase().trim();
 			if (text.equals("[edit]")) {
 				return -1;
 			}

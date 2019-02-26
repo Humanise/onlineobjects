@@ -9,6 +9,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.xml.DOM;
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
@@ -16,6 +20,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 
 public class TitleRecognizer implements Recognizer {
+	
+	private static final Logger log = LogManager.getLogger(TitleRecognizer.class);
 
 	@Override
 	public String getName() {
@@ -29,11 +35,24 @@ public class TitleRecognizer implements Recognizer {
 
 	@Override
 	public Map<Element,Double> recognize(Document document) {
+		StopWatch watch = new StopWatch();
+		watch.start();
 		Set<String> titles = findTitles(document);
+		watch.stop();
+		log.trace("findTitle: " + watch.getTime());
+		watch.reset();
+		watch.start();
 		
 		List<Element> candidates = findCandidates(document);
+		log.trace("candidate count: {}", candidates.size());
+		watch.stop();
+		log.trace("findCandidates: " + watch.getTime());
+		watch.reset();
+		watch.start();
 
-		Element main = findMain(candidates, titles);
+		Element main = findMain(candidates, titles, watch);
+		watch.stop();
+		log.trace("findMain: " + watch.getTime());
 
 		Map<Element,Double> nodes = new HashMap<>();
 		if (main!=null) {
@@ -50,7 +69,7 @@ public class TitleRecognizer implements Recognizer {
 
 	private List<Element> findCandidates(Document document) {
 		return DOM.findElements(document, element -> {
-			if (DOM.isAny(element, "title","body","head","html")) {
+			if (DOM.isAny(element, "title","body","head","html","meta","img","hr","br","table","link","code","dt","dd","dfn","pre","td","tr","th","tbody","cite","var","blockquote")) {
 				return false;
 			}
 			if (DOM.isAny(element, "h1")) {
@@ -58,8 +77,8 @@ public class TitleRecognizer implements Recognizer {
 			}
 			if (element.getChildElements().size() == 0) {
 				// TODO: Just check for first non-blank chars
-				String text = DOM.getText(element);
-				if (Strings.isNotBlank(text)) {
+				String text = DOM.getText(element).trim();
+				if (Strings.isNotBlank(text) && text.length() > 3 && text.length() < 500) {
 					// TODO: Try to limit possible candidates
 					// Maybe exclude items with only block children
 					return true;
@@ -96,7 +115,7 @@ public class TitleRecognizer implements Recognizer {
 		return str.toLowerCase().replaceAll("\\W", "");
 	}
 	
-	private Element findMain(List<Element> elements, Set<String> titles) {
+	private Element findMain(List<Element> elements, Set<String> titles, StopWatch watch) {
 		if (elements.isEmpty()) return null;
 		
 		if (!titles.isEmpty()) {
@@ -107,9 +126,38 @@ public class TitleRecognizer implements Recognizer {
 				return found.get();
 			}
 		}
-		
+		watch.stop();
+		log.trace("Check all: {}", watch.getTime());
+		watch.reset(); watch.start();
+
 		List<Candidate> candidates = make(elements);
+		watch.stop();
+		log.trace("Build candidates: {}", watch.getTime());
+		watch.reset(); watch.start();
+
+		int titleLength = 50;
+		if (!titles.isEmpty()) {
+			titleLength = 0;
+			titleLength = (int) titles.stream().mapToInt(s -> s.length()).average().getAsDouble();
+		}
+		int x = titleLength;
+		
+		if (candidates.size() > 1000) {
+			candidates.sort((a,b) -> {
+				if (!a.rank.equals(b.rank)) {
+					return b.rank.compareTo(a.rank);
+				}
+				int al = Math.abs(x - a.text.length());
+				int bl = Math.abs(x - b.text.length());
+				if (al == bl) return 0;
+				return al < bl ? -1 : 1;
+			});
+			candidates = candidates.subList(0, 1000);
+		}
+		
 		compare(candidates, titles);
+		
+		candidates.stream().map(c -> c.element.getLocalName()).distinct().forEach(str -> log.trace(str));
 		
 		candidates.sort((a,b) -> {
 			int textComparison = b.comparison.compareTo(a.comparison);
@@ -152,13 +200,14 @@ public class TitleRecognizer implements Recognizer {
 	}
 
 	private List<Candidate> make(List<Element> candidates) {
+		List<Element> all = DOM.findElements(candidates.get(0).getDocument(), node -> true);
 		List<Candidate> out = new ArrayList<>();
 		for (Element element : candidates) {
 			Candidate candidate = new Candidate();
 			candidate.element = element;
 			candidate.text = normalize(DOM.getText(element));
 			candidate.rank = rank(element);
-			candidate.position = DOM.getPosition(element);
+			candidate.position = all.indexOf(element);
 			out.add(candidate);
 		}
 		return out;

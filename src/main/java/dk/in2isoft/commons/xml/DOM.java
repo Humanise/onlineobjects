@@ -63,6 +63,29 @@ public class DOM {
 		}
 	}
 	
+	public static void getTextStart(Node node, StringBuilder sb, int length) {
+		if (node != null) {
+			if (node instanceof Text) {
+				String value = node.getValue();
+				if (value != null) {
+					sb.append(value);
+				}
+			} else {
+				int count = node.getChildCount();
+				for (int i = 0; i < count; i++) {
+					if (Strings.countVisible(sb.toString()) < length) {
+						getTextStart(node.getChild(i), sb, length);
+					}
+				}
+			}
+		}
+	}
+	public static String getTextStart(Node node, int length) {
+		StringBuilder sb = new StringBuilder();
+		getTextStart(node, sb, length);
+		return sb.toString();
+	}
+	
 	public static String getText(Node node) {
 		String text = "";
 		if (node != null) {
@@ -119,6 +142,19 @@ public class DOM {
 		}
 	}
 
+	public static int countElements(Node node) {
+		int count = 0;
+		int cc = node.getChildCount();
+		for (int i = 0; i < cc; i++) {
+			Node child = node.getChild(i);
+			if (child instanceof Element) {
+				count++;
+			}
+			count += countElements(child);
+		}
+		return count;
+	}
+
 	public static List<Element> findElements(Node node, Predicate<Element> predicate) {
 		List<Element> found = new ArrayList<>();
 		int count = node.getChildCount();
@@ -131,6 +167,28 @@ public class DOM {
 			}
 			found.addAll(findElements(child, predicate));
 		}
+		return found;
+	}
+
+	public static void findMaxElements(Node node, int max, List<Element> found, Predicate<Element> predicate) {
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			if (found.size() >= max) {
+				return;
+			}
+			Node child = node.getChild(i);
+			if (child instanceof Element) {
+				if (predicate.test((Element) child)) {
+					found.add((Element) child);
+				}
+			}
+			findMaxElements(child, max - found.size(), found, predicate);
+		}
+	}
+
+	public static List<Element> findMaxElements(Node node, int max, Predicate<Element> predicate) {
+		List<Element> found = new ArrayList<>();
+		findMaxElements(node, max, found, predicate);
 		return found;
 	}
 

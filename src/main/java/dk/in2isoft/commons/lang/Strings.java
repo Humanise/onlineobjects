@@ -183,6 +183,17 @@ public class Strings {
         return true;
     }
 
+    public static int countVisible(String str) {
+        int strLen = str.length();
+        int count = 0;
+        for (int i = 0; i < strLen; i++) {
+            if (Character.isWhitespace(str.charAt(i)) == false) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 	public static String fallback(String str, String defaultValue) {
 		if (Strings.isBlank(str)) {
 			return defaultValue;
