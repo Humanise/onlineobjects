@@ -1,7 +1,7 @@
 .container {
   position: absolute;
   top: 50%;
-  margin-top: -300px;
+  margin-top: -340px;
   left: 0;
   right: 0;
   text-align: center; }
@@ -27,7 +27,7 @@
   width: 100%;
   text-align: center;
   line-height: 1;
-  margin: -10px 0;
+  margin: 0 0 -10px 0;
   cursor: default;
   font-family: 'Work Sans'; }
 
@@ -92,9 +92,9 @@ li {
   .footer .oo_footer_logo {
     display: none; }
 
-@media screen and (max-height: 600px) {
+@media screen and (max-height: 700px) {
   .container {
-    margin-top: -250px; }
+    margin-top: -260px; }
   .logo {
     width: 260px;
     height: 260px; }
@@ -106,9 +106,9 @@ li {
   .title {
     font-size: 80px; } }
 
-@media screen and (max-height: 500px) {
+@media screen and (max-height: 550px) {
   .container {
-    margin-top: -200px; }
+    margin-top: -240px; }
   .logo {
     width: 200px;
     height: 200px; }
@@ -147,8 +147,6 @@ li {
     font-size: 58px; } }
 
 @media screen and (max-width: 400px) {
-  .container {
-    margin-top: -220px; }
   .logo {
     width: 200px;
     height: 200px; }
