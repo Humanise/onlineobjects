@@ -24,6 +24,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.index.IndexDocumentBuilder;
+import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.PileService;
 import dk.in2isoft.onlineobjects.services.StorageService;
 
@@ -32,15 +33,16 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 	private StorageService storageService;
 	private ModelService modelService;
 	private PileService pileService;
+	private InternetAddressService internetAddressService;
 	
 	public Document build(InternetAddress address, Operator operator) throws EndUserException {
 		
 		Document doc = new Document();
 		doc.add(new TextField("title", Strings.asNonBlank(address.getName(),"blank"), Field.Store.YES));
-		HTMLDocument html = getHTMLDocument(address);
 		StringBuilder text = new StringBuilder();
-		if (html!=null) {
-			text.append(html.getExtractedText());
+		String body = internetAddressService.getText(address, operator);
+		if (body != null) {
+			text.append(body);
 		}
 		
 		List<Word> words = modelService.getChildren(address, Word.class, operator);
@@ -112,5 +114,9 @@ public class KnowledgeIndexDocumentBuilder implements IndexDocumentBuilder<Inter
 
 	public void setPileService(PileService pilService) {
 		this.pileService = pilService;
+	}
+	
+	public void setInternetAddressService(InternetAddressService internetAddressService) {
+		this.internetAddressService = internetAddressService;
 	}
 }

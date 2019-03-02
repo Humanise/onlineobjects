@@ -1,6 +1,8 @@
 package dk.in2isoft.commons.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -155,6 +157,20 @@ public class DOM {
 		return count;
 	}
 
+	public static List<Text> findAllText(Node node) {
+		List<Text> found = new ArrayList<>();
+		int count = node.getChildCount();
+		for (int i = 0; i < count; i++) {
+			Node child = node.getChild(i);
+			if (child instanceof Text) {
+				found.add((Text) child);
+			} else {
+				found.addAll(findAllText(child));
+			}
+		}
+		return found;
+	}
+
 	public static List<Element> findElements(Node node, Predicate<Element> predicate) {
 		List<Element> found = new ArrayList<>();
 		int count = node.getChildCount();
@@ -221,6 +237,20 @@ public class DOM {
         return jdomBuilder.build(domDocument);
 	}
 
+	public static nu.xom.Document parseXOM(File string) {
+		try (FileReader reader = new FileReader(string)) {
+			Builder bob = new Builder();
+			return bob.build(reader);
+		} catch (ValidityException e) {
+			log.warn("Unable to parse", e);
+		} catch (ParsingException e) {
+			log.warn("Unable to parse", e);
+		} catch (IOException e) {
+			log.warn("Unable to parse", e);
+		}
+		return null;
+	}
+
 	public static nu.xom.Document parseXOM(String string) {
 		if (Strings.isNotBlank(string)) {
 			try (StringReader reader = new StringReader(string)) {
@@ -243,6 +273,16 @@ public class DOM {
 		return new dk.in2isoft.commons.xml.JsoupUtils().toXOM(document);
 	}
 	
+	public static nu.xom.Document parseWildHhtml(File wild) {
+		try {
+			org.jsoup.nodes.Document document = Jsoup.parse(wild, Strings.UTF8);
+			return new dk.in2isoft.commons.xml.JsoupUtils().toXOM(document);
+		} catch (IOException e) {
+			log.error("Problem parsing wilf html", e);
+		}
+		return null;
+	}
+
 	public static nu.xom.Document parseAnyXOM(String wild) {
 		try (StringReader reader = new StringReader(wild)){
 			Parser tagsoup = new Parser();

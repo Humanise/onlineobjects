@@ -18,5 +18,13 @@ var controller = {
         formula.focus();
       }
     })
+  },
+  $click$flushCache : function() {
+    hui.ui.request({
+      url : 'flushCache',
+      $success : function() {
+        hui.ui.msg.success({text:'Flushed'})
+      }
+    })
   }
 }

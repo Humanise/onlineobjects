@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
 import dk.in2isoft.onlineobjects.modules.localization.LocalizationService;
 import dk.in2isoft.onlineobjects.modules.onlinepublisher.OnlinePublisherService;
@@ -24,6 +25,7 @@ public abstract class SetupControllerBase extends ApplicationController {
 	protected MemberService memberService;
 	protected IndexService indexService;
 	protected PasswordRecoveryService passwordRecoveryService;
+	protected CacheService cacheService;
 
 	public SetupControllerBase() {
 		super("setup");
@@ -73,5 +75,9 @@ public abstract class SetupControllerBase extends ApplicationController {
 	
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
+	}
+	
+	public void setCacheService(CacheService cacheService) {
+		this.cacheService = cacheService;
 	}
 }

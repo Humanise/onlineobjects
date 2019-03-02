@@ -70,6 +70,8 @@ public class RecognizingContentExtractor implements ContentExtractor {
 		if (!debug) {
 			clean(document);
 		}
+		watch.stop();
+		log.trace("Complete: {}", watch.getTime());
 		return document;
 	}
 

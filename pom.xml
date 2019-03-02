@@ -615,10 +615,15 @@
     </dependency>
     <!-- Caching -->
     <dependency>
-        <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache</artifactId>
-        <version>2.10.0</version>
-      </dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>2.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-jcs-core</artifactId>
+      <version>2.2.1</version>
+    </dependency>
     <!-- Velocity -->
     <dependency>
       <groupId>org.apache.velocity</groupId>

@@ -58,9 +58,7 @@ import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Nodes;
 import nu.xom.ParentNode;
-import nu.xom.XPathContext;
 import opennlp.tools.util.Span;
 
 public class InternetAddressViewPerspectiveBuilder {
@@ -84,7 +82,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 		trace("Load", watch);
 
-		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyze(address, operator);
+		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyzeSimple(address, operator);
 		trace("Get analytics", watch);
 		Document xom = DOM.parseXOM(analytics.getXml());
 		trace("Parse dom", watch);
@@ -346,12 +344,10 @@ public class InternetAddressViewPerspectiveBuilder {
 	}
 
 	private void annotateLinks(Document document, Settings settings) {
-		XPathContext context = new XPathContext();
 		String namespaceURI = document.getRootElement().getNamespaceURI();
-		context.addNamespace("html", namespaceURI);
-		Nodes links = document.query("//html:a", context);
+		List<Element> links = DOM.findElements(document, (node) -> DOM.isAny(node, "a"));
 		for (int i = 0; i < links.size(); i++) {
-			Element node = (Element) links.get(i);
+			Element node = links.get(i);
 			String href = node.getAttributeValue("href");
 			if (href!=null && href.startsWith("http")) {
 				Map<String, Object> info = new HashMap<>();
@@ -362,13 +358,8 @@ public class InternetAddressViewPerspectiveBuilder {
 				node.addAttribute(new Attribute("data-info", Strings.toJSON(info)));
 			}
 		}
-		Nodes images = document.query("//html:img", context);
-		List<Element> imgs = Lists.newArrayList();
-		for (int i = 0; i < images.size(); i++) {
-			Element node = (Element) images.get(i);
-			imgs.add(node);
-		}
-		for (Element node : imgs) {
+		List<Element> images = DOM.findElements(document, (node) -> DOM.isAny(node, "img"));
+		for (Element node : images) {
 			String width = node.getAttributeValue("width");
 			String height = node.getAttributeValue("height");
 			if (Strings.isInteger(width) && Strings.isInteger(height)) {

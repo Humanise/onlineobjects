@@ -18,16 +18,26 @@ public class StorageService implements InitializingBean,ApplicationListener<Cont
 	private ConfigurationService configurationService;
 	private File storage;
 	private File items;
+	private File cache;
 
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		storage = new File(configurationService.getStoragePath());
 		items = new File(storage,"items");
+		cache = new File(storage,"cache");
 		if (!items.exists()) {
 			log.warn("Items directory does not exist: "+items);
 			if (!items.mkdirs()) {
 				log.error("Could not create items directory: "+items);
 			} else {
 				log.info("Items directory created: "+items);
+			}
+		}
+		if (!cache.exists()) {
+			log.warn("Cache directory does not exist: "+cache);
+			if (!cache.mkdirs()) {
+				log.error("Could not create cache directory: "+cache);
+			} else {
+				log.info("Cache directory created: "+cache);
 			}
 		}
 	}

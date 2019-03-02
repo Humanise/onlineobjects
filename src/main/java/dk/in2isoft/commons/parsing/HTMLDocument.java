@@ -31,6 +31,11 @@ public class HTMLDocument extends XMLDocument {
 		super(raw);
 	}
 	
+    public HTMLDocument(nu.xom.Document doc) {
+    	super(doc);
+    }
+
+	
 	public String getTitle() {
 		if (this.title==null) {
 			nu.xom.Document doc = getXOMDocument();

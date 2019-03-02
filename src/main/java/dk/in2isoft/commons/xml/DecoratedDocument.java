@@ -48,9 +48,9 @@ public class DecoratedDocument {
 		
 		StringBuilder allText = new StringBuilder();
 		int pos = 0;
-		Nodes nodes = document.getRootElement().query("//text()");
+		List<Text> nodes = DOM.findAllText(document);
 		for (int i = 0; i < nodes.size(); i++) {
-			Text node = (Text) nodes.get(i);
+			Text node = nodes.get(i);
 			if (i>0) {
 				boolean newLine = isNewline(node);
 				
@@ -71,7 +71,6 @@ public class DecoratedDocument {
 			allText.append(str);
 		}
 		this.text = allText.toString();
-		//log.info("Fragments: "+fragments);
 	}
 
 	private boolean isNewline(Node node) {

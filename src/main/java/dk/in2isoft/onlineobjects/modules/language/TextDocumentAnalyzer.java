@@ -17,7 +17,6 @@ import com.google.common.collect.Sets;
 import dk.in2isoft.commons.lang.Counter;
 import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.commons.xml.DOM;
-import dk.in2isoft.commons.xml.DocumentCleaner;
 import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
@@ -25,12 +24,9 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
-import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
-import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
-import nu.xom.DocType;
 import nu.xom.Document;
 
 public class TextDocumentAnalyzer {
@@ -41,18 +37,23 @@ public class TextDocumentAnalyzer {
 	private CacheService cacheService;
 	private static final Logger log = LogManager.getLogger(TextDocumentAnalyzer.class);
 
-	private Document extract(HTMLDocument htmlDocument) {
-		Document xom = htmlDocument.getXOMDocument();
-		ContentExtractor extractor = new RecognizingContentExtractor();
-		if (xom == null) {
-			return null;
+
+	public TextDocumentAnalytics analyzeSimple(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
+		TextDocumentAnalytics analytics = new TextDocumentAnalytics();
+		Document extracted = internetAddressService.getExtracted(address, privileged);
+		
+		String text;
+		if (extracted!=null) {
+			analytics.setDocumentTitle(new HTMLDocument(extracted).getTitle());
+			analytics.setXml(extracted.toXML());
+			DocumentToText doc2txt = new DocumentToText();
+			text = doc2txt.getText(extracted);
+			analytics.setText(text);
+			analytics.setHtml(DOM.getBodyXML(extracted));
+		} else {
+			log.warn("Nothing extracted from " + address);
 		}
-		Document extracted = extractor.extract(xom);
-		extracted.setDocType(new DocType("html"));
-		DocumentCleaner cleaner = new DocumentCleaner();
-		cleaner.setUrl(htmlDocument.getOriginalUrl());
-		cleaner.clean(extracted);
-		return extracted;
+		return analytics;
 	}
 
 	public TextDocumentAnalytics analyze(InternetAddress address, Operator privileged) {
@@ -61,14 +62,12 @@ public class TextDocumentAnalyzer {
 	
 	private TextDocumentAnalytics buildAnalytics(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		
-		HTMLDocument htmlDocument = internetAddressService.getHTMLDocument(address, privileged);
-
 		TextDocumentAnalytics analytics = new TextDocumentAnalytics();
-		analytics.setDocumentTitle(htmlDocument.getTitle());
-		Document extracted = extract(htmlDocument);
+		Document extracted = internetAddressService.getExtracted(address, privileged);
 		
 		String text;
 		if (extracted!=null) {
+			analytics.setDocumentTitle(new HTMLDocument(extracted).getTitle());
 			analytics.setXml(extracted.toXML());
 			DocumentToText doc2txt = new DocumentToText();
 			text = doc2txt.getText(extracted);

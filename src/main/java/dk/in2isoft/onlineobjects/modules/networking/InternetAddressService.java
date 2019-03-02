@@ -5,9 +5,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.parsing.HTMLDocument;
+import dk.in2isoft.commons.xml.DOM;
+import dk.in2isoft.commons.xml.DocumentCleaner;
+import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -18,8 +24,13 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
+import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
+import dk.in2isoft.onlineobjects.modules.information.RecognizingContentExtractor;
 import dk.in2isoft.onlineobjects.services.StorageService;
+import nu.xom.DocType;
+import nu.xom.Document;
 
 public class InternetAddressService {
 	
@@ -27,6 +38,9 @@ public class InternetAddressService {
 	private NetworkService networkService;
 	private ModelService modelService;
 	private InboxService inboxService;
+	private CacheService cacheService;
+	
+	private static final Logger log = LogManager.getLogger(InternetAddressService.class);
 
 	public HTMLDocument getHTMLDocument(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		File original = getContent(address, privileged);
@@ -41,6 +55,61 @@ public class InternetAddressService {
 		htmlDocument.setOriginalUrl(address.getAddress());
 		return htmlDocument;
 	}
+	
+	public Document getXHTML(InternetAddress address, Operator operator) throws SecurityException, ModelException {
+		String key = InternetAddress.class.getSimpleName()+"_xhtml_"+address.getId();
+		String xhtml = cacheService.getCachedDocument(key, () -> {
+			File content = getContent(address, operator);
+			if (!content.exists()) {
+				log.warn("Content file for address: {} not available", address);
+				return null;
+			}
+			Document document = dk.in2isoft.commons.xml.DOM.parseWildHhtml(content);
+			if (document == null) {
+				log.warn("Empty doc after parsing content of: {}", address);
+				return null;
+			}
+			return document.toXML();
+		});
+		if (xhtml!=null) {
+			return DOM.parseXOM(xhtml);
+		} else {
+			log.warn("Empty XHTML for: {}", address);
+		}
+		return null;
+	}
+
+	public Document getExtracted(InternetAddress address, Operator operator) throws SecurityException, ModelException {
+		String key = InternetAddress.class.getSimpleName()+"_extracted_"+address.getId();
+		String xhtml = cacheService.getCachedDocument(key, () -> {
+			Document xhtml1 = getXHTML(address, operator);
+			ContentExtractor extractor = new RecognizingContentExtractor();
+			if (xhtml1 == null) {
+				return null;
+			}
+			Document extracted = extractor.extract(xhtml1);
+			extracted.setDocType(new DocType("html"));
+			DocumentCleaner cleaner = new DocumentCleaner();
+			cleaner.setUrl(address.getAddress());
+			cleaner.clean(extracted);
+			return extracted.toXML();
+		});
+		if (xhtml!=null) {
+			return DOM.parseXOM(xhtml);
+		}
+		return null;
+	}
+
+	public String getText(InternetAddress address, Operator operator) {
+		String key = InternetAddress.class.getSimpleName()+"_text_"+address.getId();
+		String text = cacheService.getCachedDocument(key, () -> {
+			Document document = getExtracted(address, operator);
+			DocumentToText doc2text = new DocumentToText();
+			return doc2text.getText(document);
+		});
+		return text;
+	}
+
 	
 	public File getContent(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		File folder = storageService.getItemFolder(address);
@@ -180,5 +249,9 @@ public class InternetAddressService {
 	public void setInboxService(InboxService inboxService) {
 		this.inboxService = inboxService;
 	}
-	
+
+	public void setCacheService(CacheService cacheService) {
+		this.cacheService = cacheService;
+	}
+
 }

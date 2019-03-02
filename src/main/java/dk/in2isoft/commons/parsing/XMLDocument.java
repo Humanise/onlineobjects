@@ -19,6 +19,11 @@ public class XMLDocument extends TextDocument {
     	super(raw);
     }
 
+    public XMLDocument(nu.xom.Document doc) {
+    	super(null);
+    	XOMDocument = doc;
+    }
+
     public Document getDOMDocument() {
 		if (DOMDocument==null) {
             nu.xom.Document xom = getXOMDocument();

@@ -81,7 +81,12 @@ public class SetupController extends SetupControllerBase {
 			}
 		}
 	}
-	
+
+	@Path
+	public void flushCache(Request request) throws IOException,EndUserException {
+		cacheService.flushToDisk();
+	}
+
 	@Path
 	public void listUsers(Request request) throws IOException,EndUserException {
 		User publicUser = securityService.getPublicUser();

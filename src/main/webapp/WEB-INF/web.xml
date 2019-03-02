@@ -29,6 +29,9 @@
     <listener-class>dk.in2isoft.onlineobjects.core.SessionListener</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
+  </listener> 
 
 
   <!-- Filters -->

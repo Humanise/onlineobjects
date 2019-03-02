@@ -17,6 +17,7 @@
         </field>
       </fields>
       <buttons>
+        <button text="Flush cache" name="flushCache"/>
         <button text="Change" name="changePassword" submit="true"/>
       </buttons>
     </formula>
