@@ -25,7 +25,6 @@ public class VCardParser {
 		super();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<VCard> parse(File file) throws FileNotFoundException,IOException {
 		List<String> lines = FileUtils.readLines(file, "UTF-16");
 		StringBuilder fullLine = new StringBuilder();
