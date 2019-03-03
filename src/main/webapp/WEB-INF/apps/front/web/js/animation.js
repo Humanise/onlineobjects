@@ -1,7 +1,7 @@
 hui.on(function() {
   //return;
   var logo = hui.get('logo');
-  var size = logo.clientWidth;
+  var size = Math.min(logo.clientWidth, logo.clientHeight);
   var done = false;
 
   if (hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
@@ -29,7 +29,7 @@ hui.on(function() {
 
   hui.on(window,'resize',function() {
     hui.onDraw(function() {
-      var newSize = logo.clientWidth;
+      var newSize = Math.min(logo.clientWidth, logo.clientHeight);
       if (newSize !== size) {
         size = newSize;
         d.setSize(size,size);

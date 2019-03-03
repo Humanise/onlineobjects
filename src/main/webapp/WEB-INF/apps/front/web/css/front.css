@@ -1,27 +1,36 @@
+.root {
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-evenly; }
+
 .container {
-  position: absolute;
-  top: 50%;
-  margin-top: -340px;
-  left: 0;
-  right: 0;
-  text-align: center; }
+  text-align: center;
+  position: relative;
+  padding-bottom: 40px; }
 
 .logo {
-  width: 340px;
-  height: 340px;
-  display: inline-block;
-  position: relative; }
+  width: 70vw;
+  height: 45vh;
+  max-height: 400px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; }
+  .logo .hui_drawing {
+    margin: 0 auto; }
   .logo .oo_icon {
     display: inline-block;
-    width: 340px;
-    height: 340px;
-    font-size: 300px;
-    line-height: 340px;
+    width: 1em;
+    height: 1em;
+    font-size: 40vh;
+    line-height: 1em;
     color: #ddd; }
 
 .title {
-  font-size: 90px;
-  font-weight: 100;
+  font-size: 14vw;
+  font-weight: 200;
   color: #777;
   top: 30%;
   width: 100%;
@@ -32,7 +41,6 @@
   font-family: 'Work Sans'; }
 
 .slogan {
-  font-size: 24px;
   line-height: 24px;
   font-weight: 300;
   color: #777;
@@ -40,8 +48,9 @@
   text-align: center;
   letter-spacing: 1px;
   cursor: default;
-  font-size: 18px;
-  top: 30%;
+  font-size: 4vw;
+  bottom: 0;
+  position: absolute;
   margin-top: 20px;
   background: #fff; }
 
@@ -49,9 +58,8 @@
   -webkit-user-select: none;
   display: block;
   list-style: none;
-  margin: 0;
+  margin: 15px 0;
   text-align: center;
-  position: fixed;
   bottom: 60px;
   width: 100%;
   padding: 0;
@@ -60,8 +68,7 @@
 li {
   display: inline-block;
   text-align: center;
-  width: 100px;
-  padding: 20px 0; }
+  width: 90px; }
 
 .icon {
   outline: none;
@@ -83,85 +90,22 @@ li {
     -webkit-font-smoothing: antialiased; }
 
 .footer {
-  position: fixed;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  margin: 0;
   opacity: .5; }
+  .footer .oo_footer {
+    padding-top: 0; }
   .footer .oo_footer_logo {
     display: none; }
 
-@media screen and (max-height: 700px) {
-  .container {
-    margin-top: -260px; }
-  .logo {
-    width: 260px;
-    height: 260px; }
-    .logo .oo_icon {
-      width: 260px;
-      height: 260px;
-      font-size: 220px;
-      line-height: 260px; }
-  .title {
-    font-size: 80px; } }
-
-@media screen and (max-height: 550px) {
-  .container {
-    margin-top: -240px; }
-  .logo {
-    width: 200px;
-    height: 200px; }
-    .logo .oo_icon {
-      width: 200px;
-      height: 200px;
-      font-size: 180px;
-      line-height: 200px; }
-  .title {
-    font-size: 70px; } }
-
-@media screen and (max-height: 400px) {
-  .container {
-    margin-top: -180px; }
-  .logo {
-    width: 160px;
-    height: 160px; }
-    .logo .oo_icon {
-      width: 160px;
-      height: 160px;
-      font-size: 140px;
-      line-height: 160px; }
-  .title {
-    font-size: 60px; } }
-
-@media screen and (max-width: 600px) {
-  .title {
-    font-size: 70px; }
-  .icons {
-    bottom: 70px; }
-  .footer {
-    bottom: 10px; } }
-
-@media screen and (max-width: 500px) {
-  .title {
-    font-size: 58px; } }
-
-@media screen and (max-width: 400px) {
-  .logo {
-    width: 200px;
-    height: 200px; }
-    .logo .hui_drawing {
-      margin: 0;
-      top: 0;
-      left: 0; }
-    .logo .oo_icon {
-      width: 200px;
-      height: 200px;
-      font-size: 180px;
-      line-height: 200px; }
-  .icons {
-    bottom: 100px; }
-  .title {
-    font-size: 42px; }
+@media (min-width: 450px) {
+  .slogan {
+    font-size: 18px; }
   li {
-    width: 90px; } }
+    width: 100px; } }
+
+@media (min-width: 500px) {
+  .title {
+    font-weight: 100; } }
+
+@media (min-width: 600px) {
+  .title {
+    font-size: 84px; } }

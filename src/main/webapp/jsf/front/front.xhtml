@@ -16,38 +16,40 @@
   <o:head>
     <o:metatags/>
     <title>OnlineObjects</title>
-    <o:fonts additional="Work+Sans:100"/>
+    <o:fonts additional="Work+Sans:100,200"/>
   </o:head>
   <o:body light="true">
-    <div class="container">
-      <div id="logo" class="logo">
-        <span class="oo_icon">&#xa4;</span>
+    <div class="root">
+      <div class="container">
+        <div id="logo" class="logo">
+          <span class="oo_icon">&#xa4;</span>
+        </div>
+        <h1 id="title" class="title">OnlineObjects</h1>
+        <p id="slogan" class="slogan">#{msg.subtitle}</p>
       </div>
-      <h1 id="title" class="title">OnlineObjects</h1>
-      <p id="slogan" class="slogan">#{msg.subtitle}</p>
-    </div>
-    <ul class="icons">
-      <li>
-        <o:link plain="true" app="knowledge" href="/" styleClass="icon">
-          <o:icon size="48" icon="app_knowledge"/>
-          <strong>#{msg.knowledge}</strong>
-        </o:link>
-      </li>
-      <li>
-        <o:link plain="true" app="words" href="/" styleClass="icon">
-          <o:icon size="48" icon="app_words"/>
-          <strong>#{msg.words}</strong>
-        </o:link>
-      </li>
-      <li>
-        <o:link plain="true" app="photos" href="/" styleClass="icon">
-          <o:icon size="48" icon="app_photos"/>
-          <strong>#{msg.photos}</strong>
-        </o:link>
-      </li>
-    </ul>
-    <div class="footer">
-      <o:footer/>
+      <ul class="icons">
+        <li>
+          <o:link plain="true" app="knowledge" href="/" styleClass="icon">
+            <o:icon size="48" icon="app_knowledge"/>
+            <strong>#{msg.knowledge}</strong>
+          </o:link>
+        </li>
+        <li>
+          <o:link plain="true" app="words" href="/" styleClass="icon">
+            <o:icon size="48" icon="app_words"/>
+            <strong>#{msg.words}</strong>
+          </o:link>
+        </li>
+        <li>
+          <o:link plain="true" app="photos" href="/" styleClass="icon">
+            <o:icon size="48" icon="app_photos"/>
+            <strong>#{msg.photos}</strong>
+          </o:link>
+        </li>
+      </ul>
+      <div class="footer">
+        <o:footer/>
+      </div>
     </div>
     <o:analytics/>
 
