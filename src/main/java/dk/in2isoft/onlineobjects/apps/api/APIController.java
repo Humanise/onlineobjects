@@ -558,8 +558,7 @@ public class APIController extends APIControllerBase {
 	public InternetAddressApiPerspective viewAddress(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		Long id = request.getId();
-		User user = modelService.getUser(request);
-		return knowledgeService.getAddressPerspective(id, user, request);
+		return knowledgeService.getAddressPerspective(id, request);
 	}	
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "add" })
@@ -576,7 +575,7 @@ public class APIController extends APIControllerBase {
 		addressRequest.setQuote(request.getString("quote"));
 		
 		InternetAddress internetAddress = knowledgeService.createInternetAddress(addressRequest, request);
-		return knowledgeService.getAddressPerspective(internetAddress, user, request);
+		return knowledgeService.getAddressPerspective(internetAddress.getId(), request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "delete" })

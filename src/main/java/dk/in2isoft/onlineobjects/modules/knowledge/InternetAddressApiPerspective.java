@@ -1,9 +1,16 @@
 package dk.in2isoft.onlineobjects.modules.knowledge;
 
+import java.io.Serializable;
+
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
 
-public class InternetAddressApiPerspective implements CategorizableViewPerspective {
+public class InternetAddressApiPerspective implements CategorizableViewPerspective, Serializable {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 329095987621099333L;
 	private long id;
 	private String title;
 	private String url;
@@ -67,4 +74,5 @@ public class InternetAddressApiPerspective implements CategorizableViewPerspecti
 	public void setFavorite(boolean favorite) {
 		this.favorite = favorite;
 	}
+
 }

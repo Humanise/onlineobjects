@@ -24,6 +24,7 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -39,6 +40,8 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.modules.caching.CacheEntry;
+import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.PileService;
@@ -50,6 +53,7 @@ public class KnowledgeService {
 	private PileService pileService; 
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
+	private CacheService cacheService;
 
 	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
 		if (Strings.isBlank(text)) {
@@ -322,25 +326,24 @@ public class KnowledgeService {
 		modelService.update(hypothesis, operator);		
 	}
 
-	public InternetAddressApiPerspective getAddressPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
-		InternetAddress address = modelService.getRequired(InternetAddress.class, id, operator);
-		return getAddressPerspective(address, user, operator);
-	}
-
-	public InternetAddressApiPerspective getAddressPerspective(InternetAddress address, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException, ExplodingClusterFuckException {
-		InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
-		addressPerspective.setId(address.getId());
-		addressPerspective.setTitle(address.getName());
-		addressPerspective.setUrl(address.getAddress());
-		
-		Settings settings = new Settings();
-		
-		InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user, operator);
-		
-		addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
-		addressPerspective.setText(internetAddressViewPerspective.getText());
-		categorize(address, addressPerspective, user, operator);
-		return addressPerspective;
+	public InternetAddressApiPerspective getAddressPerspective(Long id, Operator operator) throws EndUserException {
+		return cacheService.cache(id, operator, InternetAddressApiPerspective.class, () -> {
+			InternetAddress address = modelService.getRequired(InternetAddress.class, id, operator);
+			User user = modelService.getUser(operator);
+			InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
+			addressPerspective.setId(address.getId());
+			addressPerspective.setTitle(address.getName());
+			addressPerspective.setUrl(address.getAddress());
+			
+			Settings settings = new Settings();
+			
+			InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user, operator);
+			
+			addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
+			addressPerspective.setText(internetAddressViewPerspective.getText());
+			categorize(address, addressPerspective, user, operator);
+			return new CacheEntry<>(address.getId(), operator.getIdentity(), addressPerspective);
+		});
 	}
 	
 	public QuestionEditPerspective getQuestionEditPerspective(Long id, Operator operator) throws ModelException, ContentNotFoundException {
@@ -434,5 +437,8 @@ public class KnowledgeService {
 	public void setPileService(PileService pileService) {
 		this.pileService = pileService;
 	}
-
+	
+	public void setCacheService(CacheService cacheService) {
+		this.cacheService = cacheService;
+	}
 }
