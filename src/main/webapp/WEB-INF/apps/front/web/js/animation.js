@@ -73,18 +73,17 @@ hui.on(function() {
   };
 
   var slogan = hui.get('slogan');
-  hui.style.set(slogan,{
-    opacity: 0,
-    paddingTop : '20px'
-  })
+
+  hui.cls.add(slogan, 'is-hidden');
 
   window.setTimeout(function() {
-    window.setTimeout(animateTitle,100)
+    window.setTimeout(animateTitle, 100);
 
 
 
-    hui.animate({node:slogan,css:{opacity:1,paddingTop:'0px'},delay:6000,ease:hui.ease.fastSlow,duration:2000})
-
+    window.setTimeout(function() {
+      hui.cls.remove(slogan, 'is-hidden');
+    }, 4000);
 
 
     function animateTitle() {
