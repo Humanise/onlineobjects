@@ -4,16 +4,29 @@ jcs.default.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttribut
 jcs.default.cacheattributes.MaxObjects=1
 jcs.default.cacheattributes.DiskUsagePatternName=UPDATE
 jcs.default.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
-jcs.default.cacheattributes.UseMemoryShrinker=false
+jcs.default.cacheattributes.UseMemoryShrinker=true
 jcs.default.cacheattributes.MaxMemoryIdleTimeSeconds=3600
 jcs.default.cacheattributes.ShrinkerIntervalSeconds=60
 jcs.default.elementattributes=org.apache.commons.jcs.engine.ElementAttributes
 jcs.default.elementattributes.IsEternal=true
-#jcs.default.elementattributes.MaxLife=21600
-#jcs.default.elementattributes.IdleTime=1800
 jcs.default.elementattributes.IsSpool=true
 jcs.default.elementattributes.IsRemote=true
 jcs.default.elementattributes.IsLateral=true
+
+# PERSPECTIVES CACHE REGION
+jcs.region.perspectives=DC
+jcs.region.perspectives.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
+jcs.region.perspectives.cacheattributes.MaxObjects=200
+jcs.region.perspectives.cacheattributes.UseMemoryShrinker=true
+jcs.region.perspectives.cacheattributes.MaxMemoryIdleTimeSeconds=600
+jcs.region.perspectives.cacheattributes.ShrinkerIntervalSeconds=60
+jcs.region.perspectives.cacheattributes.DiskUsagePatternName=UPDATE
+jcs.region.perspectives.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.perspectives.elementattributes=org.apache.commons.jcs.engine.ElementAttributes
+jcs.region.perspectives.elementattributes.IsEternal=true
+jcs.region.perspectives.elementattributes.IsSpool=true
+jcs.region.perspectives.elementattributes.IsRemote=true
+jcs.region.perspectives.elementattributes.IsLateral=true
 
 # AVAILABLE AUXILIARY CACHES
 jcs.auxiliary.DC=org.apache.commons.jcs.auxiliary.disk.indexed.IndexedDiskCacheFactory
