@@ -1,8 +1,10 @@
 package dk.in2isoft.onlineobjects.modules.knowledge;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -334,15 +336,15 @@ public class KnowledgeService {
 			addressPerspective.setId(address.getId());
 			addressPerspective.setTitle(address.getName());
 			addressPerspective.setUrl(address.getAddress());
-			
+			Set<Long> ids = new HashSet<>();
 			Settings settings = new Settings();
 			
-			InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user, operator);
+			InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user, ids, operator);
 			
 			addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
 			addressPerspective.setText(internetAddressViewPerspective.getText());
 			categorize(address, addressPerspective, user, operator);
-			return new CacheEntry<>(address.getId(), operator.getIdentity(), addressPerspective);
+			return new CacheEntry<>(address.getId(), operator.getIdentity(), ids, addressPerspective);
 		});
 	}
 	

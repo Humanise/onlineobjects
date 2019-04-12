@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -72,7 +73,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	private KnowledgeService knowledgeService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 
-	public InternetAddressViewPerspective build(Long id, Settings settings, User user, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException, SecurityException, ContentNotFoundException, SecurityException {
+	public InternetAddressViewPerspective build(Long id, Settings settings, User user, Set<Long> ids, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException, SecurityException, ContentNotFoundException, SecurityException {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		watch.split();
@@ -80,6 +81,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		if (address == null) {
 			throw new IllegalRequestException("Not found");
 		}
+		ids.add(address.getId());
 		trace("Load", watch);
 
 		TextDocumentAnalytics analytics = textDocumentAnalyzer.analyzeSimple(address, operator);
@@ -87,7 +89,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		Document xom = DOM.parseXOM(analytics.getXml());
 		trace("Parse dom", watch);
 		
-		ArticleData data = buildData(address, operator);
+		ArticleData data = buildData(address, ids, operator);
 		trace("Build data", watch);
 
 		InternetAddressViewPerspective article = new InternetAddressViewPerspective();
@@ -95,12 +97,12 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setTitle(address.getName());
 		article.setUrl(address.getAddress());
 		article.setUrlText(Strings.simplifyURL(address.getAddress()));
-		article.setAuthors(getAuthors(address, operator));
+		article.setAuthors(getAuthors(address, ids, operator));
 
 		knowledgeService.categorize(address, article, user, operator);
 		trace("Categorize", watch);
 
-		loadStatements(address, article, operator);
+		loadStatements(address, article, ids, operator);
 		trace("Load statements", watch);
 
 		article.setHeader(buildHeader(address));
@@ -116,10 +118,11 @@ public class InternetAddressViewPerspectiveBuilder {
 		return article;
 	}
 
-	private List<ItemData> getAuthors(Entity address, Operator operator) {
+	private List<ItemData> getAuthors(Entity address, Set<Long> ids, Operator operator) {
 		Query<Person> query = Query.of(Person.class).from(address,Relation.KIND_COMMON_AUTHOR).as(operator);
 		List<Person> people = modelService.list(query, operator);
 		List<ItemData> authors = people.stream().map((Person p) -> {
+			ids.add(p.getId());
 			ItemData option = new ItemData();
 			option.setId(p.getId());
 			option.setText(p.getFullName());
@@ -128,15 +131,16 @@ public class InternetAddressViewPerspectiveBuilder {
 		return authors;
 	}
 
-	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Operator session) throws ModelException {
+	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Set<Long> ids, Operator session) throws ModelException {
 		List<Statement> statements = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, session);
 		List<StatementPerspective> quoteList = Lists.newArrayList();
 		for (Statement statement : statements) {
 			StatementPerspective statementPerspective = new StatementPerspective();
 			statementPerspective.setText(statement.getText());
 			statementPerspective.setId(statement.getId());
-			statementPerspective.setAuthors(getAuthors(statement, session));
+			statementPerspective.setAuthors(getAuthors(statement, ids, session));
 			quoteList.add(statementPerspective);
+			ids.add(statement.getId());
 		}
 		article.setQuotes(quoteList);
 		
@@ -145,16 +149,20 @@ public class InternetAddressViewPerspectiveBuilder {
 			StatementPerspective perspective = new StatementPerspective();
 			perspective.setText(hypothesis.getText());
 			perspective.setId(hypothesis.getId());
-			perspective.setAuthors(getAuthors(hypothesis, session));
+			perspective.setAuthors(getAuthors(hypothesis, ids, session));
+			ids.add(hypothesis.getId());
 			return perspective;
 		}).collect(Collectors.toList());
 		article.setHypotheses(perpectives);
 	}
 	
-	private ArticleData buildData(InternetAddress address, Operator session) throws ModelException {
+	private ArticleData buildData(InternetAddress address, Set<Long> ids, Operator session) throws ModelException {
 		ArticleData data = new ArticleData();
 		data.address = address;
 		data.keywords = modelService.getChildren(address, Word.class, session);
+		for (Word word : data.keywords) {
+			ids.add(word.getId());
+		}
 		return data;
 	}
 

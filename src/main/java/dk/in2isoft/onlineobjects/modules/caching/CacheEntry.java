@@ -1,19 +1,23 @@
 package dk.in2isoft.onlineobjects.modules.caching;
 
+import java.util.Collection;
+
 public class CacheEntry<T> {
 
 	private long id;
 	private long privileged;
 	private T value;
+	private Collection<Long> ids;
 
 	public CacheEntry() {
 	}
 	
-	public CacheEntry(long id, long privileged, T value) {
+	public CacheEntry(long id, long privileged, Collection<Long> ids, T value) {
 		super();
 		this.id = id;
 		this.privileged = privileged;
 		this.value = value;
+		this.ids = ids;
 	}
 
 	public long getId() {
@@ -22,6 +26,14 @@ public class CacheEntry<T> {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public Collection<Long> getIds() {
+		return ids;
+	}
+	
+	public void setIds(Collection<Long> ids) {
+		this.ids = ids;
 	}
 
 	public long getPrivileged() {

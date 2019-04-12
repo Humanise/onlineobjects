@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -384,7 +385,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		settings.setHighlight(hightlight);
 		settings.setCssNamespace("reader_text_");
 
-		return internetAddressViewPerspectiveBuilder.build(articleId, settings, user, request);
+		return internetAddressViewPerspectiveBuilder.build(articleId, settings, user, new HashSet<Long>(), request);
 	}
 
 	@Path

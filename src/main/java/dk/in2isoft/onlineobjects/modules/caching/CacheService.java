@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.caching;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.collections4.MultiValuedMap;
@@ -117,6 +118,22 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 			}
 		}
 	}
+
+	private void evict(long... ids) {
+		Collection<CacheEntry<?>> values = cache.values();
+		for (Iterator<CacheEntry<?>> i = values.iterator(); i.hasNext();) {
+			CacheEntry<?> entry = i.next();
+			Collection<Long> cids = entry.getIds();
+			if (cids != null) { 
+				for (long id : ids) {
+					if (cids.contains(id)) {
+						log.debug("Evicting: {}", entry);
+						i.remove();
+					}
+				}
+			}	
+		}
+	}
 	
 	public String getCachedDocument(String key, Callable<String> producer) {
 		String found = documentCache.get(key);
@@ -189,31 +206,26 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 
 	@Override
 	public void entityWasUpdated(Entity entity) {
-		// TODO Be more clever
-		cache.clear();
+		evict(entity.getId());
 	}
 
 	@Override
 	public void entityWasDeleted(Entity entity) {
-		// TODO Be more clever
-		cache.clear();
+		evict(entity.getId());
 	}
 
 	@Override
 	public void relationWasCreated(Relation relation) {
-		// TODO Be more clever
-		cache.clear();
+		evict(relation.getId(), relation.getFrom().getId(), relation.getTo().getId());
 	}
 
 	@Override
 	public void relationWasUpdated(Relation relation) {
-		// TODO Be more clever
-		cache.clear();
+		evict(relation.getId(), relation.getFrom().getId(), relation.getTo().getId());
 	}
 
 	@Override
 	public void relationWasDeleted(Relation relation) {
-		// TODO Be more clever
-		cache.clear();
+		evict(relation.getId(), relation.getFrom().getId(), relation.getTo().getId());
 	}
 }

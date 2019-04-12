@@ -117,7 +117,7 @@ public class SecurityService {
 			throw new SecurityException("Cannot set password of persistent user");
 		}
 		setSaltedPassword(user, password);
-		surveillanceService.audit().info("Set initial password on user={}", user.getId());
+		surveillanceService.audit().info("Set initial password on new user");
 	}
 
 	private void setSaltedPassword(User user, String password) throws ExplodingClusterFuckException {
