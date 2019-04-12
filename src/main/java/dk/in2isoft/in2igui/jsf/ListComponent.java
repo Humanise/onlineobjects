@@ -49,7 +49,7 @@ public class ListComponent extends AbstractComponent {
 		String id = getClientId();
 		ClassBuilder cls = new ClassBuilder("hui_list").add("hui_list", variant);
 		out.startDiv().withClass(cls).withId(id);
-		out.startDiv("hui_list_progress").endDiv();
+		out.startDiv("hui_list_spinner").endDiv();
 		out.startDiv("hui_list_navigation");
 		out.startDiv("hui_list_selection window_page").startDiv().startDiv("window_page_body").endDiv().endDiv().endDiv();
 		out.startSpan("hui_list_count").endSpan();
