@@ -118,7 +118,7 @@ html, body {
   height: 30px;
   align-items: center; }
   .reader_bar_item {
-    margin-left: 10px;
+    margin-left: 5px;
     color: #999;
     text-decoration: none;
     font-size: 0;
@@ -128,7 +128,7 @@ html, body {
     .reader_bar_item:hover {
       color: #000; }
     .reader_bar_item_text {
-      line-height: 20px;
+      line-height: 30px;
       vertical-align: middle;
       font-size: 14px;
       margin-left: 5px; }
