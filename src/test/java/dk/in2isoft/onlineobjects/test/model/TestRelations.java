@@ -1,5 +1,6 @@
 package dk.in2isoft.onlineobjects.test.model;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
@@ -24,13 +25,21 @@ public class TestRelations extends AbstractSpringTestCase {
 	@Test
 	public void testRelations() throws SQLException, ModelException, SecurityException {
 		Operator adminOperator = modelService.newAdminOperator();
-
+		
 		WebPage page = new WebPage();
 		modelService.create(page, adminOperator);
 		assertTrue(page.getId() > 0);
 
 		WebNode node = new WebNode();
 		modelService.create(node, adminOperator);
+
+		assertNull(modelService.createRelation(null, null, adminOperator));
+		assertNull(modelService.createRelation(page, null, adminOperator));
+		assertNull(modelService.createRelation(null, node, adminOperator));
+		assertNull(modelService.createRelation(null, null, Relation.KIND_COMMON_SOURCE, adminOperator));
+		assertNull(modelService.createRelation(page, null, Relation.KIND_COMMON_SOURCE, adminOperator));
+		assertNull(modelService.createRelation(null, node, Relation.KIND_COMMON_SOURCE, adminOperator));
+
 		modelService.createRelation(page, node, adminOperator);
 
 		Person person = new Person();
