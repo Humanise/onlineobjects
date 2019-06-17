@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.core;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,15 +53,8 @@ import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
-import dk.in2isoft.onlineobjects.model.util.ModelClassInfo;
 import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
 import dk.in2isoft.onlineobjects.model.validation.UserValidator;
-import nu.xom.Builder;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Elements;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 
 public class ModelService implements InitializingBean, OperationProvider {
 
@@ -75,7 +66,6 @@ public class ModelService implements InitializingBean, OperationProvider {
 	private EventService eventService;
 	private SecurityService securityService;
 	
-	private Collection<ModelClassInfo> modelClassInfo;
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
 	private List<EntityValidator> entityValidators;
@@ -158,31 +148,6 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	@SuppressWarnings("deprecation")
 	private void loadModelInfo() {
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("model.xml");
-		Builder parser = new Builder();
-		Document doc;
-		try {
-			doc = parser.build(stream);
-			modelClassInfo = new ArrayList<ModelClassInfo>();
-			Elements items = doc.getRootElement().getChildElements("item");
-			for (int i = 0; i < items.size(); i++) {
-				Element item = items.get(i);
-				Element classElement = item.getFirstChildElement("class");
-				String className = classElement.getValue();
-				Class<Item> clazz = Code.cast(Class.forName("dk.in2isoft.onlineobjects.model." + className));
-				ModelClassInfo info = new ModelClassInfo(clazz);
-				modelClassInfo.add(info);
-			}
-			log.debug("Model info loaded: " + modelClassInfo.size() + " items");
-		} catch (ValidityException e) {
-			log.error("Could not load model info", e);
-		} catch (ParsingException e) {
-			log.error("Could not load model info", e);
-		} catch (IOException e) {
-			log.error("Could not load model info", e);
-		} catch (ClassNotFoundException e) {
-			log.error("Could not load model info", e);
-		}
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Set<EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();
 		for (EntityType<?> entityType : entities) {
@@ -196,29 +161,6 @@ public class ModelService implements InitializingBean, OperationProvider {
 			classes.add(clazz);
 		}
 
-	}
-
-	public Collection<ModelClassInfo> getClassInfo() {
-		return modelClassInfo;
-	}
-
-	public ModelClassInfo getClassInfo(String simpleName) {
-		for (ModelClassInfo info : modelClassInfo) {
-			if (info.getSimpleName().equals(simpleName)) {
-				return info;
-			}
-		}
-		return null;
-	}
-
-	public Collection<ModelClassInfo> getClassInfo(Class<?> interfaze) {
-		Collection<ModelClassInfo> infos = new ArrayList<ModelClassInfo>();
-		for (ModelClassInfo info : modelClassInfo) {
-			if (interfaze.isAssignableFrom(info.getModelClass())) {
-				infos.add(info);
-			}
-		}
-		return infos;
 	}
 
 	public Class<? extends Entity> getModelClass(String simpleName) throws ModelException {
