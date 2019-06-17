@@ -334,7 +334,7 @@ public class KnowledgeService {
 			User user = modelService.getUser(operator);
 			InternetAddressApiPerspective addressPerspective = new InternetAddressApiPerspective();
 			addressPerspective.setId(address.getId());
-			addressPerspective.setTitle(address.getName());
+			addressPerspective.setTitle(address.getName()==null ? "" : address.getName());
 			addressPerspective.setUrl(address.getAddress());
 			Set<Long> ids = new HashSet<>();
 			Settings settings = new Settings();
