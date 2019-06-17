@@ -142,6 +142,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		Privileged privileged = securityService.getAdminPrivileged();
 		Operator operator = modelService.newOperator(privileged);
 		try {
+			address = modelService.get(InternetAddress.class, address.getId(), operator);
 			User owner = modelService.getOwner(address, operator);
 			if (owner!=null) {
 				Document document = documentBuilder.build(address, operator);
