@@ -1,11 +1,12 @@
 package dk.in2isoft.onlineobjects.modules.knowledge;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
@@ -171,7 +172,7 @@ public class KnowledgeService {
 		return hypothesis;
 	}
 
-	public int compare(Relation a, Relation b) {
+	public int compareByPosition(Relation a, Relation b) {
 		float comp = a.getPosition() - b.getPosition();
 		if (comp == 0) {
 			return (int) (a.getId() - b.getId());
@@ -186,7 +187,7 @@ public class KnowledgeService {
 		perspective.setText(hypothesis.getText());
 
 		List<Relation> supports = modelService.find().relations(operator).from(Statement.class).to(hypothesis).withKind(Relation.SUPPORTS).list();
-		supports.sort((a,b) -> compare(a,b));
+		supports.sort(this::compareByPosition);
 		List<StatementApiPerspective> supportsPerspectives = new ArrayList<>();
 		for (Relation relation : supports) {
 			Statement c = (Statement) relation.getFrom();
@@ -198,7 +199,7 @@ public class KnowledgeService {
 		}
 		perspective.setSupporting(supportsPerspectives);
 		List<Relation> contradicts = modelService.find().relations(operator).from(Statement.class).to(hypothesis).withKind(Relation.CONTRADTICS).list();
-		contradicts.sort((a,b) -> compare(a,b));
+		contradicts.sort((a,b) -> compareByPosition(a,b));
 		List<StatementApiPerspective> contradictsPerspectives = new ArrayList<>();
 		for (Relation relation : contradicts) {
 			Statement c = (Statement) relation.getFrom();
@@ -225,16 +226,16 @@ public class KnowledgeService {
 			addressPerspective.setTitle(address.getName());
 			addressPerspective.setUrl(address.getAddress());
 			return addressPerspective;
-		}).collect(Collectors.toList()));
+		}).collect(toList()));
 		List<Relation> questions = modelService.find().relations(operator).from(statement).to(Question.class).withKind(Relation.ANSWERS).list();
-		questions.sort((a,b) -> compare(a, b));
+		questions.sort(this::compareByPosition);
 		perspective.setQuestions(questions.stream().map(relation -> {
 			Question question = (Question) relation.getTo();
 			QuestionApiPerspective p = new QuestionApiPerspective();
 			p.setId(question.getId());
 			p.setText(question.getText());
 			return p;
-		}).collect(Collectors.toList()));
+		}).collect(toList()));
 		List<Person> authors = modelService.getChildren(statement, Relation.KIND_COMMON_AUTHOR, Person.class, operator);
 		List<PersonApiPerspective> authorPerspectives = new ArrayList<>();
 		for (Person person : authors) {
@@ -267,7 +268,7 @@ public class KnowledgeService {
 		questionPerspective.setText(question.getText());
 
 		List<Relation> answers = modelService.find().relations(operator).from(Statement.class).to(question).withKind(Relation.ANSWERS).list();
-		answers.sort((a,b) -> compare(a, b));
+		answers.sort(this::compareByPosition);
 		List<StatementApiPerspective> answerPerspectives = new ArrayList<>();
 		for (Relation relation : answers) {
 			Statement answer = (Statement) relation.getFrom();
@@ -383,7 +384,7 @@ public class KnowledgeService {
 			option.setText(p.getFullName());
 			option.setIcon(p.getIcon());
 			return option;
-		}).collect(Collectors.toList());
+		}).collect(toList());
 	}
 
 	public List<Person> getAuthors(Entity entity, Operator operator) {
