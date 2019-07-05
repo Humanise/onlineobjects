@@ -40,13 +40,13 @@ public class PeoplePersonView extends AbstractView {
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(getUsersName());
 		PairSearchResult<User,Person> result = modelService.searchPairs(query, request);
 		if (result.getTotalCount()==0) {
-			throw new ContentNotFoundException();
+			throw new ContentNotFoundException("The content could not be found");
 		}
 		Pair<User, Person> next = result.iterator().next();
 		user = next.getKey();
 		person = next.getValue();
 		if (!securityService.canView(user, request)) {
-			throw new ContentNotFoundException();
+			throw new ContentNotFoundException("The content could not be found");
 		}
 		canModify = securityService.canModify(person, request);
 		try {
