@@ -32,6 +32,7 @@ public class ScriptWriter {
 	public ScriptWriter(Request request, ConfigurationService configurationService) throws IOException {
 		HttpServletResponse response = request.getResponse();
 		response.setContentType("text/javascript");
+		response.setCharacterEncoding("UTF-8");
 		HeaderUtil.setOneMonthCache(response);
 		this.writer = response.getWriter();
 		this.configurationService = configurationService;

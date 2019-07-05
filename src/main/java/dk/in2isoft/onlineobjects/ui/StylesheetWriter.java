@@ -35,6 +35,7 @@ public class StylesheetWriter {
 	public StylesheetWriter(Request request, ConfigurationService configurationService) throws IOException {
 		HttpServletResponse response = request.getResponse();
 		response.setContentType("text/css");
+		response.setCharacterEncoding("UTF-8");
 		HeaderUtil.setOneMonthCache(response);
 		this.context = request.getBaseContext();
 		this.writer = response.getWriter();

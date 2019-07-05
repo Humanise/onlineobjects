@@ -125,7 +125,7 @@ public class TestImageTransformationService extends AbstractSpringTestCase {
 			assertEquals(300, properties.getWidth());
 			assertEquals(200, properties.getHeight());
 		}
-}
+	}
 
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
