@@ -46,7 +46,7 @@ public class TestNetworkService extends AbstractSpringTestCase {
 	public void testResolveUrl() throws Exception {
 		URI url = new URI("http://feedproxy.google.com/~r/alistapart/main/~3/BU6iDJCwiVY/i-dont-need-help");
 		URI real = networkService.resolveRedirects(url);
-		assertEquals("http://alistapart.com/article/i-dont-need-help", real.toString());
+		assertEquals("http://alistapart.com/article/i-dont-need-help/", real.toString());
 	}
 	
 	
