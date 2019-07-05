@@ -86,7 +86,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	public ImageProperties getImageProperties(File file) throws EndUserException {
 		log.debug(file.getAbsolutePath());
 		log.debug("Exists: " + file.exists());
-		String cmd = configurationService.getImageMagickPath() + "/identify -quiet -format \"%m-%wx%h\" " + file.getAbsolutePath() + "[0]";
+		String cmd = configurationService.getImageMagickPath() + "/identify -quiet -format \"%m-%wx%h\" " + file.getAbsolutePath();
 		String result = execute(cmd).trim();
 		Pattern pattern = Pattern.compile(".*\"([a-zA-Z]+)-([0-9]+)x([0-9]+)\"");
 		Matcher matcher = pattern.matcher(result);
