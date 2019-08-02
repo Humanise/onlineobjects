@@ -88,18 +88,20 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 			if (language!=null) {
 				request.setLanguage(language);
 			}
-			RequestDispatcher dispatcher = controller.getDispatcher(request);
-			if (dispatcher != null) {
-				request.getResponse().setContentType("text/html");
-				request.getResponse().setCharacterEncoding("UTF-8");
-				dispatcher.forward(request.getRequest(), request.getResponse());
-			} else if (path.length > 0) {
-				String[] filePath = new String[] { "apps", application };
-				if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
+			if (!controller.handle(request)) {
+				RequestDispatcher dispatcher = controller.getDispatcher(request);
+				if (dispatcher != null) {
+					request.getResponse().setContentType("text/html");
+					request.getResponse().setCharacterEncoding("UTF-8");
+					dispatcher.forward(request.getRequest(), request.getResponse());
+				} else if (path.length > 0) {
+					String[] filePath = new String[] { "apps", application };
+					if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
+						controller.unknownRequest(request);
+					}
+				} else {
 					controller.unknownRequest(request);
 				}
-			} else {
-				controller.unknownRequest(request);
 			}
 		} catch (ServletException e) {
 			dispatchingService.displayError(request, e);
