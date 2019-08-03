@@ -12,12 +12,13 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <script>
-        hui.on(function() {
-          oo.signUp()
-        })
-      </script>
 
+      <o:box spacious="true">
+        <o:header level="0" styleClass="oo_space_bottom-3">#{msg.create_account}</o:header>
+        <div class="js-signup-container"></div>
+      </o:box>
+
+      <o:dependency src="/js/oo_signup.js" from="core"/>
     </ui:define>
 
   </ui:composition>

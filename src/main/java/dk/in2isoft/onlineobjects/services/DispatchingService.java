@@ -108,18 +108,16 @@ public class DispatchingService {
 		HeaderUtil.setOneWeekCache(response);
 		String mimeType = HeaderUtil.getMimeType(file);
 		response.setContentLength((int) file.length());
-		FileInputStream in = null;
 		try {
 			ServletOutputStream out = response.getOutputStream();
 			if (mimeType != null) {
 				response.setContentType(mimeType);
 			}
-			in = new FileInputStream(file);
-			IOUtils.copy(in, out);
+			try (FileInputStream in = new FileInputStream(file)) {
+				IOUtils.copy(in, out);
+			}
 		} catch (FileNotFoundException e) {
 			throw new IOException("File: " + file.getPath() + " not found!");
-		} finally {
-			IOUtils.closeQuietly(in);
 		}
 	}
 

@@ -69,58 +69,44 @@ public abstract class AbstractController {
 		return null;
 	}
 
-	public void unknownRequest(Request request) throws IOException, EndUserException {
+	public boolean handle(Request request) throws StupidProgrammerException, IOException, EndUserException {
 		for (Pair<String[], Method> exact : exactMethodPaths) {
 			if (request.testLocalPathFull(exact.getKey())) {
-				invokeMothod(request, exact.getValue());
-				return;
-				
+				invokeMethod(request, exact.getValue());
+				return true;
 			}			
 		}
 		for (Pair<Pattern,Method> exp : expressionMethodPaths) {
 			if (exp.getKey().matcher(request.getLocalPathAsString()).matches()) {
-				invokeMothod(request, exp.getValue());
-				return;
+				invokeMethod(request, exp.getValue());
+				return true;
 			}
 		}
 		for (Pair<String, Method> exact : methodsByName) {
 			if (request.testLocalPathFull(exact.getKey())) {
-				invokeMothod(request, exact.getValue());
-				return;
-				
+				invokeMethod(request, exact.getValue());
+				return true;
 			}			
 		}
+		return false;
+	}
+	
+	public void unknownRequest(Request request) throws IOException, EndUserException {
 		throw new ContentNotFoundException("The content could not be found");
 	}
 
 	public RequestDispatcher getDispatcher(Request request) {
 		ServletContext context = request.getRequest().getSession().getServletContext();
 		String localPath = request.getLocalPathAsString();
-		String jsfPath = null;
 		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
 			if (entry.getKey().matcher(localPath).matches()) {
-				jsfPath = entry.getValue();
-				break;
+				return context.getRequestDispatcher("/faces" + entry.getValue());
 			}
-		}
-		if (jsfPath==null) {
-			StringBuilder filePath = new StringBuilder();
-			filePath.append(File.separator).append("jsf");
-			filePath.append(File.separator).append(name);
-			String[] path = request.getLocalPath();
-			for (String item : path) {
-				filePath.append(File.separator).append(item);
-			}
-			jsfPath = filePath.toString().replaceAll("\\.html", ".xhtml");
-		}
-		File file = new File(configurationService.getBasePath() + jsfPath);
-		if (file.exists() && file.isFile()) {
-			return context.getRequestDispatcher("/faces"+jsfPath);
 		}
 		return null;
 	}
 
-	private void invokeMothod(Request request, Method method) throws IOException, StupidProgrammerException, EndUserException {
+	private void invokeMethod(Request request, Method method) throws IOException, StupidProgrammerException, EndUserException {
 		try {
 			Object result = method.invoke(this, new Object[] { request });
 			Class<?> returnType = method.getReturnType();

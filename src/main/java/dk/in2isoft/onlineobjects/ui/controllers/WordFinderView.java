@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
@@ -13,7 +11,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
-public class WordFinderView extends AbstractView implements InitializingBean {
+public class WordFinderView extends AbstractView {
 	
 	private WordsInterfaceHelper wordsInterfaceHelper;
 	
