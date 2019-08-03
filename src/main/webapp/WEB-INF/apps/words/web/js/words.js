@@ -35,7 +35,7 @@ hui.ui.listen({
       win.addToDocument();
       var form = this._importForm = hui.ui.Formula.create({name:'importFormula'});
       form.buildGroup(null,[
-        {'type':'TextInput',options:{label:'Adresse',key:'url'}}
+        {'type':'TextInput',label:'Adresse',options:{key:'url'}}
       ]);
       win.add(form);
     }

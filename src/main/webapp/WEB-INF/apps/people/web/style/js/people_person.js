@@ -73,20 +73,20 @@ var personView = {
     cancel.listen({$click:this.cancelEditor.bind(this)});
     update.listen({$click:this.saveEditor.bind(this)});
     var group = form.buildGroup({above:false},[
-      {type:'TextInput',options:{label:'Fornavn:',key:'givenName'}},
-      {type:'TextInput',options:{label:'Mellemnavn:',key:'additionalName'}},
-      {type:'TextInput',options:{label:'Efternavn:',key:'familyName'}},
-      {type:'TextInput',options:{label:'Om mig:',key:'resume',lines:5}},
-      {type:'DropDown',options:{label:'Køn:',key:'sex',items:[{value:null,title:'Ukendt'},{value:true,title:'Mand'},{value:false,title:'Kvinde'}]}},
-      {type:'TokenField',options:{label:'Interesser:',key:'interests',width:80}},
-      {type:'TokenField',options:{label:'Yndlingsmusik:',key:'music',width:80}}
+      {type:'TextInput',label:'Fornavn:',options:{key:'givenName'}},
+      {type:'TextInput',label:'Mellemnavn:',options:{key:'additionalName'}},
+      {type:'TextInput',label:'Efternavn:',options:{key:'familyName'}},
+      {type:'TextInput',label:'Om mig:',options:{key:'resume',lines:5}},
+      {type:'DropDown',label:'Køn:',options:{key:'sex',items:[{value:null,title:'Ukendt'},{value:true,title:'Mand'},{value:false,title:'Kvinde'}]}},
+      {type:'TokenField',label:'Interesser:',options:{key:'interests',width:80}},
+      {type:'TokenField',label:'Yndlingsmusik:',options:{key:'music',width:80}}
     ]);
-    var emails = hui.ui.ObjectList.create({label:'E-mail:',key:'emails',template:[{type:'text',label:'E-mail',key:'address'},{type:'text',label:'Kontekst',key:'context'}]});
-    group.add(emails);
-    var phones = hui.ui.ObjectList.create({label:'Telefonnumre:',key:'phones',template:[{type:'text',label:'Nummer',key:'number'},{type:'text',label:'Kontekst',key:'context'}]});
-    group.add(phones);
-    var urls = hui.ui.ObjectList.create({label:'Internetadresser:',key:'urls',template:[{type:'text',label:'Adresse',key:'address'},{type:'text',label:'Kontekst',key:'context'}]});
-    group.add(urls);
+    var emails = hui.ui.ObjectList.create({key:'emails',template:[{type:'text',label:'E-mail',key:'address'},{type:'text',label:'Kontekst',key:'context'}]});
+    group.add(emails, 'E-mail:');
+    var phones = hui.ui.ObjectList.create({key:'phones',template:[{type:'text',label:'Nummer',key:'number'},{type:'text',label:'Kontekst',key:'context'}]});
+    group.add(phones, 'Telefonnumre:');
+    var urls = hui.ui.ObjectList.create({key:'urls',template:[{type:'text',label:'Adresse',key:'address'},{type:'text',label:'Kontekst',key:'context'}]});
+    group.add(urls, 'Internetadresser:');
     var buttons = group.createButtons();
     buttons.add(cancel);
     buttons.add(update);
