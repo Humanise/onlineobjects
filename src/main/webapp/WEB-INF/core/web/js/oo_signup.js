@@ -6,66 +6,87 @@
 
   oo.SignUp.prototype = {
     _show : function() {
-      if (!this._box) {
+      if (this._box) {
+        this._box.show();
+        this._form.focus();
+        return;
+      }
+      if (this._form) {
+        this._form.focus();
+        return;
+      }
+      var form = this._getForm();
+      var buttons = hui.ui.Buttons.create();
+      form.add(buttons);
+      /*
+      var cancel = hui.ui.Button.create({text: {en: 'Cancel', da: 'Annuller'}, variant: 'light'});
+      buttons.add(cancel);
+      cancel.listen({
+        $click : function() {
+          form.reset();
+          box.hide();
+        }
+      })*/
+      buttons.add(hui.ui.Button.create({
+        text: {en: 'Sign up', da: 'Bliv medlem'},
+        highlighted: true,
+        variant: 'light',
+        submit: true,
+        testName: 'signupSubmit'
+      }));
+
+      var container = hui.find('.js-signup-container');
+      if (container) {
+        container.appendChild(form.getElement());
+      } else {
         var box = this._box = hui.ui.Panel.create({
           title: {en: 'Sign up', da: 'Bliv medlem'},
           closable: true,
           width: 400,
           padding: 15
         });
-        var form = this._form = hui.ui.Formula.create();
-        var group = form.buildGroup(null, [
-          {
-            type: 'TextInput',
-            label: 'E-mail',
-            options: {key: 'email', testName: 'signupEmail'}
-          },
-          {
-            type: 'TextInput',
-            label: {en: 'Username', da: 'Brugernavn'},
-            options: {key:'username', testName: 'signupUsername'}
-          },
-          {
-            type: 'TextInput',
-            label: {en: 'Password', da: 'Kodeord'},
-            options: {key:'password', secret: true, testName: 'signupPassword'}
-          },
-          {
-            type: 'Checkbox',
-            label: {en: 'Accept terms', da:'Acceptér vilkårene'},
-            options: {key:'terms', testName: 'signupAccept', text:'dadad'}
-          }
-        ]);
-        var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
-        group.add(termsLink)
-        var buttons = group.createButtons();
-        var cancel = hui.ui.Button.create({text: {en: 'Cancel', da: 'Annuller'}, variant: 'light'});
-        buttons.add(cancel);
-        buttons.add(hui.ui.Button.create({
-          text: {en: 'Sign up', da: 'Bliv medlem'},
-          highlighted: true,
-          variant: 'light',
-          submit: true,
-          testName: 'signupSubmit'
-        }));
         box.add(form);
-        form.listen({
-          $submit : this._submit.bind(this)
-        });
-        cancel.listen({
-          $click : function() {
-            form.reset();
-            box.hide();
-          }
-        })
-        termsLink.listen({
-          $click : function() {
-            window.open(hui.find('.js-agreements').href);
-          }
-        })
+        this._box.show();
       }
-      this._box.show();
+
       this._form.focus();
+    },
+
+    _getForm : function() {
+      if (this._form) { return this._form; }
+      var form = this._form = hui.ui.Formula.create();
+      var group = form.buildGroup(null, [
+        {
+          type: 'TextInput',
+          label: 'E-mail',
+          options: {key: 'email', testName: 'signupEmail'}
+        },
+        {
+          type: 'TextInput',
+          label: {en: 'Username', da: 'Brugernavn'},
+          options: {key:'username', testName: 'signupUsername'}
+        },
+        {
+          type: 'TextInput',
+          label: {en: 'Password', da: 'Kodeord'},
+          options: {key:'password', secret: true, testName: 'signupPassword'}
+        },
+        {
+          type: 'Checkbox',
+          options: {key:'terms', testName: 'signupAccept', text:'dadad', label: {en: 'Accept terms', da:'Acceptér vilkårene'}}
+        }
+      ]);
+      var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
+      termsLink.listen({
+        $click : function() {
+          window.open(hui.find('.js-agreements').href);
+        }
+      });
+      group.add(termsLink)
+      form.listen({
+        $submit : this._submit.bind(this)
+      });
+      return form;
     },
 
     _getWelcomeUrl() {
@@ -109,7 +130,9 @@
             da: 'Velkommen, se i din indbakke :-)'
           }});
           form.reset();
-          box.hide();
+          if (box) {
+            box.hide();
+          }
           setTimeout(function() {
             document.location = welcomeUrl;
           }, 2000);
