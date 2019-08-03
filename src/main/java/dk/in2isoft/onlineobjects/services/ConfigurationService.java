@@ -39,6 +39,7 @@ public class ConfigurationService implements InitializingBean {
 	private Integer port;
 	private boolean startScheduling;
 	private boolean simulateSlowRequest;
+	private boolean simulateSporadicServerError;
 	private boolean testMode;
 	private String appleAppSiteAssociation;
 	private String monitoringMails;
@@ -322,5 +323,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setMonitoringMails(String monitoringMails) {
 		this.monitoringMails = monitoringMails;
+	}
+
+	public boolean isSimulateSporadicServerError() {
+		return simulateSporadicServerError;
+	}
+
+	public void setSimulateSporadicServerError(boolean simulateSporadicServerError) {
+		this.simulateSporadicServerError = simulateSporadicServerError;
 	}
 }

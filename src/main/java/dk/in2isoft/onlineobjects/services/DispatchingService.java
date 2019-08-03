@@ -54,6 +54,13 @@ public class DispatchingService {
 				Thread.sleep(Math.round(Math.random()*1000+1000));
 			} catch (InterruptedException ignore) {}
 		}
+		if (configurationService.isSimulateSporadicServerError()) {
+			if (Math.random() > 0.5) {
+				servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				return true;
+				
+			}
+		}
 		
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
