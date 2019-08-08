@@ -38,6 +38,11 @@ public class DeveloperController extends ApplicationController {
 		return "Slow requests are now:" + configurationService.isSimulateSlowRequest();
 	}
 	
+	@Path(exactly={"toggleErrors"})
+	public String toggleErrors(Request request) {
+		configurationService.setSimulateSporadicServerError(!configurationService.isSimulateSporadicServerError());
+		return "Sporadic server error simulation is now:" + configurationService.isSimulateSporadicServerError();
+	}
 	// Injection...
 
 }
