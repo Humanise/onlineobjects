@@ -24,12 +24,12 @@
             })
         }));
         var form = this._form = hui.ui.Formula.create();
-        var group = form.buildGroup(null,[{
+        form.buildGroup(null,[{
           type: 'TextInput',
           label: {en: 'Username or e-mail:', da: 'Brugernavn eller e-mail:'},
           options: {key: 'usernameOrMail', name: 'ooTopBarUsernameOrMail'}
         }]);
-        var buttons = group.createButtons();
+        var buttons = form.createButtons();
         var cancel = hui.ui.Button.create({
           text: {en: 'Cancel', da: 'Annuller'},
           variant: 'light'
