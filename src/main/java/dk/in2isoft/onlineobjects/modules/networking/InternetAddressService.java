@@ -173,6 +173,7 @@ public class InternetAddressService {
 		if (Strings.isNotBlank(title)) {
 			address.setName(title.trim());
 		} else if (response!=null) {
+			// TODO: This is very expensive 
 			address.setName(getTitle(response, resolvedUrl));
 		}
 		if (response!=null && response.getEncoding() != null) {
