@@ -143,11 +143,13 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		Operator operator = modelService.newOperator(privileged);
 		try {
 			address = modelService.get(InternetAddress.class, address.getId(), operator);
-			User owner = modelService.getOwner(address, operator);
-			if (owner!=null) {
-				Document document = documentBuilder.build(address, operator);
-				log.debug("Re-indexing : "+address);
-				getIndexManager(owner).update(address, document);
+			if (address != null) {
+				User owner = modelService.getOwner(address, operator);
+				if (owner!=null) {
+					Document document = documentBuilder.build(address, operator);
+					log.debug("Re-indexing : "+address);
+					getIndexManager(owner).update(address, document);
+				}
 			}
 			operator.commit();
 		} catch (EndUserException e) {
