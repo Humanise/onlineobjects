@@ -157,7 +157,8 @@ public class NetworkService {
 				if (uri.getHost().endsWith("sundhed.dk")) {
 					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");					
 				} else {
-					method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36");
+					method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36");
+					method.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 				}
 				CloseableHttpResponse res = client.execute(method);
 				if (redirects > 0) {
