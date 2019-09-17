@@ -14,7 +14,7 @@
 
     <ui:define name="body">
       <o:box width="800" spacious="true">
-        <o:header level="0" styleClass="account_heading">${msg.agreements_title}</o:header>
+        <o:header level="0" styleClass="account_heading oo_space_bottom-3">${msg.agreements_title}</o:header>
         <c:if test="${!accountAgreementsView.publicUser}">
         <p class="oo_space_top">
           <o:link href="/${accountAgreementsView.language}/">#{msg.back_to_account}</o:link>
