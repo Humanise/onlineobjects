@@ -87,7 +87,7 @@ var personView = {
     group.add(phones, 'Telefonnumre:');
     var urls = hui.ui.ObjectList.create({key:'urls',template:[{type:'text',label:'Adresse',key:'address'},{type:'text',label:'Kontekst',key:'context'}]});
     group.add(urls, 'Internetadresser:');
-    var buttons = group.createButtons();
+    var buttons = form.createButtons();
     buttons.add(cancel);
     buttons.add(update);
     this.profileEditor.appendChild(form.element);

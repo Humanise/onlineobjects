@@ -61,11 +61,11 @@ oo.Map.prototype = {
     if (!this._editPanel) {
       var panel = this._editPanel = hui.ui.BoundPanel.create({variant:'light',modal:'transparent',padding:10});
       var form = this._editForm = hui.ui.Formula.create();
-      var group = form.buildGroup(null,[
+      form.buildGroup(null,[
         {label:'Title',type:'TextInput',options:{key:'title'}},
         {label:'Location',type:'LocationInput',options:{key:'location'}}
       ]);
-      var buttons = group.createButtons();
+      var buttons = form.createButtons();
       buttons.add(hui.ui.Button.create({text:'Cancel',small:true,listener:{
         $click : function() {
           panel.hide();

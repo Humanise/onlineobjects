@@ -48,24 +48,23 @@ public class FieldComponent extends AbstractComponent {
 		if (isAbove()) {
 			writer.startDiv("hui_formula_field");
 			if (Strings.isNotBlank(label)) {
-				writer.startElement("label").withClass("hui_formula_field").text(label).endElement("label");
+				writer.startElement("label").withClass("hui_formula_field_label").text(label).endElement("label");
 			}
-			writer.startDiv("hui_formula_field_body");
 		} else {
-			writer.startElement("tr");
-			writer.startElement("th").withClass("hui_formula_middle");
-			writer.startElement("label").withClass("hui_formula_field").text(label).endElement("label");
+			writer.startElement("tr").withClass("hui_formula_field");
+			writer.startElement("th");
+			writer.startElement("label").withClass("hui_formula_field_label").text(label).endElement("label");
 			writer.endElement("th");
-			writer.startElement("td").withClass("hui_formula_field").startDiv("hui_formula_field_body");
+			writer.startElement("td");
 		}
 	}
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
 		if (isAbove()) {
-			writer.endDiv().endDiv();
+			writer.endDiv();
 		} else {
-			writer.endDiv().endElement("td").endElement("tr");
+			writer.endElement("td").endElement("tr");
 		}
 	}
 
