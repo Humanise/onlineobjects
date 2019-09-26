@@ -89,7 +89,7 @@
       return form;
     },
 
-    _getWelcomeUrl() {
+    _getWelcomeUrl : function() {
       var match = document.location.href.match(/(http[s]:\/\/)[a-z]+(\.[a-z]+\.[a-z]+)/);
       return match[1] + "account" + match[2] + "/" + oo.language + "/welcome";
     },
