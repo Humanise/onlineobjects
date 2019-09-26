@@ -1,9 +1,15 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
+
+import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.TagWriter;
@@ -31,11 +37,23 @@ public class FontsComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
-		String text = "Hind+Vadodara:300,400,500,600,700";
+		List<String> googleFonts = new ArrayList<String>();
 		if (Strings.isNotBlank(additional)) {
-			text+="|"+additional;
+			googleFonts.add(additional);
 		}
-		out.startElement("link").withHref("https://fonts.googleapis.com/css?family="+text).rel("stylesheet").type("text/css").endElement("link");
+		String testFont = getRequest().getString("_font");
+		if (Strings.isNotBlank(testFont)) {
+			if ("Inter".equals(testFont)) {
+				out.startElement("link").withHref("https://rsms.me/inter/inter.css").rel("stylesheet").type("text/css").endElement("link");
+			} else {
+				googleFonts.add(Strings.encodeURL(testFont) + ":300,400,500,600,700");
+			}
+			out.startElement("style").text(".oo_body {font-family: '"+testFont+"', Arial !important;}").endElement("style");
+		}
+		out.startElement("link").withHref("https://use.typekit.net/dqs7hkt.css").rel("stylesheet").type("text/css").endElement("link");
+		if (!googleFonts.isEmpty()) {
+			out.startElement("link").withHref("https://fonts.googleapis.com/css?family="+googleFonts.stream().collect(Collectors.joining("|"))+"&display=swap").rel("stylesheet").type("text/css").endElement("link");
+		}
 	}
 
 	public String getAdditional() {

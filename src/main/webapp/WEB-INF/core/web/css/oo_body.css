@@ -1,5 +1,5 @@
 .oo_body {
-  font-family: "Hind Vadodara", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-family: "myriad-pro", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   background: #fafafa;
   margin: 0;
   padding: 0;
@@ -8,3 +8,9 @@
   line-height: 1.25; }
   .oo_body-light {
     background: #fff; }
+
+.hui_button, .hui_formula, .hui_textinput, .hui_panel_titlebar {
+  font-family: inherit !important; }
+
+.hui_button {
+  letter-spacing: .02em; }

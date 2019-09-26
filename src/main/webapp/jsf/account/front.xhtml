@@ -12,7 +12,7 @@
 
     <ui:define name="body">
       <o:box spacious="true">
-        <o:header styleClass="oo_space_bottom-2 account_heading" level="0">#{msg.account}</o:header>
+        <o:header styleClass="oo_space_bottom-3 account_heading" level="0">#{msg.account}</o:header>
         <c:if test="#{!accountSettingsView.emailConfirmed}">
           <div class="oo_message account_message oo_space_bottom-2">
             <p>${msg.email_confirmation_warning} <o:link name="confirmEmail">#{msg.send_email_confirm}</o:link></p>

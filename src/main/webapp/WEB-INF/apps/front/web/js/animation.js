@@ -66,24 +66,26 @@ hui.on(function() {
       parent : title,
       style : {
         'opacity' : 0,
+        'display' : 'inline-block',
+        'transform' : 'scale(0)',
         'position' : 'relative',
         'top' : Math.round((Math.random() * 100 - 50)) + 'px'
       }
     }));
   };
 
-  var slogan = hui.get('slogan');
+  //var slogan = hui.get('slogan');
 
-  hui.cls.add(slogan, 'is-hidden');
+  //hui.cls.add(slogan, 'is-hidden');
 
   window.setTimeout(function() {
     window.setTimeout(animateTitle, 100);
 
 
 
-    window.setTimeout(function() {
-      hui.cls.remove(slogan, 'is-hidden');
-    }, 4000);
+    //window.setTimeout(function() {
+    //  hui.cls.remove(slogan, 'is-hidden');
+    //}, 4000);
 
 
     function animateTitle() {
@@ -93,7 +95,7 @@ hui.on(function() {
         hui.animate({
           node : chr,
           css : {
-            opacity : 1, top : '0px'
+            opacity : 1, top : '0px', transform: 'scale(1)'
           },
           delay : 500 + delay,
           ease : hui.ease.elastic,

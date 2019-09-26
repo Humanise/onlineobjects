@@ -1,11 +1,18 @@
 $link-color: #08c;
 $dimmed-color: #999;
 
+
 $default-font-family: 'Hind Vadodara', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+$default-font-family: 'myriad-pro', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+
 $monospace-font-family: Monaco, monospace;
 
 $small-font-size: 14px;
 $regular-font-size: 16px;
+
+@mixin text-spacing {
+  letter-spacing: .02em;
+}
 
 @mixin border-box {
   box-sizing: border-box;

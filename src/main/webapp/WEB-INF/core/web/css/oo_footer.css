@@ -2,7 +2,8 @@
   text-align: center;
   margin: 0;
   padding-top: 20px;
-  color: #666; }
+  color: #666;
+  letter-spacing: .02em; }
   .oo_footer_separator {
     margin: 0 5px; }
   .oo_footer_links {
@@ -37,11 +38,11 @@
       display: block;
       text-align: center;
       font-size: 36px;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       margin: 5px 0 0;
       color: #eee;
       text-shadow: 0 0 10px #fff;
-      font-weight: 500;
+      font-weight: 600;
       transition: color 2s; }
   .oo_footer:hover .oo_footer_logo span, .oo_footer:hover .oo_footer_logo strong {
     color: #ddd; }

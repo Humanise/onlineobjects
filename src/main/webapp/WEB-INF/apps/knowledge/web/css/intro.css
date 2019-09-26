@@ -144,7 +144,7 @@
 @media screen and (min-width: 1000px) {
   .intro_points {
     font-size: 24pt; }
-    .intro_points > li {
+    .intro_points li {
       margin: 20px 0; }
   .intro_platform > h2 {
     font-size: 32pt; } }

@@ -70,7 +70,8 @@
   transition: opacity .3s;
   padding: 5px;
   box-sizing: border-box;
-  -moz-box-sizing: border-box; }
+  -moz-box-sizing: border-box;
+  letter-spacing: 0; }
   .oo_filters_filter.is-visible {
     opacity: 1;
     z-index: 1; }

@@ -32,7 +32,6 @@
       background: #40d8ff5c;
       padding: 0 35px;
       font-size: 30px;
-      font-family: 'Hind Vadodara', sans-serif;
       box-shadow: inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #225eb6c2, inset 0px -1px 8px 2px #00317526;
       color: rgba(4, 43, 70, 0.82);
       position: relative;
@@ -70,6 +69,7 @@
       transform: scale(.95) translate(0,10px);
     }
     &:active:before {
+      top: 12px;
       box-shadow: 0 17px 10px 5px rgba(0,0,0,1);
       opacity: .11;
     }

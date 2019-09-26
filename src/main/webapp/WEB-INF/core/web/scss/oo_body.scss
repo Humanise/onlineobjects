@@ -13,3 +13,10 @@
     background: #fff;
   }
 }
+
+.hui_button, .hui_formula, .hui_textinput, .hui_panel_titlebar {
+  font-family: inherit !important;
+}
+.hui_button {
+  @include text-spacing;
+}

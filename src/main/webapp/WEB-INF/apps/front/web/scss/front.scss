@@ -4,14 +4,13 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  height: 100vh;
   justify-content: space-evenly;
+  padding: 10px 0;
 }
 
 .container {
   text-align: center;
   position: relative;
-  padding-bottom: 40px;
 }
 
 .logo {
@@ -33,6 +32,15 @@
   }
 }
 
+.fake {
+  width: 100%;
+  height: 100%;
+  background: url('/gfx/logo.svg') 50% no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 .title {
   font-size: 14vw;
@@ -121,6 +129,14 @@ li {
   }
   .oo_footer_logo {
     display: none;
+  }
+}
+
+
+@media (min-height: 450px) {
+
+  .root {
+    height: 100vh;
   }
 }
 

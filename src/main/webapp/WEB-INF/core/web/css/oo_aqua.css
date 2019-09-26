@@ -24,7 +24,6 @@
     background: #40d8ff5c;
     padding: 0 35px;
     font-size: 30px;
-    font-family: 'Hind Vadodara', sans-serif;
     box-shadow: inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #225eb6c2, inset 0px -1px 8px 2px #00317526;
     color: rgba(4, 43, 70, 0.82);
     position: relative;
@@ -53,6 +52,7 @@
       box-shadow: inset 0px 3px 7px 0 #f1d0ff69, inset 0px 20px 35px 6px #3566afc2, inset 0px -1px 8px 2px #00317526, 0 5px 20px rgba(0,0,0,.15);*/
     transform: scale(0.95) translate(0, 10px); }
   .oo_aqua:active:before {
+    top: 12px;
     box-shadow: 0 17px 10px 5px black;
     opacity: .11; }
   .oo_aqua_button:before {
