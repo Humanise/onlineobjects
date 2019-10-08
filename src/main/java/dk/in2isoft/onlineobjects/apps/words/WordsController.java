@@ -72,6 +72,12 @@ public class WordsController extends WordsControllerBase {
 	@Path(exactly="diagram.json")
 	public void getDiagram(Request request) throws ModelException, IOException {
 		String text = request.getString("word");
+		// TODO: Generalize this to all robots
+		String agent = request.getRequest().getHeader("User-Agent");
+		if (agent != null && agent.contains("Googlebot")) {
+			request.sendObject(new Diagram());
+			return;
+		}
 		
 		Diagram diagram = wordsModelService.getDiagram(text, request);
 		
