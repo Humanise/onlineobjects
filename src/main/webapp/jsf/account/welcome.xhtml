@@ -11,14 +11,17 @@
 
   <ui:composition template="templates/plain.xhtml">
 
+    <ui:define name="title">Welcome - </ui:define>
+
     <ui:define name="body">
       <o:box spacious="true">
         <o:header level="0" styleClass="oo_space_bottom-3">Welcome to OnlineObjects</o:header>
         <oc:text>
           <p>We have <strong>sent you an e-mail</strong> where we ask you to <strong>confirm your account</strong>.</p>
-          <p>Please do so soon so we can <strong>trust that you are the owner</strong> of the e-mail account.</p>
+          <p>Please do so soon so we can <strong>trust that you are the owner</strong> of the e-mail address.</p>
           <p>You can already use <o:link app="knowledge" href="/app">the web interface of the Knowledge app</o:link>.</p>
           <p>If you use a Mac you can get the <o:link app="front" href="/mac">Mac App for OnlineObjects</o:link>.</p>
+          <p>If you use an iPhone or iPad you can get the <o:link app="front" href="https://itunes.apple.com/us/app/knowledge-from-onlineobjects/id1227523203">Knowledge app for iOS</o:link>.</p>
         </oc:text>
       </o:box>
     </ui:define>
