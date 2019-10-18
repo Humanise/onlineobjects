@@ -39,7 +39,7 @@ public class Blend {
 		addPath("hui","css","button.css");
 		addPath("hui","css","boundpanel.css");
 		addPath("hui","css","checkbox.css");
-		addPath("hui","css","formula.css");
+		addPath("hui","css","form.css");
 		addPath("hui","css","message.css");
 		addPath("hui","css","icon.css");
 		addPath("hui","css","effects.css");

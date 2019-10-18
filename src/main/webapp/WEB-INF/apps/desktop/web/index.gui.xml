@@ -17,7 +17,7 @@
 	</div>
 	
 	<window title="Add bookmark" width="500" padding="10" name="bookmarkWindow" variant="news">
-		<formula name="bookmarkFormula">
+		<form name="bookmarkFormula">
 			<fields labels="above">
 				<field label="Title">
 					<text-input key="name"/>
@@ -36,6 +36,6 @@
 				<button text="Cancel" name="cancelBookmark"/>
 				<button text="Add" submit="true" highlighted="true"/>
 			</buttons>
-		</formula>
+		</form>
 	</window>
 </gui>

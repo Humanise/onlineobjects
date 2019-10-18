@@ -79,10 +79,10 @@
     </component>
   </tag>
   <tag>
-    <tag-name>formula</tag-name>
+    <tag-name>form</tag-name>
     <component>
-      <component-type>hui.formula</component-type>
-      <renderer-type>hui.formula</renderer-type>
+      <component-type>hui.form</component-type>
+      <renderer-type>hui.form</renderer-type>
     </component>
   </tag>
   <tag>

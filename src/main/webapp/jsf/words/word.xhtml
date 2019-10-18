@@ -161,7 +161,7 @@
             </gui:boundPanel>
 
             <gui:boundPanel name="addVariantPanel" hideOnClick="true" width="200">
-              <gui:formula name="addVariantForm">
+              <gui:form name="addVariantForm">
                 <gui:fields>
                   <gui:field label="#{msg.language}">
                     <gui:dropDown key="language" items="#{wordFinderView.languages}"/>
@@ -173,7 +173,7 @@
                 <gui:buttons align="right">
                   <gui:button text="#{msg.add}" name="addVariantButton" highlighted="true"/>
                 </gui:buttons>
-              </gui:formula>
+              </gui:form>
             </gui:boundPanel>
 
           </c:if>

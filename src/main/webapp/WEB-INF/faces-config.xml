@@ -203,8 +203,8 @@
       <component-class>dk.in2isoft.in2igui.jsf.VideoPlayerComponent</component-class>
     </component>
     <component>
-      <component-type>hui.formula</component-type>
-      <component-class>dk.in2isoft.in2igui.jsf.FormulaComponent</component-class>
+      <component-type>hui.form</component-type>
+      <component-class>dk.in2isoft.in2igui.jsf.FormComponent</component-class>
     </component>
     <component>
       <component-type>hui.link</component-type>

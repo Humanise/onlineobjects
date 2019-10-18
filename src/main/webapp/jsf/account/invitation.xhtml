@@ -34,7 +34,7 @@
             </div>
             <o:header level="2">Tilmeld dig her...</o:header>
             <div class="account_invitation_form">
-              <gui:formula name="invitationFormula">
+              <gui:form name="invitationFormula">
                 <gui:fields>
                   <gui:field label="Brugernavn">
                     <gui:textfield name="invitationUsername" key="username" value="#{accountInvitationView.newUsername}"/>
@@ -52,7 +52,7 @@
                 <gui:buttons>
                   <gui:button text="Tilmeld" name="changePassword" submit="true"/>
                 </gui:buttons>
-              </gui:formula>
+              </gui:form>
             </div>
           </h:panelGroup>
         </h:panelGroup>

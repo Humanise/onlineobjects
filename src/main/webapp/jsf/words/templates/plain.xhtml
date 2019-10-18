@@ -115,13 +115,13 @@
 
     <c:if test="#{wordsLayoutView.canModify}">
       <window name="importWindow" xmlns="http://www.in2isoft.dk/in2igui" width="400" padding="10">
-        <formula>
+        <form>
           <fields>
             <field label="Adresse">
               <textInput/>
             </field>
           </fields>
-        </formula>
+        </form>
         <upload url="/importUpload" name="importUpload"/>
       </window>
     </c:if>

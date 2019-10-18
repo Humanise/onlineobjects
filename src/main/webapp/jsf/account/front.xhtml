@@ -34,7 +34,7 @@
                   </p>
                 </gui:page>
                 <gui:page>
-                  <gui:formula name="nameForm">
+                  <gui:form name="nameForm">
                     <gui:field label="#{msg.first_name}">
                       <gui:textInput key="first" value="#{accountSettingsView.firstName}"/>
                     </gui:field>
@@ -48,7 +48,7 @@
                       <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeName"/>
                       <gui:button text="#{msg.change}" submit="true" variant="light" highlighted="true"/>
                     </gui:buttons>
-                  </gui:formula>
+                  </gui:form>
                 </gui:page>
               </gui:pages>
             </oc:property>
@@ -72,7 +72,7 @@
                   <oc:text small="true" styleClass="oo_space_bottom">
                     <p>${msg.email_change_info}</p>
                   </oc:text>
-                  <gui:formula name="mailForm">
+                  <gui:form name="mailForm">
                     <gui:field label="#{msg.primary_email}">
                       <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}" testName="changeMailInput"/>
                     </gui:field>
@@ -80,7 +80,7 @@
                       <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeEmail"/>
                       <gui:button text="#{msg.change}" submit="true" variant="light" highlighted="true" testName="changeMailSubmit"/>
                     </gui:buttons>
-                  </gui:formula>
+                  </gui:form>
                 </gui:page>
               </gui:pages>
             </oc:property>
@@ -103,7 +103,7 @@
               <oc:text small="true" styleClass="oo_space_bottom">
                 <p>${msg.password_change_info}</p>
               </oc:text>
-              <gui:formula name="passwordForm">
+              <gui:form name="passwordForm">
                 <gui:field label="#{msg.current_password}">
                   <gui:textInput key="currentPassword" secret="true"/>
                 </gui:field>
@@ -114,7 +114,7 @@
                   <gui:button text="#{msg.cancel}" name="cancelPassword" variant="light"/>
                   <gui:button text="#{msg.change_password}" submit="true" variant="light" highlighted="true"/>
                 </gui:buttons>
-              </gui:formula>
+              </gui:form>
             </gui:page>
           </gui:pages>
         </oc:segment>

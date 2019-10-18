@@ -40,7 +40,7 @@
           </c:otherwise>
         </c:choose>
         </oc:text>
-        <gui:formula name="confirmationForm">
+        <gui:form name="confirmationForm">
           <gui:field label="#{msg.username}">
             <gui:textInput key="username" testName="username"/>
           </gui:field>
@@ -51,7 +51,7 @@
             <gui:button text="#{msg.cancel}" href="/${accountSettingsView.language}/" highlighted="true" variant="light"/>
             <gui:button text="#{msg.yes_delete_account}" variant="light" submit="true"/>
           </gui:buttons>
-        </gui:formula>
+        </gui:form>
       </o:box>
 
       <o:dependency src="/WEB-INF/apps/account/web/js/delete.js"/>

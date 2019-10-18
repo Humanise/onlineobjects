@@ -20,7 +20,7 @@
 						<split>
 							<row height="30%">
 								<overflow>
-								<formula name="textAnalysisFormula" padding="10">
+								<form name="textAnalysisFormula" padding="10">
 									<fields>
 										<field label="URL">
 											<text-input key="url"/>
@@ -32,7 +32,7 @@
 									<buttons>
 										<button text="Go" highlighted="true" submit="true"/>
 									</buttons>
-								</formula>
+								</form>
 								</overflow>
 							</row>
 							<row>
@@ -42,7 +42,7 @@
 					</page>
 
 					<page key="textExtraction">
-						<formula name="textExtractionFormula">
+						<form name="textExtractionform">
 							<fields>
 								<field label="URL">
 									<text-input key="url"/>
@@ -51,7 +51,7 @@
 									<code-input name="textExtractionOutput"/>
 								</field>
 							</fields>
-						</formula>
+						</form>
 						<buttons>
 							<button text="Go" highlighted="true" submit="true"/>
 						</buttons>
@@ -65,7 +65,7 @@
 
 	<window name="bookmarkWindow" title="Bogmærke" width="500">
 		<space all="5">
-			<formula name="bookmarkFormula">
+			<form name="bookmarkFormula">
 				<fields>
 					<field label="Navn">
 						<text-input key="name"/>
@@ -85,7 +85,7 @@
 					<button text="Annuller" name="cancelBookmark"/>
 					<button text="Gem" highlighted="true" name="saveBookmark"/>
 				</buttons>
-			</formula>
+			</form>
 		</space>
 	</window>
 

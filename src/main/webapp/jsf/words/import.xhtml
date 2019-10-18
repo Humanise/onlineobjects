@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:o="http://www.onlineobjects.com/jsf" 
-  xmlns:ui="http://java.sun.com/jsf/facelets" 
-  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:gui="http://www.in2isoft.dk/in2igui"
   xmlns:c="http://java.sun.com/jsp/jstl/core"
@@ -40,15 +40,15 @@
         </c:forEach>
         </c:if>
       </div>
-      
+
       <gui:boundPanel name="registrationPanel" hideOnClick="true">
-        <gui:formula name="registrationForm">
+        <gui:form name="registrationForm">
           <gui:dropDown key="language" items="#{wordFinderView.languages}" value="#{wordsImportView.language.code}"/>
           <gui:dropDown key="category" items="#{wordFinderView.categories}"/>
           <gui:button text="Register" name="registerButton" highlighted="true"/>
-        </gui:formula>
+        </gui:form>
       </gui:boundPanel>
     </ui:define>
-    
+
   </ui:composition>
 </html>

@@ -23,7 +23,7 @@ xsi:schemaLocation="uri:hui http://www.humanise.dk/hui/xslt/schema.xsd"
   </structure>
 
   <window name="applicationWindow" title="Application" width="300" padding="5">
-    <formula name="applicationFormula">
+    <form name="applicationFormula">
       <fields>
         <field label="Name">
           <text-input key="name"/>
@@ -37,6 +37,6 @@ xsi:schemaLocation="uri:hui http://www.humanise.dk/hui/xslt/schema.xsd"
         <button name="deleteApplication" text="Delete"/>
         <button text="Save" highlighted="true" submit="true"/>
       </buttons>
-    </formula>
+    </form>
   </window>
 </gui>

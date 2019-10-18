@@ -67,7 +67,7 @@
   </structure>
 
   <window name="userEditor" title="User" padding="10" width="300">
-    <formula name="userFormula">
+    <form name="userFormula">
       <fields>
         <field label="Name:">
           <text-input key="name"/>
@@ -92,11 +92,11 @@
         </button>
         <button text="Update" name="saveUser" highlighted="true"/>
       </buttons>
-    </formula>
+    </form>
   </window>
 
   <window name="memberWindow" title="New member" padding="10" width="300">
-    <formula name="memberFormula">
+    <form name="memberFormula">
       <fields>
         <field label="Name:">
           <text-input key="name"/>
@@ -115,7 +115,7 @@
         <button text="Cancel" name="cancelMember"/>
         <button text="Create" submit="true" highlighted="true"/>
       </buttons>
-    </formula>
+    </form>
   </window>
 
   <panel name="clientPanel" title="Client" padding="10" width="300">

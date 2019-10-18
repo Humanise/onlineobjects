@@ -30,7 +30,7 @@
       <c:if test="#{not empty authenticationLoginView.message}">
         <p class="oo_message oo_space_bottom">#{authenticationLoginView.message}</p>
       </c:if>
-      <gui:formula action="authenticate" name="formula">
+      <gui:form action="authenticate" name="formula">
         <gui:field label="#{msg.username}">
           <gui:textInput inputName="username" name="username"/>
         </gui:field>
@@ -43,7 +43,7 @@
           <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
           <gui:button text="#{msg.log_in}" submit="true"/>
         </p>
-      </gui:formula>
+      </gui:form>
     </o:box>
     <o:footer/>
     <o:dependency src="/WEB-INF/core/web/css/oo_message.css"/>

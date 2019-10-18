@@ -12,17 +12,17 @@ import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Strings;
 
-@FacesComponent(value=FormulaComponent.TYPE)
-@Dependencies(js = { "/hui/js/Formula.js" }, css = { "/hui/css/formula.css" }, requires = {HUIComponent.class})
-public class FormulaComponent extends AbstractComponent {
+@FacesComponent(value=FormComponent.TYPE)
+@Dependencies(js = { "/hui/js/Form.js" }, css = { "/hui/css/form.css" }, requires = {HUIComponent.class})
+public class FormComponent extends AbstractComponent {
 
-	public static final String TYPE = "hui.formula";
+	public static final String TYPE = "hui.form";
 
 	private String name;
 	private String action;
 	private String method;
 
-	public FormulaComponent() {
+	public FormComponent() {
 		super(TYPE);
 	}
 	
@@ -43,7 +43,7 @@ public class FormulaComponent extends AbstractComponent {
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
-		ClassBuilder cls = new ClassBuilder("hui_formula").add(getAttribute("styleClass"));
+		ClassBuilder cls = new ClassBuilder("hui_form").add(getAttribute("styleClass"));
 		writer.startElement("form").withClass(cls).withId(id);
 		if (Strings.isNotBlank(action)) {
 			writer.withAttribute("action", action);
@@ -57,7 +57,7 @@ public class FormulaComponent extends AbstractComponent {
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endElement("form");
 		ScriptWriter js = out.getScriptWriter().startScript();
-		js.startNewObject("hui.ui.Formula").property("element", getClientId());
+		js.startNewObject("hui.ui.Form").property("element", getClientId());
 		if (name!=null) {
 			js.comma().property("name", name);
 		}		

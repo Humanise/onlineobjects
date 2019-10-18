@@ -19,7 +19,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.in2igui.jsf.BoxComponent;
 import dk.in2isoft.in2igui.jsf.ButtonComponent;
 import dk.in2isoft.in2igui.jsf.CheckboxComponent;
-import dk.in2isoft.in2igui.jsf.FormulaComponent;
+import dk.in2isoft.in2igui.jsf.FormComponent;
 import dk.in2isoft.in2igui.jsf.ListComponent;
 import dk.in2isoft.in2igui.jsf.MessageComponent;
 import dk.in2isoft.in2igui.jsf.PanelComponent;
@@ -35,7 +35,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value = TopBarComponent.FAMILY)
 @Dependencies(js = { "/WEB-INF/core/web/js/oo_topbar.js" }, css = { "/WEB-INF/core/web/css/oo_topbar.css" }, requires = { OnlineObjectsComponent.class, IconComponent.class }, uses = {
-		PanelComponent.class, FormulaComponent.class, TextInputComponent.class, ButtonComponent.class, BoxComponent.class, ListComponent.class, SourceComponent.class, MessageComponent.class, LinkComponent.class, CheckboxComponent.class })
+		PanelComponent.class, FormComponent.class, TextInputComponent.class, ButtonComponent.class, BoxComponent.class, ListComponent.class, SourceComponent.class, MessageComponent.class, LinkComponent.class, CheckboxComponent.class })
 public class TopBarComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.topBar";

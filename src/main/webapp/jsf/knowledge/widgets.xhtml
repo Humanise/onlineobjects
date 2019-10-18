@@ -10,14 +10,14 @@
   <ui:composition>
 
       <gui:boundPanel name="newFeedPanel" variant="light" width="300" modal="true">
-        <gui:formula name="newFeedForm">
+        <gui:form name="newFeedForm">
           <gui:field label="Address">
             <gui:textInput key="url" multiline="true"/>
           </gui:field>
           <gui:buttons top="10">
             <gui:button submit="true" text="Add" variant="light"/>
           </gui:buttons>
-        </gui:formula>
+        </gui:form>
       </gui:boundPanel>
 
       <gui:boundPanel name="wordPanel" variant="light" width="200" modal="true">
@@ -62,7 +62,7 @@
       </gui:boundPanel>
 
       <gui:boundPanel name="addPanel" variant="light" width="300" modal="true">
-        <gui:formula name="addForm">
+        <gui:form name="addForm">
           <gui:textInput key="url" multiline="true"/>
           <div style="padding: 5px 2px 2px 0">
             <gui:buttons>
@@ -70,11 +70,11 @@
               <gui:button submit="true" text="Add" variant="light"/>
             </gui:buttons>
           </div>
-        </gui:formula>
+        </gui:form>
       </gui:boundPanel>
 
       <window name="addressInfoWindow" title="Address" variant="light" width="400" modal="true" padding="10" xmlns="http://www.in2isoft.dk/in2igui">
-        <formula name="addressInfoForm">
+        <form name="addressInfoForm">
           <fields labels="above">
             <field label="Title">
               <textInput key="title" multiline="true"/>
@@ -96,11 +96,11 @@
             <button text="Cancel" name="cancelAddressInfo" variant="light"/>
             <button submit="true" text="Save" highlighted="true" variant="light"/>
           </buttons>
-        </formula>
+        </form>
       </window>
 
       <window name="settingsWindow" title="Settings" variant="light" width="300" modal="true" padding="10" xmlns="http://www.in2isoft.dk/in2igui">
-        <formula name="settingsForm">
+        <form name="settingsForm">
           <fields>
             <field label="Extraction algorithm">
               <dropDown name="extractionAlgorithm"
@@ -117,11 +117,11 @@
               <confirm text="Are you sure?"/>
             </button>
           </buttons>
-        </formula>
+        </form>
       </window>
 
       <window name="statementWindow" title="Statement" variant="light" width="500" modal="true" padding="10" xmlns="http://www.in2isoft.dk/in2igui">
-        <formula name="statementForm">
+        <form name="statementForm">
           <fields labels="above">
             <field label="Text">
               <textInput key="text" multiline="true" maxHeight="600"/>
@@ -153,11 +153,11 @@
             </button>
             <button text="Save" submit="true" variant="light" highlighted="true"/>
           </buttons>
-        </formula>
+        </form>
       </window>
 
       <window name="questionWindow" title="Question" variant="light" width="500" modal="true" padding="10" xmlns="http://www.in2isoft.dk/in2igui">
-        <formula name="questionForm">
+        <form name="questionForm">
           <fields labels="above">
             <field label="Text">
               <textInput key="text" multiline="true" maxHeight="600"/>
@@ -174,11 +174,11 @@
             </button>
             <button text="Save" submit="true" variant="light" highlighted="true"/>
           </buttons>
-        </formula>
+        </form>
       </window>
 
       <window name="hypothesisWindow" title="Hypothesis" variant="light" width="500" modal="true" padding="10" xmlns="http://www.in2isoft.dk/in2igui">
-        <formula name="hypothesisForm">
+        <form name="hypothesisForm">
           <fields labels="above">
             <field label="Text">
               <textInput key="text" multiline="true" maxHeight="600"/>
@@ -195,7 +195,7 @@
             </button>
             <button text="Save" submit="true" variant="light" highlighted="true"/>
           </buttons>
-        </formula>
+        </form>
       </window>
 
 

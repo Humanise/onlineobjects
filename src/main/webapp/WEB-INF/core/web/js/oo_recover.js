@@ -23,7 +23,7 @@
               da: 'Angiv venligst din e-mail eller brugernavn. Så sender vi instruktioner om hvordan du kan ændre din kode.'
             })
         }));
-        var form = this._form = hui.ui.Formula.create();
+        var form = this._form = hui.ui.Form.create();
         form.buildGroup(null,[{
           type: 'TextInput',
           label: {en: 'Username or e-mail:', da: 'Brugernavn eller e-mail:'},

@@ -54,7 +54,7 @@
 
     _getForm : function() {
       if (this._form) { return this._form; }
-      var form = this._form = hui.ui.Formula.create();
+      var form = this._form = hui.ui.Form.create();
       var group = form.buildGroup(null, [
         {
           type: 'TextInput',

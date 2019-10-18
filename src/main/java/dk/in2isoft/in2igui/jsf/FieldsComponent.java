@@ -38,9 +38,9 @@ public class FieldsComponent extends AbstractComponent {
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		if (!isLabelsAbove()) {
-			writer.startElement("table").withClass("hui_formula_fields");
+			writer.startElement("table").withClass("hui_form_fields");
 		} else {
-			writer.startElement("div").withClass("hui_formula_fields");
+			writer.startElement("div").withClass("hui_form_fields");
 		}
 	}
 	

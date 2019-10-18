@@ -162,9 +162,9 @@
         <c:if test="#{photosPhotoView.canModify}">
 
           <gui:boundPanel name="locationPanel" modal="true" >
-            <gui:formula name="locationForm">
+            <gui:form name="locationForm">
               <gui:locationInput key="location"/>
-            </gui:formula>
+            </gui:form>
             <div style="margin-top: 3px;">
               <gui:button text="Save" name="saveLocation" small="true"/>
             </div>

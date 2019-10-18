@@ -33,7 +33,7 @@ hui.ui.listen({
     if (!this._importWindow) {
       var win = this._importWindow = hui.ui.Box.create({title:'Import',absolute:true,width:500,modal:true,padding:10,closable:true});
       win.addToDocument();
-      var form = this._importForm = hui.ui.Formula.create({name:'importFormula'});
+      var form = this._importForm = hui.ui.Form.create({name:'importFormula'});
       form.buildGroup(null,[
         {'type':'TextInput',label:'Adresse',options:{key:'url'}}
       ]);

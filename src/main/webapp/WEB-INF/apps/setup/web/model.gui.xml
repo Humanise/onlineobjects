@@ -41,7 +41,7 @@
   </structure>
 
   <window name="entityEditor" width="300" padding="5">
-    <formula name="entityFormula">
+    <form name="entityFormula">
       <fields labels="above">
         <field label="Public access">
           <checkbox text="Modify" key="publicAlter"/>
@@ -55,6 +55,6 @@
         </button>
         <button text="Update" name="updateEntity" highlighted="true"/>
       </buttons>
-    </formula>
+    </form>
   </window>
 </gui>

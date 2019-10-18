@@ -9,7 +9,7 @@
   .oo_body-light {
     background: #fff; }
 
-.hui_button, .hui_formula, .hui_textinput, .hui_panel_titlebar {
+.hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
   font-family: inherit !important; }
 
 .hui_button {

@@ -74,7 +74,7 @@
 
   <window name="bookmarkWindow" title="Bogmærke" width="500">
     <space all="5">
-      <formula name="bookmarkFormula">
+      <form name="bookmarkFormula">
         <fields>
           <field label="Navn">
             <text-input key="name"/>
@@ -94,7 +94,7 @@
             <button title="Gem" highlighted="true" name="saveBookmark"/>
           </buttons>
         </fields>
-      </formula>
+      </form>
     </space>
   </window>
 

@@ -191,7 +191,7 @@ hui.ui.listen({
   addNote : function(text) {
     try {
       var win = hui.ui.Window.create({title:'New note',padding:5,variant:'news',width:500});
-      var form = hui.ui.Formula.create();
+      var form = hui.ui.Form.create();
       form.buildGroup(null,[
         {type:'TextInput',options:{value:text,multiline:true}}
       ])

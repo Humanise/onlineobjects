@@ -67,7 +67,7 @@ var personView = {
     this.profileEditor = hui.build('div',{'class':'profile_editor',style:'width:'+this.profileInfo.clientWidth+'px;position:absolute'});
     hui.style.set(this.profileEditor,{opacity:0});
     this.container.appendChild(this.profileEditor);
-    var form = this.profileForm = hui.ui.Formula.create();
+    var form = this.profileForm = hui.ui.Form.create();
     var cancel = hui.ui.Button.create({text:'Annuller'});
     var update = hui.ui.Button.create({text:'Opdatér',highlighted:true});
     cancel.listen({$click:this.cancelEditor.bind(this)});

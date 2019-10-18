@@ -71,7 +71,7 @@
 
   <window name="imageWindow" title="Egenskaber" width="300" variant="dark">
     <space all="5">
-      <formula name="imageFormula">
+      <form name="imageFormula">
         <fields>
           <field label="Navn">
             <text-input key="name"/>
@@ -88,7 +88,7 @@
           <button text="Annuller" name="cancelImage"/>
           <button text="Gem" highlighted="true" name="saveImage"/>
         </buttons>
-      </formula>
+      </form>
     </space>
   </window>
 </gui>

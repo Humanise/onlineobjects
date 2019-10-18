@@ -44,7 +44,7 @@
   </rows>
 
   <window name="personWindow" title="Person" width="400" padding="5">
-    <formula name="personFormula">
+    <form name="personFormula">
       <columns space="10" flexible="true">
         <column>
           <fields labels="above">
@@ -106,11 +106,11 @@
         <button title="Annuller" name="cancelPerson"/>
         <button title="Gem" highlighted="true" name="savePerson"/>
       </buttons>
-    </formula>
+    </form>
   </window>
 
   <window name="invitationWindow" title="Ny invitation" width="300" padding="10">
-    <formula name="invitationFormula">
+    <form name="invitationFormula">
       <fields>
         <field label="Navn">
           <text-input key="name"/>
@@ -125,7 +125,7 @@
           <button title="Send" highlighted="true" name="sendInvitation"/>
         </buttons>
       </fields>
-    </formula>
+    </form>
   </window>
 
 </gui>
