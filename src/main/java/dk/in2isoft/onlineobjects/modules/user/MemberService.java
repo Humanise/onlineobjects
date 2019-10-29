@@ -204,6 +204,9 @@ public class MemberService {
 	}
 
 	public boolean isUsernameTaken(String username, Operator operator) {
+		if (!isValidUsername(username)) {
+			return false;
+		}
 		return modelService.getUser(username, operator) != null;
 	}
 
