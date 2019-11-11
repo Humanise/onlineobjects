@@ -43,6 +43,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		request.redirect("/");
 	}
 
+	@Path
 	public void authenticate(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
@@ -64,6 +65,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	}
 	
 
+	@Path
 	public void changeUser(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
 		String password = request.getString("password");
@@ -82,6 +84,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	}
 	
 
+	@Path
 	public void recoverPassword(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
 		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
@@ -103,6 +106,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		memberService.signUp(request.getSession(), username, password, fullName, email, request);
 	}
 
+	@Path
 	public void getUserInfo(Request request) throws ModelException, IOException, IllegalRequestException {
 		UserSession session = request.getSession();
 		User user = modelService.get(User.class, session.getIdentity(), request);
@@ -133,6 +137,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	}
 	
 
+	@Path
 	public void logout(Request request) throws IOException, EndUserException {
 		securityService.logOut(request.getSession());
 		String redirect = request.getString("redirect");

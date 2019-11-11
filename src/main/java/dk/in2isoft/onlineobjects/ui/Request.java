@@ -225,10 +225,15 @@ public class Request implements Operator {
 	public String[] getLocalPath() {
 		return (String[]) ArrayUtils.subarray(fullPath, this.localContext.length, fullPath.length);
 	}
+
+	private String localPathAsString = null;
 	
 	public String getLocalPathAsString() {
-		String[] localPath = getLocalPath();
-		return "/"+StringUtils.join(localPath,"/");
+		if (localPathAsString==null) {
+			String[] localPath = getLocalPath();
+			localPathAsString = "/"+StringUtils.join(localPath,"/");
+		}
+		return localPathAsString;
 	}
 
 	public boolean testLocalPathStart(String... path) {

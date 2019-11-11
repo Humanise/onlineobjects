@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 
 import org.apache.commons.lang.ArrayUtils;
 
@@ -35,29 +33,8 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		if (language!=null) {
 			request.setLanguage(language);
 		}
-		RequestDispatcher dispatcher = controller.getDispatcher(request);
-		if (dispatcher != null) {
-			request.getResponse().setContentType("text/html");
-			request.getResponse().setCharacterEncoding("UTF-8");
-			try {
-				dispatcher.forward(request.getRequest(), request.getResponse());
-			} catch (ServletException e) {
-				throw new EndUserException(e);
-			}
-		} else {
-			if (path.length > 2) {
-				try {
-					if (!callController(controller, path[2], request)) {
-						String[] filePath = new String[] { "service", controller.getName() };
-						if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
-							controller.unknownRequest(request);
-						}
-					}
-				} catch (NoSuchMethodException e) {
-				}
-			} else {
-				controller.unknownRequest(request);
-			}
+		if (!controller.handle(request)) {
+			controller.unknownRequest(request);
 		}
 		return true;
 	}

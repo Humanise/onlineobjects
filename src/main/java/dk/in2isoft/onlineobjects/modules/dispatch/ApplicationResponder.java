@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.InitializingBean;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ApplicationResponder extends AbstractControllerResponder implements Responder, InitializingBean {
@@ -26,7 +23,6 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 	private Map<String, String> mappings;
 	
 	private HashMap<String, ApplicationController> controllers;
-	private DispatchingService dispatchingService;
 		
 	public void afterPropertiesSet() throws Exception {
 		String domain = configurationService.getRootDomain();
@@ -74,43 +70,29 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 			throw new ContentNotFoundException("Application not found: "+application);
 		}
 		String[] path = request.getLocalPath();
-		try {
-			request.setApplication(application);
-			if (!controller.isAllowed(request)) {
-				if (controller.askForUserChange(request)) {
-					request.redirectFromBase("/service/authentication/?redirect="+request.getRequest().getRequestURI()+"&action=appAccessDenied");
-					return;
-				} else {
-					throw new SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getIdentity()+"'");
-				}
+		request.setApplication(application);
+		if (!controller.isAllowed(request)) {
+			if (controller.askForUserChange(request)) {
+				request.redirectFromBase("/service/authentication/?redirect="+request.getRequest().getRequestURI()+"&action=appAccessDenied");
+				return;
+			} else {
+				throw new SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getIdentity()+"'");
 			}
-			String language = controller.getLanguage(request);
-			if (language!=null) {
-				request.setLanguage(language);
-			}
-			if (!controller.handle(request)) {
-				RequestDispatcher dispatcher = controller.getDispatcher(request);
-				if (dispatcher != null) {
-					request.getResponse().setContentType("text/html");
-					request.getResponse().setCharacterEncoding("UTF-8");
-					dispatcher.forward(request.getRequest(), request.getResponse());
-				} else if (path.length > 0) {
-					String[] filePath = new String[] { "apps", application };
-					if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
-						controller.unknownRequest(request);
-					}
-				} else {
+		}
+		String language = controller.getLanguage(request);
+		if (language!=null) {
+			request.setLanguage(language);
+		}
+		if (!controller.handle(request)) {
+			if (path.length > 0) {
+				String[] filePath = new String[] { "apps", application };
+				if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
 					controller.unknownRequest(request);
 				}
+			} else {
+				controller.unknownRequest(request);
 			}
-		} catch (ServletException e) {
-			dispatchingService.displayError(request, e);
 		}
-	}
-
-	
-	public void setDispatchingService(DispatchingService dispatchingService) {
-		this.dispatchingService = dispatchingService;
 	}
 	
 	public void setApplicationControllers(List<ApplicationController> controllers) {

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
@@ -76,8 +77,9 @@ public abstract class AbstractController {
 				return true;
 			}			
 		}
+		String localPath = request.getLocalPathAsString();
 		for (Pair<Pattern,Method> exp : expressionMethodPaths) {
-			if (exp.getKey().matcher(request.getLocalPathAsString()).matches()) {
+			if (exp.getKey().matcher(localPath).matches()) {
 				invokeMethod(request, exp.getValue());
 				return true;
 			}
@@ -88,6 +90,20 @@ public abstract class AbstractController {
 				return true;
 			}			
 		}
+		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
+			if (entry.getKey().matcher(localPath).matches()) {
+				ServletContext context = request.getRequest().getSession().getServletContext();
+				RequestDispatcher dispatcher = context.getRequestDispatcher("/faces" + entry.getValue());
+				request.getResponse().setContentType("text/html");
+				request.getResponse().setCharacterEncoding("UTF-8");
+				try {
+					dispatcher.forward(request.getRequest(), request.getResponse());
+					return true;
+				} catch (ServletException e) {
+					throw new EndUserException(e);
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -96,13 +112,6 @@ public abstract class AbstractController {
 	}
 
 	public RequestDispatcher getDispatcher(Request request) {
-		ServletContext context = request.getRequest().getSession().getServletContext();
-		String localPath = request.getLocalPathAsString();
-		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
-			if (entry.getKey().matcher(localPath).matches()) {
-				return context.getRequestDispatcher("/faces" + entry.getValue());
-			}
-		}
 		return null;
 	}
 
