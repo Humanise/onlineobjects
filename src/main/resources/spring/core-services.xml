@@ -22,8 +22,6 @@
         <property name="securityService" ref="securityService"/>
     </bean>
 	
-	<bean id="languageController" class="dk.in2isoft.onlineobjects.service.language.LanguageController" autowire="byType"/>
-	
 	<bean id="dependencyController" class="dk.in2isoft.onlineobjects.service.dependency.DependencyController" autowire="byType"/>
 
 </beans>

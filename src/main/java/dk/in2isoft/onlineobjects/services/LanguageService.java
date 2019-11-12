@@ -22,9 +22,9 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
+import dk.in2isoft.onlineobjects.modules.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
-import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 
 public class LanguageService {
 

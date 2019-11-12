@@ -44,10 +44,10 @@ import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective
 import dk.in2isoft.onlineobjects.modules.knowledge.ProfileApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.QuestionApiPerspective;
 import dk.in2isoft.onlineobjects.modules.knowledge.StatementApiPerspective;
+import dk.in2isoft.onlineobjects.modules.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.modules.user.Agreement;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
-import dk.in2isoft.onlineobjects.service.language.TextAnalysis;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class APIController extends APIControllerBase {

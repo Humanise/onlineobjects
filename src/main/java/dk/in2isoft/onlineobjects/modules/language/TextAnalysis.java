@@ -1,10 +1,8 @@
-package dk.in2isoft.onlineobjects.service.language;
+package dk.in2isoft.onlineobjects.modules.language;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 
 public class TextAnalysis {
 
