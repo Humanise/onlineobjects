@@ -20,3 +20,19 @@
 .hui_button {
   @include text-spacing;
 }
+
+.oo_body {
+  .hui_form_field_label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .hui_textinput {
+    font-size: 14px;
+  }
+  .hui_checkbox_label {
+    font-size: 14px;
+  }
+  .hui_button {
+    font-size: 10pt;
+  }
+}
