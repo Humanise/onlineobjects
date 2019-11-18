@@ -292,9 +292,8 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		Question dummy = new Question();
+		Question dummy = knowledgeService.newQuestion(request.getString("text", "Text is required"));
 		dummy.setId(id);
-		dummy.setText(request.getString("text", "Text is required"));
 		knowledgeService.updateQuestion(dummy, request);
 		request.commit();
 		return knowledgeService.getQuestionPerspective(id, user, request);
@@ -469,9 +468,9 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		Statement dummy = new Statement();
+		
+		Statement dummy = knowledgeService.newStatement(request.getString("text", "Text is required"));
 		dummy.setId(id);
-		dummy.setText(request.getString("text", "Text is required"));
 		knowledgeService.updateStatement(dummy, request);
 		return knowledgeService.getStatementPerspective(id, user, request);
 	}
@@ -481,9 +480,8 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		Hypothesis dummy = new Hypothesis();
+		Hypothesis dummy = knowledgeService.newHypothesis(request.getString("text", "Text is required"));
 		dummy.setId(id);
-		dummy.setText(request.getString("text", "Text is required"));
 		knowledgeService.updateHypothesis(dummy, request);
 		return knowledgeService.getHypothesisPerspective(id, user, request);
 	}

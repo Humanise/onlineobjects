@@ -404,78 +404,41 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	public void addQuote(Request request) throws EndUserException {
 		Long id = request.getId();
 		String text = request.getString("text");
-		if (Strings.isNotBlank(text)) {
-			text = text.trim();
-			if (text.length() > 10000) {
-				// TODO Handle this better
-				throw new IllegalRequestException("Text too long");
-			}
-			InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
-
-			Statement part = new Statement();
-			part.setName(StringUtils.abbreviate(text, 50));
-			part.setText(text);
-			modelService.create(part, request);
-			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, request);
-		}
+		Statement statement = knowledgeService.newStatement(text);
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
+		modelService.create(statement, request);
+		modelService.createRelation(address, statement, Relation.KIND_STRUCTURE_CONTAINS, request);
 	}
 
 	@Path
 	public void addHypothesis(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
-		if (Strings.isNotBlank(text)) {
-			text = text.trim();
-			if (text.length() > 10000) {
-				// TODO Handle this better
-				throw new IllegalRequestException("Text too long");
-			}
-			InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
-			Hypothesis part = new Hypothesis();
-			part.setName(StringUtils.abbreviate(text, 50));
-			part.setText(text);
-			modelService.create(part, request);
-			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, request);
-		}
+		Hypothesis hypothesis = knowledgeService.newHypothesis(text);
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
+		modelService.create(hypothesis, request);
+		modelService.createRelation(address, hypothesis, Relation.KIND_STRUCTURE_CONTAINS, request);
 	}
 
 	@Path
 	public void addQuestion(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
-		if (Strings.isNotBlank(text)) {
-			text = text.trim();
-			if (text.length() > 10000) {
-				// TODO Handle this better
-				throw new IllegalRequestException("Text too long");
-			}
-			InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
-			Question question = new Question();
-			question.setName(StringUtils.abbreviate(text, 50));
-			question.setText(text);
-			modelService.create(question, request);
-			modelService.createRelation(address, question, Relation.KIND_STRUCTURE_CONTAINS, request);
-		}
+		Question question = knowledgeService.newQuestion(text);
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
+		modelService.create(question, request);
+		modelService.createRelation(address, question, Relation.KIND_STRUCTURE_CONTAINS, request);
 	}
 
 	@Path
 	public void addPerson(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
-		if (Strings.isNotBlank(text)) {
-			text = text.trim();
-			if (text.length() > 100) {
-				// TODO Handle this better
-				throw new IllegalRequestException("Text too long");
-			}
-			InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
-			Person person = personService.getOrCreatePerson(text, request);
-			Optional<Relation> relation = modelService.getRelation(address, person, Relation.KIND_COMMON_AUTHOR, request);
-			if (!relation.isPresent()) {
-				modelService.createRelation(address, person, Relation.KIND_COMMON_AUTHOR, request);				
-			}
-		} else {
-			throw new IllegalRequestException("Text is empty");
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
+		Person person = personService.getOrCreatePerson(text, request);
+		Optional<Relation> relation = modelService.getRelation(address, person, Relation.KIND_COMMON_AUTHOR, request);
+		if (!relation.isPresent()) {
+			modelService.createRelation(address, person, Relation.KIND_COMMON_AUTHOR, request);				
 		}
 	}
 

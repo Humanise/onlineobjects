@@ -59,13 +59,7 @@ public class KnowledgeService {
 	private CacheService cacheService;
 
 	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
-		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("The question is empty");
-		}
-		text = text.trim();
-		Question question = new Question();
-		question.setText(text);
-		question.setName(text);
+		Question question = newQuestion(text);
 		modelService.create(question, operator);
 		return question;
 	}
@@ -147,27 +141,63 @@ public class KnowledgeService {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("No text");
 		}
-		text = text.trim();
-		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", text).as(operator).from(address, Relation.KIND_STRUCTURE_CONTAINS);
+		Statement statement = newStatement(text);
+		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", statement.getText()).as(operator).from(address, Relation.KIND_STRUCTURE_CONTAINS);
 		if (modelService.count(existingQuery, operator) == 0) {
-			Statement part = new Statement();
-			part.setName(StringUtils.abbreviate(text, 50));
-			part.setText(text);
-			modelService.create(part, operator);
-			modelService.createRelation(address, part, Relation.KIND_STRUCTURE_CONTAINS, operator);
-			return part;
+			modelService.create(statement, operator);
+			modelService.createRelation(address, statement, Relation.KIND_STRUCTURE_CONTAINS, operator);
+			return statement;
 		}
 		return null;
 	}
 
-	public Hypothesis createHypothesis(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+	public Statement newStatement(String text) throws IllegalRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("The hypothesis is empty");
+			throw new IllegalRequestException("A statement must have text");
 		}
 		text = text.trim();
+		if (text.length() > 10000) {
+			throw new IllegalRequestException("The statement is longer than 10000 characters");
+		}
+		// TODO: Clean multiple spaces etc.
+		Statement statement = new Statement();
+		statement.setName(StringUtils.abbreviate(text, 50));
+		statement.setText(text);
+		return statement;
+	}
+	
+	public Question newQuestion(String text) throws IllegalRequestException {
+		if (Strings.isBlank(text)) {
+			throw new IllegalRequestException("A question must have text");
+		}
+		text = text.trim();
+		if (text.length() > 10000) {
+			throw new IllegalRequestException("The question is longer than 10000 characters");
+		}
+		// TODO: Clean multiple spaces etc. non-break space - allow newline
+		Question question = new Question();
+		question.setName(StringUtils.abbreviate(text, 50));
+		question.setText(text);
+		return question;
+	}
+
+	public Hypothesis newHypothesis(String text) throws IllegalRequestException {
+		if (Strings.isBlank(text)) {
+			throw new IllegalRequestException("A hypothesis must have text");
+		}
+		text = text.trim();
+		if (text.length() > 10000) {
+			throw new IllegalRequestException("The hypothesis is longer than 10000 characters");
+		}
+		// TODO: Clean multiple spaces etc.
 		Hypothesis hypothesis = new Hypothesis();
+		hypothesis.setName(StringUtils.abbreviate(text, 50));
 		hypothesis.setText(text);
-		hypothesis.setName(text);
+		return hypothesis;
+	}
+
+	public Hypothesis createHypothesis(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+		Hypothesis hypothesis = newHypothesis(text);
 		modelService.create(hypothesis, operator);
 		return hypothesis;
 	}
@@ -249,10 +279,9 @@ public class KnowledgeService {
 		return perspective;
 	}
 
-	public Statement addPersonalStatement(String text, User user, Operator operator) throws ModelException, SecurityException {
-		Statement statement = new Statement();
-		statement.setText(text);
-		statement.setName(text);
+	public Statement addPersonalStatement(String text, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+		// TODO Check length
+		Statement statement = newStatement(text);
 		modelService.create(statement, operator);
 		Person person = memberService.getUsersPerson(user, operator);
 		if (person != null) {
@@ -307,23 +336,22 @@ public class KnowledgeService {
 		statementPerspective.setAddresses(addressPerspectives);
 	}
 
-	public void updateQuestion(Question dummy, Operator operator) throws ModelException, SecurityException {
-		@Nullable
-		Question question = modelService.get(Question.class, dummy.getId(), operator);
+	public void updateQuestion(Question dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		Question question = modelService.getRequired(Question.class, dummy.getId(), operator);
 		question.setText(dummy.getText());
 		question.setName(dummy.getText());
 		modelService.update(question, operator);
 	}
 
-	public void updateStatement(Statement dummy, Operator operator) throws ModelException, SecurityException {
-		Statement statement = modelService.get(Statement.class, dummy.getId(), operator);
+	public void updateStatement(Statement dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		Statement statement = modelService.getRequired(Statement.class, dummy.getId(), operator);
 		statement.setText(dummy.getText());
 		statement.setName(dummy.getText());
 		modelService.update(statement, operator);		
 	}
 
-	public void updateHypothesis(Hypothesis dummy, Operator operator) throws ModelException, SecurityException {
-		Hypothesis hypothesis = modelService.get(Hypothesis.class, dummy.getId(), operator);
+	public void updateHypothesis(Hypothesis dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, dummy.getId(), operator);
 		hypothesis.setText(dummy.getText());
 		hypothesis.setName(dummy.getText());
 		modelService.update(hypothesis, operator);		

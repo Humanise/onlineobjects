@@ -329,24 +329,16 @@ public class ModelController extends ModelControllerBase {
 	public Object createFromFinder(Request request) throws IllegalRequestException, ModelException, SecurityException {
 		String type = request.getString("type", "No type provided");
 		if (Person.class.getSimpleName().equals(type)) {
-			String name = request.getString("fullName", "No name");
+			String name = request.getString("fullName");
 			return personService.getOrCreatePerson(name, request);
 		}
 		if (Question.class.getSimpleName().equals(type)) {
-			Question question = new Question();
-			String text = request.getString("text", "No question");
-			question.setText(text);
-			question.setName(text);
-			modelService.create(question, request);
-			return question;
+			String text = request.getString("text");
+			return knowledgeService.createQuestion(text, request);
 		}
 		if (Hypothesis.class.getSimpleName().equals(type)) {
-			Hypothesis hypothesis = new Hypothesis();
-			String text = request.getString("text", "No hypothesis");
-			hypothesis.setText(text);
-			hypothesis.setName(text);
-			modelService.create(hypothesis, request);
-			return hypothesis;
+			String text = request.getString("text");
+			return knowledgeService.createHypothesis(text, request);
 		}
 		throw new IllegalRequestException("Unknown type");
 	}
