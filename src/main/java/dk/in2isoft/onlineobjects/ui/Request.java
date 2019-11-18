@@ -413,6 +413,11 @@ public class Request implements Operator {
 	public void redirect(String url) throws IOException {
 		response.sendRedirect(url);
 	}
+
+	public void movedPermanently(String url) throws IOException {
+		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+		response.setHeader("Location", url);
+	}
 	
 	private UserSession session;
 	

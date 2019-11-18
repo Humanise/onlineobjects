@@ -14,3 +14,16 @@
 
 .hui_button {
   letter-spacing: .02em; }
+
+.oo_body .hui_form_field_label {
+  font-size: 14px;
+  line-height: 20px; }
+
+.oo_body .hui_textinput {
+  font-size: 14px; }
+
+.oo_body .hui_checkbox_label {
+  font-size: 14px; }
+
+.oo_body .hui_button {
+  font-size: 10pt; }

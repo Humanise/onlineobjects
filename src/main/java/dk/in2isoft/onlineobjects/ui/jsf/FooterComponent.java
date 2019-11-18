@@ -71,12 +71,12 @@ public class FooterComponent extends AbstractComponent {
 		String signupHref = configurationService.getApplicationContext("account", "signup", request);
 		writer.startA("oo_link js-signup").withHref(signupHref).withTestName("footerSignup").startSpan().text(msg.get("sign_up", locale)).endSpan().endA();
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
-		String aboutHref = configurationService.getApplicationContext("front", "about", request);
+		String aboutHref = "https://info.onlineobjects.com/" + request.getLanguage() + "/";
 		writer.startA("oo_link").withHref(aboutHref).startSpan().text(msg.get("about", locale)).endSpan().endA();
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
 		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text(msg.get("terms", locale)).endSpan().endA();
 		writer.endP();
-		writer.startP("oo_footer_logo").startA().withHref("http://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
+		writer.startP("oo_footer_logo").startA().withHref("https://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();
 	}
 

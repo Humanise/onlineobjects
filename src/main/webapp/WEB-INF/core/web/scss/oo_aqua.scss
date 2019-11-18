@@ -29,10 +29,10 @@
       display: inline-block;
       height: 60px;
       border-radius: 30px;
-      background: #40d8ff5c;
+      background: rgba(64, 216, 255, 0.36);
       padding: 0 35px;
       font-size: 30px;
-      box-shadow: inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #225eb6c2, inset 0px -1px 8px 2px #00317526;
+      box-shadow: inset 0px 3px 7px 0 rgba(236, 193, 254, 0.62), inset 0px 20px 35px 6px rgba(34, 94, 182, 0.76), inset 0px -1px 8px 2px rgba(0, 49, 117, 0.15);
       color: rgba(4, 43, 70, 0.82);
       position: relative;
       font-weight: 500;
@@ -80,7 +80,7 @@
       right: 16px;
       top: 5px;
       height: 18px;
-      background: linear-gradient(#ffffff8f,#eefcff24);
+      background: linear-gradient(rgba(255, 255, 255, 0.56), rgba(238, 252, 255, 0.14));
       position: absolute;
       border-radius: 40px 40px 18px 18px;
       pointer-events: none;
@@ -88,13 +88,13 @@
   }
   @keyframes oo_aqua_bg {
     0% {
-      box-shadow: 0 0 20px rgba(0,205,255,0), inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 20px 35px 6px #1d67d4c2, inset 0px -1px 8px 2px #00317526;
-      background: #40d8ff5c;
+      box-shadow: 0 0 20px rgba(0, 205, 255, 0), inset 0px 3px 7px 0 rgba(236, 193, 254, 0.62), inset 0px 20px 35px 6px rgba(29, 103, 212, 0.76), inset 0px -1px 8px 2px rgba(0, 49, 117, 0.15);
+      background: rgba(64, 216, 255, 0.36);
     }
 
     100% {
-      box-shadow: 0 0 20px 3px rgba(0, 180, 255, 0.32), inset 0px 3px 7px 0 #ecc1fe9e, inset 0px 10px 25px 6px #4d88e0c2, inset 0px -1px 8px 2px #00317526;
-      background: #8fe8ff5c;
+      box-shadow: 0 0 20px 3px rgba(0, 180, 255, 0.32), inset 0px 3px 7px 0 rgba(236, 193, 254, 0.62), inset 0px 10px 25px 6px rgba(77, 136, 224, 0.76), inset 0px -1px 8px 2px rgba(0, 49, 117, 0.15);
+      background: rgba(143, 232, 255, 0.36);
     }
   }
 }
