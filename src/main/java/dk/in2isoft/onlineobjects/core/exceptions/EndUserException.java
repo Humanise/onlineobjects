@@ -41,4 +41,17 @@ public class EndUserException extends Exception {
 		return code;
 	}
 
+	public static Exception findUserException(Exception ex) {
+		if (ex instanceof EndUserException) {
+			return ex;
+		}
+		Throwable cause = ex.getCause();
+		while (cause!=null) {
+			if (cause instanceof EndUserException) {
+				return (Exception) cause;
+			}
+			cause = cause.getCause();
+		}
+		return ex;
+	}
 }

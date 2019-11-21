@@ -122,7 +122,7 @@ public class DispatchingService {
 	}
 
 	public void displayError(Request request, Exception ex) {
-		ex = findUserException(ex);
+		ex = EndUserException.findUserException(ex);
 		ErrorRenderer renderer = new ErrorRenderer(ex,request,configurationService, conversionService);
 		try {
 			if (ex instanceof ContentNotFoundException) {
@@ -184,20 +184,6 @@ public class DispatchingService {
 		String query = httpServletRequest.getQueryString();
 		String url = httpServletRequest.getRequestURL().toString() + (query == null ? "" : "?" + query);
 		log.error(ex.getMessage() + " - " + url, ex);
-	}
-	
-	private static Exception findUserException(Exception ex) {
-		if (ex instanceof EndUserException) {
-			return ex;
-		}
-		Throwable cause = ex.getCause();
-		while (cause!=null) {
-			if (cause instanceof EndUserException) {
-				return (Exception) cause;
-			}
-			cause = cause.getCause();
-		}
-		return ex;
 	}
 	
 	// Wiring...

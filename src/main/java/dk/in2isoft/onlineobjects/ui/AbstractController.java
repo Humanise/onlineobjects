@@ -100,7 +100,12 @@ public abstract class AbstractController {
 					dispatcher.forward(request.getRequest(), request.getResponse());
 					return true;
 				} catch (ServletException e) {
-					throw new EndUserException(e);
+					Exception userException = EndUserException.findUserException(e);
+					if (userException instanceof EndUserException) {
+						throw (EndUserException) userException;
+					} else {
+						throw new EndUserException(e.getCause());
+					}
 				}
 			}
 		}
