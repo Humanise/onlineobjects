@@ -17,13 +17,59 @@ Parameters
 facet
 facet.query : Arbitrary Query Faceting
 Field Value Faceting Parameters
+
+facet.field
+facet.prefix
+facet.sort
+facet.limit
+facet.offset
+facet.mincount
+facet.missing
+facet.method
+facet.enum.cache.minDf
+facet.threads
+
 Date Faceting Parameters
+
+facet.date
+facet.date.start
+facet.date.end
+facet.date.gap
+facet.date.hardend
+facet.date.other
+facet.date.include
+
 Facet by Range
+
+facet.range
+facet.range.start
+facet.range.end
+facet.range.gap
+facet.range.hardend
+facet.range.other
+facet.range.include
+
 Multi-Select Faceting and LocalParams
+
+Tagging and excluding Filters
+key : Changing the output key
+
 Pivot (ie Decision Tree) Faceting
+
+facet.pivot
+facet.pivot.mincount
+
 Interval Faceting
 
+facet.interval
+facet.interval.set
+Interval Syntax
+Changing the interval Keys
+
 Deprecated Parameters
+
+facet.zeros
+
 Examples
 
 Facet Fields
@@ -36,6 +82,8 @@ Date Faceting: per day for the past 5 days
 Retrieve docs with facets missing
 Pivot (ie Decision Tree) Faceting
 Interval Faceting
+
+Changing the key per interval
 
 Warming
 

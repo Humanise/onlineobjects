@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<html xmlns="http://www.w3.org/1999/xhtml"><html><head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 
 
 
@@ -32,7 +32,7 @@
 
 <body>
 
-<div>
+
 
 
 <div>
@@ -58,7 +58,7 @@ Search:
 <li><a href="/solr/FrontPage">FrontPage</a></li><li><a href="/solr/RecentChanges">RecentChanges</a></li><li><a href="/solr/FindPage">FindPage</a></li><li><a href="/solr/HelpContents">HelpContents</a></li><li><a href="/solr/SimpleFacetParameters">SimpleFacetParameters</a></li>
 </ul>
 
-<div><hr /></div>
+<hr />
 
 <ul><li>Immutable Page</li><li><a href="#">Comments</a></li><li><a href="/solr/SimpleFacetParameters?action=info">Info</a></li><li><a href="/solr/SimpleFacetParameters?action=AttachFile">Attachments</a></li><li>
 
@@ -97,11 +97,11 @@ SlideShow
 
 </li></ul>
 
-</div>
 
-<div>
-<div>
-<p>Solr provides a <a href="http://lucene.apache.org/solr/api/org/apache/solr/request/SimpleFacets.html">Simple Faceting toolkit</a> which can be reused by various Request Handlers to include a "Facet counts" section within a search response. This extra section provides a breakdown or summary of the results based on some simple criteria, which can be used to help implement more advanced search interfaces. Use of faceting does not affect the results section of a search response. The <a href="/solr/SearchHandler">SearchHandler</a> uses these utilities via the <a href="/solr/FacetComponent">FacetComponent</a>, which supports the parameters listed here. </p><p>For More information on General Issues involved with Faceted searches in Solr, please read the <a href="/solr/SolrFacetingOverview">SolrFacetingOverview</a>. </p><div><p>Contents</p><ol><li>
+
+
+
+<p>Solr provides a <a href="http://lucene.apache.org/solr/api/org/apache/solr/request/SimpleFacets.html">Simple Faceting toolkit</a> which can be reused by various Request Handlers to include a "Facet counts" section within a search response. This extra section provides a breakdown or summary of the results based on some simple criteria, which can be used to help implement more advanced search interfaces. Use of faceting does not affect the results section of a search response. The <a href="/solr/SearchHandler">SearchHandler</a> uses these utilities via the <a href="/solr/FacetComponent">FacetComponent</a>, which supports the parameters listed here. </p><p>For More information on General Issues involved with Faceted searches in Solr, please read the <a href="/solr/SolrFacetingOverview">SolrFacetingOverview</a>. </p><p>Contents</p><ol><li>
 <a href="#Parameters">Parameters</a><ol><li>
 <a href="#facet">facet</a></li><li>
 <a href="#facet.query_:_Arbitrary_Query_Faceting">facet.query : Arbitrary Query Faceting</a></li><li>
@@ -157,7 +157,7 @@ SlideShow
 <a href="#Pivot_.28ie_Decision_Tree.29_Faceting-1">Pivot (ie Decision Tree) Faceting</a></li><li>
 <a href="#Interval_Faceting-1">Interval Faceting</a><ol><li>
 <a href="#Changing_the_key_per_interval">Changing the key per interval</a></li></ol></li></ol></li><li>
-<a href="#Warming">Warming</a></li></ol></div> <h1>Parameters</h1>
+<a href="#Warming">Warming</a></li></ol> <h1>Parameters</h1>
 <p>These are the parameters used to drive the Simple Faceting behavior, grouped by the type of faceting they support. </p><p>Note that many parameters may be overridden on a per-field basis with the following syntax: </p><ul><li><p><tt>f.&lt;fieldName&gt;.&lt;FacetParam&gt;=&lt;value&gt;</tt> </p></li></ul><p>eg. </p><pre>  facet.limit=10
   f.category.facet.limit=5</pre><p>Indicating that 10 terms will be returned for all specified facet.fields, excepting category. Which if specified will return 5 terms. </p><h2>facet</h2>
 <p>Set to "true" this param enables facet counts in the query response. Any blank or missing value, or "false" will disable faceting.  None of the other parameters listed below will have any effect without setting this param to "true" </p><p>The default value is blank. </p><h2>facet.query : Arbitrary Query Faceting</h2>
@@ -420,13 +420,13 @@ SlideShow
     &lt;/lst&gt;
   &lt;/lst&gt;
 &lt;/lst&gt;</pre><h1>Warming</h1>
-<p>facet.field queries using the term enumeration method can avoid the evaluation of some terms for greater efficiency. To force the evaluation of all terms for warming, the base query should match a single document. </p></div><p>SimpleFacetParameters  (last edited 2015-04-25 19:33:00 by <a href="/solr/TomasFernandezLobbe" title="TomasFernandezLobbe @ 67.180.18.4[67.180.18.4]">TomasFernandezLobbe</a>)</p>
+<p>facet.field queries using the term enumeration method can avoid the evaluation of some terms for greater efficiency. To force the evaluation of all terms for warming, the base query should match a single document. </p><p>SimpleFacetParameters  (last edited 2015-04-25 19:33:00 by <a href="/solr/TomasFernandezLobbe" title="TomasFernandezLobbe @ 67.180.18.4[67.180.18.4]">TomasFernandezLobbe</a>)</p>
 
 
-</div>
 
 
-<div>
+
+
 <ul><li>Immutable Page</li><li><a href="#">Comments</a></li><li><a href="/solr/SimpleFacetParameters?action=info">Info</a></li><li><a href="/solr/SimpleFacetParameters?action=AttachFile">Attachments</a></li><li>
 
 <div>
@@ -469,8 +469,8 @@ SlideShow
 </ul>
 
 
-</div>
 
 
 
-</body></html></html>
+
+</body></html>

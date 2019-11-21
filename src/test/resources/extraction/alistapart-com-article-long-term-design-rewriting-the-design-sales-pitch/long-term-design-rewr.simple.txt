@@ -241,4 +241,3 @@ by Brandon Gregory
 Brandon Gregory considers how to design accessibly for cognitive differences like anxiety disorders, inattention, and depression.
 
 Accessibility · October 16, 2018
-
