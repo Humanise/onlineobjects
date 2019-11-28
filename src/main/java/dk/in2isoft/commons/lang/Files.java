@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -94,20 +96,17 @@ public class Files {
 			log.error("Target file already exists: "+original);
 			return false;
 		}
-		FileInputStream tempStream = null;
-		FileOutputStream outStream = null;
-		try {
-			tempStream = new FileInputStream(temp);
-			outStream = new FileOutputStream(original);
+		try (
+			InputStream tempStream = new FileInputStream(temp);
+			OutputStream outStream = new FileOutputStream(original)
+		) {
 			IOUtils.copy(tempStream, outStream);
 			return true;
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			log.error("Unable to copy file",e);
 		} catch (IOException e) {
 			log.error("Unable to copy file",e);
-		} finally {
-			IOUtils.closeQuietly(tempStream);
-			IOUtils.closeQuietly(outStream);
 		}
 		return false;
 	}
