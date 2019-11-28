@@ -23,6 +23,7 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
+import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -119,9 +120,19 @@ public class APIController extends APIControllerBase {
 
 	@Path(exactly={"v1.0","recover"})
 	public void recover(Request request) throws IOException, EndUserException {
-		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
+		String usernameOrEmail = request.getString("usernameOrMail", "No username or e-mail provided");
 		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
 			throw new IllegalRequestException("Username or e-mail not found");
+		}
+	}
+
+	@Path(exactly={"v1.1","recover"})
+	public void recoverNew(Request request) throws IOException, EndUserException {
+		String usernameOrEmail = request.getString("usernameOrMail", "No username or e-mail provided");
+		securityService.randomDelay();
+		Boolean success = passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request);
+		if (!success) {
+			throw new ContentNotFoundException("Username or e-mail not found");
 		}
 	}
 
