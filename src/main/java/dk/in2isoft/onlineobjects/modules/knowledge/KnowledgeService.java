@@ -42,6 +42,7 @@ import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.caching.CacheEntry;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
@@ -155,29 +156,27 @@ public class KnowledgeService {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("A statement must have text");
 		}
+		Statement statement = new Statement();
+		setText(text, statement);
+		return statement;
+	}
+
+	private void setText(String text, TextHolding statement) throws IllegalRequestException {
 		text = text.trim();
 		if (text.length() > 10000) {
 			throw new IllegalRequestException("The statement is longer than 10000 characters");
 		}
 		// TODO: Clean multiple spaces etc.
-		Statement statement = new Statement();
 		statement.setName(StringUtils.abbreviate(text, 50));
 		statement.setText(text);
-		return statement;
 	}
 	
 	public Question newQuestion(String text) throws IllegalRequestException {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("A question must have text");
 		}
-		text = text.trim();
-		if (text.length() > 10000) {
-			throw new IllegalRequestException("The question is longer than 10000 characters");
-		}
-		// TODO: Clean multiple spaces etc. non-break space - allow newline
 		Question question = new Question();
-		question.setName(StringUtils.abbreviate(text, 50));
-		question.setText(text);
+		setText(text, question);
 		return question;
 	}
 
@@ -185,14 +184,8 @@ public class KnowledgeService {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("A hypothesis must have text");
 		}
-		text = text.trim();
-		if (text.length() > 10000) {
-			throw new IllegalRequestException("The hypothesis is longer than 10000 characters");
-		}
-		// TODO: Clean multiple spaces etc.
 		Hypothesis hypothesis = new Hypothesis();
-		hypothesis.setName(StringUtils.abbreviate(text, 50));
-		hypothesis.setText(text);
+		setText(text, hypothesis);
 		return hypothesis;
 	}
 
@@ -336,25 +329,66 @@ public class KnowledgeService {
 		statementPerspective.setAddresses(addressPerspectives);
 	}
 
-	public void updateQuestion(Question dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
-		Question question = modelService.getRequired(Question.class, dummy.getId(), operator);
-		question.setText(dummy.getText());
-		question.setName(dummy.getText());
-		modelService.update(question, operator);
+	public void updateQuestion(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+		Question question = modelService.getRequired(Question.class, id, operator);
+		if (text != null) {
+			setText(text, question);
+			modelService.update(question, operator);
+		}
+		if (inbox != null) {
+			pileService.changeInboxStatus(question, inbox, user, operator);
+		}
+		if (favorite != null) {
+			pileService.changeFavoriteStatus(question, favorite, user, operator);
+		}	
 	}
 
-	public void updateStatement(Statement dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
-		Statement statement = modelService.getRequired(Statement.class, dummy.getId(), operator);
-		statement.setText(dummy.getText());
-		statement.setName(dummy.getText());
-		modelService.update(statement, operator);		
+	public void updateStatement(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+		Statement statement = modelService.getRequired(Statement.class, id, operator);
+		if (text != null) {
+			setText(text, statement);
+			modelService.update(statement, operator);
+		}
+		if (inbox != null) {
+			pileService.changeInboxStatus(statement, inbox, user, operator);
+		}
+		if (favorite != null) {
+			pileService.changeFavoriteStatus(statement, favorite, user, operator);
+		}	
 	}
 
-	public void updateHypothesis(Hypothesis dummy, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
-		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, dummy.getId(), operator);
-		hypothesis.setText(dummy.getText());
-		hypothesis.setName(dummy.getText());
-		modelService.update(hypothesis, operator);		
+	public void updateHypothesis(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
+		if (text != null) {
+			setText(text, hypothesis);
+			modelService.update(hypothesis, operator);
+		}
+		if (inbox != null) {
+			pileService.changeInboxStatus(hypothesis, inbox, user, operator);
+		}
+		if (favorite != null) {
+			pileService.changeFavoriteStatus(hypothesis, favorite, user, operator);
+		}					
+	}
+
+	public void updateInternetAddress(Long id, String title, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+		InternetAddress address = modelService.getRequired(InternetAddress.class, id, operator);
+		if (title != null) {
+			if (Strings.isBlank(title)) {
+				throw new IllegalRequestException("Empty title");
+			}
+			if (title.length() > 500) {
+				throw new IllegalRequestException("Title too long");
+			}
+			address.setName(title);
+			modelService.update(address, operator);
+		}
+		if (inbox != null) {
+			pileService.changeInboxStatus(address, inbox, user, operator);
+		}
+		if (favorite != null) {
+			pileService.changeFavoriteStatus(address, favorite, user, operator);
+		}							
 	}
 
 	public InternetAddressApiPerspective getAddressPerspective(Long id, Operator operator) throws EndUserException {
@@ -373,6 +407,7 @@ public class KnowledgeService {
 			addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
 			addressPerspective.setText(internetAddressViewPerspective.getText());
 			categorize(address, addressPerspective, user, operator);
+			addressPerspective.setStatus("test");
 			return new CacheEntry<>(address.getId(), operator.getIdentity(), ids, addressPerspective);
 		});
 	}
@@ -472,4 +507,5 @@ public class KnowledgeService {
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}
+
 }

@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -274,6 +275,10 @@ public class Request implements Operator {
 			return value;
 		}
 	}
+
+	public String getStringOrNull(String key) {
+		return request.getParameter(key);
+	}
 	
 	public List<String> getStrings(String name) {
 		List<String> strings = Lists.newArrayList();
@@ -505,6 +510,22 @@ public class Request implements Operator {
 		}
 	}
 
+	
+	@Nullable public <T> T getObject(Class<@NonNull T> type) {
+		try {
+			String body = IOUtils.toString(request.getReader());
+			Gson gson = new Gson();
+			return gson.fromJson(body, type);
+		} catch (JsonSyntaxException e) {
+			log.warn("Could not get object", e);
+		} catch (IOException e) {
+			log.warn("Could not get object", e);
+		}
+		return null;
+	}
+
+	
+	
 	public List<WordModification> getObject(String name, Type type) {
 		try {
 			Gson gson = new Gson();

@@ -594,7 +594,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 				for (User user : q.list()) {
 					if (user != null) {
 						return getSubject(user);
-					}					
+					}
 				}
 			}
 		} catch (org.hibernate.exception.GenericJDBCException e) {

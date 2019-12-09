@@ -31,7 +31,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.3.8.RC0</version>
+        <version>9.3.28.v20191105</version>
         <configuration>
           <contextPath>/</contextPath>
           <webApp>
@@ -161,39 +161,34 @@
     </dependency>
 
     <!-- Jetty -->
-    <!-- <dependency> <groupId>org.mortbay.jetty</groupId> <artifactId>jetty</artifactId>
-      <version>6.1.26</version> </dependency> <dependency> <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty-util</artifactId> <version>6.1.26</version> </dependency>
-      <dependency> <groupId>org.mortbay.jetty</groupId> <artifactId>jetty-annotations</artifactId>
-      <version>6.1.26</version> </dependency> -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-http</artifactId>
-      <version>9.3.8.RC0</version>
+      <version>9.3.28.v20191105</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
-      <version>9.3.8.RC0</version>
+      <version>9.3.28.v20191105</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>9.3.8.RC0</version>
+      <version>9.3.28.v20191105</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
-      <version>9.3.8.RC0</version>
+      <version>9.3.28.v20191105</version>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-annotations</artifactId>
-      <version>9.3.8.RC0</version>
+      <version>9.3.28.v20191105</version>
     </dependency>
 
 

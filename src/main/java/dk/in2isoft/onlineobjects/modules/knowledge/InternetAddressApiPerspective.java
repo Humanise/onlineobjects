@@ -16,8 +16,9 @@ public class InternetAddressApiPerspective implements CategorizableViewPerspecti
 	private String url;
 	private String html;
 	private String text;
-	private boolean inbox;
-	private boolean favorite;
+	private Boolean inbox;
+	private Boolean favorite;
+	private String status;
 
 	public long getId() {
 		return id;
@@ -59,20 +60,28 @@ public class InternetAddressApiPerspective implements CategorizableViewPerspecti
 		this.text = text;
 	}
 
-	public boolean isInbox() {
+	public Boolean isInbox() {
 		return inbox;
 	}
 
-	public void setInbox(boolean inbox) {
+	public void setInbox(Boolean inbox) {
 		this.inbox = inbox;
 	}
 
-	public boolean isFavorite() {
+	public Boolean isFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(boolean favorite) {
+	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

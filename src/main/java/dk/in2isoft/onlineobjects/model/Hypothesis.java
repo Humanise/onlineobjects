@@ -2,7 +2,7 @@ package dk.in2isoft.onlineobjects.model;
 
 
 
-public class Hypothesis extends Entity {
+public class Hypothesis extends Entity implements TextHolding {
 
 	public static String TYPE = Entity.TYPE+"/Hypothesis";
 	public static String NAMESPACE = Entity.NAMESPACE+"Hypothesis/";

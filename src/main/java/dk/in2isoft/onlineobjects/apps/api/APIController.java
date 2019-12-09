@@ -303,10 +303,20 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		Question dummy = knowledgeService.newQuestion(request.getString("text", "Text is required"));
-		dummy.setId(id);
-		knowledgeService.updateQuestion(dummy, request);
-		request.commit();
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateQuestion(id, text, null, null, user, request);
+		return knowledgeService.getQuestionPerspective(id, user, request);
+	}
+
+	@Path(exactly = { "v1.1", "knowledge", "question" }, method = "POST")
+	public QuestionApiPerspective patchQuestion(Request request) throws IOException, EndUserException {
+		checkUser(request);
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		Boolean inbox = request.getBoolean("inbox", null);
+		Boolean favorite = request.getBoolean("favorite", null);
+		String text = request.getStringOrNull("text");
+		knowledgeService.updateQuestion(id, text, inbox, favorite, user, request);
 		return knowledgeService.getQuestionPerspective(id, user, request);
 	}
 
@@ -480,9 +490,20 @@ public class APIController extends APIControllerBase {
 		User user = modelService.getUser(request);
 		Long id = request.getId();
 		
-		Statement dummy = knowledgeService.newStatement(request.getString("text", "Text is required"));
-		dummy.setId(id);
-		knowledgeService.updateStatement(dummy, request);
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateStatement(id, text, null, null, user, request);
+		return knowledgeService.getStatementPerspective(id, user, request);
+	}
+
+	@Path(exactly = { "v1.1", "knowledge", "statement" }, method="POST")
+	public StatementApiPerspective patchStatement(Request request) throws IOException, EndUserException {
+		checkUser(request);
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		Boolean inbox = request.getBoolean("inbox", null);
+		Boolean favorite = request.getBoolean("favorite", null);
+		String text = request.getStringOrNull("text");
+		knowledgeService.updateStatement(id, text, inbox, favorite, user, request);
 		return knowledgeService.getStatementPerspective(id, user, request);
 	}
 
@@ -491,9 +512,18 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		Hypothesis dummy = knowledgeService.newHypothesis(request.getString("text", "Text is required"));
-		dummy.setId(id);
-		knowledgeService.updateHypothesis(dummy, request);
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateHypothesis(id, text, null, null, user, request);
+		return knowledgeService.getHypothesisPerspective(id, user, request);
+	}
+
+	@Path(exactly = { "v1.1", "knowledge", "hypothesis" }, method = "POST")
+	public HypothesisApiPerspective patchHypothesis(Request request) throws IOException, EndUserException {
+		checkUser(request);
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateHypothesis(id, text, null, null, user, request);
 		return knowledgeService.getHypothesisPerspective(id, user, request);
 	}
 
@@ -567,6 +597,19 @@ public class APIController extends APIControllerBase {
 	public InternetAddressApiPerspective viewAddress(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		Long id = request.getId();
+		return knowledgeService.getAddressPerspective(id, request);
+	}	
+
+	@Path(exactly = { "v1.1", "knowledge", "internetaddress" }, method = "POST")
+	public InternetAddressApiPerspective patchAddress(Request request) throws IOException, EndUserException {
+		checkUser(request);
+		checkUser(request);
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		Boolean inbox = request.getBoolean("inbox", null);
+		Boolean favorite = request.getBoolean("favorite", null);
+		String title = request.getStringOrNull("title");
+		knowledgeService.updateInternetAddress(id, title, inbox, favorite, user, request);
 		return knowledgeService.getAddressPerspective(id, request);
 	}	
 
