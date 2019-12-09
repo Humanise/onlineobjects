@@ -263,7 +263,7 @@ public class APIController extends APIControllerBase {
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
 		if (pageSize == 0) {
-			pageSize = 60;
+			pageSize = 500;
 		}
 		String type = request.getString("type");
 		ArrayList<String> types;
