@@ -8,8 +8,8 @@ public class HypothesisApiPerspective implements CategorizableViewPerspective {
 
 	private String text;
 	private long id;
-	private boolean inbox;
-	private boolean favorite;
+	private Boolean inbox;
+	private Boolean favorite;
 
 	private List<StatementApiPerspective> supporting;
 	private List<StatementApiPerspective> contradicting;
@@ -46,19 +46,19 @@ public class HypothesisApiPerspective implements CategorizableViewPerspective {
 		this.contradicting = contradicting;
 	}
 
-	public boolean isInbox() {
+	public Boolean isInbox() {
 		return inbox;
 	}
 
-	public void setInbox(boolean inbox) {
+	public void setInbox(Boolean inbox) {
 		this.inbox = inbox;
 	}
 
-	public boolean isFavorite() {
+	public Boolean isFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(boolean favorite) {
+	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 	}
 	

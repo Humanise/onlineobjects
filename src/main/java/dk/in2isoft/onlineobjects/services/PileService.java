@@ -76,7 +76,14 @@ public class PileService {
 		} else if (!add && relation.isPresent()) {
 			modelService.delete(relation.get(), operator);
 		}
-		
+	}
+
+	public void changeInboxStatus(Entity entity, Boolean inbox, User user, Operator operator) throws ModelException, SecurityException {
+		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox, operator);
+	}
+
+	public void changeFavoriteStatus(Entity entity, Boolean inbox, User user, Operator operator) throws ModelException, SecurityException {
+		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, inbox, operator);
 	}
 	
 	// Wiring...

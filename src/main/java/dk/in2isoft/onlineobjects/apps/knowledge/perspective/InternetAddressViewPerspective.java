@@ -93,19 +93,19 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 		this.url = url;
 	}
 
-	public boolean isInbox() {
+	public Boolean isInbox() {
 		return inbox;
 	}
 
-	public void setInbox(boolean inbox) {
+	public void setInbox(Boolean inbox) {
 		this.inbox = inbox;
 	}
 
-	public boolean isFavorite() {
+	public Boolean isFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(boolean favorite) {
+	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 	}
 

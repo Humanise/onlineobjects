@@ -58,6 +58,7 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.feeds.Feed;
@@ -116,7 +117,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				url = address.getAddress();
 			} else if (entity instanceof Statement) {
 				perspective.setStatementId(entity.getId());
-				Statement htmlPart = (Statement) entity;
+				TextHolding htmlPart = (TextHolding) entity;
 				writer.startP().withClass("reader_list_text reader_list_quote").text(htmlPart.getText()).endP();
 				Query<InternetAddress> query = Query.after(InternetAddress.class).to(entity, Relation.KIND_STRUCTURE_CONTAINS).as(session);
 				InternetAddress addr = modelService.search(query, request).getFirst();
@@ -344,10 +345,10 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Code.checkNotNull(entity, "Item not found");
 
 		if (favorite!=null) {
-			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite, request);
+			pileService.changeFavoriteStatus(entity, favorite, user, request);
 		}
 		if (inbox!=null) {
-			pileService.addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox, request);
+			pileService.changeInboxStatus(entity, inbox, user, request);
 		}
 	}
 

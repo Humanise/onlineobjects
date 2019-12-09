@@ -9,4 +9,6 @@ public @interface Path {
 	String[] exactly() default {};
 	
 	String expression() default "";
+	
+	String method() default "";
 }

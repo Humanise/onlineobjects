@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.in2igui.FileBasedInterface;
-import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -31,9 +30,7 @@ public abstract class AbstractController {
 	protected HUIService huiService;
 
 	protected Map<Pattern,String> jsfMatchers = new LinkedHashMap<Pattern, String>();
-	protected List<Pair<String[],Method>> exactMethodPaths = new ArrayList<>();
-	protected List<Pair<Pattern,Method>> expressionMethodPaths = new ArrayList<>();
-	protected List<Pair<String,Method>> methodsByName = new ArrayList<>();
+	protected List<Responder> responders = new ArrayList<>();
 
 	private String name;
 
@@ -45,15 +42,21 @@ public abstract class AbstractController {
 			
 			if (annotation!=null) {
 				String[] exactly = annotation.exactly();
+				Responder responder = new Responder();
+				responder.method = method;
+				if (annotation.method().length() > 0) {
+					responder.httpMethod = annotation.method().toUpperCase();
+				}
 				if (exactly.length > 0) {
-					exactMethodPaths.add(Pair.of(exactly, method));
+					responder.path = exactly;
 				}
 				else if (Strings.isNotBlank(annotation.expression())) {
-					expressionMethodPaths.add(Pair.of(Pattern.compile(annotation.expression()), method));
+					responder.pattern = Pattern.compile(annotation.expression());
 				}
 				else {
-					methodsByName.add(Pair.of(method.getName(), method));
+					responder.path = new String[] {method.getName()};
 				}
+				responders.add(responder);
 			}
 		}
 	}
@@ -71,24 +74,25 @@ public abstract class AbstractController {
 	}
 
 	public boolean handle(Request request) throws StupidProgrammerException, IOException, EndUserException {
-		for (Pair<String[], Method> exact : exactMethodPaths) {
-			if (request.testLocalPathFull(exact.getKey())) {
-				invokeMethod(request, exact.getValue());
-				return true;
-			}			
-		}
 		String localPath = request.getLocalPathAsString();
-		for (Pair<Pattern,Method> exp : expressionMethodPaths) {
-			if (exp.getKey().matcher(localPath).matches()) {
-				invokeMethod(request, exp.getValue());
-				return true;
+		for (Responder responder : responders) {
+			if (responder.httpMethod != null) {
+				if (!responder.httpMethod.equals(request.getRequest().getMethod())) {
+					continue;
+				}
 			}
-		}
-		for (Pair<String, Method> exact : methodsByName) {
-			if (request.testLocalPathFull(exact.getKey())) {
-				invokeMethod(request, exact.getValue());
-				return true;
-			}			
+			if (responder.path != null) {
+				if (request.testLocalPathFull(responder.path)) {
+					invokeMethod(request, responder.method);
+					return true;
+				}
+			}
+			else if (responder.pattern != null) {
+				if (responder.pattern.matcher(localPath).matches()) {
+					invokeMethod(request, responder.method);
+					return true;
+				}
+			}
 		}
 		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
 			if (entry.getKey().matcher(localPath).matches()) {
@@ -174,5 +178,12 @@ public abstract class AbstractController {
 	
 	public void setHuiService(HUIService huiService) {
 		this.huiService = huiService;
+	}
+	
+	private class Responder {
+		String httpMethod; 
+		Method method;
+		String[] path;
+		Pattern pattern;
 	}
 }
