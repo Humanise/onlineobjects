@@ -9,8 +9,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.commons.pool.PoolableObjectFactory;
-import org.apache.commons.pool.impl.StackObjectPool;
+import org.apache.commons.pool2.BasePooledObjectFactory;
+import org.apache.commons.pool2.ObjectPool;
+import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.PooledObjectFactory;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -56,28 +61,17 @@ public class IndexManager {
 	private ConfigurationService configurationService;
 	private String directoryName = "index";
 	private StandardAnalyzer analyzer;
-	private StackObjectPool<IndexReader> pool;
+	private ObjectPool<IndexReader> pool;
 	
 	private static final Logger log = LogManager.getLogger(IndexManager.class);
 	
 	public IndexManager() {
 		analyzer = new StandardAnalyzer(Version.LUCENE_40, CharArraySet.EMPTY_SET);
-		PoolableObjectFactory<IndexReader> factory = new PoolableObjectFactory<IndexReader>() {
+		
+		PooledObjectFactory<IndexReader> x = new BasePooledObjectFactory<IndexReader>() {
 
-			public void activateObject(IndexReader arg0) throws Exception {
-			}
-
-			public void destroyObject(IndexReader reader) throws Exception {
-				if (reader!=null) {
-					try {
-						reader.close();
-					} catch (IOException e) {
-						
-					}
-				}
-			}
-
-			public IndexReader makeObject() throws Exception {
+			@Override
+			public IndexReader create() throws Exception {
 				Directory directory = getIndexFile();
 				try {
 					ensureIndex();
@@ -89,36 +83,58 @@ public class IndexManager {
 				}
 			}
 
-			public void passivateObject(IndexReader arg0) throws Exception {
-			}
-
-			public boolean validateObject(IndexReader reader) {
-				return true;
+			@Override
+			public PooledObject<IndexReader> wrap(IndexReader obj) {
+				// TODO Auto-generated method stub
+				return new DefaultPooledObject<IndexReader>(obj);
 			}
 			
+			@Override
+			public void destroyObject(PooledObject<IndexReader> p) throws Exception {
+				IndexReader reader = p.getObject();
+				if (reader!=null) {
+					try {
+						reader.close();
+					} catch (IOException e) {
+						log.warn("Problem destroying pooled index reader", e);
+					}
+				}
+
+			}
 		};
-		pool = new StackObjectPool<IndexReader>(factory);
+		GenericObjectPoolConfig<IndexReader> config = new GenericObjectPoolConfig<>();
+		config.setMaxTotal(8);
+		config.setMaxIdle(4);
+		pool = new GenericObjectPool<IndexReader>(x, config );
 	}
 	
 	public IndexManager(String directoryName) {
 		this();
 		this.directoryName = directoryName;
 	}
+	
+	private Directory indexFile;
 
 	private Directory getIndexFile() throws ExplodingClusterFuckException {
+		if (indexFile != null) return indexFile;
 		File dir = new File(configurationService.getIndexDir(),directoryName);
 		try {
-			return new SimpleFSDirectory(dir);
+			indexFile = new SimpleFSDirectory(dir); 
+			return indexFile;
 		} catch (IOException e) {
 			throw new ExplodingClusterFuckException("Unable to read index");
 		}
 	}
 	
+	private boolean indexEnsured = false;
+	
 	private void ensureIndex() throws ExplodingClusterFuckException {
+		if (indexEnsured) return;
 		Directory directory = getIndexFile();
 		try {
 			if (!DirectoryReader.indexExists(directory)) {
 				openWriter().close();
+				indexEnsured = true;
 			}		
 		} catch (IOException e) {
 			throw new ExplodingClusterFuckException("Unable to ensure index", e);
