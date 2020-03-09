@@ -38,6 +38,8 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.UserStatisticsQuery;
+import dk.in2isoft.onlineobjects.core.UserStatisticsQuery.UserStatistic;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
@@ -91,32 +93,35 @@ public class SetupController extends SetupControllerBase {
 	public void listUsers(Request request) throws IOException,EndUserException {
 		User publicUser = securityService.getPublicUser();
 		Privileged admin = securityService.getAdminPrivileged();
+		boolean showPrivileges = request.getBoolean("showPrivileges");
 		int page = request.getInt("page");
 		int pageSize = 40;
 		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
 		SearchResult<User> result = modelService.search(query, request);
+		
+		List<UserStatisticsQuery.UserStatistic> list = modelService.list(new UserStatisticsQuery(securityService), request);
 		
 		ListWriter writer = new ListWriter(request);
 		
 		writer.startList();
 		writer.window(result.getTotalCount(), pageSize, page);
 		writer.startHeaders();
-		writer.header("Name");
 		writer.header("Username");
 		writer.header("Person");
 		writer.header("E-mail");
-		writer.header("Status");
-		writer.header("Access");
-		writer.header("Public",1);
-		writer.header("Self",1);
-		writer.header("Admin",1);
+		writer.header("Objects");
+		writer.header("Latest");
+		if (showPrivileges) {
+			writer.header("Public",1);
+			writer.header("Self",1);
+		}
 		writer.endHeaders();
 		for (User user : result.getList()) {
+			UserStatistic statistic = getStatistics(list, user);
 			Person person = modelService.getChild(user, Person.class, request);
 			EmailAddress email = memberService.getUsersPrimaryEmail(user, request);
 			writer.startRow().withId(user.getId()).withKind("user");
-			writer.startCell().withIcon(user.getIcon()).text(user.getName()).endCell();
-			writer.cell(user.getUsername());
+			writer.startCell().withIcon(user.getIcon()).text(user.getUsername()).endCell();
 			writer.startCell();
 			if (person!=null) {
 				writer.withIcon(person.getIcon()).text(person.getFullName());
@@ -126,50 +131,77 @@ public class SetupController extends SetupControllerBase {
 			if (email!=null) {
 				writer.withIcon(email.getIcon());
 				writer.text(email.getAddress());
+
+				Date confirmationTime = email.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
+				if (confirmationTime!=null) {			
+					writer.text(" ~ ").text(Dates.getDaysFromNow(confirmationTime) + " days");
+				} else {
+					writer.startIcons();
+					writer.icon("common/warning");
+					writer.endIcons();
+				}
 			}
 			writer.endCell();
 			writer.startCell();
-			// Status
+			if (statistic != null) {
+				writer.text(statistic.entityCount);
+			}
 			writer.endCell();
-			writer.cell(user.getUpdated().toString());
-			writer.startCell().startIcons();
-			if (securityService.canView(user, publicUser, request)) {
-				writer.icon("monochrome/view");
+
+			writer.startCell();
+			if (statistic != null) {
+				writer.text(statistic.latestModification);
 			}
-			if (securityService.canModify(user, publicUser, request)) {
-				writer.icon("monochrome/edit");
+			writer.endCell();
+			if (showPrivileges) {
+				writer.startCell().startIcons();
+				if (securityService.canView(user, publicUser, request)) {
+					writer.icon("monochrome/view");
+				}
+				if (securityService.canModify(user, publicUser, request)) {
+					writer.icon("monochrome/edit");
+				}
+				if (securityService.canDelete(user, publicUser, request)) {
+					writer.icon("monochrome/delete");
+				}
+				writer.endIcons().endCell();
+				writer.startCell().startIcons();
+				if (securityService.canView(user, user, request)) {
+					writer.icon("monochrome/view");
+				}
+				if (securityService.canModify(user, user, request)) {
+					writer.icon("monochrome/edit");
+				}
+				if (securityService.canDelete(user, user, request)) {
+					writer.icon("monochrome/delete");
+				}
+				writer.endIcons().endCell();
+				writer.startCell().startIcons();
+				if (securityService.canView(user, admin, request)) {
+					writer.icon("monochrome/view");
+				}
+				if (securityService.canModify(user, admin, request)) {
+					writer.icon("monochrome/edit");
+				}
+				if (securityService.canDelete(user, admin, request)) {
+					writer.icon("monochrome/delete");
+				}
+				writer.endIcons().endCell();
 			}
-			if (securityService.canDelete(user, publicUser, request)) {
-				writer.icon("monochrome/delete");
-			}
-			writer.endIcons().endCell();
-			writer.startCell().startIcons();
-			if (securityService.canView(user, user, request)) {
-				writer.icon("monochrome/view");
-			}
-			if (securityService.canModify(user, user, request)) {
-				writer.icon("monochrome/edit");
-			}
-			if (securityService.canDelete(user, user, request)) {
-				writer.icon("monochrome/delete");
-			}
-			writer.endIcons().endCell();
-			writer.startCell().startIcons();
-			if (securityService.canView(user, admin, request)) {
-				writer.icon("monochrome/view");
-			}
-			if (securityService.canModify(user, admin, request)) {
-				writer.icon("monochrome/edit");
-			}
-			if (securityService.canDelete(user, admin, request)) {
-				writer.icon("monochrome/delete");
-			}
-			writer.endIcons().endCell();
 			writer.endRow();
 		}
 		writer.endList();
 	}
 	
+	private UserStatistic getStatistics(List<UserStatistic> list, User user) {
+		for (UserStatistic stat : list) {
+			if (stat.userId == user.getId()) {
+				return stat;
+			}
+		}
+		return null;
+	}
+
 	@Path
 	public void listUsersObjects(Request request) throws IOException,EndUserException {
 		long id = request.getLong("userId");

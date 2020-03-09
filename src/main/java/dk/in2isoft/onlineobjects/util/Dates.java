@@ -71,6 +71,11 @@ public class Dates {
 		return formatShortDate(value, locale);
 	}
 
+	public static long getDaysFromNow(Date date) {
+		long seconds = (System.currentTimeMillis() - date.getTime())/1000;
+		return (seconds / 60 / 60 / 24) % 365;
+	}
+
 	public static String formatDurationFromNow(Date date) {
 		return format((System.currentTimeMillis() - date.getTime())/1000);
 	}
