@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletResponse;
 
-import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
@@ -17,26 +16,18 @@ public class RobotsResponder implements Responder {
 	private ConfigurationService configurationService;
 
 	public boolean applies(Request request) {
-		String[] path = request.getFullPath();
-		if (path.length != 1)
-			return false;
-		if (path[0].equals("robots.txt")) {
-			return true;
-		}
-		if (path[0].equals("apple-app-site-association")
-				&& Strings.isNotBlank(configurationService.getAppleAppSiteAssociation())) {
+		String path = request.getLocalPathAsString();
+		if (path.equals("/robots.txt") || path.equals("/.well-known/apple-app-site-association") || path.equals("/apple-app-site-association")) {
 			return true;
 		}
 		return false;
 	}
 
 	public Boolean dispatch(Request request, FilterChain chain) throws IOException {
-		String[] path = request.getFullPath();
-		if (path.length != 1)
-			return null;
+		String path = request.getLocalPathAsString();
 
 		HttpServletResponse response = request.getResponse();
-		if (path[0].equals("robots.txt")) {
+		if (path.equals("/robots.txt")) {
 			response.setContentType("text/plain");
 			PrintWriter writer = response.getWriter();
 			writer.println("User-agent: *");
@@ -44,7 +35,7 @@ public class RobotsResponder implements Responder {
 			writer.close();
 			return true;
 		}
-		if (path[0].equals("apple-app-site-association")) {
+		if (path.endsWith("/apple-app-site-association")) {
 			String out = "{\n" + 
 				"  \"webcredentials\": {\n" + 
 				"    \"apps\": [\n" + 
