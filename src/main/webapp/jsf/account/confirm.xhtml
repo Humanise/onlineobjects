@@ -13,17 +13,17 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box>
-        <o:header>#{msg.confirmation_of_email}</o:header>
+      <o:box spacious="true">
+        <o:header level="0">#{msg.confirmation_of_email}</o:header>
         <c:choose>
           <c:when test="#{accountEmailConfirmationView.found}">
-            <div class="oo_text" style="margin: 20px 0;">
+            <div class="oo_text oo_space_top-2">
               <p>#{msg.hi} #{accountEmailConfirmationView.name}.</p>
               <p>#{msg.confirmation_of_email_success}</p>
             </div>
           </c:when>
           <c:otherwise>
-            <div class="oo_text" style="margin: 20px 0;">
+            <div class="oo_text oo_space_top-2">
               <p>#{msg.confirmation_of_email_expired}</p>
             </div>
           </c:otherwise>

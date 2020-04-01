@@ -1,7 +1,8 @@
 .oo_property_label {
-  color: #999;
+  color: #777;
   font-weight: inherit;
   display: block;
   text-transform: uppercase;
   font-size: 12px;
-  letter-spacing: 1px; }
+  letter-spacing: 1px;
+  margin-bottom: 3px; }

@@ -15,10 +15,9 @@
 
 .reader_list_title {
   margin: 0 0 5px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
-  color: #0055B5;
-  line-height: 18px; }
+  color: #0055B5; }
 
 .reader_list_source {
   margin: 0;

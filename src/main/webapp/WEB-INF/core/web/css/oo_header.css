@@ -1,5 +1,6 @@
 .oo_header {
-  margin: 0; }
+  margin: 0;
+  font-family: "Hind Siliguri"; }
   .oo_header-0 {
     font-size: 32px;
     font-weight: 600;
@@ -22,6 +23,8 @@
   .oo_header-0 {
     font-size: 42px;
     line-height: 40px; }
+    .oo_box .oo_header-0:first-child {
+      margin-top: -10px; }
   .oo_header-1 {
     font-size: 36px;
     line-height: 40px; }

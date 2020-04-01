@@ -24,8 +24,8 @@
           </div>
         </c:if>
         <oc:segment title="#{msg.account}">
-          <oc:property label="#{msg.username}:" styleClass="oo_space_bottom">#{accountSettingsView.username}</oc:property>
-          <div class="oo_space_bottom">
+          <oc:property label="#{msg.username}:" styleClass="oo_space_bottom-2">#{accountSettingsView.username}</oc:property>
+          <div class="oo_space_bottom-2">
             <oc:property label="#{msg.full_name}:">
               <gui:pages name="namePages">
                 <gui:page>
@@ -62,11 +62,9 @@
                     <gui:button name="changeEmail" text="#{msg.change}" small="true" variant="light"
                       testName="changeMailButton" styleClass="account_change"/>
                   </p>
-                  <oc:text small="true">
-                    <c:if test="${accountSettingsView.emailConfirmed}">
-                      <p>#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate}</p>
-                    </c:if>
-                  </oc:text>
+                  <c:if test="${accountSettingsView.emailConfirmed}">
+                    <p class="account_minor">#{msg.confirmed}: #{accountSettingsView.emailConfirmationDate}</p>
+                  </c:if>
                 </gui:page>
                 <gui:page>
                   <oc:text small="true" styleClass="oo_space_bottom">

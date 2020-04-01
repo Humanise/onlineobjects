@@ -1,7 +1,8 @@
 @charset "UTF-8";
 .intro {
   padding: 10px;
-  font-size: 0; }
+  font-size: 0;
+  font-family: "Hind Siliguri"; }
   .intro_title {
     font-weight: 900;
     text-align: center;
@@ -28,7 +29,7 @@
     width: 50%;
     font-size: 14pt;
     text-align: center;
-    font-weight: 500; }
+    font-weight: 400; }
     .intro_points > ul {
       margin: 0;
       padding: 0;
@@ -36,7 +37,7 @@
       display: inline-block;
       text-align: left; }
   .intro_point {
-    margin: 10px 0;
+    margin: 20px 0;
     line-height: 1;
     white-space: nowrap; }
     .intro_point:before {

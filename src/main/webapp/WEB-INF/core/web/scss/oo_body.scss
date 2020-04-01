@@ -6,8 +6,8 @@
   margin: 0;
   padding: 0;
   -webkit-text-size-adjust: none;
-  font-size: 16px;
-  line-height: 1.25;
+  font-size: $regular-font-size;
+  line-height: (16/14);
 
   &-light {
     background: #fff;
@@ -15,12 +15,12 @@
 }
 
 .hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
-  font-family: inherit !important;
+  font-family: $default-font-family !important;
 }
+/*
 .hui_button {
   @include text-spacing;
 }
-
 .oo_body {
   .hui_form_field_label {
     font-size: 14px;
@@ -35,4 +35,4 @@
   .hui_button {
     font-size: 10pt;
   }
-}
+}*/

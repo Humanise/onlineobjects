@@ -83,13 +83,15 @@ public class HeadComponent extends AbstractComponent {
 
 			String styleUrl = dependencyService.handleStyles(graph);
 		 	out.startElement("link").rel("stylesheet").type("text/css").href(styleUrl).endElement("link");
-			
+			//getRequest().getResponse().addHeader("Link", "<"+styleUrl+">; rel=preload; as=style");
 		 	writeInlineJs(configurationService, out);
 		}
+		/*
 		out.write("<!--[if IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie8.css\"></link><![endif]-->");
 		out.write("<!--[if IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie7.css\"></link><![endif]-->");
 		out.write("<!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie6.css\"></link><![endif]-->");
 		out.write("<!--[if lt IE 9]><script type=\"text/javascript\" src=\"" + request.getBaseContext() + "/hui/bin/compatibility.min.js\"></script><![endif]-->");
+		*/
 		out.newLine().startElement("script").withAttribute("data-hui-context", request.getBaseContext()).withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
 
 		out.startScript().newLine();

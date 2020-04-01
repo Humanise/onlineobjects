@@ -6,6 +6,7 @@
   //border-top: 1px solid #eee;
   //border-bottom: 1px solid #eee;
   font-size: 0;
+  font-family: $prose-font-family;
 
   &_title {
     font-weight: 900;
@@ -42,7 +43,7 @@
     width: 50%;
     font-size: 14pt;
     text-align: center;
-    font-weight: 500;
+    font-weight: 400;
     > ul {
       margin: 0;
       padding: 0;
@@ -53,7 +54,7 @@
   }
 
   &_point {
-    margin: 10px 0;
+    margin: 20px 0;
     line-height: 1;
     white-space: nowrap;
 

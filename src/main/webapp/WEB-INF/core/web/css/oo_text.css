@@ -1,9 +1,13 @@
 .oo_text {
-  font-size: 16px; }
+  line-height: 1.2142857143; }
   .oo_text-small {
-    font-size: 14px; }
+    font-size: 12px;
+    line-height: 1.3333333333; }
+  .oo_text-prose {
+    font-size: 16px;
+    font-family: "Hind Siliguri"; }
   .oo_text > p {
-    margin: 5px 0; }
+    margin: 7px 0; }
   .oo_text > h1 {
     margin: 0 0 10px;
     font-weight: 600;
@@ -22,7 +26,9 @@
     border-top: 1px solid #ddd; }
   .oo_text > ul {
     padding-left: 25px;
-    margin: 5px 0; }
+    margin: 7px 0; }
+    .oo_text > ul > li {
+      margin: 5px 0; }
   .oo_text > *:first-child {
     margin-top: 0; }
   .oo_text > *:last-child {

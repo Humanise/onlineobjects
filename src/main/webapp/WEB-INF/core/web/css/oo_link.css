@@ -1,9 +1,19 @@
+@charset "UTF-8";
 .oo_link {
   color: #ccc;
   color: rgba(0, 0, 0, 0.1); }
   .oo_link > span {
-    color: #07c; }
-  .oo_link:hover {
-    color: #7CACC3; }
-    .oo_link:hover > span {
-      color: #00476B; }
+    color: #07d; }
+  .oo_link:hover, .oo_link:hover > span {
+    color: #41a7ff; }
+  .oo_link-back:before {
+    content: "";
+    font-family: 'OnlineObjects';
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1;
+    font-weight: normal;
+    color: #333;
+    font-size: 0.8571428571em;
+    margin-right: 0.2em; }

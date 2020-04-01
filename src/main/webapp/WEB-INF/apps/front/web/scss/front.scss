@@ -52,7 +52,7 @@
   line-height: 1;
   margin: 0 0 -10px 0;
   cursor: default;
-  font-family: 'Work Sans';
+  font-family: 'Work Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 
@@ -115,7 +115,8 @@ li {
 
   strong {
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 32px;
     display: block;
     -webkit-font-smoothing: antialiased;
   }
@@ -124,6 +125,11 @@ li {
 
 .footer {
   opacity: .5;
+
+  &:hover {
+    opacity: 1;
+  }
+
   .oo_footer {
     padding-top: 0;
   }

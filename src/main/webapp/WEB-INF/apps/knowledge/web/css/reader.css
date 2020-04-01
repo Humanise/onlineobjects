@@ -186,8 +186,8 @@ html, body {
   box-sizing: border-box;
   background: #F5F2E2; }
   .reader_head_title {
-    font-size: 24px;
-    font-weight: 200;
+    font-size: 18px;
+    font-weight: 300;
     margin: 0 40px 0 0;
     white-space: nowrap;
     overflow: hidden;
@@ -242,7 +242,7 @@ html, body {
     text-transform: uppercase;
     text-decoration: none;
     color: #A79F89;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 3px;
     letter-spacing: 0.5px; }
     .reader_segmented_item:hover {

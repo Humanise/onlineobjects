@@ -25,7 +25,7 @@
       height: 30px;
       line-height: 30px;
       padding: 0 5px 0 10px;
-      font-size: 12pt;
+      font-size: $regular-font-size;
       color: #bbb;
       text-decoration: none;
       @include transition(color .3s);
@@ -60,14 +60,13 @@
 
     &_item {
       display: inline-block;
-      font-size: 16px;
+      font-size: 14px;
       height: 30px;
       line-height: 30px;
       padding: 0 5px;
       text-decoration: none;
       color: #bbb;
-      font-weight: 300;
-      @include text-spacing;
+      font-weight: 400;
 
       &:hover {
         background: #f3f3f3;
@@ -267,11 +266,11 @@
     &_content {
       margin-left: 70px;
       padding-bottom: 10px;
-      font-size: 11pt;
+      font-size: $regular-font-size;
     }
 
     &_name {
-      font-size: 13pt;
+      font-size: $large-font-size;
       font-weight: 500;
       margin: 0 0 0;
       overflow: hidden;
@@ -344,12 +343,12 @@
     &_logo {
       &_text {
         display: inline-block;
-        font-weight: 200;
+        font-weight: 300;
         letter-spacing: 1px;
         margin-left: 5px;
       }
       &_part {
-        font-weight: 400;
+        font-weight: 500;
       }
     }
   }

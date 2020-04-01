@@ -17,11 +17,11 @@
         <o:header level="0" styleClass="account_heading oo_space_bottom-3">${msg.agreements_title}</o:header>
         <c:if test="${!accountAgreementsView.publicUser}">
         <p class="oo_space_top">
-          <o:link href="/${accountAgreementsView.language}/">#{msg.back_to_account}</o:link>
+          <o:link href="/${accountAgreementsView.language}/" styleClass="oo_link-back">#{msg.back_to_account}</o:link>
         </p>
         </c:if>
         <div id="${agreement.key}" class="account_agreements">
-          <div class="oo_text oo_space_top">
+          <div class="oo_text oo_text-prose oo_space_top">
             <p>${msg.agreements_intro}</p>
             <c:if test="${!accountAgreementsView.publicUser}">
             <c:choose>
@@ -45,7 +45,7 @@
             <li><o:link href="#${agreement.key}">${agreement.title}</o:link></li>
             </c:forEach>
           </ul>
-          <article class="oo_text oo_space_top-2">
+          <article class="oo_text oo_text-prose oo_space_top-2">
             <c:forEach items="${accountAgreementsView.agreements}" var="agreement">
               <hr/>
               <h1 id="${agreement.key}">${agreement.title}</h1>

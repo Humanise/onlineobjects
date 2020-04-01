@@ -12,18 +12,22 @@
 
     <ui:define name="body">
 
-      <o:box>
+      <o:box spacious="true">
         <h:panelGroup rendered="#{empty accountInvitationView.invitation}">
-          <o:header>Invitationen blev ikke fundet</o:header>
+          <o:header level="0">Invitationen blev ikke fundet</o:header>
+          <div class="oo_text oo_space_top-2">
           <p>Det var desværre ikke muligt at finde invitationen. Den er muligvis blevet fjernet efter den er blevet afsendt.</p>
+          </div>
         </h:panelGroup>
         <h:panelGroup rendered="#{not empty accountInvitationView.invitation}">
           <h:panelGroup rendered="#{accountInvitationView.invitation.state=='accepted'}">
-            <o:header>Invitationen er allerede blevet accepteret</o:header>
-            <p>Denne invitation er allerede blevet accepteret.</p>
+            <o:header level="0">Invitationen er allerede blevet accepteret</o:header>
+            <div class="oo_text oo_space_top-2">
+              <p>Denne invitation er allerede blevet accepteret.</p>
+            </div>
           </h:panelGroup>
           <h:panelGroup rendered="#{accountInvitationView.invitation.state=='active'}">
-            <o:header>Invitation til OnlineObjects</o:header>
+            <o:header level="0">Invitation til OnlineObjects</o:header>
             <div class="oo_text account_invitation_text">
               <p>Hej #{accountInvitationView.person.fullName}.</p>
               <p><o:link app="people" href="en/#{accountInvitationView.inviterUser.username}">#{accountInvitationView.inviterPerson.fullName}</o:link> har inviteret dig til at blive bruger af OnlineObjects.</p>

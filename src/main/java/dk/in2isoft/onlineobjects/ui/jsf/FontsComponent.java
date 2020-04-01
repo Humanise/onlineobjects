@@ -1,6 +1,8 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,9 +10,14 @@ import java.util.stream.Collectors;
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
 
+import com.yahoo.platform.yui.compressor.CssCompressor;
+
 import dk.in2isoft.commons.jsf.AbstractComponent;
+import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.modules.caching.CacheService;
+import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 
 @FacesComponent(value = FontsComponent.FAMILY)
 public class FontsComponent extends AbstractComponent {
@@ -34,22 +41,56 @@ public class FontsComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
-		List<String> googleFonts = new ArrayList<String>();
+		List<String> urls = new ArrayList<>();
+		List<String> googleFonts = new ArrayList<>();
+		googleFonts.add("Inter:100,200,300,400,500,600,700");
+		googleFonts.add("Hind+Siliguri:400,500,600,700");
+		//urls.add("https://use.typekit.net/dqs7hkt.css");
 		if (Strings.isNotBlank(additional)) {
 			googleFonts.add(additional);
 		}
 		String testFont = getRequest().getString("_font");
 		if (Strings.isNotBlank(testFont)) {
-			if ("Inter".equals(testFont)) {
-				out.startElement("link").withHref("https://rsms.me/inter/inter.css").rel("stylesheet").type("text/css").endElement("link");
-			} else {
+			{
 				googleFonts.add(Strings.encodeURL(testFont) + ":300,400,500,600,700");
 			}
 			out.startElement("style").text(".oo_body {font-family: '"+testFont+"', Arial !important;}").endElement("style");
 		}
-		out.startElement("link").withHref("https://use.typekit.net/dqs7hkt.css").rel("stylesheet").type("text/css").endElement("link");
 		if (!googleFonts.isEmpty()) {
-			out.startElement("link").withHref("https://fonts.googleapis.com/css?family="+googleFonts.stream().collect(Collectors.joining("|"))+"&display=swap").rel("stylesheet").type("text/css").endElement("link");
+			urls.add("https://fonts.googleapis.com/css?family="+googleFonts.stream().collect(Collectors.joining(Strings.encodeURL("|")))+"&display=swap");
+		}
+		if (true) {			
+			out.startElement("style");
+			for (String url : urls) {
+				String css = getFontCSS(url);
+				out.text(css);
+				
+			}
+			out.endElement("style");
+		} else {
+			for (String url : urls) {
+				out.startElement("link").withHref(url).rel("stylesheet").type("text/css").endElement("link");	
+			}
+		}
+	}
+
+	private String getFontCSS(String url) {
+		CacheService service = Components.getService(CacheService.class, getFacesContext());
+		NetworkService networkService = getBean(NetworkService.class);
+		return service.getCachedDocument("font-" + url, () -> {
+			String css = networkService.getStringSilently(url);
+			return compress(css.replaceAll("@import.*", "").replaceAll("font-display:auto", "font-display:swap"));
+		});
+	}
+
+	private String compress(String css) {
+		try {
+			CssCompressor compressor = new CssCompressor(new StringReader(css));
+			StringWriter writer = new StringWriter();
+			compressor.compress(writer, -1);
+			return writer.toString();
+		} catch (IOException e) {
+			return css;
 		}
 	}
 

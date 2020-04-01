@@ -1,14 +1,23 @@
-$link-color: #08c;
-$dimmed-color: #999;
+$link-color: #07d;
+$link-hover-color: #41a7ff;
+$dimmed-color: #777;
+$divider-color: #eee;
 
 
 $default-font-family: 'Hind Vadodara', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 $default-font-family: 'myriad-pro', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+$default-font-family: 'Inter', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 
 $monospace-font-family: Monaco, monospace;
 
-$small-font-size: 14px;
-$regular-font-size: 16px;
+$prose-font-family: 'myriad-pro', 'Inter', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+$prose-font-family: 'Hind Siliguri';
+
+$small-font-size: 12px;
+$regular-font-size: 14px;
+$large-font-size: 16px;
+
+$left-icon: '\e912';
 
 @mixin text-spacing {
   letter-spacing: .02em;

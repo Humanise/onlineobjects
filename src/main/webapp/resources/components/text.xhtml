@@ -6,11 +6,12 @@
 >
   <composite:interface>
     <composite:attribute name = "small" />
+    <composite:attribute name = "prose" />
     <composite:attribute name = "styleClass" />
   </composite:interface>
 
   <composite:implementation>
-    <div class="oo_text #{cc.attrs.small ? 'oo_text-small' : ''} #{cc.attrs.styleClass}">
+    <div class="oo_text #{cc.attrs.small ? 'oo_text-small' : ''} #{cc.attrs.prose ? 'oo_text-prose' : ''} #{cc.attrs.styleClass}">
       <composite:insertChildren/>
     </div>
     <o:dependency src="/WEB-INF/core/web/css/oo_text.css"/>

@@ -1,29 +1,33 @@
 .oo_body {
-  font-family: "myriad-pro", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   background: #fafafa;
   margin: 0;
   padding: 0;
   -webkit-text-size-adjust: none;
-  font-size: 16px;
-  line-height: 1.25; }
+  font-size: 14px;
+  line-height: 1.1428571429; }
   .oo_body-light {
     background: #fff; }
 
 .hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
-  font-family: inherit !important; }
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif !important; }
 
+/*
 .hui_button {
-  letter-spacing: .02em; }
-
-.oo_body .hui_form_field_label {
-  font-size: 14px;
-  line-height: 20px; }
-
-.oo_body .hui_textinput {
-  font-size: 14px; }
-
-.oo_body .hui_checkbox_label {
-  font-size: 14px; }
-
-.oo_body .hui_button {
-  font-size: 10pt; }
+  @include text-spacing;
+}
+.oo_body {
+  .hui_form_field_label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .hui_textinput {
+    font-size: 14px;
+  }
+  .hui_checkbox_label {
+    font-size: 14px;
+  }
+  .hui_button {
+    font-size: 10pt;
+  }
+}*/

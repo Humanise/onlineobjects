@@ -14,8 +14,8 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box>
-        <o:header>${msg.account_deletion}</o:header>
+      <o:box spacious="true">
+        <o:header level="0">${msg.account_deletion}</o:header>
         <oc:text styleClass="oo_space_top-2 oo_space_bottom-2">
           <c:choose>
           <c:when test="${accountSettingsView.language=='da'}">

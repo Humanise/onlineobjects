@@ -1,5 +1,5 @@
 .oo_topbar {
-  font-family: "myriad-pro", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   overflow: hidden;
   border-bottom: 1px solid transparent;
   height: 30px;
@@ -19,7 +19,7 @@
     height: 30px;
     line-height: 30px;
     padding: 0 5px 0 10px;
-    font-size: 12pt;
+    font-size: 14px;
     color: #bbb;
     text-decoration: none;
     -moz-transition: color 0.3s;
@@ -47,14 +47,13 @@
       display: none; }
   .oo_topbar_item {
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     height: 30px;
     line-height: 30px;
     padding: 0 5px;
     text-decoration: none;
     color: #bbb;
-    font-weight: 300;
-    letter-spacing: .02em; }
+    font-weight: 400; }
     .oo_topbar_item:hover {
       background: #f3f3f3;
       color: #333; }
@@ -185,7 +184,7 @@
 /** Info panel **/
 .oo_topbar_info {
   overflow: hidden;
-  font-family: "myriad-pro", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
   .oo_topbar_info_busy {
     height: 60px;
     background: url("../../../hui/gfx/progress/spinner_white_24.gif") center center no-repeat; }
@@ -205,9 +204,9 @@
   .oo_topbar_info_content {
     margin-left: 70px;
     padding-bottom: 10px;
-    font-size: 11pt; }
+    font-size: 14px; }
   .oo_topbar_info_name {
-    font-size: 13pt;
+    font-size: 16px;
     font-weight: 500;
     margin: 0 0 0;
     overflow: hidden;
@@ -258,11 +257,11 @@
       outline-offset: -4px; }
   .oo_topbar_logo_text {
     display: inline-block;
-    font-weight: 200;
+    font-weight: 300;
     letter-spacing: 1px;
     margin-left: 5px; }
   .oo_topbar_logo_part {
-    font-weight: 400; } }
+    font-weight: 500; } }
 
 @media screen and (min-width: 700px) {
   .oo_topbar_menu_item {
