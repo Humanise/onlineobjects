@@ -1,9 +1,14 @@
 package dk.in2isoft.onlineobjects.apps.account;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -15,7 +20,10 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.ui.Blend;
 import dk.in2isoft.onlineobjects.ui.Request;
+import dk.in2isoft.onlineobjects.ui.ScriptWriter;
+import dk.in2isoft.onlineobjects.ui.StylesheetWriter;
 import dk.in2isoft.onlineobjects.ui.data.Response;
 
 
@@ -106,9 +114,35 @@ public class AccountController extends AccountControllerBase {
 		if (!userChanged) {
 			throw new SecurityException(Error.userNotFound);
 		}
-		
 		memberService.deleteMember(user, request);
 		securityService.logOut(session);
 	}
-	
+
+	@Path(exactly="status")
+	public void status(Request request) throws IOException, ModelException, ContentNotFoundException {
+		@NonNull
+		User user = getUser(request);
+		Map<String,Object> info = new HashMap<>();
+		info.put("id", user.getId());
+		info.put("username", user.getUsername());
+		info.put("displayName", Strings.isNotBlank(user.getName()) ? user.getName() : user.getUsername());
+		request.getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		request.sendObject(info);
+	}
+
+	@Path(exactly="status.js")
+	public void statusScript(Request request) throws IOException {
+		ScriptWriter writer = new ScriptWriter(request, configurationService);
+		Blend blend = new Blend("account_status");
+		blend.addPath("WEB-INF","apps","account","web","js","status.js");
+		writer.write(blend);
+	}
+
+	@Path(exactly="status.css")
+	public void statusStyle(Request request) throws IOException {
+		StylesheetWriter writer = new StylesheetWriter(request, configurationService);
+		Blend blend = new Blend("account_status");
+		blend.addPath("WEB-INF","core","account","web","js","status.js");
+		writer.write(blend);
+	}
 }
