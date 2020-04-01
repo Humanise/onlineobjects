@@ -94,10 +94,12 @@
       <id>sourceforge</id>
       <url>http://opennlp.sourceforge.net/maven2/</url>
     </repository>
+    <!-- 
     <repository>
       <id>sun</id>
       <url>http://download.java.net/maven/2/</url>
     </repository>
+     -->
     <repository>
       <id>apache</id>
       <url>https://repository.apache.org/content/repositories/releases/</url>
