@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,7 @@ import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
+import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Question;
@@ -234,6 +236,7 @@ public class KnowledgeService {
 		}
 		perspective.setContradicting(contradictsPerspectives);
 		categorize(hypothesis, perspective, user, operator);
+		perspective.setVersion(Versioner.from(hypothesis).and(supports).and(contradicts).get());
 		return perspective;
 	}
 
@@ -269,7 +272,33 @@ public class KnowledgeService {
 		}
 		perspective.setAuthors(authorPerspectives);
 		categorize(statement, perspective, user, operator);
+		perspective.setVersion(Versioner.from(statement).and(answers).and(questions).and(authors).get());
 		return perspective;
+	}
+	
+	private static class Versioner {
+		private long version;
+		public static Versioner from(Item item) {
+			Versioner v = new Versioner();
+			v.version = item.getUpdated().getTime();
+			return v;
+		}
+		
+		public <T extends Item> Versioner and(Collection<T> items) {
+			for (Item item : items) {
+				version = Math.max(version, item.getUpdated().getTime());
+				if (item instanceof Relation) {
+					Relation relation = (Relation) item;
+					version = Math.max(version, relation.getFrom().getUpdated().getTime());
+					version = Math.max(version, relation.getTo().getUpdated().getTime());
+				}
+			}
+			return this;
+		}
+		
+		public long get() {
+			return version;
+		}
 	}
 
 	public Statement addPersonalStatement(String text, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
@@ -285,9 +314,9 @@ public class KnowledgeService {
 
 	public QuestionApiPerspective getQuestionPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, operator);
-		QuestionApiPerspective questionPerspective = new QuestionApiPerspective();
-		questionPerspective.setId(question.getId());
-		questionPerspective.setText(question.getText());
+		QuestionApiPerspective perspective = new QuestionApiPerspective();
+		perspective.setId(question.getId());
+		perspective.setText(question.getText());
 
 		List<Relation> answers = modelService.find().relations(operator).from(Statement.class).to(question).withKind(Relation.ANSWERS).list();
 		answers.sort(this::compareByPosition);
@@ -300,9 +329,10 @@ public class KnowledgeService {
 			populateStatement(operator, answer, statementPerspective);
 			answerPerspectives.add(statementPerspective);
 		}
-		questionPerspective.setAnswers(answerPerspectives);
-		categorize(question, questionPerspective, user, operator);
-		return questionPerspective;
+		perspective.setAnswers(answerPerspectives);
+		categorize(question, perspective, user, operator);
+		perspective.setVersion(Versioner.from(question).and(answers).get());
+		return perspective;
 	}
 
 	private void populateStatement(Operator operator, Statement answer, StatementApiPerspective statementPerspective)
@@ -327,6 +357,7 @@ public class KnowledgeService {
 			addressPerspectives.add(addressPerspective);
 		}
 		statementPerspective.setAddresses(addressPerspectives);
+		statementPerspective.setVersion(Versioner.from(answer).and(authors).and(addresses).get());
 	}
 
 	public void updateQuestion(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
@@ -408,6 +439,7 @@ public class KnowledgeService {
 			addressPerspective.setText(internetAddressViewPerspective.getText());
 			categorize(address, addressPerspective, user, operator);
 			addressPerspective.setStatus("test");
+			addressPerspective.setVersion(Versioner.from(address).get());
 			return new CacheEntry<>(address.getId(), operator.getIdentity(), ids, addressPerspective);
 		});
 	}

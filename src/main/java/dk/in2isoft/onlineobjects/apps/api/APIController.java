@@ -258,7 +258,7 @@ public class APIController extends APIControllerBase {
 	}
 	
 	@Path(exactly = { "v1.0", "knowledge", "list" })
-	public SearchResult<KnowledgeListRow> knowledgeList(Request request) throws IOException, EndUserException {
+	public APISearchResult knowledgeList(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
@@ -287,7 +287,8 @@ public class APIController extends APIControllerBase {
 		query.setText(request.getString("text"));
 		query.setInbox(request.getBoolean("inbox", null));
 		query.setFavorite(request.getBoolean("favorite", null));
-		return knowledgeService.search(query, request);
+		SearchResult<KnowledgeListRow> result = knowledgeService.search(query, request);
+		return new APISearchResult(result);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "question" })

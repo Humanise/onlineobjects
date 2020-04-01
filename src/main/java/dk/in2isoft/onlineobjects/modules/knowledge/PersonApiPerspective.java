@@ -1,9 +1,18 @@
 package dk.in2isoft.onlineobjects.modules.knowledge;
 
-public class PersonApiPerspective {
+public class PersonApiPerspective implements ApiPerspective {
 	private long id;
+	private long version;
 	private String name;
 
+	public long getVersion() {
+		return version;
+	}
+	
+	public void setVersion(long version) {
+		this.version = version;
+	}
+	
 	public long getId() {
 		return id;
 	}

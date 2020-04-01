@@ -4,14 +4,11 @@ import java.io.Serializable;
 
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
 
-public class InternetAddressApiPerspective implements CategorizableViewPerspective, Serializable {
+public class InternetAddressApiPerspective implements CategorizableViewPerspective, ApiPerspective, Serializable {
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 329095987621099333L;
 	private long id;
+	private long version;
 	private String title;
 	private String url;
 	private String html;
@@ -28,6 +25,14 @@ public class InternetAddressApiPerspective implements CategorizableViewPerspecti
 		this.id = id;
 	}
 
+	public long getVersion() {
+		return version;
+	}
+	
+	public void setVersion(long version) {
+		this.version = version;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

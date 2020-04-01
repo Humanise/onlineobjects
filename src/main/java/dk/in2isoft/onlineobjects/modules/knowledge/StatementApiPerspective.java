@@ -4,7 +4,7 @@ import java.util.List;
 
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
 
-public class StatementApiPerspective implements CategorizableViewPerspective {
+public class StatementApiPerspective implements CategorizableViewPerspective, ApiPerspective {
 
 	private String text;
 	private long id;
@@ -13,6 +13,7 @@ public class StatementApiPerspective implements CategorizableViewPerspective {
 	private List<PersonApiPerspective> authors;
 	private List<InternetAddressApiPerspective> addresses;
 	private List<QuestionApiPerspective> questions;
+	private long version;
 
 	public String getText() {
 		return text;
@@ -30,6 +31,14 @@ public class StatementApiPerspective implements CategorizableViewPerspective {
 		this.id = id;
 	}
 
+	public long getVersion() {
+		return version;
+	}
+	
+	public void setVersion(long version) {
+		this.version = version;
+	}
+	
 	public Boolean isInbox() {
 		return inbox;
 	}

@@ -4,23 +4,16 @@ import java.util.List;
 
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
 
-public class HypothesisApiPerspective implements CategorizableViewPerspective {
+public class HypothesisApiPerspective implements CategorizableViewPerspective, ApiPerspective {
 
-	private String text;
 	private long id;
+	private long version;
+	private String text;
 	private Boolean inbox;
 	private Boolean favorite;
 
 	private List<StatementApiPerspective> supporting;
 	private List<StatementApiPerspective> contradicting;
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
 
 	public long getId() {
 		return id;
@@ -28,6 +21,22 @@ public class HypothesisApiPerspective implements CategorizableViewPerspective {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	@Override
+	public long getVersion() {
+		return version;
+	}
+	
+	public void setVersion(long version) {
+		this.version = version;
+	}
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public List<StatementApiPerspective> getSupporting() {
