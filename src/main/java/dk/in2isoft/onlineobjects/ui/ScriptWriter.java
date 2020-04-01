@@ -72,25 +72,27 @@ public class ScriptWriter {
 				compress(file, script);
 			}
 			if (file.exists()) {
-				try (FileReader fileReader = new FileReader(file)) {
-					IOUtils.copy(fileReader, this.writer);					
-				}
+				FileReader fileReader = new FileReader(file);
+				IOUtils.copy(fileReader, this.writer);
+				IOUtils.closeQuietly(fileReader);
 			}
 		}
 	}
 
 	private void compress(File file, String script) throws IOException {
-		try (
-			StringReader reader = new StringReader(script);
-			FileWriter fileWriter = new FileWriter(file)
-		) {
-			new ScriptCompressor().compress(reader, fileWriter);			
+		StringReader reader = new StringReader(script);
+		FileWriter fileWriter = new FileWriter(file);
+		try {
+			new ScriptCompressor().compress(reader, fileWriter);
 		} catch (Exception e) {
 			this.writer.print(script);
 			log.error(e.getMessage(), e);
+			IOUtils.closeQuietly(fileWriter);
 			if (file.exists()) {
 				file.delete();
 			}
+		} finally {
+			IOUtils.closeQuietly(fileWriter);
 		}
 	}
 
@@ -98,10 +100,10 @@ public class ScriptWriter {
 		String name = hash + "_" + stamp + ".js";
 		File file = new File(configurationService.getTempDir(), name);
 		if (file.exists()) {
-			try (FileReader fileReader = new FileReader(file)) {
-				IOUtils.copy(fileReader, this.writer);				
-				return true;
-			}
+			FileReader fileReader = new FileReader(file);
+			IOUtils.copy(fileReader, this.writer);
+			IOUtils.closeQuietly(fileReader);
+			return true;
 		}
 		return false;
 	}
