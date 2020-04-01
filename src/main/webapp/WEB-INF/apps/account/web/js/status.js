@@ -3,11 +3,15 @@
     init: function() {
       this.check();
     },
+
+    _rootUrl : 'https://' + document.location.host.replace(/^[a-z]+/, 'account'),
+
     check : function() {
       var self = this;
       hui.on(['hui.ui'],function() {
         hui.ui.request({
-          url: 'http://account.onlineobjects.test/status',
+          url: self._rootUrl + '/status',
+          credentials: true,
           $object : function(info) {
             self.draw(info);
           }.bind(this),
@@ -17,15 +21,22 @@
         })
       });
     },
+    _itemMarkup : function(info) {
+      if (info.username == 'public') {
+        return '<a href="javascript://" class="oo_topbar_item oo_topbar_login" data="login">Log in</a>'
+      } else {
+        return '<a href="javascript://" class="oo_topbar_item oo_topbar_user" data="user">' +
+          '<span class="oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon"></span>' +
+          hui.string.escape(info.displayName) +
+        '</a>'
+      }
+    },
     draw : function(info) {
       var right = hui.find('.oo_topbar_right');
       var item = hui.build('li', {
         parent: right,
         'class': 'oo_topbar_right_item',
-        html: '<a href="javascript://" class="oo_topbar_item oo_topbar_user" data="user">' +
-          '<span class="oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon"></span>' +
-          hui.string.escape(info.displayName) +
-        '</a>'
+        html: this._itemMarkup(info)
       })
       var a = hui.find('a', item);
       hui.listen(a, 'click', function(e) {
@@ -35,6 +46,8 @@
     },
 
     _showLoginPanel : function(a) {
+      document.location = this._rootUrl;
+      return;
       hui.ui.require(['Panel','Form','Button','TextInput'], function() {
         var panel = this._buildLoginPanel();
         if (panel.isVisible()) {

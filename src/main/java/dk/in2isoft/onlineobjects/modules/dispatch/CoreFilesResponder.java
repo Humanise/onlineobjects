@@ -28,6 +28,7 @@ public class CoreFilesResponder implements Responder {
 	public Boolean dispatch(Request request, FilterChain chain) throws IOException {
 		String[] path = request.getFullPath();
 
+		request.getResponse().addHeader("Access-Control-Allow-Origin", "*");
 		String[] filePath = new String[] { "core", "web" };
 		pushCoreFile((String[]) ArrayUtils.addAll(filePath, ArrayUtils.subarray(path, 1, path.length)),request.getResponse());
 		return null;

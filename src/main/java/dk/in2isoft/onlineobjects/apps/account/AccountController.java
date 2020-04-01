@@ -126,7 +126,12 @@ public class AccountController extends AccountControllerBase {
 		info.put("id", user.getId());
 		info.put("username", user.getUsername());
 		info.put("displayName", Strings.isNotBlank(user.getName()) ? user.getName() : user.getUsername());
-		request.getResponse().addHeader("Access-Control-Allow-Origin", "*");
+		String origin = request.getRequest().getHeader("Origin");
+		if (origin != null) {
+			request.getResponse().addHeader("Access-Control-Allow-Origin", origin);
+			request.getResponse().addHeader("Access-Control-Allow-Credentials", "true");
+		}
+		
 		request.sendObject(info);
 	}
 
@@ -141,8 +146,12 @@ public class AccountController extends AccountControllerBase {
 	@Path(exactly="status.css")
 	public void statusStyle(Request request) throws IOException {
 		StylesheetWriter writer = new StylesheetWriter(request, configurationService);
-		Blend blend = new Blend("account_status");
-		blend.addPath("WEB-INF","core","account","web","js","status.js");
+		Blend blend = new Blend("account_status_css");
+		blend.addPath("WEB-INF","core","web","css","oo_footer.css");
+		blend.addPath("WEB-INF","core","web","css","oo_link.css");
+		blend.addPath("WEB-INF","core","web","css","oo_icon.css");
+		blend.addPath("WEB-INF","core","web","css","oo_font.css");
+		blend.addPath("WEB-INF","core","web","css","oo_topbar.css");
 		writer.write(blend);
 	}
 }
