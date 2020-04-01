@@ -64,7 +64,9 @@ public class NetworkService {
 		} catch (IOException | URISyntaxException e) {
 			throw e;
 		} finally {
-			response.cleanUp();
+			if (response != null) {
+				response.cleanUp();
+			}
 		}
 		return null;
 	}
