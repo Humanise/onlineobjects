@@ -227,14 +227,9 @@ public class Request implements Operator {
 		return (String[]) ArrayUtils.subarray(fullPath, this.localContext.length, fullPath.length);
 	}
 
-	private String localPathAsString = null;
-	
 	public String getLocalPathAsString() {
-		if (localPathAsString==null) {
-			String[] localPath = getLocalPath();
-			localPathAsString = "/"+StringUtils.join(localPath,"/");
-		}
-		return localPathAsString;
+		String[] localPath = getLocalPath();
+		return "/"+StringUtils.join(localPath,"/");
 	}
 
 	public boolean testLocalPathStart(String... path) {
