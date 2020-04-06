@@ -2,7 +2,7 @@
 .intro {
   padding: 10px;
   font-size: 0;
-  font-family: "Hind Siliguri"; }
+  font-family: "Hind Siliguri", "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
   .intro_title {
     font-weight: 900;
     text-align: center;

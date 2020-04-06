@@ -47,7 +47,7 @@
       text-shadow: 0 0 10px #fff;
       font-weight: 600;
       transition: color 2s;
-      font-family: "Hind Siliguri"; }
+      font-family: "Hind Siliguri", "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
   .oo_footer:hover .oo_footer_logo span, .oo_footer:hover .oo_footer_logo strong {
     color: #ddd; }
   .oo_footer:hover .oo_footer_logo a:hover span {
