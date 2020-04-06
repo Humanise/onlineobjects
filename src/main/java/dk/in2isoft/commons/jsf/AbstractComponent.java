@@ -113,7 +113,7 @@ public abstract class AbstractComponent extends UIComponentBase {
 	};
 
 	public <T> @Nullable T getBean(Class<?> cls) {
-		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(Components.getRequest().getRequest().getSession().getServletContext());
+		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(Components.getRequest().getRequest().getServletContext());
 		Map<?,?> beansOfType = context.getBeansOfType(cls);
 		if (beansOfType.isEmpty()) {
 			return null;

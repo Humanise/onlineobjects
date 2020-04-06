@@ -247,6 +247,7 @@ oo.TopBar.prototype = {
   _doLogout : function() {
     this._userPanel.setBusy(true);
     hui.ui.request({
+      credentials: true,
       url : '/service/authentication/logout',
       $success : function() {
         this._afterLogout();

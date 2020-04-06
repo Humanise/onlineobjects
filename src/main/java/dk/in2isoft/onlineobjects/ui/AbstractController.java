@@ -96,7 +96,7 @@ public abstract class AbstractController {
 		}
 		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
 			if (entry.getKey().matcher(localPath).matches()) {
-				ServletContext context = request.getRequest().getSession().getServletContext();
+				ServletContext context = request.getRequest().getServletContext();
 				RequestDispatcher dispatcher = context.getRequestDispatcher("/faces" + entry.getValue());
 				request.getResponse().setContentType("text/html");
 				request.getResponse().setCharacterEncoding("UTF-8");

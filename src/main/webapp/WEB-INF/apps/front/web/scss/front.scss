@@ -6,6 +6,7 @@
   min-height: 100vh;
   justify-content: space-evenly;
   padding: 10px 0;
+  box-sizing: border-box;
 }
 
 .container {
@@ -146,12 +147,15 @@ li {
   }
 }
 
+@media (min-width: 375px) {
+  li {
+    width: 100px;
+  }
+}
+
 @media (min-width: 450px) {
   .slogan {
     font-size: 18px;
-  }
-  li {
-    width: 100px;
   }
 }
 

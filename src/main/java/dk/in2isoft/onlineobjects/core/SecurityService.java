@@ -400,7 +400,11 @@ public class SecurityService {
 			request.setSession(new UserSession(user));
 		}
 		else {
-			HttpSession session = request.getRequest().getSession();
+			HttpSession session = request.getRequest().getSession(false);
+			if (session == null) {
+				request.setSession(getInitialUser(request));
+				return;
+			}
 			if (session.getAttribute(UserSession.SESSION_ATTRIBUTE) == null) {
 				log.trace("Creating new user session");
 				session.setAttribute(UserSession.SESSION_ATTRIBUTE, getInitialUser(request));

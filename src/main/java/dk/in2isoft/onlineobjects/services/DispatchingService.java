@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -88,7 +89,6 @@ public class DispatchingService {
 				}
 			}
 		}
-		
 		if (shouldCommit!=null) {
 			if (shouldCommit) {
 				request.commit();
@@ -98,6 +98,17 @@ public class DispatchingService {
 		}
 		stopWatch.stop();
 		surveillanceService.survey(request);
+		if (securityService.isPublicUser(request)) {
+			HttpSession session = request.getRequest().getSession(false);
+			if (session != null) {
+				if (session.isNew()) {
+					log.warn("Public user started session");
+				} else {
+					log.warn("Public user has session");
+				}
+			}
+		}
+		
 		return handled;
 	}
 

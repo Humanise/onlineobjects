@@ -232,9 +232,10 @@
   line-height: 50px; }
 
 .oo_topbar_forgot {
-  font-size: 11pt;
+  font-size: 12px;
   float: right;
-  margin-top: 10px; }
+  margin-top: 5px;
+  line-height: 26px; }
   .oo_topbar_forgot_intro {
     font-size: 14px;
     line-height: 12pt;
@@ -248,7 +249,7 @@
   text-align: center;
   padding-top: 10px;
   padding-bottom: 2px;
-  font-size: 11pt; }
+  font-size: 14px; }
 
 @media screen and (min-width: 500px) {
   .oo_topbar_item {

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +55,8 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		}
 		boolean success = securityService.changeUser(request.getSession(), username, password, request);
 		if (success) {
+			HttpSession session = request.getRequest().getSession();
+			session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
 			if (Strings.isNotBlank(redirect)) {
 				request.redirectFromBase(redirect);
 			} else {
@@ -80,6 +84,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (!success) {
 			securityService.randomDelay();
 			throw new SecurityException(Error.userNotFound);
+		} else {
+			HttpSession session = request.getRequest().getSession();
+			session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
 		}
 	}
 	
@@ -140,11 +147,15 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	@Path
 	public void logout(Request request) throws IOException, EndUserException {
 		securityService.logOut(request.getSession());
-		String redirect = request.getString("redirect");
-		String url = ".?action=loggedOut";
-		if (Strings.isNotBlank(redirect)) {
-			url += "&redirect=" + redirect;
+		request.getRequest().getSession().invalidate();
+		request.clearCookies();
+		if (request.acceptsHtml()) {
+			String redirect = request.getString("redirect");
+			String url = ".?action=loggedOut";
+			if (Strings.isNotBlank(redirect)) {
+				url += "&redirect=" + redirect;
+			}
+	 		request.redirect(url);
 		}
- 		request.redirect(url);
 	}
 }

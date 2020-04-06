@@ -3,7 +3,8 @@
   flex-direction: column;
   min-height: 100vh;
   justify-content: space-evenly;
-  padding: 10px 0; }
+  padding: 10px 0;
+  box-sizing: border-box; }
 
 .container {
   text-align: center;
@@ -113,11 +114,13 @@ li {
   .root {
     height: 100vh; } }
 
-@media (min-width: 450px) {
-  .slogan {
-    font-size: 18px; }
+@media (min-width: 375px) {
   li {
     width: 100px; } }
+
+@media (min-width: 450px) {
+  .slogan {
+    font-size: 18px; } }
 
 @media (min-width: 500px) {
   .title {

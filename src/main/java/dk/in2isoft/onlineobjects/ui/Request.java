@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -596,5 +597,30 @@ public class Request implements Operator {
 	public Operator as(Privileged privileged) {
 		if (privileged.getIdentity() == this.getIdentity()) return this;
 		return new DelegatingOperator(this, privileged);
+	}
+
+	public void clearCookies() {
+
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				cookie.setValue("");
+				cookie.setPath("/");
+				cookie.setMaxAge(0);
+				String domain = getBaseDomain();
+				if (domain != null) {
+					cookie.setDomain("." + domain);
+				}
+				response.addCookie(cookie);
+			}
+		}
+	}
+
+	public boolean acceptsHtml() {
+		String value = getRequest().getHeader("Accept");
+		if (value!=null) {
+			return value.contains("text/html");
+		}
+		return false;
 	}
 }
