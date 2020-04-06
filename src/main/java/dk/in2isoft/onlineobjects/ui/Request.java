@@ -609,7 +609,7 @@ public class Request implements Operator {
 				cookie.setMaxAge(0);
 				String domain = getBaseDomain();
 				if (domain != null) {
-					cookie.setDomain("." + domain);
+					cookie.setDomain(domain);
 				}
 				response.addCookie(cookie);
 			}
