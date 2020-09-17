@@ -604,13 +604,15 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.1", "knowledge", "internetaddress" }, method = "POST")
 	public InternetAddressApiPerspective patchAddress(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
 		Boolean inbox = request.getBoolean("inbox", null);
 		Boolean favorite = request.getBoolean("favorite", null);
 		String title = request.getStringOrNull("title");
 		knowledgeService.updateInternetAddress(id, title, inbox, favorite, user, request);
+		// TODO: We must commit in order to clear cache used in getAddressPerspective
+		// (should be handled in another way)
+		request.commit();
 		return knowledgeService.getAddressPerspective(id, request);
 	}	
 

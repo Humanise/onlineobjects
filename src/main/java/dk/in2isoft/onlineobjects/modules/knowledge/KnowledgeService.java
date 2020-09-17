@@ -122,17 +122,21 @@ public class KnowledgeService {
 
 	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
 
-		Pile inbox = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_INBOX);
+		Pile inboxPile = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_FAVORITES);
-
+		perspective.setInbox(false);
+		boolean favorite = false;
+		boolean inbox = false;
 		List<Pile> piles = modelService.getParents(entity, null, Pile.class, operator);
 		for (Pile pile : piles) {
-			if (pile.getId() == inbox.getId()) {
-				perspective.setInbox(true);
+			if (pile.getId() == inboxPile.getId()) {
+				inbox = true;
 			} else if (pile.getId() == favorites.getId()) {
-				perspective.setFavorite(true);
+				favorite = true;
 			}
 		}
+		perspective.setFavorite(favorite);
+		perspective.setInbox(inbox);
 	}
 
 	public Statement addStatementToInternetAddress(String text, Long internetAddressId, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
