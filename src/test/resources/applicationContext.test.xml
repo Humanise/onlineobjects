@@ -18,4 +18,5 @@
 
   <import resource="spring/combined.xml" />
 
+  <bean id="networkService" class="dk.in2isoft.onlineobjects.test.TestableNetworkService" autowire="byType"/>
 </beans>

@@ -37,7 +37,7 @@ public class NetworkResponse {
 		this.state = state;
 	}
 
-	protected void setFile(File file) {
+	public void setFile(File file) {
 		this.file = file;
 	}
 	

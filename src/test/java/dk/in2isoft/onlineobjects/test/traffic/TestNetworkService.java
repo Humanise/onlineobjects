@@ -24,8 +24,7 @@ public class TestNetworkService extends AbstractSpringTestCase {
 	
 	//private static Logger log = LogManager.getLogger(TestNetworkService.class);
 	
-	@Autowired
-	private NetworkService networkService;
+	private NetworkService networkService = new NetworkService();
 	
 	@Test
 	public void testGetString() throws Exception {

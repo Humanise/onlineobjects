@@ -199,9 +199,9 @@ public class NetworkService {
 			output = new FileOutputStream(file);
 			reader = new InputStreamReader(input,encoding==null ? Strings.UTF8 : encoding);
 			IOUtils.copy(input, output);
+			response.setFile(file);
 			response.setMimeType(contentType);
 			response.setEncoding(encoding);
-			response.setFile(file);
 			response.setUri(uri);
 			return response;
 		} catch (IOException e) {

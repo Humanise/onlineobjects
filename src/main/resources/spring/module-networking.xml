@@ -6,7 +6,7 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
-	<bean class="dk.in2isoft.onlineobjects.modules.networking.NetworkService" autowire="byType"/>
+	<bean id="networkService" class="dk.in2isoft.onlineobjects.modules.networking.NetworkService" autowire="byType"/>
 	
 	<bean class="dk.in2isoft.onlineobjects.modules.networking.HTMLService" autowire="byType"/>
 	

@@ -50,7 +50,7 @@ public class TestFeedComparison extends AbstractSpringTestCase {
 		List<String> urls = Lists.newArrayList();
 
 		//URL feedUrl = new URL("http://feeds.feedburner.com/AjaxRain");
-		URL feedUrl = new URL("http://feeds.feedburner.com/alistapart/main?format=xml");
+		URL feedUrl = new URL("https://alistapart.com/main/feed/");
 		//URL feedUrl = new URL("http://www.readwriteweb.com/rss.xml");
 		//URL feedUrl = new URL("http://3quarksdaily.blogs.com/3quarksdaily/index.rdf");
 		
@@ -77,7 +77,6 @@ public class TestFeedComparison extends AbstractSpringTestCase {
         if (urls.size()>10) {
         	urls = urls.subList(0, 9);
         }
-		urls.add("http://www.apple.com/hotnews/thoughts-on-flash/");
 		compareUrls(urls);
 	}
 

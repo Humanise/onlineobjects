@@ -4,7 +4,7 @@ public enum Kind {
     answers ("information.answers"),
     similarity ("common.similarity");
 
-    private final String name;       
+    private final String name;
 
     private Kind(String s) {
         name = s;
