@@ -9,12 +9,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -43,6 +46,30 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 
 	@Autowired
 	protected SecurityService securityService;
+	
+	private static boolean cleaned = false;
+	
+	@BeforeClass
+	public static void before() throws IOException {
+		if (!cleaned) {
+			Properties props = PropertiesLoaderUtils.loadAllProperties("configuration.test.properties");
+			String path = props.getProperty("storagePath");
+			
+			File storage = new File(path);
+			
+			File[] dirs = storage.listFiles();
+			for (File file : dirs) {
+				if (!file.isDirectory()) continue;
+				try {
+					System.out.println("Removing dir: " + file);
+					FileUtils.deleteDirectory(file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			cleaned = true;
+		}
+	}
 	
 	@After
 	public void after() {
