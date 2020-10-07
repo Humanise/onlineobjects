@@ -33,15 +33,15 @@ public class FeedService {
 
         WireFeedInput input = new WireFeedInput();
         WireFeed feed;
-        XmlReader reader = null;
 		try {
 			NetworkResponse response = networkService.get(url);
 			if (!response.isSuccess()) {
 				throw new NetworkException("Unable to fecth");
 			}
 			File file = response.getFile();
-			reader = new XmlReader(file);
-			feed = input.build(reader);
+			try (XmlReader reader = new XmlReader(file)) {
+				feed = input.build(reader);
+			}
 		} catch (IllegalArgumentException e) {
 			throw new NetworkException("Unable to get feed items: "+url,e);
 		} catch (MalformedURLException e) {
@@ -52,8 +52,6 @@ public class FeedService {
 			throw new NetworkException("Unable to get feed items: "+url,e);
 		} catch (URISyntaxException e) {
 			throw new NetworkException("Unable to get feed items: "+url,e);
-		} finally {
-			IOUtils.closeQuietly(reader);
 		}
         if (feed instanceof Channel) {
         	Channel channel = (Channel) feed;

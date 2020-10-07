@@ -72,27 +72,25 @@ public class ScriptWriter {
 				compress(file, script);
 			}
 			if (file.exists()) {
-				FileReader fileReader = new FileReader(file);
-				IOUtils.copy(fileReader, this.writer);
-				IOUtils.closeQuietly(fileReader);
+				try (FileReader fileReader = new FileReader(file)) {					
+					IOUtils.copy(fileReader, this.writer);
+				}
 			}
 		}
 	}
 
 	private void compress(File file, String script) throws IOException {
 		StringReader reader = new StringReader(script);
-		FileWriter fileWriter = new FileWriter(file);
-		try {
-			new ScriptCompressor().compress(reader, fileWriter);
-		} catch (Exception e) {
-			this.writer.print(script);
-			log.error(e.getMessage(), e);
-			IOUtils.closeQuietly(fileWriter);
-			if (file.exists()) {
-				file.delete();
+		try (FileWriter fileWriter = new FileWriter(file)) {
+			try {
+				new ScriptCompressor().compress(reader, fileWriter);
+			} catch (Exception e) {
+				this.writer.print(script);
+				log.error(e.getMessage(), e);
+				if (file.exists()) {
+					file.delete();
+				}
 			}
-		} finally {
-			IOUtils.closeQuietly(fileWriter);
 		}
 	}
 
@@ -100,9 +98,9 @@ public class ScriptWriter {
 		String name = hash + "_" + stamp + ".js";
 		File file = new File(configurationService.getTempDir(), name);
 		if (file.exists()) {
-			FileReader fileReader = new FileReader(file);
-			IOUtils.copy(fileReader, this.writer);
-			IOUtils.closeQuietly(fileReader);
+			try (FileReader fileReader = new FileReader(file)) {
+				IOUtils.copy(fileReader, this.writer);
+			}
 			return true;
 		}
 		return false;

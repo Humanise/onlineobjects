@@ -84,14 +84,14 @@ public class StylesheetWriter {
 					write(writer,path);
 				}
 				StringReader reader = new StringReader(writer.toString());
-				FileWriter fileWriter = new FileWriter(file);
-				CssCompressor compressor = new CssCompressor(reader);
-				compressor.compress(fileWriter, -1);
-				fileWriter.close();
+				try (FileWriter fileWriter = new FileWriter(file)) {
+					CssCompressor compressor = new CssCompressor(reader);
+					compressor.compress(fileWriter, -1);
+				}
 			}
-			FileReader fileReader = new FileReader(file); 
-			IOUtils.copy(fileReader, this.writer);
-			IOUtils.closeQuietly(fileReader);
+			try (FileReader fileReader = new FileReader(file)) {
+				IOUtils.copy(fileReader, this.writer);
+			}
 		}
 	}
 
@@ -99,9 +99,9 @@ public class StylesheetWriter {
 		String name = hash + "_" + stamp + ".css";
 		File file = new File(configurationService.getTempDir(), name);
 		if (file.exists()) {
-			FileReader fileReader = new FileReader(file);
-			IOUtils.copy(fileReader, this.writer);
-			IOUtils.closeQuietly(fileReader);
+			try (FileReader fileReader = new FileReader(file)) {
+				IOUtils.copy(fileReader, this.writer);
+			}
 			return true;
 		}
 		return false;

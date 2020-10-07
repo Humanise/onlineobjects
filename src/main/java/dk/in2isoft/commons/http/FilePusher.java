@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -53,10 +52,9 @@ public class FilePusher {
         	HeaderUtil.setContentDisposition(file.getName(),response);
         }
         try {
-        	FileInputStream input = new FileInputStream(file);
-            ServletOutputStream out = response.getOutputStream();
-            IOUtils.copy(input, out);
-            input.close();
+        	try (FileInputStream input = new FileInputStream(file)) {
+                IOUtils.copy(input, response.getOutputStream());
+        	}
         }
         catch (FileNotFoundException e) {
             try {

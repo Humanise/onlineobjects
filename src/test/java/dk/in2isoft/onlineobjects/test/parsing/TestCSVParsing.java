@@ -39,14 +39,15 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 
 	@Test
 	public void testSimple() throws Exception {
-		FileReader fileReader = new FileReader(getTestFile("language/names.csv"));
-		CSVReader reader = new CSVReader(fileReader,';');
-	    String [] nextLine;
-	    while ((nextLine = reader.readNext()) != null) {
-	        log.info(Arrays.toString(nextLine));
-	    }
-	    reader.close();
-	    fileReader.close();
+		try (
+			FileReader fileReader = new FileReader(getTestFile("language/names.csv"));
+			CSVReader reader = new CSVReader(fileReader,';')
+		) {
+		    String [] nextLine;
+		    while ((nextLine = reader.readNext()) != null) {
+		        log.info(Arrays.toString(nextLine));
+		    }
+		}
 	}
 	
 	@Test
@@ -59,16 +60,15 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 		CsvToBean<WordImportRow> csv = new CsvToBean<WordImportRow>();
 		
 		Operator operator = modelService.newAdminOperator();
-
-		FileReader fileReader = new FileReader(getTestFile("language/names.csv"));
-		CSVReader reader = new CSVReader(fileReader,';');
 		
-		List<WordImportRow> list = csv.parse(strat, reader);
-		list.remove(0);
-		importWords(list, operator);
-		
-		reader.close();
-		fileReader.close();
+		try (
+			FileReader fileReader = new FileReader(getTestFile("language/names.csv"));
+			CSVReader reader = new CSVReader(fileReader,';');
+		) {
+			List<WordImportRow> list = csv.parse(strat, reader);
+			list.remove(0);
+			importWords(list, operator);
+		}
 		operator.commit();
 	}
 
