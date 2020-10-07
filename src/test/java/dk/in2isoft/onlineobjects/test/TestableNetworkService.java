@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 
 import org.apache.commons.io.IOUtils;
@@ -32,7 +31,7 @@ public class TestableNetworkService extends NetworkService {
 	
 	@Override
 	public NetworkResponse get(URI uri) throws IOException {
-		if (uri.getScheme().equals("file") || true) {
+		if (uri.getScheme().equals("file")) {
 			return super.get(uri);
 		}
 		NetworkResponse response = new NetworkResponse();

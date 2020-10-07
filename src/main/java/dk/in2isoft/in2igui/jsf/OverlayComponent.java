@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
-import dk.in2isoft.in2igui.jsf.HUIComponent;
 
 @FacesComponent(value=OverlayComponent.FAMILY)
 @Dependencies(js = { "/hui/js/hui_color.js", "/hui/js/hui_animation.js", "/hui/js/Overlay.js" }, css = { "/hui/css/overlay.css" }, requires = { HUIComponent.class }, uses = { ButtonComponent.class })

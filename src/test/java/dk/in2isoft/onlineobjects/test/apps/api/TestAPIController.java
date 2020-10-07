@@ -157,7 +157,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 		httpRequest.removeAllParameters();
 		httpRequest.addParameter("id", String.valueOf(response.getId()));
 		InternetAddressApiPerspective addressPerspective = apiController.viewAddress(request);
-		assertEquals("", addressPerspective.getText().replaceAll("[\\s]+", "").substring(0, 30));
+		assertEquals("Knowledge From Wikipedia, the ", addressPerspective.getText().replaceAll("[\\s]+", " ").substring(0, 30));
 		request.commit();
 	}
 
