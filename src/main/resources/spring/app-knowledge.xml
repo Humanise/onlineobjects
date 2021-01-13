@@ -28,6 +28,7 @@
    	
    	<bean id="questionViewPerspectiveBuilder" class="dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspectiveBuilder" autowire="byType"/>
    	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspectiveBuilder" autowire="byType"/>
+    <bean class="dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspectiveBuilder" autowire="byType"/>
 
    	<bean id="knowledgeController" class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeController" autowire="byType"/>
    	

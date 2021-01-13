@@ -24,6 +24,7 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
+import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.FeedPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspective;
@@ -35,6 +36,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.PeekPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementEditPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
@@ -42,6 +44,7 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
@@ -75,6 +78,66 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	private static Logger log = LogManager.getLogger(KnowledgeController.class);
 
+	@Path(expression = "/(da|en)/app/ui")
+	@View(ui = {"web", "app.xml"})
+	public void app(Request request) {
+		
+	}
+	
+	@Path(expression = "/app/list")
+	public void appList(Request request) throws EndUserException, IOException {
+		int page = request.getInt("page");
+		int pageSize = request.getInt("pageSize");
+		if (pageSize == 0) {
+			pageSize = 30;
+		}
+
+		SearchResult<Entity> found = readerSearcher.search(request, page, pageSize);
+
+		ListWriter out = new ListWriter(request);
+		out.startList();
+		out.startHeaders().header("Name").endHeaders();
+
+		List<Entity> entities = found.getList();
+		for (Entity entity : entities) {
+			out.startRow().withId(entity.getId()).withKind(entity.getClass().getSimpleName());
+			out.startCell().text(entity.getName()).endCell();
+			out.endRow();
+		}
+		out.endList();
+	}
+
+	@Path(expression = "/app/question")
+	public QuestionViewPerspective appQuestion(Request request) throws EndUserException, IOException {
+		return viewQuestion(request);
+	}
+
+	@Path(expression = "/app/statement")
+	public StatementWebPerspective appStatement(Request request) throws EndUserException, IOException {
+		return statementWebPerspectiveBuilder.build(request.getId(), request);
+	}
+
+	@Path(expression = "/app/hypothesis")
+	public HypothesisViewPerspective appHypothesis(Request request) throws EndUserException, IOException {
+		return viewHypothesis(request);
+	}
+
+	@Path(expression = "/app/internetaddress")
+	public InternetAddressViewPerspective appInternetAddress(Request request) throws EndUserException, IOException {
+		return loadArticle(request);
+	}
+
+	@Path(expression = "/app/tags")
+	public List<ItemData> appTags(Request request) throws ModelException {
+		WordByInternetAddressQuery query = new WordByInternetAddressQuery(request);
+		/*
+		 * List<ItemData> list = modelService.list(query);
+		 * Collections.sort(list, (o1, o2) -> { return
+		 * Strings.compareCaseless(o1.getText(),o2.getText()); });
+		 */
+		return modelService.list(query, request);
+	}
+	
 	@Path
 	public ViewResult list(Request request) throws IOException, ModelException, ExplodingClusterFuckException, SecurityException {
 
