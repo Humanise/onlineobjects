@@ -23,17 +23,16 @@ public class RobotsResponder implements Responder {
 		return false;
 	}
 
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException {
+	public void dispatch(Request request, FilterChain chain) throws IOException {
 		String path = request.getLocalPathAsString();
 
 		HttpServletResponse response = request.getResponse();
 		if (path.equals("/robots.txt")) {
 			response.setContentType("text/plain");
-			PrintWriter writer = response.getWriter();
-			writer.println("User-agent: *");
-			writer.println("Disallow:");
-			writer.close();
-			return true;
+			try (PrintWriter writer = response.getWriter()) {
+				writer.println("User-agent: *");
+				writer.println("Disallow:");
+			}
 		}
 		if (path.endsWith("/apple-app-site-association")) {
 			String out = "{\n" + 
@@ -44,12 +43,10 @@ public class RobotsResponder implements Responder {
 				"  }\n" + 
 				"}";
 			response.setContentType("application/json");
-			PrintWriter writer = response.getWriter();
-			writer.print(out);
-			writer.close();
-			return true;			
+			try (PrintWriter writer = response.getWriter()) {
+				writer.print(out);
+			}
 		}
-		return null;
 	}
 
 	public void setConfigurationService(ConfigurationService configurationService) {

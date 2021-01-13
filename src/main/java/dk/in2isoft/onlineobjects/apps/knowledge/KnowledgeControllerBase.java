@@ -11,6 +11,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexer;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspectiveBuilder;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
@@ -43,6 +44,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	protected KnowledgeSearcher readerSearcher;
 	protected QuestionViewPerspectiveBuilder questionViewPerspectiveBuilder;
 	protected HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder;
+	protected StatementWebPerspectiveBuilder statementWebPerspectiveBuilder;
 	protected PersonService personService;
 	protected KnowledgeService knowledgeService;
 	protected InternetAddressService internetAddressService;
@@ -157,6 +159,10 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	public void setHypothesisViewPerspectiveBuilder(HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder) {
 		this.hypothesisViewPerspectiveBuilder = hypothesisViewPerspectiveBuilder;
+	}
+	
+	public void setStatementWebPerspectiveBuilder(StatementWebPerspectiveBuilder statementWebPerspectiveBuilder) {
+		this.statementWebPerspectiveBuilder = statementWebPerspectiveBuilder;
 	}
 	
 	public void setPersonService(PersonService personService) {

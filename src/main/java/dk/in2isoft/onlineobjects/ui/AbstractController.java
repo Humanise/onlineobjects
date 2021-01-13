@@ -190,5 +190,6 @@ public abstract class AbstractController {
 		Method method;
 		String[] path;
 		Pattern pattern;
+		String jsfView;
 	}
 }

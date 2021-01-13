@@ -21,7 +21,7 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		return path.length > 0 && path[0].equals("service");
 	}
 	
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
+	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
 
 		String[] path = request.getFullPath();
 		request.setLocalContext((String[]) ArrayUtils.subarray(path, 0, 2));
@@ -36,7 +36,6 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		if (!controller.handle(request)) {
 			controller.unknownRequest(request);
 		}
-		return true;
 	}
 	
 	private ServiceController getServiceController(Request request, String name) {

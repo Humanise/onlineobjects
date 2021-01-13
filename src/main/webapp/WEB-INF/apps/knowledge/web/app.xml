@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns="uri:hui" title="Indstillinger" globals="false">
+
+  <controller url="/js/app.js"/>
+  <style url="/css/app.css"/>
+
+  <source name="listSource" url="/app/list">
+    <parameter key="page" value="@list.window.page"/>
+    <parameter key="text" value="@search.value"/>
+    <parameter key="subset" value="@subsetSelection.value"/>
+    <parameter key="type" value="@typeSelection.value"/>
+  </source>
+
+  <source name="tagsSource" url="/app/tags"/>
+
+  <remote name="changeFavoriteStatus" url="/changeFavoriteStatus"/>
+
+  <foundation name="foundation">
+    <navigation>
+      <overflow>
+      <selection value="everything" name="subsetSelection">
+        <option icon="common/search" text="Everything" value="everything"/>
+        <option icon="application/inbox" text="Inbox" value="inbox"/>
+        <option icon="common/search" text="Archive" value="archive"/>
+        <option icon="common/star" text="Favorites" value="favorite"/>
+      </selection>
+      <selection value="any" name="typeSelection">
+        <title>Types</title>
+        <option icon="common/search" text="Any" value="any"/>
+        <option icon="common/page" text="Pages" value="InternetAddress"/>
+        <option icon="common/search" text="Statements" value="Statement"/>
+        <option icon="common/search" text="Questions" value="Question"/>
+        <option icon="common/search" text="Hypothesis" value="Hypothesis"/>
+      </selection>
+      <selection value="user" name="tagSelection">
+        <title>Tags</title>
+        <options source="tagsSource"/>
+      </selection>
+      </overflow>
+    </navigation>
+    <results>
+      <bar variant="layout">
+        <searchfield adaptive="true" name="search"/>
+      </bar>
+      <overflow>
+        <list name="list" variant="light" source="listSource"/>
+      </overflow>
+    </results>
+    <actions>
+      <bar>
+        <button text="Add" small="true" name="addButton"/>
+        <flexible/>
+        <checkbox text="Favorite" name="favorite"/>
+        <checkbox text="Inbox" name="inbox"/>
+        <segmented>
+          <option text="Text"/>
+          <option text="Formatted"/>
+          <option text="Web"/>
+        </segmented>
+      </bar>
+    </actions>
+    <content>
+      <overflow shadow-variant="white">
+        <fragment name="article"/>
+        <fragment name="perspective"/>
+      </overflow>
+    </content>
+    <details>
+      <form padding="10">
+        <fields labels="above">
+          <field label="Title">
+            <text-input/>
+          </field>
+          <field label="Authors">
+            <object-input/>
+          </field>
+        </fields>
+      </form>
+    </details>
+  </foundation>
+
+  <panel name="addPanel" padding="10">
+    <form name="addForm">
+      <text-input key="name" breaks="true"/>
+      <buttons>
+        <button text="Add" name="savePublisher" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <window name="publisherWindow" title="OnlinePublisher instance" padding="5" width="300">
+    <form name="publisherFormula">
+      <fields>
+        <field label="Name:">
+          <text-input key="name"/>
+        </field>
+        <field label="Address:">
+          <text-input key="address"/>
+        </field>
+      </fields>
+      <buttons top="10">
+        <button text="Cancel" name="cancelPublisher"/>
+        <button text="Delete" name="deletePublisher">
+          <confirm text="Are you sure?" ok="Yes, delete" cancel="No"/>
+        </button>
+        <button text="Save" name="savePublisher" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </window>
+</gui>

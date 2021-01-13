@@ -28,7 +28,7 @@ public class In2iGuiResponder implements Responder, InitializingBean {
 		return path.length > 0 && path[0].equals("hui");
 	}
 	
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException {
+	public void dispatch(Request request, FilterChain chain) throws IOException {
 
 		String[] path = request.getFullPath();
 		StringBuilder file = new StringBuilder();
@@ -43,7 +43,6 @@ public class In2iGuiResponder implements Responder, InitializingBean {
 		} else {
 			HeaderUtil.setNotFound(request.getResponse());
 		}
-		return null;
 	}
 	
 	public void setConfigurationService(ConfigurationService configurationService) {
