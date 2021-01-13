@@ -140,7 +140,9 @@ public class RelationQuery {
 
 	public Optional<Relation> first() {
 		Query<Relation> query = getQuery();
-		Relation unique = (Relation) query.uniqueResult();
+		List<Relation> list = query.list();
+		if (list.isEmpty()) return Optional.empty();
+		Relation unique = (Relation) list.get(0);
 		return unique==null ? Optional.empty() : Optional.of(ModelService.getSubject(unique));
 	}
 
