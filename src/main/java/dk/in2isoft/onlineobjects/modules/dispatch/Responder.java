@@ -11,6 +11,6 @@ public interface Responder {
 
 	public abstract boolean applies(Request request);
 
-	public abstract Boolean dispatch(Request request, FilterChain chain) throws IOException, EndUserException;
+	public abstract void dispatch(Request request, FilterChain chain) throws IOException, EndUserException;
 
 }

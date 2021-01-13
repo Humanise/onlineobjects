@@ -68,11 +68,12 @@ public class DispatchingService {
 		boolean handled = false;
 		Request request = Request.get(servletRequest, servletResponse);
 		request.setOperationProvider(modelService);
-		Boolean shouldCommit = null;		
+		Boolean shouldRollback = false;		
 		
 		try {
 			securityService.ensureUserSession(request);
 		} catch (SecurityException ex) {
+			request.commit();
 			displayError(request, ex);
 			return true;
 		}
@@ -81,20 +82,18 @@ public class DispatchingService {
 			if (!handled && responder.applies(request)) {
 				handled = true;
 				try {
-					shouldCommit = responder.dispatch(request, chain);
+					responder.dispatch(request, chain);
 				} catch (EndUserException e) {
-					shouldCommit = false;
+					shouldRollback = true;
 					surveillanceService.survey(e,request);
 					displayError(request, e);
 				}
 			}
 		}
-		if (shouldCommit!=null) {
-			if (shouldCommit) {
-				request.commit();
-			} else {
-				request.rollBack();
-			}
+		if (shouldRollback) {
+			request.rollBack();
+		} else {
+			request.commit();
 		}
 		stopWatch.stop();
 		surveillanceService.survey(request);

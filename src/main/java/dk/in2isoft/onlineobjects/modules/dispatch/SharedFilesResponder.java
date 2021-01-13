@@ -24,14 +24,13 @@ public class SharedFilesResponder implements Responder {
 		return request.testLocalPathStart("favicon.ico");
 	}
 	
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException {
+	public void dispatch(Request request, FilterChain chain) throws IOException {
 		String[] filePath = new String[] { "shared", "web" };
 		String[] full = (String[]) ArrayUtils.addAll(filePath, request.getLocalPath());
-		return push(full,request.getResponse());
+		push(full,request.getResponse());
 	}
 	
-	private boolean push(String[] path, HttpServletResponse response) {
-		boolean success = false;
+	private void push(String[] path, HttpServletResponse response) {
 		StringBuilder filePath = new StringBuilder();
 		filePath.append(configurationService.getBasePath());
 		filePath.append(File.separator);
@@ -44,12 +43,10 @@ public class SharedFilesResponder implements Responder {
 		if (file.exists()) {
 			try {
 				DispatchingService.pushFile(response, file);
-				success = true;
 			} catch (Exception e) {
 				log.error(e.toString(), e);
 			}
 		}
-		return success;
 	}
 	
 	public void setConfigurationService(ConfigurationService configurationService) {

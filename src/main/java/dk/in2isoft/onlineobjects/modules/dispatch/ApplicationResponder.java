@@ -38,7 +38,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 		return true;
 	}
 	
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
+	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
 		
 		String[] path = request.getFullPath();
 		if (configurationService.getRootDomain()==null && path.length>1 && path[0].equals("app")) {
@@ -52,7 +52,6 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 				callApplication(appName, request);
 			}
 		}
-		return true;
 	}
 	
 	private ApplicationController getApplicationController(Request request, String name) {

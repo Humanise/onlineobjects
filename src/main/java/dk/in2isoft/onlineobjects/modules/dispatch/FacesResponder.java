@@ -16,7 +16,7 @@ public class FacesResponder implements Responder {
 		return localPathAsString.startsWith("/faces/");
 	}
 	
-	public Boolean dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
+	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
 		String localPath = request.getRequest().getRequestURI();
 		RequestDispatcher requestDispatcher = request.getRequest().getRequestDispatcher(localPath);
 		try {
@@ -24,6 +24,5 @@ public class FacesResponder implements Responder {
 		} catch (ServletException e) {
 			throw new EndUserException(e);
 		}
-		return true;
 	}
 }
