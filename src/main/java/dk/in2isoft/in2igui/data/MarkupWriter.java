@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import dk.in2isoft.commons.lang.Strings;
+
 public abstract class MarkupWriter {
 
 	protected PrintWriter writer;
@@ -20,6 +22,7 @@ public abstract class MarkupWriter {
 	protected void text(String str) {
 		close();
 		try {
+			str = Strings.stripNonValidXMLCharacters(str);			
 			StringEscapeUtils.escapeXml(writer,str);
 		} catch (IOException e) {
 			// Ignore
