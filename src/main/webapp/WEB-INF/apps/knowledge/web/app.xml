@@ -1,39 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gui xmlns="uri:hui" title="Indstillinger" globals="false">
-
+<gui xmlns="uri:hui" title="Knowledge" globals="false">
   <controller url="/js/app.js"/>
+  <controller url="/js/app_viewer.js"/>
+  <style url="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,500;1,600&amp;family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Playfair+Display&amp;display=swap"/>
   <style url="/css/app.css"/>
+  <style url="/core/fonts/onlineobject.css"/>
+  <script url="https://account.onlineobjects.test/status.js" async="async" defer="defer"/>
+  <style url="https://account.onlineobjects.test/status.css"/>
 
   <source name="listSource" url="/app/list">
     <parameter key="page" value="@list.window.page"/>
     <parameter key="text" value="@search.value"/>
     <parameter key="subset" value="@subsetSelection.value"/>
     <parameter key="type" value="@typeSelection.value"/>
+    <parameter key="tags" value="@tagSelection.value"/>
   </source>
 
   <source name="tagsSource" url="/app/tags"/>
 
   <remote name="changeFavoriteStatus" url="/changeFavoriteStatus"/>
 
+  <div class="root">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <div class="oo_topbar oo_faded">
+      <a class="oo_topbar_logo" href="https://www.onlineobjects.com/en/">
+        <em class="oo_topbar_logo_icon oo_icon_onlineobjects"> </em>
+        <span class="oo_topbar_logo_text"><span class="oo_topbar_logo_part">Online</span>Objects</span>
+      </a>
+      <ul class="oo_topbar_menu oo_topbar_left">
+        <li class="oo_topbar_menu_item oo_topbar_words">
+          <a class="oo_topbar_item oo_topbar_menu_link" data-icon="app_words" href="https://words.{$onlineobjects_domain}/en/">Words</a>
+        </li>
+        <li class="oo_topbar_menu_item oo_topbar_photos">
+          <a class="oo_topbar_item oo_topbar_menu_link" data-icon="app_photos" href="https://photos.{$onlineobjects_domain}/en/">Photos</a>
+        </li>
+        <li class="oo_topbar_menu_item oo_topbar_people">
+          <a class="oo_topbar_item oo_topbar_menu_link" data-icon="app_people" href="https://people.{$onlineobjects_domain}/en/">People</a>
+        </li>
+        <li class="oo_topbar_menu_item oo_topbar_knowledge">
+          <a class="oo_topbar_item oo_topbar_menu_link" data-icon="app_knowledge" href="https://knowledge.{$onlineobjects_domain}/en/">Knowledge</a>
+        </li>
+      </ul>
+      <ul class="oo_topbar_right"> </ul>
+    </div>
+    </html>
+    <div class="root_body">
   <foundation name="foundation">
     <navigation>
       <overflow>
       <selection value="everything" name="subsetSelection">
         <option icon="common/search" text="Everything" value="everything"/>
         <option icon="application/inbox" text="Inbox" value="inbox"/>
-        <option icon="common/search" text="Archive" value="archive"/>
+        <option icon="common/folder" text="Archive" value="archive"/>
         <option icon="common/star" text="Favorites" value="favorite"/>
       </selection>
       <selection value="any" name="typeSelection">
         <title>Types</title>
         <option icon="common/search" text="Any" value="any"/>
         <option icon="common/page" text="Pages" value="InternetAddress"/>
-        <option icon="common/search" text="Statements" value="Statement"/>
-        <option icon="common/search" text="Questions" value="Question"/>
-        <option icon="common/search" text="Hypothesis" value="Hypothesis"/>
+        <option icon="common/folder" text="Statements" value="Statement"/>
+        <option icon="common/folder" text="Questions" value="Question"/>
+        <option icon="common/folder" text="Hypothesis" value="Hypothesis"/>
       </selection>
       <selection value="user" name="tagSelection">
         <title>Tags</title>
+        <option text="None" value=""/>
         <options source="tagsSource"/>
       </selection>
       </overflow>
@@ -48,42 +79,138 @@
     </results>
     <actions>
       <bar>
-        <button text="Add" small="true" name="addButton"/>
+        <button symbol="left" small="true" name="goBack"/>
+        <button symbol="right" small="true" name="goForward"/>
+        <button icon="common/new" text="Add" small="true" name="addButton"/>
         <flexible/>
+        <button text="Delete" small="true" name="deleteObject">
+          <confirm text="Are you sure?"/>
+        </button>
+        <divider/>
         <checkbox text="Favorite" name="favorite"/>
         <checkbox text="Inbox" name="inbox"/>
-        <segmented>
-          <option text="Text"/>
-          <option text="Formatted"/>
-          <option text="Web"/>
+        <segmented value="formatted" name="viewMode">
+          <option text="Formatted" value="formatted"/>
+          <option text="Text" value="text"/>
         </segmented>
       </bar>
     </actions>
     <content>
       <overflow shadow-variant="white">
-        <fragment name="article"/>
-        <fragment name="perspective"/>
+        <fragment name="error" visible="false">
+          <div>Something unexpected happened</div>
+        </fragment>
+        <fragment name="internetaddress" visible="false"/>
+
+        <fragment name="question" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Question</div>
+            <fragment name="questionHead"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Is answered by</div>
+              <collection name="questionAnswers"/>
+              <div class="perspective_actions">
+                <button name="addAnswerToQuestion" text="Add answer"/>
+              </div>
+            </div>
+          </div>
+        </fragment>
+
+        <fragment name="statement" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Statement</div>
+            <fragment name="statementHead"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Appears on</div>
+              <collection name="statementAddresses">
+                <empty>
+                  <div class="perspective_relation_message">No pages</div>
+                </empty>
+              </collection>
+              <div class="perspective_heading">Is answer to</div>
+              <collection name="statementQuestions">
+                <empty>
+                  <div class="perspective_relation_message">No questions yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addQuestionToStatement" text="Add question"/>
+              </div>
+            </div>
+          </div>
+        </fragment>
+
+        <fragment name="hypothesis" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Hypothesis</div>
+            <fragment name="hypothesisHead"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Is supported by</div>
+              <collection name="hypothesisSupporting">
+                <empty>
+                  <div class="perspective_relation_message">No support yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addSupportToHypothesis" text="Add support"/>
+              </div>
+              <div class="perspective_heading">Is contradicted by</div>
+              <collection name="hypothesisContradicting">
+                <empty>
+                  <div class="perspective_relation_message">No contradictions yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addContradictionToHypothesis" text="Add contradiction"/>
+              </div>
+            </div>
+          </div>
+        </fragment>
+
       </overflow>
     </content>
     <details>
+      <overflow>
       <form padding="10">
         <fields labels="above">
           <field label="Title">
             <text-input/>
           </field>
+          <!--
           <field label="Authors">
             <object-input/>
           </field>
+            -->
         </fields>
+        <buttons>
+          <button text="Update" submit="true" highlighted="true"/>
+        </buttons>
       </form>
+      </overflow>
     </details>
   </foundation>
+  </div></div>
+  <!--
+  <boundpanel name="selectionBoundPanel" padding="10">
+    <button text="Highlight" name="highlightSelection"/>
+  </boundpanel>-->
 
-  <panel name="addPanel" padding="10">
+  <panel name="selectionPanel" padding="10" closable="false">
+    <button text="Highlight" name="highlightSelection"/>
+  </panel>
+
+  <panel name="multipleSelectionPanel" closable="false" auto-hide="true">
+  </panel>
+
+  <finder name="questionFinder" url="/service/model/finder?type=Question"/>
+
+  <finder name="statementFinder" url="/service/model/finder?type=Statement"/>
+
+  <panel name="addPanel" padding="10" auto-hide="true">
     <form name="addForm">
-      <text-input key="name" breaks="true"/>
+      <text-input key="text" breaks="true"/>
       <buttons>
-        <button text="Add" name="savePublisher" highlighted="true" submit="true"/>
+        <button text="Add" highlighted="true" submit="true"/>
       </buttons>
     </form>
   </panel>

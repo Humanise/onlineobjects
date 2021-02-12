@@ -2,17 +2,17 @@ package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 
 import java.util.List;
 
-import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.Hypothesis;
 
-public class StatementWebPerspective implements CategorizableViewPerspective {
+public class HypothesisWebPerspective implements CategorizableViewPerspective {
 
 	private long id;
+	private String type = Hypothesis.class.getSimpleName();
 	private String text;
 	private boolean inbox;
 	private boolean favorite;
-	private List<QuestionWebPerspective> questions;
-	private List<InternetAddressViewPerspective> addresses;
-	private String type = Statement.class.getSimpleName();
+	private List<StatementWebPerspective> supports;
+	private List<StatementWebPerspective> contradicts;
 
 	public long getId() {
 		return id;
@@ -50,19 +50,19 @@ public class StatementWebPerspective implements CategorizableViewPerspective {
 		this.favorite = favorite;
 	}
 
-	public List<QuestionWebPerspective> getQuestions() {
-		return questions;
+	public List<StatementWebPerspective> getSupports() {
+		return supports;
 	}
 
-	public void setQuestions(List<QuestionWebPerspective> questions) {
-		this.questions = questions;
+	public void setSupports(List<StatementWebPerspective> supporting) {
+		this.supports = supporting;
 	}
 
-	public List<InternetAddressViewPerspective> getAddresses() {
-		return addresses;
+	public List<StatementWebPerspective> getContradicts() {
+		return contradicts;
 	}
 
-	public void setAddresses(List<InternetAddressViewPerspective> addresses) {
-		this.addresses = addresses;
+	public void setContradicts(List<StatementWebPerspective> contradicting) {
+		this.contradicts = contradicting;
 	}
 }

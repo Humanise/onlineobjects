@@ -355,6 +355,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
+	public <T extends Entity> void delete(Class<T> type, long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+		T address = getRequired(type, id, operator);
+		delete(address, operator);
+	}
+	
 	private void deleteEntity(Entity entity, Operator operator) throws ModelException, SecurityException {
 		if (!securityService.canDelete(entity, operator)) {
 			throw new SecurityException("Privilieged=" + operator + " cannot delete Entity=" + entity);

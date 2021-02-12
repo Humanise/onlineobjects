@@ -133,9 +133,9 @@ public class InternetAddressViewPerspectiveBuilder {
 
 	private void loadStatements(InternetAddress address, InternetAddressViewPerspective article, Set<Long> ids, Operator session) throws ModelException {
 		List<Statement> statements = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, session);
-		List<StatementPerspective> quoteList = Lists.newArrayList();
+		List<QuotePerspective> quoteList = Lists.newArrayList();
 		for (Statement statement : statements) {
-			StatementPerspective statementPerspective = new StatementPerspective();
+			QuotePerspective statementPerspective = new QuotePerspective();
 			statementPerspective.setText(statement.getText());
 			statementPerspective.setId(statement.getId());
 			statementPerspective.setAuthors(getAuthors(statement, ids, session));
@@ -145,8 +145,8 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setQuotes(quoteList);
 		
 		List<Hypothesis> hypotheses = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Hypothesis.class, session);
-		List<StatementPerspective> perpectives = hypotheses.stream().map((Hypothesis hypothesis) -> {
-			StatementPerspective perspective = new StatementPerspective();
+		List<QuotePerspective> perpectives = hypotheses.stream().map((Hypothesis hypothesis) -> {
+			QuotePerspective perspective = new QuotePerspective();
 			perspective.setText(hypothesis.getText());
 			perspective.setId(hypothesis.getId());
 			perspective.setAuthors(getAuthors(hypothesis, ids, session));
@@ -261,7 +261,7 @@ public class InternetAddressViewPerspectiveBuilder {
 
 	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch, Operator operator) throws ModelException, ExplodingClusterFuckException {
 		
-		List<StatementPerspective> statements = article.getQuotes();
+		List<QuotePerspective> statements = article.getQuotes();
 
 		DecoratedDocument decorated = new DecoratedDocument(xomDocument);
 		String text = decorated.getText();
@@ -277,7 +277,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			}
 		}
 		StringSearcher searcher = new StringSearcher();
-		for (StatementPerspective statement : statements) {
+		for (QuotePerspective statement : statements) {
 			List<Result> found = searcher.search(statement.getText(), text);
 			statement.setFirstPosition(text.length());
 			for (Result result : found) {
@@ -300,7 +300,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 
 		trace("Decorate statements", watch);
-		for (StatementPerspective hypothesis : article.getHypotheses()) {
+		for (QuotePerspective hypothesis : article.getHypotheses()) {
 			List<Result> found = searcher.search(hypothesis.getText(), text);
 			hypothesis.setFirstPosition(text.length());
 			for (Result result : found) {

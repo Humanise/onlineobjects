@@ -82,8 +82,8 @@ public class PileService {
 		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_INBOX, entity, inbox, operator);
 	}
 
-	public void changeFavoriteStatus(Entity entity, Boolean inbox, User user, Operator operator) throws ModelException, SecurityException {
-		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, inbox, operator);
+	public void changeFavoriteStatus(Entity entity, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException {
+		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite, operator);
 	}
 	
 	// Wiring...

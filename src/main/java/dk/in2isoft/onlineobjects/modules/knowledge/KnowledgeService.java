@@ -12,6 +12,8 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
+
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
@@ -19,10 +21,14 @@ import dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeSearcher;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.CategorizableViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuotePerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -51,6 +57,7 @@ import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.PileService;
+import dk.in2isoft.onlineobjects.ui.Request;
 
 public class KnowledgeService {
 	private ModelService modelService;
@@ -65,6 +72,12 @@ public class KnowledgeService {
 		Question question = newQuestion(text);
 		modelService.create(question, operator);
 		return question;
+	}
+
+	public Statement createStatement(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+		Statement statement = newStatement(text);
+		modelService.create(statement, operator);
+		return statement;
 	}
 
 	public InternetAddress createInternetAddress(String url, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
@@ -279,6 +292,37 @@ public class KnowledgeService {
 		perspective.setVersion(Versioner.from(statement).and(answers).and(questions).and(authors).get());
 		return perspective;
 	}
+
+	public StatementWebPerspective getStatementWebPerspective(Long id, Operator request)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Statement statement = modelService.getRequired(Statement.class, id, request);
+		StatementWebPerspective perspective = new StatementWebPerspective();
+		perspective.setId(id);
+		perspective.setText(statement.getText());
+
+		List<InternetAddress> answers = modelService.getParents(statement, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, request);
+		perspective.setAddresses(answers.stream().map(address -> {
+			InternetAddressViewPerspective addressPerspective = new InternetAddressViewPerspective();
+			addressPerspective.setId(address.getId());
+			addressPerspective.setTitle(address.getName());
+			addressPerspective.setUrl(address.getAddress());
+			return addressPerspective;
+		}).collect(toList()));
+		List<Relation> questions = modelService.find().relations(request).from(statement).to(Question.class).withKind(Relation.ANSWERS).list();
+		questions.sort(this::compareByPosition);
+		perspective.setQuestions(questions.stream().map(relation -> {
+			Question question = (Question) relation.getTo();
+			QuestionWebPerspective p = new QuestionWebPerspective();
+			p.setId(question.getId());
+			p.setText(question.getText());
+			return p;
+		}).collect(toList()));
+
+		
+		User user = modelService.getUser(request);
+		categorize(statement, perspective, user, request);
+		return perspective;
+	}
 	
 	private static class Versioner {
 		private long version;
@@ -336,6 +380,57 @@ public class KnowledgeService {
 		perspective.setAnswers(answerPerspectives);
 		categorize(question, perspective, user, operator);
 		perspective.setVersion(Versioner.from(question).and(answers).get());
+		return perspective;
+	}
+	
+	public QuestionWebPerspective getQuestionWebPerspective(Long id, Operator request)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Question question = modelService.getRequired(Question.class, id, request);
+		QuestionWebPerspective perspective = new QuestionWebPerspective();
+		perspective.setId(id);
+		perspective.setText(question.getText());
+		User user = modelService.getUser(request);
+		categorize(question, perspective, user, request);
+
+		List<Statement> answers = modelService.getParents(question, Relation.ANSWERS, Statement.class, request);
+		perspective.setAnswers(answers.stream().map(answer -> {
+			QuotePerspective p = new QuotePerspective();
+			p.setId(answer.getId());
+			p.setText(answer.getText());
+			return p;
+		}).collect(toList()));
+		return perspective;
+	}
+	
+	public HypothesisWebPerspective getHypothesisWebPerspective(Long id, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
+		HypothesisWebPerspective perspective = new HypothesisWebPerspective();
+		perspective.setId(id);
+		perspective.setText(hypothesis.getText());
+		User user = modelService.getUser(operator);
+		categorize(hypothesis, perspective, user, operator);
+		perspective.setContradicts(Lists.newArrayList());
+		perspective.setSupports(Lists.newArrayList());
+
+		List<Relation> supports = modelService.find().relations(operator).from(Statement.class).to(hypothesis).withKind(Relation.SUPPORTS).list();
+		supports.sort(this::compareByPosition);
+		for (Relation relation : supports) {
+			Statement c = (Statement) relation.getFrom();
+			StatementWebPerspective statementPerspective = new StatementWebPerspective();
+			statementPerspective.setId(c.getId());
+			statementPerspective.setText(c.getText());
+			perspective.getSupports().add(statementPerspective);
+		}
+		List<Relation> contradicts = modelService.find().relations(operator).from(Statement.class).to(hypothesis).withKind(Relation.CONTRADTICS).list();
+		contradicts.sort(this::compareByPosition);
+		for (Relation relation : contradicts) {
+			Statement c = (Statement) relation.getFrom();
+			StatementWebPerspective statementPerspective = new StatementWebPerspective();
+			statementPerspective.setId(c.getId());
+			statementPerspective.setText(c.getText());
+			perspective.getContradicts().add(statementPerspective);
+		}
 		return perspective;
 	}
 
@@ -404,6 +499,55 @@ public class KnowledgeService {
 		if (favorite != null) {
 			pileService.changeFavoriteStatus(hypothesis, favorite, user, operator);
 		}					
+	}
+
+	public void addQuestionToStatement(Long questionId, Long statementId, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Question question = modelService.getRequired(Question.class, questionId, operator);
+		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
+		relate(question, statement, operator);
+	}
+
+	public void removeQuestionFromStatement(Long questionId, Long statementId, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Question question = modelService.getRequired(Question.class, questionId, operator);
+		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
+		List<Relation> relations = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).list();
+		for (Relation relation : relations) {
+			modelService.delete(relation, operator);
+		}
+	}
+
+	public void removeStatementFromHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
+		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
+		List<Relation> relations = modelService.find().relations(operator).from(statement).to(hypothesis).withKind(kind).list();
+		for (Relation relation : relations) {
+			modelService.delete(relation, operator);
+		}
+	}
+	
+	public void addStatementToHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
+		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
+		relate(hypothesis, kind, statement, operator);
+	}
+	
+	private void relate(Question question, Statement statement, Operator operator) throws ModelException, SecurityException {
+		Optional<Relation> found = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(statement, question, Relation.ANSWERS, operator);
+		}
+	}
+
+	private void relate(Hypothesis hypothesis, String kind, Statement statement, Operator operator)
+			throws ModelException, SecurityException {
+		Optional<Relation> found = modelService.find().relations(operator).from(statement).to(hypothesis).withKind(kind).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(statement, hypothesis, kind, operator);
+		}
 	}
 
 	public void updateInternetAddress(Long id, String title, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
@@ -543,5 +687,4 @@ public class KnowledgeService {
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}
-
 }

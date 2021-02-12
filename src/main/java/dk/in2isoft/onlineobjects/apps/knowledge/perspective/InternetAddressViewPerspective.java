@@ -3,12 +3,14 @@ package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 import java.util.List;
 
 import dk.in2isoft.in2igui.data.ItemData;
+import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
 
 public class InternetAddressViewPerspective implements CategorizableViewPerspective {
 
 	private long id;
+	private String type = InternetAddress.class.getSimpleName(); 
 	private String title;
 	private String url;
 	private String urlText;
@@ -22,8 +24,8 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 	private boolean inbox;
 	private boolean favorite;
 
-	private List<StatementPerspective> quotes;
-	private List<StatementPerspective> hypotheses;
+	private List<QuotePerspective> quotes;
+	private List<QuotePerspective> hypotheses;
 	private List<Option> words;
 	private List<ItemData> authors;
 
@@ -35,6 +37,10 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public String getType() {
+		return type;
 	}
 
 	public String getTitle() {
@@ -69,11 +75,11 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 		this.info = info;
 	}
 
-	public List<StatementPerspective> getQuotes() {
+	public List<QuotePerspective> getQuotes() {
 		return quotes;
 	}
 
-	public void setQuotes(List<StatementPerspective> quotes) {
+	public void setQuotes(List<QuotePerspective> quotes) {
 		this.quotes = quotes;
 	}
 
@@ -125,11 +131,11 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 		this.authors = authors;
 	}
 
-	public List<StatementPerspective> getHypotheses() {
+	public List<QuotePerspective> getHypotheses() {
 		return hypotheses;
 	}
 
-	public void setHypotheses(List<StatementPerspective> hypotheses) {
+	public void setHypotheses(List<QuotePerspective> hypotheses) {
 		this.hypotheses = hypotheses;
 	}
 

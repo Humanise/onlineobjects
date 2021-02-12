@@ -381,40 +381,31 @@ public class APIController extends APIControllerBase {
 	public QuestionApiPerspective removeStatementFromQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
-		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), request);
-		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), request);
-		List<Relation> relations = modelService.find().relations(request).from(statement).to(question).withKind(Relation.ANSWERS).list();
-		for (Relation relation : relations) {
-			modelService.delete(relation, request);
-		}
-		return knowledgeService.getQuestionPerspective(question.getId(), user, request);
+		Long questionId = request.getLong("questionId");
+		Long statementId = request.getLong("statementId");
+		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
+		return knowledgeService.getQuestionPerspective(questionId, user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "remove", "statement" })
 	public HypothesisApiPerspective removeStatementFromHypothesis(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
-		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), request);
-		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), request);
+		Long hypothesisId = request.getLong("hypothesisId");
 		String kind = getHypothesisRelation(request.getString("relation"));
-		List<Relation> relations = modelService.find().relations(request).from(statement).to(hypothesis).withKind(kind).list();
-		for (Relation relation : relations) {
-			modelService.delete(relation, request);
-		}
-		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user, request);
+		Long statementId = request.getLong("statementId");
+		knowledgeService.removeStatementFromHypothesis(hypothesisId, kind, statementId, request);
+		return knowledgeService.getHypothesisPerspective(hypothesisId, user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "statement", "remove", "question" })
 	public StatementApiPerspective removeQuestionFromStatement(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
-		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), request);
-		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), request);
-		List<Relation> relations = modelService.find().relations(request).from(statement).to(question).withKind(Relation.ANSWERS).list();
-		for (Relation relation : relations) {
-			modelService.delete(relation, request);
-		}
-		return knowledgeService.getStatementPerspective(statement.getId(), user, request);
+		Long questionId = request.getLong("questionId");
+		Long statementId = request.getLong("statementId");
+		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
+		return knowledgeService.getStatementPerspective(statementId, user, request);
 	}
 
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis" })
@@ -437,13 +428,13 @@ public class APIController extends APIControllerBase {
 	public HypothesisApiPerspective addStatementToHypothesis(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
+		Long hypothesisId = request.getLong("hypothesisId");
+		Long statementId = request.getLong("statementId");
 		String relation = request.getString("relation");
 		String kind = getHypothesisRelation(relation);
-		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, request.getLong("hypothesisId"), request);
-		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), request);
-		relate(hypothesis, kind, statement, request);
+		knowledgeService.addStatementToHypothesis(hypothesisId, kind, statementId, request);
 
-		return knowledgeService.getHypothesisPerspective(hypothesis.getId(), user, request);
+		return knowledgeService.getHypothesisPerspective(hypothesisId, user, request);
 	}
 
 	private String getHypothesisRelation(String relation) throws IllegalRequestException {
@@ -573,11 +564,11 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "statement", "add", "question" })
 	public StatementApiPerspective addQuestionToStatement(Request request) throws IOException, EndUserException {
 		checkUser(request);
+		Long questionId = request.getLong("questionId");
+		Long statementId = request.getLong("statementId");
 		User user = modelService.getUser(request);
-		Question question = modelService.getRequired(Question.class, request.getLong("questionId"), request);
-		Statement statement = modelService.getRequired(Statement.class, request.getLong("statementId"), request);
-		relate(question, statement, request);
-		return knowledgeService.getStatementPerspective(statement.getId(), user, request);
+		knowledgeService.addQuestionToStatement(questionId, statementId, request);
+		return knowledgeService.getStatementPerspective(statementId, user, request);
 	}
 
 	private void relate(Question question, Statement statement, Operator operator) throws ModelException, SecurityException {

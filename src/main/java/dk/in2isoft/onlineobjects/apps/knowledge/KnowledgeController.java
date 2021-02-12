@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.apps.knowledge;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,9 +26,12 @@ import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.in2igui.data.ListWriter;
+import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
+import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.FeedPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
@@ -35,6 +39,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.ListItemPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.PeekPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
 import dk.in2isoft.onlineobjects.core.Operator;
@@ -86,45 +91,261 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	
 	@Path(expression = "/app/list")
 	public void appList(Request request) throws EndUserException, IOException {
+
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
 		if (pageSize == 0) {
-			pageSize = 30;
+			pageSize = 500;
 		}
+		String type = request.getString("type");
+		ArrayList<String> types;
+		if (type.equals(Statement.class.getSimpleName())) {
+			types = Lists.newArrayList(Statement.class.getSimpleName());
+		} else if (type.equals(Question.class.getSimpleName())) {
+			types = Lists.newArrayList(Question.class.getSimpleName());
+		} else if (type.equals(Hypothesis.class.getSimpleName())) {
+			types = Lists.newArrayList(Hypothesis.class.getSimpleName());
+		} else if (type.equals(InternetAddress.class.getSimpleName())) {
+			types = Lists.newArrayList(InternetAddress.class.getSimpleName());
+		} else {
+			types = Lists.newArrayList("any");
+		}
+		String subset = request.getString("subset");
 
-		SearchResult<Entity> found = readerSearcher.search(request, page, pageSize);
+		KnowledgeQuery query = new KnowledgeQuery();
+		query.setPage(page);
+		query.setPageSize(pageSize);
+		query.setSubset("everything");
+		query.setType(types);
+		query.setText(request.getString("text"));
+		query.setWordIds(request.getLongs("tags"));
+		if ("inbox".equals(subset)) {
+			query.setInbox(true);
+		}
+		if ("archive".equals(subset)) {
+			query.setInbox(false);
+		}
+		if ("favorite".equals(subset)) {
+			query.setFavorite(true);
+		}
+		SearchResult<KnowledgeListRow> result = knowledgeService.search(query, request);
 
 		ListWriter out = new ListWriter(request);
 		out.startList();
 		out.startHeaders().header("Name").endHeaders();
 
-		List<Entity> entities = found.getList();
-		for (Entity entity : entities) {
-			out.startRow().withId(entity.getId()).withKind(entity.getClass().getSimpleName());
-			out.startCell().text(entity.getName()).endCell();
+		List<KnowledgeListRow> entities = result.getList();
+		for (KnowledgeListRow entity : entities) {
+			out.startRow().withId(entity.getId()).withKind(entity.getType());
+			
+			out.startCell().text(entity.getText());
+			if (entity.isFavorite()) {
+				out.text(" \u2605");
+			}
+			if (entity.isInbox()) {
+				out.text(" \u25CF");
+			}
+			out.endCell();
 			out.endRow();
 		}
 		out.endList();
 	}
 
-	@Path(expression = "/app/question")
-	public QuestionViewPerspective appQuestion(Request request) throws EndUserException, IOException {
-		return viewQuestion(request);
+	@Path(expression = "/app/delete")
+	public void appDeleteInternetAddress(Request request) throws EndUserException, IOException {
+		Long id = request.getId();
+		String type = request.getString("type");
+		if (InternetAddress.class.getSimpleName().equals(type)) {
+			modelService.delete(InternetAddress.class, id, request);
+		} else if (Statement.class.getSimpleName().equals(type)) {
+			modelService.delete(Statement.class, id, request);
+		} else if (Question.class.getSimpleName().equals(type)) {
+			modelService.delete(Question.class, id, request);
+		} else if (Hypothesis.class.getSimpleName().equals(type)) {
+			modelService.delete(Hypothesis.class, id, request);
+		} else {
+			throw new IllegalRequestException("Unknown type");
+		}
+	}
+
+	@Path(expression = "/app/favorite")
+	public void appChangeFavorite(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		Long id = request.getId();
+		String type = request.getString("type");
+		boolean favorite = request.getBoolean("favorite");
+
+		User user = modelService.getUser(request);		
+		Entity entity = loadByType(id, type, request);
+
+		pileService.changeFavoriteStatus(entity, favorite, user, request);
+	}
+
+	@Path(expression = "/app/inbox")
+	public void appChangeInbox(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		Long id = request.getId();
+		String type = request.getString("type");
+		boolean inbox = request.getBoolean("inbox");
+
+		User user = modelService.getUser(request);
+		Entity entity = loadByType(id, type, request);
+
+		pileService.changeInboxStatus(entity, inbox, user, request);
+	}
+
+	private Entity loadByType(Long id, String type, Operator operator) throws ModelException, ContentNotFoundException, IllegalRequestException {
+		Class<? extends Entity> cls = modelService.getEntityClass(type);
+		Set<Class<?>> types = Sets.newHashSet(InternetAddress.class, Statement.class, Question.class, Hypothesis.class);
+		if (types.contains(cls)) {
+			Entity entity = modelService.getRequired(cls, id, operator);
+			return entity;			
+		}
+		throw new IllegalRequestException("Unknown type");
+	}
+	
+	// Statement
+	
+	@Path(expression = "/app/statement/create")
+	public StatementWebPerspective appCreateStatement(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+		String text = request.getString("text");
+		Statement statement = knowledgeService.createStatement(text, request);
+		return knowledgeService.getStatementWebPerspective(statement.getId(), request);
 	}
 
 	@Path(expression = "/app/statement")
 	public StatementWebPerspective appStatement(Request request) throws EndUserException, IOException {
-		return statementWebPerspectiveBuilder.build(request.getId(), request);
+		Long id = request.getId();
+		return knowledgeService.getStatementWebPerspective(id, request);
 	}
 
+	@Path(expression = "/app/statement/add/question")
+	public StatementWebPerspective appQuestionToStatement(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId"); 
+		Long statementId = request.getLong("statementId"); 
+		knowledgeService.addQuestionToStatement(questionId, statementId, request);
+		return knowledgeService.getStatementWebPerspective(statementId, request);
+	}
+
+	@Path(expression = "/app/statement/remove/question")
+	public StatementWebPerspective appRemoveStatementFromQuestion(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId"); 
+		Long statementId = request.getLong("statementId"); 
+		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
+		return knowledgeService.getStatementWebPerspective(statementId, request);
+	}
+
+	
+	// Questions
+	
+	@Path(expression = "/app/question/create")
+	public QuestionWebPerspective appCreateQuestion(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+		String text = request.getString("text");
+		Question question = knowledgeService.createQuestion(text, request);
+		return knowledgeService.getQuestionWebPerspective(question.getId(), request);
+	}
+
+	@Path(expression = "/app/question")
+	public QuestionWebPerspective appQuestion(Request request) throws EndUserException, IOException {
+		Long id = request.getId();
+		return knowledgeService.getQuestionWebPerspective(id, request);
+	}
+
+	@Path(expression = "/app/question/add/statement")
+	public QuestionWebPerspective appStatementToQuestion(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId");
+		Long statementId = request.getLong("statementId"); 
+		knowledgeService.addQuestionToStatement(questionId, statementId, request);
+		return knowledgeService.getQuestionWebPerspective(questionId, request);
+	}
+
+	@Path(expression = "/app/question/remove/statement")
+	public QuestionWebPerspective appRemoveQuestionFromAnswer(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId"); 
+		Long statementId = request.getLong("statementId"); 
+		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
+		return knowledgeService.getQuestionWebPerspective(questionId, request);
+	}
+
+
+	// Hypothesis
+	
 	@Path(expression = "/app/hypothesis")
-	public HypothesisViewPerspective appHypothesis(Request request) throws EndUserException, IOException {
-		return viewHypothesis(request);
+	public HypothesisWebPerspective appHypothesis(Request request) throws EndUserException, IOException {
+		Long id = request.getId();
+		return knowledgeService.getHypothesisWebPerspective(id, request);
+	}
+	
+	@Path(expression = "/app/hypothesis/create")
+	public HypothesisWebPerspective appCreateHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		String text = request.getString("text");
+		Hypothesis hypothesis = knowledgeService.createHypothesis(text, request);
+		return knowledgeService.getHypothesisWebPerspective(hypothesis.getId(), request);
+	}
+	
+	@Path(expression = "/app/hypothesis/remove/statement")
+	public HypothesisWebPerspective appRemoveStatementFromHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		String relation = request.getString("relation");
+		Long hypothesisId = request.getLong("hypothesisId"); 
+		Long statementId = request.getLong("statementId");
+		String kind = getHypothesisRelation(relation);
+		knowledgeService.removeStatementFromHypothesis(hypothesisId, kind, statementId, request);
+		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
+	}
+	
+	@Path(expression = "/app/hypothesis/add/statement")
+	public HypothesisWebPerspective appAddStatementToHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		String relation = request.getString("relation");
+		Long hypothesisId = request.getLong("hypothesisId"); 
+		Long statementId = request.getLong("statementId");
+		String kind = getHypothesisRelation(relation);
+		knowledgeService.addStatementToHypothesis(hypothesisId, kind, statementId, request);
+		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
 	}
 
+	private String getHypothesisRelation(String relation) throws IllegalRequestException {
+		if (relation.equals("contradicts")) return Relation.CONTRADTICS;
+		else if (relation.equals("supports")) return Relation.SUPPORTS;
+		throw new IllegalRequestException("Unknown relation");
+	}
+
+
+	// Internet address
+	
 	@Path(expression = "/app/internetaddress")
 	public InternetAddressViewPerspective appInternetAddress(Request request) throws EndUserException, IOException {
-		return loadArticle(request);
+		Long id = request.getId();
+		return getInternetAddressWebPerspective(id, request);
+	}
+
+	@Path(expression = "/app/internetaddress/create")
+	public InternetAddressViewPerspective appAddInternetAddress(Request request) throws EndUserException, IOException {
+
+		String url = request.getString("url");
+		User user = modelService.getUser(request);
+		InternetAddress internetAddress = knowledgeService.createInternetAddress(url, user, request);
+		return getInternetAddressWebPerspective(internetAddress.getId(), request);
+	}
+
+	@Path(expression = "/app/internetaddress/create/statement")
+	public InternetAddressViewPerspective appCreateStatementOnInternetAddress(Request request) throws EndUserException, IOException {
+		Long id = request.getId();
+		String text = request.getString("text");
+		knowledgeService.addStatementToInternetAddress(text, id, request);
+		return getInternetAddressWebPerspective(id, request);
+	}
+
+	
+	
+	
+	private InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, ContentNotFoundException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
+
+		boolean hightlight = false; //request.getBoolean("highlight");
+		User user = modelService.getUser(request);
+		
+		Settings settings = new Settings();
+		settings.setHighlight(hightlight);
+		settings.setCssNamespace("reader_text_");
+
+		return internetAddressViewPerspectiveBuilder.build(id, settings, user, new HashSet<Long>(), request);
 	}
 
 	@Path(expression = "/app/tags")
