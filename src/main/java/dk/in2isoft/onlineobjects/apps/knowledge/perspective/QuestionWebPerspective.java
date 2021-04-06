@@ -3,15 +3,17 @@ package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 import java.util.List;
 
 import dk.in2isoft.onlineobjects.model.Question;
+import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class QuestionWebPerspective implements CategorizableViewPerspective {
+public class QuestionWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
 
 	private long id;
 	private String text;
-	private List<QuotePerspective> answers;
+	private List<StatementWebPerspective> answers;
 	private boolean inbox;
 	private boolean favorite;
 	private String type = Question.class.getSimpleName();
+	private List<Option> words;
 
 	public long getId() {
 		return id;
@@ -49,11 +51,19 @@ public class QuestionWebPerspective implements CategorizableViewPerspective {
 		this.favorite = favorite;
 	}
 
-	public List<QuotePerspective> getAnswers() {
+	public List<StatementWebPerspective> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<QuotePerspective> answers) {
+	public void setAnswers(List<StatementWebPerspective> answers) {
 		this.answers = answers;
+	}
+
+	public List<Option> getWords() {
+		return words;
+	}
+
+	public void setWords(List<Option> words) {
+		this.words = words;
 	}
 }

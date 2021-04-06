@@ -190,7 +190,7 @@
       </property>
     </bean>
 
-	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService">
+	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService" depends-on="configurationService">
 		<property name="configurationService" ref="configurationService"/>
 	</bean>
 

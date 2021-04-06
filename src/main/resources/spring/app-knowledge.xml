@@ -36,7 +36,6 @@
    		<property name="documentBuilder" ref="knowledgeIndexDocumentBuilder"/>
    		<property name="indexService" ref="indexService"/>
    		<property name="modelService" ref="modelService"/>
-   		<property name="pileService" ref="pileService"/>
    		<property name="securityService" ref="securityService"/>
    	</bean>
    	
@@ -46,7 +45,6 @@
    	</bean>
 
    	<bean id="knowledgeIndexDocumentBuilder" class="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexDocumentBuilder">
-   		<property name="storageService" ref="storageService"/>
    		<property name="modelService" ref="modelService"/>
    		<property name="pileService" ref="pileService"/>
    		<property name="internetAddressService" ref="internetAddressService"/>

@@ -79,7 +79,7 @@ public class TopBarComponent extends AbstractComponent {
 		String texts = buildTexts(locale, msg);
 
 		
-		out.startDiv("oo_topbar oo_faded").withId(getClientId()).withAttribute("data-texts", texts);
+		out.startDiv("oo_topbar").withId(getClientId()).withAttribute("data-texts", texts);
 		// TODO: Get this via application controller
 		if ("knowledge".equals(request.getApplication())) {
 			out.withAttribute("data-login-url", "/"+request.getLanguage()+"/app");

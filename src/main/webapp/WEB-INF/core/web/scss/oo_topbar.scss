@@ -10,24 +10,27 @@
     height: 30px;
     font-size: 0;
     white-space: nowrap;
+    color: #777;
 
-    @include transition(background 1s,border-color 1s, opacity 1s, box-shadow 1s);
+    transition: background 1s, border-color 1s, opacity 1s, box-shadow 1s, color .3s;
 
     &:hover {
       background: #fff;
       box-shadow: 0 0 4px rgba(0,0,0,.1);
       border-bottom: 1px solid #ddd;
+      color: #000;
     }
 
     &_logo {
-      display: inline-block;
+      display: inline-flex;
+      vertical-align: top;
       font-weight: 300;
       height: 30px;
       line-height: 30px;
       padding: 0 5px 0 10px;
       font-size: $regular-font-size;
-      color: #bbb;
       text-decoration: none;
+      color: inherit;
       @include transition(color .3s);
 
       &:focus {
@@ -36,7 +39,6 @@
 
       &:hover {
         background: #f3f3f3;
-        color: #333;
       }
 
       &_icon {
@@ -65,15 +67,15 @@
       line-height: 30px;
       padding: 0 5px;
       text-decoration: none;
-      color: #bbb;
+      color: inherit;
       font-weight: 400;
 
       &:hover {
         background: #f3f3f3;
-        color: #333;
       }
     }
   }
+
   .oo_topbar_drop {
     position: fixed;
     top: -110%;
@@ -169,8 +171,7 @@
     {
       text-decoration: none;
       &.is-selected {
-        font-weight: 400;
-        color: #333;
+        font-weight: 500;
         position: relative;
         padding-right: 25px;
 

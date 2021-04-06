@@ -54,6 +54,7 @@ import dk.in2isoft.onlineobjects.modules.language.WordCategoryPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
+import dk.in2isoft.onlineobjects.ui.data.Option;
 import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
 import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 import nu.xom.Attribute;
@@ -99,6 +100,14 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setUrlText(Strings.simplifyURL(address.getAddress()));
 		article.setAuthors(getAuthors(address, ids, operator));
 
+		List<Word> words = data.keywords;
+		article.setWords(words.stream().map((word) -> {
+			Option option = new Option();
+			option.setValue(word.getId());
+			option.setLabel(word.getText());
+			return option;
+		}).collect(Collectors.toList()));
+		
 		knowledgeService.categorize(address, article, user, operator);
 		trace("Categorize", watch);
 
@@ -285,6 +294,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				info.put("id", statement.getId());
 				info.put("type", Statement.class.getSimpleName());
 				info.put("description", "Statement: " + StringUtils.abbreviate(statement.getText(), 30));
+				info.put("text", statement.getText());
 				
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", statement.getId());

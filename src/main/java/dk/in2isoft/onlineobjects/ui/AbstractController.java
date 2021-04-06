@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -66,7 +67,7 @@ public abstract class AbstractController {
 	}
 
 	protected void addJsfMatcher(String pattern,String path) {
-		jsfMatchers.put(RestUtil.compile(pattern), "/jsf/"+getName()+"/"+path);
+		jsfMatchers.put(RestUtil.compile(pattern), path);
 	}
 
 	public String getLanguage(Request request) {
@@ -96,24 +97,28 @@ public abstract class AbstractController {
 		}
 		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
 			if (entry.getKey().matcher(localPath).matches()) {
-				ServletContext context = request.getRequest().getServletContext();
-				RequestDispatcher dispatcher = context.getRequestDispatcher("/faces" + entry.getValue());
-				request.getResponse().setContentType("text/html");
-				request.getResponse().setCharacterEncoding("UTF-8");
-				try {
-					dispatcher.forward(request.getRequest(), request.getResponse());
-					return true;
-				} catch (ServletException e) {
-					Exception userException = EndUserException.findUserException(e);
-					if (userException instanceof EndUserException) {
-						throw (EndUserException) userException;
-					} else {
-						throw new EndUserException(e.getCause());
-					}
-				}
+				return dispatchToJSF(request, entry.getValue());
 			}
 		}
 		return false;
+	}
+
+	private boolean dispatchToJSF(Request request, String path) throws IOException, EndUserException {
+		ServletContext context = request.getRequest().getServletContext();
+		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/jsf/" + getName() + "/" + path);
+		request.getResponse().setContentType("text/html");
+		request.getResponse().setCharacterEncoding("UTF-8");
+		try {
+			dispatcher.forward(request.getRequest(), request.getResponse());
+			return true;
+		} catch (ServletException e) {
+			Exception userException = EndUserException.findUserException(e);
+			if (userException instanceof EndUserException) {
+				throw (EndUserException) userException;
+			} else {
+				throw new EndUserException(e.getCause());
+			}
+		}
 	}
 	
 	public void unknownRequest(Request request) throws IOException, EndUserException {
@@ -131,7 +136,16 @@ public abstract class AbstractController {
 			View view = method.getDeclaredAnnotation(View.class);
 			if (view != null && view.ui().length > 0) {
 				FileBasedInterface ui = new FileBasedInterface(getFile(view.ui()), huiService);
+				if (result instanceof Map) {
+					Map<?,?> params = (Map<?, ?>) result;
+					for (Entry<?, ?> entry : params.entrySet()) {
+						ui.setParameter(entry.getKey().toString(), entry.getValue());
+					}
+				}
 				ui.render(request.getRequest(), request.getResponse());
+			}
+			else if (view != null && view.jsf().length() > 0) {
+				dispatchToJSF(request, view.jsf());
 			}
 			else if (!returnType.equals(Void.TYPE)) {
 				request.sendObject(result);
@@ -190,6 +204,5 @@ public abstract class AbstractController {
 		Method method;
 		String[] path;
 		Pattern pattern;
-		String jsfView;
 	}
 }

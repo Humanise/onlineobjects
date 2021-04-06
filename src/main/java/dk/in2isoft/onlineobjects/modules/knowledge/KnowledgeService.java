@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
@@ -27,8 +28,8 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewP
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
-import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuotePerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.ViewPerspectiveWithTags;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
@@ -52,12 +53,13 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
+import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.caching.CacheEntry;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.PileService;
-import dk.in2isoft.onlineobjects.ui.Request;
+import dk.in2isoft.onlineobjects.ui.data.Option;
 
 public class KnowledgeService {
 	private ModelService modelService;
@@ -318,10 +320,22 @@ public class KnowledgeService {
 			return p;
 		}).collect(toList()));
 
+		addWords(statement, perspective, request);
 		
 		User user = modelService.getUser(request);
 		categorize(statement, perspective, user, request);
 		return perspective;
+	}
+
+	private void addWords(Entity entity, ViewPerspectiveWithTags perspective, Operator operator)
+			throws ModelException {
+		List<Word> words = modelService.getChildren(entity, Word.class, operator);
+		perspective.setWords(words.stream().map((word) -> {
+			Option option = new Option();
+			option.setValue(word.getId());
+			option.setLabel(word.getText());
+			return option;
+		}).collect(Collectors.toList()));
 	}
 	
 	private static class Versioner {
@@ -394,11 +408,13 @@ public class KnowledgeService {
 
 		List<Statement> answers = modelService.getParents(question, Relation.ANSWERS, Statement.class, request);
 		perspective.setAnswers(answers.stream().map(answer -> {
-			QuotePerspective p = new QuotePerspective();
+			StatementWebPerspective p = new StatementWebPerspective();
 			p.setId(answer.getId());
 			p.setText(answer.getText());
 			return p;
 		}).collect(toList()));
+		
+		addWords(question, perspective, request);
 		return perspective;
 	}
 	
@@ -431,7 +447,20 @@ public class KnowledgeService {
 			statementPerspective.setText(c.getText());
 			perspective.getContradicts().add(statementPerspective);
 		}
+		addWords(hypothesis, perspective, operator);
 		return perspective;
+	}
+	
+	public InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, ContentNotFoundException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
+
+		boolean hightlight = false; //request.getBoolean("highlight");
+		User user = modelService.getUser(request);
+		
+		Settings settings = new Settings();
+		settings.setHighlight(hightlight);
+		settings.setCssNamespace("article_");
+
+		return internetAddressViewPerspectiveBuilder.build(id, settings, user, new HashSet<Long>(), request);
 	}
 
 	private void populateStatement(Operator operator, Statement answer, StatementApiPerspective statementPerspective)

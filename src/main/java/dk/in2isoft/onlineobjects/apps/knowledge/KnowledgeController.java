@@ -8,11 +8,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,6 +73,7 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.feeds.Feed;
 import dk.in2isoft.onlineobjects.modules.language.WordByInternetAddressQuery;
+import dk.in2isoft.onlineobjects.modules.language.WordByMultipleTypesQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse;
@@ -83,14 +86,41 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	private static Logger log = LogManager.getLogger(KnowledgeController.class);
 
+
+	@Path(expression = "/(da|en)/app/legacy")
+	@View(jsf = "reader.xhtml")
+	public void legacy(Request request) {}
+	
+	@Path(expression = "/(da|en)/intro")
+	@View(jsf = "intro.xhtml")
+	public void intro(Request request) {}
+	
+	@Path(expression = "/(da|en)/analyze")
+	@View(jsf = "analyze.xhtml")
+	public void analyze(Request request) {}
+	
+	@Path(expression = "/(da|en)/extract")
+	@View(jsf = "extract.xhtml")
+	public void extract(Request request) {}
+
+	@Path(expression = "/(da|en)/app")
+	@View(jsf = "app.xhtml")
+	public Map<String,String> app2(Request request) {
+		Map<String,String> params = new HashedMap<>();
+		params.put("domain", request.getBaseDomain());
+		return params;
+	}
+	
 	@Path(expression = "/(da|en)/app/ui")
 	@View(ui = {"web", "app.xml"})
-	public void app(Request request) {
-		
+	public Map<String,String> app(Request request) {
+		Map<String,String> params = new HashedMap<>();
+		params.put("domain", request.getBaseDomain());
+		return params;
 	}
 	
 	@Path(expression = "/app/list")
-	public void appList(Request request) throws EndUserException, IOException {
+	public List<KnowledgeListRow> appList(Request request) throws EndUserException, IOException {
 
 		int page = request.getInt("page");
 		int pageSize = request.getInt("pageSize");
@@ -130,25 +160,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		}
 		SearchResult<KnowledgeListRow> result = knowledgeService.search(query, request);
 
-		ListWriter out = new ListWriter(request);
-		out.startList();
-		out.startHeaders().header("Name").endHeaders();
-
-		List<KnowledgeListRow> entities = result.getList();
-		for (KnowledgeListRow entity : entities) {
-			out.startRow().withId(entity.getId()).withKind(entity.getType());
-			
-			out.startCell().text(entity.getText());
-			if (entity.isFavorite()) {
-				out.text(" \u2605");
-			}
-			if (entity.isInbox()) {
-				out.text(" \u25CF");
-			}
-			out.endCell();
-			out.endRow();
-		}
-		out.endList();
+		return result.getList();
 	}
 
 	@Path(expression = "/app/delete")
@@ -211,8 +223,20 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getStatementWebPerspective(statement.getId(), request);
 	}
 
+	@Path(expression = "/app/statement/update")
+	public StatementWebPerspective appChangeStatement(Request request) throws EndUserException, IOException {
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateStatement(id, text, null, null, user, request);
+		return knowledgeService.getStatementWebPerspective(id, request);
+	}
+
 	@Path(expression = "/app/statement")
 	public StatementWebPerspective appStatement(Request request) throws EndUserException, IOException {
+		/*try {
+			Thread.sleep(Math.round(Math.random()*1000));
+		} catch (InterruptedException ignore) {}*/
 		Long id = request.getId();
 		return knowledgeService.getStatementWebPerspective(id, request);
 	}
@@ -241,6 +265,15 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		String text = request.getString("text");
 		Question question = knowledgeService.createQuestion(text, request);
 		return knowledgeService.getQuestionWebPerspective(question.getId(), request);
+	}
+
+	@Path(expression = "/app/question/update")
+	public QuestionWebPerspective appChangeQuestion(Request request) throws EndUserException, IOException {
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateQuestion(id, text, null, null, user, request);
+		return knowledgeService.getQuestionWebPerspective(id, request);
 	}
 
 	@Path(expression = "/app/question")
@@ -280,6 +313,15 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Hypothesis hypothesis = knowledgeService.createHypothesis(text, request);
 		return knowledgeService.getHypothesisWebPerspective(hypothesis.getId(), request);
 	}
+
+	@Path(expression = "/app/hypothesis/update")
+	public HypothesisWebPerspective appChangeHypotheis(Request request) throws EndUserException, IOException {
+		User user = modelService.getUser(request);
+		Long id = request.getId();
+		String text = request.getString("text", "Text is required");
+		knowledgeService.updateHypothesis(id, text, null, null, user, request);
+		return knowledgeService.getHypothesisWebPerspective(id, request);
+	}
 	
 	@Path(expression = "/app/hypothesis/remove/statement")
 	public HypothesisWebPerspective appRemoveStatementFromHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
@@ -313,7 +355,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path(expression = "/app/internetaddress")
 	public InternetAddressViewPerspective appInternetAddress(Request request) throws EndUserException, IOException {
 		Long id = request.getId();
-		return getInternetAddressWebPerspective(id, request);
+		return knowledgeService.getInternetAddressWebPerspective(id, request);
 	}
 
 	@Path(expression = "/app/internetaddress/create")
@@ -322,7 +364,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		String url = request.getString("url");
 		User user = modelService.getUser(request);
 		InternetAddress internetAddress = knowledgeService.createInternetAddress(url, user, request);
-		return getInternetAddressWebPerspective(internetAddress.getId(), request);
+		return knowledgeService.getInternetAddressWebPerspective(internetAddress.getId(), request);
 	}
 
 	@Path(expression = "/app/internetaddress/create/statement")
@@ -330,33 +372,60 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long id = request.getId();
 		String text = request.getString("text");
 		knowledgeService.addStatementToInternetAddress(text, id, request);
-		return getInternetAddressWebPerspective(id, request);
-	}
-
-	
-	
-	
-	private InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, ContentNotFoundException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
-
-		boolean hightlight = false; //request.getBoolean("highlight");
-		User user = modelService.getUser(request);
-		
-		Settings settings = new Settings();
-		settings.setHighlight(hightlight);
-		settings.setCssNamespace("reader_text_");
-
-		return internetAddressViewPerspectiveBuilder.build(id, settings, user, new HashSet<Long>(), request);
+		return knowledgeService.getInternetAddressWebPerspective(id, request);
 	}
 
 	@Path(expression = "/app/tags")
 	public List<ItemData> appTags(Request request) throws ModelException {
-		WordByInternetAddressQuery query = new WordByInternetAddressQuery(request);
+		WordByMultipleTypesQuery query = new WordByMultipleTypesQuery(request);
 		/*
 		 * List<ItemData> list = modelService.list(query);
 		 * Collections.sort(list, (o1, o2) -> { return
 		 * Strings.compareCaseless(o1.getText(),o2.getText()); });
 		 */
 		return modelService.list(query, request);
+	}
+
+	@Path(expression = "/app/tag", method = "POST")
+	public Object appCreateTag(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException, ExplodingClusterFuckException {
+		Long wordId = request.getId("wordId");
+		Entity entity = loadByType(request.getId(), request.getString("type"), request);
+		
+		Word word = modelService.getRequired(Word.class, wordId, request);
+		Optional<Relation> relation = modelService.getRelation(entity, word, request);
+		if (!relation.isPresent()) {
+			modelService.createRelation(entity, word, request);
+		}
+		return getWebPerspective(entity, request);
+	}
+
+	@Path(expression = "/app/tag", method = "PUT")
+	public Object appRemoveTag(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException, ExplodingClusterFuckException {
+		Long wordId = request.getId("wordId");
+		Entity entity = loadByType(request.getId(), request.getString("type"), request);
+		Word word = modelService.getRequired(Word.class, wordId, request);
+		Optional<Relation> relation = modelService.getRelation(entity, word, request);
+		if (relation.isPresent()) {
+			modelService.delete(relation.get(), request);
+		}
+		return getWebPerspective(entity, request);
+	}
+
+	private Object getWebPerspective(Entity entity, Request request) throws ModelException, ContentNotFoundException,
+			SecurityException, IllegalRequestException, ExplodingClusterFuckException {
+		if (entity instanceof Statement) {
+			return knowledgeService.getStatementWebPerspective(entity.getId(), request);
+		}
+		else if (entity instanceof Question) {
+			return knowledgeService.getQuestionWebPerspective(entity.getId(), request);
+		}
+		else if (entity instanceof Hypothesis) {
+			return knowledgeService.getHypothesisWebPerspective(entity.getId(), request);
+		}
+		else if (entity instanceof InternetAddress) {
+			return knowledgeService.getInternetAddressWebPerspective(entity.getId(), request);
+		}
+		return null;
 	}
 	
 	@Path

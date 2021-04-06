@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<f:view contentType="text/html"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  locale="#{knowledgeIntroView.locale}"
+  transient="true"
+>
+
+<o:doctype/>
+<o:html>
+  <o:head>
+    <title>Knowledge - OnlineObjects</title>
+    <o:fonts additional="Playfair+Display:400,500,600;Lora:400,700,400italic,700italic"/>
+  </o:head>
+  <o:body>
+    <div style="display: flex; flex-direction: column; height: 100vh;">
+    <o:topBar/>
+    <div style="flex: 1 0; border-top: 1px solid #ddd;">
+    <gui:include path="app.xml"/>
+    </div>
+    </div>
+    <o:analytics/>
+    <ui:include src="../shared/wordfinder.xhtml"/>
+  </o:body>
+</o:html>
+
+</f:view>

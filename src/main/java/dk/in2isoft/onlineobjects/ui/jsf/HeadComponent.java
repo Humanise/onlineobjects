@@ -60,6 +60,25 @@ public class HeadComponent extends AbstractComponent {
 			out.endElement("link");
 		}
 	}
+	
+	/*
+	 * TODO: Generate preload header
+	@Override
+	public void processUpdates(FacesContext context) {
+		DependencyGraph graph = Components.getDependencyGraph(context);
+
+		context.getViewRoot().visitTree(new FullVisitContext(context), (visitContext, component) -> {
+			visit(component.getClass(), component, graph, context);
+			return VisitResult.ACCEPT;
+		});
+		ConfigurationService configurationService = getBean(ConfigurationService.class);
+		DependencyService dependencyService = getBean(DependencyService.class);
+
+		String styleUrl = dependencyService.handleStyles(graph);
+	 	getRequest().getResponse().addHeader("Link", "<" + styleUrl + ">; rel=preload; as=style");
+		
+		super.processUpdates(context);
+	}*/
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
@@ -75,7 +94,7 @@ public class HeadComponent extends AbstractComponent {
 		Request request = Components.getRequest();
 		if (!configurationService.isOptimizeResources()) {
 			for (String url : graph.getStyles()) {
-			 	out.startElement("link").rel("stylesheet").type("text/css").href(url).endElement("link");
+			 	out.startElement("link").rel("stylesheet").type("text/css").href(DependencyService.pathToUrl(url)).endElement("link");
 			}
 		 	writeInlineJs(configurationService, out);
 		} else {

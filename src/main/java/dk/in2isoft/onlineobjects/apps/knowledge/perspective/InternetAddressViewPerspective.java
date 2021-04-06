@@ -7,7 +7,7 @@ import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
 
-public class InternetAddressViewPerspective implements CategorizableViewPerspective {
+public class InternetAddressViewPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
 
 	private long id;
 	private String type = InternetAddress.class.getSimpleName(); 

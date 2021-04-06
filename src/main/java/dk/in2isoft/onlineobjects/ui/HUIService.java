@@ -7,7 +7,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,13 +33,19 @@ import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.StackObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
-public class HUIService {
+public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 
 	private static Logger log = LogManager.getLogger(HUIService.class);
 
@@ -45,6 +54,10 @@ public class HUIService {
 	private Templates templates;
 	
 	private ConfigurationService configurationService;
+
+	private List<String> baseCSS;
+
+	private List<String> baseJS;
 
 	public HUIService() {
 		super();
@@ -68,6 +81,12 @@ public class HUIService {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		baseCSS = readJSONStrings("info/core_css.json");
+		baseJS = readJSONStrings("info/core_js.json");
 	}
 
 	private void render(StreamSource source, OutputStream output, String context,boolean devMode) throws IOException {
@@ -118,8 +137,8 @@ public class HUIService {
 
 	private void validate(StreamSource source) throws IOException {
 		SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-		String schemaPath = configurationService.getFile("hui/xslt/schema.xsd").getAbsolutePath();
+		String path = "xslt/schema.xsd";
+		String schemaPath = getFile(path).getAbsolutePath();
 		// load a WXS schema, represented by a Schema instance
 		Source schemaFile = new StreamSource(new File(schemaPath));
 		Schema schema;
@@ -157,6 +176,10 @@ public class HUIService {
 		} catch (SAXException e) {
 		    // instance document is invalid!
 		}
+	}
+
+	private File getFile(String path) {
+		return configurationService.getFile("hui/" + path);
 	}
 	
 	private void setHeaders(HttpServletRequest request, HttpServletResponse response) {
@@ -204,6 +227,18 @@ public class HUIService {
 		return new String(stream.toByteArray(),"UTF-8");
 	}
 
+	public String render(File file, HttpServletRequest request) throws IOException {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			boolean devMode = configurationService.isDevelopmentMode();
+			render(new StreamSource(file), stream, request.getContextPath(),devMode);
+			return new String(stream.toByteArray(),"UTF-8");
+		} catch (TransformerFactoryConfigurationError e) {
+			e.printStackTrace(new PrintStream(stream));
+		}
+		return "";
+	}
+
 	public void render(File file, HttpServletRequest request,HttpServletResponse response) throws IOException {
 		setHeaders(request, response);
 		OutputStream stream = response.getOutputStream();
@@ -218,6 +253,22 @@ public class HUIService {
 		}
 	}
 
+	public List<String> getBaseCSS() {
+		return baseCSS;
+	}
+
+	private List<String> readJSONStrings(String path) {
+		File file = getFile(path);
+		String string = Files.readString(file);
+		List<String> map = new Gson().fromJson(string, new TypeToken<ArrayList<String>>() {}.getType());
+		List<String> files = map.stream().map(s -> "/hui/" + s).collect(Collectors.toList());
+		return files;
+	}
+	
+	public List<String> getBaseJS() {
+		return baseJS;
+	}
+	
 	private Transformer createTransformer(boolean newTemplates) throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		if (templates == null || newTemplates) {
 			StringBuilder xslString = new StringBuilder();

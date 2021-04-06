@@ -47,7 +47,10 @@ public class FontsComponent extends AbstractComponent {
 		googleFonts.add("Hind+Siliguri:400,500,600,700");
 		//urls.add("https://use.typekit.net/dqs7hkt.css");
 		if (Strings.isNotBlank(additional)) {
-			googleFonts.add(additional);
+			String[] parts = additional.split(";");
+			for (String string : parts) {
+				googleFonts.add(string);
+			}
 		}
 		String testFont = getRequest().getString("_font");
 		if (Strings.isNotBlank(testFont)) {

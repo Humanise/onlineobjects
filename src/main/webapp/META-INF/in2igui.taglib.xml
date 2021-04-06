@@ -246,4 +246,11 @@
       <renderer-type>hui.foundation</renderer-type>
     </component>
   </tag>
+  <tag>
+    <tag-name>include</tag-name>
+    <component>
+      <component-type>hui.include</component-type>
+      <renderer-type>hui.include</renderer-type>
+    </component>
+  </tag>
 </facelet-taglib>
