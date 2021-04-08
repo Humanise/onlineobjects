@@ -28,7 +28,7 @@
         <option value="everything"><span class="selection selection-everything">Everything</span></option>
         <option value="inbox"><span class="selection selection-inbox">Inbox</span></option>
         <option value="archive"><span class="selection selection-archive">Archive</span></option>
-        <option value="favorite"><span class="selection selection-favorite">Favorite</span></option>
+        <option value="favorite"><span class="selection selection-favorite">Favorites</span></option>
       </selection>
       <selection value="any" name="typeSelection">
         <title>Types</title>
@@ -38,7 +38,7 @@
         <option value="Question"><span class="selection selection-question">Questions</span></option>
         <option value="Hypothesis"><span class="selection selection-hypothesis">Hypothesis</span></option>
       </selection>
-      <selection value="user" name="tagSelection">
+      <selection value="" name="tagSelection">
         <title>Tags</title>
         <option text="None" value="">
           <span class="selection selection-tag">Any</span>
