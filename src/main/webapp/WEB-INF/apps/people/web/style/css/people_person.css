@@ -24,17 +24,18 @@ div.people_person_left
 
 div.people_person div.people_person_image
 {
-  width: 150px;
-  height: 190px;
-  border: 1px solid #ddd;
-  border-color: #eee #ddd #ccc;
 }
 
 div.people_person div.people_person_image_photo
 {
   width: 140px;
-  height: 180px;
-  margin: 5px 0 0 5px;
+  height: 140px;
+  background-size: 140px;
+  border: 1px solid rgba(0,0,0,.2);
+  overflow: hidden;
+  border-radius: 50%;
+  box-sizing: border-box;
+  background-position: 0px;
 }
 
 div.people_person_info

@@ -89,6 +89,9 @@ public class DependencyService {
 		if (url.startsWith("/WEB-INF/apps/")) {
 			return url.replaceFirst("/WEB-INF/apps/.*/web/","/");
 		}
+		if (url.startsWith("/WEB-INF/services/")) {
+			return url.replaceFirst("/WEB-INF/services/","/service/").replaceFirst("/web/","/");
+		}
 		return url;
 	}
 	

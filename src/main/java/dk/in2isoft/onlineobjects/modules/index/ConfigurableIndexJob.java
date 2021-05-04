@@ -69,7 +69,6 @@ public class ConfigurableIndexJob<E extends Entity> extends ServiceBackedJob imp
 			if (batch.size()>200) {
 				configurableIndexer.index(batch);
 				batch.clear();
-				operator.commit();
 			}
 			num++;
 		}

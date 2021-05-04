@@ -78,9 +78,10 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 
 	public void index(List<E> words) {
 		try {
+			Operator operator = modelService.newAdminOperator();
 			Map<Entity,Document> map = Maps.newHashMap();
 			for (E word : words) {
-				Document document = documentBuilder.build(word, null);
+				Document document = documentBuilder.build(word, operator);
 				log.debug("Re-indexing : "+word);
 				map.put(word, document);
 			}

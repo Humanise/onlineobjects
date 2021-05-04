@@ -50,6 +50,7 @@ var appController = window.appController = {
     var viewMode = hui.ui.get('viewMode');
     var enabled = !!this._currentItem;
     hui.ui.get('deleteObject').setEnabled(enabled);
+    hui.ui.get('addTag').setEnabled(enabled);
     favoriteCheckbox.setEnabled(enabled);
     inboxCheckbox.setEnabled(enabled);
     viewMode.setVisible(this._currentItem && this._currentItem.type == 'InternetAddress');
@@ -69,6 +70,12 @@ var appController = window.appController = {
   // Adding
 
   $click$addButton : function(button) {
+    addPanel.show({target: button.getElement()})
+    addForm.focus();
+  },
+
+  $click$listAddButton : function(button) {
+    //addPanel.show({target: hui.ui.get('addButton').getElement()})
     addPanel.show({target: button.getElement()})
     addForm.focus();
   },
@@ -128,6 +135,7 @@ var appController = window.appController = {
           //history.replaceState(null, document.title, document.location.pathname);
           // TODO go back + pop history
           list.refresh();
+          hui.ui.get('tagsSource').refresh();
           this._reset();
         }.bind(this),
         $failure : function() {
@@ -247,6 +255,38 @@ var appController = window.appController = {
   },
   $isSelected$list : function(obj) {
     return this._currentItem && this._currentItem.id === obj.id;
+  },
+  $empty$list : function(obj) {
+    var query = hui.ui.get('search').getValue();
+    var subset = hui.ui.get('subsetSelection').getValue();
+    var type = hui.ui.get('typeSelection').getValue();
+    var tag = hui.ui.get('tagSelection').getValue();
+    var cls = 'no_content';
+    if (query) {
+      cls = 'empty_search';
+    } else if (tag.value) {
+      cls = 'empty_selection';
+    } else if (subset.value === 'everything') {
+      if (type.value === 'InternetAddress') {
+        cls = 'empty_internetaddress';
+      } else if (type.value === 'Statement') {
+        cls = 'empty_statement';
+      } else if (type.value === 'Question') {
+        cls = 'empty_question';
+      } else if (type.value === 'Hypothesis') {
+        cls = 'empty_hypothesis';
+      }
+    } else if (subset.value === 'favorite') {
+      cls = 'no_favorites';
+    } else if (subset.value === 'inbox') {
+      cls = 'empty_inbox';
+    } else if (subset.value === 'archive') {
+      cls = 'empty_archive';
+    }
+    var x = hui.findAll('.list_empty_text')
+    for (var i = 0; i < x.length; i++) {
+      x[i].style.display = x[i].getAttribute('data') === cls ? 'block' : 'none';
+    }
   },
 
   $render$list : function(obj) {

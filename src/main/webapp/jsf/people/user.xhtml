@@ -33,7 +33,7 @@
           <div class="people_person_left">
             <div class="people_person_image" id="profileImage">
               <c:if test="#{peoplePersonView.image!=null}">
-                <div class="people_person_image_photo" style="background: url('/service/image/id#{peoplePersonView.image.id}width140height180sharpen1.0cropped.jpg')"></div>
+                <div class="people_person_image_photo" style="background-image: url('/service/image/id#{peoplePersonView.image.id}width280height280sharpen1.0cropped.jpg')"></div>
               </c:if>
             </div>
             <ui:fragment rendered="#{peoplePersonView.canModify}">
@@ -73,20 +73,6 @@
                     </c:forEach>
                   </c:if>
                 </ul>
-                <c:if test="#{fn:length(peoplePersonView.info.interests)>0}">
-                  <p class="people_person_property"><span>Interesser: </span>
-                    <c:forEach items="#{peoplePersonView.info.interests}" var="item">
-                      #{item}
-                    </c:forEach>
-                  </p>
-                </c:if>
-                <c:if test="#{fn:length(peoplePersonView.info.music)>0}">
-                  <p class="people_person_property"><span>Yndlingsmusik: </span>
-                    <c:forEach items="#{peoplePersonView.info.music}" var="item">
-                      #{item}
-                    </c:forEach>
-                  </p>
-                </c:if>
                 <c:if test="#{peoplePersonView.canModify}">
                   <p style="margin-top: 20px;"><gui:button text="Rediger profil" variant="paper" name="editProfile" small="true"/></p>
                 </c:if>

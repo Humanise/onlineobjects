@@ -57,7 +57,54 @@
           selectable="true"
           class="list"
           selection-class="list_item-selected"
-        />
+        >
+          <empty>
+            <div class="list_empty" id="list_empty">
+              <div class="list_empty_text" data="no_content">
+                <p>You have no content yet...</p>
+              </div>
+              <div class="list_empty_text" data="empty_selection">
+                <p>This combination has no content.</p>
+              </div>
+              <div class="list_empty_text" data="empty_internetaddress">
+                <p>You have no pages yet.</p>
+                <p>A page is usually an article found on the web.</p>
+                <p>You can add one by copying the URL of a web page and adding it...</p>
+              </div>
+              <div class="list_empty_text" data="empty_hypothesis">
+                <p>You have no hypotheses yet.</p>
+                <p>A hypothesis is something you think may be true.</p>
+                <p>Add your first hypothesis and start finding statements that supports or contradicts it...</p>
+              </div>
+              <div class="list_empty_text" data="empty_statement">
+                <p>You have no statement yet.</p>
+                <p>A statement is usually a quote found on a web page - a great way to remember something.</p>
+                <p>You can start by adding a web page, select some text, then click "Quote".</p>
+                <p>You can also just add some text.</p>
+              </div>
+              <div class="list_empty_text" data="empty_question">
+                <p>You have no questions yet.</p>
+                <p>A question is a great starting point for organizing your thoughts.</p>
+                <p>Add your first question and start finding answers...</p>
+              </div>
+              <div class="list_empty_text" data="empty_search">
+                <p>Nothing was found</p>
+              </div>
+              <div class="list_empty_text" data="empty_inbox">
+                <p>The inbox contains newly added pages</p>
+              </div>
+              <div class="list_empty_text" data="empty_archive">
+                <p>The archive contains anything not in the inbox</p>
+              </div>
+              <div class="list_empty_text" data="no_favorites">
+                <p>You have no favorites yet</p>
+              </div>
+            </div>
+          </empty>
+        </collection>
+        <div class="list_add">
+          <button text="Add something..." name="listAddButton"/>
+        </div>
         <!--
         <list name="list" variant="light"/>
         -->
@@ -88,6 +135,12 @@
           <div class="intro">
             <div class="intro_graphic"> </div>
             <p class="intro_title">Knowledge</p>
+            <ul>
+              <li><em>Store web pages</em> and read them <em>distraction free</em></li>
+              <li><em>Highlight statements</em> on stored web pages</li>
+              <li>Relate statements as <em>answers</em> to <em>questions</em></li>
+              <li>Mark statements as <em>supporting</em> or <em>contradicting</em> <em>hypotheses</em></li>
+            </ul>
           </div>
         </fragment>
 
@@ -216,7 +269,7 @@
   </boundpanel>-->
 
   <panel name="selectionPanel" padding="10" closable="false">
-    <button text="Highlight" name="highlightSelection"/>
+    <button text="Quote" name="highlightSelection"/>
   </panel>
 
   <panel name="multipleSelectionPanel" closable="false" auto-hide="true" padding="5">

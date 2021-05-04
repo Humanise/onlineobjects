@@ -1,6 +1,7 @@
 @import 'shared';
 @import '../../../../core/web/scss/oo_font.scss';
 @import 'parts/app_hui.scss';
+@import 'parts/list.scss';
 
 .root {
   position: absolute;
@@ -20,83 +21,7 @@
   }
 }
 
-.list {
-  &_item {
-    border-bottom: 1px solid #eee;
-    padding: 5px 20px 5px 8px;
-    position: relative;
-    cursor: pointer;
-    line-height: 20px;
-    font-family: $book-font;
-    font-size: 16px;
 
-    &:hover {
-      background: #f6f6f6;
-    }
-
-    &:after {
-      opacity: .3;
-      position: absolute;
-      top: 7px;
-      right: 5px;
-      font-size: 14px;
-      line-height: 14px;
-    }
-
-    &-selected {
-      background: #36f;
-      color: #fff;
-      &:hover {
-        background: #36f;
-      }
-      &:after {
-        opacity: .7;
-      }
-    }
-
-    &-statement {
-      &:after {
-        @include icon('quote');
-      }
-    }
-
-    &-question {
-      &:after {
-        @include icon('question');
-      }
-    }
-
-    &-internetaddress {
-      &:after {
-        @include icon('document_line');
-      }
-    }
-
-    &-hypothesis {
-      &:after {
-        @include icon('hypothesis');
-      }
-    }
-    &_favorite {
-      @include icon-before('star');
-      font-size: 14px;
-      display: flex;
-      color: #ffbe00;
-      float: right;
-      margin: 1px 2px;
-    }
-    &_inbox {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 6px;
-      height: 6px;
-      background: #000;
-      border-radius: 50%;
-      z-index: 1;
-    }
-  }
-}
 
 .tags {
   display: flex;
@@ -402,15 +327,34 @@
   height: 60vh;
   justify-content: center;
   align-items: center;
-  color: #aaa;
+  color: #777;
+
   &_graphic {
     @include icon-before('app_knowledge') {
-      font-size: 12vw;
+      font-size: calc(max(12vw,80px));
     }
   }
+
   &_title {
-    font-size: 4vw;
-    font-weight: 600;    
+    font-size: calc(max(3.5vw,24px));
+    font-weight: 500;
+  }
+
+  ul {
+    list-style: none;
+    text-align: center;
+    padding: 0 20px;
+    margin: 20px 0 0;
+    font-weight: 300;
+  }
+
+  li {
+    margin: 5px 0;
+  }
+
+  em {
+    font-weight: 500;
+    font-style: normal;
   }
 }
 
