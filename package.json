@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "repository": "https://github.com/Humanise/onlineobjects",
   "devDependencies": {
-    "grunt": "^1.1.0",
+    "grunt": "^1.3.0",
     "grunt-contrib-jshint": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-sass": "^3.0.2",
