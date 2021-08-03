@@ -7,5 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface View {
 	
 	String[] ui() default {};
+	String jsf() default "";
 
 }

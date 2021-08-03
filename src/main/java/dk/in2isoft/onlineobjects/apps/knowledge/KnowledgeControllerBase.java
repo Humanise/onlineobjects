@@ -52,10 +52,6 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 
 	public KnowledgeControllerBase() {
 		super("knowledge");
-		addJsfMatcher("/<language>/app", "reader.xhtml");
-		addJsfMatcher("/<language>/analyze", "analyze.xhtml");
-		addJsfMatcher("/<language>/extract", "extract.xhtml");
-		addJsfMatcher("/<language>/intro", "intro.xhtml");
 	}
 	
 	@Override

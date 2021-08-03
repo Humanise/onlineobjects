@@ -56,7 +56,7 @@ public class BodyComponent extends HtmlBody {
 		if (!configurationService.isOptimizeResources()) {
 
 			for (String url : graph.getScripts()) {
-			 	out.startScript().src(url).endScript();
+			 	out.startScript().src(DependencyService.pathToUrl(url)).endScript();
 			}
 			File tail = configurationService.getFile(DependencyService.TAIL_PATH);
 			if (tail.exists()) {
@@ -68,11 +68,15 @@ public class BodyComponent extends HtmlBody {
 			DependencyService dependencyService = Components.getBean(DependencyService.class);
 		 	
 			String scriptUrl = dependencyService.handleScripts(graph);
-		 	out.startScript().withAttribute("async", "async").src(scriptUrl).endScript();
+		 	out.startScript().withAttribute("async", "async").withAttribute("defer", "defer").src(scriptUrl).endScript();
 		}
 		String js = writer.toString();
 		if (Strings.isNotBlank(js)) {
-			out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
+			if (configurationService.isOptimizeResources()) {
+				out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
+			} else {
+				out.startScopedScript().write(js).endScopedScript();			
+			}
 		}
 		out.flush();
 		

@@ -82,6 +82,16 @@ public class DependencyService {
 		w.write(paths, hash);
 	}
 	
+	public static String pathToUrl(String url) {
+		if (url.startsWith("/WEB-INF/core/web/")) {
+			return url.replace("/WEB-INF/core/web/","/core/");
+		}
+		if (url.startsWith("/WEB-INF/apps/")) {
+			return url.replaceFirst("/WEB-INF/apps/.*/web/","/");
+		}
+		return url;
+	}
+	
 	// Wiring...
 	
 	public void setConfigurationService(ConfigurationService configurationService) {

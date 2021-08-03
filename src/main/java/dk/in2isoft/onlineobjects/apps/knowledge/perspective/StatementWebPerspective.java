@@ -3,8 +3,9 @@ package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 import java.util.List;
 
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class StatementWebPerspective implements CategorizableViewPerspective {
+public class StatementWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
 
 	private long id;
 	private String text;
@@ -13,6 +14,7 @@ public class StatementWebPerspective implements CategorizableViewPerspective {
 	private List<QuestionWebPerspective> questions;
 	private List<InternetAddressViewPerspective> addresses;
 	private String type = Statement.class.getSimpleName();
+	private List<Option> words;
 
 	public long getId() {
 		return id;
@@ -64,5 +66,13 @@ public class StatementWebPerspective implements CategorizableViewPerspective {
 
 	public void setAddresses(List<InternetAddressViewPerspective> addresses) {
 		this.addresses = addresses;
+	}
+
+	public List<Option> getWords() {
+		return words;
+	}
+
+	public void setWords(List<Option> words) {
+		this.words = words;
 	}
 }

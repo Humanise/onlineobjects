@@ -2,7 +2,8 @@
 
 var addPanel,
   list,
-  addForm;
+  addForm,
+  foundation;
 
 
 var appController = window.appController = {
@@ -12,16 +13,21 @@ var appController = window.appController = {
     addPanel = hui.ui.get('addPanel');
     list = hui.ui.get('list');
     addForm = hui.ui.get('addForm');
+    foundation = hui.ui.get('foundation');
     //this.$select$list({id:4682437,kind:'Question'})
     hui.listen(window,'popstate',function(e) {
       hui.log(e);
       this.show(e.state, {push: false});
     }.bind(this));
     this._applyInitialState();
+
+    new Editable(hui.find('#questionTitle'), this._updateQuestion.bind(this));
+    new Editable(hui.find('#statementTitle'), this._updateStatement.bind(this));
+    new Editable(hui.find('#hypothesisTitle'), this._updateHypothesis.bind(this));
   },
   _applyInitialState : function() {
     this._updateUI();
-    var state = window.state
+    var state = history.state
     if (!state) {
       state = {
         id: hui.location.getInt('id'),
@@ -54,6 +60,10 @@ var appController = window.appController = {
       favoriteCheckbox.setValue(false);
       inboxCheckbox.setValue(false);
     }
+    list.updateSelection();
+  },
+  $render$tagSelection : function(item) {
+    return hui.build('span', {'class': 'selection selection-tag', text: item.text});
   },
 
   // Adding
@@ -104,21 +114,28 @@ var appController = window.appController = {
     if (!this._currentItem) {
       return;
     }
-    hui.ui.request({
-      url: '/app/delete',
-      parameters: {
-        id: this._currentItem.id,
-        type: this._currentItem.type
-      },
-      $success : function() {
-        this._changeItem(null)
-        history.back()
-        //history.replaceState(null, document.title, document.location.pathname);
-        // TODO go back + pop history
-        list.refresh();
-        this._reset();
-      }.bind(this)
-    })
+    this._whileBusy((unBusy) => {
+      hui.ui.request({
+        url: '/app/delete',
+        parameters: {
+          id: this._currentItem.id,
+          type: this._currentItem.type
+        },
+        $success : function() {
+          unBusy();
+          this._changeItem(null)
+          history.back()
+          //history.replaceState(null, document.title, document.location.pathname);
+          // TODO go back + pop history
+          list.refresh();
+          this._reset();
+        }.bind(this),
+        $failure : function() {
+          // TODO: Handle erroe
+          unBusy();
+        }
+      });
+    });
     
   },
 
@@ -155,29 +172,133 @@ var appController = window.appController = {
     })
   },
 
+  // Tags
+  
+  $click$addTag : function() {
+    oo.WordFinder.get().show();
+  },
+  $found$wordFinder : function(e) {
+    this._addTag(e);
+  },
+  _addTag : function(tag) {
+    hui.ui.request({
+      url: '/app/tag',
+      method: 'POST',
+      parameters: {
+        wordId: tag.id,
+        type: this._currentItem.type,
+        id: this._currentItem.id
+      },
+      $object: function(obj) {
+        this._updatePerspective(obj);
+        hui.ui.get('tagsSource').refresh();
+        list.refresh();
+      }.bind(this)
+    })
+  },
+  _removeTag : function(tag) {
+    hui.ui.request({
+      url: '/app/tag',
+      method: 'PUT',
+      parameters: {
+        wordId: tag.id,
+        type: this._currentItem.type,
+        id: this._currentItem.id
+      },
+      $object: function(obj) {
+        this._updatePerspective(obj);
+        hui.ui.get('tagsSource').refresh();
+        list.refresh();
+      }.bind(this)
+    })
+  },
+  _renderTag : function(obj) {
+    var item = hui.build('span.tags_item', { text: obj.label });
+    var remove = hui.build('span.tags_remove', { parent: item });
+    hui.on(remove, 'click', function(e) {
+
+      e.preventDefault();
+      hui.ui.confirmOverlay({
+        text: 'Really remove?', element: remove,
+        $ok: function() { 
+          this._removeTag({id: obj.value});
+        }.bind(this)
+      });
+      
+    }.bind(this));
+    return item;    
+  },
+
+
+  // List
 
   $select$list : function(item) {
     if (!item) { return; }
-    this.show({id:item.id, type:item.kind});
+    if (item.data.type === 'InternetAddress') {
+      this.show({
+        id: item.data.id,
+        title: item.data.text,
+        type: item.data.type,
+        url: item.data.url
+      });
+    } else {
+      this.show(item.data);
+    }
   },
+  $isSelected$list : function(obj) {
+    return this._currentItem && this._currentItem.id === obj.id;
+  },
+
+  $render$list : function(obj) {
+    var item = hui.build('div.list_item');
+    hui.cls.add(item, 'list_item-' + obj.type.toLowerCase());
+    if (obj.favorite) {
+      hui.build('div.list_item_favorite', {parent: item});
+    }
+    hui.build('div.list_item_text', {text: obj.text,parent: item});
+    /*
+    if (obj.inbox) {
+      hui.build('div.list_item_inbox', {parent: item});
+    }*/
+    return item;
+  },
+
+
   show : function(item, options) {
     if (!item) {
       this._changeItem(null);
       return;
     }
     this._reset();
-    if (item.type == 'InternetAddress') {
-      this._loadAddress(item);
-    } else if (item.type == 'Question') {
-      this._loadPerspective(item, this._onQuestion.bind(this));
-    } else if (item.type == 'Statement') {
-      this._loadPerspective(item, this._onStatement.bind(this));
-    } else if (item.type == 'Hypothesis') {
-      this._loadPerspective(item, this._onHypothesis.bind(this));
-    }
+
+    var func = this['_on'+item.type].bind(this);
+    func(item);
+    this._whileBusy((end) => {
+      this._loadPerspective(item).then((obj) => {
+        func(obj);
+        end();
+      }, (error) => {
+        this._loadFailed();
+        end();
+      });
+    });
     if (options === undefined || options.push !== false) {
       this._pushState(item);
     }
+  },
+  _updatePerspective : function(item) {
+    this['_on'+item.type](item);
+  },
+  _loadFailed : function() {
+    this._showError({
+      title: 'The object could not be found',
+      text: 'It is probably because it has been deleted'
+    });
+  },
+  _showError : function(params) {
+    hui.dom.setText(hui.find('.warning_title'), params.title);
+    hui.dom.setText(hui.find('.warning_text'), params.text);
+    this._changeFragment('error');
   },
   _pushState : function(item) {
     if (history.state && history.state.id == item.id) {
@@ -191,33 +312,35 @@ var appController = window.appController = {
     hui.ui.get('questionFinder').hide();
   },
   _changeItem : function(item) {
-    this._changeFragment(item ? item.type.toLowerCase() : null);
+    this._changeFragment(item ? item.type.toLowerCase() : 'intro');
     this._currentItem = item;
     this._updateUI();
+    if (item) {
+      this._pushState(item);
+    }
   },
   _changeFragment : function(name) {
-    ['internetaddress','question','statement','hypothesis','error'].forEach(function(id) {
+    ['intro','internetaddress','question','statement','hypothesis','error'].forEach(function(id) {
       hui.ui.get(id).setVisible(name == id);
     });
   },
-  _loadPerspective : function(perspective, then) {
-    hui.ui.request({
-      url: '/app/' + perspective.type.toLowerCase(),
-      parameters: {
-        id: perspective.id
-      },
-      $object : then,
-      $failure : this._loadFailed.bind(this)
-    })
-  },
-  _loadFailed : function() {
-    this._changeFragment('error');
+  _loadPerspective : function(perspective) {
+    return new Promise(function(resolve, reject) {
+      hui.ui.request({
+        url: '/app/' + perspective.type.toLowerCase(),
+        parameters: {
+          id: perspective.id
+        },
+        $object : resolve,
+        $failure : reject
+      })
+    });
   },
   _viewNewItem : function(item) {
     list.refresh();
     this._pushState(item);
     if (item.type == 'InternetAddress') {
-      this._onAddress(item);
+      this._onInternetAddress(item);
     } else if (item.type == 'Statement') {
       this._onStatement(item);
     } else if (item.type == 'Question') {
@@ -240,7 +363,7 @@ var appController = window.appController = {
       hui.on(rm,'click',function(e) {
         hui.stop(e);
         hui.ui.confirmOverlay({
-          text: 'Realy remove?', element: rm,
+          text: 'Really remove?', element: rm,
           $ok: function() { context.$remove(item) }
         });
       });
@@ -260,16 +383,30 @@ var appController = window.appController = {
       });
     });
   },
+  _updateQuestion : function(text) {
+    hui.ui.request({
+      url: '/app/question/update',
+      parameters: {
+        id: this._currentItem.id,
+        text: text
+      },
+      $object : function(obj) {
+        this._onQuestion(obj);
+        list.refresh();
+      }.bind(this)
+    });
+  },
   _onQuestion : function(data) {
     this._changeItem(data);
-    hui.ui.get('questionHead').setContent(hui.build('h1.perspective_title',{text: data.text}))
+    hui.dom.setText(hui.find('#questionTitleText'), data.text);
     hui.ui.get('questionAnswers').setData(data.answers);
+    hui.ui.get('questionTags').setData(data.words);
   },
   $render$questionAnswers : function(statement) {
     return this._render_relation(statement, {$remove: this._removeAnswerFromQuestion.bind(this)});
   },
   $select$questionAnswers : function(e) {
-    this.show({ type:'Statement', id: e.data.id });
+    this.show(e.data);
   },
   $click$addAnswerToQuestion : function() {
     this.statementFinderHandler = this._addStatementToQuestion.bind(this);
@@ -299,6 +436,9 @@ var appController = window.appController = {
       $object : this._onQuestion.bind(this)
     });
   },
+  $render$questionTags : function(obj) {
+    return this._renderTag(obj);
+  },
 
   // Statement
 
@@ -312,23 +452,37 @@ var appController = window.appController = {
       })
     })
   },
+  _updateStatement : function(text) {
+    hui.ui.request({
+      url: '/app/statement/update',
+      parameters: {
+        id: this._currentItem.id,
+        text: text
+      },
+      $object : function(obj) {
+        this._onStatement(obj);
+        list.refresh();
+      }.bind(this)
+    });
+  },
   _onStatement : function(data) {
     this._changeItem(data);
-    hui.ui.get('statementHead').setContent(hui.build('h1.perspective_title',{text: data.text}))
+    hui.dom.setText(hui.find('#statementTitleText'), data.text);
     hui.ui.get('statementQuestions').setData(data.questions);
     hui.ui.get('statementAddresses').setData(data.addresses);
+    hui.ui.get('statementTags').setData(data.words);
   },
   $render$statementQuestions : function(obj) {
     return this._render_relation(obj, {$remove: this._removeQuestionFromStatement.bind(this)});
   },
   $select$statementQuestions : function(e) {
-    this.show({ type:'Question', id: e.data.id });
+    this.show(e.data);
   },
   $render$statementAddresses : function(obj) {
     return this._render_relation(obj, {});
   },
   $select$statementAddresses : function(e) {
-    this.show({ type:'InternetAddress', id: e.data.id });
+    this.show(e.data);
   },
   $click$addQuestionToStatement : function() {
     hui.ui.get('questionFinder').show();
@@ -354,6 +508,9 @@ var appController = window.appController = {
       $object : this._onStatement.bind(this)
     });
   },
+  $render$statementTags : function(obj) {
+    return this._renderTag(obj);
+  },
 
   // Hypothesis
 
@@ -366,11 +523,28 @@ var appController = window.appController = {
       });
     });
   },
+  _updateHypothesis : function(text) {
+    this._whileBusy((end) => {
+      hui.ui.request({
+        url: '/app/hypothesis/update',
+        parameters: {
+          id: this._currentItem.id,
+          text: text
+        },
+        $object : function(obj) {
+          this._onHypothesis(obj);
+          list.refresh();
+        }.bind(this),
+        $finally : end
+      });
+    });
+  },
   _onHypothesis : function(data) {
     this._changeItem(data);
-    hui.ui.get('hypothesisHead').setContent(hui.build('h1.perspective_title',{text: data.text}))
+    hui.dom.setText(hui.find('#hypothesisTitleText'), data.text);
     hui.ui.get('hypothesisSupporting').setData(data.supports);
     hui.ui.get('hypothesisContradicting').setData(data.contradicts);
+    hui.ui.get('hypothesisTags').setData(data.words);
   },
   $render$hypothesisSupporting : function(obj) {
     return this._render_relation(obj, {$remove: function(rel) {
@@ -401,39 +575,58 @@ var appController = window.appController = {
     hui.ui.get('statementFinder').show();
   },
   _removeStatementFromHypothesis : function(statement, relation) {
-    hui.ui.request({ 
-      url: '/app/hypothesis/remove/statement',
-      parameters: {
-        hypothesisId: this._currentItem.id,
-        statementId: statement.id,
-        relation: relation
-      },
-      $object : this._onHypothesis.bind(this)
+    this._whileBusy((end) => {
+      hui.ui.request({ 
+        url: '/app/hypothesis/remove/statement',
+        parameters: {
+          hypothesisId: this._currentItem.id,
+          statementId: statement.id,
+          relation: relation
+        },
+        $object: this._onHypothesis.bind(this),
+        $finally: end
+      });
     });
   },
   _addStatementToHypothesis : function(statement, relation) {
-    hui.ui.request({ 
-      url: '/app/hypothesis/add/statement',
-      parameters: {
-        hypothesisId: this._currentItem.id,
-        statementId: statement.id,
-        relation: relation
-      },
-      $object : this._onHypothesis.bind(this)
+    this._whileBusy((end) => {
+      hui.ui.request({ 
+        url: '/app/hypothesis/add/statement',
+        parameters: {
+          hypothesisId: this._currentItem.id,
+          statementId: statement.id,
+          relation: relation
+        },
+        $object: this._onHypothesis.bind(this),
+        $finally: end
+      });
     });
   },
+  $render$hypothesisTags : function(obj) {
+    return this._renderTag(obj);
+  },
 
+  _whileBusy : function(operation) {
+    foundation.setBusyMain(true);
+    operation(function() {
+      foundation.setBusyMain(false);
+    })
+  },
 
   // Address
 
   _loadAddress : function(address) {
+    console.log(address);
+    foundation.setBusyMain(true);
     hui.ui.request({
       url: '/app/internetaddress',
       parameters: {
         id: address.id
       },
-      $object : this._onAddress.bind(this),
-      $failure: function() {}
+      $object : function(obj) {
+        this._onInternetAddress(obj);
+        foundation.setBusyMain(false);
+      }.bind(this)
     })
   },
   _createAddress : function(url) {
@@ -445,23 +638,140 @@ var appController = window.appController = {
       })
     });
   },
-  _onAddress : function(data) {
+  _onInternetAddress : function(data) {
     this._changeItem(data);
-    var fragment = hui.ui.get('internetaddress');
-    fragment.setHTML('<div class="page reader_text">' + data.formatted + '</div>');
+    var html = data.formatted;
+    if (!html) {
+      html = '<h1>'+hui.string.escape(data.title || 'Loading...')+'<h1>';
+    }
+    if (data.words) {
+      var prefix = ['<div class="tags">'];
+      
+      prefix.push('</div>');
+    }
+    this._changeAddressBody(html);
+    var head = hui.find('.js-internetaddress-head');
+    head.innerHTML = '';
+    if (data.url) {
+      hui.build('a', {href:data.url, text: data.url, target: '_blank', parent: head});
+    }
+    hui.ui.get('internetaddressTags').setData(data.words);
+    hui.find('.js-internetaddress-text').innerText = data.text || '';
   },
-
+  $valueChanged$viewMode : function(value) {
+    hui.find('.js-internetaddress-formatted').style.display = (value == 'formatted' ? '' : 'none')
+    hui.find('.js-internetaddress-text').style.display = (value == 'text' ? '' : 'none')
+    documentController.reset();
+  },
+  _changeAddressBody : function(html) {
+    hui.find('.js-internetaddress-formatted').innerHTML = html;
+  },
   createStatementOnAddress : function(text) {
-    hui.ui.request({
-      url: '/app/internetaddress/create/statement',
-      parameters: { id: this._currentItem.id, text: text },
-      $object : function(obj) {
-        this._onAddress(obj);
-        list.refresh();
-      }.bind(this)
+    this._whileBusy((unBusy) => {
+      hui.ui.request({
+        url: '/app/internetaddress/create/statement',
+        parameters: { id: this._currentItem.id, text: text },
+        $object : function(obj) {
+          this._onInternetAddress(obj);
+          list.refresh();
+        }.bind(this),
+        $finally : unBusy
+      });      
     });
+  },
+  $render$internetaddressTags : function(obj) {
+    return this._renderTag(obj);
   },
 }
 
 hui.ui.listen(appController);
+
+class Editable {
+
+  constructor(node, callback) {
+    this.node = node;
+    this.callback = callback;
+    this.subject = this.node.firstElementChild;
+    this.active = false;
+    this.attach();
+  }
+
+  attach() {
+    this.node.addEventListener('click', this.activate.bind(this));
+  }
+
+  activate() {
+    if (!this.input) {
+      this.input = document.createElement('textarea');
+      this.input.className = this.subject.className;
+      this.node.appendChild(this.input)
+      this.input.addEventListener('blur', this.onBlur.bind(this));
+      this.input.addEventListener('input', this.onChange.bind(this));
+      this.input.addEventListener('keydown', this.onKey.bind(this));
+    }
+    if (this.active) return;
+    //console.log('activate')
+    this.active = true;
+    this.canceled = false;
+    this.node.classList.toggle('is-active');
+    this.orignalValue = this.subject.innerText;
+    this.input.value = this.orignalValue;
+    this.input.focus();
+    this.input.select();
+  }
+
+  deactivate() {
+    //console.log('deactivate')
+    this.node.classList.remove('is-active');
+    this.active = false;
+  }
+
+  cancel() {
+    //console.log('cancel')
+    this.canceled = true;
+    this.input.blur();
+  }
+
+  onBlur() {
+    console.log('blur')
+    this.deactivate();
+    if (this.canceled || this.input.value.match(/[\S]+/) === null) {
+      this.update(this.orignalValue);
+    }
+    else if (this.input.value.trim() !== this.orignalValue.trim()) {
+      this.callback(this.input.value);
+    } else {
+      this.update(this.orignalValue);
+    }
+  }
+
+  onKey(e) {
+    if (e.keyCode == 27) {
+      this.cancel();
+    }
+    else if (e.keyCode == 13 && !(e.altKey || e.shiftKey)) {
+      e.preventDefault();
+      this.input.blur();
+    }
+  }
+
+  onChange(e) {
+    this.update(this.input.value);
+  }
+
+  escape(html){
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(html));
+    return p.innerHTML;
+  }
+
+  update(text) {
+    var html = this.escape(text);
+    if (html.endsWith("\n") || html.match(/[\w]+/) === null) {
+      html+="&nbsp;"
+    }
+    this.subject.innerHTML = html.replace(/\n/g,"<br/>")    
+  }
+}
+
 })();

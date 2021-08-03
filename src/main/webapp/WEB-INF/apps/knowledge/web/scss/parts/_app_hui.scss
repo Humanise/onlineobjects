@@ -16,17 +16,24 @@
   }
 }
 
-div.hui_selection {
+.hui_selection {
   padding: 5px;
+  font-family: inherit;
   
   &_item {
     border-radius: 5px;
-    padding: 2px 5px;
-  }
-  
-  div.hui_selected,
-  div.hui_selected:hover {
-    background: #5488fb;
-    box-shadow: none;
+    padding: 3px 5px;
+    font-family: inherit;
+
+    &.hui_selected,
+    &.hui_selected:hover {
+      background: none;
+      box-shadow: none;
+      color: #36f;
+      font-weight: 600;
+    }
+    &:hover, &.hui_selected:hover {
+      background: #f6f6f6;
+    }
   }
 }

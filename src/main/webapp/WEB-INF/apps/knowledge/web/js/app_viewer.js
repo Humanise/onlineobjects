@@ -3,10 +3,11 @@ var documentController = {
   text: undefined,
 
   widgets : {
-    selectionPanel: null
+    selectionPanel: null,
+    multipleSelectionPanel: null
   },
   $ready : function() {
-    this.root = hui.ui.get('internetaddress').element;
+    this.root = hui.find('.js-internetaddress-formatted');
     this.widgets.selectionPanel = hui.ui.get('selectionPanel');
     this.widgets.multipleSelectionPanel = hui.ui.get('multipleSelectionPanel');
     hui.listen(this.root,'click',this._click.bind(this));
@@ -30,24 +31,22 @@ var documentController = {
     else if (items.length > 1) {
       e.stop();
       var panel = this.widgets.multipleSelectionPanel;
-      panel.clear();
-      var self = this
-      items.forEach(function(item) {
-        panel.add(hui.ui.Button.create({text: item.info.description, listen: {
-          $click : function() {
-            self._inspectItem(item);
-            panel.hide();
-          }
-        }}))
-      })
-      panel.show({target: e.element})
+      hui.ui.get('multipleSelectionItems').setData(items);
+      panel.show({target: e.getElement()});
     }
+  },
+  $render$multipleSelectionItems : function(item) {
+    return hui.build('div.multiple_selection_item', {text: item.info.description});
+  },
+  $select$multipleSelectionItems : function(e) {
+    this._inspectItem(e.data);
+    this.widgets.multipleSelectionPanel.hide();
   },
   _inspectItem : function(item) {
     if (['Statement'].indexOf(item.info.type) !== -1) {
-      appController.show(item.info)
-    } else if (item.info.type = 'Link') {
-      window.open(item.info.url)
+      appController.show(item.info);
+    } else if (item.info.type == 'Link') {
+      window.open(item.info.url);
     }
   },
 
@@ -90,6 +89,7 @@ var documentController = {
   },
   $click$highlightSelection : function() {
     appController.createStatementOnAddress(this.text);
+    this.widgets.selectionPanel.hide();
   }
 };
 

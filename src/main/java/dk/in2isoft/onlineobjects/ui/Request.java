@@ -334,8 +334,26 @@ public class Request implements Operator {
 		return id;
 	}
 	
+	public Long getId(String parameter, Long dflt) {
+		// TODO Auto-generated method stub
+
+		Long id = getLong(parameter, dflt);
+		if (id!=null && id<1) {
+			id = null;
+		}
+		return id;
+	}
+	
+	public Long getId(String parameter) throws IllegalRequestException {
+		Long id = getId(parameter, null);
+		if (id == null) {
+			throw new IllegalRequestException("No id");
+		}
+		return id;
+	}
+	
 	public Long getId() throws IllegalRequestException {
-		Long id = getId(null);
+		Long id = getId((Long) null);
 		if (id == null) {
 			throw new IllegalRequestException("No id");
 		}

@@ -73,7 +73,7 @@
         },
         {
           type: 'Checkbox',
-          options: {key:'terms', testName: 'signupAccept', text:'dadad', label: {en: 'Accept terms', da:'Acceptér vilkårene'}}
+          options: {key:'terms', testName: 'signupAccept', text: {en: 'Accept terms', da:'Acceptér vilkårene'}}
         }
       ]);
       var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
