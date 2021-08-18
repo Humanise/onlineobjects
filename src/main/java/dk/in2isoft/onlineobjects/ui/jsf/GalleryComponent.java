@@ -150,6 +150,7 @@ public class GalleryComponent extends AbstractComponent {
 				out.withStyle(new StyleBuilder().withLinearGradient(colors));
 			}
 			String url = getUrl(image, width, height);
+			String url2x = getUrl(image, width*2, height*2);
 			if (removable) {
 				out.startSpan("oo_gallery_hover");
 				out.startVoidA("oo_gallery_remove").rel("remove").data(image.getId());
@@ -164,6 +165,7 @@ public class GalleryComponent extends AbstractComponent {
 				out.startImg();
 				if (valid) {
 					out.src(url);
+					out.withAttribute("srcset", url2x + " 2x");
 				}
 				out.alt(image.getName()).withStyle("width: " + width + "px; height: " + height + "px;").endImg();
 			}

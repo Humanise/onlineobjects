@@ -13,17 +13,21 @@
 
     <ui:define name="body">
 
-      <o:dependency src="/WEB-INF/apps/photos/web/css/photos_user.css"/>
-      <o:dependency src="/WEB-INF/apps/photos/web/css/photos_sidebar.css"/>
+      <o:dependency from="local" src="/css/photos_user.css"/>
+      <o:dependency from="local" src="/css/photos_sidebar.css"/>
+      <o:dependency from="local" src="/css/photos_search.css"/>
+      <o:dependency from="core" src="/css/oo_space.css"/>
 
       <div class="photos_user">
+        <div class="oo_space_bottom-2">
         <o:header>#{photosUserView.personName}</o:header>
+        </div>
         <form action="#{photosUserView.root}" class="photos_search">
           <input name="text" value="#{photosUserView.text}" class="photos_search_text"/>
           <input type="submit" value="#{msg.search}" class="photos_search_button"/>
         </form>
         <o:gallery model="#{photosUserView.imageList}"
-          variant="shadow"
+          size="150"
           href="/#{wordsLayoutView.language}/photo/[id].html"
           >
         </o:gallery>

@@ -123,9 +123,18 @@ public class PhotosController extends PhotosControllerBase {
 		boolean publicAccess = request.getBoolean("public");
 		Image image = getImage(imageId, request);
 		if (publicAccess) {
-			securityService.makePublicVisible(image, request);			
+			securityService.makePublicVisible(image, request);
 		} else {
 			securityService.makePublicHidden(image, request);
+		}
+		List<Relation> galleryRelations = modelService.find().relations(request).from(ImageGallery.class).to(image).list();
+		for (Relation relation : galleryRelations) {
+			boolean isPublicGallery = securityService.isPublicView(relation.getFrom(), request);
+			if (publicAccess && isPublicGallery) {
+				securityService.makePublicVisible(relation, request);
+			} else {
+				securityService.makePublicHidden(relation, request);
+			}
 		}
 	}
 	
@@ -187,6 +196,9 @@ public class PhotosController extends PhotosControllerBase {
 				Relation relation = new Relation(gallery, image);
 				relation.setPosition(position + num);
 				modelService.create(relation, request);
+				if (securityService.isPublicView(gallery, request) && securityService.isPublicView(image, request)) {
+					securityService.grantPublicView(relation, true, request);
+				}
 			}
 		}
 	}

@@ -4,14 +4,11 @@
 .photos_sidebar {
 
   &_profile {
-    padding: 5px 10px 5px;
-
-    &_image {
-      float: left;
-    }
+    padding: 10px;
+    text-align: center;
 
     &_body {
-      margin-left: 60px;
+      margin-top: 10px;
     }
 
     &_name {
@@ -23,26 +20,16 @@
     }
 
     &_user {
-      margin: 0;
-      font-size: 0;
-
-      span {
-        color: #aaa;
-        margin-right: 3px;  
+      &:before {
+        content: '@';
+        margin-right: 3px;
       }
-
-      strong {
-        display: inline-block;
-        vertical-align: middle;
-        font-weight: 400;
-        font-size: 9pt;
-        color: #999;
-      }
+      margin: 5px 0;
+      color: $dimmed-color;
     }
 
     &_link {
       margin: 5px 0;
-      font-size: 12px;  
     }
   }
   

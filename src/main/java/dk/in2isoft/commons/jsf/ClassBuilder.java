@@ -47,6 +47,17 @@ public class ClassBuilder {
 		return this;
 	}
 	
+	public ClassBuilder addVariant(String prefix, String variant) {
+		if (StringUtils.isBlank(variant)) {
+			return this;
+		}
+		if (sb.length()>0) {
+			sb.append(" ");
+		}
+		sb.append(prefix).append("-").append(variant);
+		return this;
+	}
+	
 	@Override
 	public String toString() {
 		return sb.toString();

@@ -59,12 +59,11 @@
           <c:otherwise>
             <div id="photos_gallery_images">
               <o:gallery name="gallery"
-                size="130"
+                size="150"
                 model="#{photosGalleryView.listModel}"
                 href="/#{wordsLayoutView.language}/photo/[id].html?context=#{photosGalleryView.imageGallery.id}"
                 removable="#{photosGalleryView.modifiable}"
                 movable="#{photosGalleryView.modifiable}"
-                variant="shadow"
               />
             </div>
           </c:otherwise>

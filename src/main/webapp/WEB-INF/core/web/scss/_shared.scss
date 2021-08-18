@@ -1,5 +1,5 @@
-$link-color: #07d;
-$link-hover-color: #41a7ff;
+$link-color: #07f;
+$link-hover-color: #038;
 $dimmed-color: #777;
 $divider-color: #eee;
 
@@ -159,7 +159,9 @@ $icons : (
   user_line: '\e915',
   menu: '\e916',
   cross: '\e917',
-  search_line: '\e90c'
+  search_line: '\e90c',
+  arrow_thin_left: '\e912',
+  arrow_thin_right: '\e913'
 );
 
 @mixin icon($icon) {
@@ -177,6 +179,16 @@ $icons : (
 
 @mixin icon-before($icon) {
   &:before {
+    @include icon($icon) {
+      line-height: 1;
+      font-weight: normal;
+      @content;
+    }
+  }
+}
+
+@mixin icon-after($icon) {
+  &:after {
     @include icon($icon) {
       line-height: 1;
       font-weight: normal;

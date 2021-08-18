@@ -67,7 +67,7 @@ public class LinkComponent extends AbstractComponent {
 		if (plain) {
 			writer.startA(styleClass);
 		} else {
-			writer.startA(ClassBuilder.with("oo_link").add("oo_link",variant).add(styleClass));
+			writer.startA(ClassBuilder.with("oo_link").addVariant("oo_link", variant).add(styleClass));
 		}
 		writer.withTestName(testName);
 		String id = getId();

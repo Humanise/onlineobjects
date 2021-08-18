@@ -23,7 +23,6 @@
       </c:if>
 
       <o:dependency src="/WEB-INF/apps/photos/web/css/photos_photo.css"/>
-      <o:dependency src="/WEB-INF/apps/photos/web/css/photos_sidebar.css"/>
       <o:dependency src="/WEB-INF/apps/photos/web/css/photos_controller.css"/>
       <o:dependency src="/WEB-INF/apps/photos/web/css/photos_profile.css"/>
 
@@ -63,7 +62,7 @@
                 <div id="photos_photo_description">
                   <c:if test="#{not photosPhotoView.canModify and not empty photosPhotoView.description}">
                     <p class="photos_photo_description" style="margin-top: 10px;">
-                      <span class="photos_photo_description_start">&#8220;</span><o:out value="#{photosPhotoView.description}" escape="false"/><span class="photos_photo_description_end">&#8221;</span>
+                      <o:out value="#{photosPhotoView.description}" escape="false"/>
                     </p>
                   </c:if>
                   <c:if test="#{photosPhotoView.canModify}">
@@ -72,7 +71,7 @@
                       <gui:page>
                         <c:if test="#{not empty photosPhotoView.description}">
                           <p class="photos_photo_description">
-                            <span class="photos_photo_description_start">&#8220;</span><o:out value="#{photosPhotoView.description}" escape="false"/><span class="photos_photo_description_end">&#8221;</span>
+                            <o:out value="#{photosPhotoView.description}" escape="false"/>
                           </p>
                         </c:if>
                         <div style="padding: 0 0px 10px;">
@@ -104,16 +103,15 @@
             <div class="photos_photo_right_body">
             <div class="photos_profile">
               <div class="photos_profile_photo">
-                <o:thumbnail image="#{photosPhotoView.personImage}" width="80" height="90" zoom="true" frame="false"/>
+                <o:thumbnail image="#{photosPhotoView.personImage}" variant="user" width="80" height="80" zoom="true" frame="false"/>
               </div>
               <div class="photos_profile_body">
                 <p class="photos_profile_name">#{photosPhotoView.fullPersonName}</p>
-                <p class="photos_profile_username">
-                  <o:icon icon="user" size="12"/>
-                  <strong>#{photosPhotoView.user.username}</strong>
+                <p class="photos_profile_username">#{photosPhotoView.user.username}</p>
+                <p class="photos_profile_link">
+                  <o:link app="photos" href="/users/#{photosPhotoView.user.username}/" variant="arrow">#{msg.all_photos}</o:link>
                 </p>
-                <p class="photos_profile_link"><o:link app="photos" href="/users/#{photosPhotoView.user.username}/">#{msg.all_photos} »</o:link></p>
-                <p class="photos_profile_link"><o:link app="people" href="/#{photosPhotoView.user.username}/">#{msg.profile} »</o:link></p>
+                <p class="photos_profile_link"><o:link app="people" href="/#{photosPhotoView.user.username}/" variant="arrow">#{msg.profile}</o:link></p>
               </div>
             </div>
             <c:if test="#{not empty photosPhotoView.galleries}">

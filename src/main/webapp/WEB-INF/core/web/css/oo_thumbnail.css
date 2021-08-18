@@ -1,50 +1,53 @@
-span.oo_thumbnail
+.oo_thumbnail
 {
-	font-size: 0;
-	overflow: hidden;
-	display: inline-block;
-	vertical-align: middle;
-	background: #fff no-repeat scroll center center;
+  font-size: 0;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  background: #fff no-repeat scroll center center;
 }
 
-span.oo_thumbnail_frame
+.oo_thumbnail_frame
 {
-	padding: 4px;
-	border: 1px solid #ddd;
-	border-color:#EEEEEE #DDDDDD #CCCCCC;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-color:#EEEEEE #DDDDDD #CCCCCC;
 }
 
-span.oo_thumbnail a
+.oo_thumbnail a
 {
-	display: block;
-	width: 100%;
-	height: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-span.oo_thumbnail a:focus
+.oo_thumbnail a:focus
 {
-	margin: -3px;
-	border: 3px solid #79f;
-	outline: none;
+  margin: -3px;
+  border: 3px solid #79f;
+  outline: none;
 }
 
-span.oo_thumbnail img
+.oo_thumbnail img
 {
-	border: none;
+  border: none;
 }
 
-span.oo_thumbnail_video
+.oo_thumbnail_video
 {
-	background-color: #eee;
+  background-color: #eee;
 }
 
-span.oo_thumbnail_user
+.oo_thumbnail_user
 {
-	background-image: url('../gfx/person_placeholder.png');
+  background-color: #eee;
+  background-image: url('../gfx/user.svg');
+  border-radius: 50%;
+  background-size: contain;
 }
 
-span.oo_thumbnail_zoom img
+.oo_thumbnail_zoom img
 {
-	cursor: pointer;
-	cursor: -webkit-zoom-in;
+  cursor: pointer;
+  cursor: -webkit-zoom-in;
 }

@@ -137,23 +137,9 @@ public class ThumbnailComponent extends AbstractComponent implements DependableC
 				StyleBuilder stl = new StyleBuilder();
 				stl.withWidth(wdth).withHeight(hght);
 
-				StringBuilder url = new StringBuilder();
-				url.append(Components.getRequest().getBaseContext());
-				url.append("/service/image/id").append(image.getId()).append("width").append(wdth).append("height").append(hght);
-				if (sharpen > 0) {
-					url.append("sharpen").append(Numbers.formatDecimal(sharpen, 2));
-				}
-				if (rotation != null) {
-					url.append("rotation").append(rotation);
-				}
-				if (flipHorizontally) {
-					url.append("-fliph");
-				}
-				if (flipVertically) {
-					url.append("-flipv");
-				}
-				url.append("cropped.jpg");
-				out.startElement("img").withAttribute("src", url).withAttribute("alt", image.getName());
+				StringBuilder url = buildURL(image, rotation, flipVertically, flipHorizontally, wdth, hght);
+				StringBuilder x2url = buildURL(image, rotation, flipVertically, flipHorizontally, wdth*2, hght*2).append(" 2x");
+				out.startElement("img").withAttribute("src", url).withAttribute("srcset", x2url).withAttribute("alt", image.getName());
 				if (zoom) {
 					StringBuilder onClick = new StringBuilder();
 					onClick.append("oo.showImage({id:").append(image.getId()).append(",width:").append(image.getWidth()).append(",height:").append(image.getHeight()).append("});");
@@ -171,6 +157,27 @@ public class ThumbnailComponent extends AbstractComponent implements DependableC
 			out.endA();
 		}
 		out.endSpan();
+	}
+
+	private StringBuilder buildURL(Image image, Double rotation, boolean flipVertically, boolean flipHorizontally,
+			int wdth, int hght) {
+		StringBuilder url = new StringBuilder();
+		url.append(Components.getRequest().getBaseContext());
+		url.append("/service/image/id").append(image.getId()).append("width").append(wdth).append("height").append(hght);
+		if (sharpen > 0) {
+			url.append("sharpen").append(Numbers.formatDecimal(sharpen, 2));
+		}
+		if (rotation != null) {
+			url.append("rotation").append(rotation);
+		}
+		if (flipHorizontally) {
+			url.append("-fliph");
+		}
+		if (flipVertically) {
+			url.append("-flipv");
+		}
+		url.append("cropped.jpg");
+		return url;
 	}
 
 	@Override

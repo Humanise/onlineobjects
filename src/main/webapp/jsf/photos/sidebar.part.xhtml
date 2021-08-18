@@ -8,15 +8,12 @@
 >
   <div class="photos_sidebar_profile">
     <div class="photos_sidebar_profile_image">
-      <o:thumbnail image="#{photosLayoutView.userImage}" variant="user" width="50" height="60" zoom="true" frame="false"/>
+      <o:thumbnail image="#{photosLayoutView.userImage}" variant="user" width="120" height="120" zoom="true" frame="false"/>
     </div>
     <div class="photos_sidebar_profile_body">
       <p class="photos_sidebar_profile_name">#{photosLayoutView.personName}</p>
-      <p class="photos_sidebar_profile_user">
-        <o:icon icon="user" size="12"/>
-        <strong>#{photosLayoutView.username}</strong>
-      </p>
-      <p class="photos_sidebar_profile_link"><o:link app="people" href="/#{photosLayoutView.username}/">#{msg.profile} »</o:link></p>
+      <p class="photos_sidebar_profile_user">#{photosLayoutView.username}</p>
+      <p class="photos_sidebar_profile_link"><o:link app="people" href="/#{photosLayoutView.username}/" variant="arrow">#{msg.profile}</o:link></p>
     </div>
   </div>
   <c:if test="#{not empty photosLayoutView.galleries}">
