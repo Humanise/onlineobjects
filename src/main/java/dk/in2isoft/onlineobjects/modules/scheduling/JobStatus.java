@@ -25,6 +25,10 @@ public class JobStatus {
 		setProgress(((float) index+1)/((float) total));
 	}
 
+	public void setProgress(int index, long total) {
+		setProgress(((float) index+1)/((float) total));
+	}
+
 	public void setProgress(float progress) {
 		this.progress = progress;
 		String text = "Progress: "+(Math.round(progress*1000)/10.0)+"%";

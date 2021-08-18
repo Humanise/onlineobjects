@@ -73,8 +73,20 @@ public class RelationQuery {
 		return this;
 	}
 	
+	private String getCountHQL() {
+		StringBuilder hql = new StringBuilder("select count(distinct rel) from Relation as rel");
+		buildHQL(hql);
+		return hql.toString();
+	}
+	
 	public String getHQL() {
 		StringBuilder hql = new StringBuilder("select distinct rel from Relation as rel");
+		buildHQL(hql);
+		hql.append(" order by rel.position, rel.id");
+		return hql.toString();
+	}
+
+	private void buildHQL(StringBuilder hql) {
 		if (toClass!=null) {
 			hql.append(", " + toClass.getSimpleName() + " as toClass");
 		}
@@ -110,10 +122,9 @@ public class RelationQuery {
 			hql.append(" and toPriv.object=rel.to.id and toPriv.subject in (:privileged)");
 			hql.append(" and fromPriv.object=rel.from.id and fromPriv.subject in (:privileged)");
 		}
-		return hql.toString();
 	}
 	
-	private void decorate(Query<Relation> query) {
+	private void decorate(Query<?> query) {
 		if (this.id!=null) {
 			query.setParameter("id", this.id, LongType.INSTANCE);
 		}
@@ -138,12 +149,23 @@ public class RelationQuery {
 		return query;
 	}
 
+	private Query<Long> getCountQuery() {
+		Query<Long> query = modelService.createQuery(getCountHQL(), Long.class, operation.getSession());
+		decorate(query);
+		return query;
+	}
+
 	public Optional<Relation> first() {
 		Query<Relation> query = getQuery();
 		List<Relation> list = query.list();
 		if (list.isEmpty()) return Optional.empty();
 		Relation unique = (Relation) list.get(0);
 		return unique==null ? Optional.empty() : Optional.of(ModelService.getSubject(unique));
+	}
+
+	public long count() {
+		Query<Long> query = getCountQuery();
+		return query.list().iterator().next();
 	}
 
 	public Stream<Relation> stream(int max) {
@@ -154,8 +176,7 @@ public class RelationQuery {
 
 	public Stream<Relation> stream() {
 		Query<Relation> query = getQuery();
-		List<Relation> list = Code.castList(query.list());
-		return list.stream();
+		return query.stream();
 	}
 
 	public List<Relation> list() {
