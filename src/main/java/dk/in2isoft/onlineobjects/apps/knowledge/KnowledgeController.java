@@ -27,7 +27,6 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
-import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.FeedPerspective;
@@ -399,7 +398,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return getWebPerspective(entity, request);
 	}
 
-	@Path(expression = "/app/tag", method = "PUT")
+	@Path(expression = "/app/tag/remove", method = "POST")
 	public Object appRemoveTag(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException, ExplodingClusterFuckException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);

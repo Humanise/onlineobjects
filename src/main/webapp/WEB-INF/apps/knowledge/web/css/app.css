@@ -375,7 +375,8 @@
     padding-right: 30px;
     border-radius: 5px;
     cursor: pointer;
-    position: relative; }
+    position: relative;
+    line-height: 18px; }
     .perspective_relation:hover {
       background: #fafafa; }
     .perspective_relation_message {

@@ -206,8 +206,8 @@ var appController = window.appController = {
   },
   _removeTag : function(tag) {
     hui.ui.request({
-      url: '/app/tag',
-      method: 'PUT',
+      url: '/app/tag/remove',
+      method: 'POST',
       parameters: {
         wordId: tag.id,
         type: this._currentItem.type,
