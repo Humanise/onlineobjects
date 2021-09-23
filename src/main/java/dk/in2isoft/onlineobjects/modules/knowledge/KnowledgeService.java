@@ -96,7 +96,7 @@ public class KnowledgeService {
 
 		if (Strings.isNotBlank(quote)) {
 			Statement statement = addStatementToInternetAddress(quote, internetAddress, operator);
-			if (questionId != null) {
+			if (questionId != null && statement!=null) {
 				Question question = modelService.getRequired(Question.class, questionId, operator);
 				Optional<Relation> found = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).first();
 				if (!found.isPresent()) {
@@ -163,14 +163,15 @@ public class KnowledgeService {
 		if (Strings.isBlank(text)) {
 			throw new IllegalRequestException("No text");
 		}
-		Statement statement = newStatement(text);
-		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", statement.getText()).as(operator).from(address, Relation.KIND_STRUCTURE_CONTAINS);
-		if (modelService.count(existingQuery, operator) == 0) {
-			modelService.create(statement, operator);
-			modelService.createRelation(address, statement, Relation.KIND_STRUCTURE_CONTAINS, operator);
-			return statement;
+		Statement newStatement = newStatement(text);
+		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", newStatement.getText()).as(operator).from(address, Relation.KIND_STRUCTURE_CONTAINS);
+		Statement found = modelService.getFirst(existingQuery, operator);
+		if (found != null) {
+			return found;
 		}
-		return null;
+		modelService.create(newStatement, operator);
+		modelService.createRelation(address, newStatement, Relation.KIND_STRUCTURE_CONTAINS, operator);
+		return newStatement;
 	}
 
 	public Statement newStatement(String text) throws IllegalRequestException {
