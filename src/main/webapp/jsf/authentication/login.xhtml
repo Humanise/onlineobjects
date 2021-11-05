@@ -29,9 +29,11 @@
       <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName} <o:link href="#{authenticationLoginView.logOutLink}">#{msg.log_out}</o:link></p>
       </c:if>
       <c:if test="#{not empty authenticationLoginView.message}">
-        <p class="oo_message oo_space_bottom">#{authenticationLoginView.message}</p>
+        <div class="oo_message oo_space_bottom">
+          <p>#{authenticationLoginView.message}</p>
+        </div>
       </c:if>
-      <gui:form action="authenticate" name="formula">
+      <gui:form action="authenticate" name="formula" method="POST">
         <gui:field label="#{msg.username}">
           <gui:textInput inputName="username" name="username"/>
         </gui:field>

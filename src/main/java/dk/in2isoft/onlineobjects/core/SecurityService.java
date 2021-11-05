@@ -76,6 +76,19 @@ public class SecurityService {
 		return false;
 	}
 	
+	public boolean changeUser(Request request, String username, String password, Operator operator) {
+		boolean changed = changeUser(request.getSession(), username, password, operator);
+		if (changed) {
+			startSession(request);
+		}
+		return changed;
+	}
+
+	public void startSession(Request request) {
+		HttpSession session = request.getRequest().getSession();
+		session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
+	}
+	
 	private Set<Ability> getAbilities(User user) {
 		Collection<String> properties = user.getPropertyValues(Property.KEY_ABILITY);
 		return Ability.convert(properties);
@@ -127,16 +140,16 @@ public class SecurityService {
 		user.setSalt(salt);
 	}
 
-	public void changePasswordUsingKey(String key, String password, UserSession session, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
-		User user = passwordRecoveryService.getUserByRecoveryKey(key, operator);
+	public void changePasswordUsingKey(String key, String password, Request request) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
+		User user = passwordRecoveryService.getUserByRecoveryKey(key, request);
 		if (user==null) {
 			throw new IllegalRequestException(Error.userNotFound);
 		}
-		Operator usersOperator = operator.as(user);
+		Operator usersOperator = request.as(user);
 		changePassword(user, password, usersOperator);
-		changeUser(session, user.getUsername(), password, usersOperator);
+		changeUser(request, user.getUsername(), password, usersOperator);
 	}
-	
+
 	public boolean logOut(UserSession userSession) {
 		User user = getPublicUser();
 		if (user==null) {
@@ -481,7 +494,5 @@ public class SecurityService {
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
-
-
 
 }

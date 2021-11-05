@@ -75,7 +75,8 @@ public class AccountController extends AccountControllerBase {
 	public void changePasswordUsingKey(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
 		String key = request.getString("key", "Key must be provided");
 		String password = request.getString("password", "Password must be provided");
-		securityService.changePasswordUsingKey(key, password, request.getSession(), request);
+		securityService.changePasswordUsingKey(key, password, request);
+		securityService.startSession(request);
 	}
 
 	@Path
@@ -110,7 +111,7 @@ public class AccountController extends AccountControllerBase {
 		if (!username.equals(user.getUsername())) {
 			throw new IllegalRequestException(Error.userNotCurrent);
 		}
-		boolean userChanged = securityService.changeUser(session, username, password, request);
+		boolean userChanged = securityService.changeUser(request, username, password, request);
 		if (!userChanged) {
 			throw new SecurityException(Error.userNotFound);
 		}

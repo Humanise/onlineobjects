@@ -99,8 +99,8 @@ public class APIController extends APIControllerBase {
 		String fullName = request.getString("fullName");
 		String email = request.getString("email");
 		ClientInfo info = getClientInfo(request);
-		User user = memberService.signUp(request.getSession(), username, password, fullName, email, request);
-		String secret = securityService.getSecret(info, user, request);
+		User user = memberService.signUp(username, password, fullName, email, request);
+		String secret = securityService.getSecret(info, user, request.as(user));
 		if (Strings.isBlank(secret)) {
 			throw new SecurityException("Unable to perform request");
 		}

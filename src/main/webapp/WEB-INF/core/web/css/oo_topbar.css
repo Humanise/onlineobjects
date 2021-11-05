@@ -197,7 +197,8 @@
       border-radius: 50%;
       overflow: hidden;
       background: #eee;
-      background-size: contain; }
+      background-size: contain;
+      background-image: url("../gfx/user.svg"); }
   .oo_topbar_info_content {
     margin-left: 70px;
     padding-bottom: 10px;
