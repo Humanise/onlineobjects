@@ -120,14 +120,17 @@ public class MemberService {
 	}
 
 
-	public User signUp(UserSession session, String username, String password, String fullName, String email, Operator operator) throws EndUserException {
-		if (username != null) {
-			username = username.toLowerCase();
-		}
-		
+	public User signUp(String username, String password, String fullName, String email, Operator operator) throws EndUserException {
 		User user = createMember(operator, username, password, fullName, email);
 		
 		markTermsAcceptance(user, operator.as(user));
+		
+		return user;
+	}
+
+
+	public User signUp(UserSession session, String username, String password, String fullName, String email, Operator operator) throws EndUserException {
+		User user = signUp(username, password, fullName, email, operator);
 
 		securityService.changeUser(session, username, password, operator);
 		
@@ -143,6 +146,9 @@ public class MemberService {
 		}
 		if (email==null) {
 			throw new IllegalRequestException("Cannot create member without an email");
+		}
+		if (username != null) {
+			username = username.toLowerCase();
 		}
 		// TODO: Figure out how to synch both username + email
 		Operator adminOperator = creator.as(securityService.getAdminPrivileged());

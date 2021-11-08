@@ -10,7 +10,6 @@ import java.net.URISyntaxException;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,13 +48,8 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String username = request.getString("username");
 		String password = request.getString("password");
 		String redirect = request.getString("redirect");
-		if (username != null) {
-			username = username.toLowerCase();
-		}
-		boolean success = securityService.changeUser(request.getSession(), username, password, request);
+		boolean success = securityService.changeUser(request, username, password, request);
 		if (success) {
-			HttpSession session = request.getRequest().getSession();
-			session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
 			if (Strings.isNotBlank(redirect)) {
 				request.redirectFromBase(redirect);
 			} else {
@@ -80,13 +73,12 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (!StringUtils.isNotBlank(password)) {
 			throw new IllegalRequestException(Error.noPassword);
 		}
-		boolean success = securityService.changeUser(request.getSession(), username, password, request);
+		boolean success = securityService.changeUser(request, username, password, request);
 		if (!success) {
 			securityService.randomDelay();
 			throw new SecurityException(Error.userNotFound);
 		} else {
-			HttpSession session = request.getRequest().getSession();
-			session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
+			securityService.startSession(request);
 		}
 	}
 	
@@ -107,10 +99,8 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String password = request.getString("password");
 		String fullName = request.getString("fullName");
 		String email = request.getString("email");
-		if (username != null) {
-			username = username.toLowerCase();
-		}
 		memberService.signUp(request.getSession(), username, password, fullName, email, request);
+		securityService.startSession(request);
 	}
 
 	@Path
