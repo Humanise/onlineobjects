@@ -1,5 +1,7 @@
 package dk.in2isoft.onlineobjects.test.ai;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,11 +37,19 @@ public class TestTextCategorization extends AbstractSpringTestCase {
 		DoccatFactory factory = new DoccatFactory();
 		DoccatModel model = DocumentCategorizerME.train("en", sampleStream, new TrainingParameters(), factory);
 
-		String[] texts = {"Why does my tooth hurt?", "Bugs are small", "How do I loose weight?", "Do dogs get to go to heaven?", "Should I get vaccinated?"};
-		for (String text : texts) {
+		String[][] tests = {
+				{"Why does my tooth hurt?", "health"},
+				{"Bugs are small", "biology"},
+				{"How do I loose weight?", "health"},
+				{"Do dogs get to go to heaven?", "biology"},
+				{"Should I get vaccinated?", "health"}
+			};
+		for (String[] test : tests) {
+			String text = test[0];
 			DocumentCategorizerME myCategorizer = new DocumentCategorizerME(model);
 			double[] outcomes = myCategorizer.categorize(text);
 			String category = myCategorizer.getBestCategory(outcomes);
+			assertEquals(test[1], category);
 			log.info("Best category: {} = {}", text, category);
 		}
 	}
