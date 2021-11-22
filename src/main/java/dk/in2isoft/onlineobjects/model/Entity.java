@@ -182,4 +182,15 @@ public class Entity extends Item {
 	public void addProperty(String key, String value) {
 		properties.add(new Property(key,value));
 	}
+
+	protected boolean hasProperty(String key, String value) {
+		for (Property property : getProperties()) {
+			if (key.equals(property.getKey())) {
+				if (value.equals(property.getValue())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

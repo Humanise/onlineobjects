@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
+import org.onlineobjects.modules.suggestion.Suggestion;
+import org.onlineobjects.modules.suggestion.Suggestions;
+import org.onlineobjects.modules.suggestion.SuggestionsCategory;
 
 import com.google.common.collect.Lists;
 
@@ -60,6 +64,7 @@ import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.PileService;
 import dk.in2isoft.onlineobjects.ui.data.Option;
+import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 
 public class KnowledgeService {
 	private ModelService modelService;
@@ -69,6 +74,7 @@ public class KnowledgeService {
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
 	private CacheService cacheService;
+	private Suggestions suggestions;
 
 	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
 		Question question = newQuestion(text);
@@ -297,7 +303,7 @@ public class KnowledgeService {
 	}
 
 	public StatementWebPerspective getStatementWebPerspective(Long id, Operator request)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws EndUserException {
 		Statement statement = modelService.getRequired(Statement.class, id, request);
 		StatementWebPerspective perspective = new StatementWebPerspective();
 		perspective.setId(id);
@@ -321,11 +327,30 @@ public class KnowledgeService {
 			return p;
 		}).collect(toList()));
 
+		SuggestionsCategory suggestionsForStatement = suggestions.suggestionsForStatement(statement, request);
+		Iterator<Suggestion> i = suggestionsForStatement.getSuggestions().iterator();
+		while (i.hasNext()) {
+			if (hasQuestion((Long) i.next().getEntity().getId(), perspective)) {
+				i.remove();
+			}
+		}
+		
+		perspective.setQuestionSuggestions(suggestionsForStatement);
+		
 		addWords(statement, perspective, request);
 		
 		User user = modelService.getUser(request);
 		categorize(statement, perspective, user, request);
 		return perspective;
+	}
+
+	private boolean hasQuestion(Long id, StatementWebPerspective perspective) {
+		for (QuestionWebPerspective question : perspective.getQuestions()) {
+			if (id == question.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void addWords(Entity entity, ViewPerspectiveWithTags perspective, Operator operator)
@@ -687,7 +712,15 @@ public class KnowledgeService {
 	public SearchResult<KnowledgeListRow> search(KnowledgeQuery query, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException {
 		return readerSearcher.searchOptimized(query, operator);
 	}
-	
+
+	public SuggestionsCategory suggestQuestion(String text, Operator operator) throws EndUserException {
+		return suggestions.suggestQuestion(text, operator);
+	}
+
+	public SuggestionsCategory suggestionsForStatement(Statement statement, Operator operator) throws EndUserException {
+		return suggestions.suggestionsForStatement(statement, operator);
+	}
+
 	// Wiring...
 	
 	public void setModelService(ModelService modelService) {
@@ -716,5 +749,9 @@ public class KnowledgeService {
 	
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
+	}
+	
+	public void setSuggestions(Suggestions suggestions) {
+		this.suggestions = suggestions;
 	}
 }

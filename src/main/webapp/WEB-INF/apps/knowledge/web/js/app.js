@@ -511,6 +511,12 @@ var appController = window.appController = {
     hui.ui.get('statementQuestions').setData(data.questions);
     hui.ui.get('statementAddresses').setData(data.addresses);
     hui.ui.get('statementTags').setData(data.words);
+    if (data.questionSuggestions && data.questionSuggestions.suggestions && data.questionSuggestions.suggestions.length) {
+      hui.ui.get('statementSuggestions').setData(data.questionSuggestions.suggestions);
+      hui.ui.get('statementSuggestionsFragment').show();
+    } else {
+      hui.ui.get('statementSuggestionsFragment').hide();
+    }
   },
   $render$statementQuestions : function(obj) {
     return this._render_relation(obj, {$remove: this._removeQuestionFromStatement.bind(this)});
@@ -518,22 +524,37 @@ var appController = window.appController = {
   $select$statementQuestions : function(e) {
     this.show(e.data);
   },
+
   $render$statementAddresses : function(obj) {
     return this._render_relation(obj, {});
   },
   $select$statementAddresses : function(e) {
     this.show(e.data);
   },
+
+  $render$statementSuggestions : function(obj) {
+    return hui.build('div.perspective_relation', {children:[
+      hui.build('div.perspective_relation_title',{text: obj.description})
+    ]});
+  },
+  $select$statementSuggestions : function(e) {
+    this._addQuestionToStatement(e.data.entity.id)
+  },
+
+
   $click$addQuestionToStatement : function() {
     hui.ui.get('questionFinder').show();
   },
   $select$questionFinder : function(obj) {
     hui.ui.get('questionFinder').hide();
+    this._addQuestionToStatement(obj.id);
+  },
+  _addQuestionToStatement : function(id) {
     hui.ui.request({
       url: '/app/statement/add/question',
       parameters: {
         statementId: this._currentItem.id,
-        questionId: obj.id
+        questionId: id
       },
       $object : this._onStatement.bind(this)
     })

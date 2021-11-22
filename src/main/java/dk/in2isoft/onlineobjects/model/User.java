@@ -1,5 +1,6 @@
 package dk.in2isoft.onlineobjects.model;
 
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 
@@ -60,5 +61,10 @@ public class User extends Entity implements Privileged {
 
 	public long getIdentity() {
 		return getId();
+	}
+
+	public boolean hasAbility(Ability ability) {
+		if (ability == null) return false;
+		return hasProperty(Property.KEY_ABILITY, ability.name());
 	}
 }

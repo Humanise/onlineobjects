@@ -31,7 +31,11 @@ public class SimpleOperator implements Operator {
 			operationProvider.execute(operation);
 			operation = null;
 		}
-
+	}
+	
+	@Override
+	public void close() {
+		commit();
 	}
 
 	@Override

@@ -8,6 +8,7 @@ public class CacheEntry<T> {
 	private long privileged;
 	private T value;
 	private Collection<Long> ids;
+	private Collection<Class<?>> types;
 
 	public CacheEntry() {
 	}
@@ -51,5 +52,14 @@ public class CacheEntry<T> {
 	public void setValue(T value) {
 		this.value = value;
 	}
+
+	public Collection<Class<?>> getTypes() {
+		return types;
+	}
+
+	public void setTypes(Collection<Class<?>> types) {
+		this.types = types;
+	}
+
 
 }

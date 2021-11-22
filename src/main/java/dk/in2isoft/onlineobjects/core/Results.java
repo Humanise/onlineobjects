@@ -4,7 +4,7 @@ import org.hibernate.ScrollableResults;
 
 import dk.in2isoft.commons.lang.Code;
 
-public class Results<T> {
+public class Results<T> implements AutoCloseable {
 
 	private ScrollableResults results;
 

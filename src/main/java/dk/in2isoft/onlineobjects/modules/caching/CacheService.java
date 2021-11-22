@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -44,7 +45,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 	private CacheAccess<String, Object> perspectiveCache = null;
 	
 	
-	public <T> T getCached(Entity entity,Class<T> perspective, Callable<T> producer) {
+	public <T> T getCached(Entity entity, Class<T> perspective, Callable<T> producer) {
 		if (configurationService.isDisableCache()) {
 			try {
 				return producer.call();
@@ -75,12 +76,55 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 			return null;
 		}
 	}
-	
+
 	private MultiValuedMap<Class<?>,CacheEntry<?>> cache = new ArrayListValuedHashMap<>(); 
 	
-	public synchronized <T> T cache(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
+	public <T> T replace(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
 		String typeName = type.getSimpleName();
-		String key = typeName+"_"+id+"_"+privileged.getIdentity(); 
+		String key = buildKey(id, privileged, type);
+		try {
+			log.debug("Cache replacement: {} {}", typeName, id);
+			CacheEntry<T> produced = producer.call();
+			if (produced != null) {
+				T value = produced.getValue();
+				if (value != null) {
+					log.debug("Caching value: {} {}", typeName, id);
+					perspectiveCache.put(key, value);
+					produced.setValue(null);
+					cache.put(type, produced);
+				} else {
+					log.warn("Null cache value: {} {}", typeName, id);
+				}
+				return value;
+			} else {
+				throw new StupidProgrammerException();
+			}
+		} catch (Exception e) {
+			if (e instanceof EndUserException) {
+				throw (EndUserException) e;
+			} else {
+				throw new EndUserException(e);
+			}
+		}
+	}
+
+	public <T> Optional<T> get(long id, Privileged privileged, Class<T> type) throws EndUserException {
+		String key = buildKey(id, privileged, type);
+		Object value = perspectiveCache.get(key);
+		if (value != null && type.isAssignableFrom(value.getClass())) {
+			T casted = Code.cast(value);
+			return Optional.ofNullable(casted);
+		}
+		return Optional.empty();
+	}
+
+	private <T> String buildKey(long id, Privileged privileged, Class<T> type) {
+		return type.getSimpleName() + "_" + id + "_" + privileged.getIdentity();
+	}
+
+	public <T> T cache(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
+		String typeName = type.getSimpleName();
+		String key = buildKey(id, privileged, type);
 		Collection<CacheEntry<?>> entries = cache.get(type);
 		for (CacheEntry<?> entry : entries) {
 			if (entry.getId() == id && entry.getPrivileged() == privileged.getIdentity()) {
@@ -119,7 +163,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 			}
 		}
 	}
-
+	
 	private void evict(long... ids) {
 		
 		Set<Class<?>> keys = cache.keySet();
@@ -209,7 +253,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 	}
 
 	@Override
-	public void entityWasCreated(Entity entity) {		
+	public void entityWasCreated(Entity entity) {
 	}
 
 	@Override

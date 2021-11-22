@@ -39,4 +39,8 @@ public class DelegatingOperator implements Operator {
 		return new DelegatingOperator(this, privileged);
 	}
 
+	@Override
+	public void close() {
+		commit();
+	}
 }

@@ -598,6 +598,11 @@ public class Request implements Operator {
 	}
 	
 	@Override
+	public void close() {
+		commit();
+	}
+	
+	@Override
 	public void rollBack() {
 		if (operation != null) {
 			operationProvider.rollBack(operation);

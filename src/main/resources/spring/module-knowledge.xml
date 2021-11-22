@@ -8,4 +8,12 @@
 
 	<bean id="knowledgeService" class="dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService" autowire="byType"/>
 	
+	<bean id="knowledgeSuggester" class="org.onlineobjects.modules.suggestion.KnowledgeSuggester" autowire="byType"/>
+
+	<bean id="suggestions" class="org.onlineobjects.modules.suggestion.Suggestions" autowire="byType"/>
+
+	<bean class="org.onlineobjects.modules.suggestion.KnowledgeSuggesterListener">
+		<property name="knowledgeSuggester" ref="knowledgeSuggester"/>
+		<property name="modelService" ref="modelService"/>
+	</bean>
 </beans>

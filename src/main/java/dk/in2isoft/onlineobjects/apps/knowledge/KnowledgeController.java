@@ -19,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.Nullable;
+import org.onlineobjects.modules.suggestion.Suggestion;
+import org.onlineobjects.modules.suggestion.SuggestionsCategory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -43,6 +45,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspect
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
+import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
@@ -191,6 +194,15 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		pileService.changeFavoriteStatus(entity, favorite, user, request);
 	}
 
+	@Path(expression = "/app/suggest")
+	public SuggestionsCategory suggest(Request request) throws IOException, EndUserException {
+		if (!request.getSession().has(Ability.earlyAdopter)) {
+			return new SuggestionsCategory();
+		}
+		String text = request.getString("text");
+		return knowledgeService.suggestQuestion(text, request);
+	}
+
 	@Path(expression = "/app/inbox")
 	public void appChangeInbox(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		Long id = request.getId();
@@ -216,7 +228,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	// Statement
 	
 	@Path(expression = "/app/statement/create")
-	public StatementWebPerspective appCreateStatement(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public StatementWebPerspective appCreateStatement(Request request) throws IOException, EndUserException {
 		String text = request.getString("text");
 		Statement statement = knowledgeService.createStatement(text, request);
 		return knowledgeService.getStatementWebPerspective(statement.getId(), request);
@@ -254,6 +266,16 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long statementId = request.getLong("statementId"); 
 		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
 		return knowledgeService.getStatementWebPerspective(statementId, request);
+	}
+
+	@Path(expression = "/app/statement/suggest")
+	public SuggestionsCategory suggestStatement(Request request) throws IOException, EndUserException {
+		if (!request.getSession().has(Ability.earlyAdopter)) {
+			return new SuggestionsCategory();
+		}
+		Long id = request.getId();
+		Statement statement = modelService.getRequired(Statement.class, id, request);
+		return knowledgeService.suggestionsForStatement(statement, request);
 	}
 
 	
@@ -386,7 +408,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/tag", method = "POST")
-	public Object appCreateTag(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException, ExplodingClusterFuckException {
+	public Object appCreateTag(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
 		
@@ -399,7 +421,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/tag/remove", method = "POST")
-	public Object appRemoveTag(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException, ExplodingClusterFuckException {
+	public Object appRemoveTag(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
 		Word word = modelService.getRequired(Word.class, wordId, request);
@@ -410,8 +432,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return getWebPerspective(entity, request);
 	}
 
-	private Object getWebPerspective(Entity entity, Request request) throws ModelException, ContentNotFoundException,
-			SecurityException, IllegalRequestException, ExplodingClusterFuckException {
+	private Object getWebPerspective(Entity entity, Request request) throws EndUserException {
 		if (entity instanceof Statement) {
 			return knowledgeService.getStatementWebPerspective(entity.getId(), request);
 		}

@@ -9,7 +9,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.WebNode;
 import dk.in2isoft.onlineobjects.model.WebPage;
 import dk.in2isoft.onlineobjects.model.WebSite;
@@ -28,7 +27,7 @@ public class WebModelService {
 		return page;
 	}
 
-	public WebSite getUsersWebSite(User user, Operator privileged) throws ModelException {
+	public WebSite getUsersWebSite(Entity user, Operator privileged) throws ModelException {
 		WebSite site = modelService.getChild(user, WebSite.class, privileged);
 		return site;
 	}

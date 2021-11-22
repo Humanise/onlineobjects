@@ -1,19 +1,21 @@
 package dk.in2isoft.onlineobjects.core;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public enum Ability {
-	usePhotosApp, viewDebuggingInfo, modifyWords;
+	usePhotosApp, viewDebuggingInfo, modifyWords, earlyAdopter;
 	
 	public static Set<Ability> convert(Collection<String> properties) {
-		return properties.stream().map((prop) -> {
-			try {
-				return Ability.valueOf(prop);
-			} catch (IllegalArgumentException e) {
-				return null;
+		Set<Ability> converted = new HashSet<>();
+		for (String property : properties) {
+			for (Ability ability : Ability.values()) {
+				if (ability.name().equals(property)) {
+					converted.add(ability);
+				}
 			}
-		}).filter(ability -> ability != null).collect(Collectors.toSet());
+		}
+		return converted;
 	}
 }

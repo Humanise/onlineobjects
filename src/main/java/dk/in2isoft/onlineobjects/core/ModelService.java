@@ -494,6 +494,10 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return getFirst(query, operator);
 	}
 
+	public <T extends Entity> Optional<T> getOptional(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Operator operator) throws ModelException {
+		return Optional.ofNullable(get(entityClass, id, operator));
+	}
+
 	public Relation createRelation(Entity from, Entity to, String kind, Operator operator) throws ModelException, SecurityException {
 		if (from==null || to==null) {
 			return null;

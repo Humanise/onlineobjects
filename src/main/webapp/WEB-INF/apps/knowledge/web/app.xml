@@ -206,6 +206,10 @@
               <div class="perspective_actions">
                 <button name="addQuestionToStatement" text="Add question"/>
               </div>
+              <fragment name="statementSuggestionsFragment" visible="false">
+                <div class="perspective_heading">Suggested questions</div>
+                <collection name="statementSuggestions"/>
+              </fragment>
             </div>
           </div>
         </fragment>

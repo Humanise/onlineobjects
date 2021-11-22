@@ -2,6 +2,8 @@ package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 
 import java.util.List;
 
+import org.onlineobjects.modules.suggestion.SuggestionsCategory;
+
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
@@ -13,6 +15,7 @@ public class StatementWebPerspective implements CategorizableViewPerspective, Vi
 	private boolean favorite;
 	private List<QuestionWebPerspective> questions;
 	private List<InternetAddressViewPerspective> addresses;
+	private SuggestionsCategory questionSuggestions;
 	private String type = Statement.class.getSimpleName();
 	private List<Option> words;
 
@@ -74,5 +77,13 @@ public class StatementWebPerspective implements CategorizableViewPerspective, Vi
 
 	public void setWords(List<Option> words) {
 		this.words = words;
+	}
+
+	public SuggestionsCategory getQuestionSuggestions() {
+		return questionSuggestions;
+	}
+
+	public void setQuestionSuggestions(SuggestionsCategory questionSuggestions) {
+		this.questionSuggestions = questionSuggestions;
 	}
 }

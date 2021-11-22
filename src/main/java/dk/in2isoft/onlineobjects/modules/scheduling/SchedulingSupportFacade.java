@@ -2,6 +2,8 @@ package dk.in2isoft.onlineobjects.modules.scheduling;
 
 import java.util.Collection;
 
+import org.onlineobjects.modules.suggestion.KnowledgeSuggester;
+
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexer;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -35,6 +37,7 @@ public class SchedulingSupportFacade {
 	private LanguageService languageService;
 	private MemberService memberService;
 	private KnowledgeIndexer knowledgeIndexer;
+	private KnowledgeSuggester knowledgeSuggester;
 
 	public InformationService getInformationService() {
 		return informationService;
@@ -160,5 +163,14 @@ public class SchedulingSupportFacade {
 	public void setKnowledgeIndexer(KnowledgeIndexer knowledgeIndexer) {
 		this.knowledgeIndexer = knowledgeIndexer;
 	}
+
+	public KnowledgeSuggester getKnowledgeSuggester() {
+		return knowledgeSuggester;
+	}
+
+	public void setKnowledgeSuggester(KnowledgeSuggester knowledgeSuggester) {
+		this.knowledgeSuggester = knowledgeSuggester;
+	}
+
 	
 }

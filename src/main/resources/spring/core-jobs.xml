@@ -89,4 +89,12 @@
 		<property name="repeatMinutes" value="360"/><!-- 60 * 6 -->
 	</bean>
 
+	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+		<property name="jobClass" value="org.onlineobjects.modules.suggestion.KnowledgeSuggestionJob"/>
+		<property name="name" value="knowledge-suggestor"/>
+		<property name="group" value="core"/>
+		<property name="repeatMinutes" value="1"/>
+		<property name="paused" value="false"/>
+	</bean>
+
 </beans>

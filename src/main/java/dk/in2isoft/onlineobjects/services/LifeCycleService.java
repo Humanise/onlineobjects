@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,7 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	private static Logger log = LogManager.getLogger(LifeCycleService.class);
 	private ConsistencyService consistencyService;
 	private SurveillanceService surveillanceService;
+	private List<InitializingService> initializingServices;
 
 	private Date startTime;
 	
@@ -35,6 +37,9 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 				log.error("Failed checking consistency", e);
 			}
 			surveillanceService.log(LogType.startUp);
+			for (InitializingService initializingService : initializingServices) {
+				initializingService.initialize();
+			}
 		} else {
 			surveillanceService.audit().info("Event: {}", event.getClass().getSimpleName());
 		}
@@ -50,5 +55,9 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 		
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
+	}
+	
+	public void setInitializingServices(List<InitializingService> initializingServices) {
+		this.initializingServices = initializingServices;
 	}
 }

@@ -60,6 +60,7 @@ var documentController = {
         var common = range.commonAncestorContainer;
         if (hui.dom.isDescendantOrSelf(common,this.root)) {
           this.text = hui.selection.getText();
+          //this._suggest();
           var rects = range.getClientRects();
           if (rects.length > 0) {
             panel.show({target: rects[0]});
@@ -71,6 +72,17 @@ var documentController = {
     }.bind(this);
     hui.listen(document.body,'mouseup',textListener);
     hui.listen(window,'keyup',textListener);
+  },
+
+  _suggest : function() {
+    if (!this.text) { return; }
+    hui.ui.request({
+      url: '/app/suggest',
+      parameters: {text: this.text},
+      $object: function(data) {
+        console.log(data[0]);
+      },
+    });
   },
   _findClickedItems : function(e) {
     var found = [],
