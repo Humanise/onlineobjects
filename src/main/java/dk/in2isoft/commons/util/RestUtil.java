@@ -18,7 +18,8 @@ public class RestUtil {
 		pattern = StringUtils.replace(pattern, "<letters>", "[a-z]+");
 		pattern = StringUtils.replace(pattern, "<any>", ".+");
 		pattern = StringUtils.replace(pattern, "<word>", SemanticService.WORD_EXPRESSION);
-		pattern = StringUtils.replace(pattern, "<language>", "[a-z]{2}");
+		//pattern = StringUtils.replace(pattern, "<language>", "[a-z]{2}");
+		pattern = StringUtils.replace(pattern, "<language>", "(en|da)");
 		pattern = StringUtils.replace(pattern, "<folder>", "[^/]+");
 		pattern = StringUtils.replace(pattern, "<no-dot>", "[^\\.]+");
 		return Pattern.compile(pattern);

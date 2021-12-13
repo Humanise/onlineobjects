@@ -64,7 +64,6 @@ import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.PileService;
 import dk.in2isoft.onlineobjects.ui.data.Option;
-import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 
 public class KnowledgeService {
 	private ModelService modelService;
