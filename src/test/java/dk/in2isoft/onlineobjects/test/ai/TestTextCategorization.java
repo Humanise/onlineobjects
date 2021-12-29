@@ -7,14 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.core.Pair;
+import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.test.EssentialTests;
 import opennlp.tools.doccat.DoccatFactory;
@@ -27,6 +30,8 @@ import opennlp.tools.util.TrainingParameters;
 @Category(EssentialTests.class)
 public class TestTextCategorization extends AbstractSpringTestCase {
 
+	@Autowired
+	SemanticService semanticService;
 
 	private static final Logger log = LogManager.getLogger(TestTextCategorization.class);
 
@@ -40,19 +45,22 @@ public class TestTextCategorization extends AbstractSpringTestCase {
 		String[][] tests = {
 				{"Why does my tooth hurt?", "health"},
 				{"Bugs are small", "biology"},
-				{"How do I loose weight?", "health"},
+				{"How do I loose weight?", "biology"},
 				{"Do dogs get to go to heaven?", "biology"},
-				{"Should I get vaccinated?", "health"}
+				{"Should I get vaccinated?", "health"},
+				{"Dog cow cat whale ant", "biology"},
+				{"foot dicease cough vaccine influenza", "health"}
 			};
-		for (String[] test : tests) {
-			String text = test[0];
-			DocumentCategorizerME myCategorizer = new DocumentCategorizerME(model);
-			double[] outcomes = myCategorizer.categorize(text);
-			String category = myCategorizer.getBestCategory(outcomes);
-			assertEquals(test[1], category);
-			log.info("Best category: {} = {}", text, category);
+			for (String[] test : tests) {
+				String text = test[0];
+				String[] tokens = semanticService.getTokensAsString(text, Locale.ENGLISH);
+				DocumentCategorizerME myCategorizer = new DocumentCategorizerME(model);
+				double[] outcomes = myCategorizer.categorize(tokens);
+				String category = myCategorizer.getBestCategory(outcomes);
+				assertEquals(test[1], category);
+				log.info("Best category: {} = {}", text, category);
+			}
 		}
-	}
 
 	private final class TrainingSampleStream implements ObjectStream<DocumentSample> {
 		
@@ -77,7 +85,8 @@ public class TestTextCategorization extends AbstractSpringTestCase {
 			if (iter.hasNext()) {
 				Pair<String,File> pair = iter.next();
 				String text = Files.readString(pair.getValue());
-				return new DocumentSample(pair.getKey(), text);
+				String[] tokens = semanticService.getTokensAsString(text, Locale.ENGLISH);
+				return new DocumentSample(pair.getKey(), tokens);
 			}
 			return null;
 		}

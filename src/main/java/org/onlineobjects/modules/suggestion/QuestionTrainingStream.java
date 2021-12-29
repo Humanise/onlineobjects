@@ -25,8 +25,8 @@ import opennlp.tools.util.ObjectStream;
 
 public class QuestionTrainingStream implements ObjectStream<DocumentSample> {
 	
-	private List<Pair<String, String>> stuff = new ArrayList<>();
-	private Iterator<Pair<String, String>> iter;
+	private List<Pair<String, String[]>> stuff = new ArrayList<>();
+	private Iterator<Pair<String, String[]>> iter;
 
 	public QuestionTrainingStream(Operator operator, ModelService model, KnowledgeService knowledge, SemanticService semantics) throws EndUserException {
 		List<Question> questions = model.list(Query.after(Question.class), operator);
@@ -50,18 +50,14 @@ public class QuestionTrainingStream implements ObjectStream<DocumentSample> {
 		iter = stuff.iterator();
 	}
 
-	private String extract(String text, SemanticService semantics) {
-		if (true) {
-			return text;
-		}
-		String[] words = semantics.getNaturalWords(text, new Locale("en"));
-		return String.join(" ", words);
+	private String[] extract(String text, SemanticService semantics) {
+		return semantics.getTokensAsString(text, Locale.ENGLISH);
 	}
 
 	@Override
 	public DocumentSample read() throws IOException {
 		if (iter.hasNext()) {
-			Pair<String,String> pair = iter.next();
+			Pair<String,String[]> pair = iter.next();
 			return new DocumentSample(pair.getKey(), pair.getValue());
 		}
 		return null;

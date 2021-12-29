@@ -97,18 +97,24 @@ public class DispatchingService {
 		}
 		stopWatch.stop();
 		surveillanceService.survey(request);
-		if (securityService.isPublicUser(request)) {
-			HttpSession session = request.getRequest().getSession(false);
-			if (session != null) {
-				if (session.isNew()) {
-					log.warn("Public user started session");
-				} else {
-					log.warn("Public user has session");
+		checkSessions(request);
+		return handled;
+	}
+
+
+	private void checkSessions(Request request) {
+		if (configurationService.isDevelopmentMode()) {
+			if (securityService.isPublicUser(request)) {
+				HttpSession session = request.getRequest().getSession(false);
+				if (session != null) {
+					if (session.isNew()) {
+						log.warn("Public user started session");
+					} else {
+						log.warn("Public user has session");
+					}
 				}
 			}
 		}
-		
-		return handled;
 	}
 
 

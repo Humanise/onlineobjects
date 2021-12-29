@@ -104,11 +104,11 @@ public class KnowledgeSuggester {
 		category.setDirty(isDirty(operator));
 		
 		String text = statement.getText();
-		text = String.join(" ", semanticService.getNaturalWords(text, new Locale("en")));
+		String[] tokens = semanticService.getTokensAsString(text, Locale.ENGLISH);
 
 		DoccatModel model = possibleModel.get();
 		DocumentCategorizerME categorizer = new DocumentCategorizerME(model);
-		double[] outcomes = categorizer.categorize(text);
+		double[] outcomes = categorizer.categorize(tokens);
 		List<Suggestion> results = new ArrayList<>();
 		for (int i = 0; i < outcomes.length; i++) {
 			double outcome = outcomes[i];

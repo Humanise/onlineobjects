@@ -391,12 +391,12 @@
     <dependency>
       <groupId>org.apache.opennlp</groupId>
       <artifactId>opennlp-tools</artifactId>
-      <version>1.6.0</version>
+      <version>1.9.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.opennlp</groupId>
       <artifactId>opennlp-uima</artifactId>
-      <version>1.6.0</version>
+      <version>1.9.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.opennlp</groupId>
@@ -467,7 +467,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.1</version>
+      <version>4.4.15</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -557,7 +557,7 @@
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.21.0-GA</version>
+      <version>3.28.0-GA</version>
     </dependency>
 
     <dependency>
@@ -640,7 +640,7 @@
     <dependency>
       <groupId>org.thymeleaf</groupId>
       <artifactId>thymeleaf</artifactId>
-      <version>3.0.10.RELEASE</version>
+      <version>3.0.14.RELEASE</version>
     </dependency>
     <!-- XML -->
     <dependency>
@@ -686,7 +686,7 @@
     <dependency>
       <groupId>net.sourceforge.nekohtml</groupId>
       <artifactId>nekohtml</artifactId>
-      <version>1.9.17</version>
+      <version>1.9.22</version>
     </dependency>
 
     <dependency>
