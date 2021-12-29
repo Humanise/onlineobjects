@@ -4,18 +4,19 @@ import com.chimbori.crux.articles.Article;
 import com.chimbori.crux.articles.ArticleExtractor;
 
 import nu.xom.Document;
+import okhttp3.HttpUrl;
 
 public class CruxExtractor implements ContentExtractor {
 
     public String extract(String rawString) {
     	
     	String url = "https://example.com/article.html";
-
-    	Article article = ArticleExtractor.with(url, rawString)
+    	HttpUrl httpURL = HttpUrl.Companion.parse(url);
+    	Article article = new ArticleExtractor(httpURL, rawString)
     	    .extractMetadata()
     	    .extractContent()
-    	    .article();
-		org.jsoup.nodes.Document document = article.document;
+    	    .getArticle();
+		org.jsoup.nodes.Document document = article.getDocument();
 		return document.outerHtml();
     }
 
