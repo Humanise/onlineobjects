@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
@@ -636,7 +636,7 @@ public class MemberService {
 	}
 
 	private File getAgreement(Locale locale, String key, Date date) {
-		String fileName = key + "-" + DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
+		String fileName = key + "-" + org.apache.commons.lang.time.DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
 		File file = configurationService.getFile("WEB-INF","core","agreements", fileName);
 		return file;
 	}
@@ -650,7 +650,7 @@ public class MemberService {
 		for (Entry<String, List<String>> entry : configs.entrySet()) {
 			for (String dateStr : entry.getValue()) {
 				try {
-					agreementConfigs.put(entry.getKey(),org.apache.commons.lang3.time.DateUtils.parseDate(dateStr,"yyyy-MM-dd"));
+					agreementConfigs.put(entry.getKey(),DateUtils.parseDate(dateStr,new String[]{"yyyy-MM-dd"}));
 				} catch (Exception e) {
 					log.error("Error parsing date",e);
 				}

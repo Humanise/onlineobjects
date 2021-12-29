@@ -149,9 +149,9 @@ public class ImageService extends AbstractCommandLineInterface {
 			Metadata metadata;
 			// TODO: No need to try this if not a JPEG
 			metadata = JpegMetadataReader.readMetadata(file);
-			Directory exifDirectory = metadata.getDirectory(ExifIFD0Directory.class);
-			Directory gpsDirectory = metadata.getDirectory(GpsDirectory.class);
-			Directory iptcDirectory = metadata.getDirectory(IptcDirectory.class);
+			Directory exifDirectory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+			Directory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+			Directory iptcDirectory = metadata.getFirstDirectoryOfType(IptcDirectory.class);
 			
 			if (exifDirectory!=null) {
 				if (exifDirectory.containsTag(ExifIFD0Directory.TAG_DATETIME)) {
@@ -192,15 +192,15 @@ public class ImageService extends AbstractCommandLineInterface {
 				}
 			}
 			if (gpsDirectory!=null) {
-				if (gpsDirectory.containsTag(GpsDirectory.TAG_GPS_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_GPS_LATITUDE_REF)) {
-					String ref = gpsDirectory.getString(GpsDirectory.TAG_GPS_LATITUDE_REF);
-					Rational[] dist = gpsDirectory.getRationalArray(GpsDirectory.TAG_GPS_LATITUDE);
+				if (gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LATITUDE_REF)) {
+					String ref = gpsDirectory.getString(GpsDirectory.TAG_LATITUDE_REF);
+					Rational[] dist = gpsDirectory.getRationalArray(GpsDirectory.TAG_LATITUDE);
 					double decimal = getDecimal(dist,ref);
 					imageMetaData.setLatitude(decimal);
 				}
-				if (gpsDirectory.containsTag(GpsDirectory.TAG_GPS_LONGITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_GPS_LONGITUDE_REF)) {
-					String ref = gpsDirectory.getString(GpsDirectory.TAG_GPS_LONGITUDE_REF);
-					Rational[] dist = gpsDirectory.getRationalArray(GpsDirectory.TAG_GPS_LONGITUDE);
+				if (gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE) && gpsDirectory.containsTag(GpsDirectory.TAG_LONGITUDE_REF)) {
+					String ref = gpsDirectory.getString(GpsDirectory.TAG_LONGITUDE_REF);
+					Rational[] dist = gpsDirectory.getRationalArray(GpsDirectory.TAG_LONGITUDE);
 					double decimal = getDecimal(dist,ref);
 					imageMetaData.setLongitude(decimal);
 				}

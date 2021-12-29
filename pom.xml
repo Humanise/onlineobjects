@@ -14,12 +14,12 @@
   </properties>
 
   <profiles>
-      <profile>
-          <id>EssentialTests</id>
-          <properties>
-              <testcase.groups>dk.in2isoft.onlineobjects.test.EssentialTests</testcase.groups>
-          </properties>
-      </profile>
+    <profile>
+      <id>EssentialTests</id>
+      <properties>
+        <testcase.groups>dk.in2isoft.onlineobjects.test.EssentialTests</testcase.groups>
+      </properties>
+    </profile>
   </profiles>
 
   <build>
@@ -146,7 +146,7 @@
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
-      <version>2.0.6</version>
+      <version>2.0.6.1</version>
     </dependency>
 
 	<!-- 
@@ -303,12 +303,12 @@
     <dependency>
       <groupId>com.sun.faces</groupId>
       <artifactId>jsf-api</artifactId>
-      <version>2.2.14</version>
+      <version>2.2.20</version>
     </dependency>
     <dependency>
       <groupId>com.sun.faces</groupId>
       <artifactId>jsf-impl</artifactId>
-      <version>2.2.14</version>
+      <version>2.2.20</version>
     </dependency>
 
     <!-- Database -->
@@ -326,7 +326,7 @@
     <dependency>
       <groupId>com.mchange</groupId>
       <artifactId>c3p0</artifactId>
-      <version>0.9.5.4</version>
+      <version>0.9.5.5</version>
     </dependency>
 
 
@@ -334,7 +334,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.11</version>
+      <version>42.3.1</version>
     </dependency>
 
     <dependency>
@@ -442,12 +442,12 @@
 	<dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>
-      <version>4.1</version>
+      <version>4.4</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.6</version>
+      <version>1.15</version>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
@@ -457,7 +457,7 @@
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <version>1.1.1</version>
+      <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>commons-httpclient</groupId>
@@ -467,7 +467,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.11</version>
+      <version>4.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -482,7 +482,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.7</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
       <groupId>commons-pool</groupId>
@@ -492,27 +492,27 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-pool2</artifactId>
-      <version>2.7.0</version>
+      <version>2.11.1</version>
     </dependency>
     <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
-      <version>1.5.1</version>
+      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-email</artifactId>
-      <version>1.2</version>
+      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
-      <version>2.1</version>
+      <version>2.10.13</version>
     </dependency>
     <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>2.8.6</version>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.9</version>
     </dependency>
     <dependency>
       <groupId>net.sf.opencsv</groupId>
@@ -522,7 +522,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>21.0</version>
+      <version>31.0.1-jre</version>
     </dependency>
     <!-- Scheduling -->
     <dependency>
@@ -534,12 +534,12 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>2.15.0</version>
+      <version>2.17.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.15.0</version>
+      <version>2.17.1</version>
     </dependency>
     <!-- Unknown -->
     <dependency>
@@ -613,13 +613,13 @@
     <dependency>
       <groupId>com.drewnoakes</groupId>
       <artifactId>metadata-extractor</artifactId>
-      <version>2.6.2</version>
+      <version>2.16.0</version>
     </dependency>
     <!-- Caching -->
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache</artifactId>
-      <version>2.10.0</version>
+      <version>2.10.9.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -646,12 +646,12 @@
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
-      <version>1.1</version>
+      <version>2.0.2</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.11.3</version>
+      <version>1.14.3</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
@@ -661,7 +661,7 @@
     <dependency>
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
-      <version>2.12.0</version>
+      <version>2.12.1</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -705,13 +705,13 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
     </dependency>
 
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>3.4</version>
+      <version>4.3</version>
       <scope>test</scope>
     </dependency>
 
