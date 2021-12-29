@@ -472,9 +472,8 @@ public class Request implements Operator {
 	}
 
 	public <T> T getBean(Class<T> beanClass) {
-		String name = beanClass.getSimpleName().substring(0, 1).toLowerCase()+beanClass.getSimpleName().substring(1);
 		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
-		return applicationContext.getBean(name, beanClass);
+		return applicationContext.getBean(beanClass);
 	}
 	
 	public long getStartTime() {

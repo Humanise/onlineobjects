@@ -7,26 +7,22 @@ import java.io.StringWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-
 public abstract class AbstractCommandLineInterface {
 
 	private static Logger log = LogManager.getLogger(AbstractCommandLineInterface.class);
 	
-	protected synchronized String execute(String cmd) throws EndUserException {
-		Process p;
+	protected synchronized String execute(String cmd) throws IOException {
 		try {
-			p = Runtime.getRuntime().exec(cmd,new String[] {"PATH=/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/sbin"});
-			checkError(p,cmd);
+			Process p = Runtime.getRuntime().exec(cmd,new String[] {"PATH=/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/sbin"});
+			int exitCode = p.waitFor();
+			checkError(p,cmd, exitCode);
 			return getResult(p);
-		} catch (IOException e) {
-			throw new EndUserException(e);
 		} catch (InterruptedException e) {
-			throw new EndUserException(e);
+			throw new IOException(e);
 		}
 	}
 
-	private void checkError(Process p, String cmd) throws EndUserException, IOException, InterruptedException {
+	private void checkError(Process p, String cmd, int exitCode) throws IOException, InterruptedException {
 		InputStream s = p.getErrorStream();
 		int c;
 		StringWriter sw = new StringWriter();
@@ -36,11 +32,11 @@ public abstract class AbstractCommandLineInterface {
 		if (sw.getBuffer().length()>0) {
 			log.warn(sw.getBuffer().toString());
 			log.warn("command: "+cmd);
-			if (p.waitFor()!=0) {
-				throw new EndUserException(sw.toString());				
-			}
 		}
-		
+		if (exitCode!=0) {
+			log.warn("exitCode: " + exitCode + ", for command:" + cmd);
+			throw new IOException(sw.toString());
+		}
 	}
 
 	private String getResult(Process p) throws IOException {

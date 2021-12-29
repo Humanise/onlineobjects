@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -40,17 +41,11 @@ public class Files {
 		if (file.exists()) {
 			file.delete();
 		}
-		FileOutputStream out = null;
 		try {
-			out = new FileOutputStream(file);
-			IOUtils.write(text, out);
+			com.google.common.io.Files.write(text, file, StandardCharsets.UTF_8);
 			return true;
-		} catch (FileNotFoundException e) {
-			// ignore
 		} catch (IOException e) {
-			// ignore
-		} finally {
-			IOUtils.closeQuietly(out);
+			log.error("Unable to overwrite text file", e);
 		}
 		return false;
 	}

@@ -87,20 +87,26 @@ public class ImageService extends AbstractCommandLineInterface {
 		log.debug(file.getAbsolutePath());
 		log.debug("Exists: " + file.exists());
 		String cmd = configurationService.getImageMagickPath() + "/identify -quiet -format \"%m-%wx%h\" " + file.getAbsolutePath();
-		String result = execute(cmd).trim();
-		Pattern pattern = Pattern.compile(".*\"([a-zA-Z]+)-([0-9]+)x([0-9]+)\"");
-		Matcher matcher = pattern.matcher(result);
-		if (matcher.matches()) {
-			ImageProperties properties = new ImageProperties();
-			String format = matcher.group(1);
-			int width = Integer.parseInt(matcher.group(2));
-			int height = Integer.parseInt(matcher.group(3));
-			properties.setMimeType(magickTypeToMimeType(format));
-			properties.setWidth(width);
-			properties.setHeight(height);
-			return properties;
-		} else {
-			throw new EndUserException("Could not parse output: " + result);
+		String result;
+		try {
+			result = execute(cmd).trim();
+			Pattern pattern = Pattern.compile(".*\"([a-zA-Z]+)-([0-9]+)x([0-9]+)\"");
+			Matcher matcher = pattern.matcher(result);
+			if (matcher.matches()) {
+				ImageProperties properties = new ImageProperties();
+				String format = matcher.group(1);
+				int width = Integer.parseInt(matcher.group(2));
+				int height = Integer.parseInt(matcher.group(3));
+				properties.setMimeType(magickTypeToMimeType(format));
+				properties.setWidth(width);
+				properties.setHeight(height);
+				return properties;
+			} else {
+				throw new EndUserException("Could not parse output: " + result);
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new EndUserException(e);
 		}
 	}
 	
@@ -124,8 +130,13 @@ public class ImageService extends AbstractCommandLineInterface {
 	}
 
 	private String getAverageColor(File file, int width, int height, int x, int y) throws EndUserException {
-		String cmd = "/convert " + file.getAbsolutePath() + " -crop "+width+"x"+height+"+"+x+"+"+y+" -resize 1x1 -format %[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)] info:-";
-		return execute(configurationService.getImageMagickPath() + "/" + cmd);
+		try {
+			String cmd = "convert " + file.getAbsolutePath() + " -crop "+width+"x"+height+"+"+x+"+"+y+" -resize 1x1 -format %[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)] info:-";
+			return execute(configurationService.getImageMagickPath() + "/" + cmd);
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			throw new EndUserException(e);
+		}
 	}
 	
 	public ImageMetaData getMetaData(Image image) {

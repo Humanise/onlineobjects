@@ -32,6 +32,7 @@ public class ConfigurationService implements InitializingBean {
 	private String storagePath;
 	private boolean developmentMode;
 	private String imageMagickPath;
+	private String uglifyPath;
 	private String graphvizPath;
 	private String developmentUser;
 	private String analyticsCode;
@@ -331,5 +332,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setSimulateSporadicServerError(boolean simulateSporadicServerError) {
 		this.simulateSporadicServerError = simulateSporadicServerError;
+	}
+
+	public String getUglifyPath() {
+		return uglifyPath;
+	}
+
+	public void setUglifyPath(String uglifyPath) {
+		this.uglifyPath = uglifyPath;
 	}
 }

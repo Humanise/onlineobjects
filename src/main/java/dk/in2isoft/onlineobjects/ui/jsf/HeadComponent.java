@@ -9,6 +9,7 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.sun.faces.component.visit.FullVisitContext;
 
@@ -28,7 +29,7 @@ public class HeadComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.head";
 	
-	private String inlineJs;
+	private static String inlineJs;
 
 	//private static final Logger log = LogManager.getLogger(HeadComponent.class);
 
@@ -124,13 +125,13 @@ public class HeadComponent extends AbstractComponent {
 	}
 	
 	private void writeInlineJs(ConfigurationService configurationService, TagWriter out) throws IOException {
-		String content = getInline(configurationService);
+		String content = getInline(configurationService, getBean(ScriptCompressor.class));
 		if (content!=null) {
 			out.startScript().write(content).endScript();
 		}
 	}
 
-	private String getInline(ConfigurationService configurationService) {
+	private static String getInline(ConfigurationService configurationService, @Nullable ScriptCompressor scriptCompressor) {
 		if (inlineJs!=null && !configurationService.isDevelopmentMode()) {
 			return inlineJs;
 		}
@@ -139,7 +140,7 @@ public class HeadComponent extends AbstractComponent {
 		if (file.exists()) {
 			content = Files.readString(file);
 			if (configurationService.isOptimizeResources()) {
-				content = new ScriptCompressor().compress(content);
+				content = scriptCompressor.compress(content);
 			}
 		}
 		inlineJs = content;

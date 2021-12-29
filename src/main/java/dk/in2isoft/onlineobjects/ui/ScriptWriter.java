@@ -28,8 +28,10 @@ public class ScriptWriter {
 
 	private ConfigurationService configurationService;
 	private PrintWriter writer;
+	private ScriptCompressor compressor;
 
 	public ScriptWriter(Request request, ConfigurationService configurationService) throws IOException {
+		this.compressor = request.getBean(ScriptCompressor.class);
 		HttpServletResponse response = request.getResponse();
 		response.setContentType("text/javascript");
 		response.setCharacterEncoding("UTF-8");
@@ -83,7 +85,7 @@ public class ScriptWriter {
 		StringReader reader = new StringReader(script);
 		try (FileWriter fileWriter = new FileWriter(file)) {
 			try {
-				new ScriptCompressor().compress(reader, fileWriter);
+				compressor.compress(reader, fileWriter);
 			} catch (Exception e) {
 				this.writer.print(script);
 				log.error(e.getMessage(), e);

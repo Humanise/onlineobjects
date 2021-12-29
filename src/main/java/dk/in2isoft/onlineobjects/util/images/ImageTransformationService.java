@@ -1,6 +1,7 @@
 package dk.in2isoft.onlineobjects.util.images;
 
 import java.io.File;
+import java.io.IOException;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
@@ -23,7 +24,11 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		File converted = new File(folder, getFileName(transform));
 		if (!converted.exists()) {
 			String cmd = buildImageMagick(original, transform, converted);
-			execute(cmd);
+			try {
+				execute(cmd);
+			} catch (IOException e) {
+				throw new EndUserException(e);
+			}
 		}
 		return converted;
 	}
@@ -34,7 +39,11 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		}
 		if (!converted.exists()) {
 			String cmd = buildImageMagick(original, transform, converted);
-			execute(cmd);
+			try {
+				execute(cmd);
+			} catch (IOException e) {
+				throw new EndUserException(e);
+			}
 		}
 	}
 

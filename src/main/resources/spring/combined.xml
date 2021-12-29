@@ -53,6 +53,7 @@
 		<property name="developmentUser" value="${development.user}"/>
 		<property name="optimizeResources" value="${optimizeResources}"/>
 		<property name="imageMagickPath" value="${imagemagick.path}"/>
+		<property name="uglifyPath" value="${uglifyjs.path}"/>
 		<property name="graphvizPath" value="${graphviz.path}"/>
 		<property name="analyticsCode" value="${analytics.code}"/>
 		<property name="startScheduling" value="${startScheduling}"/>
@@ -166,6 +167,12 @@
 	<bean id="pileService" class="dk.in2isoft.onlineobjects.services.PileService" autowire="byType"/>
 
 	<bean id="dependencyService" class="dk.in2isoft.onlineobjects.ui.DependencyService" autowire="byType"/>
+	<!-- 
+	<bean class="dk.in2isoft.onlineobjects.ui.YUIScriptCompressor"/>
+	-->
+	<bean class="dk.in2isoft.onlineobjects.ui.UglifyScriptCompressor">
+		<property name="configuration" ref="configurationService"/>
+	</bean>
 	
 	<bean id="invitationService" class="dk.in2isoft.onlineobjects.modules.user.InvitationService" autowire="byType"/>
 	
