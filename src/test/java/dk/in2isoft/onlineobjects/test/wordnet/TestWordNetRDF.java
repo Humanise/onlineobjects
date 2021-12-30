@@ -5,6 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.Duration;
@@ -13,16 +22,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.google.common.collect.Lists;
-import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.query.QueryHandler;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
+import dk.in2isoft.onlineobjects.modules.dannet.QueryHandler;
 import dk.in2isoft.onlineobjects.test.AbstractTestCase;
 import dk.in2isoft.onlineobjects.test.EssentialTests;
 
@@ -35,12 +36,12 @@ public class TestWordNetRDF extends AbstractTestCase {
 	private static QueryHandler query;
 	private static StopWatch watch;
 
-	private static final Node GLOSSARY = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/gloss");
-	private static Node wordURI = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/Word");
-	private static Node wordRelation = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/word");
-	private static Node lexicalForm = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/lexicalForm");
-	private static Node partOfSpeech = Node.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/partOfSpeech");
-	private static final Node CONTAINS_SENSE = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/containsWordSense");
+	private static final Node GLOSSARY = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/gloss");
+	private static Node wordURI = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/Word");
+	private static Node wordRelation = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/word");
+	private static Node lexicalForm = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/lexicalForm");
+	private static Node partOfSpeech = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/partOfSpeech");
+	private static final Node CONTAINS_SENSE = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/containsWordSense");
 	
 	@BeforeClass
 	public static void before() throws Exception {
@@ -55,7 +56,7 @@ public class TestWordNetRDF extends AbstractTestCase {
 
 		graph = model.getGraph();
 		
-		query = graph.queryHandler();
+		query = new QueryHandler(graph);
 	}
 
 	private static void read(String fileName) throws FileNotFoundException, IOException {

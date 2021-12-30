@@ -10,6 +10,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.time.StopWatch;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.Duration;
@@ -21,15 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.query.QueryHandler;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
@@ -45,6 +45,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetGlossary;
 import dk.in2isoft.onlineobjects.modules.dannet.DanNetUtil;
+import dk.in2isoft.onlineobjects.modules.dannet.QueryHandler;
 import dk.in2isoft.onlineobjects.modules.index.WordIndexer;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
@@ -59,17 +60,17 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	private LanguageService languageService;
 	private WordIndexer wordIndexer;
 
-	private static final Node GLOSSARY = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/gloss");
-	private static Node wordURI = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/Word");
-	private static Node wordRelation = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/word");
-	private static Node lexicalForm = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/lexicalForm");
-	private static Node partMeronymOf = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/partMeronymOf");
-	private static Node partHolonymOf = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/partHolonymOf");
-	private static Node partOfSpeech = Node.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/partOfSpeech");
-	private static Node hyponymOf = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/hyponymOf");
-	private static Node domain = Node.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/domain");
-	private static Node nearSynonym = Node.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/nearSynonymOf");
-	private static final Node containsWordSence = Node.createURI("http://www.w3.org/2006/03/wn/wn20/schema/containsWordSense");
+	private static final Node GLOSSARY = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/gloss");
+	private static Node wordURI = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/Word");
+	private static Node wordRelation = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/word");
+	private static Node lexicalForm = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/lexicalForm");
+	private static Node partMeronymOf = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/partMeronymOf");
+	private static Node partHolonymOf = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/partHolonymOf");
+	private static Node partOfSpeech = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/partOfSpeech");
+	private static Node hyponymOf = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/hyponymOf");
+	private static Node domain = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/domain");
+	private static Node nearSynonym = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/nearSynonymOf");
+	private static final Node containsWordSence = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/containsWordSense");
 	
 	
 	private static final Map<String,String> map = Maps.newHashMap();
@@ -112,7 +113,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 
 		graph = model.getGraph();
 		
-		query = graph.queryHandler();
+		query = new QueryHandler(graph);
 		
 	}
 	
