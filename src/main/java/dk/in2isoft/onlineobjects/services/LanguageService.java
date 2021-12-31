@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.tika.language.LanguageIdentifier;
+import org.apache.tika.langdetect.optimaize.OptimaizeLangDetector;
+import org.apache.tika.language.detect.LanguageDetector;
+import org.apache.tika.language.detect.LanguageResult;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -81,9 +83,10 @@ public class LanguageService {
 	public Locale getLocale(String text) {
 		if (Strings.isBlank(text)) {
 			return null;
-		}
-		LanguageIdentifier id = new LanguageIdentifier(text);
-		String language = id.getLanguage();
+		}		
+		LanguageDetector detector = new OptimaizeLangDetector().loadModels();
+        LanguageResult result = detector.detect(text);
+        String language = result.getLanguage();
 		if (Strings.isBlank(language)) {
 			return null;
 		}

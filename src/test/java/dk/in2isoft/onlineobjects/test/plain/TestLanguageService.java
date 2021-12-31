@@ -13,12 +13,10 @@ import dk.in2isoft.onlineobjects.test.EssentialTests;
 
 @Category(EssentialTests.class)
 public class TestLanguageService extends AbstractSpringTestCase {
-	
-	//private static Logger log = LogManager.getLogger(TestLanguageService.class);
-	
+
 	@Autowired
-	private LanguageService languageService;
-	
+	LanguageService languageService;
+
 	@Test
 	public void testLanguageDetection() {
 		{
@@ -31,10 +29,16 @@ public class TestLanguageService extends AbstractSpringTestCase {
 			Locale locale = languageService.getLocale(english);
 			Assert.assertEquals("en", locale.getLanguage());
 		}
-	}
-
-	public void setLanguageService(LanguageService languageService) {
-		this.languageService = languageService;
+		{
+			String german = "Ich bin ein Berliner";
+			Locale locale = languageService.getLocale(german);
+			Assert.assertEquals("de", locale.getLanguage());
+		}
+		{
+			String svenska = "Sedan dess har samhället blivit än mer oöverskådligt och digitaliseringen har trängt djupare in i våra liv än någon kunde föreställa sig 1987.";
+			Locale locale = languageService.getLocale(svenska);
+			Assert.assertEquals("sv", locale.getLanguage());
+		}
 	}
 
 }
