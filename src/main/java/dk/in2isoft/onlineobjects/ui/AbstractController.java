@@ -66,6 +66,7 @@ public abstract class AbstractController {
 		return name;
 	}
 
+	@Deprecated
 	protected void addJsfMatcher(String pattern,String path) {
 		jsfMatchers.put(RestUtil.compile(pattern), path);
 	}

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -14,8 +15,21 @@ public class DeveloperController extends ApplicationController {
 	
 	public DeveloperController() {
 		super("developer");
-		addJsfMatcher("/components.html", "components.xhtml");
-		addJsfMatcher("/", "index.xhtml");
+	}
+
+	@Path(expression = "/")
+	@View(jsf = "index.xhtml")
+	public void front(Request request) {
+	}
+
+	@Path(exactly = {"components.html"})
+	@View(jsf = "components.xhtml")
+	public void components(Request request) {
+	}
+
+	@Path(exactly = {"jsf.html"})
+	@View(jsf = "jsf.xhtml")
+	public void jsf(Request request) {
 	}
 	
 	public List<Locale> getLocales() {
