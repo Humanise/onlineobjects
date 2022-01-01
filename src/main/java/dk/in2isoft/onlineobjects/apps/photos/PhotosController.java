@@ -12,6 +12,7 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -32,6 +33,23 @@ import dk.in2isoft.onlineobjects.util.images.ImageMetaData;
 
 public class PhotosController extends PhotosControllerBase {
 
+
+	@Path(expression = "/(<language>)?")
+	@View(jsf = "front.xhtml")
+	public void front(Request request) {}
+
+	@Path(expression = "/<language>/photo/<integer>.html")
+	@View(jsf = "photo.xhtml")
+	public void photo(Request request) {}
+
+	@Path(expression = "/<language>/users/<username>")
+	@View(jsf = "user.xhtml")
+	public void user(Request request) {}
+
+	@Path(expression = "/<language>/gallery/<integer>")
+	@View(jsf = "gallery.xhtml")
+	public void gallery(Request request) {}
+	
 	@Path(exactly="updateTitle")
 	public void updateImageTitle(Request request) throws ModelException, SecurityException, ContentNotFoundException {
 		long id = request.getInt("id");

@@ -16,11 +16,6 @@ public abstract class FrontControllerBase extends ApplicationController {
 
 	public FrontControllerBase() {
 		super("front");
-		addJsfMatcher("/", "front.xhtml");
-		addJsfMatcher("/<language>", "front.xhtml");
-		//addJsfMatcher("/<language>/about", "about.xhtml");
-		addJsfMatcher("/<language>/mac", "mac.xhtml");
-		addJsfMatcher("/<language>/<folder>/<integer>", "entity.xhtml");
 	}
 
 	public List<Locale> getLocales() {

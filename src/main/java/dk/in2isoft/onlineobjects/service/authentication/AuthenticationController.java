@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
@@ -27,6 +28,10 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	private static Logger log = LogManager.getLogger(AuthenticationController.class);
 
+
+	@Path(expression = "/")
+	@View(jsf = "login.xhtml")
+	public void login(Request request) {}
 	
 	@Override
 	public String getLanguage(Request request) {
@@ -35,7 +40,6 @@ public class AuthenticationController extends AuthenticationControllerBase {
 			lang = "en";
 		}
 		return lang;
-
 	}
 
 	@Override

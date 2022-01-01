@@ -25,11 +25,6 @@ public class PhotosControllerBase extends ApplicationController {
 
 	public PhotosControllerBase() {
 		super("photos");
-		addJsfMatcher("/", "front.xhtml");
-		addJsfMatcher("/<language>", "front.xhtml");
-		addJsfMatcher("/<language>/photo/<integer>.html", "photo.xhtml");
-		addJsfMatcher("/<language>/users/<username>", "user.xhtml");
-		addJsfMatcher("/<language>/gallery/<integer>", "gallery.xhtml");
 	}
 		
 	public List<Locale> getLocales() {

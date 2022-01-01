@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.io.FileWriteMode;
+
 public class Files {
 	
 	private static final Logger log = LogManager.getLogger(Files.class);
@@ -42,7 +44,7 @@ public class Files {
 			file.delete();
 		}
 		try {
-			com.google.common.io.Files.write(text, file, StandardCharsets.UTF_8);
+			com.google.common.io.Files.asCharSink(file, StandardCharsets.UTF_8, FileWriteMode.APPEND).write(text);
 			return true;
 		} catch (IOException e) {
 			log.error("Unable to overwrite text file", e);

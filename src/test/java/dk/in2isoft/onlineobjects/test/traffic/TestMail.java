@@ -53,7 +53,7 @@ public class TestMail extends AbstractSpringTestCase {
 		email.setFrom(getProperty("mail.address"), getProperty("mail.name"));
 		email.setSubject("Test message");
 		email.setMsg("This is a simple test of commons-email");
-		email.setSSL(true);
+		email.setSSLOnConnect(true);
 		email.send();
 	}
 	

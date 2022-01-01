@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,7 +29,6 @@ public abstract class AbstractController {
 	protected ConfigurationService configurationService;
 	protected HUIService huiService;
 
-	protected Map<Pattern,String> jsfMatchers = new LinkedHashMap<Pattern, String>();
 	protected List<Responder> responders = new ArrayList<>();
 
 	private String name;
@@ -66,11 +64,6 @@ public abstract class AbstractController {
 		return name;
 	}
 
-	@Deprecated
-	protected void addJsfMatcher(String pattern,String path) {
-		jsfMatchers.put(RestUtil.compile(pattern), path);
-	}
-
 	public String getLanguage(Request request) {
 		return null;
 	}
@@ -94,11 +87,6 @@ public abstract class AbstractController {
 					invokeMethod(request, responder.method);
 					return true;
 				}
-			}
-		}
-		for (Map.Entry<Pattern, String> entry : jsfMatchers.entrySet()) {
-			if (entry.getKey().matcher(localPath).matches()) {
-				return dispatchToJSF(request, entry.getValue());
 			}
 		}
 		return false;

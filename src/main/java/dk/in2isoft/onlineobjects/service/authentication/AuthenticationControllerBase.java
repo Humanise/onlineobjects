@@ -16,7 +16,6 @@ public abstract class AuthenticationControllerBase extends ServiceController {
 	
 	public AuthenticationControllerBase() {
 		super("authentication");
-		addJsfMatcher("/", "login.xhtml");
 	}
 	
 	// Wiring...

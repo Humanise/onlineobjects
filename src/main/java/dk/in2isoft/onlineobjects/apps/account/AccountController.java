@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
@@ -32,6 +33,42 @@ public class AccountController extends AccountControllerBase {
 	private static final Logger log = LogManager.getLogger(AccountController.class);
 	
 	public static final String MOUNT = "account";
+
+	@Path(expression = "/(<language>)?")
+	@View(jsf = "front.xhtml")
+	public void front(Request request) {}
+
+	@Path(expression = "/invitation")
+	@View(jsf = "invitation.xhtml")
+	public void invitation(Request request) {}
+
+	@Path(expression = "/<language>/password")
+	@View(jsf = "password.xhtml")
+	public void password(Request request) {}
+
+	@Path(expression = "/<language>/delete")
+	@View(jsf = "delete.xhtml")
+	public void delete(Request request) {}
+
+	@Path(expression = "/<language>/signup")
+	@View(jsf = "signup.xhtml")
+	public void signup(Request request) {}
+
+	@Path(expression = "/<language>/welcome")
+	@View(jsf = "welcome.xhtml")
+	public void welcome(Request request) {}
+
+	@Path(expression = "/<language>/agreements")
+	@View(jsf = "agreements.xhtml")
+	public void agreements(Request request) {}
+
+	@Path(expression = "/<language>/" + AccountController.EMAIL_CONFIRM_PATH)
+	@View(jsf = "confirm.xhtml")
+	public void confirm(Request request) {}
+
+	@Path(expression = "/<language>/confirm\\-email\\-change")
+	@View(jsf = "confirm-email-change.xhtml")
+	public void confirmEmailChange(Request request) {}
 	
 	@Path
 	public void changePassword(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException, ContentNotFoundException {

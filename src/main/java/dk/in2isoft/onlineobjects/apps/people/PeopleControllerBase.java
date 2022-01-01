@@ -25,10 +25,6 @@ public class PeopleControllerBase extends ApplicationController {
 
 	public PeopleControllerBase() {
 		super("people");
-		addJsfMatcher("/", "front.xhtml");
-		addJsfMatcher("/<language>", "front.xhtml");
-		addJsfMatcher("/<username>", "user.xhtml");
-		addJsfMatcher("/<language>/<username>", "user.xhtml");
 	}
 		
 	public List<Locale> getLocales() {
