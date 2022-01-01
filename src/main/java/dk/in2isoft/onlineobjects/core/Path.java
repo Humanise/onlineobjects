@@ -10,5 +10,9 @@ public @interface Path {
 	
 	String expression() default "";
 	
+	/**
+	 * The HTTP method: GET, POST etc.
+	 * @return
+	 */
 	String method() default "";
 }

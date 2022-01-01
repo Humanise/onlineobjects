@@ -19,6 +19,7 @@ public class RestUtil {
 		pattern = StringUtils.replace(pattern, "<any>", ".+");
 		pattern = StringUtils.replace(pattern, "<word>", SemanticService.WORD_EXPRESSION);
 		//pattern = StringUtils.replace(pattern, "<language>", "[a-z]{2}");
+		// TODO use the controllers languages
 		pattern = StringUtils.replace(pattern, "<language>", "(en|da)");
 		pattern = StringUtils.replace(pattern, "<folder>", "[^/]+");
 		pattern = StringUtils.replace(pattern, "<no-dot>", "[^\\.]+");

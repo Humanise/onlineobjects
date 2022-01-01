@@ -23,7 +23,6 @@ public abstract class DesktopControlerBase extends ApplicationController {
 	
 	public DesktopControlerBase() {
 		super("desktop");
-		addJsfMatcher("/", "front.xhtml");
 	}
 
 	public List<Locale> getLocales() {

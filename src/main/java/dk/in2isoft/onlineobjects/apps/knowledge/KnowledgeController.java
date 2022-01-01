@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.Nullable;
-import org.onlineobjects.modules.suggestion.Suggestion;
 import org.onlineobjects.modules.suggestion.SuggestionsCategory;
 
 import com.google.common.collect.Lists;

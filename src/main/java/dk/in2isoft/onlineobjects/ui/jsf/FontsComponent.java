@@ -62,19 +62,12 @@ public class FontsComponent extends AbstractComponent {
 		if (!googleFonts.isEmpty()) {
 			urls.add("https://fonts.googleapis.com/css?family="+googleFonts.stream().collect(Collectors.joining(Strings.encodeURL("|")))+"&display=swap");
 		}
-		if (true) {			
-			out.startElement("style");
-			for (String url : urls) {
-				String css = getFontCSS(url);
-				out.text(css);
-				
-			}
-			out.endElement("style");
-		} else {
-			for (String url : urls) {
-				out.startElement("link").withHref(url).rel("stylesheet").type("text/css").endElement("link");	
-			}
+		out.startElement("style");
+		for (String url : urls) {
+			String css = getFontCSS(url);
+			out.text(css);
 		}
+		out.endElement("style");
 	}
 
 	private String getFontCSS(String url) {

@@ -20,6 +20,7 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -35,6 +36,13 @@ import dk.in2isoft.onlineobjects.modules.networking.InternetAddressInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DesktopController extends DesktopControlerBase {
+
+
+	@Path(expression = "/")
+	@View(jsf = "front.xhtml")
+	public void front(Request request) {
+		System.out.println("front");
+	}
 
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {

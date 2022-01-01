@@ -24,18 +24,6 @@ public class WordsControllerBase extends ApplicationController {
 
 	public WordsControllerBase() {
 		super("words");
-		addJsfMatcher("/", "front.xhtml");
-		addJsfMatcher("/<language>", "front.xhtml");
-		addJsfMatcher("/<language>/statistics", "statistics.xhtml");
-		addJsfMatcher("/<language>/search", "search.xhtml");
-		addJsfMatcher("/<language>/about", "about.xhtml");
-		addJsfMatcher("/<language>/search/<integer>", "search.xhtml");
-		addJsfMatcher("/<language>/word/<any>", "word.xhtml");
-		addJsfMatcher("/<language>/import/<folder>", "import.xhtml");
-		addJsfMatcher("/<language>/importlist/<folder>", "importList.xhtml");
-		addJsfMatcher("/<language>/index/<folder>", "index.xhtml");
-		addJsfMatcher("/<language>/index/<folder>/<integer>", "index.xhtml");
-		addJsfMatcher("/<language>/enrich", "enrich.xhtml");
 	}
 	
 	public List<Locale> getLocales() {

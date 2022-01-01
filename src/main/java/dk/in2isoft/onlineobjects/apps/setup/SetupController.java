@@ -516,7 +516,7 @@ public class SetupController extends SetupControllerBase {
 		long now = System.currentTimeMillis();
 		List<JobInfo> jobList = schedulingService.getJobList();
 		for (JobInfo status : jobList) {
-			Map<String,Object> data = Mapper.<String,Object>build("group", status.getGroup()).add("name", status.getName()).add("status", status.getTriggerState()).add("running", new Boolean(status.isRunning())).get();
+			Map<String,Object> data = Mapper.<String,Object>build("group", status.getGroup()).add("name", status.getName()).add("status", status.getTriggerState()).add("running", Boolean.valueOf(status.isRunning())).get();
 			boolean paused = "PAUSED".equals(status.getTriggerState());
 			
 			writer.startRow().withId(status.getGroup()+"-"+status.getName()).withData(data);

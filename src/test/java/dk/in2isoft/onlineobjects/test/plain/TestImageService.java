@@ -38,8 +38,8 @@ public class TestImageService extends AbstractSpringTestCase {
 		ImageMetaData metaData = imageService.getMetaData(file);
 		assertEquals("Apple",metaData.getCameraMake());
 		assertEquals("iPhone",metaData.getCameraModel());
-		assertEquals(new Double(57.225833333333334),metaData.getLatitude());
-		assertEquals(new Double(9.515666666666666),metaData.getLongitude());
+		assertEquals(Double.valueOf(57.225833333333334),metaData.getLatitude());
+		assertEquals(Double.valueOf(9.515666666666666),metaData.getLongitude());
 	}
 
 	@Test
@@ -70,8 +70,8 @@ public class TestImageService extends AbstractSpringTestCase {
 		// Check the location
 		Location location = modelService.getParent(image, Location.class, operator);
 		Assert.assertNotNull(location);
-		assertEquals(new Double(57.225833333333334),new Double(location.getLatitude()));
-		assertEquals(new Double(9.515666666666666),new Double(location.getLongitude()));
+		assertEquals(Double.valueOf(57.225833333333334),Double.valueOf(location.getLatitude()));
+		assertEquals(Double.valueOf(9.515666666666666),Double.valueOf(location.getLongitude()));
 		
 		// Clean up
 		modelService.delete(image, operator);

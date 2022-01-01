@@ -82,7 +82,6 @@
                       click="wordModifyView.addRelation({id:#{word.word.id}})"
                       rendered="#{wordsLayoutView.canModify}"
                     />
-                    <o:link rendered="#{wordsLayoutView.canModify}" app="front" href="/word/#{word.word.id}">Info</o:link>
                   </p>
                   <c:if test="#{not empty word.glossary}">
                     <p class="words_word_glossary">

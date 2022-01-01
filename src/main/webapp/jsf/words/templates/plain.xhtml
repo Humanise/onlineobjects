@@ -21,7 +21,6 @@
 <o:dependency from="local" src="/css/words_layout.css"/>
 <o:dependency from="local" src="/css/words_paging.css"/>
 <o:dependency from="local" src="/css/words_list.css"/>
-<o:dependency from="local" src="/css/words_import.css"/>
 <o:dependency from="local" src="/css/words_menu.css"/>
 <o:dependency from="local" src="/css/words_about.css"/>
 <o:dependency from="local" src="/js/words.js"/>
@@ -58,15 +57,6 @@
                 <span class="words_menu">#{msg.searching}</span>
               </o:link>
             </li>
-          <c:if test="#{wordsLayoutView.loggedIn}">
-            <li>
-              <o:link href="/#{wordsLayoutView.language}/index/a/" plain="true"
-                styleClass="#{wordsLayoutView.selectedMenuItem=='index' ? 'words_menu_selected' : ''}">
-                <o:icon icon="list_bullet"/>
-                <span class="words_menu">#{msg.index}</span>
-              </o:link>
-            </li>
-            </c:if>
             <li>
               <o:link href="/#{wordsLayoutView.language}/statistics/" plain="true"
                 styleClass="#{wordsLayoutView.selectedMenuItem=='statistics' ? 'words_menu_selected' : ''}">
@@ -82,30 +72,12 @@
               </o:link>
             </li>
           </ul>
-            <h3><span>Index</span></h3>
+          <h3><span>Index</span></h3>
           <ul class="words_sidebar_index">
             <c:forEach items="#{wordsLayoutView.alphabeth}" var="chr">
               <li class="#{chr.value=='_' ? 'words_sidebar_index_symbols' : ''}"><o:link href="/#{wordsLayoutView.language}/search/?letter=#{chr.value}">#{chr.label}</o:link></li>
             </c:forEach>
           </ul>
-          <c:if test="#{wordsLayoutView.canModify}">
-            <h3><span>Tools</span></h3>
-
-            <ul class="words_menu">
-              <li>
-                <o:link plain="true" name="enrich">
-                  <o:icon icon="gear"/>
-                  <span class="words_menu">#{msg.enrich}</span>
-                </o:link>
-              </li>
-              <li>
-                <o:link plain="true" name="import">
-                  <o:icon icon="gear"/>
-                  <span class="words_menu">#{msg['import']}</span>
-                </o:link>
-              </li>
-            </ul>
-          </c:if>
         </div>
       </f:facet>
       </c:if>

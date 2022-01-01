@@ -52,7 +52,7 @@ public abstract class AbstractController {
 					responder.path = exactly;
 				}
 				else if (Strings.isNotBlank(annotation.expression())) {
-					responder.pattern = Pattern.compile(annotation.expression());
+					responder.pattern = RestUtil.compile(annotation.expression());
 				}
 				else {
 					responder.path = new String[] {method.getName()};

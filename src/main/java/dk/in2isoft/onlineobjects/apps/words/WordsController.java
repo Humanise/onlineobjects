@@ -1,48 +1,55 @@
 package dk.in2isoft.onlineobjects.apps.words;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.time.StopWatch;
-import org.onlineobjects.common.Auditor;
-import org.onlineobjects.common.VoidAuditor;
-
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.in2igui.data.Diagram;
-import dk.in2isoft.onlineobjects.apps.words.importing.HTMLDocumentImporter;
 import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
-import dk.in2isoft.onlineobjects.apps.words.perspectives.WordEnrichmentPerspective;
-import dk.in2isoft.onlineobjects.apps.words.perspectives.WordsImportRequest;
-import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
-import dk.in2isoft.onlineobjects.core.exceptions.NetworkException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.model.LexicalCategory;
-import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
-import dk.in2isoft.onlineobjects.modules.language.WordEnrichmentQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspectiveQuery;
 import dk.in2isoft.onlineobjects.ui.Request;
-import dk.in2isoft.onlineobjects.ui.data.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class WordsController extends WordsControllerBase {
+
+	@Path(expression = "/(en|da)?")
+	@View(jsf = "front.xhtml")
+	public void front(Request request) {}
+
+	@Path(expression = "/<language>")
+	@View(jsf = "front.xhtml")
+	public void frontWithLanguage(Request request) {}
+
+	@Path(expression = "/<language>/statistics")
+	@View(jsf = "statistics.xhtml")
+	public void statistics(Request request) {}
+
+	@Path(expression = "/<language>/search(/[0-9]+)?")
+	@View(jsf = "search.xhtml")
+	public void search(Request request) {}
+
+	@Path(expression = "/<language>/about")
+	@View(jsf = "about.xhtml")
+	public void about(Request request) {}
 	
+	@Path(expression = "/<language>/word/<any>")
+	@View(jsf = "word.xhtml")
+	public void word(Request request) {}
 	
 	@Path(exactly="importUpload")
 	public void upload(Request request) throws IOException, EndUserException {
@@ -82,18 +89,6 @@ public class WordsController extends WordsControllerBase {
 		Diagram diagram = wordsModelService.getDiagram(text, request);
 		
 		request.sendObject(diagram);
-	}
-	
-	@Path(exactly="startImport")
-	public void startImport(Request request) throws NetworkException, IOException {
-		String url = request.getString("url");
-		ImportSession session = importService.createImportSession(request.getSession());
-		HTMLDocumentImporter handler = new HTMLDocumentImporter(url);
-		handler.setFeedService(feedService);
-		handler.setHtmlService(htmlService);
-		session.setTransport(handler);
-		session.start();
-		request.sendObject(session.getId());
 	}
 
 	@Path
@@ -175,56 +170,5 @@ public class WordsController extends WordsControllerBase {
 		map.put("id", relation.getId());
 		
 		return map;
-	}
-	
-	@Path
-	public String performImport(Request request) throws IOException, EndUserException {
-		WordsImportRequest object = request.getObject("data", WordsImportRequest.class);
-		Auditor auditor = new VoidAuditor();
-		wordsModelService.importWords(object, auditor , request);
-		return ""; // TODO: Too much to return
-	}
-
-
-	@Path
-	public WordEnrichmentPerspective getNextEnrichment(Request request) throws IOException, EndUserException {
-		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_WORD_SUGGESTION_LANGUAGE, "da");
-		query.withPaging(0, 1).orderByField("id");
-		StopWatch watch = new StopWatch();
-		watch.start();
-		List<WordEnrichmentPerspective> list = modelService.list(new WordEnrichmentQuery(), request);
-		watch.stop();
-		if (!list.isEmpty()) {
-			WordEnrichmentPerspective perspective = list.get(0);
-			ArrayList<Option> enrichments = Lists.newArrayList();
-			enrichments.add(new Option("Danish",Pair.of("language", "da")));
-			enrichments.add(new Option("English",Pair.of("language", "en")));
-			enrichments.add(new Option("None",Pair.of("language", null)));
-			enrichments.add(new Option("Postpone",Pair.of("postpone", null)));
-			perspective.setEnrichments(enrichments);
-			return perspective;
-		}
-		return null;
-	}
-
-	@Path
-	public void enrich(Request request) throws IOException, EndUserException {
-		Long id = request.getLong("wordId");
-		Pair<?,?> enrichment = request.getObject("enrichment", Pair.class);
-		if (enrichment==null || enrichment.getKey()==null) {
-			throw new IllegalRequestException("No enrichment provided");
-		}
-		Word word = modelService.getRequired(Word.class, id, request);
-		
-		if (enrichment.getKey().equals("postpone")) {
-			wordsModelService.addToPostponed(word);
-		}
-		else if (enrichment.getKey().equals("language")) {
-			String lang = enrichment.getValue()==null ? null : enrichment.getValue().toString();
-			wordsModelService.changeLanguage(word, lang, request);
-			word.removeProperties(Property.KEY_WORD_SUGGESTION_LANGUAGE);
-			modelService.update(word, request);
-		}
-		
 	}
 }
