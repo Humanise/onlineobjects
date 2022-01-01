@@ -101,6 +101,13 @@ public class TestMemberService extends AbstractSpringTestCase {
 				assertEquals("emailExists",e.getCode());
 			}
 	
+			try {
+				memberService.createMember(publicOperator, username+"2", password, fullName, email.toUpperCase());
+				fail("It should not be possible to use the same e-mail again in different casing");
+			} catch (IllegalRequestException e) {
+				assertEquals("emailExists",e.getCode());
+			}
+
 			// Try logging in with the user
 			UserSession session = new UserSession(getPublicUser());
 			securityService.changeUser(session, username, password, publicOperator);

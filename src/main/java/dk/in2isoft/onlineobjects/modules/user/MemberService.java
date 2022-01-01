@@ -300,7 +300,7 @@ public class MemberService {
 	 * @throws ModelException
 	 */
 	public User getUserByPrimaryEmail(String email, Operator privileged) throws ModelException {
-		Query<EmailAddress> query = Query.after(EmailAddress.class).withField(EmailAddress.ADDRESS_PROPERTY, email).orderByCreated();
+		Query<EmailAddress> query = Query.after(EmailAddress.class).withFieldInAnyCase(EmailAddress.ADDRESS_PROPERTY, email).orderByCreated();
 		
 		List<EmailAddress> list = modelService.list(query, privileged);
 		for (EmailAddress emailAddress : list) {

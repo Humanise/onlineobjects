@@ -113,6 +113,16 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return this;
 	}
 
+	public Query<T> withFieldInAnyCase(String property, String value) {
+		if (value != null) {
+			value = value.toLowerCase();
+		}
+		FieldLimitation limitation = new FieldLimitation(property, value, FieldLimitation.Comparison.EQUALS);
+		limitation.setFunction(Function.lower);
+		fieldLimitations.add(limitation);
+		return this;
+	}
+
 	public Query<T> withFieldLike(String property, String str) {
 		fieldLimitations.add(new FieldLimitation(property, str, FieldLimitation.Comparison.LIKE));
 		return this;
