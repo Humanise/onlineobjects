@@ -1,17 +1,19 @@
 package dk.in2isoft.onlineobjects.services;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.ui.velocity.VelocityEngineUtils;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 import dk.in2isoft.commons.lang.Files;
-import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 
@@ -19,9 +21,7 @@ public class EmailService {
 
 	private static final Logger log = LogManager.getLogger(EmailService.class); 
 	private ConfigurationService configurationService;
-	
-	private VelocityEngine velocityEngine;
-	
+		
 	private String host;
 	private String username;
 	private String password;
@@ -33,7 +33,18 @@ public class EmailService {
 	}
 
 	public String applyTemplate(String path, Map<String, Object> model) {
-        return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, path, Strings.UTF8, model);
+		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "class,file");
+		velocityEngine.init();
+		Template template = velocityEngine.getTemplate(path);
+		VelocityContext context = new VelocityContext();
+		model.entrySet().forEach(entry -> {
+			context.put(entry.getKey(), entry.getValue());
+		});
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+		return writer.toString();
 	}
 	
 	public void sendMessage(String subject, String textBody, String address, String name) throws EndUserException {
@@ -54,7 +65,7 @@ public class EmailService {
 			HtmlEmail email = new HtmlEmail();
 			email.setCharset("UTF-8");
 			email.setHostName(host);
-			email.setSSL(true);
+			email.setSSLOnConnect(true);
 			email.setSslSmtpPort("465");
 			email.setAuthentication(username, password);
 			email.addTo(address,name);
@@ -114,10 +125,6 @@ public class EmailService {
 
 	public String getDefaultSenderName() {
 		return defaultSenderName;
-	}
-
-	public void setVelocityEngine(VelocityEngine velocityEngine) {
-		this.velocityEngine = velocityEngine;
 	}
 
 	public void setConfigurationService(ConfigurationService configurationService) {

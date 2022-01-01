@@ -204,7 +204,7 @@
 	<bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType"/>
 
 	<!-- Tools -->
-	
+<!-- 	
 	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
       <property name="velocityProperties">
          <value>
@@ -214,6 +214,6 @@
          </value>
       </property>
    </bean>	
-	
+	 -->
 	
 </beans>
