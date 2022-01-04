@@ -25,6 +25,7 @@ public class ButtonComponent extends AbstractComponent {
 	private String text;
 	private String name;
 	private boolean highlighted;
+	private boolean large;
 	private boolean small;
 	private boolean mini;
 	private boolean tiny;
@@ -56,11 +57,12 @@ public class ButtonComponent extends AbstractComponent {
 		mini = (Boolean) state[10];
 		tiny = (Boolean) state[11];
 		disabled = (Boolean) state[12];
+		large = (Boolean) state[13];
 	}
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] { text, name, highlighted, small, click, styleClass, submit, variant, left, right, mini, tiny, disabled };
+		return new Object[] { text, name, highlighted, small, click, styleClass, submit, variant, left, right, mini, tiny, disabled, large };
 	}
 
 	@Override
@@ -104,6 +106,8 @@ public class ButtonComponent extends AbstractComponent {
 			cls.add("hui_button_mini").add("hui_button_mini", variant);
 		} else if (tiny) {
 			cls.add("hui_button_tiny").add("hui_button_tiny", variant);
+		} else if (large) {
+			cls.add("hui_button_large").add("hui_button_large", variant);
 		}
 		if (highlighted) {
 			cls.add("hui_is_highlighted");
@@ -235,6 +239,14 @@ public class ButtonComponent extends AbstractComponent {
 
 	public void setTiny(boolean tiny) {
 		this.tiny = tiny;
+	}
+
+	public boolean isLarge() {
+		return large;
+	}
+
+	public void setLarge(boolean large) {
+		this.large = large;
 	}
 
 	public boolean isDisabled() {

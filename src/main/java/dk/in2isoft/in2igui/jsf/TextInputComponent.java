@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
+import dk.in2isoft.commons.jsf.ClassBuilder;
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
@@ -29,6 +30,7 @@ public class TextInputComponent extends AbstractComponent {
 	private String value;
 	private boolean adaptive = true;
 	private boolean multiline;
+	private boolean large;
 
 	public TextInputComponent() {
 		super(TYPE);
@@ -36,7 +38,7 @@ public class TextInputComponent extends AbstractComponent {
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] { name, secret, placeholder, width, value, inputName, adaptive, multiline, maxHeight };
+		return new Object[] { name, secret, placeholder, width, value, inputName, adaptive, multiline, maxHeight, large };
 	}
 
 	@Override
@@ -50,14 +52,19 @@ public class TextInputComponent extends AbstractComponent {
 		adaptive = (Boolean) state[6];
 		multiline = (Boolean) state[7];
 		maxHeight = (Integer) state[8];
+		large = (Boolean) state[9];
 	}
 
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
 		String value = Components.getBindingAsString(this, "value", this.value, context);
+		ClassBuilder cls = new ClassBuilder("hui_textinput");
+		if (large) {
+			cls.add("hui_textinput-large");
+		}
 		if (multiline) {
-			writer.startElement("textarea").withClass("hui_textinput").withTestName(testName);
+			writer.startElement("textarea").withClass(cls).withTestName(testName);
 			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");
@@ -67,7 +74,7 @@ public class TextInputComponent extends AbstractComponent {
 			}
 			writer.write(value).endElement("textarea");
 		} else {
-			writer.startElement("input").withClass("hui_textinput").withTestName(testName);
+			writer.startElement("input").withClass(cls).withTestName(testName);
 			writer.withId(id);
 			if (width > 0) {
 				writer.withStyle("width: " + width + "px;");
@@ -178,5 +185,13 @@ public class TextInputComponent extends AbstractComponent {
 
 	public Integer getMaxHeight() {
 		return maxHeight;
+	}
+	
+	public boolean isLarge() {
+		return large;
+	}
+	
+	public void setLarge(boolean large) {
+		this.large = large;
 	}
 }

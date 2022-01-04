@@ -15,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ApplicationResponder extends AbstractControllerResponder implements Responder, InitializingBean {
@@ -72,7 +73,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 		request.setApplication(application);
 		if (!controller.isAllowed(request)) {
 			if (controller.askForUserChange(request)) {
-				request.redirectFromBase("/service/authentication/?redirect="+request.getRequest().getRequestURI()+"&action=appAccessDenied");
+				request.redirectFromBase("/service/authentication/?redirect="+request.getRequest().getRequestURI()+"&action=" + Actions.authorizationRequired.name());
 				return;
 			} else {
 				throw new SecurityException("Application '"+application+"' denied access to user '"+request.getSession().getIdentity()+"'");

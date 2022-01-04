@@ -186,7 +186,7 @@ oo.TopBar.prototype = {
         highlighted: true,
         name: 'topBarLoginButton'
       });
-      login.getElement().style.marginTop = '5px';
+      hui.cls.add(login.getElement(),'oo_topbar_loginbutton');
       p.add(login);
       var forgot = hui.build('div.oo_topbar_forgot',{
         html:'<a class="oo_link" href="javascript://"><span>' + this._text('forgot_password') + '</span></a>'

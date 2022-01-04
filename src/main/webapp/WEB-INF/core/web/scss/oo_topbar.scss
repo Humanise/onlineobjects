@@ -310,9 +310,8 @@
   }
 
   .oo_topbar_forgot {
-    font-size: $small-font-size;
     float: right;
-    margin-top: 5px;
+    margin-top: 10px;
     line-height: 26px;
 
     &_intro
@@ -323,6 +322,10 @@
       margin: 5px 0 20px;
       color: #333;
     }
+  }
+
+  .oo_topbar_loginbutton {
+    margin-top: 10px;
   }
 
   .oo_topbar_signup {

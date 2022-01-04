@@ -64,6 +64,7 @@ import dk.in2isoft.onlineobjects.modules.scheduling.JobInfo;
 import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 import dk.in2isoft.onlineobjects.modules.surveillance.LogQuery;
 import dk.in2isoft.onlineobjects.modules.surveillance.RequestInfo;
+import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
@@ -73,7 +74,8 @@ public class SetupController extends SetupControllerBase {
 	@Override
 	public void unknownRequest(Request request) throws IOException,EndUserException {
 		if (!securityService.isAdminUser(request.getSession())) {
-			request.redirectFromBase("/service/authentication/?redirect=/app/setup/&action=appAccessDenied");
+			request.redirectFromBase(
+					"/service/authentication/?redirect=/app/setup/&action=" + Actions.authorizationRequired.name());
 		} else {
 			String path = request.getLocalPathAsString();
 			if (path.endsWith("gui") || path.endsWith("/")) {

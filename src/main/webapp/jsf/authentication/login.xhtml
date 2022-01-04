@@ -23,30 +23,41 @@
 
   <o:body>
     <o:topBar/>
-    <o:box width="500">
+    <o:box narrow="true">
       <o:header level="0" styleClass="oo_space_bottom-2">#{msg.access_control}</o:header>
       <c:if test="#{authenticationLoginView.loggedIn}">
-      <p class="current_user">#{msg.current_user}: #{authenticationLoginView.currentUserName} <o:link href="#{authenticationLoginView.logOutLink}">#{msg.log_out}</o:link></p>
+      <p class="current_user">#{msg.current_user}:
+        <strong>#{authenticationLoginView.currentUserName}</strong>
+        - <o:link href="#{authenticationLoginView.logOutLink}">#{msg.log_out}</o:link>
+      </p>
       </c:if>
       <c:if test="#{not empty authenticationLoginView.message}">
-        <div class="oo_message oo_space_bottom">
+        <div class="message">
+        <div class="oo_message">
           <p>#{authenticationLoginView.message}</p>
         </div>
+        </div>
       </c:if>
+      <div class="body">
       <gui:form action="authenticate" name="formula" method="POST">
-        <gui:field label="#{msg.username}">
-          <gui:textInput inputName="username" name="username"/>
+        <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
+        <gui:field label="#{msg.username}" large="true">
+          <gui:textInput inputName="username" name="username" large="true"/>
         </gui:field>
-        <gui:field label="#{msg.password}">
-          <gui:textInput inputName="password" name="password" secret="true"/>
+        <gui:field label="#{msg.password}" large="true">
+          <gui:textInput inputName="password" name="password" secret="true" large="true"/>
         </gui:field>
-        <p class="buttons">
+        <gui:buttons>
+          <gui:button text="#{msg.log_in}" submit="true" highlighted="true" large="true"/>
+        </gui:buttons>
+        <p class="link">
           <o:link name="signUpLink">#{msg.create_account}</o:link>
+        </p>
+        <p class="link">
           <o:link name="forgotLink">#{msg.i_forgot}</o:link>
-          <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
-          <gui:button text="#{msg.log_in}" submit="true"/>
         </p>
       </gui:form>
+      </div>
     </o:box>
     <o:footer/>
     <o:dependency src="/WEB-INF/core/web/css/oo_message.css"/>

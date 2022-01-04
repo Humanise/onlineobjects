@@ -31,7 +31,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 
 	@Path(expression = "/")
 	@View(jsf = "login.xhtml")
-	public void login(Request request) {}
+	public void login(Request request) {
+		
+	}
 	
 	@Override
 	public String getLanguage(Request request) {

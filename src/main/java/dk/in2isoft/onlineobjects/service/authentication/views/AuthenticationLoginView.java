@@ -23,6 +23,10 @@ public class AuthenticationLoginView extends AbstractView {
 	private boolean loggedIn;
 	private String logOutLink;
 	
+	public static enum Actions {
+		loggedOut, authorizationRequired, invalidLogin, loggedIn
+	}
+	
 	@Override
 	protected void before(Request request) throws Exception {
 		super.before(request);
@@ -33,15 +37,25 @@ public class AuthenticationLoginView extends AbstractView {
 			currentUserName = user.getUsername();
 		}
 		loggedIn = !securityService.isPublicUser(session); 
-		String action = request.getString("action");
 		locale = request.getRequest().getLocale();
 		if (!"da".equals(locale.getLanguage()) && !"en".equals(locale.getLanguage())) {
 			locale = Locale.ENGLISH;
 		}
+		String action = getValidAction(request);
 		if (Strings.isNotBlank(action)) {
 			message = messages.get("action_"+action, locale);
 		}
 		logOutLink = "/logout?redirect=" + request.getString("redirect");
+	}
+	
+	private String getValidAction(Request request) {
+		String action = request.getString("action");
+		for (Actions value : Actions.values()) {
+			if (value.name().equals(action)) {
+				return action;
+			}
+		}
+		return null;
 	}
 	
 	public boolean isLoggedIn() {
