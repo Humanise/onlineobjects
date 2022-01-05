@@ -99,22 +99,7 @@ public class ButtonComponent extends AbstractComponent {
 
 	public void encodeMarkup(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
-		ClassBuilder cls = new ClassBuilder("hui_button").add(styleClass).add("hui_button", variant);
-		if (small) {
-			cls.add("hui_button_small").add("hui_button_small", variant);
-		} else if (mini) {
-			cls.add("hui_button_mini").add("hui_button_mini", variant);
-		} else if (tiny) {
-			cls.add("hui_button_tiny").add("hui_button_tiny", variant);
-		} else if (large) {
-			cls.add("hui_button_large").add("hui_button_large", variant);
-		}
-		if (highlighted) {
-			cls.add("hui_is_highlighted");
-		}
-		if (disabled) {
-			cls.add("hui_is_disabled");
-		}
+		String cls = buildClass();
 		String href = getExpression("href", this.href, context);
 		if (Strings.isNotBlank(href)) {
 			writer.startA(cls).withHref(href);
@@ -131,6 +116,29 @@ public class ButtonComponent extends AbstractComponent {
 		String text = getText(context);
 		writer.write(text);
 		writer.endA();
+	}
+
+	private String buildClass() {
+		ClassBuilder cls = new ClassBuilder("hui_button").add(styleClass);
+		if ("light".equals(variant)) {
+			cls.add("hui-light");
+		}
+		if (small) {
+			cls.add("hui-small");
+		} else if (mini) {
+			cls.add("hui-mini");
+		} else if (tiny) {
+			cls.add("hui-tiny");
+		} else if (large) {
+			cls.add("hui-large");
+		}
+		if (highlighted) {
+			cls.add("hui-highlighted");
+		}
+		if (disabled) {
+			cls.add("hui-disabled");
+		}
+		return cls.toString();
 	}
 
 	public void setHighlighted(boolean highlighted) {

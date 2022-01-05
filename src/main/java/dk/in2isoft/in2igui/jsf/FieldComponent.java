@@ -50,7 +50,7 @@ public class FieldComponent extends AbstractComponent {
 		String label = getLabel(context);
 		ClassBuilder cls = new ClassBuilder("hui_form_field");
 		if (large) {
-			cls.add("hui_form_field-large");
+			cls.add("hui-large");
 		}
 		if (isAbove()) {
 			writer.startDiv(cls);

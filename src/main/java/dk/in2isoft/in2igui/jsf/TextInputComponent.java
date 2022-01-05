@@ -61,7 +61,7 @@ public class TextInputComponent extends AbstractComponent {
 		String value = Components.getBindingAsString(this, "value", this.value, context);
 		ClassBuilder cls = new ClassBuilder("hui_textinput");
 		if (large) {
-			cls.add("hui_textinput-large");
+			cls.add("hui-large");
 		}
 		if (multiline) {
 			writer.startElement("textarea").withClass(cls).withTestName(testName);
