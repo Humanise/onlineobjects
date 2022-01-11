@@ -68,7 +68,13 @@ public class AccountController extends AccountControllerBase {
 
 	@Path(expression = "/<language>/confirm\\-email\\-change")
 	@View(jsf = "confirm-email-change.xhtml")
-	public void confirmEmailChange(Request request) {}
+	public void confirmEmailChange(Request request) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
+		String key = request.getString("key");
+		if ("simulate-success".equals(key)) {
+			return;
+		}
+		memberService.performEmailChangeByKey(key, request);
+	}
 	
 	@Path
 	public void changePassword(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException, ContentNotFoundException {

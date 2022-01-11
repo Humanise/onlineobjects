@@ -1,5 +1,3 @@
-basePath=/path/to/base/dir
-
 mail.hostname=smtp.gmail.com
 mail.user=
 mail.password=

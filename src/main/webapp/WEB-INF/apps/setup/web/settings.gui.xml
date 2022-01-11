@@ -5,21 +5,8 @@
   <space height="20"/>
 
   <box width="400" title="Settings" padding="10">
-    <form name="formula">
-      <header>Change administrator password</header>
-      <text><p>At least 8 characters with uppercase, lowercase, numbers and symbols - like pA$sw0rD.</p></text>
-      <fields labels="above">
-        <field label="Password">
-          <text-input secret="true" name="password1"/>
-        </field>
-        <field label="Password - again">
-          <text-input secret="true" name="password2"/>
-        </field>
-      </fields>
-      <buttons>
-        <button text="Flush cache" name="flushCache"/>
-        <button text="Change" name="changePassword" submit="true"/>
-      </buttons>
-    </form>
+    <buttons>
+      <button text="Flush cache" name="flushCache"/>
+    </buttons>
   </box>
 </gui>

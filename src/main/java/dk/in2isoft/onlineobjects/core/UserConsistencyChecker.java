@@ -14,6 +14,7 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 
 	private ModelService modelService;
 	private PasswordEncryptionService passwordEncryptionService;
+	private SecurityService securityService;
 
 	@Override
 	public void check() throws ModelException, SecurityException, ExplodingClusterFuckException {
@@ -24,6 +25,9 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 		} catch (Exception e) {
 			throw e;
 		}
+		Operator operator = modelService.newAdminOperator();
+		securityService.makePublicVisible(securityService.getPublicUser(), operator);
+		operator.commit();
 	}
 
 	private void ensureCoreUsers(Operation operation) throws SecurityException, ExplodingClusterFuckException {
@@ -58,5 +62,9 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 	
 	public void setPasswordEncryptionService(PasswordEncryptionService passwordEncryptionService) {
 		this.passwordEncryptionService = passwordEncryptionService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

@@ -699,11 +699,6 @@ public class SetupController extends SetupControllerBase {
 	}
 	
 	@Path
-	public void changeAdminPassword(Request request) throws EndUserException {
-		throw new IllegalRequestException("This is deprecated!");
-	}
-	
-	@Path
 	public ListData listEntities(Request request) throws SecurityException, ClassNotFoundException, IOException {
 		User publicUser = securityService.getPublicUser();
 		int page = request.getInt("page");

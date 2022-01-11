@@ -259,6 +259,9 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 
 	private List<String> readJSONStrings(String path) {
 		File file = getFile(path);
+		if (!file.exists()) {
+			throw new IllegalStateException("File not found: " + file.getAbsolutePath());
+		}
 		String string = Files.readString(file);
 		List<String> map = new Gson().fromJson(string, new TypeToken<ArrayList<String>>() {}.getType());
 		List<String> files = map.stream().map(s -> "/hui/" + s).collect(Collectors.toList());

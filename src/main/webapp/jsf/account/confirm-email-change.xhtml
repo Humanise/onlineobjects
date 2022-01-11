@@ -14,21 +14,11 @@
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
-      <o:box>
-        <c:choose>
-          <c:when test="${accountEmailChangeView.found}">
-            <o:header>Your mail has changed!</o:header>
-            <oc:text>
-              <p>Your new e-mail has now been activated</p>
-            </oc:text>
-          </c:when>
-          <c:otherwise>
-            <o:header>Unable to complete</o:header>
-            <oc:text>
-              <p>It failed</p>
-            </oc:text>
-          </c:otherwise>
-        </c:choose>
+      <o:box spacious="true">
+        <o:header level="0">#{msg.email_is_changed}</o:header>
+        <oc:text styleClass="oo_space_top-2">
+          <p>#{msg.email_is_changed_text}</p>
+        </oc:text>
       </o:box>
     </ui:define>
 

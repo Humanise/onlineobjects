@@ -10,6 +10,7 @@
 	<bean class="dk.in2isoft.onlineobjects.core.UserConsistencyChecker">
     	<property name="modelService" ref="modelService"/>
     	<property name="passwordEncryptionService" ref="passwordEncryptionService"/>
+    	<property name="securityService" ref="securityService"/>
     </bean>
 
 	<bean class="dk.in2isoft.onlineobjects.core.ApplicationConsistencyChecker">

@@ -549,7 +549,7 @@ public class MemberService {
 	public User performEmailChangeByKey(String key, Operator operator) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
 		String[] parts = key.split("\\|");
 		if (parts.length != 2) {
-			throw new IllegalRequestException();
+			throw new IllegalRequestException("Invalid key");
 		}
 		String email = parts[1];
 		if (!isWellFormedEmail(email)) {
