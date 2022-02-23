@@ -46,7 +46,10 @@ public class JsoupUtils {
 
                 String tagName = sanitizeTagName(sourceEl.tagName());
                 if (tagName.contains(":")) {
-                	tagName = tagName.split(":")[1];
+                	String[] parts = tagName.split(":");
+                	if (parts.length > 1) {
+    					tagName = parts[1];                		
+                	}
                 }
                 nu.xom.Element el = new nu.xom.Element(tagName, "http://www.w3.org/1999/xhtml");
                 copyAttributes(sourceEl, el);
