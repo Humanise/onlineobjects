@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +24,8 @@ import org.springframework.util.StopWatch;
 
 import dk.in2isoft.commons.http.HeaderUtil;
 import dk.in2isoft.commons.lang.Strings;
-import dk.in2isoft.commons.xml.XSLTUtil;
+import dk.in2isoft.commons.util.StackTraceUtil;
+import dk.in2isoft.commons.xml.HTML;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
@@ -32,7 +34,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.modules.dispatch.Responder;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
-import dk.in2isoft.onlineobjects.ui.ErrorRenderer;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
@@ -44,7 +45,6 @@ public class DispatchingService {
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
 	private ConfigurationService configurationService;
-	private ConversionService conversionService;
 
 	private List<Responder> responders;
 		
@@ -59,7 +59,6 @@ public class DispatchingService {
 			if (Math.random() > 0.5) {
 				servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				return true;
-				
 			}
 		}
 		
@@ -139,7 +138,6 @@ public class DispatchingService {
 
 	public void displayError(Request request, Exception ex) {
 		ex = EndUserException.findUserException(ex);
-		ErrorRenderer renderer = new ErrorRenderer(ex,request,configurationService, conversionService);
 		try {
 			if (ex instanceof ContentNotFoundException) {
 				logError(request, ex);
@@ -148,19 +146,13 @@ public class DispatchingService {
 				logError(request, ex);
 			}
 			HttpServletResponse response = request.getResponse();
-			if (ex instanceof SecurityException) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				renderer.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			} else if (ex instanceof ContentNotFoundException) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				renderer.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else if (ex instanceof IllegalRequestException) {
-				response.addHeader("Reason", ((IllegalRequestException) ex).getCode());
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				renderer.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			} else {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				renderer.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			int statusCode = getStatusCode(ex);
+			response.setStatus(statusCode);
+			if (ex instanceof EndUserException) {
+				String code = ((EndUserException) ex).getCode();
+				if (Strings.isNotBlank(code)) {
+					response.addHeader("Reason", code);
+				}
 			}
 			String accept = request.getRequest().getHeader("Accept");
 			if (accept != null && accept.contains("application/json") && !accept.contains("text/html")) {
@@ -185,13 +177,51 @@ public class DispatchingService {
 				}
 				response.getWriter().write(Strings.toJSON(resp));
 			} else {
-				XSLTUtil.applyXSLT(renderer, request);
+				renderError(ex, statusCode, request);
 			}
-		} catch (EndUserException e) {
-			logError(request, e);
 		} catch (IOException e) {
 			logError(request, e);
 		}
+	}
+
+
+	private int getStatusCode(Exception ex) {
+		if (ex instanceof SecurityException) {
+			return HttpServletResponse.SC_UNAUTHORIZED;
+		} else if (ex instanceof ContentNotFoundException) {
+			return HttpServletResponse.SC_NOT_FOUND;
+		} else if (ex instanceof IllegalRequestException) {
+			return HttpServletResponse.SC_BAD_REQUEST;
+		}
+		return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+	}
+
+
+	private void renderError(Exception ex, int statusCode, Request request) throws IOException {
+		HttpServletResponse response = request.getResponse();
+		response.setContentType("text/html");
+		response.setCharacterEncoding(Strings.UTF8);
+		PrintWriter out = response.getWriter();
+		String msg = ex.getMessage();
+		out.print("<!DOCTYPE html>"
+				+ "<html>"
+				+ "<head>"
+				+ "<title>" + HTML.escape(msg) + "</title>"
+				+ "<link rel=\"stylesheet\" href=\"/core/css/error.css\" type=\"text/css\" media=\"screen\" title=\"front\" charset=\"utf-8\" />"
+				+ "</head>"
+				+ "<body class=\"oo_body\">"
+				+ "<div class=\"error\">"
+				+ "<h1 class=\"error_title\">" + HTML.escape(msg) + "</h1>"
+				+ "<p class=\"error_status\" onclick=\"document.getElementById('trace').style.display='block'\">" + statusCode + "</p>");
+		if (configurationService.isDevelopmentMode()) {
+			out.print("<textarea class=\"error_trace\" id=\"trace\">"
+					+ HTML.escape(StackTraceUtil.getStackTrace(ex))
+					+ "</textarea>");
+		}
+		out.print("</div>"
+				+ "</body>"
+				+ "</html>");
+		;
 	}
 
 
@@ -222,9 +252,5 @@ public class DispatchingService {
 	
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
-	}
-	
-	public void setConversionService(ConversionService conversionService) {
-		this.conversionService = conversionService;
 	}
 }

@@ -1,72 +1,84 @@
-@import url('oo_font.css');
-@import url('oo_body.css');
+@font-face {
+  font-family: 'OnlineObjects';
+  src: url("/core/fonts/onlineobjects/fonts/OnlineObjects.eot?v2");
+  src: url("/core/fonts/onlineobjects/fonts/OnlineObjects.eot?#iefix") format("embedded-opentype"), url("/core/fonts/onlineobjects/fonts/OnlineObjects.woff?v2") format("woff"), url("/core/fonts/onlineobjects/fonts/OnlineObjects.ttf?v2") format("truetype"), url("/core/fonts/onlineobjects/fonts/OnlineObjects.svg?v2#OnlineObjects") format("svg");
+  font-weight: normal;
+  font-style: normal; }
 
-html,body
-{
-	height: 100%;
-}
+.oo_body {
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: none;
+  font-size: 14px;
+  line-height: 1.1428571429; }
+  .oo_body-light {
+    background: #fff; }
 
-div.body
-{
-	text-align: left;
-	width: 450px;
-	margin: 0 auto 0;
-	position: relative;
-	top: 100px;
-	padding: 20px 20px 20px 200px;
-	background: #fff;
-	border: 1px solid #eee;
-	border-radius: 5px;
-	min-height: 200px;
-}
+.hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif !important; }
 
-h1
-{
-	font-weight: 100;
-	margin: 0px 0px 10px;
+/*
+.hui_button {
+  @include text-spacing;
 }
-
-textarea
-{
-	width: 100%;
-	padding: 5px 10px;
-	box-sizing: border-box;
-	line-height: 20px;
-	height: 200px;
-	border: 1px solid #eee;
-	white-space: nowrap;
-	display: none;
-}
-
-textarea:focus
-{
-	position: absolute;
-	border-width: 1px 0px 1px 0px;
-	left: 0px;
-	height: 400px;
-}
-
-strong
-{
-	font-family: 'OnlineObjects';
-	font-size: 140px;
-	width: 180px;
-	color: #ddd;
-	position: absolute;
-	margin-left: -190px;
-	text-align: center;
-}
-
-p.status
-{
-	margin: 0;
-	position: absolute;
-	top: 160px;
-	left: 0;
-	font-size: 42px;
-	font-weight: 100;
-	line-height: 90px;
-	width: 200px;
-	text-align: center;
-	color: #ddd;
-}
+.oo_body {
+  .hui_form_field_label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .hui_textinput {
+    font-size: 14px;
+  }
+  .hui_checkbox_label {
+    font-size: 14px;
+  }
+  .hui_button {
+    font-size: 10pt;
+  }
+}*/
+.error {
+  text-align: left;
+  width: 450px;
+  margin: 0 auto 0;
+  position: relative;
+  top: 100px;
+  padding: 40px 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  text-align: center; }
+  .error:before {
+    content: "w";
+    font-family: 'OnlineObjects';
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1;
+    font-weight: normal;
+    font-size: 80px;
+    display: block;
+    color: #ddd; }
+  .error_title {
+    font-weight: 600;
+    font-size: 24px;
+    margin: 20px 0px 10px; }
+  .error_status {
+    color: #ddd;
+    font-size: 12px;
+    margin: 10px 0px; }
+  .error_trace {
+    width: 100%;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    line-height: 20px;
+    height: 200px;
+    border: 1px solid #eee;
+    white-space: nowrap;
+    display: none; }
+    .error_trace:focus {
+      position: absolute;
+      border-width: 1px 0px 1px 0px;
+      left: 0px;
+      height: 400px; }
