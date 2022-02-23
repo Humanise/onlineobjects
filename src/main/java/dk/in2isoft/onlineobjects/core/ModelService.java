@@ -269,7 +269,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		if (tx.isActive()) {
 			try {
 				tx.rollback();
-				log.warn("Rolling back!");
+				log.info("Rolling back transaction");
 			} catch (HibernateException e) {
 				log.error("Could not roll back!", e);
 			}
