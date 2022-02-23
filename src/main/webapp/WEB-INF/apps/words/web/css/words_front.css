@@ -26,7 +26,7 @@
     text-transform: uppercase;
     text-decoration: none; }
     .words_front_letters_link:hover {
-      color: #08C;
+      color: #07f;
       border-radius: 3px;
       background: #eee; }
 
@@ -46,7 +46,7 @@
     font-size: 14pt;
     text-decoration: none; }
     .words_front_filter_link:hover {
-      color: #08C;
+      color: #07f;
       border-radius: 3px;
       background: #eee; }
 

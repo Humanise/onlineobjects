@@ -47,6 +47,9 @@
       if (this._form) { return this._form; }
       var form = this._form = hui.ui.Form.create();
       var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
+      var el = termsLink.getElement();
+      el.style.marginLeft = '10px';
+      el.style.verticalAlign = 'middle';
       termsLink.listen({
         $click : function() {
           window.open(hui.find('.js-agreements').href);

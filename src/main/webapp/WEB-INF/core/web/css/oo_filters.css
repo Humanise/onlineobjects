@@ -174,7 +174,8 @@
     .oo_filters_option-index {
       font-size: 15px; }
     .oo_filters_option:hover {
-      background: #f3f3f3; }
+      background: #f3f3f3;
+      color: #07f; }
     .oo_filters_option.is-selected {
       background: #333;
       border: 1px solid #333;

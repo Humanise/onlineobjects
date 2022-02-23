@@ -1,15 +1,23 @@
-/********** Sidebar **********/
-div.words_sidebar {
-  padding: 5px 10px; }
+@import 'shared';
 
-div.words_sidebar h3 {
+/********** Sidebar **********/
+
+div.words_sidebar
+{
+  padding: 5px 10px;
+}
+
+div.words_sidebar h3
+{
   margin: 10px 0 10px;
   font-weight: 200;
   border-bottom: 1px solid #eee;
   position: relative;
-  text-align: center; }
+  text-align: center;
+}
 
-div.words_sidebar h3 span {
+div.words_sidebar h3 span
+{
   background: #fff;
   font-size: 14px;
   padding: 0 4px;
@@ -19,19 +27,25 @@ div.words_sidebar h3 span {
   /*
   text-transform: lowercase;
   font-style: italic;*/
-  color: #ccc; }
+  color: #ccc;
+}
 
-.words_sidebar_index {
+.words_sidebar_index
+{
   list-style: none;
   padding: 0;
   margin: 15px -7px 10px;
   text-align: center;
-  font-size: 0; }
+  font-size: 0;
+}
 
-.words_sidebar_index li {
-  display: inline-block; }
+.words_sidebar_index li
+{
+  display: inline-block;
+}
 
-.words_sidebar_index a {
+.words_sidebar_index a
+{
   display: block;
   width: 28px;
   text-align: center;
@@ -39,17 +53,25 @@ div.words_sidebar h3 span {
   height: 38px;
   line-height: 38px;
   border-radius: 3px;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
-li.words_sidebar_index_symbols a {
-  font-size: 16pt; }
+li.words_sidebar_index_symbols a
+{
+  font-size: 16pt;
+}
 
-ul.words_sidebar_index a span {
-  color: #999; }
+ul.words_sidebar_index a span
+{
+  color: #999;
+}
 
-ul.words_sidebar_index a:hover {
+ul.words_sidebar_index a:hover
+{
   background: #f6f6f6;
   width: 32px;
-  margin: 0 -2px; }
-  ul.words_sidebar_index a:hover > span {
-    color: #07f; }
+  margin: 0 -2px;
+  > span {
+    color: $link-color;
+  }
+}
