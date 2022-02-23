@@ -36,7 +36,6 @@
   &_logo {
     text-align: center;
     margin: 30px 0;
-    perspective: 10px;
 
     a {
       display: inline-block;
@@ -48,7 +47,7 @@
 
     span {
       font-family: 'OnlineObjects';
-      font-size: 128px;
+      font-size: 132px;
       line-height: 1;
       color: #f0f0f0;
       text-shadow: 0 0 10px #fff;
@@ -82,7 +81,7 @@
       span {
         color: #f36;
         transition: color 1s, transform 3s;
-        transform: rotate3d(20, 0, 340, 20deg);
+        transform: perspective(10px) rotate3d(20, -10, 340, 20deg) scale(0.8);
       }
       strong {
         color: #666;

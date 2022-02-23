@@ -42,7 +42,8 @@
   cursor: pointer;
   line-height: 20px;
   font-family: "Lora", Georgia, serif;
-  font-size: 16px; }
+  font-size: 16px;
+  word-break: break-word; }
   .list_item:hover {
     background: #f6f6f6; }
   .list_item:after {

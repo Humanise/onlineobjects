@@ -22,8 +22,7 @@
       color: #038; }
   .oo_footer_logo {
     text-align: center;
-    margin: 30px 0;
-    perspective: 10px; }
+    margin: 30px 0; }
     .oo_footer_logo a {
       display: inline-block;
       text-decoration: none;
@@ -31,7 +30,7 @@
       outline: none; }
     .oo_footer_logo span {
       font-family: 'OnlineObjects';
-      font-size: 128px;
+      font-size: 132px;
       line-height: 1;
       color: #f0f0f0;
       text-shadow: 0 0 10px #fff;
@@ -54,7 +53,7 @@
   .oo_footer:hover .oo_footer_logo a:hover span {
     color: #f36;
     transition: color 1s, transform 3s;
-    transform: rotate3d(20, 0, 340, 20deg); }
+    transform: perspective(10px) rotate3d(20, -10, 340, 20deg) scale(0.8); }
   .oo_footer:hover .oo_footer_logo a:hover strong {
     color: #666; }
   .oo_footer:hover .oo_footer_logo a:active span {
