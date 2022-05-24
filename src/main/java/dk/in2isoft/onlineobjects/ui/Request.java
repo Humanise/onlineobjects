@@ -472,7 +472,7 @@ public class Request implements Operator {
 	}
 
 	public <T> T getBean(Class<T> beanClass) {
-		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getServletContext());
 		return applicationContext.getBean(beanClass);
 	}
 	
