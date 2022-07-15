@@ -46,6 +46,30 @@
     _getForm : function() {
       if (this._form) { return this._form; }
       var form = this._form = hui.ui.Form.create();
+      var fields = form.buildGroup({large:true});
+      var email = hui.ui.TextInput.create({key: 'email', testName: 'signupEmail', large: true, autocomplete: 'email'});
+      fields.add(email, 'E-mail');
+
+      var username = hui.ui.TextInput.create({key:'username', testName: 'signupUsername', large: true, autocomplete: 'username'});
+      fields.add(username, {en: 'Username', da: 'Brugernavn'})
+
+      var password = hui.ui.TextInput.create({key:'password', secret: true, testName: 'signupPassword', large: true, autocomplete: 'new-password'});
+      fields.add(password, {en: 'Password', da: 'Kodeord'})
+      
+      var usernameChangedByUser = false;
+      username.listen({$valueChanged : function(value) {
+        usernameChangedByUser = value.length > 0;
+      }})
+      
+      email.listen({$valueChanged : function(value) {
+        if (usernameChangedByUser) { return; }
+        var found = value.match(/^[^@]+/)
+        found = found ? found[0] : ''
+        username.setValue(found);
+      }})
+      
+      var terms = hui.ui.Checkbox.create({key:'terms', testName: 'signupAccept', text: {en: 'Accept the terms', da:'Acceptér vilkårene'}, size: 'large'});
+      var termsField = fields.add(terms)
       var termsLink = oo.Link.create({text: {en: 'Read the terms', da: 'Læs vilkårene'}});
       var el = termsLink.getElement();
       el.style.marginLeft = '10px';
@@ -55,28 +79,8 @@
           window.open(hui.find('.js-agreements').href);
         }
       });
-      var group = form.buildGroup({large:true}, [
-        {
-          type: 'TextInput',
-          label: 'E-mail',
-          options: {key: 'email', testName: 'signupEmail', large: true}
-        },
-        {
-          type: 'TextInput',
-          label: {en: 'Username', da: 'Brugernavn'},
-          options: {key:'username', testName: 'signupUsername', large: true}
-        },
-        {
-          type: 'TextInput',
-          label: {en: 'Password', da: 'Kodeord'},
-          options: {key:'password', secret: true, testName: 'signupPassword', large: true}
-        },
-        {
-          type: 'Checkbox',
-          options: {key:'terms', testName: 'signupAccept', text: {en: 'Accept the terms', da:'Acceptér vilkårene'}, size: 'large'},
-          extra: [termsLink]
-        }
-      ]);
+      termsField.add(termsLink);
+
       form.listen({
         $submit : this._submit.bind(this)
       });

@@ -36,13 +36,13 @@
                 <gui:page>
                   <gui:form name="nameForm">
                     <gui:field label="#{msg.first_name}">
-                      <gui:textInput key="first" value="#{accountSettingsView.firstName}"/>
+                      <gui:textInput key="first" value="#{accountSettingsView.firstName}" autocomplete="given-name"/>
                     </gui:field>
                     <gui:field label="#{msg.middle_name}">
-                      <gui:textInput key="middle" value="#{accountSettingsView.middleName}"/>
+                      <gui:textInput key="middle" value="#{accountSettingsView.middleName}" autocomplete="additional-name"/>
                     </gui:field>
                     <gui:field label="#{msg.last_name}">
-                      <gui:textInput key="last" value="#{accountSettingsView.lastName}"/>
+                      <gui:textInput key="last" value="#{accountSettingsView.lastName}" autocomplete="family-name"/>
                     </gui:field>
                     <gui:buttons>
                       <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeName"/>
@@ -72,7 +72,7 @@
                   </oc:text>
                   <gui:form name="mailForm">
                     <gui:field label="#{msg.primary_email}">
-                      <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}" testName="changeMailInput"/>
+                      <gui:textInput key="mail" value="#{accountSettingsView.primaryEmail}" testName="changeMailInput"  autocomplete="email"/>
                     </gui:field>
                     <gui:buttons>
                       <gui:button text="#{msg.cancel}" variant="light" name="cancelChangeEmail"/>
@@ -103,10 +103,10 @@
               </oc:text>
               <gui:form name="passwordForm">
                 <gui:field label="#{msg.current_password}">
-                  <gui:textInput key="currentPassword" secret="true"/>
+                  <gui:textInput key="currentPassword" secret="true" autocomplete="current-password"/>
                 </gui:field>
                 <gui:field label="#{msg.new_password}">
-                  <gui:textInput key="newPassword" secret="true"/>
+                  <gui:textInput key="newPassword" secret="true" autocomplete="new-password"/>
                 </gui:field>
                 <gui:buttons>
                   <gui:button text="#{msg.cancel}" name="cancelPassword" variant="light"/>

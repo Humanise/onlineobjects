@@ -42,10 +42,10 @@
       <gui:form action="authenticate" name="formula" method="POST">
         <input type="hidden" name="redirect" value="#{authenticationLoginView.redirect}"/>
         <gui:field label="#{msg.username}" large="true">
-          <gui:textInput inputName="username" name="username" large="true"/>
+          <gui:textInput inputName="username" name="username" large="true" autocomplete="username"/>
         </gui:field>
         <gui:field label="#{msg.password}" large="true">
-          <gui:textInput inputName="password" name="password" secret="true" large="true"/>
+          <gui:textInput inputName="password" name="password" secret="true" large="true" autocomplete="current-password"/>
         </gui:field>
         <gui:buttons>
           <gui:button text="#{msg.log_in}" submit="true" highlighted="true" large="true"/>

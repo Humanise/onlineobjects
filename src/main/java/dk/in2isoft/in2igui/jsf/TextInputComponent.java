@@ -23,6 +23,7 @@ public class TextInputComponent extends AbstractComponent {
 	private String name;
 	private String key;
 	private String inputName;
+	private String autocomplete;
 	private boolean secret;
 	private String placeholder;
 	private int width;
@@ -38,7 +39,7 @@ public class TextInputComponent extends AbstractComponent {
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] { name, secret, placeholder, width, value, inputName, adaptive, multiline, maxHeight, large };
+		return new Object[] { name, secret, placeholder, width, value, inputName, adaptive, multiline, maxHeight, large, autocomplete };
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class TextInputComponent extends AbstractComponent {
 		multiline = (Boolean) state[7];
 		maxHeight = (Integer) state[8];
 		large = (Boolean) state[9];
+		autocomplete = (String) state[10];
 	}
 
 	@Override
@@ -90,6 +92,9 @@ public class TextInputComponent extends AbstractComponent {
 			}
 			if (inputName != null) {
 				writer.withAttribute("name", inputName);
+			}
+			if (autocomplete != null) {
+				writer.withAttribute("autocomplete", autocomplete);
 			}
 			writer.endElement("input");
 		}
@@ -193,5 +198,13 @@ public class TextInputComponent extends AbstractComponent {
 	
 	public void setLarge(boolean large) {
 		this.large = large;
+	}
+
+	public String getAutocomplete() {
+		return autocomplete;
+	}
+
+	public void setAutocomplete(String autocomplete) {
+		this.autocomplete = autocomplete;
 	}
 }
