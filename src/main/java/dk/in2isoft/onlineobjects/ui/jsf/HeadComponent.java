@@ -112,7 +112,7 @@ public class HeadComponent extends AbstractComponent {
 		out.write("<!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie6.css\"></link><![endif]-->");
 		out.write("<!--[if lt IE 9]><script type=\"text/javascript\" src=\"" + request.getBaseContext() + "/hui/bin/compatibility.min.js\"></script><![endif]-->");
 		*/
-		out.newLine().startElement("script").withAttribute("data-hui-context", request.getBaseContext()).withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
+		out.newLine().startElement("script").withAttribute("data-hui-context", "/hui").withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
 
 		out.startScript().newLine();
 		

@@ -89,7 +89,7 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 		baseJS = readJSONStrings("info/core_js.json");
 	}
 
-	private void render(StreamSource source, OutputStream output, String context,boolean devMode) throws IOException {
+	private void render(StreamSource source, OutputStream output, String context, boolean devMode) throws IOException {
 		Transformer transformer = null;;
 		try {
 			if (devMode) {
@@ -98,7 +98,7 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 			} else {
 				transformer = (Transformer) pool.borrowObject();
 			}
-			transformer.setParameter("context", context);
+			transformer.setParameter("context", context + "/hui");
 			transformer.setParameter("dev", devMode);
 			transformer.setParameter("version", "x");
 			transformer.setParameter("profile", "false");
