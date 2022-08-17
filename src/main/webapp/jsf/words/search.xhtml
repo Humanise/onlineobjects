@@ -57,7 +57,7 @@
           </p>
         </form>
         <o:filters value="#{wordsSearchView.filters}" expanded="#{wordsSearchView.clean}"/>
-        <c:if test="${not empty(wordsSearchView.description)}">
+        <c:if test="${not empty(wordsSearchView.description) and not wordsSearchView.clean}">
           <div class="words_search_description">
             <h1 class="words_search_description_text">#{wordsSearchView.description}</h1>
             <a class="words_search_description_reset" href="/#{wordsLayoutView.language}/search/">#{msg.reset_search}</a>
@@ -73,7 +73,7 @@
         </c:if>
         <div class="words_search_body">
         <c:choose>
-          <c:when test="${wordsSearchView.blank}">
+          <c:when test="${wordsSearchView.blank and not wordsSearchView.clean}">
             <p class="words_search_empty">#{msg.nothing_found}</p>
           </c:when>
           <c:otherwise>

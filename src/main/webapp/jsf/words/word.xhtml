@@ -18,13 +18,13 @@
 
       <div class="words">
         <div id="word" class="words_word" data-text="#{wordsWordView.text}">
-          <o:link name="toggleExpanded" styleClass="words_word_expand" plain="true">
+          <o:link name="toggleExpanded" styleClass="words_word_expand" plain="true" rendered="#{wordsLayoutView.canModify}">
             <o:icon icon="info"/>
           </o:link>
           <h1 class="words">#{wordsWordView.text}</h1>
           <p class="words_word_warning">#{msg.this_is_not_a_dictionary} - <o:link href="http://ordnet.dk/ddo/ordbog?query=#{wordsWordView.text}">#{msg.dictionary_search_prefix} "#{wordsWordView.text}" #{msg.dictionary_search_suffix}</o:link></p>
           <ui:fragment rendered="#{empty wordsWordView.words}">
-            <p style="color: #cc0000;">#{msg.word_not_registered}</p>
+            <p class="words_word_notfound">#{msg.word_not_registered}</p>
           </ui:fragment>
           <ui:fragment rendered="#{not empty wordsWordView.words}">
             <ul class="words_word_variants">

@@ -163,4 +163,5 @@
 
 @media screen and (min-width: 800px) {
   .words_search_title {
-    font-size: 48px; } }
+    font-size: 48px;
+    margin-bottom: 20px; } }
