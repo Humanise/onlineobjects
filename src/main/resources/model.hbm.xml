@@ -217,6 +217,10 @@
 		        <key column="id"/>
 		    </joined-subclass>
 		    
+		    <joined-subclass name="dk.in2isoft.onlineobjects.model.Project" table="project">
+		        <key column="id"/>
+		    </joined-subclass>
+
 		    <joined-subclass name="dk.in2isoft.onlineobjects.model.Address" table="address">
 		        <key column="id"/>
 		        <property name="street"/>
