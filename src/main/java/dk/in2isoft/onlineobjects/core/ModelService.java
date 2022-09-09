@@ -9,10 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.metamodel.EntityType;
+import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,6 +38,8 @@ import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+import org.onlineobjects.modules.database.Migrator;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.google.common.collect.Lists;
@@ -65,6 +69,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	private EventService eventService;
 	private SecurityService securityService;
+	private Migrator migrator;
 	
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
@@ -86,6 +91,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		migrator.migrate();
 		try {
 			sessionFactory = getSessionFactory();
 		} catch (Throwable t) {
@@ -130,6 +136,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 				registry = registryBuilder.configure().build();
 				*/
 				registry = new StandardServiceRegistryBuilder().configure().build();
+				
 
 				MetadataSources sources = new MetadataSources(registry);
 
@@ -144,6 +151,17 @@ public class ModelService implements InitializingBean, OperationProvider {
 			}
 		}
 		return sessionFactory;
+	}
+
+	public DataSource getDataSource() {
+		Configuration configuration = new Configuration().configure();
+		Properties properties = configuration.getProperties();
+		
+		PGSimpleDataSource ds = new PGSimpleDataSource() ;
+		ds.setURL(properties.getProperty("hibernate.connection.url"));
+		ds.setUser( properties.getProperty("hibernate.connection.username") );       
+		ds.setPassword( properties.getProperty("hibernate.connection.password") );
+		return ds;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -1045,4 +1063,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		this.finder = finder;
 	}
 
+	public void setMigrator(Migrator migrator) {
+		this.migrator = migrator;
+	}
 }

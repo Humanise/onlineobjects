@@ -1,0 +1,543 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="jbm (generated)" id="baseline-1">
+        <createTable tableName="address">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="address_pkey"/>
+            </column>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="region" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="postalcode" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-2">
+        <createTable tableName="application">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="application_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-3">
+        <createTable tableName="client">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="client_pkey"/>
+            </column>
+            <column name="uuid" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-4">
+        <createTable tableName="comment">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="comment_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(4000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-5">
+        <createTable tableName="compounddocument">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="compounddocument_pkey"/>
+            </column>
+            <column name="structure" type="VARCHAR(4000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-6">
+        <createTable tableName="emailaddress">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="emailaddress_pkey"/>
+            </column>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="context" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-7">
+        <createTable tableName="entity">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="entity_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(500)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-8">
+        <createTable tableName="event">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="event_pkey"/>
+            </column>
+            <column name="starttime" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="endtime" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="location" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-9">
+        <createTable tableName="pile">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pile_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-10">
+        <createTable tableName="website">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="website_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-11">
+        <createTable tableName="item">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="item_pkey"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-12">
+        <createTable tableName="relation">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="relation_pkey"/>
+            </column>
+            <column name="kind" type="VARCHAR(255)"/>
+            <column name="position" type="FLOAT4"/>
+            <column name="super_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sub_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="strength" type="FLOAT8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-13">
+        <createTable tableName="user">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="salt" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-14">
+        <createTable tableName="vote">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="vote_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-15">
+        <createTable tableName="word">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="word_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-16">
+        <createTable tableName="statement">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="statement_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(10000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-17">
+        <createTable tableName="topic">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="topic_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-18">
+        <createTable tableName="invitation">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="invitation_pkey"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="state" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-19">
+        <createTable tableName="webnode">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="webnode_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-20">
+        <createTable tableName="webpage">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="webpage_pkey"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-21">
+        <createTable tableName="image">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="image_pkey"/>
+            </column>
+            <column name="filesize" type="BIGINT"/>
+            <column name="contenttype" type="VARCHAR(255)"/>
+            <column name="width" type="INTEGER"/>
+            <column name="height" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-22">
+        <createTable tableName="video">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="video_pkey"/>
+            </column>
+            <column name="filesize" type="BIGINT"/>
+            <column name="contenttype" type="VARCHAR(255)"/>
+            <column name="width" type="INTEGER"/>
+            <column name="height" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-23">
+        <createTable tableName="location">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="location_pkey"/>
+            </column>
+            <column name="latitude" type="FLOAT8"/>
+            <column name="longitude" type="FLOAT8"/>
+            <column name="altitude" type="FLOAT8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-24">
+        <createTable tableName="remoteaccount">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="remoteaccount_pkey"/>
+            </column>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="domain" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-25">
+        <createTable tableName="headerpart">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="headerpart_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-26">
+        <createTable tableName="hypothesis">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="hypothesis_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(10000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-27">
+        <createTable tableName="question">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="question_pkey"/>
+            </column>
+            <column name="text" type="VARCHAR(10000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-28">
+        <createTable tableName="internetaddress">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="internetaddress_pkey"/>
+            </column>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="context" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-29">
+        <createTable tableName="language">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="language_pkey"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-30">
+        <createTable tableName="property">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="property_pkey"/>
+            </column>
+            <column name="key" type="VARCHAR(255)"/>
+            <column name="value" type="VARCHAR(100000)"/>
+            <column name="sortorder" type="INTEGER"/>
+            <column name="doublevalue" type="FLOAT8"/>
+            <column name="datevalue" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="entity_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-31">
+        <createTable tableName="lexicalcategory">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lexicalcategory_pkey"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-32">
+        <createTable tableName="person">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="person_pkey"/>
+            </column>
+            <column name="givenname" type="VARCHAR(255)"/>
+            <column name="familyname" type="VARCHAR(255)"/>
+            <column name="additionalname" type="VARCHAR(255)"/>
+            <column name="nameprefix" type="VARCHAR(255)"/>
+            <column name="namesuffix" type="VARCHAR(255)"/>
+            <column name="sex" type="BOOLEAN"/>
+            <column name="birthday" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-33">
+        <createTable tableName="imagegallery">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="imagegallery_pkey"/>
+            </column>
+            <column name="tiledcolumns" type="INTEGER"/>
+            <column name="tiledwidth" type="INTEGER"/>
+            <column name="tiledheight" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-34">
+        <createTable tableName="webstructure">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="webstructure_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-35">
+        <createTable tableName="rating">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rating_pkey"/>
+            </column>
+            <column name="rating" type="FLOAT8"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-36">
+        <createTable tableName="imagepart">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="imagepart_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-37">
+        <createTable tableName="htmlpart">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="htmlpart_pkey"/>
+            </column>
+            <column name="html" type="VARCHAR(4000)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-38">
+        <createTable tableName="phonenumber">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="phonenumber_pkey"/>
+            </column>
+            <column name="number" type="VARCHAR(255)"/>
+            <column name="context" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-39">
+        <createTable tableName="log">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="log_pkey"/>
+            </column>
+            <column name="time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="level" type="INTEGER"/>
+            <column name="type" type="INTEGER"/>
+            <column name="subject" type="BIGINT"/>
+            <column name="object" type="BIGINT"/>
+            <column name="data" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-40">
+        <createTable tableName="privilege">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="privilege_pkey"/>
+            </column>
+            <column name="object" type="BIGINT"/>
+            <column name="subject" type="BIGINT"/>
+            <column name="delete" type="BOOLEAN"/>
+            <column name="view" type="BOOLEAN"/>
+            <column name="alter" type="BOOLEAN"/>
+            <column name="reference" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-41">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="pile" constraintName="fk18vjqbaebpsa3twxo1ns2ommc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-42">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="compounddocument" constraintName="fk2e80bfc6e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-43">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="website" constraintName="fk2h2i95i0brwnjeh3l7etw8b5m" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-44">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="user" constraintName="fk36ebcbe94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-45">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="vote" constraintName="fk3752eae94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-46">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="word" constraintName="fk37c70ae94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-47">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="comment" constraintName="fk38a5ee5fe94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-48">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="statement" constraintName="fk39embti9mal5s7gq5l8xvurlg" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-49">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="topic" constraintName="fk39v12y7xnarx9tdr8usf789yx" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-50">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="invitation" constraintName="fk473f7799e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-51">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="webnode" constraintName="fk48f7af56e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-52">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="webpage" constraintName="fk48f863e3e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-53">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="client" constraintName="fk4rhn1b71ma8pdgnp2nro4eewl" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-54">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="event" constraintName="fk5c6729ae94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-55">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="application" constraintName="fk5ca40550e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-56">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="emailaddress" constraintName="fk5cf248d8e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-57">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="image" constraintName="fk5faa95be94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-58">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="video" constraintName="fk6b0147be94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-59">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="location" constraintName="fk714f9fb5e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-60">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="remoteaccount" constraintName="fk7553d727e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-61">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="headerpart" constraintName="fk75eb3800e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-62">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="hypothesis" constraintName="fk8061199ce94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-63">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="question" constraintName="fk8vs64po987gff4774cibx3n3a" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-64">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="internetaddress" constraintName="fk96c65993e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-65">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="language" constraintName="fk9fd29358e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-66">
+        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="property" constraintName="fk_property_entity" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-67">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="lexicalcategory" constraintName="fkae7fce62e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-68">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="person" constraintName="fkaod5nahntl9mkjg40fgpfo5n3" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-69">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="imagegallery" constraintName="fkb4bca197e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-70">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="address" constraintName="fkbb979bf4e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-71">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="webstructure" constraintName="fkbxuqdyptewrs24h0iy2yolld5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-72">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="rating" constraintName="fkc815b19de94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-73">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="imagepart" constraintName="fkcbb4e7cee94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-74">
+        <addForeignKeyConstraint baseColumnNames="super_entity_id" baseTableName="relation" constraintName="fkdef3f9fcac959b89" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-75">
+        <addForeignKeyConstraint baseColumnNames="sub_entity_id" baseTableName="relation" constraintName="fkdef3f9fccfff80e" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-76">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="htmlpart" constraintName="fkebf39e1ee94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-77">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="phonenumber" constraintName="fkef7fce37e94a3d71" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-78">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="relation" constraintName="fk2kg6f75t6f5jhdkkudgsattcc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-79">
+        <createIndex indexName="relation_kind_index" tableName="relation">
+            <column name="kind"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-80">
+        <createIndex indexName="relation_sub_entity_id_index" tableName="relation">
+            <column name="sub_entity_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-81">
+        <createIndex indexName="relation_super_entity_id_index" tableName="relation">
+            <column name="super_entity_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-82">
+        <createIndex indexName="word_text_idx" tableName="word">
+            <column name="text"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-83">
+        <createIndex indexName="word_text_lower_idx" tableName="word">
+            <column computed="true" name="lower((text)::text)"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-84">
+        <createIndex indexName="property_entity_id_index" tableName="property">
+            <column name="entity_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-85">
+        <createIndex indexName="property_key_index" tableName="property">
+            <column name="key"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-86">
+        <createIndex indexName="privilege_object_index" tableName="privilege">
+            <column name="object"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-87">
+        <createIndex indexName="privilege_subject_index" tableName="privilege">
+            <column name="subject"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-88">
+        <addForeignKeyConstraint baseColumnNames="id" baseTableName="entity" constraintName="fkb29de3e3165c5561" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="item" validate="true"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-89">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="item_id_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-90">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="log_id_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-91">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="privilege_id_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="jbm (generated)" id="baseline-92">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="property_id_sequence" startValue="1"/>
+    </changeSet>
+</databaseChangeLog>

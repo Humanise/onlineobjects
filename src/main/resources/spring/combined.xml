@@ -22,6 +22,7 @@
     <import resource="core-jobs.xml"/>
     <import resource="core-services.xml"/>
     <import resource="core-ui.xml"/>
+    <import resource="module-database.xml"/>
     <import resource="module-language.xml"/>
     <import resource="module-synchronization.xml"/>
     <import resource="module-networking.xml"/>
