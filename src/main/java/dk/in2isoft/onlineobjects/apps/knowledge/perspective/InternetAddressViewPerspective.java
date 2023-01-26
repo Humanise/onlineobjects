@@ -27,6 +27,7 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 	private List<QuotePerspective> quotes;
 	private List<QuotePerspective> hypotheses;
 	private List<Option> words;
+	private List<Option> tags;
 	private List<ItemData> authors;
 
 	private List<SimilarityPerspective> similar;
@@ -65,6 +66,14 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 
 	public void setWords(List<Option> words) {
 		this.words = words;
+	}
+
+	public List<Option> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Option> tags) {
+		this.tags = tags;
 	}
 
 	public String getInfo() {

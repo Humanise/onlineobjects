@@ -101,6 +101,10 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return this;
 	}
 
+	public Query<T> withNameInAnyCase(String value) {
+		return withFieldInAnyCase(Entity.FIELD_NAME, value);
+	}
+
 	public Query<T> withField(String property, Object value) {
 		fieldLimitations.add(new FieldLimitation(property, value, FieldLimitation.Comparison.EQUALS));
 		return this;

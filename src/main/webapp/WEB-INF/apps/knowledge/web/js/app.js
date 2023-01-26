@@ -50,7 +50,7 @@ var appController = window.appController = {
     var viewMode = hui.ui.get('viewMode');
     var enabled = !!this._currentItem;
     hui.ui.get('deleteObject').setEnabled(enabled);
-    hui.ui.get('addTag').setEnabled(enabled);
+    hui.ui.get('addWord').setEnabled(enabled);
     favoriteCheckbox.setEnabled(enabled);
     inboxCheckbox.setEnabled(enabled);
     viewMode.setVisible(this._currentItem && this._currentItem.type == 'InternetAddress');
@@ -63,10 +63,79 @@ var appController = window.appController = {
     }
     list.updateSelection();
   },
-  $render$tagSelection : function(item) {
-    return hui.build('span', {'class': 'selection selection-tag', text: item.text});
+  $render$wordSelection : function(item) {
+    return hui.build('span', {'class': 'selection selection-word', text: item.text});
   },
-
+  $render$tagSelection : function(item) {
+    var node = hui.build('span.selection.selection-tag', {text: item.text});
+    var more = hui.build('span.hui_symbol.hui_symbol-more.selection_more');
+    hui.on(more, 'click', function(e) {
+      hui.stop(e);
+      this._editTag({node:more,tag:item})
+    }.bind(this))
+    node.appendChild(more);
+    return node;
+  },
+  _editedTag : null,
+  _editTag : function(props) {
+    var tag = props.tag;
+    this._editedTag = tag;
+    hui.ui.get('editTagPanel').show({target: props.node})
+    hui.ui.get('editTagForm').setValues({text: tag.text});
+    hui.ui.get('editTagForm').focus();
+  },
+  $submit$editTagForm : function(form) {
+    var text = form.getValues().text;
+    if (hui.isBlank(text)) {
+      return;
+    }
+    var panel = hui.ui.get('editTagPanel');
+    panel.setBusy(true);
+    hui.ui.request({
+      url: '/app/tag',
+      method: 'PUT',
+      parameters: {
+        id: this._editedTag.id,
+        text: text
+      },
+      $success : function() {
+        hui.ui.get('tagsSource').refresh();
+        this._reloadCurrentPerspective();
+      }.bind(this),
+      $finally : function() {
+        panel.setBusy(false);
+        panel.hide();
+      }
+    });
+  },
+  tagSelection : function() {
+    return hui.ui.get("tagSelection");
+  },
+  $click$deleteTag : function() {
+    var currentTagSelection = this.tagSelection().getValue();
+    if (currentTagSelection) {
+      if (currentTagSelection.id = this._editedTag.id) {
+        this.tagSelection().reset();
+      }
+    }
+    var panel = hui.ui.get('editTagPanel');
+    panel.setBusy(true);
+    hui.ui.request({
+      url: '/app/tag',
+      method: 'DELETE',
+      parameters: {
+        id: this._editedTag.id
+      },
+      $success : function() {
+        hui.ui.get('tagsSource').refresh();
+        this._reloadCurrentPerspective();
+      }.bind(this),
+      $finally : function() {
+        panel.setBusy(false);
+        panel.hide();
+      }
+    });
+  },
   // Adding
 
   $click$addButton : function(button) {
@@ -135,7 +204,7 @@ var appController = window.appController = {
           //history.replaceState(null, document.title, document.location.pathname);
           // TODO go back + pop history
           list.refresh();
-          hui.ui.get('tagsSource').refresh();
+          hui.ui.get('wordsSource').refresh();
           this._reset();
         }.bind(this),
         $failure : function() {
@@ -182,34 +251,25 @@ var appController = window.appController = {
 
   // Tags
   
-  $click$addTag : function() {
-    oo.WordFinder.get().show();
+  $click$addTag: function(button) {
+    hui.ui.get('tagPanel').show({target: button.getElement()});
+    hui.ui.get('addTagForm').focus();
   },
-  $found$wordFinder : function(e) {
-    this._addTag(e);
+  $submit$addTagForm : function(form) {
+    var text = form.getValues().text;
+    if (hui.isBlank(text)) {
+      return;
+    }
+    this.createTagOnCurrentItem(text);
+    form.reset();
   },
-  _addTag : function(tag) {
+  
+  createTagOnCurrentItem : function(text) {
     hui.ui.request({
       url: '/app/tag',
       method: 'POST',
       parameters: {
-        wordId: tag.id,
-        type: this._currentItem.type,
-        id: this._currentItem.id
-      },
-      $object: function(obj) {
-        this._updatePerspective(obj);
-        hui.ui.get('tagsSource').refresh();
-        list.refresh();
-      }.bind(this)
-    })
-  },
-  _removeTag : function(tag) {
-    hui.ui.request({
-      url: '/app/tag/remove',
-      method: 'POST',
-      parameters: {
-        wordId: tag.id,
+        text: text,
         type: this._currentItem.type,
         id: this._currentItem.id
       },
@@ -221,8 +281,8 @@ var appController = window.appController = {
     })
   },
   _renderTag : function(obj) {
-    var item = hui.build('span.tags_item', { text: obj.label });
-    var remove = hui.build('span.tags_remove', { parent: item });
+    var item = hui.build('span.relations_item.relations_item-tag', { text: obj.label });
+    var remove = hui.build('span.relations_remove', { parent: item });
     hui.on(remove, 'click', function(e) {
 
       e.preventDefault();
@@ -230,6 +290,79 @@ var appController = window.appController = {
         text: 'Really remove?', element: remove,
         $ok: function() { 
           this._removeTag({id: obj.value});
+        }.bind(this)
+      });
+      
+    }.bind(this));
+    return item;    
+  },
+  _removeTag : function(tag) {
+    hui.ui.request({
+      url: '/app/tag/remove',
+      method: 'DELETE',
+      parameters: {
+        tagId: tag.id,
+        type: this._currentItem.type,
+        id: this._currentItem.id
+      },
+      $object: function(obj) {
+        this._updatePerspective(obj);
+        hui.ui.get('tagsSource').refresh();
+        list.refresh();
+      }.bind(this)
+    })
+  },
+
+  // Words
+  
+  $click$addWord : function() {
+    oo.WordFinder.get().show();
+  },
+  $found$wordFinder : function(e) {
+    this._addWord(e);
+  },
+  _addWord : function(tag) {
+    hui.ui.request({
+      url: '/app/word',
+      method: 'POST',
+      parameters: {
+        wordId: tag.id,
+        type: this._currentItem.type,
+        id: this._currentItem.id
+      },
+      $object: function(obj) {
+        this._updatePerspective(obj);
+        hui.ui.get('wordsSource').refresh();
+        list.refresh();
+      }.bind(this)
+    })
+  },
+  _removeWord : function(tag) {
+    hui.ui.request({
+      url: '/app/word',
+      method: 'DELETE',
+      parameters: {
+        wordId: tag.id,
+        type: this._currentItem.type,
+        id: this._currentItem.id
+      },
+      $object: function(obj) {
+        this._updatePerspective(obj);
+        hui.ui.get('wordsSource').refresh();
+        list.refresh();
+      }.bind(this)
+    })
+  },
+  _renderWord : function(obj) {
+    var item = hui.build('span.relations_item.relations_item-word', { text: obj.label });
+    var remove = hui.build('span.relations_remove', { parent: item });
+    hui.on(remove, 'click', function(e) {
+
+      e.preventDefault();
+      hui.ui.confirmOverlay({
+        text: 'Really remove?', element: remove,
+        $ok: function() { 
+          this._removeWord({id: obj.value});
         }.bind(this)
       });
       
@@ -260,11 +393,12 @@ var appController = window.appController = {
     var query = hui.ui.get('search').getValue();
     var subset = hui.ui.get('subsetSelection').getValue();
     var type = hui.ui.get('typeSelection').getValue();
+    var word = hui.ui.get('wordSelection').getValue();
     var tag = hui.ui.get('tagSelection').getValue();
     var cls = 'no_content';
     if (query) {
       cls = 'empty_search';
-    } else if (tag.value) {
+    } else if (word.value || tag.value) {
       cls = 'empty_selection';
     } else if (subset.value === 'everything') {
       if (type.value === 'InternetAddress') {
@@ -324,6 +458,21 @@ var appController = window.appController = {
     });
     if (options === undefined || options.push !== false) {
       this._pushState(item);
+    }
+  },
+  _reloadCurrentPerspective : function() {
+    var item = this._currentItem;
+    if (item) {
+      var func = this._updatePerspective.bind(this);
+      this._whileBusy((end) => {
+        this._loadPerspective(item).then((obj) => {
+          func(obj);
+          end();
+        }, (error) => {
+          this._loadFailed();
+          end();
+        });
+      });
     }
   },
   _updatePerspective : function(item) {
@@ -440,7 +589,8 @@ var appController = window.appController = {
     this._changeItem(data);
     hui.dom.setText(hui.find('#questionTitleText'), data.text);
     hui.ui.get('questionAnswers').setData(data.answers);
-    hui.ui.get('questionTags').setData(data.words);
+    hui.ui.get('questionWords').setData(data.words);
+    hui.ui.get('questionTags').setData(data.tags);
   },
   $render$questionAnswers : function(statement) {
     return this._render_relation(statement, {$remove: this._removeAnswerFromQuestion.bind(this)});
@@ -476,6 +626,9 @@ var appController = window.appController = {
       $object : this._onQuestion.bind(this)
     });
   },
+  $render$questionWords : function(obj) {
+    return this._renderWord(obj);
+  },
   $render$questionTags : function(obj) {
     return this._renderTag(obj);
   },
@@ -510,7 +663,8 @@ var appController = window.appController = {
     hui.dom.setText(hui.find('#statementTitleText'), data.text);
     hui.ui.get('statementQuestions').setData(data.questions);
     hui.ui.get('statementAddresses').setData(data.addresses);
-    hui.ui.get('statementTags').setData(data.words);
+    hui.ui.get('statementWords').setData(data.words);
+    hui.ui.get('statementTags').setData(data.tags);
     if (data.questionSuggestions && data.questionSuggestions.suggestions && data.questionSuggestions.suggestions.length) {
       hui.ui.get('statementSuggestions').setData(data.questionSuggestions.suggestions);
       hui.ui.get('statementSuggestionsFragment').show();
@@ -569,6 +723,9 @@ var appController = window.appController = {
       $object : this._onStatement.bind(this)
     });
   },
+  $render$statementWords : function(obj) {
+    return this._renderWord(obj);
+  },
   $render$statementTags : function(obj) {
     return this._renderTag(obj);
   },
@@ -605,7 +762,8 @@ var appController = window.appController = {
     hui.dom.setText(hui.find('#hypothesisTitleText'), data.text);
     hui.ui.get('hypothesisSupporting').setData(data.supports);
     hui.ui.get('hypothesisContradicting').setData(data.contradicts);
-    hui.ui.get('hypothesisTags').setData(data.words);
+    hui.ui.get('hypothesisWords').setData(data.words);
+    hui.ui.get('hypothesisTags').setData(data.tags);
   },
   $render$hypothesisSupporting : function(obj) {
     return this._render_relation(obj, {$remove: function(rel) {
@@ -663,6 +821,9 @@ var appController = window.appController = {
       });
     });
   },
+  $render$hypothesisWords : function(obj) {
+    return this._renderWord(obj);
+  },
   $render$hypothesisTags : function(obj) {
     return this._renderTag(obj);
   },
@@ -716,8 +877,10 @@ var appController = window.appController = {
     if (data.url) {
       hui.build('a', {href:data.url, text: data.url, target: '_blank', parent: head});
     }
-    hui.ui.get('internetaddressTags').setData(data.words);
+    hui.ui.get('internetaddressWords').setData(data.words);
+    hui.ui.get('internetaddressTags').setData(data.tags);
     hui.find('.js-internetaddress-text').innerText = data.text || '';
+    documentController.reset();
   },
   $valueChanged$viewMode : function(value) {
     hui.find('.js-internetaddress-formatted').style.display = (value == 'formatted' ? '' : 'none')
@@ -740,9 +903,12 @@ var appController = window.appController = {
       });      
     });
   },
+  $render$internetaddressWords : function(obj) {
+    return this._renderWord(obj);
+  },
   $render$internetaddressTags : function(obj) {
     return this._renderTag(obj);
-  },
+  }
 }
 
 hui.ui.listen(appController);

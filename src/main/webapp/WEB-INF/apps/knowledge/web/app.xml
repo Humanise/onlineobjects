@@ -15,9 +15,11 @@
     <parameter key="text" value="@search.value"/>
     <parameter key="subset" value="@subsetSelection.value"/>
     <parameter key="type" value="@typeSelection.value"/>
+    <parameter key="words" value="@wordSelection.value"/>
     <parameter key="tags" value="@tagSelection.value"/>
   </source>
 
+  <source name="wordsSource" url="/app/words"/>
   <source name="tagsSource" url="/app/tags"/>
 
   <remote name="changeFavoriteStatus" url="/changeFavoriteStatus"/>
@@ -36,7 +38,7 @@
         <option value="InternetAddress"><span class="selection selection-internetaddress">Pages</span></option>
         <option value="Statement"><span class="selection selection-statement">Statements</span></option>
         <option value="Question"><span class="selection selection-question">Questions</span></option>
-        <option value="Hypothesis"><span class="selection selection-hypothesis">Hypothesis</span></option>
+        <option value="Hypothesis"><span class="selection selection-hypothesis">Hypotheses</span></option>
       </selection>
       <selection value="" name="tagSelection">
         <title>Tags</title>
@@ -44,6 +46,13 @@
           <span class="selection selection-tag">Any</span>
         </option>
         <options source="tagsSource"/>
+      </selection>
+      <selection value="" name="wordSelection">
+        <title>Words</title>
+        <option text="None" value="">
+          <span class="selection selection-word">Any</span>
+        </option>
+        <options source="wordsSource"/>
       </selection>
       </overflow>
     </navigation>
@@ -119,6 +128,7 @@
         <button text="Delete" small="true" name="deleteObject">
           <confirm text="Are you sure?"/>
         </button>
+        <button text="Add word" small="true" name="addWord"/>
         <button text="Add tag" small="true" name="addTag"/>
         <divider/>
         <checkbox text="Favorite" name="favorite"/>
@@ -130,7 +140,7 @@
       </bar>
     </actions>
     <content>
-      <overflow shadow-variant="white">
+      <overflow shadow-variant="white" name="mainScroller">
         <fragment name="intro">
           <div class="intro">
             <div class="intro_graphic"> </div>
@@ -153,7 +163,8 @@
 
         <fragment name="internetaddress" visible="false">
           <div class="internetaddress">
-            <collection name="internetaddressTags" class="tags"/>
+            <collection name="internetaddressWords" class="relations"/>
+            <collection name="internetaddressTags" class="relations"/>
             <div class="internetaddress_head js-internetaddress-head"> </div>
             <div class="article js-internetaddress-formatted"> </div>
             <div class="plain js-internetaddress-text" style="display: none;"> </div>
@@ -167,7 +178,8 @@
               <div class="perspective_title_text" id="questionTitleText"> </div>
               <span class="perspective_title_edit"> </span>
             </div>
-            <collection name="questionTags" class="tags"/>
+            <collection name="questionWords" class="relations"/>
+            <collection name="questionTags" class="relations"/>
             <div class="perspective_relations">
               <div class="perspective_heading">Is answered by</div>
               <collection name="questionAnswers">
@@ -189,7 +201,8 @@
               <div class="perspective_title_text" id="statementTitleText"> </div>
               <span class="perspective_title_edit"> </span>
             </div>
-            <collection name="statementTags" class="tags"/>
+            <collection name="statementWords" class="relations"/>
+            <collection name="statementTags" class="relations"/>
             <div class="perspective_relations">
               <div class="perspective_heading">Appears on</div>
               <collection name="statementAddresses">
@@ -221,7 +234,8 @@
               <div class="perspective_title_text" id="hypothesisTitleText"> </div>
               <span class="perspective_title_edit"> </span>
             </div>
-            <collection name="hypothesisTags" class="tags"/>
+            <collection name="hypothesisWords" class="relations"/>
+            <collection name="hypothesisTags" class="relations"/>
             <div class="perspective_relations">
               <div class="perspective_heading">Is supported by</div>
               <collection name="hypothesisSupporting">
@@ -274,6 +288,7 @@
 
   <panel name="selectionPanel" padding="10" closable="false">
     <button text="Quote" name="highlightSelection"/>
+    <button text="Tag" name="tagSelectedText"/>
   </panel>
 
   <panel name="multipleSelectionPanel" closable="false" auto-hide="true" padding="5">
@@ -297,6 +312,25 @@
       <text-input key="text" breaks="true"/>
       <buttons>
         <button text="Add" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <panel name="tagPanel" padding="10" auto-hide="true" width="280">
+    <form name="addTagForm">
+      <text-input key="text" placeholder="Tag"/>
+      <buttons>
+        <button text="Add" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <panel name="editTagPanel" padding="10" auto-hide="true" width="280">
+    <form name="editTagForm">
+      <text-input key="text" placeholder="Tag"/>
+      <buttons>
+        <button text="Delete" name="deleteTag"><confirm text="Are you sure?"/></button>
+        <button text="Update" highlighted="true" submit="true"/>
       </buttons>
     </form>
   </panel>

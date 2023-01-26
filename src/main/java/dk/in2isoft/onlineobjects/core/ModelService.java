@@ -56,9 +56,11 @@ import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
+import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
 import dk.in2isoft.onlineobjects.model.validation.UserValidator;
+import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ModelService implements InitializingBean, OperationProvider {
 
@@ -533,6 +535,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 		Relation relation = new Relation(from, to);
 		create(relation, operator);
 		return relation;
+	}
+
+
+	public void ensureRelation(Entity from, Entity to, Request request) throws ModelException, SecurityException {
+		if (!find().relations(request).from(from).to(to).exists()) {
+			createRelation(from, to, request);
+		}
 	}
 
 	public List<Relation> getRelations(Entity entity, Operator privileged) throws ModelException, SecurityException {

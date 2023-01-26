@@ -21,6 +21,7 @@ public class KnowledgeQuery extends IndexQuery {
 	private Collection<String> type;
 	private String subset;
 	private List<Long> wordIds;
+	private List<Long> tagIds;
 	private List<Long> authorIds;
 	private Boolean inbox;
 	private Boolean favorite;
@@ -59,6 +60,14 @@ public class KnowledgeQuery extends IndexQuery {
 
 	public void setWordIds(List<Long> wordIds) {
 		this.wordIds = wordIds;
+	}
+
+	public List<Long> getTagIds() {
+		return tagIds;
+	}
+
+	public void setTagIds(List<Long> tagIds) {
+		this.tagIds = tagIds;
 	}
 
 	public List<Long> getAuthorIds() {
@@ -114,6 +123,14 @@ public class KnowledgeQuery extends IndexQuery {
 					indexQuery.append(" AND ");
 				}
 				indexQuery.append("word:").append(id);
+			}
+		}
+		if (query.getTagIds() != null) {
+			for (Long id : query.getTagIds()) {
+				if (indexQuery.length() > 0) {
+					indexQuery.append(" AND ");
+				}
+				indexQuery.append("tag:").append(id);
 			}
 		}
 		if (query.getAuthorIds() != null) {

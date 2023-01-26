@@ -273,9 +273,9 @@ public class DOM {
 		return new dk.in2isoft.commons.xml.JsoupUtils().toXOM(document);
 	}
 	
-	public static nu.xom.Document parseWildHhtml(File wild) {
+	public static nu.xom.Document parseWildHhtml(File wild, String encoding) {
 		try {
-			org.jsoup.nodes.Document document = Jsoup.parse(wild, Strings.UTF8);
+			org.jsoup.nodes.Document document = Jsoup.parse(wild, encoding);
 			return new dk.in2isoft.commons.xml.JsoupUtils().toXOM(document);
 		} catch (IOException e) {
 			log.error("Problem parsing wilf html", e);

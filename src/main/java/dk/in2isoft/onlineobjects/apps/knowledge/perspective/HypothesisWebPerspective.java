@@ -5,7 +5,7 @@ import java.util.List;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class HypothesisWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
+public class HypothesisWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags, TaggableViewPerspective {
 
 	private long id;
 	private String type = Hypothesis.class.getSimpleName();
@@ -15,6 +15,7 @@ public class HypothesisWebPerspective implements CategorizableViewPerspective, V
 	private List<StatementWebPerspective> supports;
 	private List<StatementWebPerspective> contradicts;
 	private List<Option> words;
+	private List<Option> tags;
 
 	public long getId() {
 		return id;
@@ -74,5 +75,13 @@ public class HypothesisWebPerspective implements CategorizableViewPerspective, V
 
 	public void setWords(List<Option> words) {
 		this.words = words;
+	}
+	
+	public List<Option> getTags() {
+		return tags;
+	}
+	
+	public void setTags(List<Option> tags) {
+		this.tags = tags;
 	}
 }

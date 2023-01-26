@@ -42,6 +42,7 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.information.ContentExtractor;
@@ -100,11 +101,17 @@ public class InternetAddressViewPerspectiveBuilder {
 		article.setUrlText(Strings.simplifyURL(address.getAddress()));
 		article.setAuthors(getAuthors(address, ids, operator));
 
-		List<Word> words = data.keywords;
+		List<Word> words = data.words;
 		article.setWords(words.stream().map((word) -> {
 			Option option = new Option();
 			option.setValue(word.getId());
 			option.setLabel(word.getText());
+			return option;
+		}).collect(Collectors.toList()));
+		article.setTags(data.tags.stream().map((word) -> {
+			Option option = new Option();
+			option.setValue(word.getId());
+			option.setLabel(word.getName());
 			return option;
 		}).collect(Collectors.toList()));
 		
@@ -168,9 +175,13 @@ public class InternetAddressViewPerspectiveBuilder {
 	private ArticleData buildData(InternetAddress address, Set<Long> ids, Operator session) throws ModelException {
 		ArticleData data = new ArticleData();
 		data.address = address;
-		data.keywords = modelService.getChildren(address, Word.class, session);
-		for (Word word : data.keywords) {
+		data.words = modelService.getChildren(address, Word.class, session);
+		data.tags = modelService.getParents(address, Tag.class, session);
+		for (Word word : data.words) {
 			ids.add(word.getId());
+		}
+		for (Tag tag : data.tags) {
+			ids.add(tag.getId());
 		}
 		return data;
 	}
@@ -194,7 +205,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			}
 		}
 
-		for (Word word : data.keywords) {
+		for (Word word : data.words) {
 			writer.startVoidA().withData(word.getId()).withClass("reader_meta_tags_item is-word");
 			writer.text(word.getText()).endA().text(" ");
 		}
@@ -333,23 +344,49 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 		trace("Decorate hypothesis", watch);
 
-		for (Word keyword : data.keywords) {
-			List<Result> found = searcher.search(keyword.getText().toLowerCase(), textLowercased);
+		for (Word word : data.words) {
+			String wordText = word.getText().toLowerCase();
+			if (Strings.isBlank(wordText)) {
+				continue;
+			}
+			List<Result> found = searcher.search(wordText, textLowercased);
 			for (Result result : found) {
 				Map<String, Object> info = new HashMap<>();
-				info.put("id", keyword.getId());
+				info.put("id", word.getId());
 				info.put("type", Word.class.getSimpleName());
-				info.put("description", "Word: " + StringUtils.abbreviate(keyword.getText(), 30));
+				info.put("description", "Word: " + StringUtils.abbreviate(word.getText(), 30));
 				
 				Map<String, Object> attributes = new HashMap<>();
-				attributes.put("data-id", keyword.getId());
+				attributes.put("data-id", word.getId());
 				attributes.put("class", settings.getCssNamespace() + "word js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "span", attributes);
 			}
 		}
 
-		trace("Decorate keywords", watch);
+		trace("Decorate words", watch);
+
+		for (Tag tag : data.tags) {
+			String tagText = tag.getName().toLowerCase();
+			if (Strings.isBlank(tagText)) {
+				continue;
+			}
+			List<Result> found = searcher.search(tagText, textLowercased);
+			for (Result result : found) {
+				Map<String, Object> info = new HashMap<>();
+				info.put("id", tag.getId());
+				info.put("type", Tag.class.getSimpleName());
+				info.put("description", "Tag: " + StringUtils.abbreviate(tag.getName(), 30));
+				
+				Map<String, Object> attributes = new HashMap<>();
+				attributes.put("data-id", tag.getId());
+				attributes.put("class", settings.getCssNamespace() + "tag js_reader_item");
+				attributes.put("data-info", Strings.toJSON(info));
+				decorated.decorate(result.getFrom(), result.getTo(), "span", attributes);
+			}
+		}
+
+		trace("Decorate tags", watch);
 		
 		Collections.sort(statements,(a,b) -> {
 			return a.getFirstPosition() - b.getFirstPosition();
@@ -483,7 +520,8 @@ public class InternetAddressViewPerspectiveBuilder {
 	
 	private class ArticleData {
 		InternetAddress address;
-		List<Word> keywords;
+		List<Word> words;
+		List<Tag> tags;
 	}
 	
 	public static class Settings {

@@ -5,7 +5,7 @@ import java.util.List;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class QuestionWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
+public class QuestionWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags, TaggableViewPerspective {
 
 	private long id;
 	private String text;
@@ -14,6 +14,7 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 	private boolean favorite;
 	private String type = Question.class.getSimpleName();
 	private List<Option> words;
+	private List<Option> tags;
 
 	public long getId() {
 		return id;
@@ -65,5 +66,14 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 
 	public void setWords(List<Option> words) {
 		this.words = words;
+	}
+	
+	public List<Option> getTags() {
+		return tags;
+	}
+	
+	@Override
+	public void setTags(List<Option> tags) {
+		this.tags = tags;
 	}
 }

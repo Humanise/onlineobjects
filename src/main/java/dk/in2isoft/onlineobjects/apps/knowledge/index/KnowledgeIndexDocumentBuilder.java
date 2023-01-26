@@ -23,6 +23,7 @@ import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.networking.InternetAddressService;
@@ -121,6 +122,12 @@ public class KnowledgeIndexDocumentBuilder {
 			doc.add(new StringField("word", String.valueOf(word.getId()), Field.Store.NO));
 		}
 		doc.add(new TextField("words", wordText.toString(), Field.Store.NO));
+
+		List<Tag> tags = modelService.getParents(entity, Tag.class, operator);
+		for (Tag tag : tags) {
+			doc.add(new StringField("tag", String.valueOf(tag.getId()), Field.Store.NO));
+		}
+		
 
 		StringBuilder text = new StringBuilder();
 		Query<Person> authors = Query.of(Person.class).from(entity, Relation.KIND_COMMON_AUTHOR).as(owner);

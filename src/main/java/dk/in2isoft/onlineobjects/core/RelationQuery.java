@@ -11,6 +11,8 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import dk.in2isoft.commons.lang.Code;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
 
@@ -183,5 +185,15 @@ public class RelationQuery {
 		Query<Relation> query = getQuery();
 		List<Relation> list = Code.castList(query.list());
 		return list;
+	}
+	
+	public void delete(Operator operator) throws ModelException, SecurityException {
+		for (Relation relation : list()) {			
+			modelService.delete(relation, operator);			
+		}
+	}
+
+	public boolean exists() {		
+		return count() > 0;
 	}
 }

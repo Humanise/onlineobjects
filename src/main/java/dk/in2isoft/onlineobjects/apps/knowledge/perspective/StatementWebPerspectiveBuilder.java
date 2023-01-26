@@ -25,6 +25,7 @@ public class StatementWebPerspectiveBuilder extends EntityViewPerspectiveBuilder
 
 		User user = modelService.getRequired(User.class, operator.getIdentity(), operator);
 		knowledgeService.categorize(statement, perspective, user, operator);
+		knowledgeService.addTags(statement, perspective, operator);
 		
 		return perspective;
 	}

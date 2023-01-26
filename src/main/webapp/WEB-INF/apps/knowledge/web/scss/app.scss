@@ -2,6 +2,10 @@
 @import '../../../../core/web/scss/oo_font.scss';
 @import 'parts/app_hui.scss';
 @import 'parts/list.scss';
+@import 'parts/selection.scss';
+@import 'parts/relations.scss';
+@import 'parts/perspective.scss';
+@import 'parts/intro.scss';
 
 .root {
   position: absolute;
@@ -22,295 +26,6 @@
 }
 
 
-
-.tags {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  &_item {
-    margin: 0 3px;
-    display: flex;
-    &:before {
-      content: '#';
-      color: #777;
-      margin-right: 3px;
-    }
-  }
-
-  &_remove {
-    vertical-align: top;
-    margin: 1px 0 0 3px;
-    display: inline-block;
-    opacity: 0;
-    transition: opacity .3s;
-    font-size: 12px;
-    cursor: pointer;
-    background: #eee;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    @include icon-before('delete_line')
-    &:hover {
-      background: #ddd;
-    }
-    
-  }
-  &:hover &_remove {
-    opacity: 1;
-  };
-}
-
-.selection {
-  line-height: 18px;
-  display: flex;
-  padding-left: 2px;
-
-  @include icon-before('documents_line') {
-    vertical-align: top;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    margin-right: 5px;
-    opacity: .5;
-    margin-top: 1px;
-  }
-
-  &-everything:before {
-    @include icon('documents_line');
-  }
-
-  &-inbox:before {
-    @include icon('inbox_line');
-  }
-
-  &-archive:before {
-    @include icon('archive_line');
-  }
-
-  &-favorite:before {
-    @include icon('star_line');
-  }
-
-  &-any:before {
-    @include icon('documents_line');
-  }
-
-  &-internetaddress:before {
-    @include icon('document_line');
-  }
-
-  &-statement:before {
-    @include icon('quote');
-  }
-
-  &-question:before {
-    @include icon('question');
-  }
-
-  &-hypothesis:before {
-    @include icon('hypothesis');
-  }
-
-  &-tag:before {
-    @include icon('tag_line');
-  }
-
-  .hui_selection_item.hui_selected & {
-    &:before {
-      opacity: 1;
-    }
-
-    &-everything:before {
-      @include icon('documents_line_selected');
-    }
-
-    &-inbox:before {
-      @include icon('inbox_line_selected');
-    }
-
-    &-archive:before {
-      @include icon('archive_line_selected');
-    }
-
-    &-favorite:before {
-      @include icon('star_line_selected');
-    }
-
-    &-any:before {
-      @include icon('documents_line_selected');
-    }
-
-    &-internetaddress:before {
-      @include icon('document_line_selected');
-    }
-
-    &-tag:before {
-      @include icon('tag_line_selected');
-    }
-  }
-}
-
-.perspective {
-  padding-bottom: 60px;
-  
-  &_title {
-    margin: 10px auto;
-    padding: 5px 20px 5px 10px;
-    max-width: 500px;
-    position: relative;
-    box-sizing: border-box;
-    border-radius: 5px;
-    cursor: text;
-
-    &_text {
-      white-space: pre-wrap;
-      font-family: $book-font;
-      line-height: 1.3;
-      font-size: 18px;
-      text-align: center;
-      font-weight: normal;
-    }
-
-    &:hover {
-      background: rgb(250,250,250);
-    }
-
-    &_edit {
-      position: absolute;
-      @include icon-before('edit') {
-        vertical-align: middle;
-      };
-      right: 5px;
-      top: 50%;
-      color: #777;
-      font-size: 14px;
-      margin-top: -10px;
-      line-height: 1;
-      text-align: center;
-      width: 20px;
-      height: 20px;
-      opacity: 0;
-      cursor: pointer;
-      border-radius: 3px;
-      padding: 2px;
-      box-sizing: border-box;
-      &:hover {
-        background: rgba(220,220,220,.7);
-        color: #333;
-      }
-    }
-
-    &:hover &_edit {
-      opacity: 1;
-    }
-
-    textarea {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      bottom: -0.2em;
-      padding: 0;
-      resize: none;
-      -webkit-appearance: none;
-      border: none;
-      display: none;
-      margin: 0;
-      background: inherit;
-      color: inherit;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 5px 20px 5px 10px;
-    }
-    &.is-active textarea {
-      display: block;
-    }
-
-    &.is-active div.perspective_title_text {
-      color: transparent;
-    }
-  }
-
-  &_heading {
-    font-family: 'Inter', sans-serif;
-    color: #777;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: center;
-    font-weight: 600;
-    margin: 20px 10px 10px;
-  }
-  
-  &_relations {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  &_relation {
-    font-family: 'Lora', Georgia, serif;
-    padding: 5px 10px;
-    padding-right: 30px;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    line-height: 18px;
-
-    &:hover {
-      background: rgb(250,250,250);
-    }
-
-    &_message {
-      color: #777;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    &_info {
-      color: #777;
-      font-size: 12px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    &_remove {
-      @include icon-before('delete_line') {
-        vertical-align: top;
-      }
-      vertical-align: top;
-      line-height: 1;
-      position: absolute;
-      font-size: 14px;
-      top: 50%;
-      right: 5px;
-      margin-top: -10px;
-      padding: 3px;
-      border-radius: 3px;
-      opacity: 0;
-      color: #777;
-      background: rgba(250,250,250,.5);
-      &:hover {
-        background: rgba(220,220,220,.7);
-        color: #333;
-      }
-    }
-    &:hover &_remove {
-      opacity: 1;
-    }
-  }
-
-  &_actions {
-    text-align: center;
-    margin: 10px;
-  }
-}
-
 .multiple_selection {
   &_item {
     cursor: pointer;
@@ -322,42 +37,6 @@
   }
 }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-  justify-content: center;
-  align-items: center;
-  color: #777;
-
-  &_graphic {
-    @include icon-before('app_knowledge') {
-      font-size: calc(max(12vw,80px));
-    }
-  }
-
-  &_title {
-    font-size: calc(max(3.5vw,24px));
-    font-weight: 500;
-  }
-
-  ul {
-    list-style: none;
-    text-align: center;
-    padding: 0 20px;
-    margin: 20px 0 0;
-    font-weight: 300;
-  }
-
-  li {
-    margin: 5px 0;
-  }
-
-  em {
-    font-weight: 500;
-    font-style: normal;
-  }
-}
 
 .warning {
   display: flex;
@@ -508,6 +187,13 @@
   }
 
   &_word {
+    background-color: #f3f3f3;
+    padding: 0 3px;
+    margin: 0 -3px;
+    border-radius: 10px;
+  }
+
+  &_tag {
     background-color: #f3f3f3;
     padding: 0 3px;
     margin: 0 -3px;

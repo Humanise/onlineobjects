@@ -7,7 +7,7 @@ import org.onlineobjects.modules.suggestion.SuggestionsCategory;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class StatementWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
+public class StatementWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags, TaggableViewPerspective {
 
 	private long id;
 	private String text;
@@ -18,6 +18,7 @@ public class StatementWebPerspective implements CategorizableViewPerspective, Vi
 	private SuggestionsCategory questionSuggestions;
 	private String type = Statement.class.getSimpleName();
 	private List<Option> words;
+	private List<Option> tags;
 
 	public long getId() {
 		return id;
@@ -77,6 +78,14 @@ public class StatementWebPerspective implements CategorizableViewPerspective, Vi
 
 	public void setWords(List<Option> words) {
 		this.words = words;
+	}
+	
+	public List<Option> getTags() {
+		return tags;
+	}
+	
+	public void setTags(List<Option> tags) {
+		this.tags = tags;
 	}
 
 	public SuggestionsCategory getQuestionSuggestions() {

@@ -69,10 +69,12 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.feeds.Feed;
+import dk.in2isoft.onlineobjects.modules.language.TagSelectionQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordByInternetAddressQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordByMultipleTypesQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
@@ -149,7 +151,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		query.setSubset("everything");
 		query.setType(types);
 		query.setText(request.getString("text"));
-		query.setWordIds(request.getLongs("tags"));
+		query.setWordIds(request.getLongs("words"));
+		query.setTagIds(request.getLongs("tags"));
 		if ("inbox".equals(subset)) {
 			query.setInbox(true);
 		}
@@ -396,8 +399,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/tags")
-	public List<ItemData> appTags(Request request) throws ModelException {
-		WordByMultipleTypesQuery query = new WordByMultipleTypesQuery(request);
+	public List<ItemData> tagSelection(Request request) throws ModelException {
+		TagSelectionQuery query = new TagSelectionQuery(request);
 		/*
 		 * List<ItemData> list = modelService.list(query);
 		 * Collections.sort(list, (o1, o2) -> { return
@@ -407,7 +410,67 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/tag", method = "POST")
-	public Object appCreateTag(Request request) throws EndUserException {
+	public Object addTag(Request request) throws EndUserException {
+		String text = request.getString("text", "A tag must have some text");
+		Entity entity = loadByType(request.getId(), request.getString("type"), request);
+		text = normaliseTag(text);
+		
+		Query<Tag> query = Query.after(Tag.class).withNameInAnyCase(text);
+		Tag tag = modelService.getFirst(query, request);
+		if (tag == null) {
+			tag = new Tag();
+			tag.setName(text);
+			modelService.create(tag, request);
+		}
+		modelService.ensureRelation(tag, entity, request);
+		return getWebPerspective(entity, request);
+	}
+
+	private String normaliseTag(String text) {
+		if (text == null) {
+			text = "";
+		}
+		return text.trim().replaceAll("[\\s\\n\\r\\t]+", " ");
+	}
+
+	@Path(expression = "/app/tag", method = "PUT")
+	public void updateTag(Request request) throws EndUserException {
+		String text = request.getString("text", "A tag must have some text");		
+		text = normaliseTag(text);
+		Tag tag = modelService.getRequired(Tag.class, request.getId(), request);
+		tag.setName(text);
+		modelService.update(tag, request);
+	}
+
+	@Path(expression = "/app/tag/remove", method = "DELETE")
+	public Object appRemoveTag(Request request) throws EndUserException {
+		Long tagId = request.getId("tagId");
+		Entity entity = loadByType(request.getId(), request.getString("type"), request);
+		Tag word = modelService.getRequired(Tag.class, tagId, request);
+		modelService.find().relations(request).from(word).to(entity).delete(request);
+		return getWebPerspective(entity, request);
+	}
+
+	@Path(expression = "/app/tag", method = "DELETE")
+	public void deleteTag(Request request) throws EndUserException {
+		Long tagId = request.getId("id");
+		Tag tag = modelService.getRequired(Tag.class, tagId, request);
+		modelService.delete(tag, request);
+	}
+
+	@Path(expression = "/app/words")
+	public List<ItemData> wordSelection(Request request) throws ModelException {
+		WordByMultipleTypesQuery query = new WordByMultipleTypesQuery(request);
+		/*
+		 * List<ItemData> list = modelService.list(query);
+		 * Collections.sort(list, (o1, o2) -> { return
+		 * Strings.compareCaseless(o1.getText(),o2.getText()); });
+		 */
+		return modelService.list(query, request);
+	}
+
+	@Path(expression = "/app/word", method = "POST")
+	public Object appCreateWord(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
 		
@@ -419,8 +482,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return getWebPerspective(entity, request);
 	}
 
-	@Path(expression = "/app/tag/remove", method = "POST")
-	public Object appRemoveTag(Request request) throws EndUserException {
+	@Path(expression = "/app/word", method = "DELETE")
+	public Object appRemoveWord(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
 		Word word = modelService.getRequired(Word.class, wordId, request);

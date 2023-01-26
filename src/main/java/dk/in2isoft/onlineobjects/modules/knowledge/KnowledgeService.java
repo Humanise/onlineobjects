@@ -33,6 +33,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewP
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.TaggableViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.ViewPerspectiveWithTags;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
@@ -55,6 +56,7 @@ import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Statement;
+import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
@@ -157,6 +159,16 @@ public class KnowledgeService {
 		}
 		perspective.setFavorite(favorite);
 		perspective.setInbox(inbox);
+	}
+
+	public void addTags(Entity entity, TaggableViewPerspective perspective, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		List<Tag> tags = modelService.getParents(entity, Tag.class, operator);
+		perspective.setTags(tags.stream().map((word) -> {
+			Option option = new Option();
+			option.setValue(word.getId());
+			option.setLabel(word.getName());
+			return option;
+		}).collect(Collectors.toList()));
 	}
 
 	public Statement addStatementToInternetAddress(String text, Long internetAddressId, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
@@ -336,9 +348,10 @@ public class KnowledgeService {
 		
 		perspective.setQuestionSuggestions(suggestionsForStatement);
 		
-		addWords(statement, perspective, request);
-		
 		User user = modelService.getUser(request);
+		addWords(statement, perspective, request);
+		addTags(statement, perspective, request);
+		
 		categorize(statement, perspective, user, request);
 		return perspective;
 	}
@@ -440,6 +453,7 @@ public class KnowledgeService {
 		}).collect(toList()));
 		
 		addWords(question, perspective, request);
+		addTags(question, perspective, request);
 		return perspective;
 	}
 	
@@ -473,6 +487,7 @@ public class KnowledgeService {
 			perspective.getContradicts().add(statementPerspective);
 		}
 		addWords(hypothesis, perspective, operator);
+		addTags(hypothesis, perspective, operator);
 		return perspective;
 	}
 	

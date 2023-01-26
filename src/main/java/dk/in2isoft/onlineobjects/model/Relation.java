@@ -54,9 +54,9 @@ public class Relation extends Item {
 	public static final String KIND_EVENT_ORGANIZER = "event.organizer";
 
 	
-	private Entity from;
+	private Entity from; /* super */
 
-	private Entity to;
+	private Entity to; /* sub */
 
 	private String kind;
 	
