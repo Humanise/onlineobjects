@@ -1,18 +1,19 @@
 @font-face {
   font-family: 'OnlineObjects';
-  src:  url('fonts/OnlineObjects.eot?4c5nkv');
-  src:  url('fonts/OnlineObjects.eot?4c5nkv#iefix') format('embedded-opentype'),
-    url('fonts/OnlineObjects.ttf?4c5nkv') format('truetype'),
-    url('fonts/OnlineObjects.woff?4c5nkv') format('woff'),
-    url('fonts/OnlineObjects.svg?4c5nkv#OnlineObjects') format('svg');
+  src:  url('fonts/OnlineObjects.eot?dhb7vw');
+  src:  url('fonts/OnlineObjects.eot?dhb7vw#iefix') format('embedded-opentype'),
+    url('fonts/OnlineObjects.ttf?dhb7vw') format('truetype'),
+    url('fonts/OnlineObjects.woff?dhb7vw') format('woff'),
+    url('fonts/OnlineObjects.svg?dhb7vw#OnlineObjects') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 [class^="oo_icon_"], [class*=" oo_icon_"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'OnlineObjects' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -24,6 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.oo_icon_word:before {
+  content: "\e91e";
+}
+.oo_icon_abc:before {
+  content: "\e91f";
+}
+.oo_icon_hash:before {
+  content: "\e920";
+}
 .oo_icon_app_people:before {
   content: "\e91a";
 }

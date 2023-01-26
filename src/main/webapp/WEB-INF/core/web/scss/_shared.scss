@@ -162,7 +162,10 @@ $icons : (
   cross: '\e917',
   search_line: '\e90c',
   arrow_thin_left: '\e912',
-  arrow_thin_right: '\e913'
+  arrow_thin_right: '\e913',
+  word: '\e91e',
+  abc: '\e91f',
+  hash: '\e920'
 );
 
 @mixin icon($icon) {
