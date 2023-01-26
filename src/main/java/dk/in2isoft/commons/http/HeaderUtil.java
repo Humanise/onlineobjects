@@ -60,7 +60,7 @@ public class HeaderUtil {
 	
 	public static String getContentTypeEncoding(String value) {
 		if (value!=null) {
-			String[] groups = RegExpUtil.getGroups(value, "charset=([a-zA-Z0-9\\-]+)");
+			String[] groups = RegExpUtil.getGroups(value, "[Cc]harset=([a-zA-Z0-9\\-]+)");
 			if (groups!=null) {
 				return groups[1].toUpperCase();
 			}

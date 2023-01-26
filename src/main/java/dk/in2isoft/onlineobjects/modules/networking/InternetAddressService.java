@@ -64,7 +64,12 @@ public class InternetAddressService {
 				log.warn("Content file for address: {} not available", address);
 				return null;
 			}
-			Document document = dk.in2isoft.commons.xml.DOM.parseWildHhtml(content);
+			String encoding = address.getPropertyValue(Property.KEY_INTERNETADDRESS_ENCODING);
+			if (Strings.isBlank(encoding)) {
+				encoding = Strings.UTF8;
+			}
+			
+			Document document = dk.in2isoft.commons.xml.DOM.parseWildHhtml(content, encoding);
 			if (document == null) {
 				log.warn("Empty doc after parsing content of: {}", address);
 				return null;

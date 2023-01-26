@@ -15,9 +15,10 @@ public class TestHeaderUtil extends AbstractSpringTestCase {
 	@Test
 	public void testValidation() {
 		assertEquals("UTF-8", HeaderUtil.getContentTypeEncoding("text/html; charset=UTF-8"));
+		assertEquals("ISO-8859-1", HeaderUtil.getContentTypeEncoding("text/html; Charset=ISO-8859-1"));
 		assertEquals(null, HeaderUtil.getContentTypeEncoding("text/html"));
 		assertEquals(null, HeaderUtil.getContentTypeEncoding(null));
-
+		
 		assertEquals("image/jpeg", HeaderUtil.getContentTypesMimeType("image/jpeg"));
 		assertEquals(null, HeaderUtil.getContentTypesMimeType(null));
 		assertEquals("image/jpeg", HeaderUtil.getContentTypesMimeType(" image/jpeg "));
