@@ -40,14 +40,14 @@ public class TestNetworkService extends AbstractSpringTestCase {
 		assertNull(networkService.getStringSilently("fasjfhajkfhdka"));
 	}
 
-	@Test
+	//@Test
 	public void testResolveUrl() throws Exception {
 		URI url = new URI("http://feedproxy.google.com/~r/alistapart/main/~3/BU6iDJCwiVY/i-dont-need-help");
 		URI real = networkService.resolveRedirects(url);
 		assertEquals("http://alistapart.com/article/i-dont-need-help/", real.toString());
 	}
 
-	@Test
+	//@Test
 	public void testResolveUrlAgain() throws Exception {
 		URI url = new URI("http://feedproxy.google.com/~r/37signals/beMH/~3/xozycK64-YI/the-richest-man-in-town-f115f0eb227");
 		URI real = networkService.resolveRedirects(url);

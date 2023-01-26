@@ -44,6 +44,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean testMode;
 	private String appleAppSiteAssociation;
 	private String monitoringMails;
+	private boolean migrateDatabaseSchema;
 	
 	private File tempDir;
 
@@ -340,5 +341,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setUglifyPath(String uglifyPath) {
 		this.uglifyPath = uglifyPath;
+	}
+
+	public boolean isMigrateDatabaseSchema() {
+		return migrateDatabaseSchema;
+	}
+
+	public void setMigrateDatabaseSchema(boolean migrateDatabaseSchema) {
+		this.migrateDatabaseSchema = migrateDatabaseSchema;
 	}
 }

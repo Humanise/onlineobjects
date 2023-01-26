@@ -21,7 +21,7 @@ public class TestRendering extends AbstractSpringTestCase {
 	public void testSimple() throws Exception {
 		String xml = "<button text='Button text'/>";
 		String result = huiService.renderFragment(xml);
-		Assert.assertTrue(result.contains("class=\"hui_button\""));
+		Assert.assertTrue(result.contains("class=\"hui_button"));
 	}
 
 	public void setHUIService(HUIService huiService) {

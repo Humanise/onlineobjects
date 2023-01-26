@@ -60,6 +60,7 @@ import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
 import dk.in2isoft.onlineobjects.model.validation.UserValidator;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ModelService implements InitializingBean, OperationProvider {
@@ -72,6 +73,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	private EventService eventService;
 	private SecurityService securityService;
 	private Migrator migrator;
+	private ConfigurationService configuration;
 	
 	private List<Class<?>> classes = Lists.newArrayList(); 
 	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
@@ -93,7 +95,9 @@ public class ModelService implements InitializingBean, OperationProvider {
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		migrator.migrate();
+		if (configuration.isMigrateDatabaseSchema()) {
+			migrator.migrate();
+		}
 		try {
 			sessionFactory = getSessionFactory();
 		} catch (Throwable t) {
@@ -1074,5 +1078,9 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	public void setMigrator(Migrator migrator) {
 		this.migrator = migrator;
+	}
+	
+	public void setConfiguration(ConfigurationService configuration) {
+		this.configuration = configuration;
 	}
 }
