@@ -14,9 +14,9 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
 
-    <liquibase.version>4.8.0</liquibase.version>
-    <liquibase-hibernate5.version>4.3.5</liquibase-hibernate5.version>
-    <javassist.version>3.28.0-GA</javassist.version>
+    <liquibase.version>4.19.0</liquibase.version>
+    <liquibase-hibernate5.version>4.19.0</liquibase-hibernate5.version>
+    <javassist.version>3.29.2-GA</javassist.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
@@ -151,7 +151,7 @@
     <dependency>
       <groupId>org.eclipse.jdt</groupId>
       <artifactId>org.eclipse.jdt.annotation</artifactId>
-      <version>2.2.600</version>
+      <version>2.2.700</version>
     </dependency>
 
 
@@ -346,7 +346,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.3.8</version>
+      <version>42.5.1</version>
     </dependency>
 
     <dependency>
@@ -395,13 +395,13 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <version>2.2.1</version>
+      <version>2.6.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-langdetect-optimaize</artifactId>
-      <version>2.2.1</version>
+      <version>2.6.0</version>
     </dependency>
 
     <dependency>
@@ -425,19 +425,19 @@
     <dependency>
       <groupId>org.apache.jena</groupId>
       <artifactId>jena-arq</artifactId>
-      <version>4.3.2</version>
+      <version>4.7.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.jena</groupId>
       <artifactId>jena-core</artifactId>
-      <version>4.3.2</version>
+      <version>4.7.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.jena</groupId>
       <artifactId>jena-iri</artifactId>
-      <version>4.3.2</version>
+      <version>4.7.0</version>
     </dependency>
 
     <dependency>
@@ -484,12 +484,12 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.15</version>
+      <version>4.4.16</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.13</version>
+      <version>4.5.14</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -524,12 +524,12 @@
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
-      <version>2.10.13</version>
+      <version>2.12.2</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.8.9</version>
+      <version>2.10.1</version>
     </dependency>
     <dependency>
       <groupId>net.sf.opencsv</groupId>
@@ -539,7 +539,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>31.0.1-jre</version>
+      <version>31.1-jre</version>
     </dependency>
 
 
@@ -559,13 +559,13 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>2.17.1</version>
+      <version>2.19.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.17.1</version>
+      <version>2.19.0</version>
     </dependency>
 
     <dependency>
@@ -619,7 +619,7 @@
     <dependency>
       <groupId>com.drewnoakes</groupId>
       <artifactId>metadata-extractor</artifactId>
-      <version>2.16.0</version>
+      <version>2.18.0</version>
     </dependency>
 
 
@@ -657,7 +657,7 @@
     <dependency>
       <groupId>org.thymeleaf</groupId>
       <artifactId>thymeleaf</artifactId>
-      <version>3.0.14.RELEASE</version>
+      <version>3.1.1.RELEASE</version>
     </dependency>
 
 
@@ -673,13 +673,13 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.14.3</version>
+      <version>1.15.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.dom4j</groupId>
       <artifactId>dom4j</artifactId>
-      <version>2.1.3</version>
+      <version>2.1.4</version>
       <exclusions>
         <exclusion>
           <groupId>xml-apis</groupId>
