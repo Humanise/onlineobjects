@@ -51,6 +51,7 @@ var appController = window.appController = {
     var enabled = !!this._currentItem;
     hui.ui.get('deleteObject').setEnabled(enabled);
     hui.ui.get('addWord').setEnabled(enabled);
+    hui.ui.get('addTag').setEnabled(enabled);
     favoriteCheckbox.setEnabled(enabled);
     inboxCheckbox.setEnabled(enabled);
     viewMode.setVisible(this._currentItem && this._currentItem.type == 'InternetAddress');
