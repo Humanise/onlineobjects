@@ -315,7 +315,7 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.faces</artifactId>
-      <version>2.3.8</version>
+      <version>2.4.0</version>
       <!--
       <scope>provided</scope>
       -->
@@ -407,13 +407,13 @@
     <dependency>
       <groupId>org.apache.opennlp</groupId>
       <artifactId>opennlp-tools</artifactId>
-      <version>1.9.4</version>
+      <version>2.1.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.opennlp</groupId>
       <artifactId>opennlp-uima</artifactId>
-      <version>1.9.4</version>
+      <version>2.1.0</version>
     </dependency>
 
     <dependency>
@@ -571,7 +571,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.32</version>
+      <version>2.0.6</version>
     </dependency>
 
 
@@ -754,7 +754,7 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>4.3</version>
+      <version>5.1.0</version>
       <scope>test</scope>
     </dependency>
 
