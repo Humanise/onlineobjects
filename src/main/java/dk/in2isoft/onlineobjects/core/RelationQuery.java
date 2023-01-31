@@ -7,8 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.hibernate.query.Query;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
@@ -128,16 +127,16 @@ public class RelationQuery {
 	
 	private void decorate(Query<?> query) {
 		if (this.id!=null) {
-			query.setParameter("id", this.id, LongType.INSTANCE);
+			query.setParameter("id", this.id, StandardBasicTypes.LONG);
 		}
 		if (this.fromEntity!=null) {
-			query.setParameter("from", this.fromEntity.getId(), LongType.INSTANCE);
+			query.setParameter("from", this.fromEntity.getId(), StandardBasicTypes.LONG);
 		}
 		if (this.toEntity!=null) {
-			query.setParameter("to", this.toEntity.getId(), LongType.INSTANCE);
+			query.setParameter("to", this.toEntity.getId(), StandardBasicTypes.LONG);
 		}
 		if (this.kind!=null) {
-			query.setParameter("kind", this.kind, StringType.INSTANCE);
+			query.setParameter("kind", this.kind, StandardBasicTypes.STRING);
 		}
 		if (!privileged.isEmpty()) {
 			List<Long> privIds = privileged.stream().map(priv -> priv.getIdentity()).collect(Collectors.toList());

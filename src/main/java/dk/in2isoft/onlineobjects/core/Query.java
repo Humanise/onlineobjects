@@ -6,8 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.type.DateType;
-import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.google.common.collect.Lists;
 
@@ -448,7 +447,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			FieldLimitation limit = i.next();
 			Object value = limit.getValue();
 			if (value instanceof Date) {
-				q.setParameter(limit.getProperty(), (Date) limit.getValue(), DateType.INSTANCE);
+				q.setParameter(limit.getProperty(), (Date) limit.getValue(), StandardBasicTypes.DATE);
 			} else if (value instanceof List<?>) {
 				q.setParameterList(limit.getProperty(), (List<?>) limit.getValue());
 			} else if (value instanceof Object[]) {
@@ -471,21 +470,21 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}
 		if (createdFrom != null) {
-			q.setParameter("createdFrom", createdFrom, DateType.INSTANCE);
+			q.setParameter("createdFrom", createdFrom, StandardBasicTypes.DATE);
 		}
 		if (createdTo != null) {
-			q.setParameter("createdTo", createdTo, DateType.INSTANCE);
+			q.setParameter("createdTo", createdTo, StandardBasicTypes.DATE);
 		}
 		for (int i = 0; i < from.size(); i++) {
 			Other parent2 = from.get(i);
-			q.setParameter("parent_"+i, parent2.getId(), LongType.INSTANCE);
+			q.setParameter("parent_"+i, parent2.getId(), StandardBasicTypes.LONG);
 			if (parent2.getRelationKind() != null) {
 				q.setParameter("parentKind_"+i, parent2.getRelationKind());
 			}
 		}
 		for (int i = 0; i < to.size(); i++) {
 			Other other = to.get(i);
-			q.setParameter("child_"+i, other.getId(), LongType.INSTANCE);
+			q.setParameter("child_"+i, other.getId(), StandardBasicTypes.LONG);
 			if (other.getRelationKind() != null) {
 				q.setParameter("childKind_"+i, other.getRelationKind());
 			}
@@ -497,7 +496,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}*/
 		if (toEntity != null) {
-			q.setParameter("child", toEntity.getId(), LongType.INSTANCE);
+			q.setParameter("child", toEntity.getId(), StandardBasicTypes.LONG);
 			if (toKind != null) {
 				q.setParameter("childKind", toKind);
 			}

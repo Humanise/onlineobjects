@@ -2,13 +2,11 @@ package dk.in2isoft.onlineobjects.core;
 
 import org.hibernate.ScrollableResults;
 
-import dk.in2isoft.commons.lang.Code;
-
 public class Results<T> implements AutoCloseable {
 
-	private ScrollableResults results;
+	private ScrollableResults<T> results;
 
-	protected Results(ScrollableResults results) {
+	protected Results(ScrollableResults<T> results) {
 		this.results = results;
 	}
 	
@@ -17,7 +15,7 @@ public class Results<T> implements AutoCloseable {
 	}
 	
 	public T get() {
-		T object = Code.cast(results.get(0));
+		T object = results.get();
 		return ModelService.getSubject(object);
 	}
 	

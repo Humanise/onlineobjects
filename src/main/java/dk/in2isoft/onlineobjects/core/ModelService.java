@@ -13,7 +13,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.metamodel.EntityType;
 import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
@@ -35,9 +34,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.SQLGrammarException;
 import org.hibernate.proxy.AbstractLazyInitializer;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.query.MutationQuery;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
-import org.hibernate.type.LongType;
 import org.onlineobjects.modules.database.Migrator;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.InitializingBean;
@@ -56,7 +55,6 @@ import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.LogEntry;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Relation;
-import dk.in2isoft.onlineobjects.model.Tag;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.validation.EntityValidator;
 import dk.in2isoft.onlineobjects.model.validation.UserValidator;
@@ -173,8 +171,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 	@SuppressWarnings("deprecation")
 	private void loadModelInfo() {
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-		Set<EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();
-		for (EntityType<?> entityType : entities) {
+		Set<jakarta.persistence.metamodel.EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();
+		for (jakarta.persistence.metamodel.EntityType<?> entityType : entities) {
 			Class<?> clazz = entityType.getJavaType();
 
 			log.debug(clazz + " with super " + clazz.getSuperclass());
@@ -397,19 +395,19 @@ public class ModelService implements InitializingBean, OperationProvider {
 		Session session = operator.getOperation().getSession();
 		{
 			String hql = "delete Privilege p where p.object in (select relation.id from Relation relation where relation.from=:entity or relation.to=:entity)";
-			Query<?> q = session.createQuery(hql);
+			MutationQuery q = session.createMutationQuery(hql);
 			q.setParameter("entity", entity);
 			int count = q.executeUpdate();
 			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
 			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity";
-			Query<?> q = session.createQuery(hql);
+			Query<Relation> q = session.createQuery(hql, Relation.class);
 			q.setParameter("entity", entity);
-			ScrollableResults results = q.scroll(ScrollMode.FORWARD_ONLY);
+			ScrollableResults<Relation> results = q.scroll(ScrollMode.FORWARD_ONLY);
 			while (results.next()) {
-				Relation rel = (Relation) results.get(0);
-				session.delete(rel);
+				Relation rel = (Relation) results.get();
+				session.remove(rel);
 				operator.getOperation().addDeleteEvent(rel);
 			}
 		}
@@ -697,7 +695,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		hql+=" where itemPriv.alter=true and itemPriv.object=:object and itemPriv.subject=user.id" +
 			" and user.id!=:public and user.id!=:admin";
 		if (!securityService.isAdminUser(privileged)) {
-			hql += " and userPriv.object=user and userPriv.subject in (:privileged)";
+			hql += " and userPriv.object=user.id and userPriv.subject in (:privileged)";
 		}
 		hql +=" order by itemPriv.id asc";
 		Query<User> q = createQuery(hql, User.class, session);
@@ -710,7 +708,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			if (!securityService.isPublicUser(privileged)) {
 				privs.add(securityService.getPublicUser().getId());
 			}
-			q.setParameterList("privileged", privs, LongType.INSTANCE);
+			q.setParameterList("privileged", privs);
 		}
 		return q;
 	}
@@ -763,7 +761,8 @@ public class ModelService implements InitializingBean, OperationProvider {
 	public <T> Results<T> scroll(ItemQuery<T> query, Operator operator) {
 		Query<T> q = query.createItemQuery(operator.getOperation().getSession());
 		q.setReadOnly(true).setFetchSize(0).setCacheable(false).setCacheMode(CacheMode.IGNORE);
-		return new Results<T>(q.scroll(ScrollMode.FORWARD_ONLY));
+		ScrollableResults<T> results = q.scroll(ScrollMode.FORWARD_ONLY);
+		return new Results<T>(results);
 	}
 
 
@@ -773,7 +772,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	private <T> List<T> list(CustomQuery<T> query, Session session) throws ModelException {
 		try {
-			NativeQuery<?> sql = session.createSQLQuery(query.getSQL());
+			NativeQuery<?> sql = session.createNativeQuery(query.getSQL());
 			query.setParameters(sql);
 			List<?> list = sql.list();
 			List<T> result = Lists.newArrayList();
@@ -803,7 +802,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		try {
 			int totalCount = count(query, operator);
 
-			NativeQuery<?> sqlQuery = operator.getOperation().getSession().createSQLQuery(sql);
+			NativeQuery<?> sqlQuery = operator.getOperation().getSession().createNativeQuery(sql);
 			query.setParameters(sqlQuery);
 
 			List<Object[]> rows = Code.castList(sqlQuery.list());
@@ -823,7 +822,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		String countSQL = query.getCountSQL();
 		int totalCount = 0;
 		if (countSQL!=null) {
-			NativeQuery<?> countSqlQuery = operator.getOperation().getSession().createSQLQuery(countSQL);
+			NativeQuery<?> countSqlQuery = operator.getOperation().getSession().createNativeQuery(countSQL);
 			query.setParameters(countSqlQuery);
 			List<?> countRows = countSqlQuery.list();
 			Object next = countRows.iterator().next();
@@ -882,11 +881,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 		Query<?> q = query.createItemQuery(session);
 		//q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Pair<T, U>> map = new ArrayList<Pair<T, U>>();
-		try (ScrollableResults scroll = q.scroll(ScrollMode.FORWARD_ONLY)) {
+		try (ScrollableResults<?> scroll = q.scroll(ScrollMode.FORWARD_ONLY)) {
 			while (scroll.next()) {
-				Object[] object = scroll.get();
-				T key = Code.cast(getSubject(object[0]));
-				U value = Code.cast(getSubject(object[1]));
+				Object[] row = (Object[]) scroll.get();
+				T key = Code.cast(getSubject(row[0]));
+				U value = Code.cast(getSubject(row[1]));
 				map.add(new Pair<T,U>(key, value));
 			}
 		}
@@ -1020,9 +1019,10 @@ public class ModelService implements InitializingBean, OperationProvider {
 		Query<?> q = createQuery(hql.toString(), priviledged.getOperation().getSession());
 		q.setParameter("key", key);
 		Map<String, Integer> list = new LinkedHashMap<String, Integer>();
-		ScrollableResults scroll = q.scroll();
+		ScrollableResults<?> scroll = q.scroll();
 		while (scroll.next()) {
-			list.put(scroll.getString(0), scroll.getLong(1).intValue());
+			Object[] row = (Object[]) scroll.get();
+			list.put(row[0].toString(), ((Number)row[1]).intValue());
 		}
 		return list;
 	}

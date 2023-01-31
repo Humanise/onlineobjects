@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.Privileged;
@@ -57,9 +57,9 @@ public class WordCloudQuery implements CustomQuery<CloudItem<Word>> {
 	}
 
 	public void setParameters(NativeQuery<?> sql) {
-		sql.setParameter("privileged", privileged, LongType.INSTANCE);
+		sql.setParameter("privileged", privileged, StandardBasicTypes.LONG);
 		if (viewId!=null) {
-			sql.setParameter("viewId", viewId, LongType.INSTANCE);
+			sql.setParameter("viewId", viewId, StandardBasicTypes.LONG);
 		}
 	}
 }

@@ -77,12 +77,12 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 			}
 		}
 	}
-
+	
 	@Override
-	public boolean requiresPostCommitHanding(EntityPersister persister) {
+	public boolean requiresPostCommitHandling(EntityPersister persister) {
 		return true;
 	}
-
+	
 	@Override
 	public void onPostUpdate(PostUpdateEvent event) {
 		log.debug("onPostUpdate: {}" ,event.getEntity());

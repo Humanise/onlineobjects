@@ -1,7 +1,10 @@
 package dk.in2isoft.onlineobjects.test.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +14,7 @@ import org.junit.experimental.categories.Category;
 
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.Results;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Privilege;
@@ -65,6 +69,12 @@ public class TestModelService extends AbstractSpringTestCase {
 		
 		List<Relation> relationsFromQuestion = modelService.find().relations(userOperator).from(question).list();
 		assertEquals(1, relationsFromQuestion.size());
+		
+		Results<Statement> scroll = modelService.scroll(Query.after(Statement.class), userOperator);
+		assertTrue(scroll.next());
+		assertEquals(statement, scroll.get());
+		assertFalse(scroll.next());
+		assertNull(scroll.get());
 		
 		modelService.delete(question, userOperator);
 		modelService.delete(statement, userOperator);

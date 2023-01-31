@@ -1,9 +1,8 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.query.Query;
-import org.hibernate.type.DoubleType;
-import org.hibernate.type.StringType;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.commons.geo.GeoLatLng;
 import dk.in2isoft.commons.lang.Strings;
@@ -49,14 +48,14 @@ public class LocationQuery<T extends Entity> implements PairQuery<Location, T> {
 		if (Strings.isDefined(words)) {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				q.setParameter("word" + i, "%" + word + "%", StringType.INSTANCE);
+				q.setParameter("word" + i, "%" + word + "%", StandardBasicTypes.STRING);
 			}
 		}
 		if (northEast != null && southWest != null) {
-			q.setParameter("minLongitude", southWest.getLng(), DoubleType.INSTANCE);
-			q.setParameter("maxLongitude", northEast.getLng(), DoubleType.INSTANCE);
-			q.setParameter("minLatitude", southWest.getLat(), DoubleType.INSTANCE);
-			q.setParameter("maxLatitude", northEast.getLat(), DoubleType.INSTANCE);
+			q.setParameter("minLongitude", southWest.getLng(), StandardBasicTypes.DOUBLE);
+			q.setParameter("maxLongitude", northEast.getLng(), StandardBasicTypes.DOUBLE);
+			q.setParameter("minLatitude", southWest.getLat(), StandardBasicTypes.DOUBLE);
+			q.setParameter("maxLatitude", northEast.getLat(), StandardBasicTypes.DOUBLE);
 		}
 	}
 

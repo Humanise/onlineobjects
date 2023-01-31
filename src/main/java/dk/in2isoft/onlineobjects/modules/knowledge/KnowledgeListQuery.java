@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.modules.knowledge;
 import java.util.Collection;
 
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.google.common.collect.Lists;
 
@@ -86,8 +86,8 @@ public class KnowledgeListQuery implements CustomQuery<KnowledgeListRow> {
 	}
 
 	public void setParameters(NativeQuery<?> sql) {
-		sql.setParameter("privileged", privileged, LongType.INSTANCE);
+		sql.setParameter("privileged", privileged, StandardBasicTypes.LONG);
 		Collection<Long> ids = Code.isEmpty(this.ids) ? Lists.newArrayList(-1l) : this.ids;
-		sql.setParameterList("ids", ids, LongType.INSTANCE);
+		sql.setParameterList("ids", ids, StandardBasicTypes.LONG);
 	}
 }

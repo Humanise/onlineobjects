@@ -12,7 +12,7 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.flexible.standard.QueryParserUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.google.common.collect.Lists;
 
@@ -401,7 +401,7 @@ public class WordService {
 
 				@Override
 				public void setParameters(NativeQuery<?> sql) {
-					sql.setParameter("id", address.getId(), LongType.INSTANCE);
+					sql.setParameter("id", address.getId(), StandardBasicTypes.LONG);
 				}
 			};
 			List<Long> num = modelService.list(q, operator);

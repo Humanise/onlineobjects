@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.StringType;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
@@ -59,10 +59,10 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 	
 	public void setParameters(NativeQuery<?> sql) {
 		if (Code.isNotEmpty(words)) {
-			sql.setParameterList("words", words, new StringType());
+			sql.setParameterList("words", words, StandardBasicTypes.STRING);
 		}
 		if (Code.isNotEmpty(categories)) {
-			sql.setParameterList("categories", categories, new StringType());
+			sql.setParameterList("categories", categories, StandardBasicTypes.STRING);
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
@@ -55,6 +55,6 @@ public class TagSelectionQuery implements CustomQuery<ItemData> {
 	}
 
 	public void setParameters(NativeQuery<?> sql) {
-		sql.setParameter("privileged", privileged, LongType.INSTANCE);
+		sql.setParameter("privileged", privileged, StandardBasicTypes.LONG);
 	}
 }

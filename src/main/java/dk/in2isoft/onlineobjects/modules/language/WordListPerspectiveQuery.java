@@ -1,13 +1,11 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.google.common.collect.Lists;
 
@@ -64,7 +62,7 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 
 	public WordListPerspective convert(Object[] row) {
 		WordListPerspective impression = new WordListPerspective();
-		impression.setId(((BigInteger) row[0]).longValue());
+		impression.setId(((Number) row[0]).longValue());
 		impression.setText((String) row[1]);
 		impression.setUrlPart(Strings.encodeURL(StringUtils.lowerCase((String) row[1])));
 		impression.setLanguage((String) row[2]);
@@ -127,16 +125,16 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 	
 	public void setParameters(NativeQuery<?> sql) {
 		if (startingWith!=null) {
-			sql.setParameter("startingWith", startingWith+"%", StringType.INSTANCE);
+			sql.setParameter("startingWith", startingWith+"%", StandardBasicTypes.STRING);
 		}
 		if (Code.isNotEmpty(words)) {
-			sql.setParameterList("words", words, new StringType());
+			sql.setParameterList("words", words, StandardBasicTypes.STRING);
 		}
 		if (Code.isNotEmpty(ids)) {
-			sql.setParameterList("ids", ids, new LongType());
+			sql.setParameterList("ids", ids, StandardBasicTypes.LONG);
 		}
 		if (startingWithSymbol) {
-			sql.setParameterList("alphabeth", Strings.ALPHABETH, new StringType());
+			sql.setParameterList("alphabeth", Strings.ALPHABETH, StandardBasicTypes.STRING);
 		}
 	}
 	

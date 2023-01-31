@@ -1,8 +1,8 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.query.Query;
-import org.hibernate.type.StringType;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.type.StandardBasicTypes;
 
 import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -24,7 +24,7 @@ public class UserQuery implements ItemQuery<User> {
 	public Query<User> createItemQuery(Session session) {
 		String hql = "select user " + base;
 		Query<User> query = session.createQuery(hql, User.class);
-		query.setParameter("secret", secret, StringType.INSTANCE);
+		query.setParameter("secret", secret, StandardBasicTypes.STRING);
 		return query;
 	}
 
@@ -32,7 +32,7 @@ public class UserQuery implements ItemQuery<User> {
 	public Query<Long> createCountQuery(Session session) {
 		String hql = "select count(user.id) " + base;
 		Query<Long> query = session.createQuery(hql, Long.class);
-		query.setParameter("secret", secret, StringType.INSTANCE);
+		query.setParameter("secret", secret, StandardBasicTypes.STRING);
 		return query;
 	}
 
