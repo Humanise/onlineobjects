@@ -11,6 +11,9 @@ test:
 test-all:
 	mvn test -q
 
+test-model:
+	mvn -Dtest='dk.in2isoft.onlineobjects.test.model.*' test
+
 extract:
 	mvn test -q -Dtest=TestExtractionComparison
 
