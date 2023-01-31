@@ -240,13 +240,19 @@
       <version>3.0.0</version>
     </dependency>
 
+    <!-- email -->
 
     <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.4</version>
+        <groupId>com.sun.mail</groupId>
+        <artifactId>javax.mail</artifactId>
+        <version>1.6.2</version>
     </dependency>
 
+    <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>1.6.2</version>
+    </dependency>
 
     <!-- Spring -->
 
@@ -302,7 +308,6 @@
     </dependency>
 
     <!-- Java Server Faces -->
-      
       
     <dependency>
       <groupId>javax.faces</groupId>
@@ -577,18 +582,10 @@
     <!-- Unknown -->
 
     <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1.1</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>${javassist.version}</version>
     </dependency>
-
-
 
     <!-- Images -->
 
