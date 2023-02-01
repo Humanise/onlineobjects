@@ -28,13 +28,14 @@
 				<exclude name="jetty*.jar"/>
 				<exclude name="org.apache.servicemix.bundles.lucene-3.0.1_2.jar"/>
 				<exclude name="servlet-api-2.5-20081211.jar"/> <!-- From Jetty -->
+				<exclude name="angus-activation-1.0.0.jar"/>
 			</fileset>
 		</copy>
 
 		<copy todir="${dest}/OnlineObjects/onlineobjects/hui">
 			<fileset dir="${basedir}/src/main/webapp/hui">
 				<exclude name="node_modules/"/>
-      </fileset>
+			</fileset>
 		</copy>
 		<copy todir="${dest}/OnlineObjects/onlineobjects/jsf">
 			<fileset dir="${basedir}/src/main/webapp/jsf" />
