@@ -93,8 +93,8 @@ var appController = window.appController = {
     var panel = hui.ui.get('editTagPanel');
     panel.setBusy(true);
     hui.ui.request({
-      url: '/app/tag',
-      method: 'PUT',
+      url: '/app/tag/update',
+      method: 'POST',
       parameters: {
         id: this._editedTag.id,
         text: text

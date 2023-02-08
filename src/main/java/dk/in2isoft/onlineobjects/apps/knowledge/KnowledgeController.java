@@ -433,7 +433,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return text.trim().replaceAll("[\\s\\n\\r\\t]+", " ");
 	}
 
-	@Path(expression = "/app/tag", method = "PUT")
+	@Path(expression = "/app/tag/update", method = "POST")
 	public void updateTag(Request request) throws EndUserException {
 		String text = request.getString("text", "A tag must have some text");		
 		text = normaliseTag(text);

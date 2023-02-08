@@ -296,6 +296,11 @@ public class IndexManager {
 			Query query = parser.parse(text);
 			return search(query, sort, page, size);
 		} catch (ParseException e) {
+			log.warn("Index search failed", e);
+			List<IndexSearchResult> found = Lists.newArrayList();
+			return new SearchResult<IndexSearchResult>(found, 0);
+		} catch (IllegalArgumentException e) {
+			log.warn("Index search failed", e);
 			List<IndexSearchResult> found = Lists.newArrayList();
 			return new SearchResult<IndexSearchResult>(found, 0);
 		}
