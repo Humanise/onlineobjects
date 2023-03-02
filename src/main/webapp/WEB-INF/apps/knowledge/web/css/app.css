@@ -236,12 +236,13 @@
     vertical-align: middle;
     -webkit-font-smoothing: antialiased; }
   .selection_more {
-    font-size: 12px;
+    font-size: 14px;
     align-self: center;
     margin-left: 4px;
     color: rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: opacity .3s; }
+    transition: opacity .3s;
+    text-align: center; }
     .selection_more:hover {
       color: black; }
   .selection:hover .selection_more {
