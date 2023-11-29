@@ -181,7 +181,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-http</artifactId>
-      <version>10.0.7</version>
+      <version>10.0.10</version>
     </dependency>
 
     <dependency>
@@ -193,7 +193,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>10.0.7</version>
+      <version>10.0.14</version>
     </dependency>
 
     <dependency>
@@ -259,7 +259,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>5.3.25</version>
+      <version>5.3.27</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -472,7 +472,7 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.4</version>
+      <version>1.5</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -542,7 +542,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>31.1-jre</version>
+      <version>32.0.0-jre</version>
     </dependency>
 
 
