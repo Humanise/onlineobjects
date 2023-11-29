@@ -111,7 +111,7 @@ public abstract class AbstractController {
 	}
 	
 	public void unknownRequest(Request request) throws IOException, EndUserException {
-		throw new ContentNotFoundException("The content could not be found");
+		throw new ContentNotFoundException("Not found");
 	}
 
 	public RequestDispatcher getDispatcher(Request request) {

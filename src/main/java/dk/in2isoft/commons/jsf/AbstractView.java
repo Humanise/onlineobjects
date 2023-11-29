@@ -24,7 +24,7 @@ public abstract class AbstractView implements InitializingBean {
 		
 	}
 	
-	private Request getRequest() {
+	protected Request getRequest() {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		return Request.get((HttpServletRequest) context.getRequest(),(HttpServletResponse) context.getResponse());
 	}

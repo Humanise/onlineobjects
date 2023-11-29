@@ -37,11 +37,15 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DesktopController extends DesktopControlerBase {
 
+	@Override
+	public boolean isAllowed(Request request) {
+		return !securityService.isPublicUser(request);
+	}
 
 	@Path(expression = "/")
 	@View(jsf = "front.xhtml")
 	public void front(Request request) {
-		System.out.println("front");
+		
 	}
 
 	@Override

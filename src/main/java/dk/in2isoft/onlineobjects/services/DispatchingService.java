@@ -140,11 +140,9 @@ public class DispatchingService {
 		ex = EndUserException.findUserException(ex);
 		try {
 			if (ex instanceof ContentNotFoundException) {
-				logError(request, ex);
 				surveillanceService.surveyNotFound(request);
-			} else {
-				logError(request, ex);
 			}
+			logError(request, ex);
 			HttpServletResponse response = request.getResponse();
 			int statusCode = getStatusCode(ex);
 			response.setStatus(statusCode);
@@ -208,8 +206,9 @@ public class DispatchingService {
 				+ "<head>"
 				+ "<title>" + HTML.escape(msg) + "</title>"
 				+ "<link rel=\"stylesheet\" href=\"/core/css/error.css\" type=\"text/css\" media=\"screen\" title=\"front\" charset=\"utf-8\" />"
+				+ "<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap\" rel=\"stylesheet\">"
 				+ "</head>"
-				+ "<body class=\"oo_body\">"
+				+ "<body class=\"oo_body oo_body-light	\">"
 				+ "<div class=\"error\">"
 				+ "<h1 class=\"error_title\">" + HTML.escape(msg) + "</h1>"
 				+ "<p class=\"error_status\" onclick=\"document.getElementById('trace').style.display='block'\">" + statusCode + "</p>");

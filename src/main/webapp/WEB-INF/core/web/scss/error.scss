@@ -5,26 +5,28 @@
 
 .error {
   text-align: left;
-  width: 450px;
   margin: 0 auto 0;
   position: relative;
-  top: 100px;
   padding: 40px 20px;
   background: #fff;
-  border: 1px solid #eee;
   border-radius: 5px;
   text-align: center;
+  color: #555;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
 
   @include icon-before(warning) {
-    font-size: 80px;
+    font-size: 64px;
     display: block;
-    color: #ddd;
   }
 
   &_title {
     font-weight: 600;
     font-size: 24px;
-    margin: 20px 0px 10px;
+    margin: 10px 0 0;
   }
 
   &_status {

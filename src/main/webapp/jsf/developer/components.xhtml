@@ -5,12 +5,18 @@
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
   <ui:composition template="templates/plain.xhtml">
 
     <ui:define name="body">
       <o:script src="/js/controller.js"/>
       <o:box>
+
+
+        <c:forEach items="${developerView.icons}" var="icon">
+          <div><o:icon icon="#{icon}" size="32"/> ${icon}</div>
+        </c:forEach>
 
         <o:header>This is a header</o:header>
         <p>

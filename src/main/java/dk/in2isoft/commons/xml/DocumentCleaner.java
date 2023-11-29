@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -40,7 +40,7 @@ public class DocumentCleaner {
 	private boolean allowStructureTags;
 	private boolean allowUnnecessaryTags;
 	
-	private static final Logger log = LoggerFactory.getLogger(DocumentCleaner.class);
+	private static final Logger log = LogManager.getLogger(DocumentCleaner.class);
 
 	public DocumentCleaner() {
 		validAttributes.put("a", "href");

@@ -40,6 +40,7 @@ public class IconComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
+		String icon = getExpression("icon", this.icon, context);
 		boolean addController = isNotBlank(name);
 		String id = getClientId();
 		

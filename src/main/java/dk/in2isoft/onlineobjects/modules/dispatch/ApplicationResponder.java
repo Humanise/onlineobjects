@@ -15,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
 import dk.in2isoft.onlineobjects.ui.Request;
 
