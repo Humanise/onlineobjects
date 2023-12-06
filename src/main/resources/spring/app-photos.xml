@@ -15,11 +15,18 @@
    		<property name="securityService" ref="securityService"/>
    	</bean>
    	
+   	<bean class="org.onlineobjects.modules.photos.PhotosConsistencyChecker">
+   		<property name="piles" ref="pileService"/>
+   		<property name="model" ref="modelService"/>
+   		<property name="security" ref="securityService"/>
+   	</bean>
+   	
    	<!-- Views -->
    	
    	<bean id="photosFrontView" class="dk.in2isoft.onlineobjects.apps.photos.views.PhotosFrontView" scope="request">
    		<property name="modelService" ref="modelService"/>
    		<property name="securityService" ref="securityService"/>
+   		<property name="cache" ref="cacheService"/>
    	</bean>
    	
    	<bean id="photosPhotoView" class="dk.in2isoft.onlineobjects.apps.photos.views.PhotosPhotoView" scope="request">

@@ -25,6 +25,8 @@ public class FileService {
 	private MimeUtil2 mimeUtil;
 	private Map<String,String> mimeTypeToFileName;
 	
+	private ConfigurationService config;
+	
 	public FileService() {
 		mimeUtil = new MimeUtil2();
 		mimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.ExtensionMimeDetector");
@@ -35,6 +37,10 @@ public class FileService {
 		mimeTypeToFileName.put("video/mp4", "mp4");
 	}
 
+	public File getUploadDir() {
+		return config.getTempDir();
+	}
+	
 	public String getMimeType(File file) {
 		Collection<?> types = mimeUtil.getMimeTypes(file);
 		MimeType mimeType = MimeUtil2.getMostSpecificMimeType(types);
@@ -68,5 +74,9 @@ public class FileService {
 		StringWriter writer = new StringWriter();
 		IOUtils.copy(reader, writer);
 		return writer.getBuffer().toString();
+	}
+	
+	public void setConfig(ConfigurationService config) {
+		this.config = config;
 	}
 }

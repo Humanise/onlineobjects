@@ -1,10 +1,12 @@
 package dk.in2isoft.onlineobjects.util.images;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,25 +27,32 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 import com.google.common.collect.Sets;
+import com.mchange.io.impl.StartsWithFilenameFilter;
 
 import dk.in2isoft.commons.geo.GeoDistance;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Location;
+import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.FileService;
+import dk.in2isoft.onlineobjects.services.PileService;
 import dk.in2isoft.onlineobjects.services.StorageService;
 import dk.in2isoft.onlineobjects.util.images.ImageInfo.ImageLocation;
 
 public class ImageService extends AbstractCommandLineInterface {
 	
+	public static final String FEATURED_PILE = "photos.featured";
 	private static final int NONE = 0;
 	private static final int HORIZONTAL = 1;
 	private static final int VERTICAL = 2;
@@ -66,6 +75,8 @@ public class ImageService extends AbstractCommandLineInterface {
 	private ConfigurationService configurationService;
 	private FileService fileService;
 	private ModelService modelService;
+	private PileService pileService;
+	private SecurityService securityService;
 
 	public ImageService() {
 	}
@@ -136,6 +147,15 @@ public class ImageService extends AbstractCommandLineInterface {
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			throw new EndUserException(e);
+		}
+	}
+	
+	public void clearCache(Image image) {
+		File folder = storageService.getItemFolder(image);
+		FilenameFilter filter = new StartsWithFilenameFilter("transformed", StartsWithFilenameFilter.NEVER);
+		File[] files = folder.listFiles(filter);
+		for (File file : files) {
+			file.delete();
 		}
 	}
 	
@@ -247,6 +267,23 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 	
+	public void clearMetaData(Image image, Operator priviledged) throws EndUserException {
+		var properties = new String[] {
+			Property.KEY_PHOTO_TAKEN,
+			Property.KEY_PHOTO_CAMERA_MAKE,
+			Property.KEY_PHOTO_CAMERA_MODEL,
+			Property.KEY_COMMON_TAG,
+			Property.KEY_PHOTO_ROTATION,
+			Property.KEY_PHOTO_FLIP_HORIZONTALLY,
+			Property.KEY_PHOTO_FLIP_VERTICALLY,
+			Property.KEY_PHOTO_COLORS
+		};
+		for (String key : properties) {
+			image.removeProperties(key);
+		}
+		modelService.update(image, priviledged);
+	}
+	
 	public void synchronizeMetaData(Image image, Operator priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		ImageMetaData metaData = getMetaData(file);
@@ -307,6 +344,9 @@ public class ImageService extends AbstractCommandLineInterface {
 				location.setLongitude(metaData.getLongitude());
 				modelService.create(location, priviledged);
 				modelService.createRelation(location, image, null, priviledged);
+				if (securityService.isPublicView(image, priviledged)) {
+					securityService.makePublicVisible(location, priviledged);
+				}
 			}
 		}
 	}
@@ -397,37 +437,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}		
 	}
 
-	public void setStorageService(StorageService storageService) {
-		this.storageService = storageService;
-	}
 
-	public StorageService getStorageService() {
-		return storageService;
-	}
-
-	public void setConfigurationService(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
-
-	public ConfigurationService getConfigurationService() {
-		return configurationService;
-	}
-
-	public void setModelService(ModelService modelService) {
-		this.modelService = modelService;
-	}
-
-	public ModelService getModelService() {
-		return modelService;
-	}
-
-	public void setFileService(FileService fileService) {
-		this.fileService = fileService;
-	}
-
-	public FileService getFileService() {
-		return fileService;
-	}
 
 	public File getImageFile(Image image) {
 		File folder = storageService.getItemFolder(image);
@@ -442,14 +452,18 @@ public class ImageService extends AbstractCommandLineInterface {
 		return new File(folder,"original").exists();
 	}
 
-	public void changeImageFile(Image image, File file,String contentType) throws EndUserException {
+	public void changeImageFile(Image image, File file, String contentType) throws EndUserException {
 		ImageProperties props = getImageProperties(file);
 		image.setWidth(props.getWidth());
 		image.setHeight(props.getHeight());
 		image.setContentType(contentType);
 		image.setFileSize(file.length());
 		File folder = storageService.getItemFolder(image);
-		file.renameTo(new File(folder,"original"));
+		File dest = new File(folder,"original");
+		boolean success = file.renameTo(dest);
+		if (!success) {
+			throw new ExplodingClusterFuckException("Unable to move file from: " + file + " to " + dest);
+		}
 	}
 
 	public void deleteImage(Image image, Operator privileged) throws ModelException, SecurityException {
@@ -458,5 +472,46 @@ public class ImageService extends AbstractCommandLineInterface {
 			modelService.delete(location, privileged);
 		}
 		modelService.delete(image, privileged);
+	}
+
+	public boolean isFeatured(Image image, Operator request) {
+		Pile pile = pileService.byKey(FEATURED_PILE, request);
+		return modelService.getRelation(pile, image, request).isPresent();
+	}
+
+	public void setFeatured(Image image, boolean featured, Operator operator) throws ModelException, SecurityException {
+		Pile pile = pileService.byKey(FEATURED_PILE, operator);
+		Optional<Relation> relation = modelService.getRelation(pile, image, operator);
+		if (featured && !relation.isPresent()) {
+			modelService.createRelation(pile, image, operator);
+		} else if (!featured && relation.isPresent()) {
+			modelService.delete(relation.get(), operator);
+		}
+	}
+
+	// Wiring...
+	
+	public void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
+	}
+
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
+	}
+
+	public void setFileService(FileService fileService) {
+		this.fileService = fileService;
+	}
+
+	public void setPileService(PileService pileService) {
+		this.pileService = pileService;
+	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 }

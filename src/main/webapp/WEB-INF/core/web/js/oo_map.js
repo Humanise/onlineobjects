@@ -8,7 +8,6 @@ oo.Map = function(options) {
   } else {
     hui.ui.onReady(this._initStatic.bind(this));
   }
-  hui.log('New map');
   this._addBehavior();
 }
 
@@ -32,8 +31,11 @@ oo.Map.prototype = {
     hui.log('Init static');
     var loc = this.options.location;
     if (loc) {
-      var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&maptype=terrain&sensor=false&key=AIzaSyC0jPmRh2M5ZNKHhBiRWd5RATUuP3Ia9gM ';
-      this.element.style.backgroundImage='url(\''+url+'\')';
+
+      var scale = window.devicePixelRatio > 1 ? 2 : 1;
+      var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&scale=' + scale + '&maptype=terrain&sensor=false&key=AIzaSyC0jPmRh2M5ZNKHhBiRWd5RATUuP3Ia9gM';
+      this.element.style.backgroundImage = 'url(' + url + ')';
+      this.element.style.backgroundSize = 'cover';
     }
   },
   _init : function() {

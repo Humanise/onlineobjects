@@ -9,7 +9,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public interface ImportListener<T> {
 
-	public void processFile(File file, String mimeType, String name, Map<String, String> parameters, Request request) throws IOException, EndUserException;
+	public void processFile(File file, String mimeType, String fileName, Map<String, String> parameters, Request request) throws IOException, EndUserException;
 
 	public String getProcessName();
 

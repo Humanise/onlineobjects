@@ -42,6 +42,11 @@ public class PileService {
 		return first;
 	}
 
+	public Pile byKey(String key, Operator operator) {
+		Query<Pile> query = Query.after(Pile.class).withCustomProperty(Pile.PROPERTY_KEY, key);
+		return modelService.search(query, operator).getFirst();
+	}
+
 	public Pile getOrCreatePileByRelation(User user, String relationKind, Operator operator) throws ModelException, SecurityException {
 		operator = operator.as(user);
 		Query<Pile> query = Query.after(Pile.class).from(user, relationKind).as(user);

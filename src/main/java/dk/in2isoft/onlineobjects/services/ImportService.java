@@ -23,17 +23,9 @@ public class ImportService {
 		sessionService.registerSubSession(session);
 		return session;
 	}
-
-	public void setSessionService(SessionService sessionService) {
-		this.sessionService = sessionService;
-	}
 	
 	public void setFileService(FileService fileService) {
 		this.fileService = fileService;
-	}
-
-	public FileService getFileService() {
-		return fileService;
 	}
 
 	public ImportSession getImportSession(String id) {

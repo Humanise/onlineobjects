@@ -52,6 +52,7 @@ public class DataImporter {
 		}
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(0);
+		factory.setRepository(fileService.getUploadDir());
 		
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		ProgressListener progressListener = new ProgressListener() {
@@ -81,7 +82,7 @@ public class DataImporter {
 						item.getInputStream();
 						if (item instanceof DiskFileItem) {
 							File file = ((DiskFileItem)item).getStoreLocation();
-							listener.processFile(file,fileService.getMimeType(file),fileService.cleanFileName(item.getName()), parameters, request);
+							listener.processFile(file, fileService.getMimeType(file), item.getName(), parameters, request);
 						}
 					} catch (Exception e) {
 						process.setError(true);

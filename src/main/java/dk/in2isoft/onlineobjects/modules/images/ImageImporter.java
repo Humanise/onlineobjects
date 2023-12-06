@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
@@ -19,7 +21,7 @@ import dk.in2isoft.onlineobjects.util.images.ImageService;
 public class ImageImporter implements ImportListener<Object> {
 
 	protected ModelService modelService;
-	private ImageService imageService;
+	protected ImageService imageService;
 	private List<Image> importedImages;
 
 	public ImageImporter(ModelService modelService, ImageService imageService) {
@@ -29,17 +31,18 @@ public class ImageImporter implements ImportListener<Object> {
 		importedImages = new ArrayList<Image>();
 	}
 
-	public final void processFile(File file, String mimeType, String name, Map<String, String> parameters, Request request) throws IOException, EndUserException {
+	public final void processFile(File file, String mimeType, String fileName, Map<String, String> parameters, Request request) throws IOException, EndUserException {
 		if (!isRequestLegal(parameters,request)) {
 			throw new IllegalRequestException("The request is illegal!");
 		}
 		if (!imageService.isSupportedMimeType(mimeType)) {
 			throw new IllegalRequestException("Unsupported mime type: "+mimeType);
 		}
-		Image image = new Image();
+		if (!file.exists()) {
+			throw new ExplodingClusterFuckException("The file is missing: " + file);
+		}
 		Operator privileged = request.as(getUser(parameters, request));
-		modelService.create(image, request);
-		image.setName(name);
+		Image image = getImage(fileName, parameters, request);
 		imageService.changeImageFile(image, file, mimeType);
 		imageService.synchronizeMetaData(image, privileged);
 		preProcessImage(image, parameters, request);
@@ -48,6 +51,13 @@ public class ImageImporter implements ImportListener<Object> {
 		image = modelService.get(Image.class, image.getId(), privileged);
 		postProcessImage(image, parameters, request);
 		privileged.commit();
+	}
+
+	protected Image getImage(String fileName, Map<String, String> parameters, Request request) throws EndUserException {
+		Image image = new Image();
+		image.setName(Files.cleanFileName(fileName));
+		modelService.create(image, request);
+		return image;
 	}
 	
 	protected void preProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {

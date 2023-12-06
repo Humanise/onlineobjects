@@ -63,6 +63,20 @@ p.photos_photo_by strong {
   font-size: 0;
   background: -webkit-radial-gradient(center, ellipse cover, #fff 0%,#f3f3f3 100%);
   text-align: center;
+  &.is-dropping {
+    opacity: .5;
+  }
+}
+
+.photos_photo_image_progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .photos_photo_image_vertical {
@@ -75,7 +89,6 @@ p.photos_photo_by strong {
 }
 
 .photos_photo_properties {
-  font-weight: 300;
   padding: 20px 0px 0;
   font-size: 12px;
 }
@@ -105,8 +118,8 @@ p.photos_photo_words a {
 
 
 .photos_photo_galleries h2 {
-  font-weight: 200;
-  font-size: 14pt;
+  font-weight: 400;
+  font-size: $large-font-size;
   margin: 15px 0 5px;
   color: #999;
 }

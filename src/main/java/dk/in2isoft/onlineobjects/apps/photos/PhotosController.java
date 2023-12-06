@@ -21,6 +21,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
+import dk.in2isoft.onlineobjects.model.Location;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
@@ -134,7 +135,15 @@ public class PhotosController extends PhotosControllerBase {
 		Image image = modelService.getRequired(Image.class, id, request);
 		imageService.synchronizeMetaData(image, request);
 	}
-	
+
+	@Path
+	public void changeFeatured(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+		long imageId = request.getInt("image");
+		boolean featured = request.getBoolean("featured");
+		Image image = getImage(imageId, request);
+		imageService.setFeatured(image, featured, request);
+	}
+
 	@Path
 	public void changeAccess(Request request) throws SecurityException, ModelException, ContentNotFoundException {
 		long imageId = request.getInt("image");
@@ -144,6 +153,14 @@ public class PhotosController extends PhotosControllerBase {
 			securityService.makePublicVisible(image, request);
 		} else {
 			securityService.makePublicHidden(image, request);
+		}
+		Location location = modelService.getParent(image, Location.class, request);
+		if (location != null) {
+			if (publicAccess) {
+				securityService.makePublicVisible(location, request);
+			} else {
+				securityService.makePublicHidden(location, request);
+			}			
 		}
 		List<Relation> galleryRelations = modelService.find().relations(request).from(ImageGallery.class).to(image).list();
 		for (Relation relation : galleryRelations) {
@@ -166,6 +183,14 @@ public class PhotosController extends PhotosControllerBase {
 	public void uploadToGallery(Request request) throws IOException, EndUserException {
 		DataImporter dataImporter = importService.createImporter();
 		ImportListener<?> listener = new ImageGalleryImporter(modelService,imageService);
+		dataImporter.setListener(listener);
+		dataImporter.importMultipart(this, request);
+	}
+
+	@Path
+	public void replace(Request request) throws IOException, EndUserException {
+		DataImporter dataImporter = importService.createImporter();
+		ImportListener<?> listener = new ImageReplacer(modelService, imageService);
 		dataImporter.setListener(listener);
 		dataImporter.importMultipart(this, request);
 	}

@@ -2,6 +2,7 @@ package dk.in2isoft.onlineobjects.modules.caching;
 
 import java.io.File;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.jcs.JCS;
 import org.apache.commons.jcs.access.CacheAccess;
+import org.apache.commons.jcs.engine.behavior.IElementAttributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationListener;
@@ -122,6 +124,19 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		return type.getSimpleName() + "_" + id + "_" + privileged.getIdentity();
 	}
 
+	public <T> T cache(String name, Duration duration, Callable<T> producer) throws Exception {
+		
+		Object object = perspectiveCache.get(name);
+		if (object == null) {
+			object = producer.call();
+			IElementAttributes attributes = perspectiveCache.getDefaultElementAttributes();
+			attributes.setMaxLife(duration.toSeconds());
+			attributes.setIsEternal(false);
+			perspectiveCache.put(name, object, attributes);
+		}
+		return (T) object;
+	}
+	
 	public <T> T cache(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
 		String typeName = type.getSimpleName();
 		String key = buildKey(id, privileged, type);

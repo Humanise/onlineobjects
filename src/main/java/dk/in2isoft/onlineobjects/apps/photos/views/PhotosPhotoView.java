@@ -61,6 +61,7 @@ public class PhotosPhotoView extends AbstractView {
 	
 	private String fullPersonName;
 	private Long imageId;
+	private boolean featured;
 	
 	public void before(Request request) throws Exception {
 		{
@@ -153,7 +154,13 @@ public class PhotosPhotoView extends AbstractView {
 			language = path[0];
 			
 			galleries = modelService.getParents(image, ImageGallery.class, request);
+			
+			featured = imageService.isFeatured(image, request);
 		}
+	}
+	
+	public boolean isFeatured() {
+		return featured;
 	}
 	
 	public List<SelectItem> getProperties() {

@@ -16,7 +16,45 @@ var photoView = {
         name : 'titleEditor'
       });
       this._addWordBehavior();
+      this._attachDrop();
     }
+  },
+  _attachDrop : function() {
+    hui.drag.listen({
+      element : hui.get.firstByClass(document.body,'photos_photo_image'),
+      hoverClass : 'is-dropping',
+      $dropFiles : this._dropFiles.bind(this)
+    })
+  },
+  _dropFiles : function(files) {
+    if (files.length > 0) {
+      this._addFile(files[0]);      
+    }
+  },
+  _addFile : function(file) {
+    var indicator = hui.ui.ProgressIndicator.create({size: 120, opacity: .5});
+    var img = hui.get.firstByClass(document.body, 'photos_photo_image');
+    var container = hui.build('div.photos_photo_image_progress', {parent: img});
+    container.appendChild(indicator.getElement());
+    var cleanup = function() {
+      hui.dom.remove(container);
+      hui.ui.destroy(indicator);
+    }
+    hui.ui.request({
+      url : '/replace',
+      parameters : {id : this.imageId},
+      file : file,
+      $success : function() {
+        document.location.reload();
+      }.bind(this),
+      $failure : function() {
+        hui.ui.msg.fail({text: 'Unable to replace photo'});
+        this._uploadEnded()
+      }.bind(this),
+      $progress : function(loaded,total) {
+        indicator.setValue(loaded / total);
+      }
+    });
   },
   _addWordBehavior : function() {
     hui.listen(hui.get('words'),'click',this._onClickWord.bind(this))
@@ -138,6 +176,17 @@ var photoView = {
       parameters : {image : this.imageId, 'public' : value},
       $failure : function() {
         hui.ui.msg.fail({text:'Unable to change access'});
+      }
+    })
+  },
+
+  $valueChanged$featured : function(value) {
+    hui.ui.request({
+      message : {start:'Changing', delay:300, success:'Changed'},
+      url : '/changeFeatured',
+      parameters : {image : this.imageId, 'featured' : value},
+      $failure : function() {
+        hui.ui.msg.fail({text: 'Unable to change highlighted'});
       }
     })
   },
