@@ -22,6 +22,7 @@ public class SearchFieldComponent extends AbstractComponent {
 	private int expandedWidth;
 	private String value;
 	private boolean adaptive;
+	private String inputName;
 
 	public SearchFieldComponent() {
 		super(TYPE);
@@ -29,7 +30,7 @@ public class SearchFieldComponent extends AbstractComponent {
 
 	@Override
 	protected Object[] saveState() {
-		return new Object[] { name, placeholder, width, value, expandedWidth, adaptive };
+		return new Object[] { name, placeholder, width, value, expandedWidth, adaptive, inputName };
 	}
 
 	@Override
@@ -40,6 +41,7 @@ public class SearchFieldComponent extends AbstractComponent {
 		value = (String) values[3];
 		expandedWidth = (Integer) values[4];
 		adaptive = (Boolean) values[5];
+		inputName = (String) values[6];
 	}
 
 	@Override
@@ -55,6 +57,9 @@ public class SearchFieldComponent extends AbstractComponent {
 		writer.startElement("input").withClass("hui_searchfield_input");
 		if (value != null) {
 			writer.withAttribute("value", value);
+		}
+		if (inputName != null) {
+			writer.withAttribute("name", inputName);
 		}
 		writer.endElement("input");
 		writer.endSpan();
@@ -119,6 +124,14 @@ public class SearchFieldComponent extends AbstractComponent {
 
 	public boolean isAdaptive() {
 		return adaptive;
+	}
+
+	public String getInputName() {
+		return inputName;
+	}
+
+	public void setInputName(String inputName) {
+		this.inputName = inputName;
 	}
 
 }
