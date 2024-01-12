@@ -231,8 +231,9 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 					.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU).eternal(false).timeToLiveSeconds(60*60)
 					.timeToIdleSeconds(60*60)
 					.persistence(new PersistenceConfiguration().strategy(Strategy.LOCALTEMPSWAP)));
+			cache.setCacheManager(manager);
 			cache.initialise();
-			manager.addCache(cache);
+			manager.addDecoratedCache(cache);
 		}
 		return cache;
 	}

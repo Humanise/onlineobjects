@@ -1,6 +1,5 @@
 package dk.in2isoft.onlineobjects.modules.language;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 
 	public WordListPerspective convert(Object[] row) {
 		WordListPerspective impression = new WordListPerspective();
-		impression.setId(((BigInteger) row[0]).longValue());
+		impression.setId(((Number) row[0]).longValue());
 		impression.setText((String) row[1]);
 		impression.setLexicalCategory((String) row[2]);
 		return impression;
