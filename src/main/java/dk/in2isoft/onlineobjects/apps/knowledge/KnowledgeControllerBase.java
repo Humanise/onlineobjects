@@ -93,7 +93,10 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		if (request.testLocalPathFull() || request.testLocalPathFull("da") || request.testLocalPathFull("en")) {
 			return true;
 		}
-		if (request.testLocalPathFull("en","intro") || request.testLocalPathFull("da","intro") || request.testLocalPathStart("gfx")) {
+		if (request.testLocalPathStart("js") || request.testLocalPathStart("gfx") || request.testLocalPathStart("css")) {
+			return true;
+		}
+		if (request.testLocalPathFull("en","intro") || request.testLocalPathFull("da","intro")) {
 			return true;
 		}
 		return !securityService.isPublicUser(request.getSession());
