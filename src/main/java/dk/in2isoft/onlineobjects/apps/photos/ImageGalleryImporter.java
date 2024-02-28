@@ -6,6 +6,7 @@ import java.util.Map;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -18,10 +19,12 @@ import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public class ImageGalleryImporter extends ImageImporter {
 	
-	private List<SimpleEntityPerspective> imported; 
+	private List<SimpleEntityPerspective> imported;
+	private SecurityService security; 
 
-	public ImageGalleryImporter(ModelService modelService,ImageService imageService) {
+	public ImageGalleryImporter(ModelService modelService, ImageService imageService, SecurityService securityService) {
 		super(modelService, imageService);
+		this.security = securityService;
 		imported = new ArrayList<SimpleEntityPerspective>();
 	}
 
@@ -30,11 +33,14 @@ public class ImageGalleryImporter extends ImageImporter {
 
 		int index = Integer.parseInt(parameters.get("index"));
 		long imageGalleryId = Long.parseLong(parameters.get("galleryId"));
-		ImageGallery gallery = modelService.get(ImageGallery.class, imageGalleryId, request);
-		
+		ImageGallery gallery = modelService.getRequired(ImageGallery.class, imageGalleryId, request);
 		Relation relation = new Relation(gallery, image);
 		relation.setPosition(getMaxImagePosition(gallery, request) + 1 + index);
 		modelService.create(relation, request);
+		if (security.isPublicView(gallery, request)) {
+			security.makePublicVisible(image, request);
+			security.makePublicVisible(relation, request);
+		}
 
 		imported.add(SimpleEntityPerspective.create(image));
 	}

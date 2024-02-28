@@ -75,7 +75,7 @@
           <h3><span>Index</span></h3>
           <ul class="words_sidebar_index">
             <c:forEach items="#{wordsLayoutView.alphabeth}" var="chr">
-              <li class="#{chr.value=='_' ? 'words_sidebar_index_symbols' : ''}"><o:link href="/#{wordsLayoutView.language}/search/?letter=#{chr.value}">#{chr.label}</o:link></li>
+              <li class="#{chr.value=='_' ? 'words_sidebar_index_symbols' : ''}"><o:link href="/#{wordsLayoutView.language}/search/?letter=#{chr.value}" plain="true">#{chr.label}</o:link></li>
             </c:forEach>
           </ul>
         </div>

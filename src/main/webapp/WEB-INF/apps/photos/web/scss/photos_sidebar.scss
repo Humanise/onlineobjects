@@ -138,29 +138,41 @@ div.photos_sidebar_galleries a.photos_sidebar_selected span.oo_icon
   color: #333;
 }
 
-.photos_sidebar_cloud
-{
+.photos_sidebar_cloud {
   text-align: center;
   font-size: 14px;
   padding: 0 10px 20px;
+
+  & > a {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    text-decoration: none;
+    padding: 0 1px;
+    line-height: 18px;
+  }
+  
+  &_0 { font-size: .8em; color: #aaa;}
+  &_1 { font-size: 1em; color: #999;}
+  &_2 { font-size: 1.2em; color: #888;}
+  &_3 { font-size: 1.3em; color: #777; }
+  &_4 { font-size: 1.4em; color: #666; }
+  &_5 { font-size: 1.5em; color: #555; }
+  &_6 { font-size: 1.6em; color: #444; }
+  &_7 { font-size: 1.7em; color: #333; }
+  &_8 { font-size: 1.8em; color: #222; }
+  &_9 { font-size: 1.9em; color: #111; }
+  &_10 { font-size: 2em; color: #000; }
 }
 
-.photos_sidebar_cloud > a
-{
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1;
-  text-decoration: none;
-}
 
-.photos_sidebar_cloud_0 { font-size: 1em; color: #aaa;}
-.photos_sidebar_cloud_1 { font-size: 1.1em; color: #999;}
-.photos_sidebar_cloud_2 { font-size: 1.2em; color: #888;}
-.photos_sidebar_cloud_3 { font-size: 1.3em; color: #777; }
-.photos_sidebar_cloud_4 { font-size: 1.4em; color: #666; }
-.photos_sidebar_cloud_5 { font-size: 1.5em; color: #555; }
-.photos_sidebar_cloud_6 { font-size: 1.6em; color: #444; }
-.photos_sidebar_cloud_7 { font-size: 1.7em; color: #333; }
-.photos_sidebar_cloud_8 { font-size: 1.8em; color: #222; }
-.photos_sidebar_cloud_9 { font-size: 1.9em; color: #111; }
-.photos_sidebar_cloud_10 { font-size: 2em; color: #000; }
+
+
+
+
+
+
+
+
+
+

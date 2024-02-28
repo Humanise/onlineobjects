@@ -6,11 +6,14 @@ oo.Gallery = function(options) {
   this.busy = false;
   hui.ui.extend(this);
   this.thumbnails =
-  this._addBehavior();
+  this._attach();
 }
 
 oo.Gallery.prototype = {
-  _addBehavior : function() {
+  _attach : function() {
+    if (hui.browser.touch) {
+      hui.cls.add(this.element, 'is-touch');
+    }
     hui.listen(this.element,'click',this._click.bind(this));
     if (this.options.movable) {
       this._attachDragging();
@@ -173,10 +176,11 @@ oo.Gallery.prototype = {
     });
   },
   present : function() {
-    this.getViewer().show(0);
+    oo.presentImages({items: this.images});
+    //this.getViewer().show(0);
   },
   _clickImage : function(index) {
-    this.getViewer().show(index);
+    oo.presentImages({items: this.images, index: index});
   },
   getViewer : function() {
     if (!this.imageViewer) {

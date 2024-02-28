@@ -59,9 +59,6 @@ span.oo_gallery_pages a.oo_selected {
   display: inline-block;
   vertical-align: top; }
 
-body.oo_msie7 .oo_gallery li {
-  display: inline; }
-
 .oo_gallery ol span.oo_thumbnail {
   margin: 0px 10px 10px 0; }
 
@@ -95,26 +92,25 @@ span.oo_gallery_hover {
   top: 0;
   right: 0; }
 
-span.oo_gallery_photo:hover span.oo_gallery_hover {
+.oo_gallery:not(.is-touch) .oo_gallery_photo:hover .oo_gallery_hover {
   display: block; }
 
-span.oo_gallery_hover a {
+.oo_gallery_hover a {
   margin: 2px;
   border-radius: 4px;
   display: inline-block;
   height: 22px;
   padding: 0 3px;
-  line-height: 21px;
-  font-size: 11px;
+  line-height: 1;
   color: #333;
   background: rgba(255, 255, 255, 0.5);
   text-decoration: none;
-  text-shadow: 0 0 6px #fff;
   font-size: 0; }
+  .oo_gallery_hover a .oo_icon {
+    margin-top: 3px;
+    line-height: 1; }
 
-span.oo_gallery_hover a span.oo_icon {
-  margin-top: 2px; }
-
+span.oo_gallery_hover a span
 span.oo_gallery_hover a:hover {
   background: rgba(255, 255, 255, 0.8); }
 

@@ -34,6 +34,7 @@
    		<property name="securityService" ref="securityService"/>
    		<property name="imageService" ref="imageService"/>
    		<property name="personService" ref="personService"/>
+   		<property name="photos" ref="photos"/>
    	</bean>
    	
    	<bean id="photosUserView" class="dk.in2isoft.onlineobjects.apps.photos.views.PhotosUserView" scope="request">

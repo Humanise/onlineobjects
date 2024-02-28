@@ -14,6 +14,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.model.Image;
+import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
@@ -43,6 +44,7 @@ public class ImageImporter implements ImportListener<Object> {
 		}
 		Operator privileged = request.as(getUser(parameters, request));
 		Image image = getImage(fileName, parameters, request);
+		image.overrideFirstProperty(Property.KEY_FILENAME, fileName);
 		imageService.changeImageFile(image, file, mimeType);
 		imageService.synchronizeMetaData(image, privileged);
 		preProcessImage(image, parameters, request);

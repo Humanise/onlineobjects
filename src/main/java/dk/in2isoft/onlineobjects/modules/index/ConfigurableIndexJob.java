@@ -6,6 +6,7 @@ import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.UnableToInterruptJobException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 
@@ -16,19 +17,21 @@ import dk.in2isoft.onlineobjects.core.Results;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Entity;
+import dk.in2isoft.onlineobjects.modules.scheduling.JobBase;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
-import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
-public class ConfigurableIndexJob<E extends Entity> extends ServiceBackedJob implements InterruptableJob {
+public class ConfigurableIndexJob<E extends Entity> extends JobBase implements InterruptableJob {
 	
 	private boolean interrupted;
 	
 	private ConfigurableIndexer<E> configurableIndexer;
+	
+	private ModelService modelService;
+	
+	private SecurityService securityService;
 
 	public final void execute(JobExecutionContext context) throws JobExecutionException {
 		JobStatus status = getStatus(context);
-		ModelService modelService = schedulingSupportFacade.getModelService();
-		SecurityService securityService = schedulingSupportFacade.getSecurityService();
 		Operator operator = modelService.newOperator(securityService.getAdminPrivileged());
 		try {
 			run(status, modelService, operator);
@@ -66,7 +69,7 @@ public class ConfigurableIndexJob<E extends Entity> extends ServiceBackedJob imp
 			}
 			E word = results.get();
 			batch.add(word);
-			if (batch.size()>200) {
+			if (batch.size() > 200) {
 				configurableIndexer.index(batch);
 				batch.clear();
 			}
@@ -87,5 +90,14 @@ public class ConfigurableIndexJob<E extends Entity> extends ServiceBackedJob imp
 	public void setConfigurableIndexer(ConfigurableIndexer<E> configurableIndexer) {
 		this.configurableIndexer = configurableIndexer;
 	}
+
+	@Autowired
+	public void setModelService(ModelService modelService) {
+		this.modelService = modelService;
+	}
 	
+	@Autowired
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

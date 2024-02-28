@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.modules.scheduling;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
+@Deprecated
 public abstract class ServiceBackedJob implements Job {
 
 	protected SchedulingSupportFacade schedulingSupportFacade;

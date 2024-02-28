@@ -31,6 +31,7 @@ public class LinkComponent extends AbstractComponent {
 	private boolean core;
 	private String styleClass;
 	private boolean plain;
+	private boolean subtle;
 	private String name;
 	private String app;
 	private boolean focusable = true;
@@ -41,7 +42,7 @@ public class LinkComponent extends AbstractComponent {
 	
 	@Override
 	public Object[] saveState() {
-		return new Object[] { variant, core, href, styleClass, onclick, title, plain, name, app, focusable };
+		return new Object[] { variant, core, href, styleClass, onclick, title, plain, name, app, focusable, subtle };
 	}
 
 	@Override
@@ -56,6 +57,7 @@ public class LinkComponent extends AbstractComponent {
 		name = (String) state[7];
 		app = (String) state[8];
 		focusable = (Boolean) state[9];
+		subtle = (Boolean) state[10];
 	}
 
 
@@ -67,7 +69,11 @@ public class LinkComponent extends AbstractComponent {
 		if (plain) {
 			writer.startA(styleClass);
 		} else {
-			writer.startA(ClassBuilder.with("oo_link").addVariant("oo_link", variant).add(styleClass));
+			ClassBuilder cls = ClassBuilder.with("oo_link").addVariant("oo_link", variant).add(styleClass);
+			if (subtle) {
+				cls.addVariant("oo_link", "subtle");
+			}
+			writer.startA(cls);
 		}
 		writer.withTestName(testName);
 		String id = getId();
@@ -92,9 +98,6 @@ public class LinkComponent extends AbstractComponent {
 		boolean focusable = isFocusable(context);
 		if (!focusable) {
 			writer.withAttribute("tabindex", "-1");
-		}
-		if (!plain) {
-			writer.startSpan();
 		}
 	}
 	
@@ -122,9 +125,6 @@ public class LinkComponent extends AbstractComponent {
 	
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
-		if (!plain) {
-			out.endSpan();
-		}
 		out.endA();
 		if (Strings.isNotBlank(name)) {
 			ScriptWriter js = out.getScriptWriter();
@@ -240,5 +240,13 @@ public class LinkComponent extends AbstractComponent {
 
 	public void setFocusable(boolean focusable) {
 		this.focusable = focusable;
+	}
+
+	public boolean isSubtle() {
+		return subtle;
+	}
+
+	public void setSubtle(boolean subtle) {
+		this.subtle = subtle;
 	}
 }

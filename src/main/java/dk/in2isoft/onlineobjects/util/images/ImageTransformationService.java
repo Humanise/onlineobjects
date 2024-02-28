@@ -74,6 +74,12 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		if (transformation.isFlipVertically()) {
 			sb.append("_flip-v");
 		}
+		if (transformation.isDebug()) {
+			sb.append("_debug");
+		}
+		if (transformation.getQuality() > 0) {
+			sb.append("_quality").append(transformation.getQuality());
+		}
 		sb.append(".");
 		if (Strings.isNotBlank(transformation.getFormat())) {
 			sb.append(transformation.getFormat());
@@ -87,6 +93,9 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		StringBuilder sb = new StringBuilder();
 		sb.append(configurationService.getImageMagickPath());
 		sb.append("/convert");
+		if (transform.isDebug()) {
+			// TODO : Annotate the image
+		}
 		if (transform.getRotation()!=0) {
 			sb.append(" -rotate ").append(transform.getRotation()).append("");
 		}
@@ -100,15 +109,18 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 				sb.append("+0+0  +repage ");
 			} else {
 				sb.append(" -thumbnail ").append(width).append("x").append(height);
-				sb.append(" ").append(original.getAbsolutePath()).append("[0] ");
+				sb.append(" ").append(original.getAbsolutePath());//.append("[0] ");
 			}
 		} else {
 			sb.append(" ").append(original.getAbsolutePath()).append("[0] ");
 		}
-		if (transform.getSharpen()>0) {
+		if (transform.getSharpen() > 0) {
 			sb.append(" -sharpen 0x").append(transform.getSharpen());
 		}
-		if (transform.getSepia()>0) {
+		if (transform.getQuality() > 0) {
+			sb.append(" -quality ").append(Math.round(transform.getQuality() * 100f));
+		}
+		if (transform.getSepia() > 0) {
 			sb.append(" -sepia-tone ").append(Math.round(transform.getSepia()*100)).append("%");
 		}
 		if (transform.isFlipHorizontally()) {

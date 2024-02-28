@@ -15,11 +15,15 @@ var galleryView = {
         name : 'titleEditor'
       });
       hui.drag.listen({
-        element : hui.get.firstByClass(document.body,'oo_layout_body'),
+        element : hui.get.firstByClass(document.body, 'photos_layout_split_main'),
         hoverClass : 'photos_gallery_drop',
         $dropFiles : this._dropFiles.bind(this),
         $dropURL : this._dropURL.bind(this)
       })
+      var upload = hui.find('.js-upload');
+      hui.on(upload, 'change', function() {
+        this._dropFiles(upload.files);
+      }.bind(this));
     }
     var images = hui.findAll('img', document.body);
     for (var i=0; i < images.length; i++) {
@@ -30,7 +34,21 @@ var galleryView = {
     };
   },
   $click$present : function() {
-    hui.ui.get('gallery').present();
+    var data = hui.find('.js-gallery', document.body);
+    var items = JSON.parse(data.getAttribute('data-presentation'));
+    var imageTags = hui.findAll('.oo_gallery_photo img');
+    for (var i = 0; i < items.length; i++) {
+      if (imageTags[i]) {
+        items[i].placeholder = imageTags[i].currentSrc;
+      }
+    }
+    var masonryItems = hui.findAll('.oo_masonry_item');
+    for (var i = 0; i < masonryItems.length; i++) {
+      if (masonryItems[i]) {
+        masonryItems[i].style.backgroundImage.match(/url\(["']?([^"']*)["']{0,1}\)/);
+      }
+    }
+    oo.presentImages({items: items});
   },
   _refreshImages : function() {
     hui.ui.get('gallery').refresh();

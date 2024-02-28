@@ -117,4 +117,8 @@ public class ImageInfo {
 			return longitude;
 		}
 	}
+
+	public boolean isRotated() {
+		return rotation != null && (Math.abs(rotation) == 90);
+	}
 }

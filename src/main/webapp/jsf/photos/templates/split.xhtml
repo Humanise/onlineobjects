@@ -22,7 +22,14 @@
   <o:body light="true">
     <o:topBar/>
     <div class="photos_layout">
-      <ui:insert name="body"/>
+      <div class="photos_layout_split">
+        <div class="photos_layout_split_main">
+          <ui:insert name="body"/>
+        </div>
+        <div class="photos_layout_split_aside">
+          <ui:insert name="sidebar"/>
+        </div>
+      </div>
     </div>
     <ui:insert name="footer"/>
     <o:footer/>

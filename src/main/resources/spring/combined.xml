@@ -27,6 +27,7 @@
     <import resource="module-synchronization.xml"/>
     <import resource="module-networking.xml"/>
     <import resource="module-images.xml"/>
+    <import resource="module-photos.xml"/>
     <import resource="module-onlinepublisher.xml"/>
     <import resource="module-organic.xml"/>
     <import resource="module-inbox.xml"/>

@@ -64,6 +64,7 @@ public class RelationQuery {
 		return this;
 	}
 	
+	
 	protected RelationQuery as(Privileged privileged) {
 		if (!securityService.isAdminUser(privileged)) {
 			if (!securityService.isPublicUser(privileged)) {
@@ -83,6 +84,7 @@ public class RelationQuery {
 	public String getHQL() {
 		StringBuilder hql = new StringBuilder("select distinct rel from Relation as rel");
 		buildHQL(hql);
+		// Note some already rely on position ordering
 		hql.append(" order by rel.position, rel.id");
 		return hql.toString();
 	}

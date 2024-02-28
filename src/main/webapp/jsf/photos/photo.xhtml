@@ -18,9 +18,10 @@
         data-editable="#{photosPhotoView.canModify}"
         data-id="#{photosPhotoView.image.id}"
         data-username="#{photosPhotoView.user.username}"
+        data-width="#{photosPhotoView.size.width}"
+        data-height="#{photosPhotoView.size.height}"
+        data-sizes="#{photosPhotoView.sizes}"
       ></span>
-        <o:script>
-        </o:script>
       </c:if>
 
       <o:dependency src="/WEB-INF/apps/photos/web/css/photos_photo.css"/>
@@ -30,43 +31,38 @@
       <o:dependency src="/WEB-INF/core/web/js/oo_inlineeditor.js"/>
       <o:dependency src="/WEB-INF/apps/photos/web/js/photo_view.js"/>
       <c:if test="#{photosPhotoView.canModify}">
-      <o:dependency src="/hui/js/Drawing.js"/>
-      <o:dependency src="/hui/js/ProgressIndicator.js"/>
+        <o:dependency src="/hui/js/Drawing.js"/>
+        <o:dependency src="/hui/js/ProgressIndicator.js"/>
       </c:if>
+      <o:dependency src="/hui/js/Presentation.js"/>
+      <o:dependency src="/hui/css/presentation.css"/>
 
       <c:if test="#{empty photosPhotoView.image}">
         <h1 class="photos_photo_not_found">#{msg.image_not_found}</h1>
       </c:if>
       <c:if test="#{not empty photosPhotoView.image}">
 
-        <div class="photos_photo_image">
-          <c:if test="#{photosPhotoView.vertical}">
-            <o:thumbnail image="#{photosPhotoView.image}" height="500" present="true" frame="false"/>
-          </c:if>
-          <c:if test="#{not photosPhotoView.vertical}">
-            <o:thumbnail image="#{photosPhotoView.image}" className="photos_photo_image_vertical" width="980" present="true" frame="false" responsive="true"/>
-          </c:if>
-          <div class="photos_controls">
-          <div class="photos_controller">
-            <o:link href="/service/image/id#{photosPhotoView.image.id}.jpg?download=true" core="true" plain="true"><i>d</i></o:link>
-            <o:link href="/service/image/id#{photosPhotoView.image.id}.jpg" core="true" plain="true"><i>x</i></o:link>
-          </div>
-          <div class="photos_controller photos_controller_direction">
-            <o:link href="/#{wordsLayoutView.language}/photo/#{photosPhotoView.previousId}.html" plain="true"><i>&lt;</i></o:link>
-            <o:link href="/#{wordsLayoutView.language}/photo/#{photosPhotoView.nextId}.html" plain="true"><i>&gt;</i></o:link>
-          </div>
-          </div>
-        </div>
 
         <div class="photos_photo">
-          <div class="photos_photo_left">
-            <div class="photos_photo_left_body">
+          <ui:include src="parts/photo_image.xhtml"/>
+          <div class="photos_photo_body">
+            <div class="photos_photo_main">
               <div class="photos_photo_info">
-                <h1 id="editableTitle">#{photosPhotoView.title}</h1>
-                <o:words words="#{photosPhotoView.words}" editable="#{photosPhotoView.canModify}" name="words"/>
-                <div id="photos_photo_description">
+
+                <h1 class="photos_photo_title" id="editableTitle">#{photosPhotoView.title}</h1>
+                <div class="photos_photo_avatar">
+                  <o:thumbnail image="#{photosPhotoView.personImage}" variant="user" width="80" height="80" zoom="true" frame="false"/>
+                </div>
+                <p class="photos_photo_by">
+                  By
+                  <o:link app="photos" href="/users/#{photosPhotoView.user.username}/">#{photosPhotoView.fullPersonName}</o:link>
+                  <c:if test="#{not empty photosPhotoView.taken}"> on #{photosPhotoView.taken}</c:if>
+                </p>
+                <div class="photos_photo_words">
+                  <o:words words="#{photosPhotoView.words}" editable="#{photosPhotoView.canModify}" name="words"/>
+                </div>
                   <c:if test="#{not photosPhotoView.canModify and not empty photosPhotoView.description}">
-                    <p class="photos_photo_description" style="margin-top: 10px;">
+                    <p class="photos_photo_description">
                       <o:out value="#{photosPhotoView.description}" escape="false"/>
                     </p>
                   </c:if>
@@ -97,71 +93,54 @@
                     </gui:pages>
                     </div>
                   </c:if>
-                </div>
-              </div>
-              <o:map name="theMap" location="#{photosPhotoView.mapPoint}" dynamic="false" editable="#{photosPhotoView.canModify}"/>
-            </div>
-          </div>
-
-
-          <div class="photos_photo_right">
-            <div class="photos_photo_right_body">
-            <div class="photos_profile">
-              <div class="photos_profile_photo">
-                <o:thumbnail image="#{photosPhotoView.personImage}" variant="user" width="80" height="80" zoom="true" frame="false"/>
-              </div>
-              <div class="photos_profile_body">
-                <p class="photos_profile_name">#{photosPhotoView.fullPersonName}</p>
-                <p class="photos_profile_username">#{photosPhotoView.user.username}</p>
-                <p class="photos_profile_link">
-                  <o:link app="photos" href="/users/#{photosPhotoView.user.username}/" variant="arrow">#{msg.all_photos}</o:link>
-                </p>
-                <p class="photos_profile_link"><o:link app="people" href="/#{photosPhotoView.user.username}/" variant="arrow">#{msg.profile}</o:link></p>
+                  <o:map name="theMap" location="#{photosPhotoView.mapPoint}" dynamic="false" editable="#{photosPhotoView.canModify}"/>
               </div>
             </div>
-            <c:if test="#{not empty photosPhotoView.galleries}">
-              <div class="photos_photo_galleries">
-                <h2>#{msg.albums}</h2>
-                <ul id="galleries">
-                  <c:forEach items="#{photosPhotoView.galleries}" var="gallery">
-                    <li>
-                      <o:link href="/gallery/#{gallery.id}/" app="photos" plain="true">
-                        <o:icon icon="album"/>
-                        <o:out value="#{gallery.name}"/>
-                      </o:link>
-                    </li>
-                  </c:forEach>
-                </ul>
-              </div>
-            </c:if>
 
-
-            <div class="photos_photo_properties">
-              <o:block id="properties">
-                <c:forEach items="#{photosPhotoView.properties}" var="prop">
-                  <p class="photos_photo_property"><strong>#{prop.label}:</strong> #{prop.value}</p>
-                </c:forEach>
-              </o:block>
-              <c:if test="#{photosPhotoView.canModify}">
-              <o:link name="viewMetaData">Meta data</o:link>
-                <div style="background: #f6f6f6; border: 1px solid #eee; border-width: 1px 0; margin: 30px -20px 0; padding: 5px 20px 7px;">
-                  <h2 style="font-weight: 200; font-size: 12pt; line-height: 24px; border-bottom: 1px solid #ddd; color: #666; margin: 0 0 8px;">Anyone can...</h2>
-                  <p style="margin: 5px 0;">
-                    <gui:checkbox label="See the photo" name="publicAccess" value="#{not photosPhotoView.secret}"/>
-                  </p>
-                  <p style="margin: 5px 0;">
-                    <gui:checkbox label="Featured" name="featured" value="#{photosPhotoView.featured}"/>
-                  </p>
-                  <h2 style="font-weight: 200; font-size: 12pt; line-height: 24px; border-bottom: 1px solid #ddd; color: #666; margin: 10px 0 8px;">Actions</h2>
-                  <p style="margin: 0;">
-                    <gui:button text="Delete" name="deletePhoto" small="true" variant="light" right="4"/>
-                    <gui:button text="Synchronize" name="syncMetaData" small="true" variant="light" right="4"/>
-                  </p>
+            <div class="photos_photo_aside">
+              <c:if test="#{not empty photosPhotoView.galleryLinks}">
+                <div class="photos_photo_galleries">
+                  <ul id="galleries">
+                    <c:forEach items="#{photosPhotoView.galleryLinks}" var="gallery">
+                      <li>
+                        <component:galleryLink href="/#{wordsLayoutView.language}/gallery/#{gallery.id}/" model="#{gallery}"/>
+                      </li>
+                    </c:forEach>
+                  </ul>
                 </div>
               </c:if>
-            </div>
+
+
+              <div class="photos_photo_properties">
+                <o:block id="properties">
+                  <c:forEach items="#{photosPhotoView.properties}" var="prop">
+                    <p class="photos_photo_property"><strong>#{prop.label}:</strong> #{prop.value}</p>
+                  </c:forEach>
+                </o:block>
+                <c:if test="#{photosPhotoView.canModify}">
+                <o:link name="viewMetaData">Meta data</o:link>
+                  <div style="background: #f6f6f6; border: 1px solid #eee; margin: 30px 0; padding: 15px 20px 20px; border-radius: 5px">
+                    <p style="margin: 0;">
+                      <gui:checkbox label="Viewable by anyone" name="publicAccess" value="#{not photosPhotoView.secret}"/>
+                    </p>
+                    <p style="margin: 0;">
+                      <gui:checkbox label="Featured" name="featured" value="#{photosPhotoView.featured}"/>
+                    </p>
+                    <p style="margin: 5px 0 0;">
+                      <gui:button text="Delete" name="deletePhoto" small="true" variant="light" right="4"/>
+                      <gui:button text="Synchronize" name="syncMetaData" small="true" variant="light" right="4"/>
+                    </p>
+                  </div>
+                </c:if>
+              </div>
+              <div style="margin-top: 20px">
+                <o:link href="/service/image/id#{photosPhotoView.image.id}.jpg?download=true" core="true" subtle="true">Download</o:link>
+              </div>
             </div>
           </div>
+
+
+
 
         </div>
 

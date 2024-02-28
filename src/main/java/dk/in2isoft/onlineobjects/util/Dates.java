@@ -12,12 +12,16 @@ import java.util.Map;
 public class Dates {
 	
 	private static Map<String,String> LONG = new HashMap<String, String>();
+	private static Map<String,String> MEDIUM = new HashMap<String, String>();
 	private static Map<String,String> SHORT = new HashMap<String, String>();
 	private static Map<String,String> DATEWITHTIME = new HashMap<String, String>();
 	
 	static {
 		LONG.put("en", "EEEE MMMM d. yyyy 'at' HH:mm:ss");
 		LONG.put("da", "EEEE 'd.' d. MMMM yyyy 'kl.' HH:mm:ss");
+
+		MEDIUM.put("en", "MMMM d. yyyy 'at' HH:mm:ss");
+		MEDIUM.put("da", "'d.' d. MMMM yyyy 'kl.' HH:mm:ss");
 
 		DATEWITHTIME.put("en", "MMMM d. yyyy 'at' HH:mm:ss");
 		DATEWITHTIME.put("da", "d. MMMM yyyy 'kl.' HH:mm:ss");
@@ -31,6 +35,14 @@ public class Dates {
 			return "";
 		}
 		SimpleDateFormat format = new SimpleDateFormat(LONG.get(locale.getLanguage()),locale);
+		return format.format(date);
+	}
+
+	public static String formatMediumDate(Date date, Locale locale) {
+		if (date==null) {
+			return "";
+		}
+		SimpleDateFormat format = new SimpleDateFormat(MEDIUM.get(locale.getLanguage()),locale);
 		return format.format(date);
 	}
 

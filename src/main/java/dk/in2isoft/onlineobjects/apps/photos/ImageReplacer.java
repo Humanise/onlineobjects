@@ -28,6 +28,7 @@ public class ImageReplacer extends ImageImporter {
 			throw new ContentNotFoundException(Image.class, imageId);
 		}
 		imageService.clearMetaData(image, request);
+		imageService.clearCache(image);
 		return image;
 	}
 	

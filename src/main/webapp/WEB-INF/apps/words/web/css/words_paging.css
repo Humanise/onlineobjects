@@ -15,22 +15,19 @@
 .words_paging a
 {
 	display: inline-block;
-}
-
-.words_paging a span
-{
 	color: #666;
 	padding: 0 5px;
 	display: inline-block;
 	height: 25px;
-	line-height: 26px;
+	line-height: 25px;
 	border-radius: 3px;
 	font-size: 14pt;
 	min-width: 14px;
 	text-align: center;
+  text-decoration: none;
 }
 
-.words_paging a:hover span
+.words_paging a:hover
 {
 	color: #08C;
 	border-radius: 3px;
@@ -42,12 +39,12 @@
 	outline: none;
 }
 
-.words_paging a:active span
+.words_paging a:active
 {
 	background: #ddd;
 }
 
-.words_paging a.words_paging_selected span
+.words_paging a.words_paging_selected
 {
 	color: #fff;
 	background: #333;
@@ -55,7 +52,7 @@
   z-index: 1;
 }
 
-.words_paging a.words_paging_selected_default span
+.words_paging a.words_paging_selected_default
 {
 	color: #000;
 	background: #f6f6f6;
@@ -67,7 +64,7 @@
 	outline: none;
 }
 
-.words_paging a.words_paging_selected:active span
+.words_paging a.words_paging_selected:active
 {
 	background: #eee;
 	border: 1px solid #ddd;

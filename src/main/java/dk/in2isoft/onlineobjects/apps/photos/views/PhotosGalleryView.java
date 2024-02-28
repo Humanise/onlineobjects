@@ -1,8 +1,15 @@
 package dk.in2isoft.onlineobjects.apps.photos.views;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import org.onlineobjects.modules.photos.Photos;
+import org.onlineobjects.modules.photos.ScaledImage;
+import org.onlineobjects.modules.photos.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 
@@ -11,8 +18,10 @@ import dk.in2isoft.commons.lang.Numbers;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -27,6 +36,7 @@ import dk.in2isoft.onlineobjects.util.Dates;
 public class PhotosGalleryView extends AbstractView {
 	
 	private ModelService modelService;
+	private Photos photos;
 	
 	private ImageGallery imageGallery;
 	private String title;
@@ -52,7 +62,7 @@ public class PhotosGalleryView extends AbstractView {
 		String[] path = request.getLocalPath();
 		long id = Numbers.parseLong(path[2]);
 		final UserSession session = request.getSession();
-		if (id>0) {
+		if (id > 0) {
 			imageGallery = modelService.get(ImageGallery.class, id, request);
 			if (imageGallery==null) {
 				throw new ContentNotFoundException("The gallery does not exist");
@@ -61,21 +71,10 @@ public class PhotosGalleryView extends AbstractView {
 			user = modelService.getOwner(imageGallery, request);
 			username = user.getUsername();
 			modifiable = user!=null && user.getId()==session.getIdentity() && session.has(Ability.usePhotosApp);
-			List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, request);
-			images = Lists.newArrayList();
-			for (Relation relation : childRelations) {
-				Image image = (Image) relation.getTo();
-				Date date = image.getPropertyDateValue(Property.KEY_PHOTO_TAKEN);
-				if (date!=null) {
-					if (from==null || from.after(date)) {
-						from = date;
-					}
-					if (to==null || to.before(date)) {
-						to = date;
-					}
-				}
-				images.add(image);
-			}
+
+			loadImages(request);
+			buildPresentationData();
+
 			listModel = new ListModel<Image>() {
 
 				@Override
@@ -86,24 +85,65 @@ public class PhotosGalleryView extends AbstractView {
 				
 			};
 			
-			if (from!=null && to!=null) {
-				StringBuilder sb = new StringBuilder();
-				String fromShort = Dates.formatShortDate(from, locale);
-				String toShort = Dates.formatShortDate(to, locale);
-				
-				sb.append(fromShort);
-				if (!fromShort.equals(toShort)) {
-					sb.append(" ").append(Strings.RIGHTWARDS_ARROW).append(" ");
-					sb.append(toShort);
-				}
-				info = sb.toString();
-			}
+			buildInfo(locale);
 			
 			view = request.getString("view");
 			if (Strings.isBlank(view)) {
 				view = "grid";
 			}
 		}
+	}
+
+	private void buildInfo(Locale locale) {
+		if (from!=null && to!=null) {
+			StringBuilder sb = new StringBuilder();
+			String fromShort = Dates.formatShortDate(from, locale);
+			String toShort = Dates.formatShortDate(to, locale);
+			
+			sb.append(fromShort);
+			if (!fromShort.equals(toShort)) {
+				sb.append(" ").append(Strings.RIGHTWARDS_ARROW).append(" ");
+				sb.append(toShort);
+			}
+			info = sb.toString();
+		}
+	}
+
+	private void loadImages(Operator operator) throws ModelException {
+		images = Lists.newArrayList();
+		List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, operator);
+		for (Relation relation : childRelations) {
+			Image image = (Image) relation.getTo();
+			Date date = image.getPropertyDateValue(Property.KEY_PHOTO_TAKEN);
+			if (date!=null) {
+				if (from==null || from.after(date)) {
+					from = date;
+				}
+				if (to==null || to.before(date)) {
+					to = date;
+				}
+			}
+			images.add(image);
+		}
+	}
+	
+	private String presentationData;
+	
+	private void buildPresentationData() {
+		List<Map<?,?>> data = new ArrayList<>();
+		for (Image image : images) {
+			Size size = photos.getDisplaySize(image);
+			List<ScaledImage> scaledSizes = photos.buildScaledSizes(size, image.getId());
+			data.add(Map.of("id", image.getId(),
+				"width", size.getWidth(),
+				"height", size.getHeight(),
+				"sizes", scaledSizes));
+		}
+		presentationData = Strings.toJSON(data);
+	}
+	
+	public String getPresentationData() {
+		return presentationData;
 	}
 	
 	private List<MasonryItem> masonryList;
@@ -118,7 +158,7 @@ public class PhotosGalleryView extends AbstractView {
 				item.height = image.getHeight();
 				item.width = image.getWidth();
 				item.title = image.getName();
-				item.href = "/" + language + "/photo/" + item.id + ".html";
+				item.href = "/" + language + "/photo/" + item.id + ".html?context=" + imageGallery.getId();
 				item.colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
 				item.rotation = image.getPropertyDoubleValue(Property.KEY_PHOTO_ROTATION);
 				if (item.rotation!=null && (item.rotation.intValue()==90 || item.rotation.intValue()==270)) {
@@ -173,5 +213,10 @@ public class PhotosGalleryView extends AbstractView {
 	
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
+	}
+	
+	@Autowired
+	public void setPhotos(Photos photos) {
+		this.photos = photos;
 	}
 }

@@ -25,7 +25,7 @@ oo.Masonry.prototype = {
       $$afterResize : this._rebuild.bind(this)
     })
     hui.listen(window,'scroll',this._reveal.bind(this));
-    hui.on(this.element,'tap',this._click.bind(this));
+    //hui.on(this.element,'tap',this._click.bind(this));
   },
   _rebuild : function() {
     var fullWidth = this.element.clientWidth;
@@ -100,8 +100,9 @@ oo.Masonry.prototype = {
           item.element.className = cls;
           item.element.style.backgroundImage = 'linear-gradient(' + item.colors + ')';
         } else {
-          item.element = hui.build('div',{
+          item.element = hui.build('a',{
             'class' : cls,
+            'href' : item.href,
             style : {
               width : percent+'%',
               height : rowHeight+'px',

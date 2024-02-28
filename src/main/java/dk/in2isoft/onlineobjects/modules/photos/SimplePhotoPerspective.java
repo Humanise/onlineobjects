@@ -1,6 +1,11 @@
 package dk.in2isoft.onlineobjects.modules.photos;
 
-public class SimplePhotoPerspective {
+import java.io.Serializable;
+
+public class SimplePhotoPerspective implements Serializable {
+
+	private static final long serialVersionUID = -8457766110089182716L;
+
 	private long id;
 	private int width;
 	private int height;

@@ -3,6 +3,7 @@ package dk.in2isoft.onlineobjects.util.images;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -77,6 +79,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	private ModelService modelService;
 	private PileService pileService;
 	private SecurityService securityService;
+	private ImageTransformationService imageTransformationService;
 
 	public ImageService() {
 	}
@@ -466,6 +469,21 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 	}
 
+	public String base64DataUrl(Image image, ImageTransformation transform) {
+		try {
+			File transformed = imageTransformationService.transform(image.getId(), transform);
+			if (transformed != null) {
+				byte[] encoded = java.util.Base64.getEncoder().encode(FileUtils.readFileToByteArray(transformed));
+		    	return "data:image/jpeg;base64," + new String(encoded, StandardCharsets.US_ASCII);
+			}
+		} catch (EndUserException e) {
+			log.error(e);
+		} catch (IOException e) {
+			log.error(e);
+		}
+		return null;
+	}
+	
 	public void deleteImage(Image image, Operator privileged) throws ModelException, SecurityException {
 		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
@@ -513,5 +531,9 @@ public class ImageService extends AbstractCommandLineInterface {
 	
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	public void setImageTransformationService(ImageTransformationService imageTransformationService) {
+		this.imageTransformationService = imageTransformationService;
 	}
 }

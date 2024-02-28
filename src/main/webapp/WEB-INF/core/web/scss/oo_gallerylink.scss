@@ -1,0 +1,49 @@
+@import 'shared';
+
+.oo_gallerylink {
+  display: block;
+  padding-left: 72px;
+  position: relative;
+  min-height: 62px;
+  color: inherit;
+  text-decoration: none;
+
+  &_image {
+    position: absolute;
+    background: #eee;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+    }
+    &:nth-child(2) {
+      top: 0;
+      left: 32px;
+    }
+    &:nth-child(3) {
+      top: 32px;
+      left: 0;
+    }
+    &:nth-child(4) {
+      top: 32px;
+      left: 32px;
+    }
+  }
+  &_title {
+    display: block;
+    line-height: 16px;
+    padding: 8px 0 0;
+    margin-bottom: 2px;
+    font-weight: 500;
+    font-size: $large-font-size;
+  }
+  &_info {
+    display: block;
+    color: $dimmed-color;
+    padding: 2px 0;
+    font-size: $small-font-size;
+  }
+}

@@ -58,6 +58,7 @@ public class Property {
 	public static final String KEY_CONFIRMATION_TIME = "common.confirmationtime";
 
 	public static final String KEY_ABILITY = "user.ability";
+	public static final String KEY_FILENAME = "file.filename";
 
 	private long id;
 

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.function.FailableConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
@@ -689,12 +690,13 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	private Query<User> buildOwnerQuery(Item item, Privileged privileged, Session session) {
 		String hql = "select user from User as user, Privilege as itemPriv";
-		if (!securityService.isAdminUser(privileged)) {
+		boolean isAdmin = securityService.isAdminUser(privileged);
+		if (!isAdmin) {
 			hql+=", Privilege as userPriv";
 		}
 		hql+=" where itemPriv.alter=true and itemPriv.object=:object and itemPriv.subject=user.id" +
 			" and user.id!=:public and user.id!=:admin";
-		if (!securityService.isAdminUser(privileged)) {
+		if (!isAdmin) {
 			hql += " and userPriv.object=user.id and userPriv.subject in (:privileged)";
 		}
 		hql +=" order by itemPriv.id asc";
@@ -702,7 +704,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		q.setParameter("object", item.getId());
 		q.setParameter("public", securityService.getPublicUser().getId());
 		q.setParameter("admin", securityService.getAdminPrivileged().getIdentity());
-		if (!securityService.isAdminUser(privileged)) {
+		if (!isAdmin) {
 			List<Long> privs = new ArrayList<>();
 			privs.add(privileged.getIdentity());
 			if (!securityService.isPublicUser(privileged)) {
@@ -1082,5 +1084,16 @@ public class ModelService implements InitializingBean, OperationProvider {
 	
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;
+	}
+
+	public void asAdmin(FailableConsumer<Operator, ? extends Throwable> runnable) {		
+		Operator operator = newAdminOperator();
+		try {
+			runnable.accept(operator);
+			operator.commit();
+		} catch (Throwable e) {
+			log.error(e);
+			operator.rollBack();
+		}
 	}
 }

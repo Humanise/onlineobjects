@@ -100,21 +100,21 @@
             </ul>
             <p class="words_paging">
             <c:if test="#{not empty(wordsSearchView.previousPage)}">
-              <o:link styleClass="words_paging_previous" href="#{wordsSearchView.previousPage}">#{msg.previous}</o:link>
+              <o:link styleClass="words_paging_previous" plain="true" href="#{wordsSearchView.previousPage}">#{msg.previous}</o:link>
               <em>·</em>
             </c:if>
             <c:forEach items="#{wordsSearchView.pages}" var="page">
               <c:choose>
                 <c:when test="#{page==null}"><em>···</em></c:when>
                 <c:otherwise>
-                  <o:link href="#{page.value}" styleClass="#{page.selected ? 'words_paging_selected' : ''}#{page.selected and page.key=='default' ? ' words_paging_selected_default' : ''}">#{page.label}</o:link>
+                  <o:link href="#{page.value}" styleClass="#{page.selected ? 'words_paging_selected' : ''}#{page.selected and page.key=='default' ? ' words_paging_selected_default' : ''}" plain="true">#{page.label}</o:link>
                 </c:otherwise>
               </c:choose>
               #{' '}
             </c:forEach>
             <c:if test="#{not empty(wordsSearchView.nextPage)}">
               <em>·</em>
-              <o:link styleClass="words_paging_next" href="#{wordsSearchView.nextPage}">#{msg.next}</o:link>
+              <o:link styleClass="words_paging_next" href="#{wordsSearchView.nextPage}" plain="true">#{msg.next}</o:link>
             </c:if>
             </p>
           </c:otherwise>

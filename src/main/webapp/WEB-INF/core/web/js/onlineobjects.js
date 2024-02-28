@@ -122,7 +122,53 @@ oo.render = function(options) {
   }})
 };
 
+oo.presentImages = function(params) {
+  if (hui.ui.Presentation) {
+    var presentation = hui.ui.Presentation.create();
+    presentation.listen({
+      $getImage : oo.getImage,
+      $getPreview : function(event) {
+        return event.item.placeholder;
+      }
+    })
+    presentation.show({items: params.items, index: (params.index || 0)})
+    return;
+  }
+}
+
+oo.getImage = function(event) {
+  var sizes = event.item.sizes;
+  if (sizes) {
+    for (var i = 0; i < sizes.length; i++) {
+      if (event.width <= sizes[i].width || event.height <= sizes[i].height) {
+        return sizes[i].url;
+      }
+    }
+    return sizes[sizes.length - 1].url
+  }
+  var fitted = hui.fit(event.item, {
+    width: Math.floor(event.width/100) * 100,
+    height: Math.floor(event.height/100) * 100
+  }, {
+    upscale: false
+  });
+  
+  return '/service/image/id'+event.item.id+'width'+fitted.width+'height'+fitted.height+'sharpen1.0quality0.8.jpg';
+}
+
 oo.presentImage = function(img) {
+  if (hui.ui.Presentation) {
+    var presentation = hui.ui.Presentation.create();
+    presentation.listen({
+      $getImage : oo.getImage,
+      $getPreview : function(event) {
+        return event.item.placeholder;
+      }
+    })
+    presentation.show({items:[img]})
+    return;
+  }
+  
   if (!this.imagePresenter) {
     this.imagePresenter = oo.PhotoViewer.create();
   }

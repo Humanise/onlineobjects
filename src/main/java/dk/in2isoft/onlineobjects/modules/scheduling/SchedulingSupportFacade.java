@@ -19,7 +19,7 @@ import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
-
+@Deprecated
 public class SchedulingSupportFacade {
 
 	private InformationService informationService;

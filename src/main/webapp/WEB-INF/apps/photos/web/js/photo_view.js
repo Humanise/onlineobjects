@@ -6,9 +6,14 @@ var photoView = {
   $ready : function() {
     var data = hui.get.firstByClass(document.body, 'js-data');
 
-    photoView.editable = data.getAttribute('data-editable') == 'true';
-    photoView.imageId = parseInt(data.getAttribute('data-id'),10);
-    photoView.username = data.getAttribute('data-username');
+    this.editable = data.getAttribute('data-editable') == 'true';
+    this.imageId = parseInt(data.getAttribute('data-id'),10);
+    this.username = data.getAttribute('data-username');
+    this.width = parseInt(data.getAttribute('data-width'),10);
+    this.height = parseInt(data.getAttribute('data-height'),10);
+    this.sizes = JSON.parse(data.getAttribute('data-sizes'));
+
+    this.image = hui.find('.photos_photo_image img');
 
     if (this.editable) {
       new oo.InlineEditor({
@@ -18,10 +23,107 @@ var photoView = {
       this._addWordBehavior();
       this._attachDrop();
     }
+    this._attach();
+    
+    // TODO This method may be better unless we can make the <source's work better
+    //this._pickBest();
+    //hui.listen(window, 'resize', this._pickBest.bind(this));
+    if (hui.location.getBoolean('debug')) {
+      this._debug();
+    }
+  },
+  _attach : function() {
+    var img = this.image;
+    hui.on(img, 'click', this._present.bind(this));
+    hui.on(document, 'keydown', this._onKey.bind(this));
+    var load = function() {
+      hui.cls.add(hui.find('.photos_photo_image'),'is-loaded');
+    };
+    hui.on(img, 'load', load);
+    var dummy = new Image();
+    dummy.onload = load;
+    dummy.src = img.currentSrc;
+  },
+  _pickBest : function() {
+    var ratio = window.devicePixelRatio > 1 ? 2 : 1;
+
+    var container = {width: this.image.width * ratio, height: this.image.height * ratio}
+    var fitted = hui.fit({width: this.width, height: this.height}, container);
+    var best = this._findBestSize(fitted);
+    this.image.src = best.url;
+  },
+  _debug : function() {
+    this._drawDebug();
+    hui.listen(window, 'resize', this._drawDebug.bind(this));
+  },
+  _drawDebug : function() {
+    if (!this.debugNode) {
+      this.debugNode = hui.build('span', {parent: hui.find('.photos_photo_image'), class: 'photos_photo_debug'})
+    }
+    var url = this.image.currentSrc;
+    var widthMatch = url.match(/width([0-9]+)/);
+    var width = widthMatch && widthMatch[1];
+    var heightMatch = url.match(/height([0-9]+)/);
+    var height = heightMatch && heightMatch[1];
+    if (!width || !height) return;
+    var ratio = window.devicePixelRatio > 1 ? 2 : 1;
+    var container = {width: this.image.width * ratio, height: this.image.height * ratio}
+    var fitted = hui.fit({width: this.width, height: this.height}, container);
+    var best = this._findBestSize(fitted);
+    var msg =
+      'selected: ' + width + ' x ' + height +
+      ' (container: ' + container.width + ' x ' + container.height + ')' +
+      ' (fitted: ' + fitted.width + ' x ' + fitted.height + ')' +
+      ' (ratio: ' + Math.round((width) / fitted.width * 100) + '%) ' +
+      ' (best: ' + best.width + ' x ' + best.height + ')'
+    ;
+    this.image.src = best.url;
+    this.debugNode.innerText = msg;
+    console.log(msg);
+  },
+  _findBestSize : function(container) {
+    var best = null;
+    var dist = Number.MAX_VALUE;
+    var area = container.width * container.height;
+    for (var i = 0; i < this.sizes.length; i++) {
+      var prospect = this.sizes[i];
+      var rel = Math.abs(1 - (prospect.width * prospect.height) / area);
+      console.info(rel, prospect)
+      if (rel < dist) {
+        dist = rel;
+        best = prospect;
+      }
+    }
+    return best;
+  },
+  _present : function() {
+    oo.presentImage({
+      id: this.imageId,
+      width: this.width,
+      height: this.height,
+      placeholder: this.image.currentSrc,
+      sizes: this.sizes
+    });
+  },
+  _onKey: function(e) {
+    e = hui.event(e);
+    if (e.rightKey) {
+      this.next();
+    } else if (e.leftKey) {
+      this.previous();
+    }
+  },
+  next : function() {
+    var next = hui.find('.photos_photo_next');
+    next && next.click();
+  },
+  previous : function() {
+    var prev = hui.find('.photos_photo_previous')
+    prev && prev.click();
   },
   _attachDrop : function() {
     hui.drag.listen({
-      element : hui.get.firstByClass(document.body,'photos_photo_image'),
+      element : hui.get.firstByClass(document.body, 'photos_photo_image'),
       hoverClass : 'is-dropping',
       $dropFiles : this._dropFiles.bind(this)
     })

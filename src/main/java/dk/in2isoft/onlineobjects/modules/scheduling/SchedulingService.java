@@ -27,11 +27,15 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.utils.Key;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -41,7 +45,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
-public class SchedulingService implements ApplicationListener<ApplicationContextEvent>, InitializingBean {
+public class SchedulingService implements ApplicationListener<ApplicationContextEvent>, InitializingBean, ApplicationContextAware {
 
 	private final static Logger log = LogManager.getLogger(SchedulingService.class);
 	
@@ -57,8 +61,14 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	
 	private Map<JobKey,String> triggerDescriptions = Maps.newHashMap();
 
+	private ApplicationContext applicationContext;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
+	
 	public void onApplicationEvent(ApplicationContextEvent event) {
-		
 		if (event instanceof ContextRefreshedEvent) {
 			try {
 				if (jobDescriptions!=null) {
@@ -117,11 +127,18 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	public void afterPropertiesSet() throws Exception {
 		SchedulerFactory sf = new StdSchedulerFactory();
 		scheduler = sf.getScheduler();
+		scheduler.setJobFactory(springBeanJobFactory());
 		LoggingSchedulerListener listener = new LoggingSchedulerListener(liveLog);
 		scheduler.getListenerManager().addSchedulerListener(listener);
 		scheduler.getListenerManager().addJobListener(listener);
 		scheduler.getListenerManager().addTriggerListener(listener);
 		
+	}
+
+	public SpringBeanJobFactory springBeanJobFactory() {
+		SpringBeanJobFactory jobFactory = new SpringBeanJobFactory();
+	    jobFactory.setApplicationContext(applicationContext);
+	    return jobFactory;
 	}
 	
 	public void log(String text) {

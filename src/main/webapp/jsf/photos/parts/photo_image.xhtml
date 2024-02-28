@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+  <ui:composition>
+    <div class="photos_photo_image_background">
+      <div class="photos_photo_image">
+        
+        <picture>
+          <c:forEach items="#{photosPhotoView.pictureSources}" var="source">
+          <source 
+            srcset="#{source.url} 2x"
+            media="(min-width: #{source.width/2}px)"
+          />
+          </c:forEach>
+          <img 
+            src="/service/image/id#{photosPhotoView.image.id}.jpg" 
+            alt="Baby Sleeping"
+            style="aspect-ratio: #{photosPhotoView.size.width} / #{photosPhotoView.size.height};"
+          />
+        </picture>
+        
+        <!--
+        <img src="/service/image/id#{photosPhotoView.image.id}.jpg" 
+            srcset="#{photosPhotoView.imageSourceSet}"
+            sizes="#{photosPhotoView.imageSizes}"
+            width="#{photosPhotoView.size.width}"
+            height="#{photosPhotoView.size.height}"
+            style="aspect-ratio: #{photosPhotoView.size.width} / #{photosPhotoView.size.height};"
+        />
+          -->
+        
+      <o:link href="#{photosPhotoView.previousUrl}" plain="true" styleClass="photos_photo_previous" rendered="#{photosPhotoView.previousUrl != null}"/>
+      <o:link href="#{photosPhotoView.nextUrl}" plain="true" styleClass="photos_photo_next" rendered="#{photosPhotoView.nextUrl != null}"/>
+      </div>
+    </div>
+
+    <c:if test="#{photosPhotoView.colors != null}">
+      <style>
+        .photos_photo_image_background {
+          background-image: linear-gradient(#{photosPhotoView.colors})
+        }
+        <c:if test="#{photosPhotoView.preview != null}">
+        .photos_photo_image {
+          background-image: url(#{photosPhotoView.preview});
+        }
+        </c:if>
+        .photos_photo_image:before {
+          aspect-ratio: #{photosPhotoView.size.width} / #{photosPhotoView.size.height};
+        }
+        @media (max-width: 800px)  {
+          .photos_photo_image {
+            height: #{photosPhotoView.size.height / photosPhotoView.size.width * 100}vw;
+            max-height: 80vh;
+            min-height: 40vh;
+          }
+        }
+      </style>
+    </c:if>
+
+  </ui:composition>
+</html>

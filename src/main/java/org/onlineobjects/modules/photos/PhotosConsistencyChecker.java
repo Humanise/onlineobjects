@@ -19,10 +19,10 @@ public class PhotosConsistencyChecker implements ConsistencyChecker {
 	
 	@Override
 	public void check() throws ModelException, SecurityException, ExplodingClusterFuckException {
-		Operator operator = model.newAdminOperator();
-		Pile pile = piles.getOrCreateGlobalPile(ImageService.FEATURED_PILE, operator);
-		security.grantPublicView(pile, true, operator);
-		operator.commit();
+		model.asAdmin((Operator operator) -> {
+			Pile pile = piles.getOrCreateGlobalPile(ImageService.FEATURED_PILE, operator);
+			security.grantPublicView(pile, true, operator);
+		});
 	}
 
 	public void setPiles(PileService piles) {

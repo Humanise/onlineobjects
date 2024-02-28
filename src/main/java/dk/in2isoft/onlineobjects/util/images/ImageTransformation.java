@@ -7,9 +7,11 @@ public class ImageTransformation {
 	private float sepia;
 	private float sharpen;
 	private float rotation;
+	private float quality;
 	private boolean flipVertically;
 	private boolean flipHorizontally;
 	private String format;
+	private boolean debug;
 
 	public void setWidth(int width) {
 		this.width = width;
@@ -85,5 +87,21 @@ public class ImageTransformation {
 
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
+
+	public float getQuality() {
+		return quality;
+	}
+
+	public void setQuality(float quality) {
+		this.quality = quality;
 	}
 }

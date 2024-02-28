@@ -32,6 +32,8 @@ public class ImageController extends ServiceController {
 	private Pattern sharpenPattern;
 	private Pattern sepiaPattern;
 	private Pattern rotationPattern;
+	private Pattern debugPattern;
+	private Pattern qualityPattern;
 
 	public ImageController() {
 		super("image");
@@ -40,27 +42,35 @@ public class ImageController extends ServiceController {
 		heightPattern = Pattern.compile("height([0-9]+)");
 		thumbnailPattern = Pattern.compile("thumbnail([0-9]+)");
 		sharpenPattern = Pattern.compile("sharpen([0-9]+\\.[0-9]+)");
+		qualityPattern = Pattern.compile("quality([0-9]+\\.[0-9]+)");
 		sepiaPattern = Pattern.compile("sepia([0-9]+\\.[0-9]+)");
 		rotationPattern = Pattern.compile("rotation([\\-]?[0-9]+\\.[0-9]+)");
+		debugPattern = Pattern.compile("debug1");
 	}
 
 	@Override
 	public void unknownRequest(Request request) throws IOException, EndUserException {
+		/*
+		try {
+			Thread.sleep(Math.round(Math.random()*1000+1000));
+		} catch (InterruptedException ignore) {}*/
 		String[] path = request.getLocalPath();
 		Parameters param = new Parameters();
-		if (path.length>0) {
-			String subject = path[path.length-1];
+		if (path.length > 0) {
+			String subject = path[path.length - 1];
 			String extension = Files.getFileExtension(subject);
-			param.id = Long.valueOf(match(idPattern,subject));
-			param.width = parseInt(match(widthPattern,subject));
-			param.height = parseInt(match(heightPattern,subject));
-			param.thumbnail = parseInt(match(thumbnailPattern,subject));
-			param.sharpen = parseFloat(match(sharpenPattern,subject));
-			param.sepia = parseFloat(match(sepiaPattern,subject));
-			param.cropped = subject.indexOf("cropped")!=-1;
-			param.rotation = parseFloat(match(rotationPattern,subject));
+			param.id = Long.valueOf(match(idPattern, subject));
+			param.width = parseInt(match(widthPattern, subject));
+			param.height = parseInt(match(heightPattern, subject));
+			param.thumbnail = parseInt(match(thumbnailPattern, subject));
+			param.sharpen = parseFloat(match(sharpenPattern, subject));
+			param.quality = parseFloat(match(qualityPattern, subject));
+			param.sepia = parseFloat(match(sepiaPattern, subject));
+			param.cropped = subject.indexOf("cropped") != -1;
+			param.rotation = parseFloat(match(rotationPattern, subject));
 			param.verticalFlip = subject.contains("flipv");
 			param.horizontalFlip = subject.contains("fliph");
+			param.debug = debugPattern.matcher(subject).find();
 			param.inherit = true;
 			param.format = imageService.isSupportedExtension(extension) ? extension : null;
 		} else {
@@ -70,15 +80,17 @@ public class ImageController extends ServiceController {
 			param.height = request.getInt("height");
 			param.cropped = request.getBoolean("cropped");
 			param.sharpen = request.getFloat("sharpen");
+			param.quality = request.getFloat("quality");
 			param.sepia = request.getFloat("sepia");
 			param.rotation = request.getFloat("rotation");
 			param.verticalFlip = request.getBoolean("flipVertically");
 			param.horizontalFlip = request.getBoolean("flipHorizontally");
-			param.inherit = request.getBoolean("inherit",true);
+			param.inherit = request.getBoolean("inherit", true);
+			param.debug = request.getBoolean("debug", true);
 			String format = request.getString("format");
 			param.format = imageService.isSupportedExtension(format) ? format : null;
 		}
-		process(request,param);
+		process(request, param);
 	}
 	
 	private int parseInt(String str) {
@@ -113,13 +125,13 @@ public class ImageController extends ServiceController {
 		File file;
 		Image image = modelService.get(Image.class, parameters.id, request);
 		if (image==null) {
-			throw new ContentNotFoundException("The image could not be found, id="+parameters.id);
+			throw new ContentNotFoundException("The image could not be found, id=" + parameters.id);
 		}
 		String mime;
 		ImageTransformation trans = new ImageTransformation();
 		trans.setCropped(parameters.cropped);
 		trans.setFormat(parameters.format);
-		if (parameters.thumbnail>0) {
+		if (parameters.thumbnail > 0) {
 			trans.setHeight(parameters.thumbnail);
 			trans.setWidth(parameters.thumbnail);
 		} else {
@@ -131,13 +143,15 @@ public class ImageController extends ServiceController {
 		trans.setRotation(parameters.rotation);
 		trans.setFlipHorizontally(parameters.horizontalFlip);
 		trans.setFlipVertically(parameters.verticalFlip);
+		trans.setDebug(parameters.debug);
+		trans.setQuality(parameters.quality);
 		if (parameters.inherit) {
 			boolean flipVertically = image.getPropertyBooleanValue(Property.KEY_PHOTO_FLIP_VERTICALLY);
 			boolean flipHorizontally = image.getPropertyBooleanValue(Property.KEY_PHOTO_FLIP_HORIZONTALLY);
 			Double rotation = image.getPropertyDoubleValue(Property.KEY_PHOTO_ROTATION);
 			trans.setFlipHorizontally(flipHorizontally);
 			trans.setFlipVertically(flipVertically);
-			if (rotation!=null) {
+			if (rotation != null) {
 				trans.setRotation(rotation.longValue());
 			}
 		}
@@ -178,6 +192,7 @@ public class ImageController extends ServiceController {
 	}
 	
 	private class Parameters {
+		public float quality;
 		long id;
 		int width;
 		int height;
@@ -190,5 +205,6 @@ public class ImageController extends ServiceController {
 		boolean horizontalFlip;
 		boolean inherit;
 		String format;
+		boolean debug;
 	}
 }
