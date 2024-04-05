@@ -111,7 +111,8 @@ public class PhotosGalleryView extends AbstractView {
 
 	private void loadImages(Operator operator) throws ModelException {
 		images = Lists.newArrayList();
-		List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, operator);
+		List<Relation> childRelations = modelService.find().relations(operator).from(imageGallery).to(Image.class).list();
+		//List<Relation> childRelations = modelService.getRelationsFrom(imageGallery, Image.class, operator);
 		for (Relation relation : childRelations) {
 			Image image = (Image) relation.getTo();
 			Date date = image.getPropertyDateValue(Property.KEY_PHOTO_TAKEN);

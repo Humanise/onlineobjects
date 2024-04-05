@@ -1,8 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.photos.views;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.onlineobjects.core.Ability;
@@ -12,6 +11,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -19,7 +19,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.PersonService;
 import dk.in2isoft.onlineobjects.ui.Request;
-import dk.in2isoft.onlineobjects.ui.data.Option;
+import dk.in2isoft.onlineobjects.ui.jsf.model.GalleryLink;
 
 public class PhotosLayoutView extends AbstractView {
 
@@ -31,8 +31,6 @@ public class PhotosLayoutView extends AbstractView {
 	private String fullPersonName;
 	private User user;
 	private Person person;
-
-	private List<Option> galleries;
 	
 	private boolean allImages;
 
@@ -57,7 +55,6 @@ public class PhotosLayoutView extends AbstractView {
 			throw new ContentNotFoundException("User not found");
 		}
 		this.user = pair.getKey();
-		galleries = Lists.newArrayList();
 		this.person = pair.getValue();
 		fullPersonName = personService.getFullPersonName(person, 14);
 		if (user!=null) {
@@ -66,15 +63,47 @@ public class PhotosLayoutView extends AbstractView {
 			if (user.getId() != session.getIdentity()) {
 				galleryQuery.withPublicView();
 			}
-			List<ImageGallery> imageGalleries = modelService.list(galleryQuery, request);
-			for (ImageGallery gallery : imageGalleries) {
-				Option option = Option.of(gallery.getName(), gallery.getId());
-				option.setSelected(gallery.getId()==selected);
-				galleries.add(option);
-			}
 			modifiable = this.user.getId() == session.getIdentity() && session.has(Ability.usePhotosApp);
 			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request);
 		}
+	}
+
+	private GalleryLink allPhotos;
+	
+	public GalleryLink getAllPhotos() {
+		if (allPhotos != null) return allPhotos;
+		Query<Image> query = Query.after(Image.class).as(getRequest()).orderByCreated().descending();
+		
+		List<Long> ids = modelService.listIds(query, getRequest());
+		allPhotos = new GalleryLink();
+		allPhotos.title = "All photos";
+		allPhotos.photoCount = ids.size();
+		allPhotos.photoIds = ids.stream().mapToInt(Long::intValue).toArray(); 
+		return allPhotos;
+	}
+	
+	private List<GalleryLink> galleryLinks;
+	
+	public List<GalleryLink> getGalleryLinks() throws ModelException {
+		if (galleryLinks != null) return galleryLinks;
+		Request request = getRequest();
+		Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
+		if (user.getId() != request.getIdentity()) {
+			galleryQuery.withPublicView();
+		}
+		List<ImageGallery> galleries = modelService.list(galleryQuery, request);
+		List<GalleryLink> links = new ArrayList<>();
+		for (ImageGallery imageGallery : galleries) {
+			int[] ids = modelService.getChildren(imageGallery, Image.class, request).stream().map(r -> r.getId()).mapToInt(Long::intValue).toArray();
+			GalleryLink link = new GalleryLink();
+			link.id = imageGallery.getId();
+			link.title = imageGallery.getName();
+			link.photoCount = ids.length;
+			link.photoIds = ids;
+			links.add(link);
+		}
+		galleryLinks = links;
+		return links;
 	}
 	
 	public boolean isAllImages() {
@@ -87,10 +116,6 @@ public class PhotosLayoutView extends AbstractView {
 	
 	public boolean isModifiable() {
 		return modifiable;
-	}
-	
-	public List<Option> getGalleries() {
-		return galleries;
 	}
 	
 	public String getUsername() {

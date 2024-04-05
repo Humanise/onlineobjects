@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:component = "http://java.sun.com/jsf/composite/components"
+>
+  <ui:composition template="templates/user.xhtml">
+
+    <ui:define name="title">TODO</ui:define>
+
+    <ui:define name="body">
+      <div style="padding: 10px; display: flex; flex-wrap: wrap;">
+      <c:forEach items="#{photosLayoutView.galleryLinks}" var="gallery">
+        <div style="padding: 5px; width: 200px;">
+          <component:galleryLink href="/#{wordsLayoutView.language}/gallery/#{gallery.id}/" model="#{gallery}" size="large"/>
+        </div>
+      </c:forEach>
+      </div>
+    </ui:define>
+
+  </ui:composition>
+</html>

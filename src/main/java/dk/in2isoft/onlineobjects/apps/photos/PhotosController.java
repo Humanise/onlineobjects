@@ -47,6 +47,10 @@ public class PhotosController extends PhotosControllerBase {
 	@View(jsf = "user.xhtml")
 	public void user(Request request) {}
 
+	@Path(expression = "/<language>/users/<username>/galleries")
+	@View(jsf = "galleries.xhtml")
+	public void galleries(Request request) {}
+
 	@Path(expression = "/<language>/gallery/<integer>")
 	@View(jsf = "gallery.xhtml")
 	public void gallery(Request request) {}

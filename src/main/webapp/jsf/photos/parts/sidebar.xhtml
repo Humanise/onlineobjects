@@ -5,6 +5,7 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:gui="http://www.in2isoft.dk/in2igui"
   xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:component = "http://java.sun.com/jsf/composite/components"
 >
   <o:dependency src="/WEB-INF/apps/photos/web/js/layout_view.js"/>
   <div class="photos_sidebar_profile">
@@ -13,18 +14,14 @@
     </div>
     <div class="photos_sidebar_profile_body">
       <p class="photos_sidebar_profile_name">#{photosLayoutView.personName}</p>
-      <p class="photos_sidebar_profile_user">#{photosLayoutView.username}</p>
-      <p class="photos_sidebar_profile_link"><o:link app="people" href="/#{photosLayoutView.username}/" variant="arrow">#{msg.profile}</o:link></p>
+      <p class="photos_sidebar_profile_user">
+        <o:link href="/#{wordsLayoutView.language}/users/#{photosLayoutView.username}/" variant="arrow">#{photosLayoutView.username}</o:link></p>
     </div>
   </div>
-  <c:if test="#{not empty photosLayoutView.galleries}">
     <div class="photos_sidebar_galleries">
     <ul>
       <li>
-        <o:link app="photos" href="/users/#{photosLayoutView.username}/" plain="true" styleClass="#{photosLayoutView.allImages ? 'photos_sidebar_selected' : null}">
-          <o:icon icon="photos"/>
-          <o:out value="#{msg.all_photos}"/>
-        </o:link>
+        <component:galleryLink href="/#{wordsLayoutView.language}/users/#{photosLayoutView.username}/" model="#{photosLayoutView.allPhotos}" compact="true"/>
       </li>
     </ul>
     <h2 class="photos_sidebar_title">
@@ -36,17 +33,15 @@
       </c:if>
 
     </h2>
-    <ul id="galleries">
-      <c:forEach items="#{photosLayoutView.galleries}" var="gallery">
-        <li>
-          <o:link href="/gallery/#{gallery.value}/" app="photos" plain="true" styleClass="#{gallery.selected ? 'photos_sidebar_selected' : null}">
-            <o:icon icon="album"/>
-            <o:out value="#{gallery.label}"/>
-          </o:link>
-        </li>
-      </c:forEach>
+    <c:if test="#{not empty photosLayoutView.galleryLinks}">
+    <ul>
+    <c:forEach items="#{photosLayoutView.galleryLinks}" var="gallery">
+      <li>
+        <component:galleryLink href="/#{wordsLayoutView.language}/gallery/#{gallery.id}/" model="#{gallery}" compact="true"/>
+      </li>
+    </c:forEach>
     </ul>
+    </c:if>
     </div>
-  </c:if>
 
 </ui:fragment>

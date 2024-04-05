@@ -32,43 +32,37 @@
       margin: 5px 0;
     }
   }
-  
+
+  &_title {
+    border-bottom: 1px solid #eee;
+    margin: 20px 0 10px;
+    position: relative;
+    &_text {
+      position: absolute;
+      background: #fff;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1;
+      margin-top: -8px;
+      padding: 0 4px;
+      margin-left: 20px;
+      font-weight: normal;
+      color: #999;
+    }
+  }
+  &_galleries {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    li {
+      margin: 5px 20px;
+    }
+  }
 }
 
 
-
-
-
-
-
-
-.photos_sidebar_title
-{
-  border-bottom: 1px solid #eee;
-  margin: 20px -5px 10px;
-  position: relative;
-}
-
-.photos_sidebar_title_text
-{
-  position: absolute;
-  background: #fff;
-  margin: 0;
-  font-size: 14px;
-  line-height: 1;
-  margin-top: -8px;
-  padding: 0 4px;
-  margin-left: 20px;
-  font-weight: normal;
-  color: #999;
-}
-
-div.photos_sidebar_galleries
-{
-  border-top: 1px solid #eee;
-  padding: 10px 5px;
-  margin: 5px;
-}
 
 .photos_sidebar_title_action
 {
@@ -79,63 +73,6 @@ div.photos_sidebar_galleries
   font-size: 0;
   background: #fff;
   padding: 3px;
-}
-
-div.photos_sidebar_galleries h2 a:hover
-{
-  color: #333;
-}
-
-div.photos_sidebar_galleries ul
-{
-  list-style: none;
-  margin: 0;
-  padding: 0px;
-  font-size: 14px;
-}
-
-div.photos_sidebar_galleries li
-{
-}
-
-div.photos_sidebar_galleries ul a
-{
-  text-decoration: none;
-  color: #333;
-  display: block;
-  padding: 2px 0;
-}
-
-div.photos_sidebar_galleries ul a:hover,
-div.photos_sidebar_galleries ul a:hover span.oo_icon
-{
-  color: #000;
-}
-
-div.photos_sidebar_galleries ul a:focus
-{
-  text-shadow: #3366ff 0px 0px 2px;
-  color: #002244;
-  outline: none;
-}
-
-div.photos_sidebar_galleries ul a span.oo_icon
-{
-  color: #ccc;
-  margin-right: 4px;
-  font-weight: normal;
-  margin-top: -1px;
-}
-
-a.photos_sidebar_selected
-{
-  font-weight: bold;
-  color: #000;
-}
-
-div.photos_sidebar_galleries a.photos_sidebar_selected span.oo_icon
-{
-  color: #333;
 }
 
 .photos_sidebar_cloud {

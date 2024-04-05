@@ -8,21 +8,54 @@
   <composite:interface>
     <composite:attribute name="href" />
     <composite:attribute name="model" />
+    <composite:attribute name="compact" value="false"/>
+    <composite:attribute name="size" value="regular"/>
   </composite:interface>
 
   <composite:implementation>
-    <a class="oo_gallerylink" href="#{cc.attrs.href}">
-      <c:forEach items="#{cc.attrs.model.photoIds}" var="id">
-        <c:if test="#{id > 0}">
-          <span class="oo_gallerylink_image" style="background-image: url('/service/image/id#{id}width60height60sharpen1.00cropped.jpg')"></span>
-        </c:if>
-        <c:if test="#{id == 0}">
-          <span class="oo_gallerylink_image"></span>
-        </c:if>
-      </c:forEach>
-      <span class="oo_gallerylink_title">#{cc.attrs.model.title}</span>
-      <span class="oo_gallerylink_info">#{cc.attrs.model.photoCount} photos</span>
-    </a>
+    <c:if test="#{cc.attrs.compact}">
+      <a class="oo_gallerylink_compact" href="#{cc.attrs.href}">
+        <c:forEach items="#{cc.attrs.model.photoIds}" var="id">
+          <c:if test="#{id > 0}">
+            <span class="oo_gallerylink_compact_image" style="background-image: url('/service/image/id#{id}width72height72sharpen1.00cropped.jpg')"></span>
+          </c:if>
+          <c:if test="#{id == 0}">
+            <span class="oo_gallerylink_compact_image"></span>
+          </c:if>
+        </c:forEach>
+        <span class="oo_gallerylink_compact_title">#{cc.attrs.model.title}</span>
+      </a>
+    </c:if>
+    <c:if test="#{not cc.attrs.compact}">
+      <c:if test="#{cc.attrs.size == 'large'}">
+        <a class="oo_gallerylink_large" href="#{cc.attrs.href}">
+          <c:forEach items="#{cc.attrs.model.photoIds}" var="id">
+            <c:if test="#{id > 0}">
+              <span class="oo_gallerylink_large_image" style="background-image: url('/service/image/id#{id}width150height120sharpen1.00cropped.jpg')"></span>
+            </c:if>
+            <c:if test="#{id == 0}">
+              <span class="oo_gallerylink_large_image"></span>
+            </c:if>
+          </c:forEach>
+          <span class="oo_gallerylink_large_title">#{cc.attrs.model.title}</span>
+        <span class="oo_gallerylink_large_info">#{cc.attrs.model.photoCount} photos</span>
+        </a>
+      </c:if>
+      <c:if test="#{cc.attrs.size != 'large'}">
+      <a class="oo_gallerylink" href="#{cc.attrs.href}">
+        <c:forEach items="#{cc.attrs.model.photoIds}" var="id">
+          <c:if test="#{id > 0}">
+            <span class="oo_gallerylink_image" style="background-image: url('/service/image/id#{id}width60height60sharpen1.00cropped.jpg')"></span>
+          </c:if>
+          <c:if test="#{id == 0}">
+            <span class="oo_gallerylink_image"></span>
+          </c:if>
+        </c:forEach>
+        <span class="oo_gallerylink_title">#{cc.attrs.model.title}</span>
+        <span class="oo_gallerylink_info">#{cc.attrs.model.photoCount} photos</span>
+      </a>
+      </c:if>
+    </c:if>
     <o:dependency src="/WEB-INF/core/web/css/oo_gallerylink.css"/>
   </composite:implementation>
 </html>
