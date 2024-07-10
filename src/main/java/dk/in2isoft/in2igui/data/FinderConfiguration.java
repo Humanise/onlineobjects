@@ -1,15 +1,16 @@
 package dk.in2isoft.in2igui.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FinderConfiguration {
 
 	private String url;
 	private String title;
-	private String selectionUrl;
-	private String selectionValue;
-	private String selectionParameter;
-	private FinderListConfiguration list;
-	private FinderSearchConfiguration search;
-	private FinderCreationConfiguration creation;
+	private FinderList list;
+	private Search search;
+	private Creation creation;
+	private Selection selection;
 	
 	public FinderConfiguration() {
 	}
@@ -32,59 +33,43 @@ public class FinderConfiguration {
 
 	public void setListUrl(String listUrl) {
 		if (list==null) {
-			list = new FinderListConfiguration();
+			list = new FinderList();
 		}
 		list.setUrl(listUrl);
 	}
 
-	public String getSelectionUrl() {
-		return selectionUrl;
-	}
-
-	public void setSelectionUrl(String selectionUrl) {
-		this.selectionUrl = selectionUrl;
-	}
-
-	public String getSelectionValue() {
-		return selectionValue;
-	}
-
-	public void setSelectionValue(String selectionValue) {
-		this.selectionValue = selectionValue;
-	}
-
-	public String getSelectionParameter() {
-		return selectionParameter;
-	}
-
-	public void setSelectionParameter(String selectionParameter) {
-		this.selectionParameter = selectionParameter;
-	}
-
 	public void setSearchParameter(String searchParameter) {
 		if (this.search == null) {
-			search = new FinderSearchConfiguration();
+			search = new Search();
 		}
 		this.search.setParameter(searchParameter);
 	}
 
-	public FinderSearchConfiguration getSearch() {
+	public Search getSearch() {
 		return search;
 	}
 	
-	public FinderListConfiguration getList() {
+	public FinderList getList() {
 		return list;
 	}
 	
-	public FinderCreationConfiguration getCreation() {
+	public Creation getCreation() {
 		return creation;
 	}
 	
-	public void setCreation(FinderCreationConfiguration creation) {
+	public void setCreation(Creation creation) {
 		this.creation = creation;
 	}
 
-	public class FinderListConfiguration {
+	public Selection getSelection() {
+		return selection;
+	}
+
+	public void setSelection(Selection selection) {
+		this.selection = selection;
+	}
+
+	public class FinderList {
 		private String url;
 
 		public String getUrl() {
@@ -96,7 +81,7 @@ public class FinderConfiguration {
 		}
 	}
 	
-	public class FinderSearchConfiguration {
+	public class Search {
 		private String parameter;
 
 		public String getParameter() {
@@ -108,7 +93,50 @@ public class FinderConfiguration {
 		}
 	}
 
-	public class FinderCreationConfiguration {
+	public class Selection {
+		private String value;
+		private String url;
+		private String parameter;
+		private List<ItemData> items = new ArrayList<>();
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public String getParameter() {
+			return parameter;
+		}
+
+		public void setParameter(String parameter) {
+			this.parameter = parameter;
+		}
+
+		public List<ItemData> getItems() {
+			return items;
+		}
+
+		public void setItems(List<ItemData> items) {
+			this.items = items;
+		}
+
+		public void addItem(ItemData item) {
+			items.add(item);
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
+
+	public class Creation {
 		private String url;
 		private String button;
 		private Object formula;
@@ -137,5 +165,15 @@ public class FinderConfiguration {
 			this.formula = formula;
 		}
 
+	}
+
+	public Creation addCreation() {
+		creation = new Creation();
+		return creation;
+	}
+
+	public Selection addSelection() {
+		selection = new Selection();
+		return selection;
 	}
 }

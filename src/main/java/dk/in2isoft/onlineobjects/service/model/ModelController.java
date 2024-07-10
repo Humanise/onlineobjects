@@ -14,7 +14,9 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.Diagram;
 import dk.in2isoft.in2igui.data.FinderConfiguration;
-import dk.in2isoft.in2igui.data.FinderConfiguration.FinderCreationConfiguration;
+import dk.in2isoft.in2igui.data.FinderConfiguration.Creation;
+import dk.in2isoft.in2igui.data.FinderConfiguration.Selection;
+import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.in2igui.data.ListWriter;
 import dk.in2isoft.in2igui.data.Node;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
@@ -232,15 +234,28 @@ public class ModelController extends ModelControllerBase {
 	@Path
 	public FinderConfiguration finder(Request request) throws IllegalRequestException, ModelException, SecurityException {
 
-		String type = request.getString("type");
+		List<String> types = request.getStrings("type");
+		if (types.isEmpty()) {
+			throw new IllegalRequestException("Missing type");
+		}
+		String type = types.get(0);
 		
 		FinderConfiguration config = new FinderConfiguration();
-		config.setTitle("Find " + type);
-		config.setListUrl("/service/model/finderList?type=" + type);
+		config.setTitle("Find " + types);
+		config.setListUrl("/service/model/finderList");
 		config.setSearchParameter("text");
 		
+		if (types.size() > 0) {
+			Selection selection = config.addSelection();
+			selection.setParameter("type");
+			selection.setValue(types.get(0));
+			for (String it : types) {
+				selection.addItem(new ItemData(it, it));
+			}
+		}
+		
 		if (Person.class.getSimpleName().equals(type)) {
-			FinderCreationConfiguration creation = config.new FinderCreationConfiguration();
+			Creation creation = config.addCreation();
 			creation.setUrl("/service/model/createFromFinder?type=" + type);
 			creation.setButton("New person");
 			List<Object> formula = Lists.newArrayList();
@@ -254,10 +269,9 @@ public class ModelController extends ModelControllerBase {
 				formula.add(field);
 			}
 			creation.setFormula(formula);
-			config.setCreation(creation);
 		}
 		if (Question.class.getSimpleName().equals(type)) {
-			FinderCreationConfiguration creation = config.new FinderCreationConfiguration();
+			Creation creation = config.addCreation();
 			creation.setUrl("/service/model/createFromFinder?type=" + type);
 			creation.setButton("New question");
 			List<Object> formula = Lists.newArrayList();
@@ -271,10 +285,9 @@ public class ModelController extends ModelControllerBase {
 				formula.add(field);
 			}
 			creation.setFormula(formula);
-			config.setCreation(creation);
 		}
 		if (Hypothesis.class.getSimpleName().equals(type)) {
-			FinderCreationConfiguration creation = config.new FinderCreationConfiguration();
+			Creation creation = config.addCreation();
 			creation.setUrl("/service/model/createFromFinder?type=" + type);
 			creation.setButton("New hypothesis");
 			List<Object> formula = Lists.newArrayList();
@@ -288,7 +301,6 @@ public class ModelController extends ModelControllerBase {
 				formula.add(field);
 			}
 			creation.setFormula(formula);
-			config.setCreation(creation);
 			
 		}
 		return config;
@@ -304,7 +316,6 @@ public class ModelController extends ModelControllerBase {
 		
 		Query<? extends Entity> query = Query.after(entityClass).withPaging(page, 20).withWords(text).as(request.getSession());
 		SearchResult<? extends Entity> result = modelService.search(query, request);
-
 
 		ListWriter out = new ListWriter(request);
 		out.startList();

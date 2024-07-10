@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -55,6 +56,10 @@ public class DeveloperView extends AbstractView {
 		}
 	}
 
+	public List<String> getModelTypeNames() {
+		return modelService.getEntityClasses().stream().map(Class::getSimpleName).collect(Collectors.toList());
+	}
+	
 	public List<Item> getUsers() {
 		if (users == null) {
 			Request request = getRequest();

@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.knowledge.perspective;
 
 
-public class QuestionViewPerspective implements CategorizableViewPerspective {
+public class QuestionViewPerspective implements KnowledgeWebPerspective, CategorizableViewPerspective {
 
 	private long id;
 	private String text;

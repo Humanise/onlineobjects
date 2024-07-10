@@ -5,7 +5,7 @@ import java.util.List;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.ui.data.Option;
 
-public class HypothesisWebPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags, TaggableViewPerspective {
+public class HypothesisWebPerspective implements KnowledgeWebPerspective, CategorizableViewPerspective, ViewPerspectiveWithTags, TaggableViewPerspective {
 
 	private long id;
 	private String type = Hypothesis.class.getSimpleName();
@@ -14,6 +14,7 @@ public class HypothesisWebPerspective implements CategorizableViewPerspective, V
 	private boolean favorite;
 	private List<StatementWebPerspective> supports;
 	private List<StatementWebPerspective> contradicts;
+	private List<QuestionWebPerspective> questions;
 	private List<Option> words;
 	private List<Option> tags;
 
@@ -68,7 +69,15 @@ public class HypothesisWebPerspective implements CategorizableViewPerspective, V
 	public void setContradicts(List<StatementWebPerspective> contradicting) {
 		this.contradicts = contradicting;
 	}
+	
+	public void setQuestions(List<QuestionWebPerspective> questions) {
+		this.questions = questions;
+	}
 
+	public List<QuestionWebPerspective> getQuestions() {
+		return questions;
+	}
+	
 	public List<Option> getWords() {
 		return words;
 	}
@@ -83,5 +92,12 @@ public class HypothesisWebPerspective implements CategorizableViewPerspective, V
 	
 	public void setTags(List<Option> tags) {
 		this.tags = tags;
+	}
+
+	public static HypothesisWebPerspective from(Hypothesis hypothesis) {
+		var p = new HypothesisWebPerspective();
+		p.setId(hypothesis.getId());
+		p.setText(hypothesis.getText());
+		return p;
 	}
 }

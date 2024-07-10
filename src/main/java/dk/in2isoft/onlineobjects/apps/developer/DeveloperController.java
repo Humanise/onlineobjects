@@ -31,6 +31,10 @@ public class DeveloperController extends ApplicationController {
 	@View(jsf = "jsf.xhtml")
 	public void jsf(Request request) {
 	}
+
+	@Path(exactly = {"finder.html"})
+	@View(jsf = "finder.xhtml")
+	public void finder(Request request) {}
 	
 	public List<Locale> getLocales() {
 		return null;

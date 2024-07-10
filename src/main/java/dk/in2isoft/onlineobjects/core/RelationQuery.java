@@ -49,6 +49,18 @@ public class RelationQuery {
 		return this;
 	}
 
+	public RelationQuery answers(Entity entity) {
+		this.kind = Relation.ANSWERS;
+		this.toEntity = entity;
+		return this;
+	}
+
+	public RelationQuery answers(Class<? extends Entity> type) {
+		withKind(Relation.ANSWERS);
+		to(type);
+		return this;
+	}
+
 	public RelationQuery to(Entity entity) {
 		this.toEntity = entity;
 		return this;

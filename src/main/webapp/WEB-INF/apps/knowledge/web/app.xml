@@ -255,6 +255,15 @@
               <div class="perspective_actions">
                 <button name="addContradictionToHypothesis" text="Add contradiction"/>
               </div>
+              <div class="perspective_heading">Is answer to</div>
+              <collection name="hypothesisQuestions">
+                <empty>
+                  <div class="perspective_relation_message">No questions yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addQuestionToHypothesis" text="Add question"/>
+              </div>
             </div>
           </div>
         </fragment>
@@ -298,6 +307,10 @@
   <finder name="questionFinder" url="/service/model/finder?type=Question"/>
 
   <finder name="statementFinder" url="/service/model/finder?type=Statement"/>
+
+  <finder name="answerFinder" url="/service/model/finder?type=Statement&amp;type=Hypothesis"/>
+
+  <finder name="hypothesisFinder" url="/service/model/finder?type=Hypothesis"/>
 
   <finder name="wordFinder" url="/service/model/finder?type=Word"/>
 

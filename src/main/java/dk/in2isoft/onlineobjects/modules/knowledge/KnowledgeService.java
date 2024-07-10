@@ -30,6 +30,7 @@ import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisWebPerspec
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder.Settings;
+import dk.in2isoft.onlineobjects.apps.knowledge.perspective.KnowledgeWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionEditPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionWebPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.StatementWebPerspective;
@@ -444,13 +445,13 @@ public class KnowledgeService {
 		User user = modelService.getUser(request);
 		categorize(question, perspective, user, request);
 
-		List<Statement> answers = modelService.getParents(question, Relation.ANSWERS, Statement.class, request);
-		perspective.setAnswers(answers.stream().map(answer -> {
-			StatementWebPerspective p = new StatementWebPerspective();
-			p.setId(answer.getId());
-			p.setText(answer.getText());
-			return p;
-		}).collect(toList()));
+		List<Statement> statementAnswers = modelService.getParents(question, Relation.ANSWERS, Statement.class, request);
+		List<Hypothesis> hypothesisAnswers = modelService.getParents(question, Relation.ANSWERS, Hypothesis.class, request);
+
+		var answers = new ArrayList<KnowledgeWebPerspective>();
+		answers.addAll(statementAnswers.stream().map(StatementWebPerspective::from).collect(toList()));
+		answers.addAll(hypothesisAnswers.stream().map(HypothesisWebPerspective::from).collect(toList()));
+		perspective.setAnswers(answers);
 		
 		addWords(question, perspective, request);
 		addTags(question, perspective, request);
@@ -467,6 +468,7 @@ public class KnowledgeService {
 		categorize(hypothesis, perspective, user, operator);
 		perspective.setContradicts(Lists.newArrayList());
 		perspective.setSupports(Lists.newArrayList());
+		perspective.setQuestions(Lists.newArrayList());
 
 		List<Relation> supports = modelService.find().relations(operator).from(Statement.class).to(hypothesis).withKind(Relation.SUPPORTS).list();
 		supports.sort(this::compareByPosition);
@@ -485,6 +487,12 @@ public class KnowledgeService {
 			statementPerspective.setId(c.getId());
 			statementPerspective.setText(c.getText());
 			perspective.getContradicts().add(statementPerspective);
+		}
+		List<Relation> questions = modelService.find().relations(operator).from(hypothesis).answers(Question.class).list();
+		questions.sort(this::compareByPosition);
+		for (Relation relation : questions) {
+			Question question = (Question) relation.getTo();
+			perspective.getQuestions().add(QuestionWebPerspective.from(question));
 		}
 		addWords(hypothesis, perspective, operator);
 		addTags(hypothesis, perspective, operator);
@@ -577,6 +585,24 @@ public class KnowledgeService {
 		relate(question, statement, operator);
 	}
 
+	public void addQuestionToHypothesis(Long questionId, Long hypothesisId, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Question question = modelService.getRequired(Question.class, questionId, operator);
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
+		relate(question, hypothesis, operator);
+	}
+
+	public void addAnswerToQuestion(Long questionId, Long answerId, String answerType, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+		Question question = modelService.getRequired(Question.class, questionId, operator);
+		Class<? extends Entity> answer = modelService.getEntityClass(answerType);
+		Entity entity = modelService.get(answer, answerId, operator);
+		Optional<Relation> found = modelService.find().relations(operator).from(entity).answers(question).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(entity, question, Relation.ANSWERS, operator);
+		}
+	}
+
+	
 	public void removeQuestionFromStatement(Long questionId, Long statementId, Operator operator)
 			throws ModelException, ContentNotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
@@ -585,6 +611,13 @@ public class KnowledgeService {
 		for (Relation relation : relations) {
 			modelService.delete(relation, operator);
 		}
+	}
+
+	public void removeQuestionFromHypothesis(Long questionId, Long hypothesisId, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		Question question = modelService.getRequired(Question.class, questionId, operator);
+		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
+		modelService.find().relations(operator).from(hypothesis).answers(question).delete(operator);
 	}
 
 	public void removeStatementFromHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator)
@@ -608,6 +641,13 @@ public class KnowledgeService {
 		Optional<Relation> found = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).first();
 		if (!found.isPresent()) {
 			modelService.createRelation(statement, question, Relation.ANSWERS, operator);
+		}
+	}
+	
+	private void relate(Question question, Hypothesis hypothesis, Operator operator) throws ModelException, SecurityException {
+		Optional<Relation> found = modelService.find().relations(operator).from(hypothesis).to(question).withKind(Relation.ANSWERS).first();
+		if (!found.isPresent()) {
+			modelService.createRelation(hypothesis, question, Relation.ANSWERS, operator);
 		}
 	}
 
@@ -768,4 +808,5 @@ public class KnowledgeService {
 	public void setSuggestions(Suggestions suggestions) {
 		this.suggestions = suggestions;
 	}
+
 }

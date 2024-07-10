@@ -3,8 +3,9 @@ package dk.in2isoft.onlineobjects.core;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.hibernate.query.Query;
+
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import com.google.common.collect.Lists;
 
@@ -12,6 +13,7 @@ import dk.in2isoft.onlineobjects.model.Entity;
 
 public abstract class AbstractModelQuery<T> implements ModelQuery {
 	protected Class<T> clazz;
+	protected List<Class<?>> subClazzes;
 	protected List<FieldLimitation> fieldLimitations = new ArrayList<FieldLimitation>();
 	protected List<PropertyLimitation> customProperties = Lists.newArrayList();
 	protected Privileged[] privileged;
@@ -69,5 +71,5 @@ public abstract class AbstractModelQuery<T> implements ModelQuery {
 	}
 
 	abstract public Query<T> createItemQuery(Session session);
-	
+
 }

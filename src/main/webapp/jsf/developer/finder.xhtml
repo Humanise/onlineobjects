@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+>
+
+<ui:composition template="templates/plain.xhtml">
+
+  <ui:define name="body">
+    
+    <h1>Finder</h1>
+
+    <script>
+      hui.on(function() {
+        var answers = hui.ui.get('answersFinder');
+
+        answers.listen({
+          $select : function(obj) {
+            alert(hui.string.toJSON(obj))
+          }
+        })
+        answers.show();
+      });
+      
+      function findByType(type) {
+        var finder = hui.ui.Finder.create({
+          url: '/service/model/finder?type=' + type,
+          title : 'Find ' + type
+        })
+        finder.listen({
+          $select : function(obj) {
+            alert(hui.string.toJSON(obj))
+          }
+        })
+        finder.show();
+      }
+    </script>
+    <gui:finder name="answersFinder" url="/service/model/finder?type=Statement&amp;type=Hypothesis"/>
+    <gui:button click="hui.ui.get('answersFinder').show()" text="Show answers finder"/>
+    
+
+    <ui:repeat value="#{developerView.modelTypeNames}" var="type">
+      <gui:button click="findByType('#{type}')" text="Find #{type}"/>
+    </ui:repeat>
+  </ui:define>
+
+</ui:composition>
+
+</html>
+

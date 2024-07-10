@@ -306,10 +306,40 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/question/add/statement")
-	public QuestionWebPerspective appStatementToQuestion(Request request) throws EndUserException, IOException {
+	public QuestionWebPerspective appAddStatementToQuestion(Request request) throws EndUserException, IOException {
 		Long questionId = request.getLong("questionId");
 		Long statementId = request.getLong("statementId"); 
 		knowledgeService.addQuestionToStatement(questionId, statementId, request);
+		return knowledgeService.getQuestionWebPerspective(questionId, request);
+	}
+
+	@Path(expression = "/app/question/add/answer")
+	public QuestionWebPerspective appAddAnswerToQuestion(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId");
+		Long id = request.getLong("answerId");
+		String type = request.getString("answerType");
+		if (Hypothesis.class.getSimpleName().equalsIgnoreCase(type)) {
+			knowledgeService.addQuestionToHypothesis(questionId, id, request);
+		} else if (Statement.class.getSimpleName().equalsIgnoreCase(type)) {
+			knowledgeService.addQuestionToStatement(questionId, id, request);
+		} else {
+			throw new IllegalRequestException("Unsupported type: " + type);
+		}
+		return knowledgeService.getQuestionWebPerspective(questionId, request);
+	}
+	
+	@Path(expression = "/app/question/remove/answer")
+	public QuestionWebPerspective appRemoveAnswerFromQuestion(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId");
+		Long id = request.getLong("answerId");
+		String type = request.getString("answerType");
+		if (Hypothesis.class.getSimpleName().equalsIgnoreCase(type)) {
+			knowledgeService.removeQuestionFromHypothesis(questionId, id, request);
+		} else if (Statement.class.getSimpleName().equalsIgnoreCase(type)) {
+			knowledgeService.removeQuestionFromStatement(questionId, id, request);
+		} else {
+			throw new IllegalRequestException("Unsupported type: " + type);
+		}
 		return knowledgeService.getQuestionWebPerspective(questionId, request);
 	}
 
@@ -318,6 +348,14 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Long questionId = request.getLong("questionId"); 
 		Long statementId = request.getLong("statementId"); 
 		knowledgeService.removeQuestionFromStatement(questionId, statementId, request);
+		return knowledgeService.getQuestionWebPerspective(questionId, request);
+	}
+
+	@Path(expression = "/app/question/remove/hypothesis")
+	public QuestionWebPerspective appRemoveHypothesisFromQuestion(Request request) throws EndUserException, IOException {
+		Long questionId = request.getLong("questionId"); 
+		Long hypothesisId = request.getLong("hypothesisId"); 
+		knowledgeService.removeQuestionFromHypothesis(questionId, hypothesisId, request);
 		return knowledgeService.getQuestionWebPerspective(questionId, request);
 	}
 
@@ -356,6 +394,14 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
 	}
 	
+	@Path(expression = "/app/hypothesis/remove/question")
+	public HypothesisWebPerspective appRemoveQuestionFromHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		Long hypothesisId = request.getLong("hypothesisId"); 
+		Long questionId = request.getLong("questionId");
+		knowledgeService.removeQuestionFromHypothesis(questionId, hypothesisId, request);
+		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
+	}
+	
 	@Path(expression = "/app/hypothesis/add/statement")
 	public HypothesisWebPerspective appAddStatementToHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		String relation = request.getString("relation");
@@ -364,6 +410,20 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		String kind = getHypothesisRelation(relation);
 		knowledgeService.addStatementToHypothesis(hypothesisId, kind, statementId, request);
 		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
+	}
+	
+	@Path(expression = "/app/hypothesis/add/question")
+	public HypothesisWebPerspective appAddQuestionToHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		Long hypothesisId = request.getId("hypothesisId"); 
+		Long questionId = request.getId("questionId");
+		knowledgeService.addQuestionToHypothesis(questionId, hypothesisId, request);
+		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
+	}
+
+	@Path(expression = "/app/relate", method = "POST")
+	public void appRelate(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		RelationRequest object = request.getObject(RelationRequest.class);
+		System.out.println(object.relation);
 	}
 
 	private String getHypothesisRelation(String relation) throws IllegalRequestException {

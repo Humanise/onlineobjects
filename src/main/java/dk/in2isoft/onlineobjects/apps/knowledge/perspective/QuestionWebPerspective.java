@@ -9,7 +9,7 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 
 	private long id;
 	private String text;
-	private List<StatementWebPerspective> answers;
+	private List<KnowledgeWebPerspective> answers;
 	private boolean inbox;
 	private boolean favorite;
 	private String type = Question.class.getSimpleName();
@@ -52,11 +52,11 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 		this.favorite = favorite;
 	}
 
-	public List<StatementWebPerspective> getAnswers() {
+	public List<KnowledgeWebPerspective> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<StatementWebPerspective> answers) {
+	public void setAnswers(List<KnowledgeWebPerspective> answers) {
 		this.answers = answers;
 	}
 
@@ -75,5 +75,12 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 	@Override
 	public void setTags(List<Option> tags) {
 		this.tags = tags;
+	}
+
+	public static QuestionWebPerspective from(Question question) {
+		QuestionWebPerspective perspective = new QuestionWebPerspective();
+		perspective.setId(question.getId());
+		perspective.setText(question.getText());
+		return perspective;
 	}
 }

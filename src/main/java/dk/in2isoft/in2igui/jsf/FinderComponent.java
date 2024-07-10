@@ -11,8 +11,8 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.in2igui.data.FinderConfiguration;
-import dk.in2isoft.in2igui.data.FinderConfiguration.FinderListConfiguration;
-import dk.in2isoft.in2igui.data.FinderConfiguration.FinderSearchConfiguration;
+import dk.in2isoft.in2igui.data.FinderConfiguration.FinderList;
+import dk.in2isoft.in2igui.data.FinderConfiguration.Search;
 
 @FacesComponent(value = FinderComponent.TYPE)
 @Dependencies(js = { "/hui/js/Finder.js" }, requires = { HUIComponent.class }, uses = {
@@ -62,12 +62,12 @@ public class FinderComponent extends AbstractComponent {
 			if (isNotBlank(config.getUrl())) {
 				js.comma().property("url", config.getUrl());
 			}
-			FinderListConfiguration list = config.getList();
+			FinderList list = config.getList();
 			if (list != null && list.getUrl() != null) {
 				js.comma().startObjectProperty("list")
 						.property("url", list.getUrl()).endObjectProperty();
 			}
-			FinderSearchConfiguration search = config.getSearch();
+			Search search = config.getSearch();
 			if (search != null && isNotBlank(search.getParameter())) {
 				js.comma().startObjectProperty("search")
 						.property("parameter", search.getParameter())
