@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns="uri:hui" title="Knowledge" globals="false">
+  <controller url="/js/suggestion.js"/>
+
+    <source name="listSource" url="/suggest">
+      <parameter key="text" value="@search.value"/>
+    </source>
+
+    <structure>
+      <middle>
+        <left>
+          <overflow height="400">
+          <selection value="latest">
+            <option text="Alle billeder" icon="common/image" value="all"/>
+            <option text="Seneste" icon="common/time" value="latest"/>
+            <title>Grupper</title>
+            <option text="Personer" icon="common/folder" value="1"/>
+          </selection>
+          </overflow>
+        </left>
+        <center>
+          <bar variant="layout">
+            <right>
+              <searchfield expanded-width="200" name="search"/>
+            </right>
+          </bar>
+          <overflow>
+            <list source="listSource">
+              <column name="description" key="description"/>
+              <column name="strength" key="strength"/>
+            </list>
+          </overflow>
+        </center>
+      </middle>
+    </structure>
+  
+</gui>
