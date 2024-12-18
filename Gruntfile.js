@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-  const sass = require('node-sass');
+  const sass = require('sass');
 
   // Project configuration.
   config = {
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         options: {
           implementation: sass,
           sourceMap: false,
-          outputStyle: 'nested'
+          api: 'modern'
         },
         files: [{
           expand: true,
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       options: {
         implementation: sass,
         sourceMap: false,
-        outputStyle: 'nested'
+        api: 'modern'
       },
       files: [{
         expand: true,
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
   // Load plugins.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-sass-modern');
 
   // Default task(s).
   grunt.registerTask('default', 'Watch', ['sass','watch']);

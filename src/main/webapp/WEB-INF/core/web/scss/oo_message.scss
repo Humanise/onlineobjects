@@ -1,4 +1,4 @@
-@import 'shared';
+@use 'shared' as *;
 
 @include if {
   .oo_message {
@@ -7,7 +7,7 @@
     color: #433d15;
     padding: 2px 12px;
     border: 1px solid #fdf19c;
-    line-height: (18/14);
+    line-height: calc(18/14);
     > p {
       margin: 5px 0;
     }

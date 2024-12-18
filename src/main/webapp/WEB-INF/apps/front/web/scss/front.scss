@@ -1,4 +1,4 @@
-@import '../../../../core/web/scss/shared';
+@use '../../../../core/web/scss/shared' as *;
 
 .root {
   display: flex;

@@ -1,7 +1,7 @@
-@import 'shared';
+@use 'shared' as *;
 
-@import 'oo_font.scss';
-@import 'oo_body.scss';
+@use 'oo_font.scss';
+@use 'oo_body.scss';
 
 .error {
   text-align: left;

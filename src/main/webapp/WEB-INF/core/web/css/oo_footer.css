@@ -3,61 +3,76 @@
   text-align: center;
   margin: 0;
   padding-top: 20px;
-  color: #666; }
-  .oo_footer_separator {
-    margin: 0 5px; }
-  .oo_footer_links {
-    font-size: 14px;
-    line-height: 24px;
-    padding: 0 20px; }
-    .oo_footer_links strong {
-      font-weight: 500;
-      color: #333; }
-  .oo_footer .oo_link span {
-    color: #666;
-    white-space: nowrap; }
-  .oo_footer .oo_link:hover {
-    color: #038; }
-    .oo_footer .oo_link:hover span {
-      color: #038; }
-  .oo_footer_logo {
-    text-align: center;
-    margin: 30px 0; }
-    .oo_footer_logo a {
-      display: inline-block;
-      text-decoration: none;
-      cursor: -webkit-grab;
-      outline: none; }
-    .oo_footer_logo span {
-      font-family: 'OnlineObjects';
-      font-size: 132px;
-      line-height: 1;
-      color: #f0f0f0;
-      text-shadow: 0 0 10px #fff;
-      transition: color 2s, transform 1s;
-      transform-style: preserve-3d;
-      transform-origin: 50% 100%; }
-    .oo_footer_logo strong {
-      display: block;
-      text-align: center;
-      font-size: 36px;
-      letter-spacing: 0.5px;
-      margin: 5px 0 0;
-      color: #eee;
-      text-shadow: 0 0 10px #fff;
-      font-weight: 600;
-      transition: color 2s;
-      font-family: "Hind Siliguri", "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif; }
-  .oo_footer:hover .oo_footer_logo span, .oo_footer:hover .oo_footer_logo strong {
-    color: #ddd; }
-  .oo_footer:hover .oo_footer_logo a:hover span {
-    color: #f36;
-    transition: color 1s, transform 3s;
-    transform: perspective(10px) rotate3d(20, -10, 340, 20deg) scale(0.8); }
-  .oo_footer:hover .oo_footer_logo a:hover strong {
-    color: #666; }
-  .oo_footer:hover .oo_footer_logo a:active span {
-    color: #d03;
-    transition-property: transform, color;
-    transition-duration: 0.1s;
-    transform: rotate3d(20, 0, 340, -5deg); }
+  color: #666;
+}
+.oo_footer_separator {
+  margin: 0 5px;
+}
+.oo_footer_links {
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0 20px;
+}
+.oo_footer_links strong {
+  font-weight: 500;
+  color: #333;
+}
+.oo_footer .oo_link span {
+  color: #666;
+  white-space: nowrap;
+}
+.oo_footer .oo_link:hover {
+  color: #038;
+}
+.oo_footer .oo_link:hover span {
+  color: #038;
+}
+.oo_footer_logo {
+  text-align: center;
+  margin: 30px 0;
+}
+.oo_footer_logo a {
+  display: inline-block;
+  text-decoration: none;
+  cursor: -webkit-grab;
+  outline: none;
+}
+.oo_footer_logo span {
+  font-family: "OnlineObjects";
+  font-size: 132px;
+  line-height: 1;
+  color: #f0f0f0;
+  text-shadow: 0 0 10px #fff;
+  transition: color 2s, transform 1s;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+}
+.oo_footer_logo strong {
+  display: block;
+  text-align: center;
+  font-size: 36px;
+  letter-spacing: 0.5px;
+  margin: 5px 0 0;
+  color: #eee;
+  text-shadow: 0 0 10px #fff;
+  font-weight: 600;
+  transition: color 2s;
+  font-family: "Hind Siliguri", "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+}
+.oo_footer:hover .oo_footer_logo span, .oo_footer:hover .oo_footer_logo strong {
+  color: #ddd;
+}
+.oo_footer:hover .oo_footer_logo a:hover span {
+  color: #f36;
+  transition: color 1s, transform 3s;
+  transform: perspective(10px) rotate3d(20, -10, 340, 20deg) scale(0.8);
+}
+.oo_footer:hover .oo_footer_logo a:hover strong {
+  color: #666;
+}
+.oo_footer:hover .oo_footer_logo a:active span {
+  color: #d03;
+  transition-property: transform, color;
+  transition-duration: 0.1s;
+  transform: rotate3d(20, 0, 340, -5deg);
+}

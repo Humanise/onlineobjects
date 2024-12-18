@@ -2,23 +2,27 @@
   overflow: hidden;
   height: 22px;
   font-size: 0;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+}
 
 a.oo_gallery_slideshow {
   color: #ddd;
   font-size: 11pt;
   display: inline-block;
   vertical-align: middle;
-  height: 16px; }
+  height: 16px;
+}
 
 a.oo_gallery_slideshow span {
-  color: #333; }
+  color: #333;
+}
 
 span.oo_gallery_pages {
   vertical-align: middle;
   display: inline-block;
   font-size: 0;
-  margin-right: 20px; }
+  margin-right: 20px;
+}
 
 span.oo_gallery_pages a {
   color: #666;
@@ -31,21 +35,24 @@ span.oo_gallery_pages a {
   min-width: 14px;
   text-align: center;
   border: 1px solid #fff;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 span.oo_gallery_pages a:hover {
   color: #07f;
   border-radius: 3px;
   background: #fafafa;
   border: 1px solid #eee;
-  font-weight: 400; }
+  font-weight: 400;
+}
 
 span.oo_gallery_pages a.oo_selected {
   color: #333;
   background: #f6f6f6;
   border: 1px solid #ddd;
   font-weight: bold;
-  font-weight: 400; }
+  font-weight: 400;
+}
 
 .oo_gallery ol {
   padding: 5px 13px 10px;
@@ -53,47 +60,57 @@ span.oo_gallery_pages a.oo_selected {
   color: rgba(0, 0, 0, 0);
   margin: 0;
   padding: 0;
-  list-style: none; }
+  list-style: none;
+}
 
 .oo_gallery li {
   display: inline-block;
-  vertical-align: top; }
+  vertical-align: top;
+}
 
 .oo_gallery ol span.oo_thumbnail {
-  margin: 0px 10px 10px 0; }
+  margin: 0px 10px 10px 0;
+}
 
 /********/
 span.oo_gallery_photo {
   display: inline-block;
   font-size: 0;
   position: relative;
-  margin: 0 1px 1px 0; }
+  margin: 0 1px 1px 0;
+}
 
 span.oo_gallery_photo img {
   border: none;
-  display: block; }
+  display: block;
+}
 
 .oo_gallery_frame span.oo_gallery_photo {
   padding: 4px;
   border: 1px solid #ddd;
   border-color: #EEEEEE #DDDDDD #CCCCCC;
-  margin: 0px 10px 10px 0; }
+  margin: 0px 10px 10px 0;
+}
 
 .oo_gallery_shadow span.oo_gallery_photo {
   margin: 0px 20px 20px 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); }
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
 
 .oo_gallery_shadow ol {
-  margin-right: -20px; }
+  margin-right: -20px;
+}
 
 span.oo_gallery_hover {
   display: none;
   position: absolute;
   top: 0;
-  right: 0; }
+  right: 0;
+}
 
 .oo_gallery:not(.is-touch) .oo_gallery_photo:hover .oo_gallery_hover {
-  display: block; }
+  display: block;
+}
 
 .oo_gallery_hover a {
   margin: 2px;
@@ -105,14 +122,16 @@ span.oo_gallery_hover {
   color: #333;
   background: rgba(255, 255, 255, 0.5);
   text-decoration: none;
-  font-size: 0; }
-  .oo_gallery_hover a .oo_icon {
-    margin-top: 3px;
-    line-height: 1; }
+  font-size: 0;
+}
+.oo_gallery_hover a .oo_icon {
+  margin-top: 3px;
+  line-height: 1;
+}
 
-span.oo_gallery_hover a span
-span.oo_gallery_hover a:hover {
-  background: rgba(255, 255, 255, 0.8); }
+span.oo_gallery_hover a span span.oo_gallery_hover a:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
 
 /******* Incoming *****/
 span.oo_gallery_incoming {
@@ -120,47 +139,58 @@ span.oo_gallery_incoming {
   border: 1px dashed #ddd;
   background: #fafafa;
   border-radius: 5px;
-  display: inline-block; }
+  display: inline-block;
+}
 
 span.oo_gallery_incoming span {
   display: inline-block;
   font-size: 12px;
-  margin: -1px; }
+  margin: -1px;
+}
 
 .oo_gallery_shadow span.oo_gallery_incoming {
-  margin: 0 20px 20px 0; }
+  margin: 0 20px 20px 0;
+}
 
 /************ Drag/drop **************/
 body.oo_gallery_dragging,
 body.oo_gallery_dragging span.oo_gallery_dummy a {
   cursor: move;
-  cursor: -webkit-grabbing; }
+  cursor: -webkit-grabbing;
+}
 
 span.oo_gallery_dummy {
   position: absolute;
-  opacity: .7;
+  opacity: 0.7;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   font-size: 0;
   cursor: move;
-  cursor: -webkit-grabbing; }
+  cursor: -webkit-grabbing;
+}
 
 span.oo_gallery_dragged {
-  opacity: .3; }
+  opacity: 0.3;
+}
 
 .oo_gallery_busy,
 .oo_gallery_busy span.oo_gallery_photo {
-  cursor: wait; }
+  cursor: wait;
+}
 
 .oo_gallery_busy span.oo_gallery_hover {
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 @media screen and (max-width: 600px) {
   .oo_gallery ol {
     margin: 0 -15px;
-    text-align: center; }
+    text-align: center;
+  }
   .oo_gallery ol span.oo_gallery_photo,
   .oo_gallery ol span.oo_thumbnail {
     margin: 0 0 1px 1px;
     padding: 0;
     border: none;
-    box-shadow: none; } }
+    box-shadow: none;
+  }
+}

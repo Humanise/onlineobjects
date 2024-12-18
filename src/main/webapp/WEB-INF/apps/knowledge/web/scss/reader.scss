@@ -1,4 +1,10 @@
-@import 'shared';
+@use 'parts/reader_layout';
+@use 'parts/reader_sidebar';
+@use 'parts/reader_list';
+@use 'parts/reader_selection';
+@use 'parts/reader_meta';
+@use 'parts/reader_head';
+@use 'parts/reader_segmented';
 
 html,body {
   position:fixed;
@@ -8,11 +14,3 @@ html,body {
   bottom: 0;
   top: 0;
 }
-
-@import 'parts/reader_layout';
-@import 'parts/reader_sidebar';
-@import 'parts/reader_list';
-@import 'parts/reader_selection';
-@import 'parts/reader_meta';
-@import 'parts/reader_head';
-@import 'parts/reader_segmented';

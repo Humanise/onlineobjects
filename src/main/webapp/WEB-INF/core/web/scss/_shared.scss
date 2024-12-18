@@ -1,3 +1,4 @@
+@use "sass:map";
 $link-color: #07f;
 $link-hover-color: #038;
 $dimmed-color: #777;
@@ -38,8 +39,8 @@ $left-icon: '\e912';
 }
 
 @mixin if($params:()) {
-  @if (map-has-key($params, width)) {
-    @media screen and (min-width: #{map-get($params,'width')}) {
+  @if (map.has-key($params, width)) {
+    @media screen and (min-width: #{map.get($params,'width')}) {
       @content;
     }
   }
@@ -170,8 +171,8 @@ $icons : (
 );
 
 @mixin icon($icon) {
-  @if map-has-key($icons, $icon) {
-    content: map-get($icons, $icon);
+  @if map.has-key($icons, $icon) {
+    content: map.get($icons, $icon);
   } @else {
     content: $icon;
   }

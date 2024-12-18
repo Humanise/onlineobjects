@@ -1,4 +1,5 @@
-@import 'shared';
+@use 'sass:math';
+@use 'shared' as *;
 
 .oo_body {
   font-family: $default-font-family;
@@ -7,7 +8,7 @@
   padding: 0;
   -webkit-text-size-adjust: none;
   font-size: $regular-font-size;
-  line-height: (16/14);
+  line-height: math.div(16,14);
 
   &-light {
     background: #fff;

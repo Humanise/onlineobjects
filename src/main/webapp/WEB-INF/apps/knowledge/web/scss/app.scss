@@ -1,11 +1,11 @@
-@import 'shared';
-@import '../../../../core/web/scss/oo_font.scss';
-@import 'parts/app_hui.scss';
-@import 'parts/list.scss';
-@import 'parts/selection.scss';
-@import 'parts/relations.scss';
-@import 'parts/perspective.scss';
-@import 'parts/intro.scss';
+@use 'shared' as *;
+@use '../../../../core/web/scss/oo_font.scss';
+@use 'parts/app_hui.scss';
+@use 'parts/list.scss';
+@use 'parts/selection.scss';
+@use 'parts/relations.scss';
+@use 'parts/perspective.scss';
+@use 'parts/intro.scss';
 
 .root {
   position: absolute;
@@ -94,7 +94,7 @@
 .plain {
   font-family: $mono-font;
   white-space: pre-wrap;
-  line-height: (18 / 14);
+  line-height: calc(18 / 14);
 }
 
 .article {

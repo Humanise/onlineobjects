@@ -1,12 +1,12 @@
-@import 'shared';
+@use 'shared' as *;
 
 @include if {
   .oo_text {
-    line-height: (17/14);
+    line-height: calc(17/14);
 
     &-small {
       font-size: 12px;
-      line-height: (16/12);
+      line-height: calc(16/12);
     }
 
     &-prose {

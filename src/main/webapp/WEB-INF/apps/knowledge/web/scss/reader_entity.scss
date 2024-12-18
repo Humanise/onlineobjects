@@ -1,4 +1,5 @@
-@import 'shared';
+@use '../../../../core/web/scss/shared' as *;
+@use 'shared' as *;
 
 .reader_entity {
 

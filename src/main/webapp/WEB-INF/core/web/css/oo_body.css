@@ -5,12 +5,15 @@
   padding: 0;
   -webkit-text-size-adjust: none;
   font-size: 14px;
-  line-height: 1.1428571429; }
-  .oo_body-light {
-    background: #fff; }
+  line-height: 1.1428571429;
+}
+.oo_body-light {
+  background: #fff;
+}
 
 .hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
-  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif !important; }
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif !important;
+}
 
 /*
 .hui_button {

@@ -1,3 +1,5 @@
+@use '../shared' as *;
+
 @include if {
 
   .reader_list {
