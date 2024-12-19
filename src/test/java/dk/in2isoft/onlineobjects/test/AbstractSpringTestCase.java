@@ -160,13 +160,13 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		}
 		File dir = new File(outputDir);
 		if (!dir.exists()) {
-			throw new IllegalStateException("The output dir does not exists");
+			throw new IllegalStateException("The output dir does not exists: " + outputDir);
 		}
 		if (!dir.isDirectory()) {
-			throw new IllegalStateException("The output dir is not a folder");
+			throw new IllegalStateException("The output dir is not a folder: " + outputDir);
 		}
 		if (!dir.canWrite()) {
-			throw new IllegalStateException("The output dir can not be written");
+			throw new IllegalStateException("The output dir can not be written: " + outputDir);
 		}
 		return dir;
 	}
