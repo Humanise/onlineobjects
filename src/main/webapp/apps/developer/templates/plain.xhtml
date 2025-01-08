@@ -15,10 +15,16 @@
   </o:head>
   <o:body>
     <div class="developer_menu">
-    <o:link href="/">Home</o:link> | <o:link href="components.html">Components</o:link> | <o:link href="jsf.html">JSF</o:link>
+    <o:link href="/">Home</o:link> |
+    <o:link href="settings">Settings</o:link> |
+    <o:link href="components.html">Components</o:link> |
+    <o:link href="jsf.html">JSF</o:link>	|
+    <o:link href="users">Users</o:link>
     </div>
-    <ui:insert name="body"/>
+    <div class="developer_body">
+      <ui:insert name="body"/>
+    </div>
   </o:body>
 </o:html>
-  <o:dependency from="local" src="/css/developer.css"/>
+<o:dependency from="local" src="/css/developer.css"/>
 </f:view>

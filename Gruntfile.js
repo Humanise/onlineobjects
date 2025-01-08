@@ -35,9 +35,9 @@ module.exports = function(grunt) {
     }
   };
 
-  ['account','words','knowledge','photos','people','front'].forEach((app) => {
+  ['account','words','knowledge','photos','people','front','developer'].forEach((app) => {
     config.watch[app] = {
-      files: ['src/main/webapp/WEB-INF/apps/'+app+'/web/scss/**/*.scss'],
+      files: ['src/main/webapp/WEB-INF/apps/'+app+'/web/scss/**/*.scss','src/main/webapp/apps/'+app+'/scss/**/*.scss'],
       tasks: ['sass:'+app],
       options: {
         spawn: false,
@@ -54,6 +54,12 @@ module.exports = function(grunt) {
         cwd: 'src/main/webapp/WEB-INF/apps/' + app + '/web/scss/',
         src: ['*.scss'],
         dest: 'src/main/webapp/WEB-INF/apps/' + app + '/web/css',
+        ext: '.css'
+      },{
+        expand: true,
+        cwd: 'src/main/webapp/apps/' + app + '/scss/',
+        src: ['*.scss'],
+        dest: 'src/main/webapp/apps/' + app + '/css',
         ext: '.css'
       }]
     }

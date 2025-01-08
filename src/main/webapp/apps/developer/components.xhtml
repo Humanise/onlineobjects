@@ -13,10 +13,17 @@
       <o:script src="/js/controller.js"/>
       <o:box>
 
+        <o:header>Components</o:header>
+        <c:forEach items="${developerView.components}" var="component">
+          <div>${component}</div>
+        </c:forEach>
 
+
+        <o:header>Icons</o:header>
         <c:forEach items="${developerView.icons}" var="icon">
           <div><o:icon icon="#{icon}" size="32"/> ${icon}</div>
         </c:forEach>
+
 
         <o:header>This is a header</o:header>
         <p>

@@ -55,13 +55,10 @@ public class DispatchingService {
 				Thread.sleep(Math.round(Math.random()*1000+1000));
 			} catch (InterruptedException ignore) {}
 		}
-		if (configurationService.isSimulateSporadicServerError()) {
-			if (Math.random() > 0.5) {
-				servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				return true;
-			}
-		}
-		
+		if (shouldSimulateError(servletRequest)) {
+			servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return true;			
+		}		
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		boolean handled = false;
@@ -98,6 +95,24 @@ public class DispatchingService {
 		surveillanceService.survey(request);
 		checkSessions(request);
 		return handled;
+	}
+
+
+	private boolean shouldSimulateError(HttpServletRequest servletRequest) {
+		if (configurationService.isSimulateSporadicServerError()) {
+			if (!isDeveloperApp(servletRequest)) {
+				if (Math.random() > 0.5) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+
+	private boolean isDeveloperApp(HttpServletRequest servletRequest) {
+		String serverName = servletRequest.getServerName();
+		return (serverName != null && serverName.startsWith("developer."));
 	}
 
 

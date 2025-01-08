@@ -3,8 +3,16 @@ package dk.in2isoft.onlineobjects.apps.developer.views;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.apache.jena.ext.com.google.common.collect.Streams;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -53,6 +61,21 @@ public class DeveloperView extends AbstractView {
 			Map<String,Object> props = (Map<String, Object>) icon.get("properties");
 			icons.add(props.get("name").toString());
 		}
+	}
+
+	public List<Map<String, String>> getComponents() {
+		Application application = FacesContext.getCurrentInstance().getApplication();
+		Iterator<String> types = application.getComponentTypes();
+		return Streams.stream(types).sorted().map(type -> {
+			try {
+				UIComponent component = application.createComponent(type);
+				return Map.of("type", type, "class", component.getClass().getSimpleName());
+			} catch (NoClassDefFoundError e) {
+				return Map.of("type", type, "class", "?");
+			} catch (Exception e) {
+				return Map.of("type", type, "class", "?");
+			}
+		}).collect(Collectors.toList());
 	}
 
 	public List<Item> getUsers() {

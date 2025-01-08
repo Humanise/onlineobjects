@@ -25,6 +25,22 @@ public class AbstractControllerResponder {
 	protected boolean pushFile(String[] path, HttpServletResponse response) throws IOException {
 		StringBuilder filePath = new StringBuilder();
 		filePath.append(configurationService.getBasePath());
+		for (int i = 0; i < path.length; i++) {
+			filePath.append(File.separator);
+			filePath.append(path[i]);
+		}
+		File file = new File(filePath.toString());
+
+		if (file.exists() && !file.isDirectory()) {
+			DispatchingService.pushFile(response, file);
+			return true;
+		}
+		return pushFileLegacy(path, response);
+	}
+	
+	private boolean pushFileLegacy(String[] path, HttpServletResponse response) throws IOException {
+		StringBuilder filePath = new StringBuilder();
+		filePath.append(configurationService.getBasePath());
 		filePath.append(File.separator);
 		filePath.append("WEB-INF");
 		filePath.append(File.separator);
@@ -38,13 +54,13 @@ public class AbstractControllerResponder {
 			filePath.append(path[i]);
 		}
 		File file = new File(filePath.toString());
+
 		if (file.exists() && !file.isDirectory()) {
 			DispatchingService.pushFile(response, file);
 			return true;
 		}
 		return false;
 	}
-	
 	protected void invokeMothod(AbstractController controller, Request request, Method method) throws IOException, StupidProgrammerException, EndUserException {
 		try {
 			Object result = method.invoke(controller, new Object[] { request });

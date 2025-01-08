@@ -8,11 +8,9 @@
 >
   <ui:composition template="templates/plain.xhtml">
 
-    <ui:param name="tab" value="home"/>
+    <ui:param name="tab" value="users"/>
 
     <ui:define name="body">
-      #{developerController}
-      <o:link href="/test">Throw ContentNotFound</o:link>
 
       <o:list>
       <ui:repeat value="#{developerView.users}" var="pair">
@@ -25,7 +23,7 @@
         </o:listItem>
       </ui:repeat>
       </o:list>
-      <p><o:link href="/toggleSlow">Toggle slow requests</o:link> | <o:link href="/toggleErrors">Toggle errors</o:link></p>
     </ui:define>
   </ui:composition>
-</html>
+
+  </html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="uri:hui ../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="Knowledge" globals="false">
+  <controller url="/js/settings.js"/>
+  <source url="/settings/data" name="data"/>
+
+  <box title="Settings" width="400" top="40">
+  	<form name="settings">
+      <fields>
+        <field>
+          <checkbox text="Sporadic errors" key="errors"/>
+          <checkbox text="Slow requests" key="slow"/>
+        </field>
+      </fields>
+    </form>
+  </box>
+</gui>
