@@ -72,12 +72,22 @@ public class DependencyComponent extends AbstractComponent implements Dependable
 	public String getSrc(FacesContext context) {
 		@Nullable
 		String value = getExpression("src", src, context);
+		if (!value.startsWith("/")) {
+			if (value.endsWith(".js")) {
+				value = "/js/" + value;
+			}
+			else if (value.endsWith(".css")) {
+				value = "/css/" + value;
+			}
+		}
 		if (isNotBlank(from)) {
 			Request request = Request.get(context);
 			if (from.equals("local")) {
-				value = "/WEB-INF/apps/" + request.getApplication() + "/web" + value;
+				value = "/apps/" + request.getApplication() + value;
 			} else if (from.equals("core")) {
-				value = "/WEB-INF/core/web" + value;
+				value = "/core" + value;
+			} else if (from.equals("hui")) {
+				value = "/hui" + value;
 			}
 		}
 		return value;

@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.DependencyService;
 
 @FacesComponent(BodyComponent.TYPE)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_body.css"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_body.css"},requires={OnlineObjectsComponent.class})
 public class BodyComponent extends HtmlBody {
 
 	public static final String TYPE = "onlineobjects.body";
@@ -53,6 +53,14 @@ public class BodyComponent extends HtmlBody {
 
 		TagWriter out = new TagWriter(this, context);
 		ScriptWriter writer = Components.getScriptWriter(context);
+		String js = writer.toString();
+		if (Strings.isNotBlank(js)) {
+			if (configurationService.isOptimizeResources()) {
+				out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
+			} else {
+				out.startScopedScript().write(js).endScopedScript();			
+			}
+		}
 		if (!configurationService.isOptimizeResources()) {
 
 			for (String url : graph.getScripts()) {
@@ -69,14 +77,6 @@ public class BodyComponent extends HtmlBody {
 		 	
 			String scriptUrl = dependencyService.handleScripts(graph);
 		 	out.startScript().withAttribute("async", "async").withAttribute("defer", "defer").src(scriptUrl).endScript();
-		}
-		String js = writer.toString();
-		if (Strings.isNotBlank(js)) {
-			if (configurationService.isOptimizeResources()) {
-				out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
-			} else {
-				out.startScopedScript().write(js).endScopedScript();			
-			}
 		}
 		out.flush();
 		

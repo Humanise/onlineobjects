@@ -441,4 +441,8 @@ public class Strings {
 	      }
 	      return out.toString();
 	  }
+
+	public static String[] merge(String[] a, String[] b) {
+		return (String[]) ArrayUtils.addAll(a, b);
+	}
 }

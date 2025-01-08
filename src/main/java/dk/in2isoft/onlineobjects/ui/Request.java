@@ -654,4 +654,8 @@ public class Request implements Operator {
 	public void setVariable(String name, Object value) {
 		getRequest().setAttribute(name, value);
 	}
+
+	public void notFound() {
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	}
 }

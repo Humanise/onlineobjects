@@ -15,7 +15,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.jsf.SourceComponent;
 
 @FacesComponent(value=SelectionComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_selection.css"},js={"/WEB-INF/core/web/js/oo_selection.js"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_selection.css"},js={"/core/js/oo_selection.js"},requires={OnlineObjectsComponent.class})
 public class SelectionComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.selection";

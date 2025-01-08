@@ -135,7 +135,7 @@ public class HeadComponent extends AbstractComponent {
 		if (inlineJs!=null && !configurationService.isDevelopmentMode()) {
 			return inlineJs;
 		}
-		File file = configurationService.getFile("WEB-INF","core","web","js","inline.js");
+		File file = configurationService.getFile("core","js","inline.js");
 		String content = null;
 		if (file.exists()) {
 			content = Files.readString(file);

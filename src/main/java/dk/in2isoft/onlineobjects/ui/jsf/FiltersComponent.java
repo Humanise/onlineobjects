@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.Filters.Filter;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
 @FacesComponent(value=FiltersComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_filters.js" },css={"/WEB-INF/core/web/css/oo_filters.css"})
+@Dependencies(js = { "/core/js/oo_filters.js" },css={"/core/css/oo_filters.css"})
 public class FiltersComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.filters";

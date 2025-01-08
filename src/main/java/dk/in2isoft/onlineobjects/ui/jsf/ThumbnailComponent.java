@@ -22,7 +22,7 @@ import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 @FacesComponent(value = ThumbnailComponent.FAMILY)
-@Dependencies(css = { "/WEB-INF/core/web/css/oo_thumbnail.css" }, requires = { OnlineObjectsComponent.class })
+@Dependencies(css = { "/core/css/oo_thumbnail.css" }, requires = { OnlineObjectsComponent.class })
 public class ThumbnailComponent extends AbstractComponent implements DependableComponent {
 
 	public static final String FAMILY = "onlineobjects.thumbnail";

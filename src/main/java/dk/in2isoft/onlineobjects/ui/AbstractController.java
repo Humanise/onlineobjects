@@ -95,8 +95,7 @@ public abstract class AbstractController {
 	private boolean dispatchToJSF(Request request, String path) throws IOException, EndUserException {
 		ServletContext context = request.getRequest().getServletContext();
 		
-
-		String urlPath = "apps/" + getName() + "/" + path;
+		String urlPath = getDimension() + "/" + getName() + "/" + path;
 		File file = new File(configurationService.getBasePath() + File.separator + urlPath);
 		if (!file.exists()) {
 			urlPath = "jsf/" + getName() + "/" + path;						

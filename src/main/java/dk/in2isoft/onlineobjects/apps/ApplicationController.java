@@ -68,9 +68,9 @@ public abstract class ApplicationController extends AbstractController implement
 		File file;
 		if (localPath.length > 0 && localPath[localPath.length - 1].endsWith(".gui")) {
 			localPath[localPath.length - 1] = localPath[localPath.length - 1] + ".xml";
-			file = getFile(Strings.combine("web", localPath));
+			file = getFile(localPath);
 		} else {
-			file = getFile(Strings.combine("web", localPath, "index.gui.xml"));
+			file = getFile(Strings.combine(localPath, "index.gui.xml"));
 		}
 		if (file.exists()) {
 			FileBasedInterface ui = new FileBasedInterface(file, huiService);

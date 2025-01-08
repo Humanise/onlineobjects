@@ -118,13 +118,10 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		StringBuilder filePath = new StringBuilder();
 		filePath.append(config.getBasePath());
 		filePath.append(File.separator);
-		filePath.append("WEB-INF");
-		filePath.append(File.separator);
 		filePath.append("apps");
 		filePath.append(File.separator);
 		filePath.append(getRequest().getApplication());
-		filePath.append(File.separator);
-		filePath.append("web").append(File.separator).append(path);
+		filePath.append(File.separator).append(path);
 		File file = new File(filePath.toString());
 		return file;
 	}
@@ -174,12 +171,12 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 
 	private String urlToPath(String url) {
 		if (url.startsWith("/core")) {
-			return "/WEB-INF/core/web" + url.substring(5);
+			return url;
 		}
 		else if (url.startsWith("/hui")) {
 			return url;
 		} else {
-			return "/WEB-INF/apps/" + getRequest().getApplication() + "/web" + url;
+			return "/apps/" + getRequest().getApplication() + url;
 		}
 	}
 

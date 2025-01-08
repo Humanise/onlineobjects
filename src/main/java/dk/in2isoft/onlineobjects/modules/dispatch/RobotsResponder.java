@@ -11,13 +11,11 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class RobotsResponder implements Responder {
 
-	// private static Logger log = LogManager.getLogger(RobotsResponder.class);
-
 	private ConfigurationService configurationService;
 
 	public boolean applies(Request request) {
 		String path = request.getLocalPathAsString();
-		if (path.equals("/robots.txt") || path.equals("/.well-known/apple-app-site-association") || path.equals("/apple-app-site-association")) {
+		if (path.equals("/.well-known/apple-app-site-association") || path.equals("/apple-app-site-association")) {
 			return true;
 		}
 		return false;
@@ -27,13 +25,6 @@ public class RobotsResponder implements Responder {
 		String path = request.getLocalPathAsString();
 
 		HttpServletResponse response = request.getResponse();
-		if (path.equals("/robots.txt")) {
-			response.setContentType("text/plain");
-			try (PrintWriter writer = response.getWriter()) {
-				writer.println("User-agent: *");
-				writer.println("Disallow:");
-			}
-		}
 		if (path.endsWith("/apple-app-site-association")) {
 			String out = "{\n" + 
 				"  \"webcredentials\": {\n" + 

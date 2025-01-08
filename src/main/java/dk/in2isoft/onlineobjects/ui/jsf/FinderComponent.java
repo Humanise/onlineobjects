@@ -17,7 +17,11 @@ import dk.in2isoft.in2igui.jsf.WindowComponent;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 @FacesComponent(FinderComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_finder.js" }, requires = { OnlineObjectsComponent.class}, uses = { WindowComponent.class, ButtonComponent.class, SourceComponent.class, OverflowComponent.class, GalleryComponent.class })
+@Dependencies(
+		js = { "/core/js/oo_finder.js" },
+		requires = { OnlineObjectsComponent.class },
+		uses = { WindowComponent.class, ButtonComponent.class, SourceComponent.class, OverflowComponent.class,
+				GalleryComponent.class })
 public class FinderComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.finder";

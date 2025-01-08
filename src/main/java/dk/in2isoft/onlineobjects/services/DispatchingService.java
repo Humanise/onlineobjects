@@ -138,6 +138,9 @@ public class DispatchingService {
 		HeaderUtil.setOneWeekCache(response);
 		String mimeType = HeaderUtil.getMimeType(file);
 		response.setContentLength((int) file.length());
+		if ("text/javascript".equals(mimeType) || "text/css".equals(mimeType)) {
+			response.setCharacterEncoding(Strings.UTF8);
+		}
 		try {
 			ServletOutputStream out = response.getOutputStream();
 			if (mimeType != null) {

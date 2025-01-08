@@ -23,7 +23,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.ImageContainer;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 @FacesComponent(value = GalleryComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_gallery.js" }, css = { "/WEB-INF/core/web/css/oo_gallery.css" }, requires = { OnlineObjectsComponent.class }, uses = {
+@Dependencies(js = { "/core/js/oo_gallery.js" }, css = { "/core/css/oo_gallery.css" }, requires = { OnlineObjectsComponent.class }, uses = {
 		IconComponent.class, ProgressIndicatorComponent.class })
 public class GalleryComponent extends AbstractComponent {
 

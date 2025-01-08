@@ -11,7 +11,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=LayoutComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_layout.css"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_layout.css"},requires={OnlineObjectsComponent.class})
 public class LayoutComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.layout";
