@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     },
     watch: {
       core: {
-        files: ['src/main/webapp/WEB-INF/core/web/scss/**/*.scss'],
+        files: ['src/main/webapp/core/scss/**/*.scss'],
         tasks: ['sass'],
         options: {
           spawn: false,
@@ -26,9 +26,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'src/main/webapp/WEB-INF/core/web/scss/',
+          cwd: 'src/main/webapp/core/scss/',
           src: ['*.scss'],
-          dest: 'src/main/webapp/WEB-INF/core/web/css',
+          dest: 'src/main/webapp/core/css',
           ext: '.css'
         }]
       }
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 
   ['account','words','knowledge','photos','people','front','developer'].forEach((app) => {
     config.watch[app] = {
-      files: ['src/main/webapp/WEB-INF/apps/'+app+'/web/scss/**/*.scss','src/main/webapp/apps/'+app+'/scss/**/*.scss'],
+      files: ['src/main/webapp/apps/'+app+'/scss/**/*.scss'],
       tasks: ['sass:'+app],
       options: {
         spawn: false,
@@ -50,12 +50,6 @@ module.exports = function(grunt) {
         api: 'modern'
       },
       files: [{
-        expand: true,
-        cwd: 'src/main/webapp/WEB-INF/apps/' + app + '/web/scss/',
-        src: ['*.scss'],
-        dest: 'src/main/webapp/WEB-INF/apps/' + app + '/web/css',
-        ext: '.css'
-      },{
         expand: true,
         cwd: 'src/main/webapp/apps/' + app + '/scss/',
         src: ['*.scss'],

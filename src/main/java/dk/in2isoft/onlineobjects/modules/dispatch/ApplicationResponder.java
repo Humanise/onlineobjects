@@ -106,28 +106,11 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 
 	protected boolean pushFile(String[] path, HttpServletResponse response) throws IOException {
 		File file = configurationService.findExistingFile(path);
-		if (file == null) {
-			String[] legacyPath = legacyPath(path);
-			file = configurationService.findExistingFile(legacyPath);
-		}
-
 		if (file != null) {
 			DispatchingService.pushFile(response, file);
 			return true;
 		}
 		return false;
-	}
-
-	private String[] legacyPath(String[] path) {
-		String[] legacyPath = new String[path.length + 2];
-		legacyPath[0] = "WEB-INF";
-		legacyPath[1] = "apps";
-		legacyPath[2] = path[1];
-		legacyPath[3] = "web";
-		for (int i = 2; i < path.length; i++) {
-			legacyPath[i + 2] = path[i];
-		}
-		return legacyPath;
 	}
 
 	public void setApplicationControllers(List<ApplicationController> controllers) {

@@ -54,15 +54,18 @@ public class BodyComponent extends HtmlBody {
 		TagWriter out = new TagWriter(this, context);
 		ScriptWriter writer = Components.getScriptWriter(context);
 		String js = writer.toString();
-		if (Strings.isNotBlank(js)) {
-			if (configurationService.isOptimizeResources()) {
+		
+		if (configurationService.isOptimizeResources()) {
+			
+			DependencyService dependencyService = Components.getBean(DependencyService.class);
+		 	
+			if (Strings.isNotBlank(js)) {
 				out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
-			} else {
-				out.startScopedScript().write(js).endScopedScript();			
 			}
-		}
-		if (!configurationService.isOptimizeResources()) {
-
+			String scriptUrl = dependencyService.handleScripts(graph);
+		 	out.startScript().withAttribute("async", "async").withAttribute("defer", "defer").src(scriptUrl).endScript();
+		} else {
+			
 			for (String url : graph.getScripts()) {
 			 	out.startScript().src(DependencyService.pathToUrl(url)).endScript();
 			}
@@ -71,12 +74,9 @@ public class BodyComponent extends HtmlBody {
 				String tailContents = Files.readString(tail);
 			 	out.startScript().write(tailContents).endScript();
 			}
-			
-		} else {
-			DependencyService dependencyService = Components.getBean(DependencyService.class);
-		 	
-			String scriptUrl = dependencyService.handleScripts(graph);
-		 	out.startScript().withAttribute("async", "async").withAttribute("defer", "defer").src(scriptUrl).endScript();
+			if (Strings.isNotBlank(js)) {
+				out.startScopedScript().write(js).endScopedScript();
+			}
 		}
 		out.flush();
 		

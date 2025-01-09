@@ -84,7 +84,7 @@ public class DependencyService {
 	
 	public static String pathToUrl(String path) {
 		if (path.startsWith("/apps/")) {
-			return path.replaceFirst("/apps/","/");
+			return path.replaceFirst("/apps/[^/]+/","/");
 		}
 		if (path.startsWith("/services/")) {
 			return path.replaceFirst("/services/","/service/");
