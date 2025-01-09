@@ -184,7 +184,7 @@ h1.photos_photo_not_found {
 }
 .photos_photo_property strong {
   font-weight: inherit;
-  color: #777;
+  color: #555;
   flex-basis: 62px;
   text-align: right;
   padding-right: 10px;
@@ -199,7 +199,7 @@ p.photos_photo_words a {
   font-weight: 400;
   font-size: 16px;
   margin: 15px 0 5px;
-  color: #777;
+  color: #555;
 }
 .photos_photo_galleries ul {
   margin: 0;

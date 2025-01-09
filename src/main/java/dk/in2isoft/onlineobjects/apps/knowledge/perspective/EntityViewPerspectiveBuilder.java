@@ -30,7 +30,7 @@ public class EntityViewPerspectiveBuilder {
 			for (Statement statement : answers) {
 				html.startDiv().withData("id", statement.getId()).withClass("reader_entity_item reader_entity_item-statement");
 				html.startP().withClass("reader_entity_item_text").text(statement.getText());
-				html.startSpan().withClass("oo_icon oo_icon_16 oo_icon_info_light js-clickable").withDataMap("id",statement.getId(),"type",statement.getClass().getSimpleName()).endSpan();
+				html.startSpan().withClass("oo_icon oo_icon-16 oo_icon-info_light js-clickable").withDataMap("id",statement.getId(),"type",statement.getClass().getSimpleName()).endSpan();
 				html.endP();
 				List<Person> authors = modelService.getChildren(statement, Relation.KIND_COMMON_AUTHOR, Person.class, privileged);
 				List<InternetAddress> addresses = modelService.getParents(statement, Relation.KIND_STRUCTURE_CONTAINS, InternetAddress.class, privileged);

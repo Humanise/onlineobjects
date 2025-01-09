@@ -3,7 +3,7 @@ hui.on(['hui.ui'],function() {
   hui.ui.listen({
     $ready : function() {
       //hui.ui.get('testFinder').show();
-      hui.ui.get('objectInputWindow').show();
+      //hui.ui.get('objectInputWindow').show();
     },
     $click$resetObjectInputFormula : function() {
       hui.ui.get('objectInputFormula').reset();

@@ -1,7 +1,9 @@
 @use "sass:map";
+
+$background-color: #fff;
 $link-color: #07f;
 $link-hover-color: #038;
-$dimmed-color: #777;
+$dimmed-color: #555;
 $light-color: #999;
 $divider-color: #eee;
 $error-text-color: #f03;
@@ -165,10 +167,17 @@ $icons : (
   search_line: '\e90c',
   arrow_thin_left: '\e912',
   arrow_thin_right: '\e913',
+  arrow_bold_down: '\e90d',
+  arrow_bold_left: '\e90e',
+  arrow_bold_right: '\e90f',
+  arrow_bold_up: '\e910',
+  arrow_thin_down: '\e911',
+  arrow_thin_up: '\e914',
   word: '\e91e',
   abc: '\e91f',
   hash: '\e920'
 );
+
 
 @mixin icon($icon) {
   @if map.has-key($icons, $icon) {

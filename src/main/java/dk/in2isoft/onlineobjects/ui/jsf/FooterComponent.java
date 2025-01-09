@@ -76,7 +76,7 @@ public class FooterComponent extends AbstractComponent {
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
 		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text(msg.get("terms", locale)).endSpan().endA();
 		writer.endP();
-		writer.startP("oo_footer_logo").startA().withHref("https://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
+		writer.startP("oo_footer_logo").startA().withHref("https://www.humanise.dk/").startSpan("oo_icon oo_icon-humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();
 	}
 

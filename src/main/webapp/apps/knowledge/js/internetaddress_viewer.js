@@ -263,7 +263,7 @@ var internetAddressViewer = {
         hui.cls.add(node, 'is-not-found');
       }
       hui.build('span',{
-        'class' : 'oo_icon oo_icon_info_light reader_view_quote_icon js_reader_action',
+        'class' : 'oo_icon oo_icon-info_light reader_view_quote_icon js_reader_action',
         'data' : hui.string.toJSON({action:'editStatement', id: quote.id}),
         parent: node
       })

@@ -154,7 +154,7 @@ public class GalleryComponent extends AbstractComponent {
 			if (removable) {
 				out.startSpan("oo_gallery_hover");
 				out.startVoidA("oo_gallery_remove").rel("remove").data(image.getId());
-				out.startSpan("oo_icon oo_icon_16 oo_icon_delete").endSpan();
+				out.startSpan("oo_icon oo_icon-16 oo_icon-delete").endSpan();
 				out.endA();
 				out.endSpan();
 			}

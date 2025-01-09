@@ -14,7 +14,7 @@
   margin: 0 0 3px;
 }
 .photos_profile_username {
-  color: #777;
+  color: #555;
 }
 .photos_profile_username:before {
   content: "@";

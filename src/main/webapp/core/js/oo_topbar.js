@@ -50,7 +50,7 @@ oo.TopBar.prototype = {
     if (!this._menu) {
       var menu = this._menu = hui.build('div.oo_topbar_drop',{
         parent: document.body,
-        html: '<span class="oo_topbar_drop_title">OnlineObjects</span><span class="oo_topbar_drop_close oo_icon oo_icon_close_line"></span>'
+        html: '<span class="oo_topbar_drop_title">OnlineObjects</span><span class="oo_topbar_drop_close oo_icon oo_icon-close_line"></span>'
       });
       hui.on(menu,'tap',function(e) {
         e = hui.event(e);
@@ -64,7 +64,7 @@ oo.TopBar.prototype = {
           parent : menu,
           href : links[i].getAttribute('href')
         });
-        hui.build('span',{'class':'oo_topbar_drop_icon oo_icon oo_icon_' + links[i].getAttribute('data-icon'), parent:link});
+        hui.build('span',{'class':'oo_topbar_drop_icon oo_icon oo_icon-' + links[i].getAttribute('data-icon'), parent:link});
         hui.build('span',{'class':'oo_topbar_drop_label', text : hui.dom.getText(links[i]), parent:link});
       }
     }

@@ -51,7 +51,7 @@ public class DeveloperView extends AbstractView {
 
 	private void loadIcons() {
 		if (icons != null) return;
-		File file = configurationService.getFile("WEB-INF","core","web","fonts","onlineobjects","selection.json");
+		File file = configurationService.getFile("core","fonts","onlineobjects","selection.json");
 		String json = Files.readString(file);
 		Gson g = new Gson();
 		icons = new ArrayList<>();

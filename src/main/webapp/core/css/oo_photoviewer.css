@@ -93,7 +93,7 @@ div.oo_photoviewer_thumbs:hover a.oo_photoviewer_thumb:hover
 	box-shadow: inset 0 0 3px #fff;
 }
 
-div.oo_photoviewer_thumbs span.oo_icon_warning
+div.oo_photoviewer_thumbs span.oo_icon-warning
 {
 	position: absolute;
 	margin: 42px 0 0 42px;
@@ -114,7 +114,7 @@ div.oo_photoviewer_photo
 	position: relative;
 }
 
-div.oo_photoviewer_photo span.oo_icon_warning
+div.oo_photoviewer_photo span.oo_icon-warning
 {
 	position: absolute;
 	left: 50%;

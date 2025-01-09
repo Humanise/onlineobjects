@@ -8,7 +8,7 @@
 }
 .oo_words_word:before {
   content: "#";
-  color: #777;
+  color: #555;
   margin-right: 3px;
 }
 .oo_words_word:hover {

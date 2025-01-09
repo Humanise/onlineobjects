@@ -14,7 +14,7 @@
 }
 .photos_sidebar_profile_user {
   margin: 5px 0;
-  color: #777;
+  color: #555;
 }
 .photos_sidebar_profile_user:before {
   content: "@";

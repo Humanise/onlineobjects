@@ -40,7 +40,7 @@
 }
 .oo_gallerylink_info {
   display: block;
-  color: #777;
+  color: #555;
   padding: 2px 0;
   font-size: 12px;
 }
@@ -130,7 +130,7 @@
 }
 .oo_gallerylink_large_info {
   display: block;
-  color: #777;
+  color: #555;
   padding: 2px 0;
   font-size: 12px;
   text-align: center;

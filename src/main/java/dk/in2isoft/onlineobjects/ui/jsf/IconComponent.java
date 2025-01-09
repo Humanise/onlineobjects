@@ -44,7 +44,7 @@ public class IconComponent extends AbstractComponent {
 		boolean addController = isNotBlank(name);
 		String id = getClientId();
 		
-		writer.startSpan().withClass(new ClassBuilder("oo_icon").add("oo_icon", size).add(styleClass).add("oo_icon", icon));
+		writer.startSpan().withClass(new ClassBuilder("oo_icon").addVariant("oo_icon", size).add(styleClass).addVariant("oo_icon", icon));
 		if (addController) {
 			writer.withId(id);
 		}

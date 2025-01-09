@@ -29,7 +29,7 @@
     height: 1em;
     font-size: 40vh;
     line-height: 1em;
-    color: #ddd;
+    color: $dimmed-color;
   }
 }
 
@@ -46,7 +46,7 @@
 .title {
   font-size: 14vw;
   font-weight: 200;
-  color: #777;
+  color: $dimmed-color;
   top: 30%;
   width: 100%;
   text-align: center;
@@ -60,7 +60,7 @@
 .slogan {
   line-height: 24px;
   font-weight: 300;
-  color: #777;
+  color: $dimmed-color;
   width: 100%;
   text-align: center;
   letter-spacing: 1px;
@@ -100,17 +100,17 @@ li {
   outline: none;
   display: block;
   text-decoration: none;
-  color: #777;
+  color: $dimmed-color;
   transition-property: transform, color;
   transition-duration: 0.5s;
 
   &:focus {
-    text-shadow: 0 0 5px #46f;
-    color: #46a;
+    text-shadow: 0 0 5px $link-color;
+    color: $link-color;
   }
 
   &:hover {
-    color: #46a;
+    color: $link-color;
     transform: scale(1.3);
   }
 

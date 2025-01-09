@@ -35,10 +35,10 @@ oo.PhotoViewer.create = function(options) {
     'class':'oo_photoviewer',
     html:'<div class="oo_photoviewer_body"><div class="oo_photoviewer_photos"></div></div><div class="oo_photoviewer_bottom"><div class="oo_photoviewer_thumbs"></div></div>'+
       '<div class="oo_photoviewer_actions">'+
-        '<a rel="previous" class="oo_photoviewer_arrow"><span class="oo_icon oo_icon_32">&lt;</span></a>'+
-        '<a rel="next" class="oo_photoviewer_arrow"><span class="oo_icon oo_icon_32">&gt;</span></a>'+
-        (hui.browser.webkit ? '<a rel="full"><span class="oo_icon oo_icon_32">x</span></a>' : '')+
-        '<a rel="close"><span class="oo_icon oo_icon_32">k</span></a>'+
+        '<a rel="previous" class="oo_photoviewer_arrow"><span class="oo_icon oo_icon-32">&lt;</span></a>'+
+        '<a rel="next" class="oo_photoviewer_arrow"><span class="oo_icon oo_icon-32">&gt;</span></a>'+
+        (hui.browser.webkit ? '<a rel="full"><span class="oo_icon oo_icon-32">x</span></a>' : '')+
+        '<a rel="close"><span class="oo_icon oo_icon-32">k</span></a>'+
       '</div>',
     parent:document.body
   });
@@ -177,8 +177,8 @@ oo.PhotoViewer.prototype = {
         imageDidGiveError : function(loaded,total,index) {
           hui.cls.remove(this.thumbItems[index],'oo_photoviewer_thumb_loading');
           hui.cls.remove(this.imageItems[index],'oo_photoviewer_photo_loading');
-          this.imageItems[index].innerHTML = '<span></span><span class="oo_icon_warning"></span>';
-          this.thumbItems[index].innerHTML = '<span></span><span class="oo_icon_warning"></span>';
+          this.imageItems[index].innerHTML = '<span></span><span class="oo_icon-warning"></span>';
+          this.thumbItems[index].innerHTML = '<span></span><span class="oo_icon-warning"></span>';
         }.bind(this)
       })
       preloader.addImages(urls);

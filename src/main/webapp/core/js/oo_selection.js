@@ -42,7 +42,7 @@
         var option = this.options[i];
         var icon = option.icon || 'tag_line';
         var html = '<a class="oo_selection_link" href="javascript://" data-index="'+i+'">'+
-          '<span class="oo_selection_icon oo_icon oo_icon_16 oo_icon_' + icon + '"></span>'+
+          '<span class="oo_selection_icon oo_icon oo_icon-16 oo_icon-' + icon + '"></span>'+
           '<span class="oo_selection_text">' + hui.string.escape(option.text || option.title || option.label) + '</span>';
         if (option.badge) {
           html+= '<span class="oo_selection_badge">' + hui.string.escape(option.badge) + '</span>';

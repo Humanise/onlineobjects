@@ -26,7 +26,7 @@
         return '<a href="javascript://" class="oo_topbar_item oo_topbar_login" data="login">Log in</a>'
       } else {
         return '<a href="javascript://" class="oo_topbar_item oo_topbar_user" data="user">' +
-          '<span class="oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon"></span>' +
+          '<span class="oo_icon oo_icon-16 oo_icon-user oo_topbar_user_icon"></span>' +
           hui.string.escape(info.displayName) +
         '</a>'
       }
