@@ -44,31 +44,18 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 	}
 	
 	private boolean pushServiceFile(String[] path, HttpServletResponse response) {
-		boolean success = false;
-		StringBuilder filePath = new StringBuilder();
-		filePath.append(configurationService.getBasePath());
-		filePath.append(File.separator);
-		filePath.append("WEB-INF");
-		filePath.append(File.separator);
-		filePath.append("services");
-		filePath.append(File.separator);
-		filePath.append(path[1]);
-		filePath.append(File.separator);
-		filePath.append("web");
-		for (int i = 2; i < path.length; i++) {
-			filePath.append(File.separator);
-			filePath.append(path[i]);
-		}
-		File file = new File(filePath.toString());
-		if (file.exists()) {
+		String[] full = path.clone();
+		full[0] = "services";
+		File file = configurationService.findExistingFile(full);
+		if (file != null) {
 			try {
 				DispatchingService.pushFile(response, file);
-				success = true;
+				return true;
 			} catch (Exception e) {
 				//log.error(e.toString(), e);
 			}
 		}
-		return success;
+		return false;
 	}
 	
 	private ServiceController getServiceController(Request request, String name) {

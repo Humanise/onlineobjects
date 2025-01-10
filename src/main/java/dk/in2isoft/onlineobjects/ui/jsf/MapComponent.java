@@ -20,7 +20,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 @ListenerFor(systemEventClass=PostAddToViewEvent.class)
 @FacesComponent(value=MapComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_map.js" }, css = { "/WEB-INF/core/web/css/oo_map.css" }, requires = { OnlineObjectsComponent.class} ,uses= { BoundPanelComponent.class })
+@Dependencies(js = { "/core/js/oo_map.js" }, css = { "/core/css/oo_map.css" }, requires = { OnlineObjectsComponent.class} ,uses= { BoundPanelComponent.class })
 public class MapComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.map";

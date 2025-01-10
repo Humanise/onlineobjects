@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="uri:hui ../../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="Knowledge" globals="false">
+  <controller url="/js/hui.js"/>
+  <style url="/css/app.css"/>
+
+
+  <foundation name="foundation">
+    <navigation>
+      <overflow>
+        <selection value="everything" name="subsetSelection">
+          <option value="everything"><span class="selection selection-everything">Everything</span></option>
+        </selection>
+      </overflow>
+    </navigation>
+    <results>
+      <bar variant="layout">
+        <searchfield adaptive="true" name="search"/>
+      </bar>
+      <overflow>
+        <collection name="list"
+          source="listSource"
+          selectable="true"
+          class="list"
+          selection-class="list_item-selected"
+        >
+          <empty>
+            <div class="list_empty" id="list_empty">
+              <div class="list_empty_text" data="no_content">
+                <p>You have no content yet...</p>
+              </div>
+              <div class="list_empty_text" data="empty_selection">
+                <p>This combination has no content.</p>
+              </div>
+              <div class="list_empty_text" data="empty_internetaddress">
+                <p>You have no pages yet.</p>
+                <p>A page is usually an article found on the web.</p>
+                <p>You can add one by copying the URL of a web page and adding it...</p>
+              </div>
+              <div class="list_empty_text" data="empty_hypothesis">
+                <p>You have no hypotheses yet.</p>
+                <p>A hypothesis is something you think may be true.</p>
+                <p>Add your first hypothesis and start finding statements that supports or contradicts it...</p>
+              </div>
+              <div class="list_empty_text" data="empty_statement">
+                <p>You have no statement yet.</p>
+                <p>A statement is usually a quote found on a web page - a great way to remember something.</p>
+                <p>You can start by adding a web page, select some text, then click "Quote".</p>
+                <p>You can also just add some text.</p>
+              </div>
+              <div class="list_empty_text" data="empty_question">
+                <p>You have no questions yet.</p>
+                <p>A question is a great starting point for organizing your thoughts.</p>
+                <p>Add your first question and start finding answers...</p>
+              </div>
+              <div class="list_empty_text" data="empty_search">
+                <p>Nothing was found</p>
+              </div>
+              <div class="list_empty_text" data="empty_inbox">
+                <p>The inbox contains newly added pages</p>
+              </div>
+              <div class="list_empty_text" data="empty_archive">
+                <p>The archive contains anything not in the inbox</p>
+              </div>
+              <div class="list_empty_text" data="no_favorites">
+                <p>You have no favorites yet</p>
+              </div>
+            </div>
+          </empty>
+        </collection>
+        <div class="list_add">
+          <button text="Add something..." name="listAddButton"/>
+        </div>
+        <!--
+        <list name="list" variant="light"/>
+        -->
+      </overflow>
+    </results>
+    <actions>
+      <bar>
+        <button symbol="left" small="true" name="goBack"/>
+        <button symbol="right" small="true" name="goForward"/>
+        <button icon="common/new" text="Add" small="true" name="addButton"/>
+        <flexible/>
+        <button text="Delete" small="true" name="deleteObject">
+          <confirm text="Are you sure?"/>
+        </button>
+        <button text="Add word" small="true" name="addWord"/>
+        <button text="Add tag" small="true" name="addTag"/>
+        <divider/>
+        <checkbox text="Favorite" name="favorite"/>
+        <checkbox text="Inbox" name="inbox"/>
+        <segmented value="formatted" name="viewMode">
+          <option text="Formatted" value="formatted"/>
+          <option text="Text" value="text"/>
+        </segmented>
+      </bar>
+    </actions>
+    <content>
+      <overflow shadow-variant="white" name="mainScroller">
+        <fragment name="intro">
+          <div class="intro">
+            <div class="intro_graphic"> </div>
+            <p class="intro_title">Knowledge</p>
+            <ul>
+              <li><em>Store web pages</em> and read them <em>distraction free</em></li>
+              <li><em>Highlight statements</em> on stored web pages</li>
+              <li>Relate statements as <em>answers</em> to <em>questions</em></li>
+              <li>Mark statements as <em>supporting</em> or <em>contradicting</em> <em>hypotheses</em></li>
+            </ul>
+          </div>
+        </fragment>
+
+        <fragment name="error" visible="false">
+          <div class="warning">
+            <div class="warning_title">Something unexpected happened</div>
+            <div class="warning_text">Please try again later</div>
+          </div>
+        </fragment>
+
+        <fragment name="internetaddress" visible="false">
+          <div class="internetaddress">
+            <collection name="internetaddressWords" class="relations"/>
+            <collection name="internetaddressTags" class="relations"/>
+            <div class="internetaddress_head js-internetaddress-head"> </div>
+            <div class="article js-internetaddress-formatted"> </div>
+            <div class="plain js-internetaddress-text" style="display: none;"> </div>
+          </div>
+        </fragment>
+
+        <fragment name="question" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Question</div>
+            <div class="perspective_title" id="questionTitle">
+              <div class="perspective_title_text" id="questionTitleText"> </div>
+              <span class="perspective_title_edit"> </span>
+            </div>
+            <collection name="questionWords" class="relations"/>
+            <collection name="questionTags" class="relations"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Is answered by</div>
+              <collection name="questionAnswers">
+                <empty>
+                  <div class="perspective_relation_message">No answers yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addAnswerToQuestion" text="Add answer"/>
+              </div>
+            </div>
+          </div>
+        </fragment>
+
+        <fragment name="statement" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Statement</div>
+            <div class="perspective_title" id="statementTitle">
+              <div class="perspective_title_text" id="statementTitleText"> </div>
+              <span class="perspective_title_edit"> </span>
+            </div>
+            <collection name="statementWords" class="relations"/>
+            <collection name="statementTags" class="relations"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Appears on</div>
+              <collection name="statementAddresses">
+                <empty>
+                  <div class="perspective_relation_message">No pages</div>
+                </empty>
+              </collection>
+              <div class="perspective_heading">Is answer to</div>
+              <collection name="statementQuestions">
+                <empty>
+                  <div class="perspective_relation_message">No questions yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addQuestionToStatement" text="Add question"/>
+              </div>
+              <fragment name="statementSuggestionsFragment" visible="false">
+                <div class="perspective_heading">Suggested questions</div>
+                <collection name="statementSuggestions"/>
+              </fragment>
+            </div>
+          </div>
+        </fragment>
+
+        <fragment name="hypothesis" visible="false">
+          <div class="perspective">
+            <div class="perspective_heading">Hypothesis</div>
+            <div class="perspective_title" id="hypothesisTitle">
+              <div class="perspective_title_text" id="hypothesisTitleText"> </div>
+              <span class="perspective_title_edit"> </span>
+            </div>
+            <collection name="hypothesisWords" class="relations"/>
+            <collection name="hypothesisTags" class="relations"/>
+            <div class="perspective_relations">
+              <div class="perspective_heading">Is supported by</div>
+              <collection name="hypothesisSupporting">
+                <empty>
+                  <div class="perspective_relation_message">No support yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addSupportToHypothesis" text="Add support"/>
+              </div>
+              <div class="perspective_heading">Is contradicted by</div>
+              <collection name="hypothesisContradicting">
+                <empty>
+                  <div class="perspective_relation_message">No contradictions yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addContradictionToHypothesis" text="Add contradiction"/>
+              </div>
+            </div>
+          </div>
+        </fragment>
+
+      </overflow>
+    </content>
+    <!--      
+    <details>
+      <overflow>
+      <form padding="10">
+        <fields labels="above">
+          <field label="Title">
+            <text-input/>
+          </field>
+          <field label="Authors">
+            <object-input/>
+          </field>
+        </fields>
+        <buttons>
+          <button text="Update" submit="true" highlighted="true"/>
+        </buttons>
+      </form>
+      </overflow>
+    </details>
+      -->
+  </foundation>
+  <!--
+  <boundpanel name="selectionBoundPanel" padding="10">
+    <button text="Highlight" name="highlightSelection"/>
+  </boundpanel>-->
+
+  <panel name="selectionPanel" padding="10" closable="false">
+    <button text="Quote" name="highlightSelection"/>
+    <button text="Tag" name="tagSelectedText"/>
+  </panel>
+
+  <panel name="multipleSelectionPanel" closable="false" auto-hide="true" padding="5">
+    <collection name="multipleSelectionItems"/>
+  </panel>
+
+  <finder name="questionFinder" url="/service/model/finder?type=Question"/>
+
+  <finder name="statementFinder" url="/service/model/finder?type=Statement"/>
+
+  <finder name="wordFinder" url="/service/model/finder?type=Word"/>
+
+  <panel name="addPanel" padding="10" auto-hide="true" width="280">
+    <div class="add_intro">
+      A <strong>URL</strong> will be imported as a <strong>page</strong>
+      <br/>Text ending in "<strong>?</strong>" will become a <strong>question</strong>
+      <br/>End with "<strong>!</strong>" to create a <strong>hypothesis</strong>
+      <br/>Otherwise a <strong>statement</strong> will be created
+    </div>
+    <form name="addForm">
+      <text-input key="text" breaks="true"/>
+      <buttons>
+        <button text="Add" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <panel name="tagPanel" padding="10" auto-hide="true" width="280">
+    <form name="addTagForm">
+      <text-input key="text" placeholder="Tag"/>
+      <buttons>
+        <button text="Add" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <panel name="editTagPanel" padding="10" auto-hide="true" width="280">
+    <form name="editTagForm">
+      <text-input key="text" placeholder="Tag"/>
+      <buttons>
+        <button text="Delete" name="deleteTag"><confirm text="Are you sure?"/></button>
+        <button text="Update" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </panel>
+
+  <window name="publisherWindow" title="OnlinePublisher instance" padding="5" width="300">
+    <form name="publisherFormula">
+      <fields>
+        <field label="Name:">
+          <text-input key="name"/>
+        </field>
+        <field label="Address:">
+          <text-input key="address"/>
+        </field>
+      </fields>
+      <buttons top="10">
+        <button text="Cancel" name="cancelPublisher"/>
+        <button text="Delete" name="deletePublisher">
+          <confirm text="Are you sure?" ok="Yes, delete" cancel="No"/>
+        </button>
+        <button text="Save" name="savePublisher" highlighted="true" submit="true"/>
+      </buttons>
+    </form>
+  </window>
+</gui>

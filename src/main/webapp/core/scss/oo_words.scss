@@ -1,0 +1,44 @@
+@use 'shared' as *;
+
+.oo_words {
+  &_word {
+    height: 16px;
+    line-height: 16px;
+    color: inherit;
+    text-decoration: none;
+    margin-right: 10px;
+
+    display: inline-flex;
+    &:before {
+      content: '#';
+      color: $dimmed-color;
+      margin-right: 3px;
+    }
+    &:hover {
+      color: $link-color;
+    };
+  }
+}
+
+.oo_words_add
+{
+  background: #fff;
+  border: 1px dashed #eee;
+  border-radius: 8px;
+  display: inline-block;
+  height: 16px;
+  line-height: 16px;
+  font-size: 12px;
+  padding: 0 7px;
+  margin: 0 2px 2px 0;
+  color: #999;
+  text-decoration: none;
+  vertical-align: middle;
+  text-transform: lowercase;
+}
+
+.oo_words_add:hover
+{
+  border: 1px solid #ddd;
+  color: #333;
+}

@@ -1,0 +1,88 @@
+@use 'shared' as *;
+
+
+.words_front_top
+{
+  max-width: 700px;
+  margin: 0 auto 50px;
+}
+
+.words_front_title
+{
+  text-align: center;
+  font-size: 72pt;
+  margin: 0;
+  font-weight: 100;
+}
+
+/***************** Letters ***************/
+
+.words_front_letters {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 610px;
+
+  &_title {
+    display: none;
+  }
+
+  &_link {
+    color: #666;
+    padding: 0 8px;
+    display: inline-block;
+    height: 42px;
+    line-height: 42px;
+    border-radius: 3px;
+    font-size: 24pt;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    &:hover {
+      color: $link-color;
+      border-radius: 3px;
+      background: #eee; 
+    }
+  }
+}
+
+
+
+
+
+/***************** Languages ***************/
+
+.words_front_filter {
+  margin: 20px auto;
+  max-width: 600px;
+
+  &_links {
+    text-align: center;
+  }
+
+  &_link {
+    color: #666;
+    padding: 0 8px;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 3px;
+    font-size: 14pt;
+    text-decoration: none;
+
+    &:hover {
+      color: $link-color;
+      border-radius: 3px;
+      background: #eee; 
+    }
+  }
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+  .words_front_title
+  {
+    font-size: 54pt;
+  }
+}

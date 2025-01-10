@@ -12,7 +12,7 @@ import dk.in2isoft.commons.jsf.StyleBuilder;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=BoxComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_box.css"})
+@Dependencies(css={"/core/css/oo_box.css"})
 public class BoxComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.box";

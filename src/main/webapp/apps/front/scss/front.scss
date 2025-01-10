@@ -1,0 +1,172 @@
+@use '../../../core/scss/shared' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-evenly;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+}
+
+.logo {
+  width: 70vw;
+  height: 45vh;
+  max-height: 400px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .oo_icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    font-size: 40vh;
+    line-height: 1em;
+    color: $dimmed-color;
+  }
+}
+
+.fake {
+  width: 100%;
+  height: 100%;
+  background: url('/gfx/logo.svg') 50% no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.title {
+  font-size: 14vw;
+  font-weight: 200;
+  color: $dimmed-color;
+  top: 30%;
+  width: 100%;
+  text-align: center;
+  line-height: 1;
+  margin: 0 0 -10px 0;
+  cursor: default;
+  font-family: 'Work Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+
+.slogan {
+  line-height: 24px;
+  font-weight: 300;
+  color: $dimmed-color;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 1px;
+  cursor: default;
+  font-size: 4vw;
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 0px;
+  transition: opacity 2s, margin-bottom 2s;
+
+  &.is-hidden {
+    margin-bottom: -20px;
+    opacity: 0;
+    transition: none;
+  }
+}
+
+.icons {
+  -webkit-user-select: none;
+  display: block;
+  list-style: none;
+  margin: 15px 0;
+  text-align: center;
+  bottom: 60px;
+  width: 100%;
+  padding: 0;
+  font-size: 0;
+}
+
+li {
+  display: inline-block;
+  text-align: center;
+  width: 90px;
+}
+
+.icon {
+  outline: none;
+  display: block;
+  text-decoration: none;
+  color: $dimmed-color;
+  transition-property: transform, color;
+  transition-duration: 0.5s;
+
+  &:focus {
+    text-shadow: 0 0 5px $link-color;
+    color: $link-color;
+  }
+
+  &:hover {
+    color: $link-color;
+    transform: scale(1.3);
+  }
+
+  strong {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 32px;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+
+.footer {
+  opacity: .5;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  .oo_footer {
+    padding-top: 0;
+  }
+  .oo_footer_logo {
+    display: none;
+  }
+}
+
+
+@media (min-height: 450px) {
+
+  .root {
+    height: 100vh;
+  }
+}
+
+@media (min-width: 375px) {
+  li {
+    width: 100px;
+  }
+}
+
+@media (min-width: 450px) {
+  .slogan {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 500px) {
+  .title {
+    font-weight: 100;
+  }
+}
+
+@media (min-width: 600px) {
+  .title {
+    font-size: 84px;
+  }
+}

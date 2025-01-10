@@ -45,6 +45,7 @@ public class ConfigurationService implements InitializingBean {
 	private String appleAppSiteAssociation;
 	private String monitoringMails;
 	private boolean migrateDatabaseSchema;
+	private boolean https;
 	
 	private File tempDir;
 
@@ -122,7 +123,26 @@ public class ConfigurationService implements InitializingBean {
 		}
 		return file;
 	}
-	
+
+	/**
+	 * TODO: Move to other service
+	 */
+	public File findExistingFile(String[] path) {
+		StringBuilder filePath = new StringBuilder();
+		filePath.append(basePath);
+		for (int i = 0; i < path.length; i++) {
+			filePath.append(File.separator);
+			filePath.append(path[i]);
+		}
+		File file = new File(filePath.toString());
+
+		if (file.exists() && !file.isDirectory()) {
+			return file;
+		}
+		
+		return null;
+	}
+
 	public void setDisableCache(boolean disableCache) {
 		this.disableCache = disableCache;
 	}
@@ -225,7 +245,11 @@ public class ConfigurationService implements InitializingBean {
 
 	public String getApplicationContext(String app) {
 		StringBuilder url = new StringBuilder();
-		url.append("https://");
+		if (https) {
+			url.append("https://");			
+		} else {
+			url.append("http://");
+		}
 		url.append(appMountPoints.get(app)).append(".").append(rootDomain);
 		return url.toString();
 	}
@@ -350,4 +374,13 @@ public class ConfigurationService implements InitializingBean {
 	public void setMigrateDatabaseSchema(boolean migrateDatabaseSchema) {
 		this.migrateDatabaseSchema = migrateDatabaseSchema;
 	}
+
+	public boolean isHttps() {
+		return https;
+	}
+
+	public void setHttps(boolean https) {
+		this.https = https;
+	}
+
 }

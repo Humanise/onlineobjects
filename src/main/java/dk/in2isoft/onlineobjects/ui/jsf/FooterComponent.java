@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value=FooterComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_footer.css"},requires={OnlineObjectsComponent.class}, uses = { IconComponent.class })
+@Dependencies(css={"/core/css/oo_footer.css"},requires={OnlineObjectsComponent.class}, uses = { IconComponent.class })
 public class FooterComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.footer";
@@ -76,7 +76,7 @@ public class FooterComponent extends AbstractComponent {
 		writer.startSpan("oo_footer_separator").text(" \u00B7 ").endSpan();
 		writer.startA("oo_link js-agreements").withHref(agreementsUrl).withTestName("footerAgreements").startSpan().text(msg.get("terms", locale)).endSpan().endA();
 		writer.endP();
-		writer.startP("oo_footer_logo").startA().withHref("https://www.humanise.dk/").startSpan("oo_icon oo_icon_humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
+		writer.startP("oo_footer_logo").startA().withHref("https://www.humanise.dk/").startSpan("oo_icon oo_icon-humanise").endSpan().startStrong().text("Humanise").endStrong().endA().endP();
 		writer.endDiv();
 	}
 

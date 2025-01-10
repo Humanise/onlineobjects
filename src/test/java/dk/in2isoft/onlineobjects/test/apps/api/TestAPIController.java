@@ -23,6 +23,8 @@ import dk.in2isoft.onlineobjects.apps.api.APISearchResult;
 import dk.in2isoft.onlineobjects.apps.api.AuthenticationResponse;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
 import dk.in2isoft.onlineobjects.core.ModelService;
+import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
@@ -121,6 +123,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 
 	@Test
 	public void testCreateAddress() throws IOException, EndUserException {
+		Operator operator = modelService.newOperator(getAdminUser());
 		MockHttpServletRequest httpRequest = new MockHttpServletRequest("POST", "/");
 		Request request = mock(httpRequest);
 		String url = "https://en.wikipedia.org/wiki/Knowledge";
@@ -135,6 +138,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 		} catch (SecurityException e) {
 			assertEquals(Error.userNotFound.toString(), e.getCode());
 		}
+		assertEquals(0, modelService.search(Query.of(dk.in2isoft.onlineobjects.model.Statement.class), operator).getTotalCount());
 		// Add authorization
 		httpRequest.addHeader("Authorization", "Bearer " + key);
 		securityService.ensureUserSession(request);
@@ -159,6 +163,18 @@ public class TestAPIController extends AbstractSpringTestCase {
 		InternetAddressApiPerspective addressPerspective = apiController.viewAddress(request);
 		assertEquals("Knowledge From Wikipedia, the ", addressPerspective.getText().replaceAll("[\\s]+", " ").substring(0, 30));
 		request.commit();
+		
+		httpRequest.removeAllParameters();
+		httpRequest.addParameter("id", String.valueOf(statement.getId()));
+		apiController.deleteStatement(request);
+		request.commit();
+
+		httpRequest.removeAllParameters();
+		httpRequest.addParameter("id", String.valueOf(address.getId()));
+		apiController.deleteInternetAddress(request);
+		request.commit();
+		
+		operator.commit();
 	}
 
 	private KnowledgeListRow firstRowByType(APISearchResult result, String type) {

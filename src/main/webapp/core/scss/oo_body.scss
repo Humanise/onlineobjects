@@ -1,0 +1,39 @@
+@use 'sass:math';
+@use 'shared' as *;
+
+.oo_body {
+  font-family: $default-font-family;
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: none;
+  font-size: $regular-font-size;
+  line-height: math.div(16,14);
+
+  &-light {
+    background: #fff;
+  }
+}
+
+.hui_button, .hui_form, .hui_textinput, .hui_panel_titlebar {
+  font-family: $default-font-family !important;
+}
+/*
+.hui_button {
+  @include text-spacing;
+}
+.oo_body {
+  .hui_form_field_label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .hui_textinput {
+    font-size: 14px;
+  }
+  .hui_checkbox_label {
+    font-size: 14px;
+  }
+  .hui_button {
+    font-size: 10pt;
+  }
+}*/

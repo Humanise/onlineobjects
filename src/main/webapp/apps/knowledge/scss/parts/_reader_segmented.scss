@@ -1,0 +1,30 @@
+@use '../shared' as *;
+
+.reader_segmented {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0;
+
+  &_item {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: $view-dark-action-color;
+    font-size: 12px;
+    padding: 0 3px;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      color: $view-dark-action-color-hover;
+    }
+
+    &.is-selected {
+      color: $view-action-selected-color;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+
+      &:hover {
+        color: $view-action-selected-color-hover;
+      }
+    }
+  }
+}

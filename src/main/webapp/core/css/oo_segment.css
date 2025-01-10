@@ -1,0 +1,29 @@
+.oo_segment_title {
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  padding-bottom: 5px;
+}
+.oo_segment_body {
+  padding: 15px 0 30px 20px;
+}
+
+@media screen and (min-width: 700px) {
+  .oo_segment {
+    display: flex;
+  }
+  .oo_segment_title {
+    flex-basis: 25%;
+    padding: 0;
+    border: none;
+    color: #555;
+  }
+  .oo_segment_body {
+    flex-basis: 75%;
+    padding: 0;
+  }
+  .oo_segment + .oo_segment {
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+  }
+}

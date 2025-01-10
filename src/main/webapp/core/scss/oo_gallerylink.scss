@@ -1,0 +1,142 @@
+@use 'shared' as *;
+
+.oo_gallerylink {
+  display: block;
+  padding-left: 72px;
+  position: relative;
+  min-height: 62px;
+  color: inherit;
+  text-decoration: none;
+
+  &_image {
+    position: absolute;
+    background: #eee;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 2px;
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+    }
+    &:nth-child(2) {
+      top: 0;
+      left: 32px;
+    }
+    &:nth-child(3) {
+      top: 32px;
+      left: 0;
+    }
+    &:nth-child(4) {
+      top: 32px;
+      left: 32px;
+    }
+  }
+  &_title {
+    display: block;
+    line-height: 16px;
+    padding: 8px 0 0;
+    margin-bottom: 2px;
+    font-weight: 500;
+    font-size: $large-font-size;
+  }
+  &_info {
+    display: block;
+    color: $dimmed-color;
+    padding: 2px 0;
+    font-size: $small-font-size;
+  }
+}
+
+.oo_gallerylink_compact {
+  display: flex;
+  padding-left: 68px;
+  position: relative;
+  min-height: 40px;
+  color: inherit;
+  text-decoration: none;
+  align-items: center;
+
+  &_image {
+    position: absolute;
+    background: #eee;
+    background-size: cover;
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+    }
+    &:nth-child(2) {
+      top: 3px;
+      left: 22px;
+      border: 1px solid #fff;
+    }
+    &:nth-child(3) {
+      display: none;
+    }
+    &:nth-child(4) {
+      display: none;
+    }
+  }
+  &_title {
+    display: block;
+    line-height: 14px;
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: $regular-font-size;
+  }
+}
+
+.oo_gallerylink_large {
+  display: block;
+  padding-top: 130px;
+  position: relative;
+  min-height: 62px;
+  color: inherit;
+  text-decoration: none;
+  width: 152px;
+
+  &_image {
+    position: absolute;
+    background: #eee;
+    background-size: cover;
+    width: 75px;
+    height: 60px;
+    border-radius: 5px;
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+    }
+    &:nth-child(2) {
+      top: 0;
+      left: 77px;
+    }
+    &:nth-child(3) {
+      top: 62px;
+      left: 0;
+    }
+    &:nth-child(4) {
+      top: 62px;
+      left: 77px;
+    }
+  }
+  &_title {
+    display: block;
+    line-height: 16px;
+    padding: 8px 0 0;
+    margin-bottom: 2px;
+    font-weight: 500;
+    font-size: $large-font-size;
+    word-break: break-word;
+    text-align: center;
+  }
+  &_info {
+    display: block;
+    color: $dimmed-color;
+    padding: 2px 0;
+    font-size: $small-font-size;
+    text-align: center;
+  }
+}

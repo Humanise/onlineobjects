@@ -1,0 +1,57 @@
+@use '../../../core/scss/shared' as *;
+
+.account {
+  padding: 20px 20px 20px;
+}
+
+.account_invitation_form {
+  margin-top: 20px;
+}
+
+.account_invitation_text {
+  margin: 20px 0;
+}
+
+.account_minor {
+  color: $dimmed-color;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+@include if ((width: 620px)) {
+  .account_message {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
+.account_change {
+  margin-left: 10px;
+}
+
+
+.account_agreements {
+
+  &_toc {
+    list-style: none;
+    padding: 0;
+
+    > li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+  hr {
+    margin: 40px 0;
+  }
+  h1 {
+    font-size: 2em;
+    line-height: 1;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  h3 {
+    font-size: 1em;
+  }
+}

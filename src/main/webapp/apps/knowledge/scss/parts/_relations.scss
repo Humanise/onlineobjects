@@ -1,0 +1,52 @@
+@use '../shared' as *;
+
+.relations {
+  display: flex;
+  margin: 5px -3px;
+  flex-wrap: wrap;
+
+  .perspective & {
+    justify-content: center;
+    margin: 5px 0;
+  }
+
+  &_item {
+    margin: 0 3px;
+    display: flex;
+    &-tag:before {
+      @include icon('hash');
+      color: #777;
+      margin-right: 3px;
+    }
+    &-word:before {
+      @include icon('word');
+      color: #777;
+      margin-right: 3px;
+    }
+  }
+
+  &_remove {
+    vertical-align: top;
+    margin: -1px -5px 0 -5px;
+    display: inline-block;
+    opacity: 0;
+    transition: opacity .3s;
+    font-size: 12px;
+    cursor: pointer;
+    background: #eee;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include icon-before('delete_line');
+    &:hover {
+      background: #ddd;
+    }
+    
+  }
+  &:hover &_remove {
+    opacity: 1;
+  };
+}

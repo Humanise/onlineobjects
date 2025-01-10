@@ -94,7 +94,14 @@ public abstract class AbstractController {
 
 	private boolean dispatchToJSF(Request request, String path) throws IOException, EndUserException {
 		ServletContext context = request.getRequest().getServletContext();
-		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/jsf/" + getName() + "/" + path);
+		
+		String urlPath = getDimension() + "/" + getName() + "/" + path;
+		File file = new File(configurationService.getBasePath() + File.separator + urlPath);
+		if (!file.exists()) {
+			urlPath = "jsf/" + getName() + "/" + path;						
+		}
+
+		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/" + urlPath);
 		request.getResponse().setContentType("text/html");
 		request.getResponse().setCharacterEncoding("UTF-8");
 		try {
@@ -158,11 +165,21 @@ public abstract class AbstractController {
 	}
 	
 	public final File getFile(String... path) {
+		File file = getFile(false, path);
+		if (file.exists()) {
+			return file;
+		}
+		return getFile(true, path);
+	}
+
+	public final File getFile(boolean webInf, String... path) {
 		StringBuilder filePath = new StringBuilder();
 		filePath.append(configurationService.getBasePath());
 		filePath.append(File.separator);
-		filePath.append("WEB-INF");
-		filePath.append(File.separator);
+		if (webInf) {
+			filePath.append("WEB-INF");
+			filePath.append(File.separator);			
+		}
 		filePath.append(getDimension());
 		filePath.append(File.separator);
 		filePath.append(getName());

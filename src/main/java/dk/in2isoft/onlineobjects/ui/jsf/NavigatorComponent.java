@@ -14,7 +14,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.onlineobjects.model.Image;
 
 @FacesComponent(value = NavigatorComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_navigator.css"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_navigator.css"},requires={OnlineObjectsComponent.class})
 public class NavigatorComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.navigator";

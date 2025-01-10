@@ -43,6 +43,18 @@
 		<copy todir="${dest}/OnlineObjects/onlineobjects/resources">
 			<fileset dir="${basedir}/src/main/webapp/resources" />
 		</copy>
+		<copy todir="${dest}/OnlineObjects/onlineobjects/apps">
+			<fileset dir="${basedir}/src/main/webapp/apps" />
+		</copy>
+		<copy todir="${dest}/OnlineObjects/onlineobjects/core">
+			<fileset dir="${basedir}/src/main/webapp/core" />
+		</copy>
+		<copy todir="${dest}/OnlineObjects/onlineobjects/services">
+			<fileset dir="${basedir}/src/main/webapp/services" />
+		</copy>
+		<copy todir="${dest}/OnlineObjects/onlineobjects/shared">
+			<fileset dir="${basedir}/src/main/webapp/shared" />
+		</copy>
 
 		<javac destdir="${dest}/OnlineObjects_temp/classes" debug="on">
 			<classpath>

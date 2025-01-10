@@ -51,6 +51,7 @@
 		<property name="storagePath" value="${storagePath}"/>
 		<property name="baseUrl" value="${baseUrl}"/>
 		<property name="port" value="${port}"/>
+		<property name="https" value="${https}"/>
 		<property name="rootDomain" value="${rootDomain}"/>
 		<property name="developmentMode" value="${developmentMode}"/>
 		<property name="developmentUser" value="${development.user}"/>

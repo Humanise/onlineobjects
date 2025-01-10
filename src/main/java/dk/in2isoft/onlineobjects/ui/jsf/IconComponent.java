@@ -11,7 +11,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=IconComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_icon.css","/WEB-INF/core/web/css/oo_font.css"},js={"/WEB-INF/core/web/js/oo_icon.js"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_icon.css","/core/css/oo_font.css"},js={"/core/js/oo_icon.js"},requires={OnlineObjectsComponent.class})
 public class IconComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.icon";
@@ -44,7 +44,7 @@ public class IconComponent extends AbstractComponent {
 		boolean addController = isNotBlank(name);
 		String id = getClientId();
 		
-		writer.startSpan().withClass(new ClassBuilder("oo_icon").add("oo_icon", size).add(styleClass).add("oo_icon", icon));
+		writer.startSpan().withClass(new ClassBuilder("oo_icon").addVariant("oo_icon", size).add(styleClass).addVariant("oo_icon", icon));
 		if (addController) {
 			writer.withId(id);
 		}

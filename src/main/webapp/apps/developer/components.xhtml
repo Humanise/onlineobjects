@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+  <ui:composition template="templates/plain.xhtml">
+
+    <ui:define name="body">
+      <o:script src="/js/controller.js"/>
+      <o:box>
+
+        <o:header>Components</o:header>
+        <c:forEach items="${developerView.components}" var="component">
+          <div>${component}</div>
+        </c:forEach>
+
+
+        <o:header>Icons</o:header>
+        <c:forEach items="${developerView.icons}" var="icon">
+          <div><o:icon icon="#{icon}" size="32"/> ${icon}</div>
+        </c:forEach>
+
+
+        <o:header>This is a header</o:header>
+        <p>
+          <o:link href="#link">A simple link</o:link>
+        </p>
+
+        <h2>List</h2>
+        <o:list>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+        </o:list>
+
+        <h3>Bordered list</h3>
+        <o:list variant="bordered">
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+          <o:listItem>List item</o:listItem>
+        </o:list>
+
+        <h2>Date</h2>
+        <o:date value="#{developerComponentTestView.date}"/>
+
+        <h2>Box</h2>
+        <o:box>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</o:box>
+
+        <h2>HUI</h2>
+        <h3>Buttons</h3>
+        <gui:button text="Plain button"/>
+        <gui:button text="Highlighted" highlighted="true"/>
+        <gui:button text="Disabled" disabled="true"/>
+        <gui:button text="Disabled + highlighted" highlighted="true" disabled="true"/>
+        <gui:button text="Confirmation" click="alert('Great')">
+          <gui:confirm text="Are you fresh?" okText="Yes" cancelText="Nay"/>
+        </gui:button>
+        <hr/>
+        <gui:button text="This is a small button" small="true" click="alert(0)" name="theButton"/>
+        <gui:button text="I will disable the previous button" small="true" click="hui.ui.get('theButton').setEnabled(false)"/>
+        <gui:button text="Mini button" mini="true"/>
+        <gui:button text="Tiny button" tiny="true"/>
+
+        <h3>Buttons</h3>
+        <gui:buttons>
+          <gui:button text="Buttons"/>
+        </gui:buttons>
+        <gui:buttons align="right">
+          <gui:button text="Right aligned"/>
+        </gui:buttons>
+
+        <h3>Search field</h3>
+        <gui:searchfield expandedWidth="200" placeholder="Placeholder"/>
+
+        <h3>Bar</h3>
+        <gui:bar>
+          <gui:barButton text="Hello" icon="common/info"/>
+          <f:facet name="right">
+            <gui:barButton text="Hello" icon="common/info"/>
+            <gui:searchfield/>
+          </f:facet>
+        </gui:bar>
+        <gui:bar variant="layout">
+          <gui:barButton text="Hello" icon="common/info"/>
+          <gui:button small="true" text="This is the text"/>
+          <gui:searchfield/>
+        </gui:bar>
+
+        <h2>Finder + Object input</h2>
+        <gui:objectInput key="author" name="authorInput">
+          <gui:finder name="authorFinder" url="/service/model/finder?type=Person"/>
+        </gui:objectInput>
+
+        <h3>Checkbox</h3>
+        <gui:checkbox label="My checkbox"/>
+
+        <h3>Drop down</h3>
+        <gui:dropDown items="#{developerComponentTestView.options}" value="3"/>
+
+        <h3>Location input</h3>
+        <gui:locationInput/>
+
+        <h3>Fields / field</h3>
+        <gui:fields>
+          <gui:field label="Label besides">
+            <gui:textInput/>
+          </gui:field>
+        </gui:fields>
+        <gui:fields labels="above">
+          <gui:field label="Label above">
+            <gui:textInput/>
+          </gui:field>
+        </gui:fields>
+
+        <gui:field label="Stand alone field">
+          <gui:textInput/>
+        </gui:field>
+
+        <h3>Fragment</h3>
+        <gui:fragment name="myFragment">This is a fragment</gui:fragment>
+        <gui:button click="hui.ui.get('myFragment').setHTML('New content')" text="Change fragment"/>
+
+        <h3>Pages</h3>
+        <gui:pages name="myPages">
+          <gui:page>
+            Page 1
+          </gui:page>
+          <gui:page>
+            Page 2
+          </gui:page>
+        </gui:pages>
+        <gui:buttons>
+          <gui:button click="hui.ui.get('myPages').previous()" small="true" text="Previous"/>
+          <gui:button click="hui.ui.get('myPages').next()" small="true" text="Next"/>
+        </gui:buttons>
+
+        <h3>Diagram</h3>
+        <gui:diagram/>
+
+      </o:box>
+
+      <window name="objectInputWindow" width="350" xmlns="http://www.in2isoft.dk/in2igui" padding="10">
+        <form name="objectInputFormula">
+          <fields labels="above">
+            <field label="Text">
+              <textInput key="text"/>
+            </field>
+            <field label="Text">
+              <dropDown key="drop" items="#{developerComponentTestView.options}"/>
+            </field>
+            <field label="Author">
+              <objectInput key="author" name="authorInput">
+                <finder name="authorFinder" url="/service/model/finder?type=Person"/>
+              </objectInput>
+            </field>
+          </fields>
+        </form>
+        <buttons align="right">
+          <button text="Change value" name="changeObjectInputFormula"/>
+          <button text="Log" name="logObjectInputFormula"/>
+          <button text="Reset" name="resetObjectInputFormula"/>
+          <button submit="true" highlighted="true" text="Submit"/>
+        </buttons>
+      </window>
+
+    </ui:define>
+  </ui:composition>
+</html>

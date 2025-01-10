@@ -1,0 +1,36 @@
+@forward '../../../core/scss/shared';
+@use "sass:color";
+
+$list-title-color: #0055B5;
+
+$view-background-color: #FFFCEC;
+
+$view-dark-background-color: #F5F2E2;
+$view-dark-dimmed-color: #B3B09D;
+$view-dark-action-color: #A79F89;
+$view-dark-action-color-hover: color.adjust($view-dark-action-color, $lightness: -30%);
+
+
+$view-line-color: #ECE5D5;
+
+$view-text-color: #3A3326;
+
+$view-section-header-color: #B7B09A;
+
+$view-effect-color: #E2DBC5;
+
+$view-action-color: #AD9F76;
+
+$view-action-color-hover: color.adjust($view-action-color, $lightness: -30%);
+
+$view-action-selected-color: #5D583F; //#c88f35; //#D64B21;
+
+$view-action-selected-color-hover: color.adjust($view-action-selected-color, $lightness: -10%);
+
+$view-dimmed-color: #D8D3B8;
+
+$font-serif: 'Merriweather';
+
+$book-font: 'Lora', Georgia, serif;
+$heading-font: 'Playfair Display', 'Lora', Georgia, serif;
+$mono-font: 'Menlo', 'Monaco', 'Courier', monospace;

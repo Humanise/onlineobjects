@@ -1,0 +1,99 @@
+@use 'shared' as *;
+
+.oo_footer {
+  font-family: $default-font-family;
+  text-align: center;
+  margin: 0;
+  padding-top: 20px;
+  color: #666;
+
+
+  &_separator {
+    margin: 0 5px;
+  }
+
+  &_links {
+    font-size: 14px;
+    line-height: 24px;
+    padding: 0 20px;
+
+    strong {
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .oo_link span {
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .oo_link:hover {
+    color: $link-hover-color;
+    span { color: $link-hover-color;}
+  };
+
+  &_logo {
+    text-align: center;
+    margin: 30px 0;
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      cursor: -webkit-grab;
+      outline: none;
+
+    }
+
+    span {
+      font-family: 'OnlineObjects';
+      font-size: 132px;
+      line-height: 1;
+      color: #f0f0f0;
+      text-shadow: 0 0 10px #fff;
+      transition: color 2s, transform 1s;
+      transform-style: preserve-3d;
+      transform-origin: 50% 100%;
+    }
+
+    strong {
+      display: block;
+      text-align: center;
+      font-size: 36px;
+      letter-spacing: 0.5px;
+      margin: 5px 0 0;
+      color: #eee;
+      text-shadow: 0 0 10px #fff;
+      font-weight: 600;
+      transition: color 2s;
+      font-family: $prose-font-family;
+    }
+
+  }
+
+  &:hover &_logo {
+
+    span, strong {
+      color: #ddd;
+    }
+
+    a:hover {
+      span {
+        color: #f36;
+        transition: color 1s, transform 3s;
+        transform: perspective(10px) rotate3d(20, -10, 340, 20deg) scale(0.8);
+      }
+      strong {
+        color: #666;
+      }
+    }
+    a:active span
+    {
+      color: #d03;
+      transition-property: transform, color;
+      transition-duration: 0.1s;
+      transform: rotate3d(20, 0, 340, -5deg);
+    }
+  }
+}
+

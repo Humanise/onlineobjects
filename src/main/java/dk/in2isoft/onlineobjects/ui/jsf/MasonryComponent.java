@@ -15,7 +15,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 
 @FacesComponent(value=MasonryComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_masonry.js" }, css = { "/WEB-INF/core/web/css/oo_masonry.css" }, requires = { OnlineObjectsComponent.class })
+@Dependencies(js = { "/core/js/oo_masonry.js" }, css = { "/core/css/oo_masonry.css" }, requires = { OnlineObjectsComponent.class })
 public class MasonryComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.masonry";

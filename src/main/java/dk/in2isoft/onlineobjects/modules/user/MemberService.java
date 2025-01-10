@@ -637,7 +637,7 @@ public class MemberService {
 
 	private File getAgreement(Locale locale, String key, Date date) {
 		String fileName = key + "-" + org.apache.commons.lang.time.DateFormatUtils.format(date, "yyyy-MM-dd") + "-" + locale.getLanguage() + ".html";
-		File file = configurationService.getFile("WEB-INF","core","agreements", fileName);
+		File file = configurationService.getFile("WEB-INF","agreements", fileName);
 		return file;
 	}
 	

@@ -1,0 +1,38 @@
+@use '../shared' as *;
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  justify-content: center;
+  align-items: center;
+  color: #777;
+
+  &_graphic {
+    @include icon-before('app_knowledge') {
+      font-size: calc(max(12vw,80px));
+    }
+  }
+
+  &_title {
+    font-size: calc(max(3.5vw,24px));
+    font-weight: 500;
+  }
+
+  ul {
+    list-style: none;
+    text-align: center;
+    padding: 0 20px;
+    margin: 20px 0 0;
+    font-weight: 300;
+  }
+
+  li {
+    margin: 5px 0;
+  }
+
+  em {
+    font-weight: 500;
+    font-style: normal;
+  }
+}

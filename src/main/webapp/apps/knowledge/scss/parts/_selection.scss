@@ -1,0 +1,113 @@
+@use '../shared' as *;
+
+.selection {
+  line-height: 20px;
+  font-size: 14px;
+  display: flex;
+  padding-left: 4px;
+
+  @include icon-before('documents_line') {
+    vertical-align: top;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin-right: 7px;
+    opacity: .5;
+    margin-top: 0px;
+    text-align: center;
+    line-height: 20px;
+  }
+
+  &-everything:before {
+    @include icon('documents_line');
+  }
+
+  &-inbox:before {
+    @include icon('inbox_line');
+  }
+
+  &-archive:before {
+    @include icon('archive_line');
+  }
+
+  &-favorite:before {
+    @include icon('star_line');
+  }
+
+  &-any:before {
+    @include icon('documents_line');
+  }
+
+  &-internetaddress:before {
+    @include icon('document_line');
+  }
+
+  &-statement:before {
+    @include icon('quote');
+  }
+
+  &-question:before {
+    @include icon('question');
+  }
+
+  &-hypothesis:before {
+    @include icon('hypothesis');
+  }
+
+  &-tag:before {
+    @include icon('hash');
+  }
+
+  &-word:before {
+    @include icon('word');
+  }
+
+  .hui_selection_item.hui_selected & {
+    &:before {
+      opacity: 1;
+    }
+
+    &-everything:before {
+      @include icon('documents_line_selected');
+    }
+
+    &-inbox:before {
+      @include icon('inbox_line_selected');
+    }
+
+    &-archive:before {
+      @include icon('archive_line_selected');
+    }
+
+    &-favorite:before {
+      @include icon('star_line_selected');
+    }
+
+    &-any:before {
+      @include icon('documents_line_selected');
+    }
+
+    &-internetaddress:before {
+      @include icon('document_line_selected');
+    }
+  }
+
+  &_more {
+    font-size: 14px;
+    align-self: center;
+    margin-left: 4px;
+    color: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity .3s;
+    text-align: center;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  &:hover &_more {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:o="http://www.onlineobjects.com/jsf"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:gui="http://www.in2isoft.dk/in2igui"
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:oc = "http://java.sun.com/jsf/composite/components"
+>
+
+  <ui:composition template="templates/plain.xhtml">
+
+    <ui:define name="body">
+
+      <o:box spacious="true">
+        <o:header level="0" styleClass="oo_space_bottom-3">#{msg.create_account}</o:header>
+        <div class="js-signup-container"></div>
+      </o:box>
+
+      <o:dependency src="oo_signup.js" from="core"/>
+    </ui:define>
+
+  </ui:composition>
+
+</html>

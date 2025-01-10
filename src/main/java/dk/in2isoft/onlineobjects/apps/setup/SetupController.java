@@ -40,6 +40,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserStatisticsQuery;
 import dk.in2isoft.onlineobjects.core.UserStatisticsQuery.UserStatistic;
+import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
@@ -64,27 +65,55 @@ import dk.in2isoft.onlineobjects.modules.scheduling.JobInfo;
 import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 import dk.in2isoft.onlineobjects.modules.surveillance.LogQuery;
 import dk.in2isoft.onlineobjects.modules.surveillance.RequestInfo;
-import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class SetupController extends SetupControllerBase {
+		
+	@Path(exactly = "applications.gui")
+	@View(ui = "applications.gui.xml")
+	public void applications(Request request) {}
 	
-	@Override
-	public void unknownRequest(Request request) throws IOException,EndUserException {
-		if (!securityService.isAdminUser(request.getSession())) {
-			request.redirectFromBase(
-					"/service/authentication/?redirect=/app/setup/&action=" + Actions.authorizationRequired.name());
-		} else {
-			String path = request.getLocalPathAsString();
-			if (path.endsWith("gui") || path.endsWith("/")) {
-				showGui(request);
-			} else {
-				super.unknownRequest(request);
-			}
-		}
-	}
+	@Path(exactly = "images.gui")
+	@View(ui = "images.gui.xml")
+	public void images(Request request) {}
+	
+	@Path(exactly = {})
+	@View(ui = "index.gui.xml")
+	public void index(Request request) {}
+	
+	@Path(exactly = "indices.gui")
+	@View(ui = "indices.gui.xml")
+	public void indices(Request request) {}
+	
+	@Path(exactly = "integration.gui")
+	@View(ui = "integration.gui.xml")
+	public void integration(Request request) {}
+	
+	@Path(exactly = "internetaddresses.gui")
+	@View(ui = "internetaddresses.gui.xml")
+	public void internetaddresses(Request request) {}
+	
+	@Path(exactly = "model.gui")
+	@View(ui = "model.gui.xml")
+	public void model(Request request) {}
+	
+	@Path(exactly = "scheduler.gui")
+	@View(ui = "scheduler.gui.xml")
+	public void scheduler(Request request) {}
+	
+	@Path(exactly = "settings.gui")
+	@View(ui = "settings.gui.xml")
+	public void settings(Request request) {}
+	
+	@Path(exactly = "surveillance.gui")
+	@View(ui = "surveillance.gui.xml")
+	public void surveillance(Request request) {}
+	
+	@Path(exactly = "users.gui")
+	@View(ui = "users.gui.xml")
+	public void users(Request request) {}
 
 	@Path
 	public void flushCache(Request request) throws IOException,EndUserException {

@@ -1,0 +1,56 @@
+@use '../shared' as *;
+
+@include if {
+
+  .reader_list {
+
+    &_top {
+      border-bottom: 1px solid #eee;
+      padding: 0 4px;
+      height: 30px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+    }
+
+    &_middle {
+      position: absolute;
+      top: 31px;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+
+
+
+  /* Actions */
+
+  .reader_bar {
+    display: flex;
+    height: 30px;
+    align-items: center;
+
+    &_item {
+      margin-left: 5px;
+      color: #999;
+      text-decoration: none;
+      font-size: 0;
+      display: inline-block;
+      vertical-align: middle;
+      padding: 0 5px;
+
+      &:hover {
+        color: #000;
+      }
+
+      &_text {
+        line-height: 30px;
+        vertical-align: middle;
+        font-size: 14px;
+        margin-left: 5px;
+      }
+    }
+  }
+
+
+}

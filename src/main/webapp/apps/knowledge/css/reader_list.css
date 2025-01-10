@@ -1,0 +1,113 @@
+/** Item **/
+.reader_list_item {
+  border-bottom: 1px solid #eee;
+  padding: 5px 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.reader_list_item:hover {
+  background: #fafafa;
+}
+
+.reader_list_pending {
+  border-bottom: 1px solid #eee;
+  height: 49px;
+}
+
+.reader_list_title {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #0055B5;
+}
+
+.reader_list_source {
+  margin: 0;
+  font-size: 12px;
+  float: left;
+}
+.reader_list_link {
+  text-decoration: none;
+  color: #999;
+  display: inline-block;
+  line-height: 1;
+  border-bottom: 1px solid #eee;
+}
+.reader_list_link:hover {
+  color: #0055B5;
+  border-bottom-color: #7FA2CA;
+}
+.reader_list_author {
+  text-decoration: none;
+  color: #333;
+  display: inline-block;
+  line-height: 1;
+  border-bottom: 1px solid #eee;
+}
+.reader_list_author:hover {
+  color: #0055B5;
+  border-bottom-color: #7FA2CA;
+}
+.reader_list_words {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+}
+.reader_list_word {
+  display: inline-block;
+  line-height: 1;
+  border-bottom: 1px solid #eee;
+}
+.reader_list_word:hover {
+  color: #0055B5;
+  border-bottom-color: #7FA2CA;
+}
+
+.reader_list_text {
+  font-family: "Merriweather";
+  margin: 5px 0;
+  line-height: 1.2;
+  font-size: 16px;
+}
+.reader_list_text:before {
+  float: right;
+  font-size: 24px;
+  margin-left: 5px;
+  margin-right: -4px;
+  margin-top: -2px;
+  color: #ddd;
+  line-height: 1em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reader_list_quote:before {
+  content: "\e902";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reader_list_question:before {
+  content: "\e903";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reader_list_hypothesis:before {
+  content: "\e901";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+}
+
+.oo_view_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

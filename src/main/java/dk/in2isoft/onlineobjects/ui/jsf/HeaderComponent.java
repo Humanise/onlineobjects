@@ -11,7 +11,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=HeaderComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_header.css"})
+@Dependencies(css={"/core/css/oo_header.css"})
 public class HeaderComponent extends AbstractComponent {
 
 

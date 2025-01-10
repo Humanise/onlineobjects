@@ -62,4 +62,8 @@ public class ClassBuilder {
 	public String toString() {
 		return sb.toString();
 	}
+
+	public ClassBuilder addVariant(String prefix, int size) {
+		return addVariant(prefix, String.valueOf(size));
+	}
 }

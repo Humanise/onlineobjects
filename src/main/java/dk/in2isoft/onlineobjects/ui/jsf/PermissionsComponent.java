@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.model.Entity;
 
 @FacesComponent(value=PermissionsComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_permissions.js" }, requires = { OnlineObjectsComponent.class}, uses = { CheckboxComponent.class })
+@Dependencies(js = { "/core/js/oo_permissions.js" }, requires = { OnlineObjectsComponent.class}, uses = { CheckboxComponent.class })
 public class PermissionsComponent extends AbstractComponent {
 
 

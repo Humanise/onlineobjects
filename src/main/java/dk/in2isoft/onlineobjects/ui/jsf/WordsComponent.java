@@ -16,7 +16,7 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value=WordsComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_words.js" }, css = { "/WEB-INF/core/web/css/oo_words.css" }, requires = { OnlineObjectsComponent.class}, uses = { OverlayComponent.class })
+@Dependencies(js = { "/core/js/oo_words.js" }, css = { "/core/css/oo_words.css" }, requires = { OnlineObjectsComponent.class}, uses = { OverlayComponent.class })
 public class WordsComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.words";

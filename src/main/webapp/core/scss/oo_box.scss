@@ -1,0 +1,37 @@
+@use 'shared' as *;
+
+@include if {
+  .oo_box {
+    border-radius: 3px;
+    background: #fff;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+@include if(( width: 460px )) {
+  .oo_box-narrow {
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    max-width: 460px;
+    border: none;
+  }
+}
+
+@include if(( width: 620px )) {
+  .oo_box-normal {
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    max-width: 600px;
+    border: none;
+  }
+
+  .oo_box-spacious {
+    padding: 40px;
+  }
+}

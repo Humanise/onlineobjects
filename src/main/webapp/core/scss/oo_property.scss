@@ -1,0 +1,14 @@
+@use 'shared' as *;
+
+.oo_property {
+
+  &_label {
+    color: $dimmed-color;
+    font-weight: inherit;
+    display: block;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+}

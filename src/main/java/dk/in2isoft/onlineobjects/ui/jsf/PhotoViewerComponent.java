@@ -12,8 +12,8 @@ import dk.in2isoft.in2igui.jsf.PreloaderComponent;
 
 @FacesComponent(value=PhotoViewerComponent.FAMILY)
 @Dependencies(
-	js = {"/WEB-INF/core/web/js/oo_photoviewer.js"},
-	css = {"/WEB-INF/core/web/css/oo_photoviewer.css"},
+	js = {"/core/js/oo_photoviewer.js"},
+	css = {"/core/css/oo_photoviewer.css"},
 	requires = {OnlineObjectsComponent.class}, 
 	uses = {PreloaderComponent.class}
 )

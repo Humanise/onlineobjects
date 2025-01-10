@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -407,6 +408,10 @@ public class Request implements Operator {
 		return whenNullOrInvalid;
 	}
 
+	public Optional<Boolean> optionalBoolean(String key) {
+		return Optional.ofNullable(getBoolean(key, null));
+	}
+	
 	public String getString(String key, String error) throws IllegalRequestException {
 		String value = request.getParameter(key);
 		if (Strings.isBlank(value)) {
@@ -508,7 +513,7 @@ public class Request implements Operator {
 	public void sendObject(Object value) throws IOException {
 		Gson gson = new Gson();
 		String json = gson.toJson(value);
-		response.setContentType("text/plain");
+		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
 	}
@@ -644,5 +649,13 @@ public class Request implements Operator {
 			return value.contains("text/html");
 		}
 		return false;
+	}
+
+	public void setVariable(String name, Object value) {
+		getRequest().setAttribute(name, value);
+	}
+
+	public void notFound() {
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 }

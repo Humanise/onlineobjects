@@ -11,7 +11,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value = RenderingComponent.FAMILY)
-@Dependencies(css={"/WEB-INF/core/web/css/oo_rendering.css"},requires={OnlineObjectsComponent.class})
+@Dependencies(css={"/core/css/oo_rendering.css"},requires={OnlineObjectsComponent.class})
 public class RenderingComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.rendering";

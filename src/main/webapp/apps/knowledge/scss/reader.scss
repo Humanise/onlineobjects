@@ -1,0 +1,16 @@
+@use 'parts/reader_layout';
+@use 'parts/reader_sidebar';
+@use 'parts/reader_list';
+@use 'parts/reader_selection';
+@use 'parts/reader_meta';
+@use 'parts/reader_head';
+@use 'parts/reader_segmented';
+
+html,body {
+  position:fixed;
+  overflow:hidden;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 0;
+}

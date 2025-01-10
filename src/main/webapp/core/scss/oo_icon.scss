@@ -1,0 +1,26 @@
+@use 'shared' as *;
+
+.oo_icon {
+  font-family: 'OnlineObjects';
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+}
+
+.oo_icon {
+  @each $name, $glyph in $icons {
+    &-#{$name}:before {
+      content: $glyph;
+    }
+  }  
+
+  @each $name in (12,16,20,32,48) {
+    &-#{$name} {
+      font-size: $name * 1px;
+      line-height: $name * 1px;
+      width: $name * 1px;
+      height: $name * 1px;
+    }
+  }  
+
+}

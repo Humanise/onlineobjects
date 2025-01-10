@@ -1,0 +1,23 @@
+@use '../shared' as *;
+
+.hui_foundation_navigation .hui_selection {
+  padding: 5px;
+  font-family: inherit;
+  
+  &_item {
+    border-radius: 5px;
+    padding: 3px 5px;
+    font-family: inherit;
+
+    &.hui_selected,
+    &.hui_selected:hover {
+      background: none;
+      box-shadow: none;
+      color: #36f;
+      font-weight: 600;
+    }
+    &:hover, &.hui_selected:hover {
+      background: #f6f6f6;
+    }
+  }
+}

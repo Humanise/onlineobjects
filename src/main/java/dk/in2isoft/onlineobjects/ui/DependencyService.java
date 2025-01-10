@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class DependencyService {
 	
-	public static final String[] TAIL_PATH = new String[] {"WEB-INF","core","web","js","tail.js"};
+	public static final String[] TAIL_PATH = new String[] {"core","js","tail.js"};
 	private Map<String,String[]> storedScripts = new HashMap<>();
 	private Map<String,String[]> storedStyles = new HashMap<>();
 	private static final Logger log = LogManager.getLogger(DependencyService.class);
@@ -82,17 +82,14 @@ public class DependencyService {
 		w.write(paths, hash);
 	}
 	
-	public static String pathToUrl(String url) {
-		if (url.startsWith("/WEB-INF/core/web/")) {
-			return url.replace("/WEB-INF/core/web/","/core/");
+	public static String pathToUrl(String path) {
+		if (path.startsWith("/apps/")) {
+			return path.replaceFirst("/apps/[^/]+/","/");
 		}
-		if (url.startsWith("/WEB-INF/apps/")) {
-			return url.replaceFirst("/WEB-INF/apps/.*/web/","/");
+		if (path.startsWith("/services/")) {
+			return path.replaceFirst("/services/","/service/");
 		}
-		if (url.startsWith("/WEB-INF/services/")) {
-			return url.replaceFirst("/WEB-INF/services/","/service/").replaceFirst("/web/","/");
-		}
-		return url;
+		return path;
 	}
 	
 	// Wiring...

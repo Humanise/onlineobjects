@@ -1,11 +1,13 @@
 package dk.in2isoft.onlineobjects.modules.dispatch;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +19,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
+import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ApplicationResponder extends AbstractControllerResponder implements Responder, InitializingBean {
@@ -86,8 +89,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 		}
 		if (!controller.handle(request)) {
 			if (path.length > 0) {
-				String[] filePath = new String[] { "apps", application };
-				if (!pushFile((String[]) ArrayUtils.addAll(filePath, path), request.getResponse())) {
+				if (!pushFile(request)) {
 					controller.unknownRequest(request);
 				}
 			} else {
@@ -96,6 +98,21 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 		}
 	}
 	
+	private boolean pushFile(Request request) throws IOException {
+		String[] filePath = new String[] { "apps", request.getApplication() };
+		String[] path = (String[]) ArrayUtils.addAll(filePath, request.getLocalPath());
+		return pushFile(path, request.getResponse());
+	}
+
+	protected boolean pushFile(String[] path, HttpServletResponse response) throws IOException {
+		File file = configurationService.findExistingFile(path);
+		if (file != null) {
+			DispatchingService.pushFile(response, file);
+			return true;
+		}
+		return false;
+	}
+
 	public void setApplicationControllers(List<ApplicationController> controllers) {
 		this.controllers = new HashMap<String,ApplicationController>();
 		for (ApplicationController controller : controllers) {

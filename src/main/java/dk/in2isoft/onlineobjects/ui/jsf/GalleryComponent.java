@@ -23,7 +23,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.ImageContainer;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 @FacesComponent(value = GalleryComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_gallery.js" }, css = { "/WEB-INF/core/web/css/oo_gallery.css" }, requires = { OnlineObjectsComponent.class }, uses = {
+@Dependencies(js = { "/core/js/oo_gallery.js" }, css = { "/core/css/oo_gallery.css" }, requires = { OnlineObjectsComponent.class }, uses = {
 		IconComponent.class, ProgressIndicatorComponent.class })
 public class GalleryComponent extends AbstractComponent {
 
@@ -154,7 +154,7 @@ public class GalleryComponent extends AbstractComponent {
 			if (removable) {
 				out.startSpan("oo_gallery_hover");
 				out.startVoidA("oo_gallery_remove").rel("remove").data(image.getId());
-				out.startSpan("oo_icon oo_icon_16 oo_icon_delete").endSpan();
+				out.startSpan("oo_icon oo_icon-16 oo_icon-delete").endSpan();
 				out.endA();
 				out.endSpan();
 			}

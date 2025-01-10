@@ -34,7 +34,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value = TopBarComponent.FAMILY)
-@Dependencies(js = { "/WEB-INF/core/web/js/oo_topbar.js" }, css = { "/WEB-INF/core/web/css/oo_topbar.css" }, requires = { OnlineObjectsComponent.class, IconComponent.class }, uses = {
+@Dependencies(js = { "/core/js/oo_topbar.js" }, css = { "/core/css/oo_topbar.css" }, requires = { OnlineObjectsComponent.class, IconComponent.class }, uses = {
 		PanelComponent.class, FormComponent.class, TextInputComponent.class, ButtonComponent.class, BoxComponent.class, ListComponent.class, SourceComponent.class, MessageComponent.class, LinkComponent.class, CheckboxComponent.class })
 public class TopBarComponent extends AbstractComponent {
 
@@ -86,7 +86,7 @@ public class TopBarComponent extends AbstractComponent {
 			out.withAttribute("data-logout-url", "/"+request.getLanguage()+"/intro");
 		}
 		out.startA("oo_topbar_logo").withHref(configurationService.getApplicationContext("front", null, request));
-		out.startEm("oo_topbar_logo_icon oo_icon_onlineobjects").endEm();
+		out.startEm("oo_topbar_logo_icon oo_icon-onlineobjects").endEm();
 		out.startSpan("oo_topbar_logo_text").startSpan("oo_topbar_logo_part").text("Online").endSpan().text("Objects").endSpan();
 		out.endA();
 
@@ -141,7 +141,7 @@ public class TopBarComponent extends AbstractComponent {
 				//int count = inboxService.getCountSilently(user);
 				//out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_inbox").withAttribute("data", "inbox").text(count).endA().endLi();
 				out.startLi("oo_topbar_right_item").startVoidA("oo_topbar_item oo_topbar_user").withAttribute("data", "user");
-				out.startSpan().withClass("oo_icon oo_icon_16 oo_icon_user oo_topbar_user_icon").endSpan();
+				out.startSpan().withClass("oo_icon oo_icon-16 oo_icon-user oo_topbar_user_icon").endSpan();
 				out.write(user.getName()).endA().endLi();
 			} catch (EndUserException e) {
 				
