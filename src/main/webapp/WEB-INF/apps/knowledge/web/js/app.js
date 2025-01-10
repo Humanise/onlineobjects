@@ -839,9 +839,9 @@ var appController = window.appController = {
         url: '/app/relate',
         method: 'POST',
         data: {
-          from: question,
+          from: from,
           via: 'answers',
-          to: hypothesis
+          to: to
         },
         $success : resolve
       });
