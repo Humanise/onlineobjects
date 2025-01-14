@@ -543,7 +543,7 @@ var appController = window.appController = {
   _render_relation : function(item, context) {
     var text = item.title || item.text;
     var info = item.url ? item.url.match(/\/\/(www\.)?([^\/]+)/)[2] : undefined;
-    var node = hui.build('div.perspective_relation');
+    var node = hui.build('div.perspective_relation.perspective_relation-' + item.type.toLowerCase());
     node.appendChild(hui.build('div.perspective_relation_type',{text: item.type}));
     node.appendChild(hui.build('div.perspective_relation_title',{text: text}));
     if (info) {
@@ -627,7 +627,7 @@ var appController = window.appController = {
       url: '/app/question/remove/answer',
       parameters: {
         answerId: answer.id,
-        answerType: answer.kind,
+        answerType: answer.type,
         questionId: this._currentItem.id
       },
       $object : this._onQuestion.bind(this)
@@ -830,7 +830,9 @@ var appController = window.appController = {
   $click$addQuestionToHypothesis : function() {
     var hypothesis = this._currentItem;
     this._findQuestion().then(function(question) {
-      this._addQuestionToHypothesis(question, hypothesis).then(this._onHypothesis.bind(this))
+      this._addQuestionToHypothesis(question, hypothesis).then(function(x) {
+        this._loadPerspective(hypothesis);
+      }.bind(this))
     }.bind(this))
   },
   _relate : function(from, via, to) {
@@ -840,7 +842,7 @@ var appController = window.appController = {
         method: 'POST',
         data: {
           from: from,
-          via: 'answers',
+          relation: 'answers',
           to: to
         },
         $success : resolve
@@ -849,7 +851,7 @@ var appController = window.appController = {
     
   },
   _addQuestionToHypothesis : function(question, hypothesis) {
-    return this._relate({id: question.id, type: 'Question'} , 'answers', {id: hypothesis.id, type: 'Hypothesis'})
+    return this._relate({id: question.id, type: 'Question'} , 'answers', {id: hypothesis.id, type: 'Hypothesis'}).then(this._reloadCurrentPerspective.bind(this))
   },
   _removeStatementFromHypothesis : function(statement, relation) {
     this._whileBusy((end) => {

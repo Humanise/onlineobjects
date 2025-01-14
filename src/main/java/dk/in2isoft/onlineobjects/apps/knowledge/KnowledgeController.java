@@ -423,7 +423,18 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path(expression = "/app/relate", method = "POST")
 	public void appRelate(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		RelationRequest object = request.getObject(RelationRequest.class);
-		System.out.println(object.relation);
+		Entity from = get(object.from, request);
+		Entity to = get(object.to, request);
+		if (from instanceof Question && to instanceof Hypothesis && "answers".equals(object.relation)) {
+			knowledgeService.addQuestionToHypothesis((Question)from, (Hypothesis) to, request);
+		} else {
+			throw new IllegalRequestException();
+		}
+	}
+
+	private Entity get(SimpleEntityPerspective persp, Operator operator) throws ModelException {
+		Class<? extends Entity> entityClass = modelService.getEntityClass(persp.getType());
+		return modelService.get(entityClass, persp.getId(), operator);
 	}
 
 	private String getHypothesisRelation(String relation) throws IllegalRequestException {

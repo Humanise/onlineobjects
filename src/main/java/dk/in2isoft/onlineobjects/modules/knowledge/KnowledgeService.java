@@ -592,6 +592,11 @@ public class KnowledgeService {
 		relate(question, hypothesis, operator);
 	}
 
+	public void addQuestionToHypothesis(Question question, Hypothesis hypothesis, Operator operator)
+			throws ModelException, ContentNotFoundException, SecurityException {
+		relate(question, hypothesis, operator);
+	}
+
 	public void addAnswerToQuestion(Long questionId, Long answerId, String answerType, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Class<? extends Entity> answer = modelService.getEntityClass(answerType);
