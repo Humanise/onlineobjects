@@ -191,30 +191,21 @@ var appController = window.appController = {
     if (!this._currentItem) {
       return;
     }
-    this._whileBusy((unBusy) => {
-      hui.ui.request({
-        url: '/app/delete',
-        parameters: {
-          id: this._currentItem.id,
-          type: this._currentItem.type
-        },
-        $success : function() {
-          unBusy();
-          this._changeItem(null)
-          history.back()
-          //history.replaceState(null, document.title, document.location.pathname);
-          // TODO go back + pop history
-          list.refresh();
-          hui.ui.get('wordsSource').refresh();
-          this._reset();
-        }.bind(this),
-        $failure : function() {
-          // TODO: Handle erroe
-          unBusy();
-        }
-      });
-    });
-    
+    this._request({
+      url: '/app/delete',
+      parameters: {
+        id: this._currentItem.id,
+        type: this._currentItem.type
+      }
+    }).then(() => {
+      this._changeItem(null)
+      history.back()
+      //history.replaceState(null, document.title, document.location.pathname);
+      // TODO go back + pop history
+      list.refresh();
+      hui.ui.get('wordsSource').refresh();
+      this._reset();      
+    });    
   },
 
   $click$goBack : function(button) {
@@ -224,30 +215,28 @@ var appController = window.appController = {
     history.forward();
   },
   $valueChanged$favorite : function(value) {
-    hui.ui.request({
+    this._request({
       url: '/app/favorite',
       parameters: {
         id: this._currentItem.id,
         type: this._currentItem.type,
         favorite: value
-      },
-      $success: function() {
-        hui.ui.get('list').refresh();
       }
-    })
+    }).then(() => {
+      list.refresh();
+    });
   },
   $valueChanged$inbox : function(value) {
-    hui.ui.request({
+    this._request({
       url: '/app/inbox',
       parameters: {
         id: this._currentItem.id,
         type: this._currentItem.type,
         inbox: value
-      },
-      $success: function() {
-        hui.ui.get('list').refresh();
       }
-    })
+    }).then(() => {
+      list.refresh();
+    });
   },
 
   // Tags
@@ -266,20 +255,19 @@ var appController = window.appController = {
   },
   
   createTagOnCurrentItem : function(text) {
-    hui.ui.request({
+    this._request({
       url: '/app/tag',
       method: 'POST',
       parameters: {
         text: text,
         type: this._currentItem.type,
         id: this._currentItem.id
-      },
-      $object: function(obj) {
-        this._updatePerspective(obj);
-        hui.ui.get('tagsSource').refresh();
-        list.refresh();
-      }.bind(this)
-    })
+      }
+    }).then((obj) => {
+      this._updatePerspective(obj);
+      hui.ui.get('tagsSource').refresh();
+      list.refresh();
+    });
   },
   _renderTag : function(obj) {
     var item = hui.build('span.relations_item.relations_item-tag', { text: obj.label });
@@ -298,20 +286,19 @@ var appController = window.appController = {
     return item;    
   },
   _removeTag : function(tag) {
-    hui.ui.request({
+    this._request({
       url: '/app/tag/remove',
       method: 'DELETE',
       parameters: {
         tagId: tag.id,
         type: this._currentItem.type,
         id: this._currentItem.id
-      },
-      $object: function(obj) {
-        this._updatePerspective(obj);
-        hui.ui.get('tagsSource').refresh();
-        list.refresh();
-      }.bind(this)
-    })
+      }
+    }).then((obj) => {
+      this._updatePerspective(obj);
+      hui.ui.get('tagsSource').refresh();
+      list.refresh();
+    });
   },
 
   // Words
@@ -323,36 +310,34 @@ var appController = window.appController = {
     this._addWord(e);
   },
   _addWord : function(tag) {
-    hui.ui.request({
+    this._request({
       url: '/app/word',
       method: 'POST',
       parameters: {
         wordId: tag.id,
         type: this._currentItem.type,
         id: this._currentItem.id
-      },
-      $object: function(obj) {
-        this._updatePerspective(obj);
-        hui.ui.get('wordsSource').refresh();
-        list.refresh();
-      }.bind(this)
-    })
+      }
+    }).then((obj) => {
+      this._updatePerspective(obj);
+      hui.ui.get('wordsSource').refresh();
+      list.refresh();
+    });
   },
   _removeWord : function(tag) {
-    hui.ui.request({
+    this._request({
       url: '/app/word',
       method: 'DELETE',
       parameters: {
         wordId: tag.id,
         type: this._currentItem.type,
         id: this._currentItem.id
-      },
-      $object: function(obj) {
-        this._updatePerspective(obj);
-        hui.ui.get('wordsSource').refresh();
-        list.refresh();
-      }.bind(this)
-    })
+      }
+    }).then((obj) => {
+      this._updatePerspective(obj);
+      hui.ui.get('wordsSource').refresh();
+      list.refresh();
+    });
   },
   _renderWord : function(obj) {
     var item = hui.build('span.relations_item.relations_item-word', { text: obj.label });
@@ -515,15 +500,11 @@ var appController = window.appController = {
     });
   },
   _loadPerspective : function(perspective) {
-    return new Promise(function(resolve, reject) {
-      hui.ui.request({
-        url: '/app/' + perspective.type.toLowerCase(),
-        parameters: {
-          id: perspective.id
-        },
-        $object : resolve,
-        $failure : reject
-      })
+    return this._request({
+      url: '/app/' + perspective.type.toLowerCase(),
+      parameters: {
+        id: perspective.id
+      }
     });
   },
   _viewNewItem : function(item) {
@@ -566,25 +547,21 @@ var appController = window.appController = {
   // Question
 
   _createQuestion : function(text) {
-    return new Promise(function(resolve, reject) {
-      hui.ui.request({
-        url: '/app/question/create',
-        parameters: { text: text },
-        $object : resolve, $failure : reject
-      });
+    return this._request({
+      url: '/app/question/create',
+      parameters: { text: text }
     });
   },
   _updateQuestion : function(text) {
-    hui.ui.request({
+    this._request({
       url: '/app/question/update',
       parameters: {
         id: this._currentItem.id,
         text: text
-      },
-      $object : function(obj) {
-        this._onQuestion(obj);
-        list.refresh();
-      }.bind(this)
+      }
+    }).then((obj) => {
+      this._onQuestion(obj);
+      list.refresh();
     });
   },
   _onQuestion : function(data) {
@@ -608,30 +585,28 @@ var appController = window.appController = {
     this._addAnswerToQuestion(answer)
   },
   _addAnswerToQuestion : function(statement) {
-    hui.ui.request({
+    this._request({
       url: '/app/question/add/answer',
       parameters: {
         answerId: statement.id,
         answerType: statement.kind,
         questionId: this._currentItem.id
-      },
-      $object : this._onQuestion.bind(this)
-    })
+      }
+    }).then(this._onQuestion.bind(this));
   },
   $select$statementFinder : function(statement) {
     hui.ui.get('statementFinder').hide();
     this.statementFinderHandler(statement);
   },
   _removeAnswerFromQuestion : function(answer) {
-    hui.ui.request({
+    this._request({
       url: '/app/question/remove/answer',
       parameters: {
         answerId: answer.id,
         answerType: answer.type,
         questionId: this._currentItem.id
-      },
-      $object : this._onQuestion.bind(this)
-    })
+      }
+    }).then(this._onQuestion.bind(this));
   },
 
   $render$questionWords : function(obj) {
@@ -644,26 +619,21 @@ var appController = window.appController = {
   // Statement
 
   _createStatement : function(text) {
-    return new Promise(function(resolve, reject) {
-      hui.ui.request({
-        url: '/app/statement/create',
-        parameters: { text: text },
-        $object : resolve,
-        $failure: reject
-      })
+    return this._request({
+      url: '/app/statement/create',
+      parameters: { text: text }
     })
   },
   _updateStatement : function(text) {
-    hui.ui.request({
+    this._request({
       url: '/app/statement/update',
       parameters: {
         id: this._currentItem.id,
         text: text
-      },
-      $object : function(obj) {
-        this._onStatement(obj);
-        list.refresh();
-      }.bind(this)
+      }
+    }).then((obj) => {
+      this._onStatement(obj);
+      list.refresh();
     });
   },
   _onStatement : function(data) {
@@ -705,10 +675,13 @@ var appController = window.appController = {
 
 
   $click$addQuestionToStatement : function() {
-    hui.ui.get('questionFinder').show();
+    var statement = this._currentItem;
+    this._findQuestion().then((question) => {
+      this._addQuestionToStatement(question, statement);
+    })
   },
 
-  _findQuestion : function(then) {
+  _findQuestion : function() {
     hui.ui.get('questionFinder').show();
     var self = this;
     return new Promise(function(resolve) {
@@ -720,30 +693,27 @@ var appController = window.appController = {
 
   $select$questionFinder : function(obj) {
     hui.ui.get('questionFinder').hide();
-    //this._addQuestionToStatement(obj.id);
     if (this._onFindQuestion) {
       this._onFindQuestion(obj)
     }
   },
-  _addQuestionToStatement : function(id) {
-    hui.ui.request({
+  _addQuestionToStatement : function(question, statement) {
+    this._request({
       url: '/app/statement/add/question',
       parameters: {
-        statementId: this._currentItem.id,
-        questionId: id
-      },
-      $object : this._onStatement.bind(this)
-    })
+        statementId: statement.id,
+        questionId: question.id
+      }
+    }).then(this._onStatement.bind(this));
   },
   _removeQuestionFromStatement : function(question) {
-    hui.ui.request({ 
+    this._request({ 
       url: '/app/statement/remove/question',
       parameters: {
         statementId: this._currentItem.id,
         questionId: question.id
-      },
-      $object : this._onStatement.bind(this)
-    });
+      }
+    }).then(this._onStatement.bind(this));
   },
   $render$statementWords : function(obj) {
     return this._renderWord(obj);
@@ -755,29 +725,22 @@ var appController = window.appController = {
   // Hypothesis
 
   _createHypothesis : function(text) {
-    return new Promise(function(resolve, reject) {
-      hui.ui.request({
-        url: '/app/hypothesis/create',
-        parameters: { text: text },
-        $object : resolve, $failure : reject
-      });
+    return this._request({
+      url: '/app/hypothesis/create',
+      parameters: { text: text }
     });
   },
   _updateHypothesis : function(text) {
-    this._whileBusy((end) => {
-      hui.ui.request({
-        url: '/app/hypothesis/update',
-        parameters: {
-          id: this._currentItem.id,
-          text: text
-        },
-        $object : function(obj) {
-          this._onHypothesis(obj);
-          list.refresh();
-        }.bind(this),
-        $finally : end
-      });
-    });
+    this._request({
+      url: '/app/hypothesis/update',
+      parameters: {
+        id: this._currentItem.id,
+        text: text
+      }
+    }).then(function(obj) {
+      this._onHypothesis(obj);
+      list.refresh();
+    }.bind(this));
   },
   _onHypothesis : function(data) {
     this._changeItem(data);
@@ -829,70 +792,65 @@ var appController = window.appController = {
   },
   $click$addQuestionToHypothesis : function() {
     var hypothesis = this._currentItem;
-    this._findQuestion().then(function(question) {
-      this._addQuestionToHypothesis(question, hypothesis).then(function(x) {
+    this._findQuestion().then((question) => {
+      this._addQuestionToHypothesis(question, hypothesis).then(() => {
         this._loadPerspective(hypothesis);
-      }.bind(this))
-    }.bind(this))
+      })
+    })
   },
   _relate : function(from, via, to) {
-    return new Promise(function(resolve) {
-      hui.ui.request({
-        url: '/app/relate',
-        method: 'POST',
-        data: {
-          from: from,
-          relation: 'answers',
-          to: to
-        },
-        $success : resolve
-      });
+    return this._request({
+      url: '/app/relate',
+      data: {
+        from: from,
+        relation: 'answers',
+        to: to
+      }
     });
-    
   },
   _addQuestionToHypothesis : function(question, hypothesis) {
     return this._relate({id: question.id, type: 'Question'} , 'answers', {id: hypothesis.id, type: 'Hypothesis'}).then(this._reloadCurrentPerspective.bind(this))
   },
-  _removeStatementFromHypothesis : function(statement, relation) {
-    this._whileBusy((end) => {
-      hui.ui.request({ 
-        url: '/app/hypothesis/remove/statement',
-        parameters: {
-          hypothesisId: this._currentItem.id,
-          statementId: statement.id,
-          relation: relation
-        },
-        $object: this._onHypothesis.bind(this),
-        $finally: end
-      });
+  _request : function(p) {
+    return new Promise((resolve, reject) => {
+      this._whileBusy((end) => {
+        var o = hui.override({}, p);
+        if (!o.method) o.method = 'POST';
+        o.$object = resolve;
+        o.$failure = reject;
+        o.$finally = end;
+        hui.ui.request(o);
+      });    
     });
+  },
+  _removeStatementFromHypothesis : function(statement, relation) {
+    this._request({
+      url: '/app/hypothesis/remove/statement',
+      parameters: {
+        hypothesisId: this._currentItem.id,
+        statementId: statement.id,
+        relation: relation
+      }      
+    }).then(this._onHypothesis.bind(this));
   },
   _removeQuestionFromHypothesis : function(question) {
-    this._whileBusy((end) => {
-      hui.ui.request({ 
-        url: '/app/hypothesis/remove/question',
-        parameters: {
-          hypothesisId: this._currentItem.id,
-          questionId: question.id
-        },
-        $object: this._onHypothesis.bind(this),
-        $finally: end
-      });
-    });
+    this._request({ 
+      url: '/app/hypothesis/remove/question',
+      parameters: {
+        hypothesisId: this._currentItem.id,
+        questionId: question.id
+      }
+    }).then(this._onHypothesis.bind(this));
   },
   _addStatementToHypothesis : function(statement, relation) {
-    this._whileBusy((end) => {
-      hui.ui.request({ 
-        url: '/app/hypothesis/add/statement',
-        parameters: {
-          hypothesisId: this._currentItem.id,
-          statementId: statement.id,
-          relation: relation
-        },
-        $object: this._onHypothesis.bind(this),
-        $finally: end
-      });
-    });
+    this._request({ 
+      url: '/app/hypothesis/add/statement',
+      parameters: {
+        hypothesisId: this._currentItem.id,
+        statementId: statement.id,
+        relation: relation
+      }
+    }).then(this._onHypothesis.bind(this));
   },
   $render$hypothesisWords : function(obj) {
     return this._renderWord(obj);
@@ -911,26 +869,21 @@ var appController = window.appController = {
   // Address
 
   _loadAddress : function(address) {
-    console.log(address);
     foundation.setBusyMain(true);
-    hui.ui.request({
+    this._request({
       url: '/app/internetaddress',
       parameters: {
         id: address.id
-      },
-      $object : function(obj) {
-        this._onInternetAddress(obj);
-        foundation.setBusyMain(false);
-      }.bind(this)
-    })
+      }
+    }).then((obj) => {
+      this._onInternetAddress(obj);
+      foundation.setBusyMain(false);      
+    });
   },
   _createAddress : function(url) {
-    return new Promise(function(resolve, reject) {
-      hui.ui.request({
-        url: '/app/internetaddress/create',
-        parameters: { url: url },
-        $object : resolve, $failure : reject
-      })
+    return this._request({
+      url: '/app/internetaddress/create',
+      parameters: { url: url }      
     });
   },
   _onInternetAddress : function(data) {
@@ -964,16 +917,12 @@ var appController = window.appController = {
     hui.find('.js-internetaddress-formatted').innerHTML = html;
   },
   createStatementOnAddress : function(text) {
-    this._whileBusy((unBusy) => {
-      hui.ui.request({
-        url: '/app/internetaddress/create/statement',
-        parameters: { id: this._currentItem.id, text: text },
-        $object : function(obj) {
-          this._onInternetAddress(obj);
-          list.refresh();
-        }.bind(this),
-        $finally : unBusy
-      });      
+    this._request({
+      url: '/app/internetaddress/create/statement',
+      parameters: { id: this._currentItem.id, text: text }
+    }).then((obj) => {
+      this._onInternetAddress(obj);
+      list.refresh();
     });
   },
   $render$internetaddressWords : function(obj) {

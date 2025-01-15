@@ -100,22 +100,32 @@
 
   &_relation {
     font-family: 'Lora', Georgia, serif;
-    padding: 5px 10px;
-    padding-right: 30px;
+    padding: 5px 30px;
     border-radius: 5px;
     cursor: pointer;
     position: relative;
     line-height: 18px;
 
+    &:before {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 16px;
+      color: $light-color;
+      line-height: 1;
+    }
+
     &-statement {
-      @include icon-before(quote) {
-        position: absolute;
-        top: 7px;
-        left: -16px;
-        font-size: 16px;
-        color: $light-color;
-        line-height: 1;
-      };
+      @include icon-before(quote);
+    }
+    &-question {
+      @include icon-before(question);
+    }
+    &-hypothesis {
+      @include icon-before(hypothesis);
+    }
+    &-internetaddress {
+      @include icon-before(document_line);
     }
 
     &_type {

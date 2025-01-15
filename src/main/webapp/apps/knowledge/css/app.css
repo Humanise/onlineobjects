@@ -450,12 +450,19 @@
 }
 .perspective_relation {
   font-family: "Lora", Georgia, serif;
-  padding: 5px 10px;
-  padding-right: 30px;
+  padding: 5px 30px;
   border-radius: 5px;
   cursor: pointer;
   position: relative;
   line-height: 18px;
+}
+.perspective_relation:before {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 16px;
+  color: #999;
+  line-height: 1;
 }
 .perspective_relation-statement:before {
   content: "\e902";
@@ -465,12 +472,33 @@
   -webkit-font-smoothing: antialiased;
   line-height: 1;
   font-weight: normal;
-  position: absolute;
-  top: 7px;
-  left: -16px;
-  font-size: 16px;
-  color: #999;
+}
+.perspective_relation-question:before {
+  content: "\e903";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
   line-height: 1;
+  font-weight: normal;
+}
+.perspective_relation-hypothesis:before {
+  content: "\e901";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1;
+  font-weight: normal;
+}
+.perspective_relation-internetaddress:before {
+  content: "\e604";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1;
+  font-weight: normal;
 }
 .perspective_relation_type {
   font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
