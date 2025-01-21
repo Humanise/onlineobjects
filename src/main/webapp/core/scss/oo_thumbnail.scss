@@ -1,4 +1,5 @@
-.oo_thumbnail {
+.oo_thumbnail
+{
   font-size: 0;
   overflow: hidden;
   display: inline-block;
@@ -6,40 +7,47 @@
   background: no-repeat scroll center center;
 }
 
-.oo_thumbnail_frame {
+.oo_thumbnail_frame
+{
   padding: 4px;
   border: 1px solid #ddd;
-  border-color: #EEEEEE #DDDDDD #CCCCCC;
+  border-color:#EEEEEE #DDDDDD #CCCCCC;
 }
 
-.oo_thumbnail a {
+.oo_thumbnail a
+{
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.oo_thumbnail a:focus {
+.oo_thumbnail a:focus
+{
   margin: -3px;
   border: 3px solid #79f;
   outline: none;
 }
 
-.oo_thumbnail img {
+.oo_thumbnail img
+{
   border: none;
 }
 
-.oo_thumbnail_video {
+.oo_thumbnail_video
+{
   background-color: #eee;
 }
 
-.oo_thumbnail_user {
+.oo_thumbnail_user
+{
   background-color: #eee;
-  background-image: url("../gfx/user.svg");
+  background-image: url('../gfx/user.svg');
   border-radius: 50%;
   background-size: contain;
 }
 
-.oo_thumbnail_zoom img {
+.oo_thumbnail_zoom img
+{
   cursor: pointer;
   cursor: -webkit-zoom-in;
 }

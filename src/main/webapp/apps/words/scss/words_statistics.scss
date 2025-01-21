@@ -1,4 +1,5 @@
-div.words_statistics h3 {
+div.words_statistics h3
+{
   font-weight: normal;
   border-bottom: 1px solid #ddd;
   line-height: 30px;
@@ -6,7 +7,8 @@ div.words_statistics h3 {
   margin: 20px -5px 10px;
 }
 
-span.words_statistics_count {
+span.words_statistics_count
+{
   color: #ccc;
   position: relative;
   top: -2px;
@@ -14,7 +16,8 @@ span.words_statistics_count {
   margin-left: 5px;
 }
 
-span.words_statistics_count strong {
+span.words_statistics_count strong
+{
   margin: 0 3px;
   font-weight: normal;
   color: #333;
@@ -25,17 +28,20 @@ span.words_statistics_count strong {
   letter-spacing: 1px;
 }
 
-div.words_statistics ul {
+div.words_statistics ul
+{
   color: #eee;
   padding: 0px 0 10px 20px;
   margin: 0;
 }
 
-div.words_statistics li {
+div.words_statistics li
+{
   margin: 0 0 5px;
 }
 
-div.words_statistics ul span.words_statistics_count {
+div.words_statistics ul span.words_statistics_count
+{
   font-size: 12pt;
   position: relative;
   top: -1px;

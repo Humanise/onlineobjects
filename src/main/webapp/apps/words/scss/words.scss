@@ -1,15 +1,22 @@
-div.words {
+div.words
+{
   padding: 18px 30px 40px;
 }
 
 @media screen and (max-width: 600px) {
-  div.words {
+  div.words
+  {
     padding: 10px;
   }
 }
+
+
+
 /**************** Titles **************/
+
 .words_title,
-h1.words {
+h1.words
+{
   margin: 0;
   font-weight: normal;
   font-size: 48px;
@@ -17,11 +24,13 @@ h1.words {
 }
 
 .words_title span,
-h1.words span {
+h1.words span
+{
   color: #aaa;
 }
 
-h2.words {
+h2.words
+{
   font-weight: normal;
   font-size: 24px;
   margin: 20px 0 0;
@@ -29,32 +38,47 @@ h2.words {
 
 @media screen and (max-width: 600px) {
   .words_title,
-  h1.words {
+  h1.words
+  {
     font-size: 2em;
   }
 }
+
 /*********** index *********/
+
+
+
+
+
+
+
+
 /*************** panel ****************/
-div.panel_body {
+
+div.panel_body
+{
   font-size: 12px;
   padding: 5px;
   font-family: Georgia;
 }
 
-div.panel_body h2 {
+div.panel_body h2
+{
   margin: 0 0 10px;
   font-weight: normal;
   font-style: italic;
   color: #666;
 }
 
-div.panel_body ul.selection {
+div.panel_body ul.selection
+{
   list-style: none;
   margin: 0 -4px -4px;
   padding: 0;
 }
 
-div.panel_body ul.selection a {
+div.panel_body ul.selection a
+{
   display: block;
   padding: 4px 6px 4px 26px;
   border: 1px solid transparent;
@@ -65,14 +89,16 @@ div.panel_body ul.selection a {
   text-indent: -20px;
 }
 
-div.panel_body ul.selection a strong {
+div.panel_body ul.selection a strong
+{
   color: #000;
   font-size: 14px;
   margin-right: 3px;
 }
 
-div.panel_body ul.selection a:hover {
+div.panel_body ul.selection a:hover
+{
   border: 1px solid #eee;
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#f6f6f6));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100% , from(#fff), to(#f6f6f6));
   background: -moz-linear-gradient(top, #fff, #f6f6f6);
 }

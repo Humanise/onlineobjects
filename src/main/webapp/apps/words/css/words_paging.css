@@ -1,82 +1,73 @@
-.words_paging
-{
-	color: #ddd;
-	font-size: 0;
-	cursor: default;
+@charset "UTF-8";
+.words_paging {
+  color: #ddd;
+  font-size: 0;
+  cursor: default;
 }
 
-.words_paging em
-{
-	font-style: normal;
-	font-size: 12pt;
-	margin: 0 3px;
+.words_paging em {
+  font-style: normal;
+  font-size: 12pt;
+  margin: 0 3px;
 }
 
-.words_paging a
-{
-	display: inline-block;
-	color: #666;
-	padding: 0 5px;
-	display: inline-block;
-	height: 25px;
-	line-height: 25px;
-	border-radius: 3px;
-	font-size: 14pt;
-	min-width: 14px;
-	text-align: center;
+.words_paging a {
+  display: inline-block;
+  color: #666;
+  padding: 0 5px;
+  display: inline-block;
+  height: 25px;
+  line-height: 25px;
+  border-radius: 3px;
+  font-size: 14pt;
+  min-width: 14px;
+  text-align: center;
   text-decoration: none;
 }
 
-.words_paging a:hover
-{
-	color: #08C;
-	border-radius: 3px;
-	background: #eee;
+.words_paging a:hover {
+  color: #08C;
+  border-radius: 3px;
+  background: #eee;
 }
 
-.words_paging a:active
-{
-	outline: none;
+.words_paging a:active {
+  outline: none;
 }
 
-.words_paging a:active
-{
-	background: #ddd;
+.words_paging a:active {
+  background: #ddd;
 }
 
-.words_paging a.words_paging_selected
-{
-	color: #fff;
-	background: #333;
+.words_paging a.words_paging_selected {
+  color: #fff;
+  background: #333;
   position: relative;
   z-index: 1;
 }
 
-.words_paging a.words_paging_selected_default
-{
-	color: #000;
-	background: #f6f6f6;
-	border: 1px solid #ddd;
+.words_paging a.words_paging_selected_default {
+  color: #000;
+  background: #f6f6f6;
+  border: 1px solid #ddd;
 }
 
-.words_paging a.words_paging_selected:active
-{
-	outline: none;
+.words_paging a.words_paging_selected:active {
+  outline: none;
 }
 
-.words_paging a.words_paging_selected:active
-{
-	background: #eee;
-	border: 1px solid #ddd;
-	outline: none;
+.words_paging a.words_paging_selected:active {
+  background: #eee;
+  border: 1px solid #ddd;
+  outline: none;
 }
 
 .words_paging_previous > span:before {
-	margin-right: 3px;
-	content: '«';
+  margin-right: 3px;
+  content: "«";
 }
 
 .words_paging_next > span:after {
-	margin-left: 3px;
-	content: '»';
+  margin-left: 3px;
+  content: "»";
 }
