@@ -26,6 +26,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.iptc.IptcDirectory;
 import com.google.common.collect.Sets;
@@ -166,6 +167,9 @@ public class ImageService extends AbstractCommandLineInterface {
 		return getMetaData(getImageFile(image));
 	}
 	
+	public void get() {
+	}
+	
 	public ImageMetaData getMetaData(File file) {
 		ImageMetaData imageMetaData = new ImageMetaData();
 		try {
@@ -175,6 +179,14 @@ public class ImageService extends AbstractCommandLineInterface {
 			Directory exifDirectory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 			Directory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
 			Directory iptcDirectory = metadata.getFirstDirectoryOfType(IptcDirectory.class);
+			
+
+			ExifSubIFDDirectory exifSubIFD = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+			if (exifSubIFD != null) {
+				Date date = exifSubIFD.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);				
+				//ExifSubIFDDescriptor descriptor = new ExifSubIFDDescriptor(exifSubIFD);
+				imageMetaData.setOriginalDateTime(date);
+			}
 			
 			if (exifDirectory!=null) {
 				if (exifDirectory.containsTag(ExifIFD0Directory.TAG_DATETIME)) {
@@ -291,18 +303,21 @@ public class ImageService extends AbstractCommandLineInterface {
 		File file = getImageFile(image);
 		ImageMetaData metaData = getMetaData(file);
 		boolean modified = false;
-		Date taken = image.getPropertyDateValue(Property.KEY_PHOTO_TAKEN);
-		if (taken==null) {
-			image.overrideFirstProperty(Property.KEY_PHOTO_TAKEN, metaData.getDateTime());
+		Date taken = metaData.getOriginalDateTime();
+		if (taken == null) {
+			taken = metaData.getDateTime();
+		}
+		if (taken == null) {
+			image.overrideFirstProperty(Property.KEY_PHOTO_TAKEN, taken);
 			modified = true;
 		}
 		String make = image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MAKE);
-		if (make==null) {
+		if (make == null) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_CAMERA_MAKE, metaData.getCameraMake());
 			modified = true;
 		}
 		String model = image.getPropertyValue(Property.KEY_PHOTO_CAMERA_MODEL);
-		if (model==null) {
+		if (model == null) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_CAMERA_MODEL, metaData.getCameraModel());
 			modified = true;
 		}
@@ -310,15 +325,15 @@ public class ImageService extends AbstractCommandLineInterface {
 			image.overrideProperties(Property.KEY_COMMON_TAG, Arrays.asList(metaData.getKeywords()));
 			modified = true;
 		}
-		if (metaData.getObjectName()!=null) {
+		if (metaData.getObjectName() != null) {
 			image.setName(metaData.getObjectName());
 			modified = true;
 		}
-		if (metaData.getCaption()!=null) {
+		if (metaData.getCaption() != null) {
 			image.overrideFirstProperty(Image.PROPERTY_DESCRIPTION, metaData.getCaption());
 			modified = true;
 		}
-		if (metaData.getRotation()!=null) {
+		if (metaData.getRotation() != null) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_ROTATION, metaData.getRotation().doubleValue());
 			modified = true;
 		}
@@ -339,9 +354,9 @@ public class ImageService extends AbstractCommandLineInterface {
 		if (modified) {
 			modelService.update(image, priviledged);
 		}
-		if (metaData.getLatitude()!=null && metaData.getLongitude()!=null) {
+		if (metaData.getLatitude() != null && metaData.getLongitude() != null) {
 			Location location = modelService.getParent(image, Location.class, priviledged);
-			if (location==null) {
+			if (location == null) {
 				location = new Location();
 				location.setLatitude(metaData.getLatitude());
 				location.setLongitude(metaData.getLongitude());

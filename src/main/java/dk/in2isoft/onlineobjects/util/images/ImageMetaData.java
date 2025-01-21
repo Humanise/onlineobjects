@@ -7,6 +7,7 @@ public class ImageMetaData {
 	private String caption;
 	private String[] keywords;
 	private Date dateTime;
+	private Date originalDateTime;
 	private String cameraMake;
 	private String cameraModel;
 	private Double latitude;
@@ -111,5 +112,12 @@ public class ImageMetaData {
 	public void setFlippedHorizontally(Boolean flippedHorizontally) {
 		this.flippedHorizontally = flippedHorizontally;
 	}
-	
+
+	public Date getOriginalDateTime() {
+		return originalDateTime;
+	}
+
+	public void setOriginalDateTime(Date originalDateTime) {
+		this.originalDateTime = originalDateTime;
+	}
 }

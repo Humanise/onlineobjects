@@ -37,9 +37,6 @@
 				<exclude name="node_modules/"/>
 			</fileset>
 		</copy>
-		<copy todir="${dest}/OnlineObjects/onlineobjects/jsf">
-			<fileset dir="${basedir}/src/main/webapp/jsf" />
-		</copy>
 		<copy todir="${dest}/OnlineObjects/onlineobjects/resources">
 			<fileset dir="${basedir}/src/main/webapp/resources" />
 		</copy>
