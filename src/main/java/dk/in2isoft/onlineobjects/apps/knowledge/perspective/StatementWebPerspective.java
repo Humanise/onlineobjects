@@ -15,6 +15,8 @@ public class StatementWebPerspective implements KnowledgeWebPerspective, Categor
 	private boolean favorite;
 	private List<QuestionWebPerspective> questions;
 	private List<InternetAddressViewPerspective> addresses;
+	private List<HypothesisWebPerspective> supports;
+	private List<HypothesisWebPerspective> contradicts;
 	private SuggestionsCategory questionSuggestions;
 	private String type = Statement.class.getSimpleName();
 	private List<Option> words;
@@ -101,5 +103,21 @@ public class StatementWebPerspective implements KnowledgeWebPerspective, Categor
 		p.setId(answer.getId());
 		p.setText(answer.getText());
 		return p;
+	}
+
+	public List<HypothesisWebPerspective> getSupports() {
+		return supports;
+	}
+
+	public void setSupports(List<HypothesisWebPerspective> supports) {
+		this.supports = supports;
+	}
+
+	public List<HypothesisWebPerspective> getContradicts() {
+		return contradicts;
+	}
+
+	public void setContradicts(List<HypothesisWebPerspective> contradicts) {
+		this.contradicts = contradicts;
 	}
 }

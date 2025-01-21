@@ -427,6 +427,37 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		Entity to = get(object.to, request);
 		if (from instanceof Question && to instanceof Hypothesis && "answers".equals(object.relation)) {
 			knowledgeService.addQuestionToHypothesis((Question)from, (Hypothesis) to, request);
+		} else if (from instanceof Statement && to instanceof Hypothesis && Relation.SUPPORTS.equals(object.relation)) {
+			var found = modelService.find().relations(request).from(from).to(to).withKind(Relation.SUPPORTS).first();
+			if (found.isEmpty()) {
+				modelService.createRelation(from, to, Relation.SUPPORTS, request);
+			}
+		} else if (from instanceof Statement && to instanceof Hypothesis && Relation.CONTRADTICS.equals(object.relation)) {
+			var found = modelService.find().relations(request).from(from).to(to).withKind(Relation.CONTRADTICS).first();
+			if (found.isEmpty()) {
+				modelService.createRelation(from, to, Relation.CONTRADTICS, request);
+			}
+		} else {
+			throw new IllegalRequestException();
+		}
+	}
+
+	@Path(expression = "/app/relation", method = "DELETE")
+	public void deleteRelation(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+		RelationRequest object = request.getObject(RelationRequest.class);
+		Entity from = get(object.from, request);
+		Entity to = get(object.to, request);
+		if (from instanceof Statement && to instanceof Hypothesis && Relation.SUPPORTS.equals(object.relation)) {
+			var found = modelService.find().relations(request).from(from).to(to).withKind(Relation.SUPPORTS).first();
+			if (found.isPresent()) {
+				modelService.delete(found.get(), request);
+			}
+		}
+		else if (from instanceof Statement && to instanceof Hypothesis && Relation.CONTRADTICS.equals(object.relation)) {
+			var found = modelService.find().relations(request).from(from).to(to).withKind(Relation.CONTRADTICS).first();
+			if (found.isPresent()) {
+				modelService.delete(found.get(), request);
+			}
 		} else {
 			throw new IllegalRequestException();
 		}

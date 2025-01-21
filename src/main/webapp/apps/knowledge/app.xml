@@ -219,6 +219,27 @@
               <div class="perspective_actions">
                 <button name="addQuestionToStatement" text="Add question"/>
               </div>
+
+              <div class="perspective_heading">Supports</div>
+              <collection name="statementSupports">
+                <empty>
+                  <div class="perspective_relation_message">Nothing yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addSupportToStatement" text="Add supporting"/>
+              </div>
+
+              <div class="perspective_heading">Contradicts</div>
+              <collection name="statementContradicts">
+                <empty>
+                  <div class="perspective_relation_message">Nothing yet</div>
+                </empty>
+              </collection>
+              <div class="perspective_actions">
+                <button name="addContradictsToStatement" text="Add contradicting"/>
+              </div>
+
               <fragment name="statementSuggestionsFragment" visible="false">
                 <div class="perspective_heading">Suggested questions</div>
                 <collection name="statementSuggestions"/>

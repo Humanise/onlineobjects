@@ -641,6 +641,8 @@ var appController = window.appController = {
     hui.dom.setText(hui.find('#statementTitleText'), data.text);
     hui.ui.get('statementQuestions').setData(data.questions);
     hui.ui.get('statementAddresses').setData(data.addresses);
+    hui.ui.get('statementContradicts').setData(data.contradicts);
+    hui.ui.get('statementSupports').setData(data.supports);
     hui.ui.get('statementWords').setData(data.words);
     hui.ui.get('statementTags').setData(data.tags);
     if (data.questionSuggestions && data.questionSuggestions.suggestions && data.questionSuggestions.suggestions.length) {
@@ -653,8 +655,63 @@ var appController = window.appController = {
   $render$statementQuestions : function(obj) {
     return this._render_relation(obj, {$remove: this._removeQuestionFromStatement.bind(this)});
   },
+
+
+  // Statement : Contradicts
+
+  $render$statementContradicts : function(obj) {
+    return this._render_relation(obj, {$remove: (o) => this._removeStatementRelation('information.contradicts', o)});
+  },
+  $select$statementContradicts : function(e) {
+    this.show(e.data);
+  },
+
+  $click$addContradictsToStatement : function() {
+    var statement = this._currentItem;
+    this._findHypothesis().then((hypothesis) => {
+      this._relate(statement, 'information.contradicts', {type: 'Hypothesis', id: hypothesis.id}).then(() => {
+        this._reloadCurrentPerspective();
+      });
+    })
+  },
+
+  // Statement : Supports
+
+  $click$addSupportToStatement : function() {
+    var statement = this._currentItem;
+    this._findHypothesis().then((hypothesis) => {
+      this._relate(statement, 'information.supports', {type: 'Hypothesis', id: hypothesis.id}).then(() => {
+        this._reloadCurrentPerspective();
+      });
+    })
+  },
+
+  $render$statementSupports : function(obj) {
+    return this._render_relation(obj, {$remove: (o) => this._removeStatementRelation('information.supports', o)})
+  },
+  _removeStatementRelation : function(relation, obj) {
+    this._removeRelation(this._currentItem, relation, obj).then(() => {
+      this._reloadCurrentPerspective();
+    });
+  },
+
+  $select$statementSupports : function(e) {
+    this.show(e.data);
+  },
+
   $select$statementQuestions : function(e) {
     this.show(e.data);
+  },
+  _removeRelation : function(from, relation, to) {
+    return this._request({
+      url: '/app/relation',
+      method: 'delete',
+      data: {
+        from: {id: from.id, type: from.type},
+        relation: relation,
+        to: {id: to.id, type: to.type}
+      }
+    });
   },
 
   $render$statementAddresses : function(obj) {
@@ -697,6 +754,23 @@ var appController = window.appController = {
       this._onFindQuestion(obj)
     }
   },
+
+  _findHypothesis : function() {
+    hui.ui.get('hypothesisFinder').show();
+    var self = this;
+    return new Promise(function(resolve) {
+      self._onFindHypothesis = function(q) {
+        resolve(q);
+      };
+    });
+  },
+  $select$hypothesisFinder : function(obj) {
+    hui.ui.get('hypothesisFinder').hide();
+    if (this._onFindHypothesis) {
+      this._onFindHypothesis(obj)
+    }
+  },
+
   _addQuestionToStatement : function(question, statement) {
     this._request({
       url: '/app/statement/add/question',
@@ -798,12 +872,12 @@ var appController = window.appController = {
       })
     })
   },
-  _relate : function(from, via, to) {
+  _relate : function(from, relation, to) {
     return this._request({
       url: '/app/relate',
       data: {
         from: from,
-        relation: 'answers',
+        relation: relation,
         to: to
       }
     });

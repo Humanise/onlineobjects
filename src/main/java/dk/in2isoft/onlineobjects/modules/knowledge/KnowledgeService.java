@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
@@ -329,6 +330,7 @@ public class KnowledgeService {
 			addressPerspective.setUrl(address.getAddress());
 			return addressPerspective;
 		}).collect(toList()));
+
 		List<Relation> questions = modelService.find().relations(request).from(statement).to(Question.class).withKind(Relation.ANSWERS).list();
 		questions.sort(this::compareByPosition);
 		perspective.setQuestions(questions.stream().map(relation -> {
@@ -339,6 +341,27 @@ public class KnowledgeService {
 			return p;
 		}).collect(toList()));
 
+		List<Relation> contradicts = modelService.find().relations(request).from(statement).to(Hypothesis.class).withKind(Relation.CONTRADTICS).list();
+		contradicts.sort(this::compareByPosition);
+		perspective.setContradicts(contradicts.stream().map(relation -> {
+			Hypothesis hypothesis = (Hypothesis) relation.getTo();
+			HypothesisWebPerspective p = new HypothesisWebPerspective();
+			p.setId(hypothesis.getId());
+			p.setText(hypothesis.getText());
+			return p;
+		}).collect(toList()));
+
+		List<Relation> supports = modelService.find().relations(request).from(statement).to(Hypothesis.class).withKind(Relation.SUPPORTS).list();
+		contradicts.sort(this::compareByPosition);
+		perspective.setSupports(supports.stream().map(relation -> {
+			Hypothesis hypothesis = (Hypothesis) relation.getTo();
+			HypothesisWebPerspective p = new HypothesisWebPerspective();
+			p.setId(hypothesis.getId());
+			p.setText(hypothesis.getText());
+			return p;
+		}).collect(toList()));
+
+		
 		SuggestionsCategory suggestionsForStatement = suggestions.suggestionsForStatement(statement, request);
 		Iterator<Suggestion> i = suggestionsForStatement.getSuggestions().iterator();
 		while (i.hasNext()) {
