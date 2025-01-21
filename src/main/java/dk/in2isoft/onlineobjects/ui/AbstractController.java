@@ -43,8 +43,8 @@ public abstract class AbstractController {
 				String[] exactly = annotation.exactly();
 				Responder responder = new Responder();
 				responder.method = method;
-				if (annotation.method().length() > 0) {
-					responder.httpMethod = annotation.method().toUpperCase();
+				if (annotation.method() != dk.in2isoft.onlineobjects.core.Path.Method.NONE) {
+					responder.httpMethod = annotation.method().name();
 				}
 				if (exactly.length > 0) {
 					responder.path = exactly;

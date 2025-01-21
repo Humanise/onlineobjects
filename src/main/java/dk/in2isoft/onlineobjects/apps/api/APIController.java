@@ -20,6 +20,7 @@ import dk.in2isoft.commons.parsing.HTMLDocument;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
@@ -309,7 +310,7 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getQuestionPerspective(id, user, request);
 	}
 
-	@Path(exactly = { "v1.1", "knowledge", "question" }, method = "POST")
+	@Path(exactly = { "v1.1", "knowledge", "question" }, method = Method.POST)
 	public QuestionApiPerspective patchQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
@@ -487,7 +488,7 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getStatementPerspective(id, user, request);
 	}
 
-	@Path(exactly = { "v1.1", "knowledge", "statement" }, method="POST")
+	@Path(exactly = { "v1.1", "knowledge", "statement" }, method = Method.POST)
 	public StatementApiPerspective patchStatement(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
@@ -509,7 +510,7 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getHypothesisPerspective(id, user, request);
 	}
 
-	@Path(exactly = { "v1.1", "knowledge", "hypothesis" }, method = "POST")
+	@Path(exactly = { "v1.1", "knowledge", "hypothesis" }, method = Method.POST)
 	public HypothesisApiPerspective patchHypothesis(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);
@@ -592,7 +593,7 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getAddressPerspective(id, request);
 	}	
 
-	@Path(exactly = { "v1.1", "knowledge", "internetaddress" }, method = "POST")
+	@Path(exactly = { "v1.1", "knowledge", "internetaddress" }, method = Method.POST)
 	public InternetAddressApiPerspective patchAddress(Request request) throws IOException, EndUserException {
 		checkUser(request);
 		User user = modelService.getUser(request);

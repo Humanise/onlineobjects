@@ -48,6 +48,7 @@ import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -420,7 +421,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getHypothesisWebPerspective(hypothesisId, request);
 	}
 
-	@Path(expression = "/app/relate", method = "POST")
+	@Path(expression = "/app/relate", method = Method.POST)
 	public void appRelate(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		RelationRequest object = request.getObject(RelationRequest.class);
 		Entity from = get(object.from, request);
@@ -442,7 +443,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		}
 	}
 
-	@Path(expression = "/app/relation", method = "DELETE")
+	@Path(expression = "/app/relation", method = Method.DELETE)
 	public void deleteRelation(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
 		RelationRequest object = request.getObject(RelationRequest.class);
 		Entity from = get(object.from, request);
@@ -511,7 +512,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return modelService.list(query, request);
 	}
 
-	@Path(expression = "/app/tag", method = "POST")
+	@Path(expression = "/app/tag", method = Method.POST)
 	public Object addTag(Request request) throws EndUserException {
 		String text = request.getString("text", "A tag must have some text");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
@@ -535,7 +536,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return text.trim().replaceAll("[\\s\\n\\r\\t]+", " ");
 	}
 
-	@Path(expression = "/app/tag/update", method = "POST")
+	@Path(expression = "/app/tag/update", method = Method.POST)
 	public void updateTag(Request request) throws EndUserException {
 		String text = request.getString("text", "A tag must have some text");		
 		text = normaliseTag(text);
@@ -544,7 +545,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		modelService.update(tag, request);
 	}
 
-	@Path(expression = "/app/tag/remove", method = "DELETE")
+	@Path(expression = "/app/tag/remove", method = Method.DELETE)
 	public Object appRemoveTag(Request request) throws EndUserException {
 		Long tagId = request.getId("tagId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
@@ -553,7 +554,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return getWebPerspective(entity, request);
 	}
 
-	@Path(expression = "/app/tag", method = "DELETE")
+	@Path(expression = "/app/tag", method = Method.DELETE)
 	public void deleteTag(Request request) throws EndUserException {
 		Long tagId = request.getId("id");
 		Tag tag = modelService.getRequired(Tag.class, tagId, request);
@@ -571,7 +572,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return modelService.list(query, request);
 	}
 
-	@Path(expression = "/app/word", method = "POST")
+	@Path(expression = "/app/word", method = Method.POST)
 	public Object appCreateWord(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);
@@ -584,7 +585,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return getWebPerspective(entity, request);
 	}
 
-	@Path(expression = "/app/word", method = "DELETE")
+	@Path(expression = "/app/word", method = Method.DELETE)
 	public Object appRemoveWord(Request request) throws EndUserException {
 		Long wordId = request.getId("wordId");
 		Entity entity = loadByType(request.getId(), request.getString("type"), request);

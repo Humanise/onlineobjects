@@ -8,6 +8,7 @@ import java.util.Map;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -82,7 +83,7 @@ public class DeveloperController extends ApplicationController {
 		throw new IllegalRequestException();
 	}
 
-	@Path(exactly={"settings", "data"}, method = "POST")
+	@Path(exactly={"settings", "data"}, method = Method.POST)
 	public void saveSettings(Request request) {
 		request.optionalBoolean("errors").ifPresent(value -> {
 			configurationService.setSimulateSporadicServerError(value);
@@ -92,7 +93,7 @@ public class DeveloperController extends ApplicationController {
 		});
 	}
 
-	@Path(exactly={"settings", "data"}, method = "GET")
+	@Path(exactly={"settings", "data"}, method = Method.GET)
 	public Map<String,Object> readSettings(Request request) {
 		return Map.of(
 			"errors", configurationService.isSimulateSporadicServerError(),
