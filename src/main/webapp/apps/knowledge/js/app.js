@@ -702,17 +702,6 @@ var appController = window.appController = {
   $select$statementQuestions : function(e) {
     this.show(e.data);
   },
-  _removeRelation : function(from, relation, to) {
-    return this._request({
-      url: '/app/relation',
-      method: 'delete',
-      data: {
-        from: {id: from.id, type: from.type},
-        relation: relation,
-        to: {id: to.id, type: to.type}
-      }
-    });
-  },
 
   $render$statementAddresses : function(obj) {
     return this._render_relation(obj, {});
@@ -872,6 +861,9 @@ var appController = window.appController = {
       })
     })
   },
+  _addQuestionToHypothesis : function(question, hypothesis) {
+    return this._relate({id: question.id, type: 'Question'} , 'answers', {id: hypothesis.id, type: 'Hypothesis'}).then(this._reloadCurrentPerspective.bind(this))
+  },
   _relate : function(from, relation, to) {
     return this._request({
       url: '/app/relate',
@@ -882,8 +874,16 @@ var appController = window.appController = {
       }
     });
   },
-  _addQuestionToHypothesis : function(question, hypothesis) {
-    return this._relate({id: question.id, type: 'Question'} , 'answers', {id: hypothesis.id, type: 'Hypothesis'}).then(this._reloadCurrentPerspective.bind(this))
+  _removeRelation : function(from, relation, to) {
+    return this._request({
+      url: '/app/relation',
+      method: 'delete',
+      data: {
+        from: {id: from.id, type: from.type},
+        relation: relation,
+        to: {id: to.id, type: to.type}
+      }
+    });
   },
   _request : function(p) {
     return new Promise((resolve, reject) => {
