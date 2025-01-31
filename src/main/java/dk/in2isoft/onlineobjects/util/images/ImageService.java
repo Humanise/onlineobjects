@@ -307,7 +307,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		if (taken == null) {
 			taken = metaData.getDateTime();
 		}
-		if (taken == null) {
+		if (taken != null) {
 			image.overrideFirstProperty(Property.KEY_PHOTO_TAKEN, taken);
 			modified = true;
 		}
