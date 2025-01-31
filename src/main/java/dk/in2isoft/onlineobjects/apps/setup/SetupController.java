@@ -79,7 +79,7 @@ public class SetupController extends SetupControllerBase {
 	@View(ui = "images.gui.xml")
 	public void images(Request request) {}
 	
-	@Path(exactly = {})
+	@Path(expression = "/")
 	@View(ui = "index.gui.xml")
 	public void index(Request request) {}
 	
