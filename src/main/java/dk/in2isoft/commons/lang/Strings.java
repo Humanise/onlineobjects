@@ -8,14 +8,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import dk.in2isoft.onlineobjects.core.Pair;
 
@@ -261,6 +264,15 @@ public class Strings {
 	public static String toJSON(Object object) {
 		Gson gson = new Gson();
 		return gson.toJson(object);
+	}
+
+	public static <T> Optional<T> fromJson(String json, Class<@NonNull T> type) {
+		try {
+			Gson gson = new Gson();
+			return Optional.of(gson.fromJson(json, type));
+		} catch (JsonSyntaxException e) {
+			return Optional.empty();
+		}
 	}
 	
 	public static String simplifyURL(String url) {

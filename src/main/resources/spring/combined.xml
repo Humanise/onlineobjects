@@ -207,6 +207,8 @@
 	</bean>
 
 	<bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType"/>
+	
+	<bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence"/>
 
 	<!-- Tools -->
 <!-- 	

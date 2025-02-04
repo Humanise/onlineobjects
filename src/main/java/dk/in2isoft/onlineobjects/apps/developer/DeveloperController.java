@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.onlineobjects.modules.intelligence.Intelligence;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Path.Method;
@@ -17,6 +20,9 @@ import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DeveloperController extends ApplicationController {
+	
+	@Autowired
+	Intelligence intelligence;
 	
 	public DeveloperController() {
 		super("developer");
@@ -99,5 +105,16 @@ public class DeveloperController extends ApplicationController {
 			"errors", configurationService.isSimulateSporadicServerError(),
 			"slow", configurationService.isSimulateSlowRequest()
 		);
+	}
+
+	@Path(exactly={"intelligence", "vectorize"}, method = Method.GET)
+	public List<Double> vectorize(Request request) {
+		return intelligence.vectorize(request.getString("text"));
+	}
+
+	@Path(exactly={"intelligence", "prompt"}, method = Method.GET)
+	public void prompt(Request request) throws IOException {
+		String prompt = intelligence.prompt(request.getString("prompt"));
+		request.getResponse().getWriter().print(prompt);
 	}
 }

@@ -495,6 +495,11 @@
       <version>4.5.14</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.4.2</version>
+    </dependency>
+    <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
@@ -546,8 +551,7 @@
     </dependency>
 
 
-
-    <!-- Scheduling -->
+		<!-- Scheduling -->
 
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
@@ -556,8 +560,7 @@
     </dependency>
 
 
-
-    <!-- Logging -->
+		<!-- Logging -->
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -576,7 +579,7 @@
       <artifactId>slf4j-api</artifactId>
       <version>2.0.9</version>
     </dependency>
-<!--
+		<!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
@@ -584,7 +587,7 @@
     </dependency>
 -->
 
-    <!-- Unknown -->
+		<!-- Unknown -->
 
     <dependency>
       <groupId>org.javassist</groupId>
@@ -592,7 +595,7 @@
       <version>${javassist.version}</version>
     </dependency>
 
-    <!-- Images -->
+		<!-- Images -->
 
     <dependency>
       <groupId>org.apache.sanselan</groupId>
@@ -623,8 +626,7 @@
     </dependency>
 
 
-
-    <!-- Caching -->
+		<!-- Caching -->
 
     <dependency>
       <groupId>net.sf.ehcache</groupId>
@@ -639,8 +641,7 @@
     </dependency>
 
 
-
-    <!-- Velocity -->
+		<!-- Velocity -->
 
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -661,8 +662,7 @@
     </dependency>
 
 
-
-    <!-- XML -->
+		<!-- XML -->
 
     <dependency>
       <groupId>org.jdom</groupId>
@@ -742,13 +742,13 @@
       <version>1.0.3</version>
     </dependency>
 
-    <!-- Testing -->
+		<!-- Testing -->
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
-      <!-- TODO: Should have test scope -->
+			<!-- TODO: Should have test scope -->
     </dependency>
 
     <dependency>
