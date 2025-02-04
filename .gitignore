@@ -21,3 +21,5 @@ tmp
 Makefile.config
 log4j2.xml
 cache.ccf
+.vscode
+hs_err_*
