@@ -20,11 +20,13 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
@@ -154,7 +156,14 @@ public class NetworkService {
 			String encoding = null;
 			String contentType = null;
 			if (isHttpOrHttps(uri)) {
-				client = HttpClients.createDefault();
+				
+				int timeout = 10;
+				RequestConfig config = RequestConfig.custom()
+				  .setConnectTimeout(timeout * 1000)
+				  .setConnectionRequestTimeout(timeout * 1000)
+				  .setSocketTimeout(timeout * 1000).build();
+				
+				client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 				method = new HttpGet(uri);
 				if (uri.getHost().endsWith("sundhed.dk")) {
 					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");					

@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.onlineobjects.modules.intelligence.Intelligence;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.collect.Lists;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexer;
+import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeSolrIndexReader;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.InternetAddressViewPerspectiveBuilder;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.QuestionViewPerspectiveBuilder;
@@ -49,6 +53,8 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	protected KnowledgeService knowledgeService;
 	protected InternetAddressService internetAddressService;
 	protected SecurityService securityService;
+	protected Intelligence intelligence;
+	protected KnowledgeSolrIndexReader knowledgeSolrIndexReader;
 
 	public KnowledgeControllerBase() {
 		super("knowledge");
@@ -178,5 +184,14 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	public void setIntelligence(Intelligence intelligence) {
+		this.intelligence = intelligence;
+	}
+	
+	@Autowired
+	public void setKnowledgeSolrIndexReader(KnowledgeSolrIndexReader knowledgeSolrIndexReader) {
+		this.knowledgeSolrIndexReader = knowledgeSolrIndexReader;
 	}
 }

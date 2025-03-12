@@ -37,7 +37,12 @@
    		<property name="indexService" ref="indexService"/>
    		<property name="modelService" ref="modelService"/>
    		<property name="securityService" ref="securityService"/>
+   		<property name="knowledgeSolrIndexWriter" ref="knowledgeSolrIndexWriter"/>
    	</bean>
+   	
+   	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeSolrIndexWriter" id="knowledgeSolrIndexWriter"/>
+
+    <bean class="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeSolrIndexReader"/>
    	
    	<bean class="dk.in2isoft.onlineobjects.apps.knowledge.KnowledgeSearcher">
    		<property name="indexService" ref="indexService"/>

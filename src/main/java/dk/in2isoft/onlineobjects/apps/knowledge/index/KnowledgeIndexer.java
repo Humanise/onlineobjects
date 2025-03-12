@@ -39,6 +39,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	private IndexService indexService;
 	private ModelService modelService;
 	private SecurityService securityService;
+	private KnowledgeSolrIndexWriter knowledgeSolrIndexWriter;
 	
 	private static final Logger log = LogManager.getLogger(KnowledgeIndexer.class);
 	
@@ -48,7 +49,6 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	
 	@Override
 	public boolean is(IndexDescription description) {
-		// TODO Auto-generated method stub
 		return description.getName().startsWith(APP_READER_USER );
 	}
 	
@@ -137,7 +137,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 				if (owner!=null) {
 					Document document = documentBuilder.build(address, operator, owner);
 					log.debug("Re-indexing : "+address);
-					getIndexManager(owner).update(address, document);
+					index(address, owner, document);
 				}
 			}
 			operator.commit();
@@ -145,6 +145,11 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			log.error("Unable to reindex: "+address, e);
 			operator.rollBack();
 		}
+	}
+
+	private void index(Entity entity, User owner, Document document) throws EndUserException {
+		getIndexManager(owner).update(entity, document);
+		knowledgeSolrIndexWriter.index(entity, owner, document);
 	}
 	
 	public void index(Question question) {
@@ -155,7 +160,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			if (owner!=null) {
 				Document doc = documentBuilder.build(question, operator, owner);
 
-				getIndexManager(owner).update(question, doc);
+				index(question, owner, doc);
 			}
 			operator.commit();
 		} catch (EndUserException e) {
@@ -171,7 +176,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			User owner = modelService.getOwner(hypothesis, operator);
 			if (owner!=null) {
 				Document document = documentBuilder.build(hypothesis, operator, owner);
-				getIndexManager(owner).update(hypothesis, document);
+				index(hypothesis, owner, document);
 			}
 			operator.commit();
 		} catch (EndUserException e) {
@@ -189,7 +194,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 
 				Document doc = documentBuilder.build(statement, operator, owner);
 
-				getIndexManager(owner).update(statement, doc);
+				index(statement, owner, doc);
 			}
 			operator.commit();
 		} catch (EndUserException e) {
@@ -277,5 +282,9 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
+	}
+	
+	public void setKnowledgeSolrIndexWriter(KnowledgeSolrIndexWriter knowledgeSolrIndexWriter) {
+		this.knowledgeSolrIndexWriter = knowledgeSolrIndexWriter;
 	}
 }

@@ -6,9 +6,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+import org.onlineobjects.modules.index.SolrService;
+import org.onlineobjects.modules.index.SolrService.Collection;
 import org.onlineobjects.modules.intelligence.Intelligence;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Path.Method;
@@ -24,6 +34,9 @@ public class DeveloperController extends ApplicationController {
 	@Autowired
 	Intelligence intelligence;
 	
+	@Autowired
+	SolrService solr;
+
 	public DeveloperController() {
 		super("developer");
 	}
@@ -63,6 +76,13 @@ public class DeveloperController extends ApplicationController {
 	public void settings(Request request) {
 	}
 
+	@Path(expression = "/intelligence")
+	@View(jsf = "intelligence.xhtml")
+	public void intelligence(Request request) {}
+
+	@Path(expression = "/intelligence-raw")
+	@View(ui = {"intelligence.xml"})
+	public void intelligenceRaw(Request request) {}
 
 	@Path(exactly = "mail")
 	public void mail(Request request) throws IOException {
@@ -117,4 +137,37 @@ public class DeveloperController extends ApplicationController {
 		String prompt = intelligence.prompt(request.getString("prompt"));
 		request.getResponse().getWriter().print(prompt);
 	}
+
+	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.GET)
+	public void promptStream(Request request) throws IOException {
+		intelligence.streamPrompt(request.getString("prompt"), request.getResponse().getOutputStream());
+	}
+
+	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
+	public void summarize(Request request) throws IOException {
+		intelligence.summarize(request.getString("text"), request.getResponse().getOutputStream());
+	}
+
+	@Path(expression = "/solr", method = Method.GET)
+	public Object solr(Request request) throws SolrServerException, IOException {
+		SolrClient client = solr.getClient();
+		final SolrQuery query = new SolrQuery("*:*");
+		query.addField("id");
+		query.addField("title");
+		query.setSort("id", ORDER.asc);
+		query.setRows(10);
+		QueryResponse response = client.query("knowledge", query);
+		SolrDocumentList results = response.getResults();
+		return results;
+	}
+
+	@Path(expression = "/solr", method = Method.POST)
+	public void putSolr(Request request) throws SolrServerException, IOException {
+		var doc = new SolrInputDocument();
+		doc.addField("id", Strings.generateRandomString(10));
+		doc.addField("title", Strings.generateRandomString(10));
+		doc.addField("vector", intelligence.vectorize("test"));
+		solr.add(Collection.knowledge, doc);
+	}
+
 }

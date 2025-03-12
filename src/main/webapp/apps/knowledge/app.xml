@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui xmlns="uri:hui" title="Knowledge" globals="false">
   <controller url="/js/app.js"/>
-  <controller url="/js/app_viewer.js"/>
+  <controller url="/js/app_internetaddress.js"/>
+  <controller url="/js/app_question.js"/>
+  <script url="/core/js/oo_intelligence.js"/>
+  <script url="https://cdn.jsdelivr.net/npm/marked/marked.min.js"/>
   <!--
   <html xmlns="http://www.w3.org/1999/xhtml">
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
@@ -22,7 +25,6 @@
   <source name="wordsSource" url="/app/words"/>
   <source name="tagsSource" url="/app/tags"/>
 
-  <remote name="changeFavoriteStatus" url="/changeFavoriteStatus"/>
   <foundation name="foundation">
     <navigation>
       <overflow>
@@ -166,8 +168,17 @@
             <collection name="internetaddressWords" class="relations"/>
             <collection name="internetaddressTags" class="relations"/>
             <div class="internetaddress_head js-internetaddress-head"> </div>
+            <div class="intel">
+              <div class="intel_actions">
+                <button name="summarizeInternetAddress" text="Summarize" class="intel_action"/>
+                <button name="pointsInternetAddress" text="Key points" class="intel_action"/>
+                <button name="authorInternetAddress" text="Author" class="intel_action"/>
+              </div>
+              <div class="id-internetaddress-intel intel_response intel_prose" style="display: none;"> </div>
+            </div>
             <div class="article js-internetaddress-formatted"> </div>
             <div class="plain js-internetaddress-text" style="display: none;"> </div>
+            <collection name="internetaddressRelated"/>
           </div>
         </fragment>
 
@@ -177,6 +188,12 @@
             <div class="perspective_title" id="questionTitle">
               <div class="perspective_title_text" id="questionTitleText"> </div>
               <span class="perspective_title_edit"> </span>
+            </div>
+            <div class="intel">
+              <div class="intel_actions">
+                <button name="answerQuestion" text="Answer" class="intel_action"/>
+              </div>
+              <div class="js-question-intel intel_response intel_prose" style="display: none;"> </div>
             </div>
             <collection name="questionWords" class="relations"/>
             <collection name="questionTags" class="relations"/>
@@ -317,8 +334,12 @@
   </boundpanel>-->
 
   <panel name="selectionPanel" padding="10" closable="false">
-    <button text="Quote" name="highlightSelection"/>
-    <button text="Tag" name="tagSelectedText"/>
+    <div class="id-selection-details intel_definition intel_prose" style="display: none;"> </div>
+    <buttons align="center">
+      <button text="Quote" name="highlightSelection"/>
+      <button text="Tag" name="tagSelectedText"/>
+      <button text="Define" name="defineSelectedText"/>
+    </buttons>
   </panel>
 
   <panel name="multipleSelectionPanel" closable="false" auto-hide="true" padding="5">

@@ -225,6 +225,14 @@ public class SemanticService {
 		
 		return compare(words1, words2);
 	}
+
+	public double compareVectors(List<Double> a, List<Double> b) {
+		double[] na = a.stream().mapToDouble(Double::doubleValue).toArray();
+		double[] ba = b.stream().mapToDouble(Double::doubleValue).toArray();
+		normalizeInPlace(na);
+		normalizeInPlace(ba);
+		return findDotProduct(na, ba);
+	}
 	
 	public double compare(String[] words1, String[] words2) {
 		String[] allWords = (String[]) ArrayUtils.addAll(words1, words2);
@@ -288,6 +296,17 @@ public class SemanticService {
 			sum+=query[i]*doc[i];
 		}
 		return sum;
+	}
+
+	public static void normalizeInPlace(double a[]) {
+		double scale = 0;
+		for (int k = 0; k < a.length; k++) {
+			scale += a[k] * a[k];
+		}
+		scale = 1 / Math.sqrt(scale);
+		for (int k = 0; k < a.length; k++) {
+			a[k] *= scale;
+		}
 	}
 
 	public void lowercaseWords(String[] words) {
@@ -475,4 +494,5 @@ public class SemanticService {
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
+
 }

@@ -46,6 +46,7 @@ public class ConfigurationService implements InitializingBean {
 	private String monitoringMails;
 	private boolean migrateDatabaseSchema;
 	private boolean https;
+	private boolean intelligenceEnabled;
 	
 	private File tempDir;
 
@@ -257,7 +258,7 @@ public class ConfigurationService implements InitializingBean {
 	public String getApplicationContext(String app, String path, Request request) {
 		Locale locale = request.getLocale();
 		if (StringUtils.isBlank(rootDomain)) {
-			return request.getBaseContext()+"/app/words/"+locale.getLanguage()+"/";
+			return request.getBaseContext() + "/app/words/" + locale.getLanguage() + "/";
 		}
 		HttpServletRequest servletRequest = request.getRequest();
 		StringBuilder url = new StringBuilder();
@@ -266,9 +267,11 @@ public class ConfigurationService implements InitializingBean {
 		if (simulateHttps) {
 			scheme = "https";
 			port = 443;
+		} else if (this.port != null) {
+			port = this.port;
 		}
 		url.append(scheme).append("://").append(appMountPoints.get(app)).append(".").append(rootDomain);
-		if (port!=80 && port!=443) {
+		if (port != 80 && port != 443) {
 			url.append(":").append(port);
 		}
 		url.append(request.getBaseContext());
@@ -383,4 +386,15 @@ public class ConfigurationService implements InitializingBean {
 		this.https = https;
 	}
 
+	public boolean indexToSolr() {
+		return isDevelopmentMode();
+	}
+
+	public boolean isIntelligenceEnabled() {
+		return intelligenceEnabled;
+	}
+
+	public void setIntelligenceEnabled(boolean intelligenceEnabled) {
+		this.intelligenceEnabled = intelligenceEnabled;
+	}
 }

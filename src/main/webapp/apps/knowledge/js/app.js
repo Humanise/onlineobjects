@@ -8,6 +8,9 @@ var addPanel,
 
 var appController = window.appController = {
   _currentItem: null,
+  _base: {
+    intelligence: false
+  },
 
   $ready : function() {
     addPanel = hui.ui.get('addPanel');
@@ -19,13 +22,19 @@ var appController = window.appController = {
       hui.log(e);
       this.show(e.state, {push: false});
     }.bind(this));
-    this._applyInitialState();
 
     new Editable(hui.find('#questionTitle'), this._updateQuestion.bind(this));
     new Editable(hui.find('#statementTitle'), this._updateStatement.bind(this));
     new Editable(hui.find('#hypothesisTitle'), this._updateHypothesis.bind(this));
+    this._fetchBase((base) => {
+      this._base = base;
+      this._applyInitialState();
+    })
   },
   _applyInitialState : function() {
+    if (this._base.intelligence) {
+      hui.query('.intel').addClass('is-enabled');
+    }
     this._updateUI();
     var state = history.state
     if (!state) {
@@ -41,6 +50,22 @@ var appController = window.appController = {
     }
   },
 
+  _fetchBase : function(then) {
+    this._whileBusy((end) => {
+      hui.ui.request({
+        url: '/app/base',
+        method: 'GET',
+        $object : then,
+        $finally: end
+      });
+    })
+  },
+
+  // Inter-communication
+  
+  getCurrentItem : function() {
+    return this._currentItem;
+  },
 
   // UI
   
@@ -483,7 +508,7 @@ var appController = window.appController = {
     }
   },
   _reset : function() {
-    documentController.reset();
+    hui.controller('internetAddress').reset();
     hui.ui.get('questionFinder').hide();
   },
   _changeItem : function(item) {
@@ -522,7 +547,7 @@ var appController = window.appController = {
   },
 
   _render_relation : function(item, context) {
-    var text = item.title || item.text;
+    var text = item.title || item.name || item.text;
     var info = item.url ? item.url.match(/\/\/(www\.)?([^\/]+)/)[2] : undefined;
     var node = hui.build('div.perspective_relation.perspective_relation-' + item.type.toLowerCase());
     node.appendChild(hui.build('div.perspective_relation_type',{text: item.type}));
@@ -530,7 +555,7 @@ var appController = window.appController = {
     if (info) {
       node.appendChild(hui.build('div.perspective_relation_info',{text: info}));
     }
-    if (context.$remove) {
+    if (context && context.$remove) {
       var rm = hui.build('div.perspective_relation_remove');
       hui.on(rm,'click',function(e) {
         hui.stop(e);
@@ -941,7 +966,7 @@ var appController = window.appController = {
   },
 
   // Address
-
+/*
   _loadAddress : function(address) {
     foundation.setBusyMain(true);
     this._request({
@@ -953,7 +978,7 @@ var appController = window.appController = {
       this._onInternetAddress(obj);
       foundation.setBusyMain(false);      
     });
-  },
+  },*/
   _createAddress : function(url) {
     return this._request({
       url: '/app/internetaddress/create',
@@ -962,33 +987,7 @@ var appController = window.appController = {
   },
   _onInternetAddress : function(data) {
     this._changeItem(data);
-    var html = data.formatted;
-    if (!html) {
-      html = '<h1>'+hui.string.escape(data.title || 'Loading...')+'<h1>';
-    }
-    if (data.words) {
-      var prefix = ['<div class="tags">'];
-      
-      prefix.push('</div>');
-    }
-    this._changeAddressBody(html);
-    var head = hui.find('.js-internetaddress-head');
-    head.innerHTML = '';
-    if (data.url) {
-      hui.build('a', {href:data.url, text: data.url, target: '_blank', parent: head});
-    }
-    hui.ui.get('internetaddressWords').setData(data.words);
-    hui.ui.get('internetaddressTags').setData(data.tags);
-    hui.find('.js-internetaddress-text').innerText = data.text || '';
-    documentController.reset();
-  },
-  $valueChanged$viewMode : function(value) {
-    hui.find('.js-internetaddress-formatted').style.display = (value == 'formatted' ? '' : 'none')
-    hui.find('.js-internetaddress-text').style.display = (value == 'text' ? '' : 'none')
-    documentController.reset();
-  },
-  _changeAddressBody : function(html) {
-    hui.find('.js-internetaddress-formatted').innerHTML = html;
+    hui.controller('internetAddress').render();
   },
   createStatementOnAddress : function(text) {
     this._request({
@@ -998,12 +997,6 @@ var appController = window.appController = {
       this._onInternetAddress(obj);
       list.refresh();
     });
-  },
-  $render$internetaddressWords : function(obj) {
-    return this._renderWord(obj);
-  },
-  $render$internetaddressTags : function(obj) {
-    return this._renderTag(obj);
   }
 }
 

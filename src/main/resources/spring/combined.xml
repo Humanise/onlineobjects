@@ -61,6 +61,8 @@
 		<property name="graphvizPath" value="${graphviz.path}"/>
 		<property name="analyticsCode" value="${analytics.code}"/>
 		<property name="startScheduling" value="${startScheduling}"/>
+    	<property name="intelligenceEnabled" value="${intelligence.enabled}"/>
+    
         <property name="simulateHttps" value="${development.simulateHttps}"/>
         <property name="testMode" value="${testMode}"/>
         <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
@@ -209,6 +211,9 @@
 	<bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType"/>
 	
 	<bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence"/>
+
+	<bean id="solrService" class="org.onlineobjects.modules.index.SolrService"/>
+
 
 	<!-- Tools -->
 <!-- 	

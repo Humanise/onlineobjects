@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.apps.knowledge;
 
+import static dk.in2isoft.onlineobjects.core.Path.Method.GET;
+import static java.util.stream.Collectors.toList;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +33,7 @@ import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.onlineobjects.apps.api.KnowledgeListRow;
+import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexDocument;
 import dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeQuery;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.FeedPerspective;
 import dk.in2isoft.onlineobjects.apps.knowledge.perspective.HypothesisEditPerspective;
@@ -122,6 +127,14 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		params.put("domain", request.getBaseDomain());
 		return params;
 	}
+
+	@Path(expression = "/app/base")
+	public Map<String,Object> base(Request request) {
+		Map<String,Object> params = new HashedMap<>();
+		params.put("intelligence", configurationService.isIntelligenceEnabled());
+		return params;
+	}
+
 	
 	@Path(expression = "/app/list")
 	public List<KnowledgeListRow> appList(Request request) throws EndUserException, IOException {
@@ -499,6 +512,60 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		String text = request.getString("text");
 		knowledgeService.addStatementToInternetAddress(text, id, request);
 		return knowledgeService.getInternetAddressWebPerspective(id, request);
+	}
+
+	@Path(expression = "/app/internetaddress/intel/summarize", method = GET)
+	public void internetAddressSummarize(Request request) throws IOException, IllegalRequestException, EndUserException {
+		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
+		intelligence.summarize(text, request.getResponse().getOutputStream());
+	}
+
+	@Path(expression = "/app/internetaddress/intel/points", method = GET)
+	public void internetAddressPoints(Request request) throws IOException, IllegalRequestException, EndUserException {
+		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
+		intelligence.keyPoints(text, request.getResponse().getOutputStream());
+	}
+
+	@Path(expression = "/app/internetaddress/intel/people", method = GET)
+	public void internetAddressPeople(Request request) throws IOException, IllegalRequestException, EndUserException {
+		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
+		intelligence.author(text, request.getResponse().getOutputStream());
+	}
+
+	@Path(expression = "/app/intel/define", method = GET)
+	public void intelDefine(Request request) throws IOException, IllegalRequestException, EndUserException {
+		var text = request.getString("text");
+		var detailed = request.getBoolean("detailed");
+		String prompt;
+		if (detailed) {
+			prompt = "What does the word '" + text + "' mean?";
+		} else {
+			prompt = "Define the word '" + text + "' in at most 50 words.";
+		}
+		intelligence.streamPrompt(prompt, request.getResponse().getOutputStream());
+	}
+
+	@Path(expression = "/app/related", method = GET)
+	public List<SimpleEntityPerspective> related(Request request) throws IOException, IllegalRequestException, EndUserException {
+		Long id = request.getId();
+		var perspective = knowledgeService.getInternetAddressWebPerspective(id, request);
+		String text = perspective.getText();
+		
+		Stream<KnowledgeIndexDocument> stream = knowledgeSolrIndexReader.findSimilar(text, request).stream();
+		return stream.filter(doc -> !id.equals(doc.getId())).map(doc -> {
+			var p = new SimpleEntityPerspective();
+			p.setId(doc.getId());
+			p.setName(doc.getTitle());
+			p.setType(InternetAddress.class.getSimpleName());
+			return p;
+		}).collect(toList());
+		
+	}
+
+	@Path(expression = "/app/question/answer", method = GET)
+	public void answerQuestion(Request request) throws IOException, IllegalRequestException, EndUserException {
+		var question = modelService.getRequired(Question.class, request.getId(), request);
+		intelligence.streamPrompt(question.getText(), request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/tags")

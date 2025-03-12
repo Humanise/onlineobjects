@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="uri:hui ../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="Knowledge" globals="false">
+  <controller url="/js/intelligence.js"/>
+  <source url="/settings/data" name="data"/>
+  <style url="/css/intelligence.css"/>
+  <script url="/core/js/oo_intelligence.js"/>
+
+  <box title="Intelligence" width="800" top="40">
+    <tabs>
+      <tab title="Prompt" padding="10">
+        <form name="form">
+        <div style="display: flex; width: 100%">
+          <div style="flex-grow: 1; padding-right: 10px;">
+            <text-input name="prompt" breaks="true" value="How wet is water?"/>
+          </div>
+          <button text="Send" submit="true"/>
+        </div>
+        <radiobuttons value="raw" name="type">
+          <radiobutton text="Raw prompt" value="raw"/>
+          <radiobutton text="Summarize" value="summarize"/>
+        </radiobuttons>
+        </form>
+        <div id="result">
+        </div>
+      </tab>
+    </tabs>
+  </box>
+
+</gui>
