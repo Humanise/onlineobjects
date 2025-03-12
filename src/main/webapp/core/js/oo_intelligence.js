@@ -1,12 +1,20 @@
 oo.intelligence = {
-  fetch : async function(url, onText, onEnd) {
-    const response = await fetch(url);
+  _fetch : async function(params) {
+    var ops = {
+      method: params.method || 'GET'
+    }
+    if (params.form) {
+      ops.headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+      ops.body = new URLSearchParams(params.form)
+    }
+    const response = await fetch(params.url, ops);
   
     // Ensure the response is a ReadableStream
     if (!response.body) {
       throw new Error('ReadableStream not supported');
     }
-
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
   
@@ -21,9 +29,9 @@ oo.intelligence = {
         const decodedChunk = decoder.decode(value, { stream: true });
       
         // Update UI with incremental content
-        onText(decodedChunk)
+        params.$chunk(decodedChunk)
       }
-      onEnd && onEnd();
+      params.$finally && params.$finally();
     } catch (error) {
       console.error('Streaming error:', error);
     }
@@ -43,10 +51,19 @@ oo.intelligence = {
       window.setTimeout(next, time)
     }
     window.setTimeout(next, 2000)
-    this.fetch(params.url, (s) => {
+    
+    const onChunk = (s) => {
       text += s;
       params.$html && params.$html(this.markdown(text));
-    }, params.$finally);
+    }
+    
+    this._fetch({
+      url: params.url,
+      method: params.method,
+      form: params.form,
+      $chunk: onChunk,
+      $finally: params.$finally
+    });
   },
   markdown : (str) => {
     if (window.marked) {

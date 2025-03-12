@@ -143,6 +143,11 @@ public class DeveloperController extends ApplicationController {
 		intelligence.streamPrompt(request.getString("prompt"), request.getResponse().getOutputStream());
 	}
 
+	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.POST)
+	public void promptStreamPost(Request request) throws IOException {
+		intelligence.streamPrompt(request.getString("prompt"), request.getResponse().getOutputStream());
+	}
+
 	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
 	public void summarize(Request request) throws IOException {
 		intelligence.summarize(request.getString("text"), request.getResponse().getOutputStream());
