@@ -1,200 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
-	<bean class="dk.in2isoft.onlineobjects.core.UserConsistencyChecker">
-    	<property name="modelService" ref="modelService"/>
-    	<property name="passwordEncryptionService" ref="passwordEncryptionService"/>
-    	<property name="securityService" ref="securityService"/>
-    </bean>
+  <bean class="dk.in2isoft.onlineobjects.core.UserConsistencyChecker">
+    <property name="modelService" ref="modelService" />
+    <property name="passwordEncryptionService" ref="passwordEncryptionService" />
+    <property name="securityService" ref="securityService" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.core.ApplicationConsistencyChecker">
-    	<property name="modelService" ref="modelService"/>
-    </bean>
-    
-    <import resource="core-scheduling.xml"/>
-    <import resource="core-publishing.xml"/>
-    <import resource="core-jobs.xml"/>
-    <import resource="core-services.xml"/>
-    <import resource="core-ui.xml"/>
-    <import resource="module-database.xml"/>
-    <import resource="module-language.xml"/>
-    <import resource="module-synchronization.xml"/>
-    <import resource="module-networking.xml"/>
-    <import resource="module-images.xml"/>
-    <import resource="module-photos.xml"/>
-    <import resource="module-onlinepublisher.xml"/>
-    <import resource="module-organic.xml"/>
-    <import resource="module-inbox.xml"/>
-    <import resource="module-knowledge.xml"/>
-    <import resource="app-setup.xml"/>
-    <import resource="app-community.xml"/>
-    <import resource="app-developer.xml"/>
-    <import resource="app-desktop.xml"/>
-    <import resource="app-words.xml"/>
-    <import resource="app-photos.xml"/>
-    <import resource="app-account.xml"/>
-    <import resource="app-tools.xml"/>
-    <import resource="app-front.xml"/>
-    <import resource="app-people.xml"/>
-    <import resource="app-api.xml"/>
-    <import resource="app-knowledge.xml"/>
-    
+  <bean class="dk.in2isoft.onlineobjects.core.ApplicationConsistencyChecker">
+    <property name="modelService" ref="modelService" />
+  </bean>
 
-	<bean id="configurationService" class="dk.in2isoft.onlineobjects.services.ConfigurationService" autowire="byType">
-		<property name="basePath" value="${basePath}"/>
-		<property name="storagePath" value="${storagePath}"/>
-		<property name="baseUrl" value="${baseUrl}"/>
-		<property name="port" value="${port}"/>
-		<property name="https" value="${https}"/>
-		<property name="rootDomain" value="${rootDomain}"/>
-		<property name="developmentMode" value="${developmentMode}"/>
-		<property name="developmentUser" value="${development.user}"/>
-		<property name="optimizeResources" value="${optimizeResources}"/>
-		<property name="imageMagickPath" value="${imagemagick.path}"/>
-		<property name="uglifyPath" value="${uglifyjs.path}"/>
-		<property name="graphvizPath" value="${graphviz.path}"/>
-		<property name="analyticsCode" value="${analytics.code}"/>
-		<property name="startScheduling" value="${startScheduling}"/>
-    	<property name="intelligenceEnabled" value="${intelligence.enabled}"/>
-    	<property name="solrEnabled" value="${solr.enabled}"/>
-    
-        <property name="simulateHttps" value="${development.simulateHttps}"/>
-        <property name="testMode" value="${testMode}"/>
-        <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}"/>
-        <property name="disableCache" value="${cache.disabled}"></property>
-        <property name="monitoringMails" value="${monitoring.mails}"/>
-        <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}"/>
-	</bean>
-
-	<bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
-        <property name="configurationService" ref="configurationService"/>
-		<property name="host" value="${email.host}" />
-		<property name="username" value="${email.username}" />
-		<property name="password" value="${email.password}" />
-		<property name="defaultSenderAddress" value="${email.defaultSenderAddress}" />
-		<property name="defaultSenderName" value="${email.defaultSenderName}" />
-
-	</bean>
-
-	<bean id="passwordRecoveryService" class="dk.in2isoft.onlineobjects.services.PasswordRecoveryService">
-		<property name="emailService" ref="emailService" />
-		<property name="modelService" ref="modelService" />
-		<property name="configurationService" ref="configurationService"/>
-		<property name="securityService" ref="securityService"/>
-		<property name="memberService" ref="memberService"/>
-		<property name="surveillanceService" ref="surveillanceService"/>
-	</bean>
-
-	<bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType">
-      <property name="finder">
-        <bean class="dk.in2isoft.onlineobjects.core.Finder" autowire="byType"/>
-      </property>
-    </bean>
-	
-	<bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType"/>
-	
-	<bean id="securityService" class="dk.in2isoft.onlineobjects.core.SecurityService" autowire="byType"/>
-	
-	<bean id="passwordEncryptionService" class="dk.in2isoft.onlineobjects.core.PasswordEncryptionService" autowire="byType"/>
-	
-	<bean id="lifeCycleService" class="dk.in2isoft.onlineobjects.services.LifeCycleService" autowire="byType"/>
-	
-	<bean id="eventService" class="dk.in2isoft.onlineobjects.core.events.EventService" autowire="byType"/>
-	
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.EmailAddressConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.HeaderPartConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.HtmlPartConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.ImageConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.ImagePartConverter">
-		<property name="conversionService" ref="conversionService"/>
-		<property name="modelService" ref="modelService"/>
-	</bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.PersonConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.UserConverter"></bean>
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.WebSiteConverter"></bean>
-	<!-- Important to come last -->
-	<bean class="dk.in2isoft.onlineobjects.model.conversion.EntityConverter"></bean>
+  <import resource="core-scheduling.xml" />
+  <import resource="core-publishing.xml" />
+  <import resource="core-jobs.xml" />
+  <import resource="core-services.xml" />
+  <import resource="core-ui.xml" />
+  <import resource="module-database.xml" />
+  <import resource="module-language.xml" />
+  <import resource="module-synchronization.xml" />
+  <import resource="module-networking.xml" />
+  <import resource="module-images.xml" />
+  <import resource="module-photos.xml" />
+  <import resource="module-onlinepublisher.xml" />
+  <import resource="module-organic.xml" />
+  <import resource="module-inbox.xml" />
+  <import resource="module-knowledge.xml" />
+  <import resource="app-setup.xml" />
+  <import resource="app-community.xml" />
+  <import resource="app-developer.xml" />
+  <import resource="app-desktop.xml" />
+  <import resource="app-words.xml" />
+  <import resource="app-photos.xml" />
+  <import resource="app-account.xml" />
+  <import resource="app-tools.xml" />
+  <import resource="app-front.xml" />
+  <import resource="app-people.xml" />
+  <import resource="app-api.xml" />
+  <import resource="app-knowledge.xml" />
 
 
-	<bean id="conversionService" class="dk.in2isoft.onlineobjects.services.ConversionService" autowire="byType"/>
-	
-	
-	<bean id="webModelService" class="dk.in2isoft.onlineobjects.services.WebModelService" autowire="byType"/>
-	
-	<bean id="dispatchingService" class="dk.in2isoft.onlineobjects.services.DispatchingService" autowire="byType">
-		<property name="responders">
-			<util:list>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.SharedFilesResponder" autowire="byType"/>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.FacesResponder" autowire="byType"/>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.CoreFilesResponder" autowire="byType"/>
-                <bean class="dk.in2isoft.onlineobjects.modules.dispatch.RobotsResponder" autowire="byType"/>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.In2iGuiResponder" autowire="byType"/>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.ServicesResponder" autowire="byType"/>
-				<bean class="dk.in2isoft.onlineobjects.modules.dispatch.ApplicationResponder" autowire="byType"/>
-			</util:list>
-		</property>
-	</bean>
-	
-	<bean id="surveillanceService" class="dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService" autowire="byType"/>
-	
-	<bean id="schedulingSupportFacade" class="dk.in2isoft.onlineobjects.modules.scheduling.SchedulingSupportFacade" autowire="byType"/>
+  <bean id="configurationService" class="dk.in2isoft.onlineobjects.services.ConfigurationService" autowire="byType">
+    <property name="basePath" value="${basePath}" />
+    <property name="storagePath" value="${storagePath}" />
+    <property name="baseUrl" value="${baseUrl}" />
+    <property name="port" value="${port}" />
+    <property name="https" value="${https}" />
+    <property name="rootDomain" value="${rootDomain}" />
+    <property name="developmentMode" value="${developmentMode}" />
+    <property name="developmentUser" value="${development.user}" />
+    <property name="optimizeResources" value="${optimizeResources}" />
+    <property name="imageMagickPath" value="${imagemagick.path}" />
+    <property name="uglifyPath" value="${uglifyjs.path}" />
+    <property name="graphvizPath" value="${graphviz.path}" />
+    <property name="analyticsCode" value="${analytics.code}" />
+    <property name="startScheduling" value="${startScheduling}" />
+    <property name="intelligenceEnabled" value="${intelligence.enabled}" />
+    <property name="solrEnabled" value="${solr.enabled}" />
 
-	<bean id="schedulingService" class="dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService" autowire="byType"/>
-	
-	<bean id="importService" class="dk.in2isoft.onlineobjects.services.ImportService" autowire="byType"/>
-	
-	<bean id="fileService" class="dk.in2isoft.onlineobjects.services.FileService" autowire="byType"/>
-	
-	<bean id="graphService" class="dk.in2isoft.onlineobjects.services.GraphService" autowire="byType"/>
-	
-	<bean id="semanticService" class="dk.in2isoft.onlineobjects.services.SemanticService" autowire="byType"/>
-	
-	<bean id="indexService" class="dk.in2isoft.onlineobjects.modules.index.IndexService" autowire="byType"/>
-	
-	<bean id="personService" class="dk.in2isoft.onlineobjects.services.PersonService" autowire="byType"/>
-	
-	<bean id="feedService" class="dk.in2isoft.onlineobjects.services.FeedService" autowire="byType"/>
-	<bean id="ratingService" class="dk.in2isoft.onlineobjects.services.RatingService" autowire="byType"/>
-	
-	<bean id="localizationService" class="dk.in2isoft.onlineobjects.modules.localization.LocalizationService" autowire="byType"/>
-	
-	<bean id="userService" class="dk.in2isoft.onlineobjects.modules.user.UserService" autowire="byType"/>
-	
-	<bean id="consistencyService" class="dk.in2isoft.onlineobjects.services.ConsistencyService" autowire="byType"/>
+    <property name="simulateHttps" value="${development.simulateHttps}" />
+    <property name="testMode" value="${testMode}" />
+    <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}" />
+    <property name="disableCache" value="${cache.disabled}"></property>
+    <property name="monitoringMails" value="${monitoring.mails}" />
+    <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}" />
+  </bean>
 
-	<bean id="sessionService" class="dk.in2isoft.onlineobjects.services.SessionService" autowire="byType"/>
+  <bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
+    <property name="configurationService" ref="configurationService" />
+    <property name="host" value="${email.host}" />
+    <property name="username" value="${email.username}" />
+    <property name="password" value="${email.password}" />
+    <property name="defaultSenderAddress" value="${email.defaultSenderAddress}" />
+    <property name="defaultSenderName" value="${email.defaultSenderName}" />
+  </bean>
 
-	<bean id="informationService" class="dk.in2isoft.onlineobjects.modules.information.InformationService" autowire="byType"/>
-	
-	<bean id="pileService" class="dk.in2isoft.onlineobjects.services.PileService" autowire="byType"/>
+  <bean id="passwordRecoveryService" class="dk.in2isoft.onlineobjects.services.PasswordRecoveryService">
+    <property name="emailService" ref="emailService" />
+    <property name="modelService" ref="modelService" />
+    <property name="configurationService" ref="configurationService" />
+    <property name="securityService" ref="securityService" />
+    <property name="memberService" ref="memberService" />
+    <property name="surveillanceService" ref="surveillanceService" />
+  </bean>
 
-	<bean id="dependencyService" class="dk.in2isoft.onlineobjects.ui.DependencyService" autowire="byType"/>
-	<!-- 
-	<bean class="dk.in2isoft.onlineobjects.ui.YUIScriptCompressor"/>
-	-->
-	<bean class="dk.in2isoft.onlineobjects.ui.UglifyScriptCompressor">
-		<property name="configuration" ref="configurationService"/>
-	</bean>
-	
-	<bean id="invitationService" class="dk.in2isoft.onlineobjects.modules.user.InvitationService" autowire="byType"/>
-	
-	<bean id="memberService" class="dk.in2isoft.onlineobjects.modules.user.MemberService" autowire="byType">
-      <property name="agreementConfigs">
+  <bean id="modelService" class="dk.in2isoft.onlineobjects.core.ModelService" autowire="byType">
+    <property name="finder">
+      <bean class="dk.in2isoft.onlineobjects.core.Finder" autowire="byType" />
+    </property>
+  </bean>
+
+  <bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType" />
+
+  <bean id="securityService" class="dk.in2isoft.onlineobjects.core.SecurityService" autowire="byType" />
+
+  <bean id="passwordEncryptionService" class="dk.in2isoft.onlineobjects.core.PasswordEncryptionService" autowire="byType" />
+
+  <bean id="lifeCycleService" class="dk.in2isoft.onlineobjects.services.LifeCycleService" autowire="byType" />
+
+  <bean id="eventService" class="dk.in2isoft.onlineobjects.core.events.EventService" autowire="byType" />
+
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.EmailAddressConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.HeaderPartConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.HtmlPartConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.ImageConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.ImagePartConverter">
+    <property name="conversionService" ref="conversionService" />
+    <property name="modelService" ref="modelService" />
+  </bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.PersonConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.UserConverter"></bean>
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.WebSiteConverter"></bean>
+  <!-- Important to come last -->
+  <bean class="dk.in2isoft.onlineobjects.model.conversion.EntityConverter"></bean>
+
+
+  <bean id="conversionService" class="dk.in2isoft.onlineobjects.services.ConversionService" autowire="byType" />
+
+
+  <bean id="webModelService" class="dk.in2isoft.onlineobjects.services.WebModelService" autowire="byType" />
+
+  <bean id="dispatchingService" class="dk.in2isoft.onlineobjects.services.DispatchingService" autowire="byType">
+    <property name="responders">
+      <util:list>
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.SharedFilesResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.FacesResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.CoreFilesResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.RobotsResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.In2iGuiResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.ServicesResponder" autowire="byType" />
+        <bean class="dk.in2isoft.onlineobjects.modules.dispatch.ApplicationResponder" autowire="byType" />
+      </util:list>
+    </property>
+  </bean>
+
+  <bean id="surveillanceService" class="dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService" autowire="byType" />
+
+  <bean id="schedulingSupportFacade" class="dk.in2isoft.onlineobjects.modules.scheduling.SchedulingSupportFacade" autowire="byType" />
+
+  <bean id="schedulingService" class="dk.in2isoft.onlineobjects.modules.scheduling.SchedulingService" autowire="byType" />
+
+  <bean id="importService" class="dk.in2isoft.onlineobjects.services.ImportService" autowire="byType" />
+
+  <bean id="fileService" class="dk.in2isoft.onlineobjects.services.FileService" autowire="byType" />
+
+  <bean id="graphService" class="dk.in2isoft.onlineobjects.services.GraphService" autowire="byType" />
+
+  <bean id="semanticService" class="dk.in2isoft.onlineobjects.services.SemanticService" autowire="byType" />
+
+  <bean id="indexService" class="dk.in2isoft.onlineobjects.modules.index.IndexService" autowire="byType" />
+
+  <bean id="personService" class="dk.in2isoft.onlineobjects.services.PersonService" autowire="byType" />
+
+  <bean id="feedService" class="dk.in2isoft.onlineobjects.services.FeedService" autowire="byType" />
+  <bean id="ratingService" class="dk.in2isoft.onlineobjects.services.RatingService" autowire="byType" />
+
+  <bean id="localizationService" class="dk.in2isoft.onlineobjects.modules.localization.LocalizationService" autowire="byType" />
+
+  <bean id="userService" class="dk.in2isoft.onlineobjects.modules.user.UserService" autowire="byType" />
+
+  <bean id="consistencyService" class="dk.in2isoft.onlineobjects.services.ConsistencyService" autowire="byType" />
+
+  <bean id="sessionService" class="dk.in2isoft.onlineobjects.services.SessionService" autowire="byType" />
+
+  <bean id="informationService" class="dk.in2isoft.onlineobjects.modules.information.InformationService" autowire="byType" />
+
+  <bean id="pileService" class="dk.in2isoft.onlineobjects.services.PileService" autowire="byType" />
+
+  <bean id="dependencyService" class="dk.in2isoft.onlineobjects.ui.DependencyService" autowire="byType" />
+  <!-- <bean class="dk.in2isoft.onlineobjects.ui.YUIScriptCompressor"/> -->
+  <bean class="dk.in2isoft.onlineobjects.ui.UglifyScriptCompressor">
+    <property name="configuration" ref="configurationService" />
+  </bean>
+
+  <bean id="invitationService" class="dk.in2isoft.onlineobjects.modules.user.InvitationService" autowire="byType" />
+
+  <bean id="memberService" class="dk.in2isoft.onlineobjects.modules.user.MemberService" autowire="byType">
+    <property name="agreementConfigs">
       <util:map>
         <entry>
-          <key><value>terms</value></key>
+          <key>
+            <value>terms</value>
+          </key>
           <util:list>
             <value>2018-07-06</value>
           </util:list>
         </entry>
         <entry>
-          <key><value>privacy</value></key>
+          <key>
+            <value>privacy</value>
+          </key>
           <util:list>
             <value>1984-07-01</value>
             <value>2018-07-01</value>
@@ -202,31 +200,21 @@
           </util:list>
         </entry>
       </util:map>
-      </property>
-    </bean>
+    </property>
+  </bean>
 
-	<bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService" depends-on="configurationService">
-		<property name="configurationService" ref="configurationService"/>
-	</bean>
+  <bean id="huiService" class="dk.in2isoft.onlineobjects.ui.HUIService" depends-on="configurationService">
+    <property name="configurationService" ref="configurationService" />
+  </bean>
 
-	<bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType"/>
-	
-	<bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence"/>
+  <bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType" />
 
-	<bean id="solrService" class="org.onlineobjects.modules.index.SolrService"/>
+  <bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence" />
+
+  <bean id="solrService" class="org.onlineobjects.modules.index.SolrService" />
 
 
-	<!-- Tools -->
-<!-- 	
-	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-      <property name="velocityProperties">
-         <value>
-            resource.loader=file
-            file.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-            file.resource.loader.path=/Users/jbm/Development/Workspace/onlineobjects/src/web/
-         </value>
-      </property>
-   </bean>	
-	 -->
-	
+  <!-- Tools -->
+  <!-- <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean"> <property name="velocityProperties"> <value> resource.loader=file file.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader file.resource.loader.path=/Users/jbm/Development/Workspace/onlineobjects/src/web/ </value> </property> </bean> -->
+
 </beans>

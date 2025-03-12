@@ -27,9 +27,9 @@ public class SolrService {
 		if (client != null) return this.client;
 		final String solrUrl = "http://localhost:8983/solr";
 		this.client = new HttpJdkSolrClient.Builder(solrUrl)
-		    .withConnectionTimeout(10000, TimeUnit.MILLISECONDS)
-		    .withBasicAuthCredentials("humanise", "Kuw8LJz7kDnznyRJYckH8G3csYzdHH")
-		    .build();
+			.withConnectionTimeout(10000, TimeUnit.MILLISECONDS)
+			.withBasicAuthCredentials("humanise", "Kuw8LJz7kDnznyRJYckH8G3csYzdHH")
+			.build();
 		return this.client;
 	}
 

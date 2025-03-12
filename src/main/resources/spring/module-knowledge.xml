@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
-	<bean id="knowledgeService" class="dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService" autowire="byType"/>
-	
-	<bean id="knowledgeSuggester" class="org.onlineobjects.modules.suggestion.KnowledgeSuggester" autowire="byType"/>
+  <bean id="knowledgeService" class="dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService" autowire="byType" />
 
-	<bean id="suggestions" class="org.onlineobjects.modules.suggestion.Suggestions" autowire="byType"/>
+  <bean id="knowledgeSuggester" class="org.onlineobjects.modules.suggestion.KnowledgeSuggester" autowire="byType" />
 
-	<bean class="org.onlineobjects.modules.suggestion.KnowledgeSuggesterListener">
-		<property name="knowledgeSuggester" ref="knowledgeSuggester"/>
-		<property name="modelService" ref="modelService"/>
-	</bean>
+  <bean id="suggestions" class="org.onlineobjects.modules.suggestion.Suggestions" autowire="byType" />
+
+  <bean class="org.onlineobjects.modules.suggestion.KnowledgeSuggesterListener">
+    <property name="knowledgeSuggester" ref="knowledgeSuggester" />
+    <property name="modelService" ref="modelService" />
+  </bean>
 </beans>

@@ -1,117 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
-	<bean id="wordsController" class="dk.in2isoft.onlineobjects.apps.words.WordsController"
-		autowire="byType" />
+  <bean id="wordsController" class="dk.in2isoft.onlineobjects.apps.words.WordsController" autowire="byType" />
 
-	<bean id="wordsModelService" class="dk.in2isoft.onlineobjects.apps.words.WordsModelService"
-		autowire="byType" />
+  <bean id="wordsModelService" class="dk.in2isoft.onlineobjects.apps.words.WordsModelService" autowire="byType" />
 
-	<bean id="wordIndexer" class="dk.in2isoft.onlineobjects.modules.index.WordIndexer">
-		<property name="indexManager" ref="wordsIndex" />
-		<property name="modelService" ref="modelService" />
-        <property name="securityService" ref="securityService" />
-		<property name="documentBuilder">
-			<bean
-				class="dk.in2isoft.onlineobjects.modules.index.WordIndexDocumentBuilder">
-				<property name="wordService" ref="wordService" />
-			</bean>
-		</property>
-	</bean>
+  <bean id="wordIndexer" class="dk.in2isoft.onlineobjects.modules.index.WordIndexer">
+    <property name="indexManager" ref="wordsIndex" />
+    <property name="modelService" ref="modelService" />
+    <property name="securityService" ref="securityService" />
+    <property name="documentBuilder">
+      <bean class="dk.in2isoft.onlineobjects.modules.index.WordIndexDocumentBuilder">
+        <property name="wordService" ref="wordService" />
+      </bean>
+    </property>
+  </bean>
 
-	<bean id="wordsIndex" class="dk.in2isoft.onlineobjects.modules.index.IndexManager">
-		<property name="directoryName">
-			<util:constant
-				static-field="dk.in2isoft.onlineobjects.modules.index.IndexService.WORDS_INDEX" />
-		</property>
-		<property name="configurationService" ref="configurationService" />
-	</bean>
+  <bean id="wordsIndex" class="dk.in2isoft.onlineobjects.modules.index.IndexManager">
+    <property name="directoryName">
+      <util:constant static-field="dk.in2isoft.onlineobjects.modules.index.IndexService.WORDS_INDEX" />
+    </property>
+    <property name="configurationService" ref="configurationService" />
+  </bean>
 
-	<bean id="wordService" class="dk.in2isoft.onlineobjects.modules.language.WordService">
-		<property name="index" ref="wordsIndex" />
-		<property name="modelService" ref="modelService" />
-		<property name="languageService" ref="languageService" />
-		<property name="securityService" ref="securityService" />
-	</bean>
+  <bean id="wordService" class="dk.in2isoft.onlineobjects.modules.language.WordService">
+    <property name="index" ref="wordsIndex" />
+    <property name="modelService" ref="modelService" />
+    <property name="languageService" ref="languageService" />
+    <property name="securityService" ref="securityService" />
+  </bean>
 
-	<bean id="wordIndexJob" class="dk.in2isoft.onlineobjects.apps.words.index.WordIndexJob">
-	</bean>
+  <bean id="wordIndexJob" class="dk.in2isoft.onlineobjects.apps.words.index.WordIndexJob">
+  </bean>
 
-	<bean id="wordsLayoutView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsLayoutView"
-		scope="request">
-		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper"/>
-        <property name="securityService" ref="securityService"/>
-	</bean>
+  <bean id="wordsLayoutView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsLayoutView" scope="request">
+    <property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
+    <property name="securityService" ref="securityService" />
+  </bean>
 
-	<bean id="wordsWordView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsWordView"
-		scope="request">
-		<property name="modelService" ref="modelService" />
-		<property name="wordService" ref="wordService" />
-	</bean>
+  <bean id="wordsWordView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsWordView" scope="request">
+    <property name="modelService" ref="modelService" />
+    <property name="wordService" ref="wordService" />
+  </bean>
 
-	<bean id="wordsIndexView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsIndexView"
-		scope="request">
-		<property name="modelService" ref="modelService" />
-	</bean>
+  <bean id="wordsIndexView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsIndexView" scope="request">
+    <property name="modelService" ref="modelService" />
+  </bean>
 
-	<bean id="wordsSearchView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsSearchView"
-		scope="request">
-		<property name="wordService" ref="wordService" />
-		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper"/>
-	</bean>
+  <bean id="wordsSearchView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsSearchView" scope="request">
+    <property name="wordService" ref="wordService" />
+    <property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
+  </bean>
 
-	<bean id="wordsInterfaceHelper"
-		class="dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper"
-		autowire="byType" />
+  <bean id="wordsInterfaceHelper" class="dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper" autowire="byType" />
 
-	<bean id="wordsFrontView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsFrontView"
-      scope="request">
-		<property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
-	</bean>
+  <bean id="wordsFrontView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsFrontView" scope="request">
+    <property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
+  </bean>
 
-	<bean id="languageStatisticsDataProvider"
-		class="dk.in2isoft.onlineobjects.modules.language.LanguageStatisticsDataProvider">
-		<property name="modelService" ref="modelService" />
-		<property name="eventService" ref="eventService" />
-	</bean>
+  <bean id="languageStatisticsDataProvider" class="dk.in2isoft.onlineobjects.modules.language.LanguageStatisticsDataProvider">
+    <property name="modelService" ref="modelService" />
+    <property name="eventService" ref="eventService" />
+  </bean>
 
-	<bean id="languageFacetsDataProvider"
-		class="dk.in2isoft.onlineobjects.modules.language.LanguageFacetsDataProvider">
-		<property name="modelService" ref="modelService" />
-		<property name="eventService" ref="eventService" />
-	</bean>
+  <bean id="languageFacetsDataProvider" class="dk.in2isoft.onlineobjects.modules.language.LanguageFacetsDataProvider">
+    <property name="modelService" ref="modelService" />
+    <property name="eventService" ref="eventService" />
+  </bean>
 
-	<bean id="wordsStatisticsView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsStatisticsView"
-		scope="request">
-		<property name="statisticsDataProvider" ref="languageStatisticsDataProvider" />
-	</bean>
+  <bean id="wordsStatisticsView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsStatisticsView" scope="request">
+    <property name="statisticsDataProvider" ref="languageStatisticsDataProvider" />
+  </bean>
 
-	<bean id="wordsImportView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsImportView"
-		scope="request">
-		<property name="modelService" ref="modelService" />
-		<property name="languageService" ref="languageService" />
-		<property name="importService" ref="importService" />
-		<property name="semanticService" ref="semanticService" />
-	</bean>
+  <bean id="wordsImportView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsImportView" scope="request">
+    <property name="modelService" ref="modelService" />
+    <property name="languageService" ref="languageService" />
+    <property name="importService" ref="importService" />
+    <property name="semanticService" ref="semanticService" />
+  </bean>
 
-	<bean id="wordsImportListView"
-		class="dk.in2isoft.onlineobjects.apps.words.views.WordsImportListView"
-		scope="request">
-		<property name="modelService" ref="modelService" />
-		<property name="languageService" ref="languageService" />
-		<property name="importService" ref="importService" />
-		<property name="semanticService" ref="semanticService" />
-	</bean>
+  <bean id="wordsImportListView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsImportListView" scope="request">
+    <property name="modelService" ref="modelService" />
+    <property name="languageService" ref="languageService" />
+    <property name="importService" ref="importService" />
+    <property name="semanticService" ref="semanticService" />
+  </bean>
 </beans>

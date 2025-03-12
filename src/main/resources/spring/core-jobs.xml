@@ -1,100 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.scheduling.HelloWorldJob"/>
-		<property name="name" value="helloworld"/>
-		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="1"/>
-		<property name="paused" value="true"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.scheduling.HelloWorldJob" />
+    <property name="name" value="helloworld" />
+    <property name="group" value="core" />
+    <property name="repeatMinutes" value="1" />
+    <property name="paused" value="true" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.synchronization.MailWatchingJob"/>
-		<property name="name" value="mailwatcher"/>
-		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="1"/>
-		<property name="paused" value="true"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.synchronization.MailWatchingJob" />
+    <property name="name" value="mailwatcher" />
+    <property name="group" value="core" />
+    <property name="repeatMinutes" value="1" />
+    <property name="paused" value="true" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.images.ImageCleanupJob"/>
-		<property name="name" value="imagecleanup"/>
-		<property name="group" value="core"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.images.ImageCleanupJob" />
+    <property name="name" value="imagecleanup" />
+    <property name="group" value="core" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.images.ImageGalleryCleanupJob"/>
-		<property name="name" value="imagegallerycleanup"/>
-		<property name="group" value="core"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.images.ImageGalleryCleanupJob" />
+    <property name="name" value="imagegallerycleanup" />
+    <property name="group" value="core" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.InformationSpiderJob"/>
-		<property name="name" value="informationspider"/>
-		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="30"/>
-		<property name="paused" value="true"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.InformationSpiderJob" />
+    <property name="name" value="informationspider" />
+    <property name="group" value="core" />
+    <property name="repeatMinutes" value="30" />
+    <property name="paused" value="true" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.SimilarityJob"/>
-		<property name="name" value="similaritycalculator"/>
-		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="10"/>
-		<property name="paused" value="true"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.information.SimilarityJob" />
+    <property name="name" value="similaritycalculator" />
+    <property name="group" value="core" />
+    <property name="repeatMinutes" value="10" />
+    <property name="paused" value="true" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordIndexJob"/>
-		<property name="name" value="index-words"/>
-		<property name="group" value="core"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordIndexJob" />
+    <property name="name" value="index-words" />
+    <property name="group" value="core" />
+  </bean>
 
-<!-- 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordnetSourceCleanupJob"/>
-		<property name="name" value="wordnet-source-cleanup"/>
-		<property name="group" value="core"/>
-	</bean>
+  <!-- <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription"> <property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.WordnetSourceCleanupJob"/> <property name="name" 
+    value="wordnet-source-cleanup"/> <property name="group" value="core"/> </bean> <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription"> <property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.NamesSourceCleanupJob"/> 
+    <property name="name" value="names-source-cleanup"/> <property name="group" value="core"/> </bean> -->
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.words.index.NamesSourceCleanupJob"/>
-		<property name="name" value="names-source-cleanup"/>
-		<property name="group" value="core"/>
-	</bean>
--->
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.user.UserHealthCheckJob" />
+    <property name="name" value="user-health-check" />
+    <property name="group" value="core" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.user.UserHealthCheckJob"/>
-		<property name="name" value="user-health-check"/>
-		<property name="group" value="core"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexJob" />
+    <property name="name" value="index-knowledge" />
+    <property name="group" value="core" />
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeIndexJob"/>
-		<property name="name" value="index-knowledge"/>
-		<property name="group" value="core"/>
-	</bean>
-	
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="dk.in2isoft.onlineobjects.modules.surveillance.SendReportJob"/>
-		<property name="name" value="sendreport"/>
-		<property name="group" value="monitoring"/>
-		<property name="repeatMinutes" value="360"/><!-- 60 * 6 -->
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.surveillance.SendReportJob" />
+    <property name="name" value="sendreport" />
+    <property name="group" value="monitoring" />
+    <property name="repeatMinutes" value="360" /><!-- 60 * 6 -->
+  </bean>
 
-	<bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
-		<property name="jobClass" value="org.onlineobjects.modules.suggestion.KnowledgeSuggestionJob"/>
-		<property name="name" value="knowledge-suggestor"/>
-		<property name="group" value="core"/>
-		<property name="repeatMinutes" value="1"/>
-		<property name="paused" value="false"/>
-	</bean>
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="org.onlineobjects.modules.suggestion.KnowledgeSuggestionJob" />
+    <property name="name" value="knowledge-suggestor" />
+    <property name="group" value="core" />
+    <property name="repeatMinutes" value="1" />
+    <property name="paused" value="false" />
+  </bean>
 
 </beans>
