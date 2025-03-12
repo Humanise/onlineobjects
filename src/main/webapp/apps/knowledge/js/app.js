@@ -34,6 +34,7 @@ var appController = window.appController = {
   _applyInitialState : function() {
     if (this._base.intelligence) {
       hui.query('.intel').addClass('is-enabled');
+      hui.query('.js-internetaddress-related').style({display: ''})
     }
     this._updateUI();
     var state = history.state

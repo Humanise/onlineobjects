@@ -26,7 +26,7 @@ public class KnowledgeSolrIndexWriter {
 	private static final Logger log = LogManager.getLogger(KnowledgeSolrIndexWriter.class);
 
 	protected void index(Entity entity, User owner, Document document) throws EndUserException {
-		if (configuration.indexToSolr()) {
+		if (configuration.isSolrEnabled()) {
 			try {
 				SolrInputDocument solrDoc = new SolrInputDocument();
 				solrDoc.addField("id", entity.getId());

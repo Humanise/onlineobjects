@@ -178,7 +178,10 @@
             </div>
             <div class="article js-internetaddress-formatted"> </div>
             <div class="plain js-internetaddress-text" style="display: none;"> </div>
-            <collection name="internetaddressRelated"/>
+            <div class="perspective_relations js-internetaddress-related" style="display: none;">
+              <div class="perspective_heading">Related</div>
+              <collection name="internetaddressRelated"/>
+            </div>
           </div>
         </fragment>
 

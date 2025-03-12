@@ -308,6 +308,9 @@ hui.control({
   },
 
   fetchRelated : function() {
+    if (!appController._base.intelligence) {
+      return;
+    }
     var item = appController.getCurrentItem();
     hui.ui.request({
       url: '/app/related',

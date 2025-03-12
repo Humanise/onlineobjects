@@ -47,6 +47,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean migrateDatabaseSchema;
 	private boolean https;
 	private boolean intelligenceEnabled;
+	private boolean solrEnabled;
 	
 	private File tempDir;
 
@@ -386,15 +387,19 @@ public class ConfigurationService implements InitializingBean {
 		this.https = https;
 	}
 
-	public boolean indexToSolr() {
-		return isDevelopmentMode();
-	}
-
 	public boolean isIntelligenceEnabled() {
 		return intelligenceEnabled;
 	}
 
 	public void setIntelligenceEnabled(boolean intelligenceEnabled) {
 		this.intelligenceEnabled = intelligenceEnabled;
+	}
+
+	public boolean isSolrEnabled() {
+		return solrEnabled;
+	}
+
+	public void setSolrEnabled(boolean solrEnabled) {
+		this.solrEnabled = solrEnabled;
 	}
 }

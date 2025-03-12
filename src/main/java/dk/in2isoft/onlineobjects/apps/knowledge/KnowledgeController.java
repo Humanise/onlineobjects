@@ -547,6 +547,9 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	@Path(expression = "/app/related", method = GET)
 	public List<SimpleEntityPerspective> related(Request request) throws IOException, IllegalRequestException, EndUserException {
+		if (!configurationService.isSolrEnabled()) {
+			return List.of();
+		}
 		Long id = request.getId();
 		var perspective = knowledgeService.getInternetAddressWebPerspective(id, request);
 		String text = perspective.getText();

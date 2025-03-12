@@ -62,6 +62,7 @@
 		<property name="analyticsCode" value="${analytics.code}"/>
 		<property name="startScheduling" value="${startScheduling}"/>
     	<property name="intelligenceEnabled" value="${intelligence.enabled}"/>
+    	<property name="solrEnabled" value="${solr.enabled}"/>
     
         <property name="simulateHttps" value="${development.simulateHttps}"/>
         <property name="testMode" value="${testMode}"/>
