@@ -65,3 +65,9 @@ jconsole
 ```
 
 `tools/spider.sh` can be used to simulate a spider
+
+#### Checking for new Java dependency updates
+
+```
+mvn versions:display-dependency-updates
+```
