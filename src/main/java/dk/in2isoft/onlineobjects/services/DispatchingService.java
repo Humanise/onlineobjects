@@ -28,9 +28,8 @@ import dk.in2isoft.commons.util.StackTraceUtil;
 import dk.in2isoft.commons.xml.HTML;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.modules.dispatch.Responder;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
@@ -157,7 +156,7 @@ public class DispatchingService {
 	public void displayError(Request request, Exception ex) {
 		ex = EndUserException.findUserException(ex);
 		try {
-			if (ex instanceof ContentNotFoundException) {
+			if (ex instanceof NotFoundException) {
 				surveillanceService.surveyNotFound(request);
 			}
 			logError(request, ex);
@@ -202,12 +201,8 @@ public class DispatchingService {
 
 
 	private int getStatusCode(Exception ex) {
-		if (ex instanceof SecurityException) {
-			return HttpServletResponse.SC_UNAUTHORIZED;
-		} else if (ex instanceof ContentNotFoundException) {
-			return HttpServletResponse.SC_NOT_FOUND;
-		} else if (ex instanceof IllegalRequestException) {
-			return HttpServletResponse.SC_BAD_REQUEST;
+		if (ex instanceof EndUserException) {
+			return ((EndUserException) ex).getHttpStatusCode();
 		}
 		return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 	}

@@ -16,6 +16,7 @@ import com.google.common.collect.Ordering;
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.apps.words.LoadManager;
 import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.apps.words.views.util.RelationOption;
 import dk.in2isoft.onlineobjects.core.ModelService;
@@ -38,6 +39,7 @@ public class WordsWordView extends AbstractView {
 
 	private ModelService modelService;
 	private WordService wordService;
+	private LoadManager loadManager;
 	
 	private String text;
 	private List<WordImpression> words;
@@ -55,6 +57,7 @@ public class WordsWordView extends AbstractView {
 	
 	@Override
 	protected void before(Request request) throws Exception {
+		loadManager.failIfBusy();
 		StopWatch watch = new StopWatch();
 		watch.start();
 		String[] path = request.getLocalPath();
@@ -258,5 +261,9 @@ public class WordsWordView extends AbstractView {
 	
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
+	}
+
+	public void setLoadManager(LoadManager loadManager) {
+		this.loadManager = loadManager;
 	}
 }

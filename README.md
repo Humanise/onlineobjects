@@ -51,3 +51,17 @@ docker build -t onlineobjects .
 ```
 docker run -p 8080:8080 onlineobjects
 ```
+
+### Debugging
+
+```
+jmap -histo:live <pid>
+```
+
+**User jconsole to track memory usage**
+
+```
+jconsole
+```
+
+`tools/spider.sh` can be used to simulate a spider

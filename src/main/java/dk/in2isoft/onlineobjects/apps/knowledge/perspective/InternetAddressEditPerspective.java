@@ -4,7 +4,7 @@ import java.util.List;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.in2igui.data.ItemData;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 
 public class InternetAddressEditPerspective {
 
@@ -45,18 +45,18 @@ public class InternetAddressEditPerspective {
 		this.address = address;
 	}
 	
-	public static void validate(InternetAddressEditPerspective perspective) throws IllegalRequestException {
+	public static void validate(InternetAddressEditPerspective perspective) throws BadRequestException {
 		if (perspective==null) {
-			throw new IllegalRequestException("No data");
+			throw new BadRequestException("No data");
 		}
 		if (perspective.getId() < 1) {
-			throw new IllegalRequestException("Invalid ID");
+			throw new BadRequestException("Invalid ID");
 		}
 		if (Strings.isBlank(perspective.getTitle())) {
-			throw new IllegalRequestException("The title is empty");
+			throw new BadRequestException("The title is empty");
 		}
 		if (Strings.isBlank(perspective.getAddress())) {
-			throw new IllegalRequestException("The address is empty");
+			throw new BadRequestException("The address is empty");
 		}
 	}
 }

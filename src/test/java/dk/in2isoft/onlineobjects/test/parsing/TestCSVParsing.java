@@ -18,8 +18,8 @@ import au.com.bytecode.opencsv.bean.CsvToBean;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.WordsModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Word;
@@ -51,7 +51,7 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 	}
 	
 	@Test
-	public void testToModel() throws FileNotFoundException, IOException, ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void testToModel() throws FileNotFoundException, IOException, ModelException, BadRequestException, SecurityException, NotFoundException {
 		ColumnPositionMappingStrategy<WordImportRow> strat = new ColumnPositionMappingStrategy<WordImportRow>();
 		strat.setType(WordImportRow.class);
 		String[] columns = new String[] {"text", "category", "language"}; // the fields to bind do in your JavaBean
@@ -72,7 +72,7 @@ public class TestCSVParsing extends AbstractSpringTestCase {
 		operator.commit();
 	}
 
-	private void importWords(List<WordImportRow> list, Operator admin) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	private void importWords(List<WordImportRow> list, Operator admin) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		for (WordImportRow row : list) {
 			WordListPerspective found = findWordToEnrich(row,admin);
 			if (found==null) {

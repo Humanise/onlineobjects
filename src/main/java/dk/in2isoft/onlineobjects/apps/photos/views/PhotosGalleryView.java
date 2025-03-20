@@ -20,7 +20,7 @@ import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
@@ -65,7 +65,7 @@ public class PhotosGalleryView extends AbstractView {
 		if (id > 0) {
 			imageGallery = modelService.get(ImageGallery.class, id, request);
 			if (imageGallery==null) {
-				throw new ContentNotFoundException("The gallery does not exist");
+				throw new NotFoundException("The gallery does not exist");
 			}
 			title = imageGallery.getName();
 			user = modelService.getOwner(imageGallery, request);

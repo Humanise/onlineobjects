@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
@@ -25,7 +25,7 @@ public class ImageReplacer extends ImageImporter {
 		@Nullable
 		Image image = modelService.get(Image.class, imageId, request);
 		if (image == null) {
-			throw new ContentNotFoundException(Image.class, imageId);
+			throw new NotFoundException(Image.class, imageId);
 		}
 		imageService.clearMetaData(image, request);
 		imageService.clearCache(image);

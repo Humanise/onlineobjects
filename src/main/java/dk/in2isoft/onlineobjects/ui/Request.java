@@ -36,7 +36,7 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 
 public class Request implements Operator {
@@ -345,18 +345,18 @@ public class Request implements Operator {
 		return id;
 	}
 	
-	public Long getId(String parameter) throws IllegalRequestException {
+	public Long getId(String parameter) throws BadRequestException {
 		Long id = getId(parameter, null);
 		if (id == null) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		return id;
 	}
 	
-	public Long getId() throws IllegalRequestException {
+	public Long getId() throws BadRequestException {
 		Long id = getId((Long) null);
 		if (id == null) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		return id;
 	}
@@ -412,19 +412,19 @@ public class Request implements Operator {
 		return Optional.ofNullable(getBoolean(key, null));
 	}
 	
-	public String getString(String key, String error) throws IllegalRequestException {
+	public String getString(String key, String error) throws BadRequestException {
 		String value = request.getParameter(key);
 		if (Strings.isBlank(value)) {
-			throw new IllegalRequestException(error);
+			throw new BadRequestException(error);
 		} else {
 			return value;
 		}
 	}
 
-	public String getString(String key, dk.in2isoft.onlineobjects.core.exceptions.Error error) throws IllegalRequestException {
+	public String getString(String key, dk.in2isoft.onlineobjects.core.exceptions.Error error) throws BadRequestException {
 		String value = request.getParameter(key);
 		if (Strings.isBlank(value)) {
-			throw new IllegalRequestException(error);
+			throw new BadRequestException(error);
 		} else {
 			return value;
 		}

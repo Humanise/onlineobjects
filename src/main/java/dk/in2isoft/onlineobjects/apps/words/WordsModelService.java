@@ -24,8 +24,8 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -185,23 +185,23 @@ public class WordsModelService {
 		return diagram;
 	}
 	
-	public void createWord(String languageCode, String category, String text, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void createWord(String languageCode, String category, String text, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		if (StringUtils.isBlank(languageCode)) {
-			throw new IllegalRequestException("No language provided");
+			throw new BadRequestException("No language provided");
 		}
 		if (StringUtils.isBlank(text)) {
-			throw new IllegalRequestException("No text provided");
+			throw new BadRequestException("No text provided");
 		}
 		LexicalCategory lexicalCategory = null;
 		if (StringUtils.isNotBlank(category)) {
 			lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 			if (lexicalCategory==null) {
-				throw new IllegalRequestException("Unsupported category ("+category+")");
+				throw new BadRequestException("Unsupported category ("+category+")");
 			}
 		}
 		Language language = languageService.getLanguageForCode(languageCode, operator);
 		if (language==null) {
-			throw new IllegalRequestException("Unsupported language ("+languageCode+")");
+			throw new BadRequestException("Unsupported language ("+languageCode+")");
 		}
 		Query<Word> query = Query.of(Word.class).withField(Word.TEXT_FIELD, text).from(language);
 		if (lexicalCategory!=null) {
@@ -223,22 +223,22 @@ public class WordsModelService {
 		}
 	}
 
-	public void deleteRelation(long id, Operator operator) throws IllegalRequestException, SecurityException, ModelException {
+	public void deleteRelation(long id, Operator operator) throws BadRequestException, SecurityException, ModelException {
 		Relation relation = modelService.getRelation(id, operator).orElseThrow(() -> 
-			new IllegalRequestException("Relation not found (id="+id+")")
+			new BadRequestException("Relation not found (id="+id+")")
 		);
 		modelService.delete(relation, operator);
 	}
 
-	public void relateWords(long parentId,String kind, long childId, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+	public void relateWords(long parentId,String kind, long childId, Operator operator) throws ModelException, BadRequestException, SecurityException {
 		Word parentWord = modelService.get(Word.class, parentId, operator);
 		Word childWord = modelService.get(Word.class, childId, operator);
 		if (parentWord==null || childWord==null) {
-			throw new IllegalRequestException("Word not found");
+			throw new BadRequestException("Word not found");
 		}
 		Set<String> allowed = Sets.newHashSet(Relation.KIND_SEMANTICS_EQUIVALENT, Relation.KIND_SEMANTICS_ANTONYMOUS, Relation.KIND_SEMANTICS_SYNONYMOUS,Relation.KIND_SEMANTICS_ANALOGOUS, Relation.KIND_SEMANTICS_MORPHEME, Relation.KIND_SEMANTICS_GENRALTIZATION);
 		if (!allowed.contains(kind)) {
-			throw new IllegalRequestException("Illegal relation: "+kind);
+			throw new BadRequestException("Illegal relation: "+kind);
 		}
 		
 		Optional<Relation> relation = modelService.getRelation(parentWord, childWord, kind, operator);
@@ -249,20 +249,20 @@ public class WordsModelService {
 		}
 	}
 	
-	public void changeLanguage(long wordId, String languageCode, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void changeLanguage(long wordId, String languageCode, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		Word word = getWord(wordId, operator);
 		if (word==null) {
-			throw new ContentNotFoundException(Word.class, wordId);
+			throw new NotFoundException(Word.class, wordId);
 		}
 		changeLanguage(word, languageCode, operator);
 	}
 	
-	public void changeLanguage(Word word, String languageCode, Operator privileged) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void changeLanguage(Word word, String languageCode, Operator privileged) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		Language language = null;
 		if (languageCode!=null) {
 			language = languageService.getLanguageForCode(languageCode, privileged);
 			if (language==null) {
-				throw new IllegalRequestException("Unsupported language ("+languageCode+")");
+				throw new BadRequestException("Unsupported language ("+languageCode+")");
 			}
 		}
 		List<Relation> parents = modelService.find().relations(privileged).to(word).from(Language.class).list();
@@ -274,15 +274,15 @@ public class WordsModelService {
 		wordService.ensureOriginator(word, privileged);
 	}
 
-	public void changeCategory(long wordId, String category, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void changeCategory(long wordId, String category, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		Word word = getWord(wordId, operator);
 		changeCategory(word, category, operator);
 	}
 
-	public void changeCategory(Word word, String category, Operator operator) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public void changeCategory(Word word, String category, Operator operator) throws BadRequestException, ModelException, SecurityException, NotFoundException {
 		LexicalCategory lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 		if (lexicalCategory==null) {
-			throw new IllegalRequestException("Unsupported category ("+category+")");
+			throw new BadRequestException("Unsupported category ("+category+")");
 		}
 		List<Relation> parents = modelService.find().relations(operator).to(word).from(LexicalCategory.class).list();
 		modelService.delete(parents, operator);
@@ -293,15 +293,15 @@ public class WordsModelService {
 
 	
 	
-	public void deleteWord(long wordId, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+	public void deleteWord(long wordId, Operator operator) throws ModelException, BadRequestException, SecurityException {
 		Word word = getWord(wordId, operator);
 		modelService.delete(word, operator);
 	}
 
-	private Word getWord(long wordId, Operator operator) throws ModelException, IllegalRequestException {
+	private Word getWord(long wordId, Operator operator) throws ModelException, BadRequestException {
 		Word word = modelService.get(Word.class, wordId, operator);
 		if (word==null) {
-			throw new IllegalRequestException("Word not found (id="+wordId+")");
+			throw new BadRequestException("Word not found (id="+wordId+")");
 		}
 		return word;
 	}
@@ -319,7 +319,7 @@ public class WordsModelService {
 		}
 	}
 	
-	public void importWords(WordsImportRequest object, Auditor auditor, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void importWords(WordsImportRequest object, Auditor auditor, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		Language language = languageService.getLanguageForCode(object.getLanguage(), operator);
 		LexicalCategory category = languageService.getLexcialCategoryForCode(object.getCategory(), operator);
 		

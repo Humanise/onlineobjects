@@ -17,8 +17,8 @@ import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -141,9 +141,9 @@ public class InternetAddressService {
 		return original;
 	}
 
-	public InternetAddress create(String url, String title, User user, Operator operator) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public InternetAddress create(String url, String title, User user, Operator operator) throws BadRequestException, ModelException, SecurityException, NotFoundException {
 		if (Strings.isBlank(url)) {
-			throw new IllegalRequestException("The url is empty");
+			throw new BadRequestException("The url is empty");
 		}
 		URI uri = asURI(url);
 		// First check if it exists
@@ -215,12 +215,12 @@ public class InternetAddressService {
 		return Files.copy(temp, original);
 	}
 
-	private URI asURI(String url) throws IllegalRequestException {
+	private URI asURI(String url) throws BadRequestException {
 		URI uri;
 		try {
 			uri = new URI(url);
 		} catch (URISyntaxException e) {
-			throw new IllegalRequestException("Invalid URL syntax", e);
+			throw new BadRequestException("Invalid URL syntax", e);
 		}
 		verifyAsHttp(uri);
 		return uri;
@@ -232,9 +232,9 @@ public class InternetAddressService {
 		return address;
 	}
 
-	private void verifyAsHttp(URI uri) throws IllegalRequestException {
+	private void verifyAsHttp(URI uri) throws BadRequestException {
 		if (!networkService.isHttpOrHttps(uri)) {
-			throw new IllegalRequestException("The scheme of '" + uri + "' is unsupported");
+			throw new BadRequestException("The scheme of '" + uri + "' is unsupported");
 		}
 	}
 	

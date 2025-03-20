@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -46,10 +46,10 @@ public class ImageGalleryService {
 		return gallery;
 	}
 
-	public <T extends Entity>void deleteGallery(long id, Operator privileged) throws ModelException, SecurityException, ContentNotFoundException {
+	public <T extends Entity>void deleteGallery(long id, Operator privileged) throws ModelException, SecurityException, NotFoundException {
 		ImageGallery gallery = modelService.get(ImageGallery.class, id, privileged);
 		if (gallery==null) {
-			throw new ContentNotFoundException(ImageGallery.class, id);
+			throw new NotFoundException(ImageGallery.class, id);
 		}
 		List<Class<T>> parts = Lists.newArrayList();
 		parts.add(Code.<Class<T>>cast(HtmlPart.class));
@@ -63,7 +63,7 @@ public class ImageGalleryService {
 		modelService.delete(gallery, privileged);
 	}
 	
-	public void changeSequence(long galleryId, final List<Long> imageIds, Operator privileged) throws ModelException, ContentNotFoundException, SecurityException {
+	public void changeSequence(long galleryId, final List<Long> imageIds, Operator privileged) throws ModelException, NotFoundException, SecurityException {
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, galleryId, privileged);
 		
 		List<Relation> relations = modelService.getRelationsFrom(gallery, Image.class, privileged);

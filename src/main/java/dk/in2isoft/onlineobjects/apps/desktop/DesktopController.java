@@ -22,7 +22,7 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -127,16 +127,16 @@ public class DesktopController extends DesktopControlerBase {
 	}
 	
 	@Path
-	public void saveInternetAddress(Request request) throws ModelException, SecurityException, InterruptedException, IllegalRequestException {
+	public void saveInternetAddress(Request request) throws ModelException, SecurityException, InterruptedException, BadRequestException {
 		InternetAddressInfo info = request.getObject("info", InternetAddressInfo.class);
 		if (info==null) {
-			throw new IllegalRequestException("Illegal format");			
+			throw new BadRequestException("Illegal format");			
 		}
 		InternetAddress address;
 		if (info.getId()!=null) {
 			address = modelService.get(InternetAddress.class, info.getId(), request);
 			if (address==null) {
-				throw new IllegalRequestException("Not found");
+				throw new BadRequestException("Not found");
 			}
 		} else {
 			address = new InternetAddress();

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.onlineobjects.core.Path;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.service.ServiceController;
 import dk.in2isoft.onlineobjects.ui.DependencyService;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -30,7 +30,7 @@ public class DependencyController extends ServiceController {
 	}
 
 	@Path(expression=SCRIPT_PATH)
-	public void script(Request request) throws IOException, ContentNotFoundException {
+	public void script(Request request) throws IOException, NotFoundException {
 		String path = request.getLocalPathAsString();
 		Matcher matcher = scriptPattern.matcher(path);
 		if (matcher.matches()) {
@@ -38,12 +38,12 @@ public class DependencyController extends ServiceController {
 			String hash = matcher.group(2);
 			dependencyService.respondScripts(stamp,hash,request);
 		} else {
-			throw new ContentNotFoundException();
+			throw new NotFoundException();
 		}
 	}
 
 	@Path(expression=STYLE_PATH)
-	public void style(Request request) throws IOException, ContentNotFoundException {
+	public void style(Request request) throws IOException, NotFoundException {
 		String path = request.getLocalPathAsString();
 		Matcher matcher = stylePattern.matcher(path);
 		if (matcher.matches()) {
@@ -51,12 +51,12 @@ public class DependencyController extends ServiceController {
 			String hash = matcher.group(2);
 			dependencyService.respondStyles(stamp,hash,request);
 		} else {
-			throw new ContentNotFoundException();
+			throw new NotFoundException();
 		}
 	}
 
 	@Path(exactly="error")
-	public void logClientError(Request request) throws IOException, ContentNotFoundException {
+	public void logClientError(Request request) throws IOException, NotFoundException {
 		String message = request.getString("message");
 		String line = request.getString("line");
 		String column = request.getString("column");

@@ -8,9 +8,9 @@ import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -71,15 +71,15 @@ public class OnlinePublisherService {
 		status.log("Heart massage finished");
 	}
 
-	public void createOrUpdatePublisher(PublisherPerspective perspective, Operator privileged) throws IllegalRequestException, ModelException, ContentNotFoundException, SecurityException {
+	public void createOrUpdatePublisher(PublisherPerspective perspective, Operator privileged) throws BadRequestException, ModelException, NotFoundException, SecurityException {
 		if (perspective == null) {
-			throw new IllegalRequestException("No publisher provider");
+			throw new BadRequestException("No publisher provider");
 		}
 		InternetAddress address;
 		if (perspective.getId() > 0) {
 			address = modelService.get(InternetAddress.class, perspective.getId(), privileged);
 			if (address == null) {
-				throw new ContentNotFoundException("Internet address not found (id=" + perspective.getId() + ")");
+				throw new NotFoundException("Internet address not found (id=" + perspective.getId() + ")");
 			}
 		} else {
 			address = new InternetAddress();
@@ -93,7 +93,7 @@ public class OnlinePublisherService {
 		}
 	}
 
-	public PublisherPerspective getPublisherPerspective(Long id, Operator privileged) throws ModelException, ContentNotFoundException {
+	public PublisherPerspective getPublisherPerspective(Long id, Operator privileged) throws ModelException, NotFoundException {
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, id, privileged);
 		if (internetAddress!=null) {
 			PublisherPerspective perspective = new PublisherPerspective();
@@ -102,7 +102,7 @@ public class OnlinePublisherService {
 			perspective.setName(internetAddress.getName());
 			return perspective;
 		}
-		throw new ContentNotFoundException("The internet address does not exists: id="+id);
+		throw new NotFoundException("The internet address does not exists: id="+id);
 	}
 
 	public void deletePublisher(Long id, Operator privileged) throws ModelException, SecurityException {

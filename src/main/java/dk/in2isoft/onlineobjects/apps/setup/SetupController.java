@@ -41,11 +41,11 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserStatisticsQuery;
 import dk.in2isoft.onlineobjects.core.UserStatisticsQuery.UserStatistic;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -114,6 +114,13 @@ public class SetupController extends SetupControllerBase {
 	@Path(exactly = "users.gui")
 	@View(ui = "users.gui.xml")
 	public void users(Request request) {}
+
+	
+	
+	@Path(expression = "/settings/data")
+	public Object settingsData(Request request) throws IOException,EndUserException {
+		return Map.of("wordsRequestPerSecond", 0.5d);
+	}
 
 	@Path
 	public void flushCache(Request request) throws IOException,EndUserException {
@@ -412,7 +419,7 @@ public class SetupController extends SetupControllerBase {
 		Long id = request.getLong("id");
 		User user = modelService.get(User.class, id, request);
 		if (user==null) {
-			throw new ContentNotFoundException("User not found (id="+id+")");
+			throw new NotFoundException("User not found (id="+id+")");
 		}
 		User publicUser = securityService.getPublicUser();
 		UserPerspective perspective = new UserPerspective();
@@ -478,11 +485,11 @@ public class SetupController extends SetupControllerBase {
 	public void saveUser(Request request) throws IOException,EndUserException {
 		UserPerspective perspective = request.getObject("user", UserPerspective.class);
 		if (perspective==null) {
-			throw new IllegalRequestException("No user provider");
+			throw new BadRequestException("No user provider");
 		}
 		User user = modelService.get(User.class, perspective.getId(), request);
 		if (user==null) {
-			throw new ContentNotFoundException("User not found (id="+perspective.getId()+")");
+			throw new NotFoundException("User not found (id="+perspective.getId()+")");
 		}
 		if (securityService.canChangeUsername(user)) {
 			user.setUsername(perspective.getUsername());			
@@ -884,7 +891,7 @@ public class SetupController extends SetupControllerBase {
 		InternetAddressPerspective perspective = new InternetAddressPerspective();
 		InternetAddress address = modelService.get(InternetAddress.class, id, request);
 		if (address==null) {
-			throw new ContentNotFoundException("The address could not be found, id = "+id);
+			throw new NotFoundException("The address could not be found, id = "+id);
 		}
 		String content = address.getPropertyValue(Property.KEY_INTERNETADDRESS_CONTENT);
 		perspective.setContent(content);
@@ -938,7 +945,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		IndexManager manager = indexService.getIndex(desc.getName());
 		if (manager==null) {
-			throw new IllegalRequestException("No index manager width the name '"+desc.getName()+"'");
+			throw new BadRequestException("No index manager width the name '"+desc.getName()+"'");
 		}
 		SearchResult<Document> result;
 		try {
@@ -971,7 +978,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		IndexManager manager = indexService.getIndex(desc.getName());
 		if (manager==null) {
-			throw new IllegalRequestException("No index manager width the name '" + desc.getName() + "'");
+			throw new BadRequestException("No index manager width the name '" + desc.getName() + "'");
 		}
 		ListWriter writer = new ListWriter(request);
 		writer.startList();

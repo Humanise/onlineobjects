@@ -16,16 +16,20 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @ApplicationScope
 public class Intelligence {
 
 	//private static final String MODEL = "mistral";
 	//private static final String MODEL = "llama3.2";
-	private static final String MODEL = "mistral-small";
+	//private static final String MODEL = "mistral-small";
+	
+	private ConfigurationService configuration;
 
 	public List<String> synonyms(String word) {
 		return List.of(word);
@@ -90,6 +94,10 @@ public class Intelligence {
 		
 	}
 
+	private String getModelName() {
+		return "qwq";
+	}
+	
 	public List<Double> vectorize(String string) {
 		Object payload = Map.of("model", "nomic-embed-text", "input", string);
 		Optional<EmbeddingsResponse> response = fetch("embed", payload, EmbeddingsResponse.class);
@@ -97,13 +105,13 @@ public class Intelligence {
 	}
 
 	public String prompt(String prompt) {
-		Object payload = Map.of("model", MODEL, "prompt", prompt);
+		Object payload = Map.of("model", getModelName(), "prompt", prompt);
 		Optional<String> response = fetch("generate", payload, String.class);
 		return response.orElse(null);
 	}
 	
 	public void streamPrompt(String prompt, OutputStream out) {
-		Object payload = Map.of("model", MODEL, "prompt", prompt);
+		Object payload = Map.of("model", getModelName(), "prompt", prompt);
 		stream("generate", payload, out);
 	}
 
@@ -134,5 +142,10 @@ public class Intelligence {
 
 	public static class StreamResponse {
 		public String response;
+	}
+
+	@Autowired
+	public void setConfiguration(ConfigurationService configuration) {
+		this.configuration = configuration;
 	}
 }

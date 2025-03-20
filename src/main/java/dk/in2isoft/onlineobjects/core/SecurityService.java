@@ -19,7 +19,7 @@ import com.google.common.collect.Sets;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Client;
@@ -107,17 +107,17 @@ public class SecurityService {
 		return null;
 	}
 	
-	public void changePassword(String username, String existingPassword,String newPassword, Operator operator) throws SecurityException, ModelException, IllegalRequestException, ExplodingClusterFuckException {
+	public void changePassword(String username, String existingPassword,String newPassword, Operator operator) throws SecurityException, ModelException, BadRequestException, ExplodingClusterFuckException {
 		User user = getUser(username, existingPassword, operator);
 		if (user==null) {
-			throw new IllegalRequestException(Error.incorrectCurrentPassword);
+			throw new BadRequestException(Error.incorrectCurrentPassword);
 		}
 		changePassword(user, newPassword, operator);
 	}
 
-	private void changePassword(User user, String password, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
+	private void changePassword(User user, String password, Operator operator) throws ExplodingClusterFuckException, SecurityException, ModelException, BadRequestException {
 		if (!ValidationUtil.isValidPassword(password)) {
-			throw new IllegalRequestException(Error.invalidNewPassword);
+			throw new BadRequestException(Error.invalidNewPassword);
 		}
 		setSaltedPassword(user, password);
 		user.removeProperties(Property.KEY_PASSWORD_RECOVERY_CODE);
@@ -140,10 +140,10 @@ public class SecurityService {
 		user.setSalt(salt);
 	}
 
-	public void changePasswordUsingKey(String key, String password, Request request) throws ExplodingClusterFuckException, SecurityException, ModelException, IllegalRequestException {
+	public void changePasswordUsingKey(String key, String password, Request request) throws ExplodingClusterFuckException, SecurityException, ModelException, BadRequestException {
 		User user = passwordRecoveryService.getUserByRecoveryKey(key, request);
 		if (user==null) {
-			throw new IllegalRequestException(Error.userNotFound);
+			throw new BadRequestException(Error.userNotFound);
 		}
 		Operator usersOperator = request.as(user);
 		changePassword(user, password, usersOperator);

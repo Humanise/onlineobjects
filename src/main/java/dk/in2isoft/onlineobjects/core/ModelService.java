@@ -48,7 +48,7 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.events.EventService;
 import dk.in2isoft.onlineobjects.core.events.ModelEventType;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -378,7 +378,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 	}
 
-	public <T extends Entity> void delete(Class<T> type, long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public <T extends Entity> void delete(Class<T> type, long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		T address = getRequired(type, id, operator);
 		delete(address, operator);
 	}
@@ -501,11 +501,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return false;
 	}
 
-	public <T extends Entity> @NonNull T getRequired(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Operator operator) throws ModelException,ContentNotFoundException {
+	public <T extends Entity> @NonNull T getRequired(@NonNull Class<T> entityClass, @NonNull Long id, @NonNull Operator operator) throws ModelException,NotFoundException {
 		@Nullable
 		T found = get(entityClass, id, operator);
 		if (found==null) {
-			throw new ContentNotFoundException(entityClass, id);
+			throw new NotFoundException(entityClass, id);
 		}
 		return found;
 	}
@@ -650,7 +650,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return null;
 	}
 
-	public User getUser(Operator operator) throws ModelException, ContentNotFoundException {
+	public User getUser(Operator operator) throws ModelException, NotFoundException {
 		return getRequired(User.class, operator.getIdentity(), operator);
 	}
 

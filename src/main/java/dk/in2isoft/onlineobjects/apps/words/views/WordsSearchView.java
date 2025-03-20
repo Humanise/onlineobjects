@@ -8,12 +8,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.apps.words.LoadManager;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -33,8 +36,9 @@ public class WordsSearchView extends AbstractView {
 	private static final int PAGING = 10;
 	private WordService wordService;
 	private WordsInterfaceHelper wordsInterfaceHelper;
+	private LoadManager loadManager;
 	
-	//private static final Logger log = LogManager.getLogger(WordsSearchView.class);
+	private static final Logger log = LogManager.getLogger(WordsSearchView.class);
 		
 	private List<WordListPerspective> list;
 	private int count;
@@ -66,6 +70,7 @@ public class WordsSearchView extends AbstractView {
 
 	@Override
 	protected void before(Request request) throws Exception {
+		loadManager.failIfBusy();
 		text = request.getString("text");
 		letter = request.getString("letter");
 		language = request.getString("language");
@@ -464,5 +469,9 @@ public class WordsSearchView extends AbstractView {
 	
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {
 		this.wordsInterfaceHelper = wordsInterfaceHelper;
+	}
+	
+	public void setLoadManager(LoadManager loadManager) {
+		this.loadManager = loadManager;
 	}
 }

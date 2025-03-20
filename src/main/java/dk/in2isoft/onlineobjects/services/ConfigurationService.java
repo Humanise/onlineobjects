@@ -48,6 +48,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean https;
 	private boolean intelligenceEnabled;
 	private boolean solrEnabled;
+	private String languageModel;
 	
 	private File tempDir;
 
@@ -401,5 +402,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setSolrEnabled(boolean solrEnabled) {
 		this.solrEnabled = solrEnabled;
+	}
+
+	public String getLanguageModel() {
+		return languageModel;
+	}
+
+	public void setLanguageModel(String languageModel) {
+		this.languageModel = languageModel;
 	}
 }

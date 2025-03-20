@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
@@ -52,7 +52,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 		} else {
 			String appName = resolveMapping(request);
 			if (appName == null) {
-				throw new ContentNotFoundException("Application not found");
+				throw new NotFoundException("Application not found");
 			} else {
 				callApplication(appName, request);
 			}
@@ -71,7 +71,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 	private void callApplication(String application, Request request) throws IOException, EndUserException {
 		ApplicationController controller = getApplicationController(request,application);
 		if (controller == null) {
-			throw new ContentNotFoundException("Application not found: "+application);
+			throw new NotFoundException("Application not found: "+application);
 		}
 		String[] path = request.getLocalPath();
 		request.setApplication(application);

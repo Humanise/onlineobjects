@@ -23,10 +23,10 @@ import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -63,7 +63,7 @@ public class ModelController extends ModelControllerBase {
 		}
 	}
 
-	private User getUser(Request request) throws ModelException, ContentNotFoundException {
+	private User getUser(Request request) throws ModelException, NotFoundException {
 		return modelService.getUser(request);
 	}
 
@@ -118,7 +118,7 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void addTag(Request request) throws ModelException, SecurityException, IllegalRequestException {
+	public void addTag(Request request) throws ModelException, SecurityException, BadRequestException {
 		String tag = request.getString("tag", "No tag provided");
 		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request);
@@ -170,7 +170,7 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void removeEntity(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public void removeEntity(Request request) throws BadRequestException, ModelException, SecurityException {
 
 		Long id = request.getId();
 		Entity entity = modelService.get(Entity.class, id, request);
@@ -179,7 +179,7 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public void removeFromInbox(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public void removeFromInbox(Request request) throws BadRequestException, ModelException, SecurityException, NotFoundException {
 
 		long id = request.getLong("id");
 		User user = getUser(request);
@@ -187,13 +187,13 @@ public class ModelController extends ModelControllerBase {
 	}
 	
 	@Path
-	public Diagram diagram(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public Diagram diagram(Request request) throws BadRequestException, ModelException, SecurityException {
 		Long id = request.getLong("id");
 		Diagram diagram = new Diagram();
 		
 		Entity entity = modelService.get(Entity.class, id, request);
 		if (entity==null) {
-			throw new IllegalRequestException("Not found");
+			throw new BadRequestException("Not found");
 		}
 
 		Node center = new Node();
@@ -232,11 +232,11 @@ public class ModelController extends ModelControllerBase {
 	}
 
 	@Path
-	public FinderConfiguration finder(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public FinderConfiguration finder(Request request) throws BadRequestException, ModelException, SecurityException {
 
 		List<String> types = request.getStrings("type");
 		if (types.isEmpty()) {
-			throw new IllegalRequestException("Missing type");
+			throw new BadRequestException("Missing type");
 		}
 		String type = types.get(0);
 		
@@ -337,7 +337,7 @@ public class ModelController extends ModelControllerBase {
 	}
 	
 	@Path
-	public Object createFromFinder(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public Object createFromFinder(Request request) throws BadRequestException, ModelException, SecurityException {
 		String type = request.getString("type", "No type provided");
 		if (Person.class.getSimpleName().equals(type)) {
 			String name = request.getString("fullName");
@@ -351,6 +351,6 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text");
 			return knowledgeService.createHypothesis(text, request);
 		}
-		throw new IllegalRequestException("Unknown type");
+		throw new BadRequestException("Unknown type");
 	}
 }

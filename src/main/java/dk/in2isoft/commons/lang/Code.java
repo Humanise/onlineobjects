@@ -3,7 +3,7 @@ package dk.in2isoft.commons.lang;
 import java.util.Collection;
 import java.util.List;
 
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 
 public class Code {
 	
@@ -30,15 +30,15 @@ public class Code {
 		return !isEmpty(collection);
 	}
 
-	public static void checkNotEmpty(Collection<?> collection, String message) throws IllegalRequestException {
+	public static void checkNotEmpty(Collection<?> collection, String message) throws BadRequestException {
 		if (Code.isEmpty(collection)) {
-			throw new IllegalRequestException(message);
+			throw new BadRequestException(message);
 		}
 	}
 
-	public static void checkNotNull(Object object, String message) throws IllegalRequestException {
+	public static void checkNotNull(Object object, String message) throws BadRequestException {
 		if (object==null) {
-			throw new IllegalRequestException(message);
+			throw new BadRequestException(message);
 		}
 	}
 }

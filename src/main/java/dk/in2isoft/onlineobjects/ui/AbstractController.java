@@ -19,7 +19,7 @@ import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
@@ -118,7 +118,7 @@ public abstract class AbstractController {
 	}
 	
 	public void unknownRequest(Request request) throws IOException, EndUserException {
-		throw new ContentNotFoundException("Not found");
+		throw new NotFoundException("Not found");
 	}
 
 	public RequestDispatcher getDispatcher(Request request) {

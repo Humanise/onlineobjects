@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.service.ServiceController;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
@@ -30,7 +30,7 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		request.setLocalContext((String[]) ArrayUtils.subarray(path, 0, 2));
 		ServiceController controller = getServiceController(request,path[1]);
 		if (controller == null) {
-			throw new ContentNotFoundException("No controller found!");
+			throw new NotFoundException("No controller found!");
 		}
 		String language = controller.getLanguage(request);
 		if (language!=null) {

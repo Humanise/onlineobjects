@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -31,7 +31,7 @@ public class PasswordRecoveryService {
 	
 	public boolean sendRecoveryMail(String usernameOrEmail, Operator operator) throws EndUserException {
 		if (!memberService.isValidUsername(usernameOrEmail) && !memberService.isWellFormedEmail(usernameOrEmail)) {
-			throw new IllegalRequestException(Error.invalidUsernameOrEmail);
+			throw new BadRequestException(Error.invalidUsernameOrEmail);
 		}
 		User user = modelService.getUser(usernameOrEmail, operator);
 		if (user==null) {

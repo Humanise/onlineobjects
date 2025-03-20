@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.StorageService;
@@ -19,7 +19,7 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		File folder = storageService.getItemFolder(id);
 		File original = new File(folder, "original");
 		if (!original.isFile()) {
-			throw new ContentNotFoundException("The image with id=" + id + " does not exist");
+			throw new NotFoundException("The image with id=" + id + " does not exist");
 		}
 		File converted = new File(folder, getFileName(transform));
 		if (!converted.exists()) {
@@ -35,7 +35,7 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 	
 	public void transform(File original, ImageTransformation transform, File converted) throws EndUserException {
 		if (!original.isFile()) {
-			throw new ContentNotFoundException("The file does not exist");
+			throw new NotFoundException("The file does not exist");
 		}
 		if (!converted.exists()) {
 			String cmd = buildImageMagick(original, transform, converted);

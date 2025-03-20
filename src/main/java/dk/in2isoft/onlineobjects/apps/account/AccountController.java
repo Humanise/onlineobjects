@@ -12,11 +12,11 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -68,7 +68,7 @@ public class AccountController extends AccountControllerBase {
 
 	@Path(expression = "/<language>/confirm\\-email\\-change")
 	@View(jsf = "confirm-email-change.xhtml")
-	public void confirmEmailChange(Request request) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
+	public void confirmEmailChange(Request request) throws NotFoundException, BadRequestException, ModelException, SecurityException {
 		String key = request.getString("key");
 		if ("simulate-success".equals(key)) {
 			return;
@@ -77,7 +77,7 @@ public class AccountController extends AccountControllerBase {
 	}
 	
 	@Path
-	public void changePassword(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException, ContentNotFoundException {
+	public void changePassword(Request request) throws BadRequestException, SecurityException, ModelException, ExplodingClusterFuckException, NotFoundException {
 		User user = getUser(request);
 		String username = user.getUsername();
 		String currentPassword = request.getString("currentPassword", Error.missingCurrentPassword);
@@ -86,7 +86,7 @@ public class AccountController extends AccountControllerBase {
 	}
 
 	@Path
-	public void changeName(Request request) throws ModelException, ContentNotFoundException, SecurityException {
+	public void changeName(Request request) throws ModelException, NotFoundException, SecurityException {
 		UserSession privileged = request.getSession();
 		User user = modelService.getRequired(User.class, privileged.getIdentity(), request);
 		Person person = memberService.getUsersPerson(user, request);
@@ -109,13 +109,13 @@ public class AccountController extends AccountControllerBase {
 		memberService.sendEmailChangeRequest(user, email, request);
 	}
 
-	private @NonNull User getUser(Request request) throws ModelException, ContentNotFoundException {
+	private @NonNull User getUser(Request request) throws ModelException, NotFoundException {
 		return modelService.getRequired(User.class, request.getIdentity(), request);
 	}
 
 	
 	@Path
-	public void changePasswordUsingKey(Request request) throws IllegalRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
+	public void changePasswordUsingKey(Request request) throws BadRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
 		String key = request.getString("key", "Key must be provided");
 		String password = request.getString("password", "Password must be provided");
 		securityService.changePasswordUsingKey(key, password, request);
@@ -123,7 +123,7 @@ public class AccountController extends AccountControllerBase {
 	}
 
 	@Path
-	public void acceptTerms(Request request) throws ContentNotFoundException, ModelException, SecurityException {
+	public void acceptTerms(Request request) throws NotFoundException, ModelException, SecurityException {
 		User user = getUser(request);
 		memberService.markTermsAcceptance(user, request);
 	}
@@ -146,13 +146,13 @@ public class AccountController extends AccountControllerBase {
 	}
 	
 	@Path
-	public void deleteAccount(Request request) throws ModelException, SecurityException, IllegalRequestException {
+	public void deleteAccount(Request request) throws ModelException, SecurityException, BadRequestException {
 		String username = request.getString("username", Error.noUsername);
 		String password = request.getString("password", Error.noPassword);
 		UserSession session = request.getSession();
 		User user = modelService.get(User.class, session.getIdentity(), request);
 		if (!username.equals(user.getUsername())) {
-			throw new IllegalRequestException(Error.userNotCurrent);
+			throw new BadRequestException(Error.userNotCurrent);
 		}
 		boolean userChanged = securityService.changeUser(request, username, password, request);
 		if (!userChanged) {
@@ -163,7 +163,7 @@ public class AccountController extends AccountControllerBase {
 	}
 
 	@Path(exactly="status")
-	public void status(Request request) throws IOException, ModelException, ContentNotFoundException {
+	public void status(Request request) throws IOException, ModelException, NotFoundException {
 		@NonNull
 		User user = getUser(request);
 		Map<String,Object> info = new HashMap<>();

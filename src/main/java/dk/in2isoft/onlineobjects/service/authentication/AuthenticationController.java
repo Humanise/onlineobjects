@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -73,11 +73,11 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		String username = request.getString("username");
 		String password = request.getString("password");
 		if (!StringUtils.isNotBlank(username)) {
-			throw new IllegalRequestException(Error.noUsername);
+			throw new BadRequestException(Error.noUsername);
 		}
 		username = username.toLowerCase();
 		if (!StringUtils.isNotBlank(password)) {
-			throw new IllegalRequestException(Error.noPassword);
+			throw new BadRequestException(Error.noPassword);
 		}
 		boolean success = securityService.changeUser(request, username, password, request);
 		if (!success) {
@@ -95,7 +95,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
 			
 		} else {
-			throw new IllegalRequestException("Username or e-mail not found");
+			throw new BadRequestException("Username or e-mail not found");
 		}
 	}
 	
@@ -110,11 +110,11 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	}
 
 	@Path
-	public void getUserInfo(Request request) throws ModelException, IOException, IllegalRequestException {
+	public void getUserInfo(Request request) throws ModelException, IOException, BadRequestException {
 		UserSession session = request.getSession();
 		User user = modelService.get(User.class, session.getIdentity(), request);
 		if (user==null) {
-			throw new IllegalRequestException();
+			throw new BadRequestException();
 		}
 		Image image = memberService.getUsersProfilePhoto(user, request);
 		Person person = memberService.getUsersPerson(user, request);

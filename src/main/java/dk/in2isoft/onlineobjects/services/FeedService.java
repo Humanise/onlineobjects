@@ -20,7 +20,7 @@ import com.sun.syndication.io.WireFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 import dk.in2isoft.commons.lang.Code;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.NetworkException;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
@@ -76,7 +76,7 @@ public class FeedService {
         return null;
 	}
 	
-	public dk.in2isoft.onlineobjects.modules.feeds.Feed parse(File file) throws IllegalRequestException {
+	public dk.in2isoft.onlineobjects.modules.feeds.Feed parse(File file) throws BadRequestException {
         WireFeedInput input = new WireFeedInput();
         WireFeed wireFeed;
         XmlReader reader = null;
@@ -93,11 +93,11 @@ public class FeedService {
 			}
 			return feed;
 		} catch (IOException e) {
-			throw new IllegalRequestException("Could not parse the feed");
+			throw new BadRequestException("Could not parse the feed");
 		} catch (IllegalArgumentException e) {
-			throw new IllegalRequestException("Could not parse the feed");
+			throw new BadRequestException("Could not parse the feed");
 		} catch (FeedException e) {
-			throw new IllegalRequestException("Could not parse the feed");
+			throw new BadRequestException("Could not parse the feed");
 		} finally {
 			IOUtils.closeQuietly(reader);
 		}

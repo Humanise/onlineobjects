@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
@@ -42,10 +42,10 @@ public class PeopleControllerBase extends ApplicationController {
 		return super.getLanguage(request);
 	}
 
-	protected Image getImage(long id, Operator privileged) throws ModelException, ContentNotFoundException {
+	protected Image getImage(long id, Operator privileged) throws ModelException, NotFoundException {
 		Image image = modelService.get(Image.class, id,privileged);
 		if (image==null) {
-			throw new ContentNotFoundException("The image was not found");
+			throw new NotFoundException("The image was not found");
 		}
 		return image;
 	}

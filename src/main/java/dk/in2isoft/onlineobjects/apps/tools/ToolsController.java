@@ -25,9 +25,9 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -104,7 +104,7 @@ public class ToolsController extends ToolsControllerBase {
 	}
 
 	@Path
-	public Map<String,Object> getImage(Request request) throws ModelException, IllegalRequestException {
+	public Map<String,Object> getImage(Request request) throws ModelException, BadRequestException {
 		Long id = request.getId();
 		Map<String,Object> data = new HashMap<String, Object>();
 		Image image = modelService.get(Image.class, id, request);
@@ -155,7 +155,7 @@ public class ToolsController extends ToolsControllerBase {
 	}
 
 	@Path
-	public void listInvitations(Request request) throws IOException, ModelException, ContentNotFoundException {
+	public void listInvitations(Request request) throws IOException, ModelException, NotFoundException {
 
 		User user = getUser(request);
 		List<Invitation> invitations = modelService.getChildren(user, Invitation.class, request);
@@ -181,7 +181,7 @@ public class ToolsController extends ToolsControllerBase {
 	}
 
 	@Path
-	public Map<String,Object> loadPerson(Request request) throws ModelException, ContentNotFoundException, IllegalRequestException {
+	public Map<String,Object> loadPerson(Request request) throws ModelException, NotFoundException, BadRequestException {
 		Long id = request.getId();
 		
 		Map<String,Object> data = new HashMap<String, Object>();
@@ -199,7 +199,7 @@ public class ToolsController extends ToolsControllerBase {
 	public void savePerson(Request request) throws EndUserException {
 		PersonPerspective perspective = request.getObject("data", PersonPerspective.class);
 		if (perspective==null) {
-			throw new IllegalRequestException("Invalid data");
+			throw new BadRequestException("Invalid data");
 		}
 		Person dummy = perspective.getPerson();
 		Person person;
@@ -227,12 +227,12 @@ public class ToolsController extends ToolsControllerBase {
 		return invitationService.createAndSendInvitation(name, email, message, user, request);
 	}
 
-	private @NonNull User getUser(Request request) throws ModelException, ContentNotFoundException {
+	private @NonNull User getUser(Request request) throws ModelException, NotFoundException {
 		return modelService.getRequired(User.class, request.getSession().getIdentity(), request);
 	}
 	
 	@Path
-	public void deletePerson(Request request) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+	public void deletePerson(Request request) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		Long id = request.getId();
 		Person person = modelService.getRequired(Person.class, id, request);
 		List<EmailAddress> mails = modelService.getChildren(person, EmailAddress.class, request);
@@ -299,10 +299,10 @@ public class ToolsController extends ToolsControllerBase {
 	}
 	
 	@Path
-	public void saveInternetAddress(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void saveInternetAddress(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		InternetAddressInfo info = request.getObject("data", InternetAddressInfo.class);
 		if (info==null) {
-			throw new IllegalRequestException("Malformed data");
+			throw new BadRequestException("Malformed data");
 		}
 		InternetAddress address;
 		if (info.getId()!=null) {
@@ -322,7 +322,7 @@ public class ToolsController extends ToolsControllerBase {
 		try {
 			informationService.addInternetAddress(request.getString("url"), request);			
 		} catch (IllegalArgumentException e) {
-			throw new IllegalRequestException("Unable to create address");
+			throw new BadRequestException("Unable to create address");
 		}
 	}
 	

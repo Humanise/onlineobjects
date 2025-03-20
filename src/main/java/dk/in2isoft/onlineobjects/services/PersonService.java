@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Address;
@@ -34,13 +34,13 @@ public class PersonService {
 		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class, privileged);
 	}
 	
-	public Person getOrCreatePerson(String text, Operator privileged) throws ModelException, SecurityException, IllegalRequestException {
+	public Person getOrCreatePerson(String text, Operator privileged) throws ModelException, SecurityException, BadRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("A person must have a name");
+			throw new BadRequestException("A person must have a name");
 		}
 		text = text.replaceAll("[\\s]+", " ").trim();
 		if (text.length() > 100) {
-			throw new IllegalRequestException("The persons name is too long");
+			throw new BadRequestException("The persons name is too long");
 		}
 		Query<Person> query = Query.after(Person.class).withName(text).as(privileged);
 		Person person = modelService.getFirst(query, privileged);

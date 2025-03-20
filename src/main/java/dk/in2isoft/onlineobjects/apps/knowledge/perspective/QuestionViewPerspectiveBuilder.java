@@ -4,7 +4,7 @@ import java.util.List;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Question;
@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.model.User;
 
 public class QuestionViewPerspectiveBuilder extends EntityViewPerspectiveBuilder {
 
-	public QuestionViewPerspective build(long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public QuestionViewPerspective build(long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, operator);
 		QuestionViewPerspective perspective = new QuestionViewPerspective();
 		perspective.setId(id);

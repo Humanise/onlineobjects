@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import dk.in2isoft.commons.jsf.DependencyGraph;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class DependencyService {
@@ -45,7 +45,7 @@ public class DependencyService {
 		return hash;
 	}
 
-	public void respondScripts(String stamp, String hash, Request request) throws ContentNotFoundException, IOException {
+	public void respondScripts(String stamp, String hash, Request request) throws NotFoundException, IOException {
 		String[] urls = storedScripts.get(hash);
 		ScriptWriter w = new ScriptWriter(request, configurationService);
 		if (urls==null) {
@@ -53,7 +53,7 @@ public class DependencyService {
 				log.info("Served cached JS: {}.{}.js", stamp, hash);
 				return;
 			} else {
-				throw new ContentNotFoundException();
+				throw new NotFoundException();
 			}
 		}
 		List<String[]> paths = new ArrayList<>();
@@ -64,7 +64,7 @@ public class DependencyService {
 		w.write(paths, hash);
 	}
 
-	public void respondStyles(String stamp, String hash, Request request) throws ContentNotFoundException, IOException {
+	public void respondStyles(String stamp, String hash, Request request) throws NotFoundException, IOException {
 		String[] urls = storedStyles.get(hash);
 		StylesheetWriter w = new StylesheetWriter(request, configurationService);
 		if (urls==null) {
@@ -72,7 +72,7 @@ public class DependencyService {
 				log.info("Served cached CSS: {}.{}.css", stamp, hash);
 				return;
 			} else {
-				throw new ContentNotFoundException();
+				throw new NotFoundException();
 			}
 		}
 		List<String[]> paths = new ArrayList<>();

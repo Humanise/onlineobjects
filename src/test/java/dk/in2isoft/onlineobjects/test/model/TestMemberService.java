@@ -18,7 +18,7 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -97,14 +97,14 @@ public class TestMemberService extends AbstractSpringTestCase {
 			try {
 				memberService.createMember(publicOperator, username+"2", password, fullName, email);
 				fail("It should not be possible to use the same e-mail again");
-			} catch (IllegalRequestException e) {
+			} catch (BadRequestException e) {
 				assertEquals("emailExists",e.getCode());
 			}
 	
 			try {
 				memberService.createMember(publicOperator, username+"2", password, fullName, email.toUpperCase());
 				fail("It should not be possible to use the same e-mail again in different casing");
-			} catch (IllegalRequestException e) {
+			} catch (BadRequestException e) {
 				assertEquals("emailExists",e.getCode());
 			}
 

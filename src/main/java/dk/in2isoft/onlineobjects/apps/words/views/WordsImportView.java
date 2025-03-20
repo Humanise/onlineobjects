@@ -17,8 +17,8 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.importing.TextImporter;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
@@ -46,7 +46,7 @@ public class WordsImportView extends AbstractView {
 	private List<Pair<String, Integer>> languages;
 	private long queryTime;
 	
-	private Language findLanguage(String fromContent, Request request) throws IllegalRequestException {
+	private Language findLanguage(String fromContent, Request request) throws BadRequestException {
 		String[] path = request.getLocalPath();
 		String pathLang = path[0];
 		String queryLang = request.getString("language");
@@ -61,7 +61,7 @@ public class WordsImportView extends AbstractView {
 			language = languageService.getLanguageForCode(pathLang, request);
 		}
 		if (language == null) {
-			throw new IllegalRequestException("Unsupported language");
+			throw new BadRequestException("Unsupported language");
 		}
 		return language;
 	}
@@ -73,7 +73,7 @@ public class WordsImportView extends AbstractView {
 			id = path[2];
 			ImportSession session = importService.getImportSession(id);
 			if (session==null) {
-				throw new ContentNotFoundException("The session does not exist");
+				throw new NotFoundException("The session does not exist");
 			}
 			status = session.getStatus().name();
 			TextImporter handler = (TextImporter) session.getTransport();

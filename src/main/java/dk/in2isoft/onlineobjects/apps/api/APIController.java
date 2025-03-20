@@ -24,10 +24,10 @@ import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
@@ -123,7 +123,7 @@ public class APIController extends APIControllerBase {
 	public void recover(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail", "No username or e-mail provided");
 		if (!passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
-			throw new IllegalRequestException("Username or e-mail not found");
+			throw new BadRequestException("Username or e-mail not found");
 		}
 	}
 
@@ -133,7 +133,7 @@ public class APIController extends APIControllerBase {
 		securityService.randomDelay();
 		Boolean success = passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request);
 		if (!success) {
-			throw new ContentNotFoundException("Username or e-mail not found");
+			throw new NotFoundException("Username or e-mail not found");
 		}
 	}
 
@@ -143,11 +143,11 @@ public class APIController extends APIControllerBase {
 		String password = request.getString("password");
 		if (Strings.isBlank(username)) {
 			surveillanceService.audit().warn("Failed to authenticate because of missing username");
-			throw new IllegalRequestException(Error.noUsername);
+			throw new BadRequestException(Error.noUsername);
 		}
 		if (Strings.isBlank(password)) {
 			surveillanceService.audit().warn("Failed to authenticate because of missing password");
-			throw new IllegalRequestException(Error.noPassword);
+			throw new BadRequestException(Error.noPassword);
 		}
 		
 		ClientInfo info = getClientInfo(request);
@@ -170,7 +170,7 @@ public class APIController extends APIControllerBase {
 		return response;
 	}
 
-	private ClientInfo getClientInfo(Request request) throws IllegalRequestException {
+	private ClientInfo getClientInfo(Request request) throws BadRequestException {
 		ClientInfo info = new ClientInfo();
 		info.setUUID(request.getString("id"));
 		info.setNickname(request.getString("nickname"));
@@ -217,7 +217,7 @@ public class APIController extends APIControllerBase {
 			protected Privileged getUser(Map<String, String> parameters, Request request) throws EndUserException {
 				String secret = parameters.get("secret");
 				if (Strings.isBlank(secret)) {
-					throw new IllegalRequestException("No secret");
+					throw new BadRequestException("No secret");
 				}
 				User user = securityService.getUserBySecret(secret, request);
 				if (user == null) {
@@ -438,9 +438,9 @@ public class APIController extends APIControllerBase {
 		return knowledgeService.getHypothesisPerspective(hypothesisId, user, request);
 	}
 
-	private String getHypothesisRelation(String relation) throws IllegalRequestException {
+	private String getHypothesisRelation(String relation) throws BadRequestException {
 		if (!"supports".equals(relation) && !"contradicts".equals(relation)) {
-			throw new IllegalRequestException("Invalid relation: " + relation);
+			throw new BadRequestException("Invalid relation: " + relation);
 		}
 		String kind = "supports".equals(relation) ? Relation.SUPPORTS : Relation.CONTRADTICS;
 		return kind;
@@ -545,7 +545,7 @@ public class APIController extends APIControllerBase {
 			relate(question, statement, request);
 		}
 		if (statement == null) {
-			throw new IllegalRequestException("The statement could not be added");
+			throw new BadRequestException("The statement could not be added");
 		}
 		return knowledgeService.getStatementPerspective(statement.getId(), user, request);
 	}
@@ -557,7 +557,7 @@ public class APIController extends APIControllerBase {
 		String text = request.getString("text", "No text provided");
 		Statement statement = knowledgeService.addPersonalStatement(text, user, request);
 		if (statement == null) {
-			throw new IllegalRequestException("The statement could not be added");
+			throw new BadRequestException("The statement could not be added");
 		}
 		return knowledgeService.getStatementPerspective(statement.getId(), user, request);
 	}
@@ -655,7 +655,7 @@ public class APIController extends APIControllerBase {
 				wordService.updateWord(wordModification , request);
 			}
 		} else {
-			throw new IllegalRequestException("No modifications provided");
+			throw new BadRequestException("No modifications provided");
 		}
 		
 	}

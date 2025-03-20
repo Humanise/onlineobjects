@@ -23,9 +23,9 @@ import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
@@ -101,12 +101,12 @@ public class DeveloperController extends ApplicationController {
 
 	@Path(exactly={"not-found"})
 	public void throwNotFound(Request request) throws IOException, EndUserException {
-		throw new ContentNotFoundException();
+		throw new NotFoundException();
 	}
 	
 	@Path(exactly={"bad-request"})
 	public void throwBadRequest(Request request) throws IOException, EndUserException {
-		throw new IllegalRequestException();
+		throw new BadRequestException();
 	}
 
 	@Path(exactly={"settings", "data"}, method = Method.POST)

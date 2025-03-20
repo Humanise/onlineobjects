@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.ApplicationSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.ui.AsynchronousProcessDescriptor;
@@ -48,7 +48,7 @@ public class DataImporter {
 		final AsynchronousProcessDescriptor process = session.createAsynchronousProcessDescriptor(listener.getProcessName());
 		if (!ServletFileUpload.isMultipartContent(request.getRequest())) {
 			process.setError(true);
-			throw new IllegalRequestException("The request is not multi-part!");
+			throw new BadRequestException("The request is not multi-part!");
 		}
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(0);

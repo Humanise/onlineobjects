@@ -9,7 +9,7 @@ import com.google.common.io.Files;
 
 import dk.in2isoft.commons.http.FilePusher;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -125,7 +125,7 @@ public class ImageController extends ServiceController {
 		File file;
 		Image image = modelService.get(Image.class, parameters.id, request);
 		if (image==null) {
-			throw new ContentNotFoundException("The image could not be found, id=" + parameters.id);
+			throw new NotFoundException("The image could not be found, id=" + parameters.id);
 		}
 		String mime;
 		ImageTransformation trans = new ImageTransformation();

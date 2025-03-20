@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.apps.api.APIController;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserQuery;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Client;
 import dk.in2isoft.onlineobjects.model.User;
@@ -101,7 +101,7 @@ public class TestClientSecret extends AbstractSpringTestCase {
 		// apiController.authentication(request);
 	}
 
-	private User createMember(Operator operator) throws IllegalRequestException, EndUserException, ModelException {
+	private User createMember(Operator operator) throws BadRequestException, EndUserException, ModelException {
 		String username = getUniqueTestUserName();
 		String password = "zup4$seKr8";
 		String fullName = "Dummy Test User";

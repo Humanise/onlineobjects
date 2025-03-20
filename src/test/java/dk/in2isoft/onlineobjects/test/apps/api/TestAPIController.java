@@ -28,7 +28,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
@@ -87,21 +87,21 @@ public class TestAPIController extends AbstractSpringTestCase {
 		try {
 			apiController.signup(request);
 			Assert.fail();
-		} catch (IllegalRequestException e) {
+		} catch (BadRequestException e) {
 			assertEquals(Error.noUsername.toString(), e.getCode());
 		}
 		httpRequest.addParameter("username", "someone");
 		try {
 			apiController.signup(request);
 			Assert.fail();
-		} catch (IllegalRequestException e) {
+		} catch (BadRequestException e) {
 			assertEquals(Error.noPassword.toString(), e.getCode());
 		}
 		httpRequest.addParameter("password", "jfdskfjdsaljl");
 		try {
 			apiController.signup(request);
 			Assert.fail();
-		} catch (IllegalRequestException e) {
+		} catch (BadRequestException e) {
 			assertEquals(Error.noEmail.toString(), e.getCode());
 		}
 		httpRequest.addParameter("email", "someone@somewhere.com");

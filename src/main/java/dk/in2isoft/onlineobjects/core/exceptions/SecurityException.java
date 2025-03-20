@@ -1,11 +1,18 @@
 package dk.in2isoft.onlineobjects.core.exceptions;
 
+import javax.servlet.http.HttpServletResponse;
+
 public class SecurityException extends EndUserException {
 
 	private static final long serialVersionUID = 1449397281498175390L;
 
 	public SecurityException() {
 		super();
+	}
+	
+	@Override
+	public int getHttpStatusCode() {
+		return HttpServletResponse.SC_UNAUTHORIZED;
 	}
 
 	public SecurityException(String arg0) {

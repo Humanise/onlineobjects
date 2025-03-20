@@ -13,9 +13,9 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -56,7 +56,7 @@ public class PhotosController extends PhotosControllerBase {
 	public void gallery(Request request) {}
 	
 	@Path(exactly="updateTitle")
-	public void updateImageTitle(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void updateImageTitle(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		String title = request.getString("title");
 		Image image = getImage(id, request);
@@ -65,7 +65,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path(exactly="updateDescription")
-	public void updateImageDescription(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void updateImageDescription(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		String description = request.getString("description");
 		Image image = getImage(id,request);
@@ -74,7 +74,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path(exactly="updateLocation")
-	public void updateImageLocation(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void updateImageLocation(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		ImageLocation location = request.getObject("location", ImageLocation.class);
 		Image image = getImage(id, request);
@@ -82,7 +82,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path(exactly="relateWord")
-	public void relateWordToImage(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void relateWordToImage(Request request) throws ModelException, SecurityException, NotFoundException {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");
 		Image image = getImage(imageId, request);
@@ -94,7 +94,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path(exactly="removeWord")
-	public void removeWordFromImage(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void removeWordFromImage(Request request) throws ModelException, SecurityException, NotFoundException {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");
 		Image image = getImage(imageId, request);
@@ -123,13 +123,13 @@ public class PhotosController extends PhotosControllerBase {
 	}
 	
 	@Path
-	public void deleteImage(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public void deleteImage(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getLong("imageId");
 		Image image = getImage(imageId, request);
 		if (image!=null) {
 			imageService.deleteImage(image, request);
 		} else {
-			throw new ContentNotFoundException(Image.class,imageId);
+			throw new NotFoundException(Image.class,imageId);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public void changeFeatured(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public void changeFeatured(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getInt("image");
 		boolean featured = request.getBoolean("featured");
 		Image image = getImage(imageId, request);
@@ -149,7 +149,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public void changeAccess(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public void changeAccess(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getInt("image");
 		boolean publicAccess = request.getBoolean("public");
 		Image image = getImage(imageId, request);
@@ -200,7 +200,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public void updateGalleryTitle(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void updateGalleryTitle(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		String title = request.getString("title");
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, id, request);
@@ -209,13 +209,13 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public <T extends Entity> void deleteGallery(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public <T extends Entity> void deleteGallery(Request request) throws SecurityException, ModelException, NotFoundException {
 		long id = request.getLong("id");
 		imageGalleryService.deleteGallery(id, request);
 	}
 	
 	@Path
-	public void removeImageFromGallery(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public void removeImageFromGallery(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getLong("imageId");
 		long galleryId = request.getLong("galleryId");
 		Image image = modelService.getRequired(Image.class, imageId, request);
@@ -228,10 +228,10 @@ public class PhotosController extends PhotosControllerBase {
 	}
 	
 	@Path
-	public void addImagesToGallery(Request request) throws SecurityException, ModelException, ContentNotFoundException, IllegalRequestException {
+	public void addImagesToGallery(Request request) throws SecurityException, ModelException, NotFoundException, BadRequestException {
 		GalleryModificationRequest per = request.getObject("info", GalleryModificationRequest.class);
 		if (per==null) {
-			throw new IllegalRequestException("Malformed data");
+			throw new BadRequestException("Malformed data");
 		}
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, per.getGalleryId(), request);
 		float position = getMaxImagePosition(gallery, request);
@@ -251,7 +251,7 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public void changeGallerySequence(Request request) throws SecurityException, ModelException, ContentNotFoundException {
+	public void changeGallerySequence(Request request) throws SecurityException, ModelException, NotFoundException {
 		GalleryModificationRequest info = request.getObject("info", GalleryModificationRequest.class);
 		List<Long> ids = Lists.newArrayList();
 		for (SimpleEntityPerspective image : info.getImages()) {
@@ -276,11 +276,11 @@ public class PhotosController extends PhotosControllerBase {
 	}
 
 	@Path
-	public ImageMetaData getMetaData(Request request) throws ModelException, SecurityException, IllegalRequestException {
+	public ImageMetaData getMetaData(Request request) throws ModelException, SecurityException, BadRequestException {
 		Long imageId = request.getLong("imageId");
 		Image image = modelService.get(Image.class, imageId, request);
 		if (image==null) {
-			throw new IllegalRequestException("Unabe to load image");
+			throw new BadRequestException("Unabe to load image");
 		}
 		
 		ImageMetaData metaData = imageService.getMetaData(image);

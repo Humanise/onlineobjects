@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.apps.words.importing.WordsImporter;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Language;
@@ -127,7 +127,7 @@ public class WordsController extends WordsControllerBase {
 		Long wordId = request.getLong("wordId");
 		Locale locale = new Locale(request.getString("language"));
 		
-		Relation relation = modelService.getRelation(relationid, request).orElseThrow(() -> new IllegalRequestException("Word not found"));
+		Relation relation = modelService.getRelation(relationid, request).orElseThrow(() -> new BadRequestException("Word not found"));
 		Entity to = relation.getTo();
 		Entity from = relation.getFrom();
 		Entity word = null;
@@ -136,7 +136,7 @@ public class WordsController extends WordsControllerBase {
 		} else if (from.getId()==wordId) {
 			word = from;
 		} else {
-			throw new IllegalRequestException("Word not found");
+			throw new BadRequestException("Word not found");
 		}
 		
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery().withWord(word);

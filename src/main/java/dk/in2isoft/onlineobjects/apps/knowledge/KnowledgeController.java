@@ -59,10 +59,10 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.NetworkException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
@@ -194,12 +194,12 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		} else if (Hypothesis.class.getSimpleName().equals(type)) {
 			modelService.delete(Hypothesis.class, id, request);
 		} else {
-			throw new IllegalRequestException("Unknown type");
+			throw new BadRequestException("Unknown type");
 		}
 	}
 
 	@Path(expression = "/app/favorite")
-	public void appChangeFavorite(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void appChangeFavorite(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
 		boolean favorite = request.getBoolean("favorite");
@@ -220,7 +220,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/inbox")
-	public void appChangeInbox(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void appChangeInbox(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
 		boolean inbox = request.getBoolean("inbox");
@@ -231,14 +231,14 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		pileService.changeInboxStatus(entity, inbox, user, request);
 	}
 
-	private Entity loadByType(Long id, String type, Operator operator) throws ModelException, ContentNotFoundException, IllegalRequestException {
+	private Entity loadByType(Long id, String type, Operator operator) throws ModelException, NotFoundException, BadRequestException {
 		Class<? extends Entity> cls = modelService.getEntityClass(type);
 		Set<Class<?>> types = Sets.newHashSet(InternetAddress.class, Statement.class, Question.class, Hypothesis.class);
 		if (types.contains(cls)) {
 			Entity entity = modelService.getRequired(cls, id, operator);
 			return entity;			
 		}
-		throw new IllegalRequestException("Unknown type");
+		throw new BadRequestException("Unknown type");
 	}
 	
 	// Statement
@@ -298,7 +298,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	// Questions
 	
 	@Path(expression = "/app/question/create")
-	public QuestionWebPerspective appCreateQuestion(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public QuestionWebPerspective appCreateQuestion(Request request) throws IOException, ModelException, SecurityException, BadRequestException, ExplodingClusterFuckException, NotFoundException {
 		String text = request.getString("text");
 		Question question = knowledgeService.createQuestion(text, request);
 		return knowledgeService.getQuestionWebPerspective(question.getId(), request);
@@ -337,7 +337,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		} else if (Statement.class.getSimpleName().equalsIgnoreCase(type)) {
 			knowledgeService.addQuestionToStatement(questionId, id, request);
 		} else {
-			throw new IllegalRequestException("Unsupported type: " + type);
+			throw new BadRequestException("Unsupported type: " + type);
 		}
 		return knowledgeService.getQuestionWebPerspective(questionId, request);
 	}
@@ -352,7 +352,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		} else if (Statement.class.getSimpleName().equalsIgnoreCase(type)) {
 			knowledgeService.removeQuestionFromStatement(questionId, id, request);
 		} else {
-			throw new IllegalRequestException("Unsupported type: " + type);
+			throw new BadRequestException("Unsupported type: " + type);
 		}
 		return knowledgeService.getQuestionWebPerspective(questionId, request);
 	}
@@ -383,7 +383,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path(expression = "/app/hypothesis/create")
-	public HypothesisWebPerspective appCreateHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisWebPerspective appCreateHypothesis(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		String text = request.getString("text");
 		Hypothesis hypothesis = knowledgeService.createHypothesis(text, request);
 		return knowledgeService.getHypothesisWebPerspective(hypothesis.getId(), request);
@@ -399,7 +399,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path(expression = "/app/hypothesis/remove/statement")
-	public HypothesisWebPerspective appRemoveStatementFromHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisWebPerspective appRemoveStatementFromHypothesis(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		String relation = request.getString("relation");
 		Long hypothesisId = request.getLong("hypothesisId"); 
 		Long statementId = request.getLong("statementId");
@@ -409,7 +409,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path(expression = "/app/hypothesis/remove/question")
-	public HypothesisWebPerspective appRemoveQuestionFromHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisWebPerspective appRemoveQuestionFromHypothesis(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long hypothesisId = request.getLong("hypothesisId"); 
 		Long questionId = request.getLong("questionId");
 		knowledgeService.removeQuestionFromHypothesis(questionId, hypothesisId, request);
@@ -417,7 +417,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path(expression = "/app/hypothesis/add/statement")
-	public HypothesisWebPerspective appAddStatementToHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisWebPerspective appAddStatementToHypothesis(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		String relation = request.getString("relation");
 		Long hypothesisId = request.getLong("hypothesisId"); 
 		Long statementId = request.getLong("statementId");
@@ -427,7 +427,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path(expression = "/app/hypothesis/add/question")
-	public HypothesisWebPerspective appAddQuestionToHypothesis(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisWebPerspective appAddQuestionToHypothesis(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long hypothesisId = request.getId("hypothesisId"); 
 		Long questionId = request.getId("questionId");
 		knowledgeService.addQuestionToHypothesis(questionId, hypothesisId, request);
@@ -435,7 +435,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/relate", method = Method.POST)
-	public void appRelate(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void appRelate(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		RelationRequest object = request.getObject(RelationRequest.class);
 		Entity from = get(object.from, request);
 		Entity to = get(object.to, request);
@@ -452,12 +452,12 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				modelService.createRelation(from, to, Relation.CONTRADTICS, request);
 			}
 		} else {
-			throw new IllegalRequestException();
+			throw new BadRequestException();
 		}
 	}
 
 	@Path(expression = "/app/relation", method = Method.DELETE)
-	public void deleteRelation(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void deleteRelation(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		RelationRequest object = request.getObject(RelationRequest.class);
 		Entity from = get(object.from, request);
 		Entity to = get(object.to, request);
@@ -473,7 +473,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				modelService.delete(found.get(), request);
 			}
 		} else {
-			throw new IllegalRequestException();
+			throw new BadRequestException();
 		}
 	}
 
@@ -482,10 +482,10 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return modelService.get(entityClass, persp.getId(), operator);
 	}
 
-	private String getHypothesisRelation(String relation) throws IllegalRequestException {
+	private String getHypothesisRelation(String relation) throws BadRequestException {
 		if (relation.equals("contradicts")) return Relation.CONTRADTICS;
 		else if (relation.equals("supports")) return Relation.SUPPORTS;
-		throw new IllegalRequestException("Unknown relation");
+		throw new BadRequestException("Unknown relation");
 	}
 
 
@@ -515,25 +515,25 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/internetaddress/intel/summarize", method = GET)
-	public void internetAddressSummarize(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public void internetAddressSummarize(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.summarize(text, request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/internetaddress/intel/points", method = GET)
-	public void internetAddressPoints(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public void internetAddressPoints(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.keyPoints(text, request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/internetaddress/intel/people", method = GET)
-	public void internetAddressPeople(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public void internetAddressPeople(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.author(text, request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/intel/define", method = GET)
-	public void intelDefine(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public void intelDefine(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = request.getString("text");
 		var detailed = request.getBoolean("detailed");
 		String prompt;
@@ -546,7 +546,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/related", method = GET)
-	public List<SimpleEntityPerspective> related(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public List<SimpleEntityPerspective> related(Request request) throws IOException, BadRequestException, EndUserException {
 		if (!configurationService.isSolrEnabled()) {
 			return List.of();
 		}
@@ -566,7 +566,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path(expression = "/app/question/answer", method = GET)
-	public void answerQuestion(Request request) throws IOException, IllegalRequestException, EndUserException {
+	public void answerQuestion(Request request) throws IOException, BadRequestException, EndUserException {
 		var question = modelService.getRequired(Question.class, request.getId(), request);
 		intelligence.streamPrompt(question.getText(), request.getResponse().getOutputStream());
 	}
@@ -789,7 +789,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 	
 	@Path
-	public PeekPerspective peek(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
+	public PeekPerspective peek(Request request) throws ModelException, BadRequestException, NotFoundException {
 		String type = request.getString("type");
 		PeekPerspective perspective = new PeekPerspective();
 		HTMLWriter rendering = new HTMLWriter();
@@ -921,7 +921,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 				modelService.createRelation(feeds, address, request);
 			}
 		} catch (URISyntaxException e) {
-			throw new IllegalRequestException("The URL is not well formed");
+			throw new BadRequestException("The URL is not well formed");
 		} catch (IOException e) {
 			throw new NetworkException("Unable to fetch " + url);
 		} finally {
@@ -932,7 +932,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void changeStatus(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void changeStatus(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
 		Boolean favorite = request.getBoolean("favorite",null);
@@ -961,7 +961,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void changeFavoriteStatus(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void changeFavoriteStatus(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		boolean favorite = request.getBoolean("favorite");
 
@@ -973,7 +973,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void changeInboxStatus(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void changeInboxStatus(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		boolean inbox = request.getBoolean("inbox");
 
@@ -984,8 +984,8 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public InternetAddressViewPerspective loadArticle(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException,
-			ContentNotFoundException {
+	public InternetAddressViewPerspective loadArticle(Request request) throws IOException, ModelException, SecurityException, BadRequestException, ExplodingClusterFuckException,
+			NotFoundException {
 		Long articleId = request.getId();
 		boolean hightlight = request.getBoolean("highlight");
 		User user = modelService.getUser(request);
@@ -1020,7 +1020,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void addHypothesis(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public void addHypothesis(Request request) throws IOException, ModelException, SecurityException, BadRequestException, ExplodingClusterFuckException, NotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
 		Hypothesis hypothesis = knowledgeService.newHypothesis(text);
@@ -1030,7 +1030,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void addQuestion(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public void addQuestion(Request request) throws IOException, ModelException, SecurityException, BadRequestException, ExplodingClusterFuckException, NotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
 		Question question = knowledgeService.newQuestion(text);
@@ -1040,7 +1040,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void addPerson(Request request) throws IOException, ModelException, SecurityException, IllegalRequestException, ExplodingClusterFuckException, ContentNotFoundException {
+	public void addPerson(Request request) throws IOException, ModelException, SecurityException, BadRequestException, ExplodingClusterFuckException, NotFoundException {
 		Long id = request.getId();
 		String text = request.getString("text");
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, request);
@@ -1055,7 +1055,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	public SimpleEntityPerspective addInternetAddress(Request request) throws EndUserException {
 		String url = request.getString("url");
 		if (Strings.isBlank(url)) {
-			throw new IllegalRequestException("No URL");
+			throw new BadRequestException("No URL");
 		}
 		
 		User user = modelService.getUser(request);
@@ -1065,7 +1065,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void removeInternetAddress(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void removeInternetAddress(Request request) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		Long id = request.getId();
 
 		knowledgeService.deleteInternetAddress(id, request);
@@ -1084,7 +1084,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void removeWord(Request request) throws ModelException, SecurityException, ContentNotFoundException {
+	public void removeWord(Request request) throws ModelException, SecurityException, NotFoundException {
 		Long internetAddressId = request.getLong("internetAddressId");
 		Long wordId = request.getLong("wordId");
 		InternetAddress internetAddress = modelService.getRequired(InternetAddress.class, internetAddressId, request);
@@ -1096,7 +1096,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void removeTag(Request request) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public void removeTag(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long internetAddressId = request.getLong("internetAddressId");
 		String tag = request.getString("tag");
 		InternetAddress internetAddress = modelService.getRequired(InternetAddress.class, internetAddressId, request);
@@ -1127,7 +1127,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public StatementEditPerspective loadStatement(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
+	public StatementEditPerspective loadStatement(Request request) throws ModelException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		UserSession session = request.getSession();
 		Statement statement = modelService.getRequired(Statement.class, id, request);
@@ -1174,12 +1174,12 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void saveAddress(Request request) throws ModelException, IllegalRequestException, SecurityException {
+	public void saveAddress(Request request) throws ModelException, BadRequestException, SecurityException {
 		InternetAddressEditPerspective perspective = request.getObject("data", InternetAddressEditPerspective.class);
 		InternetAddressEditPerspective.validate(perspective);
 		InternetAddress internetAddress = modelService.get(InternetAddress.class, perspective.getId(), request);
 		if (internetAddress == null) {
-			throw new IllegalRequestException("The address was not found");
+			throw new BadRequestException("The address was not found");
 		}
 		internetAddress.setName(perspective.getTitle());
 		boolean addressChanged = !Strings.equals(perspective.getAddress(), internetAddress.getAddress());
@@ -1201,15 +1201,15 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void saveStatement(Request request) throws ModelException, IllegalRequestException, SecurityException {
+	public void saveStatement(Request request) throws ModelException, BadRequestException, SecurityException {
 		StatementEditPerspective perspective = request.getObject("data", StatementEditPerspective.class);
 		long id = perspective.getId();
 		if (id < 1) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		String text = perspective.getText();
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("The text is empty");
+			throw new BadRequestException("The text is empty");
 		}
 		Statement statement = modelService.get(Statement.class, id, request);
 		statement.setName(StringUtils.abbreviate(text, 50));
@@ -1230,35 +1230,35 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void deleteStatement(Request request) throws IllegalRequestException, ModelException, SecurityException {
+	public void deleteStatement(Request request) throws BadRequestException, ModelException, SecurityException {
 		Long id = request.getLong("id");
 		if (id == null) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		@Nullable
 		Statement statement = modelService.get(Statement.class, id, request);
 		if (statement == null) {
-			throw new IllegalRequestException("Statement not found");
+			throw new BadRequestException("Statement not found");
 		}
 		modelService.delete(statement, request);
 	}
 
 	@Path
-	public QuestionEditPerspective editQuestion(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
+	public QuestionEditPerspective editQuestion(Request request) throws ModelException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		return knowledgeService.getQuestionEditPerspective(id, request);
 	}
 
 	@Path
-	public void saveQuestion(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void saveQuestion(Request request) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		QuestionEditPerspective perspective = request.getObject("data", QuestionEditPerspective.class);
 		long id = perspective.getId();
 		if (id < 1) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		String text = perspective.getText();
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("The text is empty");
+			throw new BadRequestException("The text is empty");
 		}
 		Question question = modelService.getRequired(Question.class, id, request);
 		question.setName(StringUtils.abbreviate(text, 50));
@@ -1270,28 +1270,28 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void deleteQuestion(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public void deleteQuestion(Request request) throws BadRequestException, ModelException, SecurityException, NotFoundException {
 		Long id = request.getId();
 		Question question = modelService.getRequired(Question.class, id, request);
 		modelService.delete(question, request);
 	}
 
 	@Path
-	public HypothesisEditPerspective editHypothesis(Request request) throws ModelException, IllegalRequestException, ContentNotFoundException {
+	public HypothesisEditPerspective editHypothesis(Request request) throws ModelException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		return knowledgeService.getHypothesisEditPerspective(id, request);
 	}
 
 	@Path
-	public void saveHypothesis(Request request) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public void saveHypothesis(Request request) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		HypothesisEditPerspective perspective = request.getObject("data", HypothesisEditPerspective.class);
 		long id = perspective.getId();
 		if (id < 1) {
-			throw new IllegalRequestException("No id");
+			throw new BadRequestException("No id");
 		}
 		String text = perspective.getText();
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("The text is empty");
+			throw new BadRequestException("The text is empty");
 		}
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, request);
 		hypothesis.setName(StringUtils.abbreviate(text, 50));
@@ -1303,7 +1303,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	}
 
 	@Path
-	public void deleteHypothesis(Request request) throws IllegalRequestException, ModelException, SecurityException, ContentNotFoundException {
+	public void deleteHypothesis(Request request) throws BadRequestException, ModelException, SecurityException, NotFoundException {
 		Long id = request.getId();
 		Hypothesis question = modelService.getRequired(Hypothesis.class, id, request);
 		modelService.delete(question, request);

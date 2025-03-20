@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
@@ -109,7 +109,7 @@ public class InvitationService {
 
 		Invitation invitation = getInvitation(code, operator);
 		if (invitation == null) {
-			throw new IllegalRequestException("Could not find invitation with code: " + code);
+			throw new BadRequestException("Could not find invitation with code: " + code);
 		}
 		if (!Invitation.STATE_ACTIVE.equals(invitation.getState())) {
 			throw new EndUserException("The invitation is not active. The state is: " + invitation.getState());

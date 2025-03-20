@@ -41,6 +41,10 @@ public class EndUserException extends Exception {
 		return code;
 	}
 
+	public int getHttpStatusCode() {
+		return 500;
+	}
+	
 	public static Exception findUserException(Exception ex) {
 		if (ex instanceof EndUserException) {
 			return ex;

@@ -23,9 +23,9 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -250,23 +250,23 @@ public class WordService {
 		return impressions;
 	}
 	
-	public Word createWord(String languageCode, String category, String text, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ContentNotFoundException {
+	public Word createWord(String languageCode, String category, String text, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		if (StringUtils.isBlank(languageCode)) {
-			throw new IllegalRequestException("No language provided");
+			throw new BadRequestException("No language provided");
 		}
 		if (StringUtils.isBlank(text)) {
-			throw new IllegalRequestException("No text provided");
+			throw new BadRequestException("No text provided");
 		}
 		LexicalCategory lexicalCategory = null;
 		if (StringUtils.isNotBlank(category)) {
 			lexicalCategory = languageService.getLexcialCategoryForCode(category, operator);
 			if (lexicalCategory==null) {
-				throw new IllegalRequestException("Unsupported category ("+category+")");
+				throw new BadRequestException("Unsupported category ("+category+")");
 			}
 		}
 		Language language = languageService.getLanguageForCode(languageCode, operator);
 		if (language==null) {
-			throw new IllegalRequestException("Unsupported language ("+languageCode+")");
+			throw new BadRequestException("Unsupported language ("+languageCode+")");
 		}
 		Query<Word> query = Query.of(Word.class).withField(Word.TEXT_FIELD, text).from(language);
 		if (lexicalCategory!=null) {
@@ -291,7 +291,7 @@ public class WordService {
 		}
 	}
 
-	public void updateWord(WordModification modification, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+	public void updateWord(WordModification modification, Operator operator) throws ModelException, BadRequestException, SecurityException {
 		StopWatch watch = new StopWatch();
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery();
 		query.withWord(modification.text.toLowerCase());
@@ -417,17 +417,17 @@ public class WordService {
 		return address;
 	}
 	
-	private void updateWord(Word word, WordModification modification, InternetAddress source, Operator operator) throws ModelException, IllegalRequestException, SecurityException {
+	private void updateWord(Word word, WordModification modification, InternetAddress source, Operator operator) throws ModelException, BadRequestException, SecurityException {
 		Language language = languageService.getLanguageForCode(modification.language, operator);
 		if (language == null) {
-			throw new IllegalRequestException("No language in modification");
+			throw new BadRequestException("No language in modification");
 		}
 		LexicalCategory category = null;
 		String categoryCode = modification.lexicalCategory;
 		if (Strings.isNotBlank(categoryCode)) {
 			category = languageService.getLexcialCategoryForCode(categoryCode, operator);
 			if (category==null) {
-				throw new IllegalRequestException("Unsupported category: " + categoryCode);
+				throw new BadRequestException("Unsupported category: " + categoryCode);
 			}
 			changeCategory(word, category, operator);
 		}
@@ -542,7 +542,7 @@ public class WordService {
 		return null;
 	}
 	
-	public void ensureOriginator(Word word, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+	public void ensureOriginator(Word word, Operator operator) throws ModelException, SecurityException, NotFoundException {
 		User user = modelService.getUser(operator);
 		User existing = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, operator.as(securityService.getAdminPrivileged()));
 		if (existing==null) {

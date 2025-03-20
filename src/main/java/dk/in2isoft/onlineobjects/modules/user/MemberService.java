@@ -35,10 +35,10 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -80,30 +80,30 @@ public class MemberService {
 		return ValidationUtil.isValidUsername(username);
 	}
 
-	public void validateNewMember(String username, String password, String email, Operator operator) throws IllegalRequestException, ModelException {
+	public void validateNewMember(String username, String password, String email, Operator operator) throws BadRequestException, ModelException {
 		if (!StringUtils.isNotBlank(username)) {
-			throw new IllegalRequestException(Error.noUsername);
+			throw new BadRequestException(Error.noUsername);
 		}
 		if (!isValidUsername(username)) {
-			throw new IllegalRequestException(Error.invalidUsername);
+			throw new BadRequestException(Error.invalidUsername);
 		}
 		if (!Strings.isNotBlank(password)) {
-			throw new IllegalRequestException(Error.noPassword);
+			throw new BadRequestException(Error.noPassword);
 		}
 		if (!isValidPassword(password)) {
-			throw new IllegalRequestException(Error.invalidPassword);
+			throw new BadRequestException(Error.invalidPassword);
 		}
 		if (!Strings.isNotBlank(email)) {
-			throw new IllegalRequestException(Error.noEmail);
+			throw new BadRequestException(Error.noEmail);
 		}
 		if (!isWellFormedEmail(email)) {
-			throw new IllegalRequestException(Error.invalidEmail);
+			throw new BadRequestException(Error.invalidEmail);
 		}
 		if (isUsernameTaken(username, operator)) {
-			throw new IllegalRequestException(Error.userExists);
+			throw new BadRequestException(Error.userExists);
 		}
 		if (isPrimaryEmailTaken(email, operator)) {
-			throw new IllegalRequestException(Error.emailExists);
+			throw new BadRequestException(Error.emailExists);
 		}
 	}
 
@@ -139,13 +139,13 @@ public class MemberService {
 
 	public User createMember(Operator creator, String username,
 			String password, String fullName, String email)
-			throws IllegalRequestException, EndUserException, ModelException {
+			throws BadRequestException, EndUserException, ModelException {
 		surveillanceService.audit().info("Request to create user with username={}", username);
 		if (creator==null) {
-			throw new IllegalRequestException("Cannot create user without a creator");
+			throw new BadRequestException("Cannot create user without a creator");
 		}
 		if (email==null) {
-			throw new IllegalRequestException("Cannot create member without an email");
+			throw new BadRequestException("Cannot create member without an email");
 		}
 		if (username != null) {
 			username = username.toLowerCase();
@@ -254,13 +254,13 @@ public class MemberService {
 	 * @return 
 	 * @throws ModelException
 	 * @throws SecurityException
-	 * @throws IllegalRequestException 
+	 * @throws BadRequestException 
 	 */
-	public EmailAddress changePrimaryEmail(User user, String email, Operator privileged) throws ModelException, SecurityException, IllegalRequestException {
+	public EmailAddress changePrimaryEmail(User user, String email, Operator privileged) throws ModelException, SecurityException, BadRequestException {
 		surveillanceService.audit().info("Request to change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
 		email = email.trim();
 		if (!isWellFormedEmail(email)) {
-			throw new IllegalRequestException(Error.invalidEmail);
+			throw new BadRequestException(Error.invalidEmail);
 		}
 		EmailAddress emailAddress = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 		if (emailAddress!=null) {
@@ -269,14 +269,14 @@ public class MemberService {
 				//throw new IllegalRequestException("The email is the same");
 			}
 			if (isPrimaryEmailTaken(email, privileged)) {
-				throw new IllegalRequestException(Error.emailExists);
+				throw new BadRequestException(Error.emailExists);
 			}
 			emailAddress.setAddress(email);
 			emailAddress.setName(email);
 			modelService.update(emailAddress, privileged);
 		} else {
 			if (isPrimaryEmailTaken(email, privileged)) {
-				throw new IllegalRequestException(Error.emailExists);
+				throw new BadRequestException(Error.emailExists);
 			}
 			emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
@@ -479,7 +479,7 @@ public class MemberService {
 		EmailAddress email = getUsersPrimaryEmail(user, privileged);
 		if (email==null) {
 			surveillanceService.audit().warn("Tried sending email confirmation to user {} with no primary e-mail by privileged={}", user.getUsername(), privileged.getIdentity());
-			throw new IllegalRequestException("Tried sending email confirmation to user ("+user.getUsername()+") with no primary e-mail");
+			throw new BadRequestException("Tried sending email confirmation to user ("+user.getUsername()+") with no primary e-mail");
 		}
 		String name = getFullName(user, privileged);
 		String random = Strings.generateRandomString(30);
@@ -516,14 +516,14 @@ public class MemberService {
 	public void sendEmailChangeRequest(User user, String newEmail, Operator operator) throws EndUserException {
 		surveillanceService.audit().info("Request to send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, operator.getIdentity());
 		if (!isWellFormedEmail(newEmail)) {
-			throw new IllegalRequestException(Error.invalidEmail);
+			throw new BadRequestException(Error.invalidEmail);
 		}
 		EmailAddress email = getUsersPrimaryEmail(user, operator);
 		if (email!=null && newEmail.equals(email.getAddress())) {
-			throw new IllegalRequestException(Error.emailSameAsCurrent);
+			throw new BadRequestException(Error.emailSameAsCurrent);
 		}
 		if (isPrimaryEmailTaken(newEmail,operator)) {
-			throw new IllegalRequestException(Error.emailExists);
+			throw new BadRequestException(Error.emailExists);
 		}
 		String key = Strings.generateRandomString(30) + "|" + newEmail;
 		user.overrideFirstProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
@@ -546,24 +546,24 @@ public class MemberService {
 		surveillanceService.audit().info("Did send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, operator.getIdentity());
 	}
 
-	public User performEmailChangeByKey(String key, Operator operator) throws ContentNotFoundException, IllegalRequestException, ModelException, SecurityException {
+	public User performEmailChangeByKey(String key, Operator operator) throws NotFoundException, BadRequestException, ModelException, SecurityException {
 		String[] parts = key.split("\\|");
 		if (parts.length != 2) {
-			throw new IllegalRequestException("Invalid key");
+			throw new BadRequestException("Invalid key");
 		}
 		String email = parts[1];
 		if (!isWellFormedEmail(email)) {
-			throw new IllegalRequestException(Error.invalidEmail);
+			throw new BadRequestException(Error.invalidEmail);
 		}
 		Operator admin = operator.as(securityService.getAdminPrivileged());
 		Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_EMAIL_CHANGE_CODE, key);
 		User user = modelService.getFirst(query, admin);
 		if (user==null) {
-			throw new ContentNotFoundException("A user with the key could not be found");
+			throw new NotFoundException("A user with the key could not be found");
 		}
 		EmailAddress currentEmail = getUsersPrimaryEmail(user, admin);
 		if (currentEmail != null && email.equals(currentEmail.getAddress())) {
-			throw new IllegalRequestException("The e-mail was already changed");
+			throw new BadRequestException("The e-mail was already changed");
 		}
 		EmailAddress emailAddress = changePrimaryEmail(user, email, admin);
 		markConfirmed(emailAddress, operator.as(user));
@@ -571,17 +571,17 @@ public class MemberService {
 		return user;
 	}
 
-	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key, final Operator operator) throws ContentNotFoundException, ModelException, SecurityException {
+	public Pair<EmailAddress, String> findEmailByConfirmationKey(String key, final Operator operator) throws NotFoundException, ModelException, SecurityException {
 		Operator admin = operator.as(securityService.getAdminPrivileged());
 		Query<EmailAddress> query = Query.after(EmailAddress.class).withCustomProperty(Property.KEY_EMAIL_CONFIRMATION_CODE, key);
 		@Nullable
 		EmailAddress email = modelService.getFirst(query, admin);
 		if (email == null) {
-			throw new ContentNotFoundException("Could not find the email with the confirmation code: "+key);
+			throw new NotFoundException("Could not find the email with the confirmation code: "+key);
 		}
 		User user = getUserOfPrimaryEmail(email, admin);
 		if (user == null) {
-			throw new ContentNotFoundException("Could not find the user for the email with the confirmation code: "+key);
+			throw new NotFoundException("Could not find the user for the email with the confirmation code: "+key);
 		}
 		String name = user.getUsername();
 		Person person = getUsersPerson(user, admin);
@@ -608,7 +608,7 @@ public class MemberService {
 		surveillanceService.audit().info("Marked terms accepted for user={}", user.getUsername());
 	}
 
-	public boolean hasAcceptedTerms(User user, Privileged privileged) throws SecurityException, ModelException, ContentNotFoundException {
+	public boolean hasAcceptedTerms(User user, Privileged privileged) throws SecurityException, ModelException, NotFoundException {
 		Date accepted = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
 		Optional<Date> latestAgreementDate = getLatestAgreementDate();
 		if (accepted == null || !latestAgreementDate.isPresent()) return false;

@@ -8,7 +8,7 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
@@ -42,7 +42,7 @@ public class PhotosUserView extends AbstractView {
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
 		Pair<User, Person> pair = modelService.searchPairs(query, request).getFirst();
 		if (pair == null) {
-			throw new ContentNotFoundException("User not found");
+			throw new NotFoundException("User not found");
 		}
 		root = request.getLocalPathAsString()+"/";
 		

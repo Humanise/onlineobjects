@@ -9,8 +9,8 @@ import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -32,14 +32,14 @@ public class FrontEntityView extends AbstractView {
 	@Override
 	protected void before(Request request) throws Exception {
 		if (!securityService.isAdminUser(request)) {
-			throw new ContentNotFoundException();
+			throw new NotFoundException();
 		}
 		String[] path = request.getLocalPath();
 		String type = path[1];
 		Long id = Long.parseLong(path[2]);
 		Class<? extends Entity> typeClass = extracted(type);
 		if (typeClass==null) {
-			throw new IllegalRequestException("Unknown type: "+type);
+			throw new BadRequestException("Unknown type: "+type);
 		}
 		Entity entity = modelService.getRequired(typeClass, id, request);
 		Locale locale = request.getLocale();

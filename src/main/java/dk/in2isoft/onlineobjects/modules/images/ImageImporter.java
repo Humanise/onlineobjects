@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
@@ -34,10 +34,10 @@ public class ImageImporter implements ImportListener<Object> {
 
 	public final void processFile(File file, String mimeType, String fileName, Map<String, String> parameters, Request request) throws IOException, EndUserException {
 		if (!isRequestLegal(parameters,request)) {
-			throw new IllegalRequestException("The request is illegal!");
+			throw new BadRequestException("The request is illegal!");
 		}
 		if (!imageService.isSupportedMimeType(mimeType)) {
-			throw new IllegalRequestException("Unsupported mime type: "+mimeType);
+			throw new BadRequestException("Unsupported mime type: "+mimeType);
 		}
 		if (!file.exists()) {
 			throw new ExplodingClusterFuckException("The file is missing: " + file);

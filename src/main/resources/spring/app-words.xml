@@ -5,6 +5,8 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
     ">
 
+  <bean id="wordsLoadManager" class="dk.in2isoft.onlineobjects.apps.words.LoadManager" />
+
   <bean id="wordsController" class="dk.in2isoft.onlineobjects.apps.words.WordsController" autowire="byType" />
 
   <bean id="wordsModelService" class="dk.in2isoft.onlineobjects.apps.words.WordsModelService" autowire="byType" />
@@ -45,6 +47,7 @@
   <bean id="wordsWordView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsWordView" scope="request">
     <property name="modelService" ref="modelService" />
     <property name="wordService" ref="wordService" />
+    <property name="loadManager" ref="wordsLoadManager"/>
   </bean>
 
   <bean id="wordsIndexView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsIndexView" scope="request">
@@ -54,6 +57,7 @@
   <bean id="wordsSearchView" class="dk.in2isoft.onlineobjects.apps.words.views.WordsSearchView" scope="request">
     <property name="wordService" ref="wordService" />
     <property name="wordsInterfaceHelper" ref="wordsInterfaceHelper" />
+    <property name="loadManager" ref="wordsLoadManager"/>
   </bean>
 
   <bean id="wordsInterfaceHelper" class="dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper" autowire="byType" />

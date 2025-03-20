@@ -29,9 +29,9 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -75,13 +75,13 @@ public class InternetAddressViewPerspectiveBuilder {
 	private KnowledgeService knowledgeService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
 
-	public InternetAddressViewPerspective build(Long id, Settings settings, User user, Set<Long> ids, Operator operator) throws ModelException, IllegalRequestException, SecurityException, ExplodingClusterFuckException, SecurityException, ContentNotFoundException, SecurityException {
+	public InternetAddressViewPerspective build(Long id, Settings settings, User user, Set<Long> ids, Operator operator) throws ModelException, BadRequestException, SecurityException, ExplodingClusterFuckException, SecurityException, NotFoundException, SecurityException {
 		StopWatch watch = new StopWatch();
 		watch.start();
 		watch.split();
 		InternetAddress address = modelService.get(InternetAddress.class, id, operator);
 		if (address == null) {
-			throw new IllegalRequestException("Not found");
+			throw new BadRequestException("Not found");
 		}
 		ids.add(address.getId());
 		trace("Load", watch);

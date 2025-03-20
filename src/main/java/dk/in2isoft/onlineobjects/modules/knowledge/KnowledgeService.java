@@ -41,10 +41,10 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.exceptions.ContentNotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.IllegalRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
@@ -79,23 +79,23 @@ public class KnowledgeService {
 	private CacheService cacheService;
 	private Suggestions suggestions;
 
-	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+	public Question createQuestion(String text, Operator operator) throws ModelException, SecurityException, BadRequestException {
 		Question question = newQuestion(text);
 		modelService.create(question, operator);
 		return question;
 	}
 
-	public Statement createStatement(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+	public Statement createStatement(String text, Operator operator) throws ModelException, SecurityException, BadRequestException {
 		Statement statement = newStatement(text);
 		modelService.create(statement, operator);
 		return statement;
 	}
 
-	public InternetAddress createInternetAddress(String url, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public InternetAddress createInternetAddress(String url, User user, Operator operator) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		return internetAddressService.create(url, null, user, operator);
 	}
 
-	public InternetAddress createInternetAddress(AddressRequest request, Operator operator) throws ModelException, SecurityException, IllegalRequestException, ContentNotFoundException {
+	public InternetAddress createInternetAddress(AddressRequest request, Operator operator) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		String url = request.getUrl();
 		User user = request.getUser();
 		Long questionId = request.getQuestionId();
@@ -117,22 +117,22 @@ public class KnowledgeService {
 		return internetAddress;
 	}
 
-	public void deleteQuestion(Long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public void deleteQuestion(Long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, operator);
 		modelService.delete(question, operator);
 	}
 
-	public void deleteStatement(Long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public void deleteStatement(Long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Statement statement = modelService.getRequired(Statement.class, id, operator);
 		modelService.delete(statement, operator);
 	}
 
-	public void deleteHypothesis(Long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public void deleteHypothesis(Long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
 		modelService.delete(hypothesis, operator);
 	}
 
-	public void deleteInternetAddress(Long id, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public void deleteInternetAddress(Long id, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, operator);
 		List<Statement> children = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Statement.class, operator);
 
@@ -144,7 +144,7 @@ public class KnowledgeService {
 
 	}
 
-	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+	public void categorize(Entity entity, CategorizableViewPerspective perspective, User user, Operator operator) throws ModelException, SecurityException, NotFoundException {
 
 		Pile inboxPile = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_INBOX);
 		Pile favorites = pileService.getOrCreatePileByRelation(user, operator, Relation.KIND_SYSTEM_USER_FAVORITES);
@@ -163,7 +163,7 @@ public class KnowledgeService {
 		perspective.setInbox(inbox);
 	}
 
-	public void addTags(Entity entity, TaggableViewPerspective perspective, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+	public void addTags(Entity entity, TaggableViewPerspective perspective, Operator operator) throws ModelException, SecurityException, NotFoundException {
 		List<Tag> tags = modelService.getParents(entity, Tag.class, operator);
 		perspective.setTags(tags.stream().map((word) -> {
 			Option option = new Option();
@@ -173,14 +173,14 @@ public class KnowledgeService {
 		}).collect(Collectors.toList()));
 	}
 
-	public Statement addStatementToInternetAddress(String text, Long internetAddressId, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+	public Statement addStatementToInternetAddress(String text, Long internetAddressId, Operator operator) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, internetAddressId, operator);
 		return addStatementToInternetAddress(text, address, operator);
 	}
 	
-	public Statement addStatementToInternetAddress(String text, InternetAddress address, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+	public Statement addStatementToInternetAddress(String text, InternetAddress address, Operator operator) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("No text");
+			throw new BadRequestException("No text");
 		}
 		Statement newStatement = newStatement(text);
 		Query<Statement> existingQuery = Query.after(Statement.class).withField("text", newStatement.getText()).as(operator).from(address, Relation.KIND_STRUCTURE_CONTAINS);
@@ -193,44 +193,44 @@ public class KnowledgeService {
 		return newStatement;
 	}
 
-	public Statement newStatement(String text) throws IllegalRequestException {
+	public Statement newStatement(String text) throws BadRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("A statement must have text");
+			throw new BadRequestException("A statement must have text");
 		}
 		Statement statement = new Statement();
 		setText(text, statement);
 		return statement;
 	}
 
-	private void setText(String text, TextHolding statement) throws IllegalRequestException {
+	private void setText(String text, TextHolding statement) throws BadRequestException {
 		text = text.trim();
 		if (text.length() > 10000) {
-			throw new IllegalRequestException("The statement is longer than 10000 characters");
+			throw new BadRequestException("The statement is longer than 10000 characters");
 		}
 		// TODO: Clean multiple spaces etc.
 		statement.setName(StringUtils.abbreviate(text, 50));
 		statement.setText(text);
 	}
 	
-	public Question newQuestion(String text) throws IllegalRequestException {
+	public Question newQuestion(String text) throws BadRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("A question must have text");
+			throw new BadRequestException("A question must have text");
 		}
 		Question question = new Question();
 		setText(text, question);
 		return question;
 	}
 
-	public Hypothesis newHypothesis(String text) throws IllegalRequestException {
+	public Hypothesis newHypothesis(String text) throws BadRequestException {
 		if (Strings.isBlank(text)) {
-			throw new IllegalRequestException("A hypothesis must have text");
+			throw new BadRequestException("A hypothesis must have text");
 		}
 		Hypothesis hypothesis = new Hypothesis();
 		setText(text, hypothesis);
 		return hypothesis;
 	}
 
-	public Hypothesis createHypothesis(String text, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+	public Hypothesis createHypothesis(String text, Operator operator) throws ModelException, SecurityException, BadRequestException {
 		Hypothesis hypothesis = newHypothesis(text);
 		modelService.create(hypothesis, operator);
 		return hypothesis;
@@ -244,7 +244,7 @@ public class KnowledgeService {
 		return (int)comp;
 	}
 
-	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public HypothesisApiPerspective getHypothesisPerspective(Long id, User user, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
 		HypothesisApiPerspective perspective = new HypothesisApiPerspective();
 		perspective.setId(hypothesis.getId());
@@ -279,7 +279,7 @@ public class KnowledgeService {
 		return perspective;
 	}
 
-	public StatementApiPerspective getStatementPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public StatementApiPerspective getStatementPerspective(Long id, User user, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Statement statement = modelService.getRequired(Statement.class, id, operator);
 		StatementApiPerspective perspective = new StatementApiPerspective();
 		perspective.setId(statement.getId());
@@ -425,7 +425,7 @@ public class KnowledgeService {
 		}
 	}
 
-	public Statement addPersonalStatement(String text, User user, Operator operator) throws ModelException, SecurityException, IllegalRequestException {
+	public Statement addPersonalStatement(String text, User user, Operator operator) throws ModelException, SecurityException, BadRequestException {
 		// TODO Check length
 		Statement statement = newStatement(text);
 		modelService.create(statement, operator);
@@ -436,7 +436,7 @@ public class KnowledgeService {
 		return statement;
 	}
 
-	public QuestionApiPerspective getQuestionPerspective(Long id, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public QuestionApiPerspective getQuestionPerspective(Long id, User user, Operator operator) throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, operator);
 		QuestionApiPerspective perspective = new QuestionApiPerspective();
 		perspective.setId(question.getId());
@@ -460,7 +460,7 @@ public class KnowledgeService {
 	}
 	
 	public QuestionWebPerspective getQuestionWebPerspective(Long id, Operator request)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, request);
 		QuestionWebPerspective perspective = new QuestionWebPerspective();
 		perspective.setId(id);
@@ -482,7 +482,7 @@ public class KnowledgeService {
 	}
 	
 	public HypothesisWebPerspective getHypothesisWebPerspective(Long id, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
 		HypothesisWebPerspective perspective = new HypothesisWebPerspective();
 		perspective.setId(id);
@@ -522,7 +522,7 @@ public class KnowledgeService {
 		return perspective;
 	}
 	
-	public InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, ContentNotFoundException, IllegalRequestException, SecurityException, ExplodingClusterFuckException {
+	public InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, NotFoundException, BadRequestException, SecurityException, ExplodingClusterFuckException {
 
 		boolean hightlight = false; //request.getBoolean("highlight");
 		User user = modelService.getUser(request);
@@ -559,7 +559,7 @@ public class KnowledgeService {
 		statementPerspective.setVersion(Versioner.from(answer).and(authors).and(addresses).get());
 	}
 
-	public void updateQuestion(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+	public void updateQuestion(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, NotFoundException, BadRequestException {
 		Question question = modelService.getRequired(Question.class, id, operator);
 		if (text != null) {
 			setText(text, question);
@@ -573,7 +573,7 @@ public class KnowledgeService {
 		}	
 	}
 
-	public void updateStatement(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+	public void updateStatement(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, NotFoundException, BadRequestException {
 		Statement statement = modelService.getRequired(Statement.class, id, operator);
 		if (text != null) {
 			setText(text, statement);
@@ -587,7 +587,7 @@ public class KnowledgeService {
 		}	
 	}
 
-	public void updateHypothesis(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, ContentNotFoundException, IllegalRequestException {
+	public void updateHypothesis(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, NotFoundException, BadRequestException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
 		if (text != null) {
 			setText(text, hypothesis);
@@ -602,25 +602,25 @@ public class KnowledgeService {
 	}
 
 	public void addQuestionToStatement(Long questionId, Long statementId, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
 		relate(question, statement, operator);
 	}
 
 	public void addQuestionToHypothesis(Long questionId, Long hypothesisId, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
 		relate(question, hypothesis, operator);
 	}
 
 	public void addQuestionToHypothesis(Question question, Hypothesis hypothesis, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		relate(question, hypothesis, operator);
 	}
 
-	public void addAnswerToQuestion(Long questionId, Long answerId, String answerType, Operator operator) throws ModelException, SecurityException, ContentNotFoundException {
+	public void addAnswerToQuestion(Long questionId, Long answerId, String answerType, Operator operator) throws ModelException, SecurityException, NotFoundException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Class<? extends Entity> answer = modelService.getEntityClass(answerType);
 		Entity entity = modelService.get(answer, answerId, operator);
@@ -632,7 +632,7 @@ public class KnowledgeService {
 
 	
 	public void removeQuestionFromStatement(Long questionId, Long statementId, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
 		List<Relation> relations = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).list();
@@ -642,14 +642,14 @@ public class KnowledgeService {
 	}
 
 	public void removeQuestionFromHypothesis(Long questionId, Long hypothesisId, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
 		modelService.find().relations(operator).from(hypothesis).answers(question).delete(operator);
 	}
 
 	public void removeStatementFromHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator)
-			throws ModelException, ContentNotFoundException, SecurityException {
+			throws ModelException, NotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
 		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
 		List<Relation> relations = modelService.find().relations(operator).from(statement).to(hypothesis).withKind(kind).list();
@@ -658,7 +658,7 @@ public class KnowledgeService {
 		}
 	}
 	
-	public void addStatementToHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator) throws ModelException, ContentNotFoundException, SecurityException {
+	public void addStatementToHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator) throws ModelException, NotFoundException, SecurityException {
 
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
 		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
@@ -687,14 +687,14 @@ public class KnowledgeService {
 		}
 	}
 
-	public void updateInternetAddress(Long id, String title, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, ContentNotFoundException, SecurityException, IllegalRequestException {
+	public void updateInternetAddress(Long id, String title, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, id, operator);
 		if (title != null) {
 			if (Strings.isBlank(title)) {
-				throw new IllegalRequestException("Empty title");
+				throw new BadRequestException("Empty title");
 			}
 			if (title.length() > 500) {
-				throw new IllegalRequestException("Title too long");
+				throw new BadRequestException("Title too long");
 			}
 			address.setName(title);
 			modelService.update(address, operator);
@@ -729,11 +729,11 @@ public class KnowledgeService {
 		});
 	}
 	
-	public QuestionEditPerspective getQuestionEditPerspective(Long id, Operator operator) throws ModelException, ContentNotFoundException {
+	public QuestionEditPerspective getQuestionEditPerspective(Long id, Operator operator) throws ModelException, NotFoundException {
 		@Nullable
 		Question statement = modelService.get(Question.class, id, operator);
 		if (statement == null) {
-			throw new ContentNotFoundException(Question.class, id);
+			throw new NotFoundException(Question.class, id);
 		}
 		QuestionEditPerspective perspective = new QuestionEditPerspective();
 		perspective.setText(statement.getText());
@@ -743,11 +743,11 @@ public class KnowledgeService {
 		return perspective;
 	}
 
-	public HypothesisEditPerspective getHypothesisEditPerspective(Long id, Operator operator) throws ModelException, ContentNotFoundException {
+	public HypothesisEditPerspective getHypothesisEditPerspective(Long id, Operator operator) throws ModelException, NotFoundException {
 		@Nullable
 		Hypothesis hypothesis = modelService.get(Hypothesis.class, id, operator);
 		if (hypothesis == null) {
-			throw new ContentNotFoundException(Question.class, id);
+			throw new NotFoundException(Question.class, id);
 		}
 		HypothesisEditPerspective perspective = new HypothesisEditPerspective();
 		perspective.setText(hypothesis.getText());

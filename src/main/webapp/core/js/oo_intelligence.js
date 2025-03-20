@@ -54,7 +54,7 @@ oo.intelligence = {
     
     const onChunk = (s) => {
       text += s;
-      params.$html && params.$html(this.markdown(text));
+      params.$html && params.$html(this.handleThinking(this.markdown(text)));
     }
     
     this._fetch({
@@ -64,6 +64,16 @@ oo.intelligence = {
       $chunk: onChunk,
       $finally: params.$finally
     });
+  },
+  handleThinking : (str) => {
+    return str;
+    if (str.indexOf('<think>') !== -1) {
+      str = str.replace('<think>','<pre>');
+      if (str.indexOf('</think>') == -1) {
+        str += '</pre>'
+      }
+    }
+    return str;
   },
   markdown : (str) => {
     if (window.marked) {
