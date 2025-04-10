@@ -23,9 +23,9 @@ import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
@@ -139,13 +139,14 @@ public class DeveloperController extends ApplicationController {
 	}
 
 	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.GET)
-	public void promptStream(Request request) throws IOException {
-		intelligence.streamPrompt(request.getString("prompt"), request.getResponse().getOutputStream());
+	public void promptStream(Request request) throws IOException, BadRequestException {
+		promptStreamPost(request);
 	}
 
 	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.POST)
-	public void promptStreamPost(Request request) throws IOException {
-		intelligence.streamPrompt(request.getString("prompt"), request.getResponse().getOutputStream());
+	public void promptStreamPost(Request request) throws IOException, BadRequestException {
+		String prompt = request.getString("prompt", "Missing prompt");
+		intelligence.streamPrompt(prompt, request.getResponse().getOutputStream());
 	}
 
 	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
