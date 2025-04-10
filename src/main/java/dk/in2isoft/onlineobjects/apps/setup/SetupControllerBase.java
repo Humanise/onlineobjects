@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
+import dk.in2isoft.onlineobjects.apps.words.LoadManager;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.index.IndexService;
@@ -26,6 +27,7 @@ public abstract class SetupControllerBase extends ApplicationController {
 	protected IndexService indexService;
 	protected PasswordRecoveryService passwordRecoveryService;
 	protected CacheService cacheService;
+	protected LoadManager wordsLoadManager;
 
 	public SetupControllerBase() {
 		super("setup");
@@ -79,5 +81,9 @@ public abstract class SetupControllerBase extends ApplicationController {
 	
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
+	}
+	
+	public void setWordsLoadManager(LoadManager loadManager) {
+		this.wordsLoadManager = loadManager;
 	}
 }

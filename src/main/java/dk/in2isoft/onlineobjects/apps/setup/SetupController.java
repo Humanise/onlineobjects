@@ -35,6 +35,7 @@ import dk.in2isoft.onlineobjects.apps.setup.perspectives.UserPerspective;
 import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Path;
+import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
@@ -117,9 +118,23 @@ public class SetupController extends SetupControllerBase {
 
 	
 	
-	@Path(expression = "/settings/data")
+	@Path(expression = "/settings/data", method = Method.GET)
 	public Object settingsData(Request request) throws IOException,EndUserException {
-		return Map.of("wordsRequestPerSecond", 0.5d);
+		return Map.of(
+			"wordsRequestsPerSecond", wordsLoadManager.getRequestsPerSecond(),
+			"wordsTimeout", wordsLoadManager.getTimeout()
+		);
+	}
+
+	@Path(expression = "/settings/data", method = Method.POST)
+	public void saveSettingsData(Request request) throws IOException,EndUserException {
+		double rate = request.getDouble("wordsRequestsPerSecond");
+		long timeout = request.getLong("wordsTimeout");
+		if (rate <= 0 || timeout < 1) {
+			throw new BadRequestException("Rate must be positive and timeout above 1");
+		}
+		wordsLoadManager.setTimeout(timeout);
+		wordsLoadManager.setRequestsPerSecond(rate);
 	}
 
 	@Path

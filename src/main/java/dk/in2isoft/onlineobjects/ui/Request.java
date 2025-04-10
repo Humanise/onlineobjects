@@ -35,8 +35,8 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
 
 public class Request implements Operator {
@@ -391,6 +391,18 @@ public class Request implements Operator {
 			return Float.parseFloat(value);
 		} catch (NumberFormatException e) {
 			return 0f;
+		}
+	}
+
+	public double getDouble(String key) {
+		String value = request.getParameter(key);
+		if (Strings.isBlank(value)) {
+			return 0d;
+		}
+		try {
+			return Double.parseDouble(value);
+		} catch (NumberFormatException e) {
+			return 0d;
 		}
 	}
 
