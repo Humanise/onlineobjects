@@ -19,8 +19,8 @@ import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.in2igui.FileBasedInterface;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
@@ -51,6 +51,9 @@ public abstract class AbstractController {
 				}
 				else if (Strings.isNotBlank(annotation.expression())) {
 					responder.pattern = RestUtil.compile(annotation.expression());
+				}
+				else if (Strings.isNotBlank(annotation.of())) {
+					responder.pattern = RestUtil.compile(annotation.of());
 				}
 				else {
 					responder.path = new String[] {method.getName()};

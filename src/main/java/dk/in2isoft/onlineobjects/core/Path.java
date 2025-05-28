@@ -10,6 +10,8 @@ public @interface Path {
 	
 	String expression() default "";
 	
+	String of() default "";
+
 	Method method() default Method.NONE;
 	
 	public static enum Method {
