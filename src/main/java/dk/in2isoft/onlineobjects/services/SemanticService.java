@@ -231,7 +231,7 @@ public class SemanticService {
 		double[] ba = b.stream().mapToDouble(Double::doubleValue).toArray();
 		normalizeInPlace(na);
 		normalizeInPlace(ba);
-		return findDotProduct(na, ba);
+		return (findDotProduct(na, ba) + 1) / 2d;
 	}
 	
 	public double compare(String[] words1, String[] words2) {
