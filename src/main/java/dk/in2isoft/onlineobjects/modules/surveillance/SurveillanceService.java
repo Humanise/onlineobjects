@@ -148,6 +148,7 @@ public class SurveillanceService {
 		entry.put("duration", request.getRunningTime());
 		entry.put("agent", request.getRequest().getHeader("User-Agent"));
 		entry.put("path", request.getRequest().getRequestURI());
+		entry.put("query", request.getRequest().getQueryString());
 		requestLog.info(Strings.toJSON(entry));
 	}
 	
