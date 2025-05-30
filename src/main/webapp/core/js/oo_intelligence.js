@@ -37,22 +37,23 @@ oo.intelligence = {
     }
   },
   stream : function(params) {
-    var text = '';
+    var text = null;
     var started = false;
     var pre = 'Hmm ... let me think about that really carefully using all the power at my disposal'.split(' ');
-    var x = [];
+    var thinking = [];
     var next;
     next = function() {
-      if (text !== '') return;
+      if (text !== null) return;
       var word = pre.shift();
-      x.push(word || '...just a second')
+      thinking.push(word || '...just a second')
       var time = word ? (200 + Math.random()*200) : 2000;
-      params.$html && params.$html('<p>' + x.join(' ') + '</p>');
+      params.$html && params.$html('<p>' + thinking.join(' ') + '</p>');
       window.setTimeout(next, time)
     }
     window.setTimeout(next, 2000)
     
     const onChunk = (s) => {
+      if (text == null) text = '';
       text += s;
       params.$html && params.$html(this.handleThinking(this.markdown(text)));
     }
@@ -62,7 +63,13 @@ oo.intelligence = {
       method: params.method,
       form: params.form,
       $chunk: onChunk,
-      $finally: params.$finally
+      $finally: function() {
+        if (text == null) { // Empty response
+          text = '';
+          params.$html && params.$html('');
+        }
+        params.$finally && params.$finally();
+      }
     });
   },
   handleThinking : (str) => {

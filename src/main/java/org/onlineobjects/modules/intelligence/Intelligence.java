@@ -95,7 +95,8 @@ public class Intelligence {
 	}
 
 	private String getModelName() {
-		return "qwq";
+		return "mistral";
+		//return "qwq";
 	}
 	
 	public List<Double> vectorize(String string) {
