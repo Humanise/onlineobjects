@@ -183,7 +183,7 @@ public class AccountController extends AccountControllerBase {
 	public void statusScript(Request request) throws IOException {
 		ScriptWriter writer = new ScriptWriter(request, configurationService);
 		Blend blend = new Blend("account_status");
-		blend.addPath("WEB-INF","apps","account","web","js","status.js");
+		blend.addPath("apps","account","js","status.js");
 		writer.write(blend);
 	}
 
@@ -191,11 +191,11 @@ public class AccountController extends AccountControllerBase {
 	public void statusStyle(Request request) throws IOException {
 		StylesheetWriter writer = new StylesheetWriter(request, configurationService);
 		Blend blend = new Blend("account_status_css");
-		blend.addPath("WEB-INF","core","web","css","oo_footer.css");
-		blend.addPath("WEB-INF","core","web","css","oo_link.css");
-		blend.addPath("WEB-INF","core","web","css","oo_icon.css");
-		blend.addPath("WEB-INF","core","web","css","oo_font.css");
-		blend.addPath("WEB-INF","core","web","css","oo_topbar.css");
+		blend.addPath("core","css","oo_footer.css");
+		blend.addPath("core","css","oo_link.css");
+		blend.addPath("core","css","oo_icon.css");
+		blend.addPath("core","css","oo_font.css");
+		blend.addPath("core","css","oo_topbar.css");
 		writer.write(blend);
 	}
 }

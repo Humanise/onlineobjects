@@ -13,9 +13,24 @@ var controller = {
   _load : function() {
     hui.ui.request({
       url : '/settings/data',
+      method: 'GET',
       $object : function(data) {
-        console.log(data);
+        hui.ui.get('settingsForm').setValues(data);
       }
     })
+  },
+  $submit$settingsForm : function() {
+    hui.ui.request({
+      url : '/settings/data',
+      method: 'POST',
+      parameters : hui.ui.get('settingsForm').getValues(),
+      $success : function() {
+        hui.ui.msg.success({text: 'Saved'})
+      },
+      $failure : function() {
+        hui.ui.msg.fail({text: 'Not good'})
+      }
+    })
+    
   }
 }
