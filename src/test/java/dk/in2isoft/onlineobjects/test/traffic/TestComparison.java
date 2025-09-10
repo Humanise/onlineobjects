@@ -1,5 +1,7 @@
 package dk.in2isoft.onlineobjects.test.traffic;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
@@ -36,6 +40,23 @@ public class TestComparison extends AbstractSpringTestCase {
 	@Autowired
 	private HTMLService htmlService;
 	
+	@Test
+	public void testSimply() throws Exception {
+		
+		double comparison = semanticService.compareVectors(List.of(1d), List.of(-1d));
+		assertEquals(0.0d, comparison, 0d);
+	}
+
+	@Test
+	public void testRealVector() throws Exception {
+		RealVector a = new ArrayRealVector(new double[] {1.0});
+		RealVector b = new ArrayRealVector(new double[] {-1.0});
+
+		double dotProduct = a.unitVector().dotProduct(b.unitVector());
+
+		assertEquals(-1.0d, dotProduct, 0d);
+	}
+		
 	@Test
 	public void testWikipedia() throws Exception {
 		
