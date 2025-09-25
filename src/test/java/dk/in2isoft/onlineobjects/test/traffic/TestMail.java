@@ -22,12 +22,12 @@ import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,7 +36,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
-@Ignore
+//@Ignore
 public class TestMail extends AbstractSpringTestCase {
 	
 	private static final Logger log = LogManager.getLogger(TestMail.class);
@@ -44,11 +44,13 @@ public class TestMail extends AbstractSpringTestCase {
 	@Autowired
 	private ImageService imageService;
 
-	//@Test
+	@Test
 	public void testSimpleMail() throws EmailException {
 		SimpleEmail email = new SimpleEmail();
 		email.setHostName(getProperty("mail.hostname"));
-		email.setAuthentication(getProperty("mail.user"), getProperty("mail.password"));
+		email.setSmtpPort(465);
+		email.setAuthenticator(new DefaultAuthenticator(getProperty("mail.user"), getProperty("mail.password")));
+		email.setSSLOnConnect(true);
 		email.addTo(getProperty("mail.address"), getProperty("mail.name"));
 		email.setFrom(getProperty("mail.address"), getProperty("mail.name"));
 		email.setSubject("Test message");

@@ -82,7 +82,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 				Query<Language> query = Query.of(Language.class).withField(Language.CODE, entry.getKey());
 				SearchResult<Language> result = modelService.search(query,adminUser);
 				if (result.getTotalCount()==0) {
-					log.warn("No language ("+entry.getValue()+"), creating it...");
+					log.info("Missing language ("+entry.getValue()+"), creating it...");
 					Language language = new Language();
 					language.setCode(entry.getKey());
 					language.setName(entry.getValue());

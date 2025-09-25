@@ -3,6 +3,7 @@
  xsi:schemaLocation="uri:hui ../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="Knowledge" globals="false">
   <controller url="/js/intelligence.js"/>
   <source url="/settings/data" name="data"/>
+  <source url="/model/intel/models" name="modelSource"/>
   <style url="/css/intelligence.css"/>
   <script url="/core/js/oo_intelligence.js"/>
 
@@ -20,6 +21,8 @@
           <radiobutton text="Raw prompt" value="raw"/>
           <radiobutton text="Summarize" value="summarize"/>
         </radiobuttons>
+        <dropdown name="model">
+        </dropdown>
         </form>
         <div id="result">
         </div>

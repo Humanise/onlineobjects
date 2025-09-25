@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,11 +29,23 @@ public class Intelligence {
 	//private static final String MODEL = "mistral";
 	//private static final String MODEL = "llama3.2";
 	//private static final String MODEL = "mistral-small";
-	
+
 	private ConfigurationService configuration;
+	private Anthropic anthropic;
+	private List<LanguageModel> models;
+
+	public Intelligence() {
+		models = new ArrayList<>();
+		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet"));
+		models.add(LanguageModel.of("ollama", "mistral-small", "Mistral small"));
+	}
 
 	public List<String> synonyms(String word) {
 		return List.of(word);
+	}
+
+	public List<LanguageModel> getModels() {
+		return models;
 	}
 
 	private <T> Optional<T> fetch(String path, Object payload, Class<T> type) {
@@ -49,13 +62,13 @@ public class Intelligence {
 				}
 				return Strings.fromJson(body, type);
 			});
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Optional.empty();
 		}
-		
+
 	}
 
 	private void stream(String path, Object payload, OutputStream out) {
@@ -68,7 +81,7 @@ public class Intelligence {
 			client.execute(request, response -> {
 				try (BufferedReader reader = new BufferedReader(
 	                    new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
-	                
+
 	                // Read the response line by line
 	                String line;
 	                while ((line = reader.readLine()) != null) {
@@ -86,18 +99,19 @@ public class Intelligence {
 	            }
 				return null;
 			});
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private String getModelName() {
-		return "qwq";
+		return "mistral";
+		//return "qwq";
 	}
-	
+
 	public List<Double> vectorize(String string) {
 		Object payload = Map.of("model", "nomic-embed-text", "input", string);
 		Optional<EmbeddingsResponse> response = fetch("embed", payload, EmbeddingsResponse.class);
@@ -109,8 +123,12 @@ public class Intelligence {
 		Optional<String> response = fetch("generate", payload, String.class);
 		return response.orElse(null);
 	}
-	
+
 	public void streamPrompt(String prompt, OutputStream out) {
+		if (!true) {
+			anthropic.prompt(prompt, out);
+			return;
+		}
 		Object payload = Map.of("model", getModelName(), "prompt", prompt);
 		stream("generate", payload, out);
 	}
@@ -127,7 +145,7 @@ public class Intelligence {
 				+ "\n\nThis is the text you should extract the key points from:\n" + text;
 		streamPrompt(prompt, out);
 	}
-	
+
 	public void author(String text, OutputStream out) {
 		String prompt = "You are a function that helps to find the author of a text. "
 				+ "You should only state if you are certain about the author. "
@@ -147,5 +165,10 @@ public class Intelligence {
 	@Autowired
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;
+	}
+
+	@Autowired
+	public void setAnthropic(Anthropic anthropic) {
+		this.anthropic = anthropic;
 	}
 }

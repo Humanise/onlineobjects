@@ -3,11 +3,13 @@ package dk.in2isoft.onlineobjects.test.ai;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,6 +62,26 @@ public class TestVectors extends AbstractSpringTestCase {
 			System.out.println(string + " - " + similarity);
 		}
 	}
+	
+	@Test
+	public void testIt() {
+		String abs = "I dislike war, because it is a waste of life and resources. War is a terrible thing that destroys lives, families, and communities. It is a tragedy that should be avoided at all costs. I believe that we should work towards peace and understanding, rather than resorting to violence and conflict. We should strive to find common ground and resolve our differences through dialogue and cooperation, rather than through war. On another note, I love apples. I also love oranges. I also love bananas. To change the topic back, I also really hate world war I since it was a really boring war fought mainly in the trenches, not anything exicting like in moves."; 
+		List<String> subjects = Arrays.stream(abs.split("\\.")).collect(Collectors.toList());
+		subjects.add(abs);
+		
+		String[] questions = {"Do you love both oranges and apples and war?", "Do you love both lemons and apples and war?"};
+		for (String question : questions) {
+			List<Double> questionVector = intelligence.vectorize(question);
+			for (String string : subjects) {
+				
+				List<Double> candidateV = intelligence.vectorize(string);
+				double similarity = semanticService.compareVectors(questionVector, candidateV);
+				log.info(similarity + " - " + string);
+			}			
+		}
+	}
+
+	
 	
 	private class Item {
 		HTMLDocument document;

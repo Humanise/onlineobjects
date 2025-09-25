@@ -83,18 +83,18 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 	}
 	
 	private List<String> extractJS(String html) {
-		List<String> css = new ArrayList<>();
+		List<String> list = new ArrayList<>();
 		if (html != null) {
 			Pattern p = Pattern.compile("<script[^>]+src=\"([^\"]*)\"");
 			Matcher matcher = p.matcher(html);
 			while (matcher.find()) {
 				String href = matcher.group(1);
 				if (!href.contains("hui/bin")) {
-					css.add(urlToPath(href));
+					list.add(urlToPath(href));
 				}
 			}
 		}
-		return css;
+		return list;
 	}
 	
 	private String filterScripts(String html, dk.in2isoft.commons.jsf.ScriptWriter scriptWriter) throws IOException {

@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.onlineobjects.modules.intelligence.LanguageModel;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -23,11 +25,11 @@ import dk.in2isoft.onlineobjects.apps.words.WordsController;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
@@ -56,7 +58,7 @@ public class ModelController extends ModelControllerBase {
 		if (publicView!=null) {
 			Entity entity = modelService.get(Entity.class, id, request);
 			if (publicView) {
-				securityService.makePublicVisible(entity,request);			
+				securityService.makePublicVisible(entity,request);
 			} else {
 				securityService.makePublicHidden(entity,request);
 			}
@@ -73,18 +75,18 @@ public class ModelController extends ModelControllerBase {
 		SearchResult<Image> result = modelService.search(query, request);
 		request.sendObject(result.getList());
 	}
-	
+
 	@Path(exactly="listWords")
 	public void listWords(Request request) throws IOException, ModelException, ExplodingClusterFuckException {
 		String text = request.getString("text");
 		int page = request.getInt("page");
 		String language = request.getString("language");
 		Locale locale = new Locale(language);
-		
+
 		int pageSize = 20;
 		WordQuery query = new WordQuery().withPage(page).withPageSize(pageSize).withText(text);
 		SearchResult<WordListPerspective> result = wordService.search(query, request);
-		
+
 		Messages msg = new Messages(WordsController.class);
 		Messages langMsg = new Messages(Language.class);
 		Messages lexMsg = new Messages(LexicalCategory.class);
@@ -92,8 +94,8 @@ public class ModelController extends ModelControllerBase {
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
 		writer.window(result.getTotalCount(),50,page);
-		writer.startHeaders().header(msg.get("word", locale)).header(msg.get("language", locale)).header(msg.get("category", locale)).endHeaders();		
-		
+		writer.startHeaders().header(msg.get("word", locale)).header(msg.get("language", locale)).header(msg.get("category", locale)).endHeaders();
+
 		for (WordListPerspective word : result.getList()) {
 			String kind = word.getClass().getSimpleName().toLowerCase();
 			writer.startRow().withId(word.getId()).withKind(kind);
@@ -139,24 +141,24 @@ public class ModelController extends ModelControllerBase {
 		Word word = wordService.createWord(language, category, text, request);
 		request.sendObject(word);
 	}
-	
+
 	@Path(exactly="listInbox")
 	public void listInbox(Request request) throws IOException, EndUserException {
 		int page = request.getInt("page");
-		
+
 		User user = getUser(request);
 		Pile inbox = inboxService.getOrCreateInbox(user, request);
-		
+
 		List<Entity> items = modelService.getChildren(inbox, Entity.class, request.as(user));
 
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
 		writer.window(items.size(),50,page);
-		writer.startHeaders().header("Inbox").header(null, 1).endHeaders();		
-		
+		writer.startHeaders().header("Inbox").header(null, 1).endHeaders();
+
 		for (Entity item : items) {
 			Map<String,String> data = Maps.newHashMap();
-			
+
 			String url = configurationService.getApplicationContext("photos", "/photo/"+item.getId()+".html", request);
 			data.put("url", url);
 			String kind = item.getClass().getSimpleName().toLowerCase();
@@ -185,12 +187,12 @@ public class ModelController extends ModelControllerBase {
 		User user = getUser(request);
 		inboxService.remove(user,id, request);
 	}
-	
+
 	@Path
 	public Diagram diagram(Request request) throws BadRequestException, ModelException, SecurityException {
 		Long id = request.getLong("id");
 		Diagram diagram = new Diagram();
-		
+
 		Entity entity = modelService.get(Entity.class, id, request);
 		if (entity==null) {
 			throw new BadRequestException("Not found");
@@ -201,11 +203,11 @@ public class ModelController extends ModelControllerBase {
 		center.setTitle(entity.getName());
 		center.addProperty("type", entity.getClass().getSimpleName());
 		diagram.addNode(center);
-		
+
 		Predicate<? super Relation> filterDissimilar = e -> {
 			return Kind.similarity.toString().equals(e.getKind()) ? e.getStrength() > 0.5 : true;
 		};
-		// TODO build filtering+limit into query 
+		// TODO build filtering+limit into query
 		modelService.find().relations(request).from(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getTo();
 
@@ -214,9 +216,9 @@ public class ModelController extends ModelControllerBase {
 			otherNode.setTitle(other.getName());
 			otherNode.addProperty("type", other.getClass().getSimpleName());
 			diagram.addNode(otherNode);
-			diagram.addEdge(center, relation.getKind(), otherNode);			
+			diagram.addEdge(center, relation.getKind(), otherNode);
 		});;
-		// TODO build filtering+limit into query 
+		// TODO build filtering+limit into query
 		modelService.find().relations(request).to(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getFrom();
 
@@ -227,7 +229,7 @@ public class ModelController extends ModelControllerBase {
 			diagram.addNode(otherNode);
 			diagram.addEdge(otherNode, relation.getKind(), center);
 		});
-		
+
 		return diagram;
 	}
 
@@ -239,12 +241,12 @@ public class ModelController extends ModelControllerBase {
 			throw new BadRequestException("Missing type");
 		}
 		String type = types.get(0);
-		
+
 		FinderConfiguration config = new FinderConfiguration();
 		config.setTitle("Find " + types);
 		config.setListUrl("/service/model/finderList");
 		config.setSearchParameter("text");
-		
+
 		if (types.size() > 0) {
 			Selection selection = config.addSelection();
 			selection.setParameter("type");
@@ -253,7 +255,7 @@ public class ModelController extends ModelControllerBase {
 				selection.addItem(new ItemData(it, it));
 			}
 		}
-		
+
 		if (Person.class.getSimpleName().equals(type)) {
 			Creation creation = config.addCreation();
 			creation.setUrl("/service/model/createFromFinder?type=" + type);
@@ -301,27 +303,27 @@ public class ModelController extends ModelControllerBase {
 				formula.add(field);
 			}
 			creation.setFormula(formula);
-			
+
 		}
 		return config;
 	}
-	
+
 	@Path
 	public <E extends Entity> void finderList(Request request) throws IOException, ModelException, ExplodingClusterFuckException {
 		String type = request.getString("type");
 		Class<? extends Entity> entityClass = modelService.getEntityClass(type);
-		
+
 		String text = request.getString("text");
 		int page = request.getInt("windowPage");
-		
+
 		Query<? extends Entity> query = Query.after(entityClass).withPaging(page, 20).withWords(text).as(request.getSession());
 		SearchResult<? extends Entity> result = modelService.search(query, request);
 
 		ListWriter out = new ListWriter(request);
 		out.startList();
 		out.window(result.getTotalCount(),20,page);
-		out.startHeaders().header("Title").endHeaders();		
-		
+		out.startHeaders().header("Title").endHeaders();
+
 		for (Entity entity : result.getList()) {
 			String kind = entity.getClass().getSimpleName().toLowerCase();
 			Map<String,Object> data = new HashMap<>();
@@ -335,7 +337,7 @@ public class ModelController extends ModelControllerBase {
 		}
 		out.endList();
 	}
-	
+
 	@Path
 	public Object createFromFinder(Request request) throws BadRequestException, ModelException, SecurityException {
 		String type = request.getString("type", "No type provided");
@@ -352,5 +354,10 @@ public class ModelController extends ModelControllerBase {
 			return knowledgeService.createHypothesis(text, request);
 		}
 		throw new BadRequestException("Unknown type");
+	}
+
+	@Path(exactly = {"intel","models"})
+	public List<LanguageModel> languageModels(Request request) {
+		return intelligence.getModels();
 	}
 }
