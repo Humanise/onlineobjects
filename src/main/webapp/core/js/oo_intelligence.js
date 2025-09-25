@@ -1,4 +1,14 @@
 oo.intelligence = {
+  getModels : function() {
+    return new Promise((resolve, reject) => {
+      hui.ui.request({
+        method : 'GET',
+        url : '/service/model/intel/models',
+        $object : resolve,
+        $failure : reject
+      });
+    })
+  },
   _fetch : async function(params) {
     var ops = {
       method: params.method || 'GET'
@@ -35,6 +45,12 @@ oo.intelligence = {
     } catch (error) {
       console.error('Streaming error:', error);
     }
+  },
+  enableMarkdown : function() {
+    return new Promise(resolve => {
+      if (window.marked) resolve();
+      hui.require('https://cdn.jsdelivr.net/npm/marked/marked.min.js', resolve);
+    });
   },
   stream : function(params) {
     var text = null;

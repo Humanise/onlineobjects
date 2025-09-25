@@ -67,6 +67,7 @@
     <property name="disableCache" value="${cache.disabled}"></property>
     <property name="monitoringMails" value="${monitoring.mails}" />
     <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}" />
+    <property name="anthropicApiKey" value="${intelligence.anthropic.key}" />
   </bean>
 
   <bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
@@ -210,6 +211,8 @@
   <bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType" />
 
   <bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence" />
+
+  <bean id="anthropic" class="org.onlineobjects.modules.intelligence.Anthropic" />
 
   <bean id="solrService" class="org.onlineobjects.modules.index.SolrService" />
 

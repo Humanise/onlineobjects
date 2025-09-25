@@ -4,7 +4,6 @@
   <controller url="/js/app_internetaddress.js"/>
   <controller url="/js/app_question.js"/>
   <script url="/core/js/oo_intelligence.js"/>
-  <script url="https://cdn.jsdelivr.net/npm/marked/marked.min.js"/>
   <!--
   <html xmlns="http://www.w3.org/1999/xhtml">
   <link rel="preconnect" href="https://fonts.gstatic.com"/>

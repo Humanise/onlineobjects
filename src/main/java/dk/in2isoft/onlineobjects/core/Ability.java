@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Ability {
-	usePhotosApp, viewDebuggingInfo, modifyWords, earlyAdopter;
-	
+	usePhotosApp, viewDebuggingInfo, modifyWords, earlyAdopter, useIntelligence;
+
 	public static Set<Ability> convert(Collection<String> properties) {
 		Set<Ability> converted = new HashSet<>();
 		for (String property : properties) {

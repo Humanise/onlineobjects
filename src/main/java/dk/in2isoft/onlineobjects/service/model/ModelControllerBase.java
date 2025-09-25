@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.service.model;
 
+import org.onlineobjects.modules.intelligence.Intelligence;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.modules.inbox.InboxService;
@@ -22,8 +25,9 @@ public class ModelControllerBase extends ServiceController {
 	protected SecurityService securityService;
 	protected InboxService inboxService;
 	protected WordService wordService;
-	protected PersonService personService; 
+	protected PersonService personService;
 	protected KnowledgeService knowledgeService;
+	protected Intelligence intelligence;
 
 	public ModelControllerBase() {
 		super("model");
@@ -56,28 +60,33 @@ public class ModelControllerBase extends ServiceController {
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setInboxService(InboxService inboxService) {
 		this.inboxService = inboxService;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-	
+
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
+	}
+
+	@Autowired
+	public void setIntelligence(Intelligence intelligence) {
+		this.intelligence = intelligence;
 	}
 }

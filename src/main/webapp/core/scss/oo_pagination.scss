@@ -1,0 +1,29 @@
+@use 'shared' as *;
+
+.oo_pagination {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 16px;
+
+  &_page {
+    min-width: 24px;
+    height: 24px;
+    padding: 0 3px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      background: #f3f3f3;
+    }
+
+    &.is-selected {
+      background: #f3f3f3;
+      border-color: #eee;
+    }
+  }
+}

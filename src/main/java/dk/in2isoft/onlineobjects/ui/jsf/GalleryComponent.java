@@ -23,7 +23,7 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.ImageContainer;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 @FacesComponent(value = GalleryComponent.FAMILY)
-@Dependencies(js = { "/core/js/oo_gallery.js" }, css = { "/core/css/oo_gallery.css" }, requires = { OnlineObjectsComponent.class }, uses = {
+@Dependencies(js = { "/core/js/oo_gallery.js" }, css = { "/core/css/oo_gallery.css", "/core/css/oo_pagination.css" }, requires = { OnlineObjectsComponent.class }, uses = {
 		IconComponent.class, ProgressIndicatorComponent.class })
 public class GalleryComponent extends AbstractComponent {
 
@@ -86,7 +86,6 @@ public class GalleryComponent extends AbstractComponent {
 
 		ClassBuilder cls = ClassBuilder.with("oo_gallery").add("oo_gallery", variant);
 		out.startDiv(cls).withId(id);
-		encodePaging(out, result.getTotalCount(), model.getPage(), model.getPageSize());
 		out.startOl();
 		List<UIComponent> children = getChildren();
 		StringBuilder imageArray = new StringBuilder();
@@ -125,6 +124,7 @@ public class GalleryComponent extends AbstractComponent {
 		}
 		imageArray.append("]");
 		out.endOl();
+		encodePaging(out, result.getTotalCount(), model.getPage(), model.getPageSize());
 		out.endDiv();
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("oo.Gallery");
@@ -205,15 +205,16 @@ public class GalleryComponent extends AbstractComponent {
 		if (totalCount == 0) {
 			return;
 		}
-		// Messages msg = new Messages(this);
 		int pages = (int) Math.ceil((double) totalCount / (double) pageSize);
 		if (pages > 1) {
 			writer.startDiv("oo_gallery_navigator");
-			writer.startSpan("oo_gallery_pages");
+			writer.startSpan("oo_pagination");
 			for (int i = 0; i < pages; i++) {
 				writer.startA().withHref("?page=" + (i + 1));
 				if (page == i) {
-					writer.withClass("oo_selected");
+					writer.withClass("oo_pagination_page is-selected");
+				} else {
+					writer.withClass("oo_pagination_page");
 				}
 				writer.write(String.valueOf(i + 1));
 				writer.endA();
@@ -221,8 +222,6 @@ public class GalleryComponent extends AbstractComponent {
 			writer.endSpan();
 			writer.endDiv();
 		}
-		// writer.startVoidA("oo_gallery_slideshow").startSpan().write(msg.get("slideshow",
-		// getLocale())).endSpan().endA();
 	}
 
 	private void decodeRequest(FacesContext context, ListModel<Image> model) {

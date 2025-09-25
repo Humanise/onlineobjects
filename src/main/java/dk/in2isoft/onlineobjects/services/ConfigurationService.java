@@ -24,9 +24,9 @@ import dk.in2isoft.onlineobjects.core.exceptions.ConfigurationException;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ConfigurationService implements InitializingBean {
-	
+
 	private static Logger log = LogManager.getLogger(ConfigurationService.class);
-	
+
 	private String baseUrl;
 	private String basePath;
 	private String storagePath;
@@ -49,16 +49,16 @@ public class ConfigurationService implements InitializingBean {
 	private boolean intelligenceEnabled;
 	private boolean solrEnabled;
 	private String languageModel;
-	
+
 	private File tempDir;
 
 	private File storageDir;
 
 	private File indexDir;
-	
+
 	private Multimap<String, Locale> appLocales = HashMultimap.create();
 	private Map<String, String> appMountPoints = Maps.newHashMap();
-	
+
 	private LifeCycleService lifeCycleService;
 
 	private boolean optimizeResources;
@@ -66,7 +66,10 @@ public class ConfigurationService implements InitializingBean {
 	private boolean simulateHttps;
 	private boolean disableCache;
 
+	private String anthropicApiKey;
 
+
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (!new File(basePath).isDirectory()) {
 			throw new ConfigurationException("The base path is not a dir: " + basePath);
@@ -95,7 +98,7 @@ public class ConfigurationService implements InitializingBean {
 			throw new ConfigurationException("Can not write to the index directory");
 		}
 	}
-	
+
 	@Autowired
 	public void setApplicationControllers(Collection<? extends ApplicationController> controllers) {
 		for (ApplicationController controller : controllers) {
@@ -105,11 +108,11 @@ public class ConfigurationService implements InitializingBean {
 			appMountPoints.put(controller.getName(), controller.getMountPoint());
 		}
 	}
-	
+
 	public File getTempDir() {
 		return tempDir;
 	}
-	
+
 	public File getFile(String... path) {
 		StringBuilder name = new StringBuilder();
 		name.append(basePath);
@@ -142,22 +145,22 @@ public class ConfigurationService implements InitializingBean {
 		if (file.exists() && !file.isDirectory()) {
 			return file;
 		}
-		
+
 		return null;
 	}
 
 	public void setDisableCache(boolean disableCache) {
 		this.disableCache = disableCache;
 	}
-	
+
 	public boolean isDisableCache() {
 		return disableCache;
 	}
-	
+
 	public String getDeploymentId() {
 		return String.valueOf(lifeCycleService.getStartTime().getTime());
 	}
-	
+
 	public Date getDeploymentTime() {
 		return lifeCycleService.getStartTime();
 	}
@@ -181,7 +184,7 @@ public class ConfigurationService implements InitializingBean {
 	public boolean isOptimizeResources() {
 		return optimizeResources;
 	}
-	
+
 	public void setOptimizeResources(boolean optimizeResources) {
 		this.optimizeResources = optimizeResources;
 	}
@@ -189,11 +192,11 @@ public class ConfigurationService implements InitializingBean {
 	public void setStoragePath(String storagePath) {
 		this.storagePath = storagePath;
 	}
-	
+
 	public File getStorageDir() {
 		return storageDir;
 	}
-	
+
 	public File getIndexDir() {
 		return indexDir;
 	}
@@ -241,7 +244,7 @@ public class ConfigurationService implements InitializingBean {
 	public void setAnalyticsCode(String analyticsCode) {
 		this.analyticsCode = analyticsCode;
 	}
-	
+
 	public Collection<Locale> getApplicationLocales(String app) {
 		return appLocales.get(app);
 	}
@@ -249,14 +252,14 @@ public class ConfigurationService implements InitializingBean {
 	public String getApplicationContext(String app) {
 		StringBuilder url = new StringBuilder();
 		if (https) {
-			url.append("https://");			
+			url.append("https://");
 		} else {
 			url.append("http://");
 		}
 		url.append(appMountPoints.get(app)).append(".").append(rootDomain);
 		return url.toString();
 	}
-	
+
 	public String getApplicationContext(String app, String path, Request request) {
 		Locale locale = request.getLocale();
 		if (StringUtils.isBlank(rootDomain)) {
@@ -299,7 +302,7 @@ public class ConfigurationService implements InitializingBean {
 	public void setRootDomain(String rootDomain) {
 		this.rootDomain = rootDomain;
 	}
-	
+
 	public void setLifeCycleService(LifeCycleService lifeCycleService) {
 		this.lifeCycleService = lifeCycleService;
 	}
@@ -327,7 +330,7 @@ public class ConfigurationService implements InitializingBean {
 	public void setSimulateSlowRequest(boolean simulateSlowRequest) {
 		this.simulateSlowRequest = simulateSlowRequest;
 	}
-	
+
 	public void setSimulateHttps(boolean simulateHttps) {
 		this.simulateHttps = simulateHttps;
 	}
@@ -410,5 +413,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setLanguageModel(String languageModel) {
 		this.languageModel = languageModel;
+	}
+
+	public String getAnthropicApiKey() {
+		return this.anthropicApiKey;
+	}
+
+	public void setAnthropicApiKey(String anthropicApiKey) {
+		this.anthropicApiKey = anthropicApiKey;
 	}
 }
