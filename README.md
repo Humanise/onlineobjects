@@ -77,3 +77,7 @@ jconsole
 ```
 mvn versions:display-dependency-updates
 ```
+
+### Logging
+
+	private static Logger log = org.apache.logging.log4j.getLogger(DispatchingService.class);

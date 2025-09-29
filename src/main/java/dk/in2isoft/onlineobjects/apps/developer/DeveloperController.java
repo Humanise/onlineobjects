@@ -2,10 +2,16 @@ package dk.in2isoft.onlineobjects.apps.developer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -16,6 +22,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.onlineobjects.modules.index.SolrService;
 import org.onlineobjects.modules.index.SolrService.Collection;
 import org.onlineobjects.modules.intelligence.Intelligence;
+import org.onlineobjects.modules.intelligence.LanguageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
@@ -30,7 +37,9 @@ import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DeveloperController extends ApplicationController {
-	
+
+	private static Logger log = LogManager.getLogger(DeveloperController.class);
+
 	@Autowired
 	Intelligence intelligence;
 	
@@ -74,6 +83,11 @@ public class DeveloperController extends ApplicationController {
 	@Path(exactly = {"settings"})
 	@View(ui = {"settings.xml"})
 	public void settings(Request request) {
+	}
+
+	@Path(of = "/documents")
+	@View(ui = {"documents", "documents.xml"})
+	public void documents(Request request) {
 	}
 
 	@Path(expression = "/intelligence")
@@ -146,7 +160,10 @@ public class DeveloperController extends ApplicationController {
 	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.POST)
 	public void promptStreamPost(Request request) throws IOException, BadRequestException {
 		String prompt = request.getString("prompt", "Missing prompt");
-		intelligence.streamPrompt(prompt, request.getResponse().getOutputStream());
+		String model = request.getString("model");
+		LanguageModel m = intelligence.getModelById(model).orElse(intelligence.getDefaultModel());
+		OutputStream stream = request.getResponse().getOutputStream();
+		intelligence.prompt(prompt, m, stream);
 	}
 
 	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
@@ -176,4 +193,60 @@ public class DeveloperController extends ApplicationController {
 		solr.add(Collection.knowledge, doc);
 	}
 
+	@Path(expression = "/dav")
+	public void davRoot(Request request) throws IOException {
+		dav(request);
+	}
+
+	@Path(expression = "/dav<any>")
+	public void dav(Request request) throws IOException {
+		HttpServletResponse response = request.getResponse();
+		HttpServletRequest httpServletRequest = request.getRequest();
+		String method = httpServletRequest.getMethod();
+		if ("OPTIONS".equals(method)) {
+	        response.addHeader("Allow", "GET, PUT, DELETE, PROPFIND, MKCOL, OPTIONS");
+	        response.addHeader("DAV", "1");
+		} else if ("PROPFIND".equals(method)) {
+			response.addHeader("Content-Type", "application/xml; charset=utf-8");
+			response.getWriter().write("""
+					<?xml version="1.0" encoding="utf-8"?>
+	<D:multistatus xmlns:D="DAV:">
+	<D:response>
+	    <D:href>/dav/</D:href>
+	    <D:propstat>
+	      <D:prop>
+	        <D:displayname>documents</D:displayname>
+	        <D:resourcetype>
+	          <D:collection/>
+	        </D:resourcetype>
+	      </D:prop>
+	      <D:status>HTTP/1.1 200 OK</D:status>
+	    </D:propstat>
+	  </D:response>
+		<D:response>
+    <D:href>/dav/notes.txt</D:href>
+    <D:propstat>
+      <D:prop>
+        <D:displayname>notes.txt</D:displayname>
+        <D:getcontentlength>234567</D:getcontentlength>
+        <D:getlastmodified>Tue, 10 Sep 2024 14:32:00 GMT</D:getlastmodified>
+        <D:resourcetype/>
+      </D:prop>
+      <D:status>HTTP/1.1 200 OK</D:status>
+    </D:propstat>
+  </D:response>
+    </D:multistatus>
+					""".trim());
+
+		} else if ("GET".equals(method)) {
+			response.setHeader("Content-Type", "text/plain");
+			response.getWriter().println("[ ] Work");
+			response.getWriter().println("[ ] Eat");
+			response.getWriter().println("[ ] Sleep");
+		} else {
+			log.warn("Unknown webdav request...");
+			log.warn(request.getRequest());
+			log.warn(request.getBody());
+		}
+	}
 }

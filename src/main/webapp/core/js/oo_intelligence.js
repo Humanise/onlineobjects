@@ -105,6 +105,6 @@ oo.intelligence = {
     return str.replace(/\*\*([^\*]{2,})\*\*/g, function (found) {
       found = found.substring(2,found.length - 2)
       return '<strong>' + found + '</strong>';
-    })
+    }).replace(/\n/g, '<br>');
   }
 }

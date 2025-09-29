@@ -36,8 +36,10 @@ public class Intelligence {
 
 	public Intelligence() {
 		models = new ArrayList<>();
-		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet"));
 		models.add(LanguageModel.of("ollama", "mistral-small", "Mistral small"));
+		models.add(LanguageModel.of("ollama", "gpt-oss:20b", "GPT OSS 20b"));
+		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3"));
+		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
 	}
 
 	public List<String> synonyms(String word) {
@@ -86,7 +88,9 @@ public class Intelligence {
 	                String line;
 	                while ((line = reader.readLine()) != null) {
 	                    Strings.fromJson(line, StreamResponse.class).ifPresent(r -> {
-	                    	if (r.response == null) return;
+	                    	if (r.response == null) {
+								return;
+							}
 		                    try {
 								out.write(r.response.getBytes());
 			                    out.flush();
@@ -124,26 +128,35 @@ public class Intelligence {
 		return response.orElse(null);
 	}
 
-	public void streamPrompt(String prompt, OutputStream out) {
-		if (!true) {
-			anthropic.prompt(prompt, out);
-			return;
+
+	public void prompt(String prompt, LanguageModel model, OutputStream out) {
+		if (model.getProvider().equals("anthropic")) {
+			anthropic.prompt(prompt, model, out);
+		} else {
+			Object payload = Map.of("model", model.getId(), "prompt", prompt);
+			stream("generate", payload, out);
 		}
-		Object payload = Map.of("model", getModelName(), "prompt", prompt);
-		stream("generate", payload, out);
+	}
+
+	public void prompt(String prompt, OutputStream out) {
+		prompt(prompt, getDefaultModel(), out);
+	}
+
+	public LanguageModel getDefaultModel() {
+		return models.get(0);
 	}
 
 	public void summarize(String text, OutputStream out) {
 		String prompt = "Help me summarize some text. Only respond with the summary.\n"
 				+ "The following is the text to summarize:\n"
 				+ text;
-		streamPrompt(prompt, out);
+		prompt(prompt, out);
 	}
 
 	public void keyPoints(String text, OutputStream out) {
 		String prompt = "You are an assistant that helps a person. Generate a few key points from some text. Only output the key points as a short list of at most 8 points."
 				+ "\n\nThis is the text you should extract the key points from:\n" + text;
-		streamPrompt(prompt, out);
+		prompt(prompt, out);
 	}
 
 	public void author(String text, OutputStream out) {
@@ -151,7 +164,7 @@ public class Intelligence {
 				+ "You should only state if you are certain about the author. "
 				+ "If you cannot detemine the author, simply reply with 'No author'. "
 				+ "\n\nWhat is the name of the author of the following text:\n" + StringUtils.abbreviate(text, 1000);
-		streamPrompt(prompt, out);
+		prompt(prompt, out);
 	}
 
 	public static class EmbeddingsResponse {
@@ -170,5 +183,14 @@ public class Intelligence {
 	@Autowired
 	public void setAnthropic(Anthropic anthropic) {
 		this.anthropic = anthropic;
+	}
+
+	public Optional<LanguageModel> getModelById(String id) {
+		for (LanguageModel model : models) {
+			if (id.equals(model.getId())) {
+				return Optional.of(model);
+			}
+		}
+		return Optional.empty();
 	}
 }

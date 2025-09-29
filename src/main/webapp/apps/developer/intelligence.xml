@@ -11,18 +11,22 @@
     <tabs>
       <tab title="Prompt" padding="10">
         <form name="form">
+          <field>
         <div style="display: flex; width: 100%">
           <div style="flex-grow: 1; padding-right: 10px;">
             <text-input name="prompt" breaks="true" value="How wet is water?"/>
           </div>
           <button text="Send" submit="true"/>
         </div>
-        <radiobuttons value="raw" name="type">
-          <radiobutton text="Raw prompt" value="raw"/>
-          <radiobutton text="Summarize" value="summarize"/>
-        </radiobuttons>
-        <dropdown name="model">
+        </field>
+        <field>
+          <radiobuttons value="raw" name="type">
+            <radiobutton text="Raw prompt" value="raw"/>
+            <radiobutton text="Summarize" value="summarize"/>
+          </radiobuttons>
+          <dropdown name="model">
         </dropdown>
+        </field>
         </form>
         <div id="result">
         </div>

@@ -9,13 +9,14 @@ hui.ui.listen({
   $submit$form : function(form) {
     var values = form.getValues();
     var prompt = values.prompt;
+    var model = hui.ui.get('model').getValue();
     var body;
     if (values.type == 'summarize') {
       var url = '/intelligence/summarize?text=' + encodeURIComponent(prompt);
     } else {
       var url = '/intelligence/prompt/stream';
       body = {
-        model: hui.ui.get('model').getValue(),
+        model: model,
         prompt: prompt
       }
     }

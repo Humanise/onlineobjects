@@ -544,7 +544,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		} else {
 			prompt = "Define the word '" + text + "' in at most 50 words.";
 		}
-		intelligence.streamPrompt(prompt, request.getResponse().getOutputStream());
+		intelligence.prompt(prompt, request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/related", method = GET)
@@ -570,7 +570,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 	@Path(expression = "/app/question/answer", method = GET)
 	public void answerQuestion(Request request) throws IOException, BadRequestException, EndUserException {
 		var question = modelService.getRequired(Question.class, request.getId(), request);
-		intelligence.streamPrompt(question.getText(), request.getResponse().getOutputStream());
+		intelligence.prompt(question.getText(), request.getResponse().getOutputStream());
 	}
 
 	@Path(expression = "/app/tags")

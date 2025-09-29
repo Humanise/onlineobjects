@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="uri:hui ../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="Documents" globals="false">
+  <controller url="/documents/document-model.js"/>
+  <controller url="/documents/documents.js"/>
+  <source url="/settings/data" name="data"/>
+  <style url="/css/documents.css"/>
+
+  <foundation name="foundation">
+    <navigation>
+      <overflow>
+      <selection value="everything" name="subsetSelection">
+        <option value="everything" text="Everything"></option>
+      </selection>
+    </overflow>
+    </navigation>
+    <results>
+      <bar variant="layout">
+      <searchfield adaptive="true" name="search"/>
+    </bar>
+    <overflow>
+      <collection name="list"
+        source="listSource"
+        selectable="true"
+        class="list"
+        selection-class="list_item-selected"
+      >
+        <empty>
+          <div class="list_empty" id="list_empty">
+            <div class="list_empty_text" data="no_content">
+              <p>You have no content yet...</p>
+            </div>
+          </div>
+        </empty>
+      </collection>
+      <div class="list_add">
+        <button text="Add something..." name="listAddButton"/>
+      </div>
+      <!--
+      <list name="list" variant="light"/>
+      -->
+    </overflow>
+  </results>
+  <content>
+    <code-input name="code"/>
+    <html>
+    <div id="rendering" class="document"></div>
+    <div id="json" class="document"></div>
+    </html>
+  </content>
+  </foundation>
+</gui>

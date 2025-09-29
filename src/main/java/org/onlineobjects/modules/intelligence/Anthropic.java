@@ -14,8 +14,14 @@ import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
@@ -23,15 +29,18 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 @ApplicationScope
 public class Anthropic {
 
+	private static Logger log = LogManager.getLogger(Anthropic.class);
 	private ConfigurationService configuration;
+	private ObjectMapper objectMapper = new ObjectMapper();
 
-	public void prompt(String prompt, OutputStream out) {
+	public void prompt(String prompt, LanguageModel model, OutputStream out) {
+		String version = model.getParameters().get("version");
 		var payload = Map.of(
-				"model", "claude-sonnet-4-20250514",
-				"max_tokens", 1024,
-				"stream", true,
-				"messages", List.of(Map.of("role", "user", "content", prompt))
-			);
+			"model", "claude-sonnet-4-20250514",
+			"max_tokens", 1024,
+			"stream", true,
+			"messages", List.of(Map.of("role", "user", "content", prompt))
+		);
 		String apiKey = configuration.getAnthropicApiKey();
 		if (Strings.isBlank(apiKey)) {
 			throw new IllegalStateException("Missing anthropic API key");
@@ -41,53 +50,63 @@ public class Anthropic {
 					.setEntity(new StringEntity(
 							Strings.toJSON(payload),
 						    ContentType.APPLICATION_JSON))
-					.addHeader("anthropic-version", "2023-06-01")
+					.addHeader("anthropic-version", version)
 					.addHeader("x-api-key", apiKey)
 		            .build();
 			client.execute(request, response -> {
 				int code = response.getCode();
 				if (code != 200) {
 					String body = new BasicHttpClientResponseHandler().handleResponse(response);
+					log.error("Unexpected response from anthropic, code: " + code + ", body: " + body);
 					throw new IOException("Unexpected response code: " + code + ", body: " + body);
-					//return null;
 				}
 				try (BufferedReader reader = new BufferedReader(
 	                    new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
-					StringBuilder buffer = new StringBuilder();
-	                // Read the response line by line
 	                String line;
 	                String event = null;
 	                String data = null;
 	                while ((line = reader.readLine()) != null) {
-	                	System.out.println(System.currentTimeMillis());
 	                	if (line.startsWith("event: ")) {
 	                		event = line.substring(7);
 	                	} else if (line.startsWith("data: ")) {
 	                		data = line.substring(6);
-	                	} else {
-		                	System.out.println(event + " | " + data);
 		                	if ("content_block_delta".equals(event)) {
-			                	Map<?,?> parsed = Strings.fromJson(data, Map.class).orElse(Map.of());
-		                		Object delta = parsed.get("delta");
-		                		if (delta instanceof Map) {
-		                			Object text = ((Map<?,?>) delta).get("text");
-		                			if (text instanceof String) {
-		        	                	out.write(((String)text).getBytes());
-		        	                	out.flush();
-		                			}
-		                		}
+			                	handleContent(data, out);
 		                	}
 	                	}
-	                	buffer.append(line);
 	                }
 	            }
 				return null;
 			});
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
+	}
+
+	private void handleContent(String data, OutputStream out) throws IOException {
+		Map<?,?> parsed = Strings.fromJson(data, Map.class).orElseThrow();
+		Object delta = parsed.get("delta");
+		if (delta instanceof Map) {
+			Object text = ((Map<?,?>) delta).get("text");
+			Object type = ((Map<?,?>) delta).get("type");
+			if ("text_delta".equals(type)) {
+				if (text instanceof String) {
+		        	out.write(((String)text).getBytes());
+		        	out.flush();
+				}
+			}
+		}
+	}
+
+	protected String extract(String json) {
+		try {
+			JsonNode parsed = objectMapper.readTree(json);
+			return parsed.path("delta").path("text").asText();
+		} catch (JsonProcessingException e) {
+			log.error(e);
+		}
+		return null;
 	}
 
 	@Autowired

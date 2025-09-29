@@ -670,4 +670,9 @@ public class Request implements Operator {
 	public void notFound() {
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
+
+	public String getBody() throws IOException {
+		// TODO: Encoding?
+		return IOUtils.toString(request.getReader());
+	}
 }
