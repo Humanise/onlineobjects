@@ -17,6 +17,8 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -30,6 +32,7 @@ public class Intelligence {
 	//private static final String MODEL = "llama3.2";
 	//private static final String MODEL = "mistral-small";
 
+	private static Logger log = LogManager.getLogger(Intelligence.class);
 	private ConfigurationService configuration;
 	private Anthropic anthropic;
 	private List<LanguageModel> models;
@@ -37,8 +40,11 @@ public class Intelligence {
 	public Intelligence() {
 		models = new ArrayList<>();
 		models.add(LanguageModel.of("ollama", "mistral-small", "Mistral small"));
+		models.add(LanguageModel.of("ollama", "mistral", "Mistral"));
 		models.add(LanguageModel.of("ollama", "gpt-oss:20b", "GPT OSS 20b"));
-		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3"));
+		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3 - 27b"));
+		models.add(LanguageModel.of("ollama", "gemma3:12b", "Gemma 3 - 12b"));
+
 		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
 	}
 
@@ -86,27 +92,28 @@ public class Intelligence {
 
 	                // Read the response line by line
 	                String line;
-	                while ((line = reader.readLine()) != null) {
-	                    Strings.fromJson(line, StreamResponse.class).ifPresent(r -> {
-	                    	if (r.response == null) {
-								return;
+	                boolean failed = false;
+	                while (!failed && (line = reader.readLine()) != null) {
+	                	var parsed = Strings.fromJson(line, StreamResponse.class);
+	                	if (parsed.isPresent()) {
+	                		var r = parsed.get();
+	                    	if (r.response != null) {
+			                    try {
+									out.write(r.response.getBytes());
+				                    out.flush();
+								} catch (IOException e) {
+									failed = true;
+									log.error(e);
+								}
 							}
-		                    try {
-								out.write(r.response.getBytes());
-			                    out.flush();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-	                    });
+	                	}
 	                }
 	            }
 				return null;
 			});
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e);
 		}
 
 	}
