@@ -44,6 +44,8 @@ public class Intelligence {
 		models.add(LanguageModel.of("ollama", "gpt-oss:20b", "GPT OSS 20b"));
 		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3 - 27b"));
 		models.add(LanguageModel.of("ollama", "gemma3:12b", "Gemma 3 - 12b"));
+		models.add(LanguageModel.of("ollama", "qwen3:30b", "Qwen 3 - 30b"));
+
 
 		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
 	}
@@ -130,7 +132,7 @@ public class Intelligence {
 	}
 
 	public String prompt(String prompt) {
-		Object payload = Map.of("model", getModelName(), "prompt", prompt);
+		Object payload = Map.of("model", getDefaultModel().getId(), "prompt", prompt);
 		Optional<String> response = fetch("generate", payload, String.class);
 		return response.orElse(null);
 	}
@@ -150,6 +152,14 @@ public class Intelligence {
 	}
 
 	public LanguageModel getDefaultModel() {
+		String model = configuration.getLanguageModel();
+		if (Strings.isNotBlank(model)) {
+			for (LanguageModel languageModel : models) {
+				if (model.equals(languageModel.getId())) {
+					return languageModel;
+				}
+			}
+		}
 		return models.get(0);
 	}
 

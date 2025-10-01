@@ -68,6 +68,7 @@
     <property name="monitoringMails" value="${monitoring.mails}" />
     <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}" />
     <property name="anthropicApiKey" value="${intelligence.anthropic.key}" />
+    <property name="languageModel" value="${intelligence.model}" />
   </bean>
 
   <bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
