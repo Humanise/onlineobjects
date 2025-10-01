@@ -27,12 +27,18 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @ApplicationScope
-public class Anthropic {
+public class Anthropic implements LanguageModelHost {
 
 	private static Logger log = LogManager.getLogger(Anthropic.class);
 	private ConfigurationService configuration;
 	private ObjectMapper objectMapper = new ObjectMapper();
 
+	@Override
+	public String name() {
+		return "anthropic";
+	}
+
+	@Override
 	public void prompt(String prompt, LanguageModel model, OutputStream out) {
 		String version = model.getParameters().get("version");
 		var payload = Map.of(

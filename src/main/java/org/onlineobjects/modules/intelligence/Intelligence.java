@@ -33,9 +33,8 @@ public class Intelligence {
 
 	private static Logger log = LogManager.getLogger(Intelligence.class);
 	private ConfigurationService configuration;
-	private Anthropic anthropic;
-	private Ollama ollama;
 	private List<LanguageModel> models;
+	private List<LanguageModelHost> hosts;
 
 	public Intelligence() {
 		models = new ArrayList<>();
@@ -93,10 +92,10 @@ public class Intelligence {
 	}
 
 	public void prompt(String prompt, LanguageModel model, OutputStream out) {
-		if (model.getProvider().equals("anthropic")) {
-			anthropic.prompt(prompt, model, out);
-		} else if (model.getProvider().equals("ollama")) {
-			ollama.prompt(prompt, model, out);
+		for (LanguageModelHost host : hosts) {
+			if (model.getProvider().equals(host.name())) {
+				host.prompt(prompt, model, out);
+			}
 		}
 	}
 
@@ -151,13 +150,8 @@ public class Intelligence {
 	}
 
 	@Autowired
-	public void setAnthropic(Anthropic anthropic) {
-		this.anthropic = anthropic;
-	}
-
-	@Autowired
-	public void setOllama(Ollama ollama) {
-		this.ollama = ollama;
+	public void setHosts(List<LanguageModelHost> hosts) {
+		this.hosts = hosts;
 	}
 
 	public Optional<LanguageModel> getModelById(String id) {
