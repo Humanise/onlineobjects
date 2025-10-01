@@ -215,6 +215,8 @@
 
   <bean id="anthropic" class="org.onlineobjects.modules.intelligence.Anthropic" />
 
+  <bean id="ollama" class="org.onlineobjects.modules.intelligence.Ollama" />
+
   <bean id="solrService" class="org.onlineobjects.modules.index.SolrService" />
 
 

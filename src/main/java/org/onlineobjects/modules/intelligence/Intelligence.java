@@ -1,8 +1,7 @@
 package org.onlineobjects.modules.intelligence;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ public class Intelligence {
 	private static Logger log = LogManager.getLogger(Intelligence.class);
 	private ConfigurationService configuration;
 	private Anthropic anthropic;
+	private Ollama ollama;
 	private List<LanguageModel> models;
 
 	public Intelligence() {
@@ -45,7 +45,6 @@ public class Intelligence {
 		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3 - 27b"));
 		models.add(LanguageModel.of("ollama", "gemma3:12b", "Gemma 3 - 12b"));
 		models.add(LanguageModel.of("ollama", "qwen3:30b", "Qwen 3 - 30b"));
-
 
 		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
 	}
@@ -81,50 +80,6 @@ public class Intelligence {
 
 	}
 
-	private void stream(String path, Object payload, OutputStream out) {
-		try (var client = HttpClients.createDefault()) {
-			ClassicHttpRequest request = ClassicRequestBuilder.post("http://localhost:11434/api/" + path)
-					.setEntity(new StringEntity(
-							Strings.toJSON(payload),
-						    ContentType.APPLICATION_JSON))
-		            .build();
-			client.execute(request, response -> {
-				try (BufferedReader reader = new BufferedReader(
-	                    new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
-
-	                // Read the response line by line
-	                String line;
-	                boolean failed = false;
-	                while (!failed && (line = reader.readLine()) != null) {
-	                	var parsed = Strings.fromJson(line, StreamResponse.class);
-	                	if (parsed.isPresent()) {
-	                		var r = parsed.get();
-	                    	if (r.response != null) {
-			                    try {
-									out.write(r.response.getBytes());
-				                    out.flush();
-								} catch (IOException e) {
-									failed = true;
-									log.error(e);
-								}
-							}
-	                	}
-	                }
-	            }
-				return null;
-			});
-
-		} catch (IOException e) {
-			log.error(e);
-		}
-
-	}
-
-	private String getModelName() {
-		return "mistral";
-		//return "qwq";
-	}
-
 	public List<Double> vectorize(String string) {
 		Object payload = Map.of("model", "nomic-embed-text", "input", string);
 		Optional<EmbeddingsResponse> response = fetch("embed", payload, EmbeddingsResponse.class);
@@ -132,18 +87,16 @@ public class Intelligence {
 	}
 
 	public String prompt(String prompt) {
-		Object payload = Map.of("model", getDefaultModel().getId(), "prompt", prompt);
-		Optional<String> response = fetch("generate", payload, String.class);
-		return response.orElse(null);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		prompt(prompt, out);
+		return out.toString(StandardCharsets.UTF_8);
 	}
-
 
 	public void prompt(String prompt, LanguageModel model, OutputStream out) {
 		if (model.getProvider().equals("anthropic")) {
 			anthropic.prompt(prompt, model, out);
-		} else {
-			Object payload = Map.of("model", model.getId(), "prompt", prompt);
-			stream("generate", payload, out);
+		} else if (model.getProvider().equals("ollama")) {
+			ollama.prompt(prompt, model, out);
 		}
 	}
 
@@ -200,6 +153,11 @@ public class Intelligence {
 	@Autowired
 	public void setAnthropic(Anthropic anthropic) {
 		this.anthropic = anthropic;
+	}
+
+	@Autowired
+	public void setOllama(Ollama ollama) {
+		this.ollama = ollama;
 	}
 
 	public Optional<LanguageModel> getModelById(String id) {
