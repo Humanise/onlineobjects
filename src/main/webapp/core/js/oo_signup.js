@@ -103,7 +103,7 @@
         failure = {en: 'A username is required', da: 'Brugernavnet er krævet'}
       }
       else if (hui.isBlank(values.password)) {
-        failure = {en: 'A password is reqired', da: 'Kodeordet er krævet'}
+        failure = {en: 'A password is required', da: 'Kodeordet er krævet'}
       }
       else if (!values.terms) {
         failure = {en: 'Please accept the terms', da: 'Acceptér veligst vilkårene'}
