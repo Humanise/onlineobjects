@@ -7,4 +7,6 @@ public interface LanguageModelHost {
 	void prompt(String prompt, LanguageModel model, OutputStream out);
 
 	String name();
+
+	boolean isConfigured();
 }

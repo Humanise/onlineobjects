@@ -115,6 +115,11 @@ public class Anthropic implements LanguageModelHost {
 		return null;
 	}
 
+	@Override
+	public boolean isConfigured() {
+		return Strings.isNotBlank(configuration.getAnthropicApiKey());
+	}
+
 	@Autowired
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;

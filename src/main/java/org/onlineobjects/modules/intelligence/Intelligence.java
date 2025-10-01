@@ -19,22 +19,22 @@ import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 @ApplicationScope
-public class Intelligence {
-
-	//private static final String MODEL = "mistral";
-	//private static final String MODEL = "llama3.2";
-	//private static final String MODEL = "mistral-small";
+public class Intelligence  implements ApplicationListener<ContextRefreshedEvent> {
 
 	private static Logger log = LogManager.getLogger(Intelligence.class);
 	private ConfigurationService configuration;
 	private List<LanguageModel> models;
 	private List<LanguageModelHost> hosts;
+	private List<LanguageModel> availableModels;
+	private LanguageModel defaultModel;
 
 	public Intelligence() {
 		models = new ArrayList<>();
@@ -48,12 +48,30 @@ public class Intelligence {
 		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
 	}
 
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		availableModels = hosts.stream().filter(h -> h.isConfigured()).flatMap(h -> models.stream().filter(m -> m.getProvider().equals(h.name()))).toList();
+
+		String model = configuration.getLanguageModel();
+		if (Strings.isNotBlank(model)) {
+			for (LanguageModel languageModel : availableModels) {
+				if (model.equals(languageModel.getId())) {
+					defaultModel = languageModel;
+				}
+			}
+		}
+		if (defaultModel == null && !availableModels.isEmpty()) {
+			defaultModel = availableModels.get(0);
+		}
+
+	}
+
 	public List<String> synonyms(String word) {
 		return List.of(word);
 	}
 
 	public List<LanguageModel> getModels() {
-		return models;
+		return availableModels;
 	}
 
 	private <T> Optional<T> fetch(String path, Object payload, Class<T> type) {
@@ -104,15 +122,7 @@ public class Intelligence {
 	}
 
 	public LanguageModel getDefaultModel() {
-		String model = configuration.getLanguageModel();
-		if (Strings.isNotBlank(model)) {
-			for (LanguageModel languageModel : models) {
-				if (model.equals(languageModel.getId())) {
-					return languageModel;
-				}
-			}
-		}
-		return models.get(0);
+		return defaultModel;
 	}
 
 	public void summarize(String text, OutputStream out) {

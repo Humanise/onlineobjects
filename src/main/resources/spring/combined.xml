@@ -68,6 +68,7 @@
     <property name="monitoringMails" value="${monitoring.mails}" />
     <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}" />
     <property name="anthropicApiKey" value="${intelligence.anthropic.key}" />
+    <property name="ollamaUrl" value="${intelligence.ollama.url}" />
     <property name="languageModel" value="${intelligence.model}" />
   </bean>
 
@@ -211,7 +212,7 @@
 
   <bean id="cacheService" class="dk.in2isoft.onlineobjects.modules.caching.CacheService" autowire="byType" />
 
-  <bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence" />
+  <bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence" depends-on="configurationService"/>
 
   <bean id="anthropic" class="org.onlineobjects.modules.intelligence.Anthropic" />
 

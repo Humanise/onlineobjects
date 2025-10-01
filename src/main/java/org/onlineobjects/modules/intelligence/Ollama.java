@@ -18,8 +18,6 @@ import org.onlineobjects.modules.intelligence.Intelligence.StreamResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
@@ -28,17 +26,20 @@ public class Ollama implements LanguageModelHost {
 
 	private static Logger log = LogManager.getLogger(Ollama.class);
 	private ConfigurationService configuration;
-	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
 	public String name() {
 		return "ollama";
 	}
+
 	@Override
 	public void prompt(String prompt, LanguageModel model, OutputStream out) {
+		if (!isConfigured()) {
+			throw new IllegalStateException("Ollama base url not configured");
+		}
 		Object payload = Map.of("model", model.getId(), "prompt", prompt);
 		try (var client = HttpClients.createDefault()) {
-			ClassicHttpRequest request = ClassicRequestBuilder.post("http://localhost:11434/api/generate")
+			ClassicHttpRequest request = ClassicRequestBuilder.post(getBaseUrl() + "/api/generate")
 					.setEntity(new StringEntity(
 							Strings.toJSON(payload),
 						    ContentType.APPLICATION_JSON))
@@ -74,6 +75,14 @@ public class Ollama implements LanguageModelHost {
 		}
 	}
 
+	private String getBaseUrl() {
+		return configuration.getOllamaUrl();
+	}
+
+	@Override
+	public boolean isConfigured() {
+		return Strings.isNotBlank(getBaseUrl());
+	}
 
 	@Autowired
 	public void setConfiguration(ConfigurationService configuration) {

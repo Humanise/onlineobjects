@@ -49,6 +49,7 @@ public class ConfigurationService implements InitializingBean {
 	private boolean intelligenceEnabled;
 	private boolean solrEnabled;
 	private String languageModel;
+	private String ollamaUrl;
 
 	private File tempDir;
 
@@ -421,5 +422,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setAnthropicApiKey(String anthropicApiKey) {
 		this.anthropicApiKey = anthropicApiKey;
+	}
+
+	public String getOllamaUrl() {
+		return ollamaUrl;
+	}
+
+	public void setOllamaUrl(String ollamaUrl) {
+		this.ollamaUrl = ollamaUrl;
 	}
 }
