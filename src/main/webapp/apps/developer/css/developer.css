@@ -1,7 +1,10 @@
-.developer_menu {
-  margin: 20px;
+.developer {
+  display: flex;
+  flex-direction: column;
 }
-
+.developer_menu {
+  height: 30px;
+}
 .developer_body {
-  margin: 20px;
+  height: calc(100vh - 30px);
 }

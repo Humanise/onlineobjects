@@ -1,4 +1,5 @@
 #result {
+  white-space: pre-wrap;
   padding: 10px;
   font-family: Georgia;
   line-height: 1.3;

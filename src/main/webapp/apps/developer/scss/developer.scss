@@ -1,7 +1,12 @@
-.developer_menu {
-  margin: 20px;
+.developer {
+  display: flex;
+  flex-direction: column;
+  &_menu {
+    height: 30px;
+  }
+
+  &_body {
+    height: calc(100vh - 30px);
+  }
 }
 
-.developer_body {
-  margin: 20px;
-}
