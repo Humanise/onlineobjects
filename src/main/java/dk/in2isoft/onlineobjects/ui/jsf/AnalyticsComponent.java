@@ -17,7 +17,7 @@ public class AnalyticsComponent extends AbstractComponent {
 
 
 	public static final String FAMILY = "onlineobjects.analytics";
-	
+
 	public AnalyticsComponent() {
 		super(FAMILY);
 	}
@@ -30,16 +30,20 @@ public class AnalyticsComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		ConfigurationService configurationService = Components.getBean(ConfigurationService.class);
 		String code = configurationService.getAnalyticsCode();
 		if (StringUtils.isNotBlank(code)) {
+			String url = "https://www.googletagmanager.com/gtag/js?id=" + code;
+			out.startScript().withAttribute("async", "async").withSrc(url);
 			out.startScript();
-			out.write("(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');");
-			out.write("ga('create', '").write(code).write("', {storage: 'none'});");
-			out.write("ga('send', 'pageview');");
+			out.write("window.dataLayer = window.dataLayer || [];\n"
+					+ "  function gtag(){dataLayer.push(arguments);}\n"
+					+ "  gtag('js', new Date());\n"
+					+ "  gtag('storage', 'none');\n"
+					+ "  gtag('config', '" + code + "');");
 			out.endScript();
 		}
 	}
