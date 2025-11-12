@@ -659,6 +659,12 @@
   font-family: "Lora", "Georgia", serif;
   line-height: 1.4;
 }
+.intel_prose h2 {
+  font-size: 18px;
+  margin-block-start: 10px;
+  font-weight: 600;
+  margin-block-end: 5px;
+}
 .intel_prose strong {
   font-weight: 600;
 }

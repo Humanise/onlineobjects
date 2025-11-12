@@ -10,16 +10,19 @@
 >
   <ui:composition template="templates/user.xhtml">
 
-    <ui:define name="title">TODO</ui:define>
+    <ui:define name="title">#{msg.albums}</ui:define>
 
     <ui:define name="body">
-      <div style="padding: 10px; display: flex; flex-wrap: wrap;">
+      <div style="padding: 10px;">
+      <o:header>#{msg.albums}</o:header>
+      <div style="display: flex; flex-wrap: wrap;">
       <c:forEach items="#{photosLayoutView.galleryLinks}" var="gallery">
-        <div style="padding: 5px; width: 200px;">
+        <div style="padding: 10px;">
           <component:galleryLink href="/#{wordsLayoutView.language}/gallery/#{gallery.id}/" model="#{gallery}" size="large"/>
         </div>
       </c:forEach>
       </div>
+    </div>
     </ui:define>
 
   </ui:composition>

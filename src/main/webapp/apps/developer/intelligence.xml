@@ -13,7 +13,7 @@
         <option value="testing" text="Testing"></option>
         <option value="prompts" text="Prompts"></option>
         <option value="models" text="Models"></option>
-        <option value="Hosts" text="hosts"></option>
+        <option value="hosts" text="Hosts"></option>
       </selection>
       </overflow>
     </navigation>
