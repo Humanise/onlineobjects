@@ -20,6 +20,7 @@ import dk.in2isoft.onlineobjects.apps.words.LoadManager;
 import dk.in2isoft.onlineobjects.apps.words.views.util.UrlBuilder;
 import dk.in2isoft.onlineobjects.apps.words.views.util.WordsInterfaceHelper;
 import dk.in2isoft.onlineobjects.core.SearchResult;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordQuery;
@@ -37,28 +38,28 @@ public class WordsSearchView extends AbstractView {
 	private WordService wordService;
 	private WordsInterfaceHelper wordsInterfaceHelper;
 	private LoadManager loadManager;
-	
+
 	private static final Logger log = LogManager.getLogger(WordsSearchView.class);
-		
+
 	private List<WordListPerspective> list;
 	private int count;
 	private int page;
-	
+
 	private String title;
-	
+
 	private String text;
 	private String letter;
 	private String language;
 	private String category;
 	private String source;
 	private String state;
-	
+
 	private int pageSize = 20;
 	private List<Option> pages;
 
 	private String nextPage;
 	private String previousPage;
-	
+
 	private String effectiveQuery;
 	private Messages wordsMsg;
 	private Messages languageMsg;
@@ -70,6 +71,7 @@ public class WordsSearchView extends AbstractView {
 
 	@Override
 	protected void before(Request request) throws Exception {
+		checkRequest(request);
 		loadManager.failIfBusy();
 		text = request.getString("text");
 		letter = request.getString("letter");
@@ -77,7 +79,7 @@ public class WordsSearchView extends AbstractView {
 		category = request.getString("category");
 		source = request.getString("source");
 		state = request.getString("state");
-		
+
 		String[] localPath = request.getLocalPath();
 		page = 0;
 		if (localPath.length>2) {
@@ -87,7 +89,7 @@ public class WordsSearchView extends AbstractView {
 		wordsMsg = wordsInterfaceHelper.getWordsMessages();
 		languageMsg = wordsInterfaceHelper.getLanguageMessages();
 		categoryMsg = wordsInterfaceHelper.getCategoryMessages();
-		
+
 		WordQuery query = new WordQuery().withText(text).withLetter(letter).withCategory(category).withLanguage(language).withSource(source).withPage(page).withPageSize(20);
 		if ("validated".equals(state)) {
 			query.setSourceDefined(true);
@@ -99,16 +101,25 @@ public class WordsSearchView extends AbstractView {
 		count = result.getTotalCount();
 
 		highlight();
-		
+
 		effectiveQuery = result.getDescription();
-		
+
 		title = buildTitle(request);
 		description = title;
 		pages = buildPages(request);
 		suggestions = buildSuggestions(request);
 		filters = buildFilters(request);
 	}
-	
+
+	private void checkRequest(Request request) throws BadRequestException {
+		String ua = request.getUserAgent();
+		if (ua != null && (ua.contains("bingbot") || ua.contains("Googlebot"))) {
+			if (Strings.isNotBlank(request.getString("text"))) {
+				throw new BadRequestException("Bingbot and Googlebot cannot search by text since they have abused it");
+			}
+		}
+	}
+
 	private List<Option> buildSuggestions(Request request) {
 		List<Option> suggestions = Lists.newArrayList();
 		Locale locale = request.getLocale();
@@ -137,7 +148,7 @@ public class WordsSearchView extends AbstractView {
 		}
 		return suggestions;
 	}
-	
+
 	private LinkedHashSet<String> getLanguages(Request request) {
 		LinkedHashSet<String> languages = Sets.newLinkedHashSet();
 		String acceptLanguage = request.getRequest().getHeader("Accept-Language");
@@ -151,11 +162,11 @@ public class WordsSearchView extends AbstractView {
 					languages.add(language);
 				}
 			}
-			
+
 		}
 		return languages;
 	}
-	
+
 	public List<Option> getSuggestions() {
 		return suggestions;
 	}
@@ -166,9 +177,9 @@ public class WordsSearchView extends AbstractView {
 			row.setHighlightedText(Strings.highlight(row.getText(), words));
 			row.setHighlightedGlossary(Strings.highlight(row.getGlossary(), words));
 		}
-			
+
 	}
-	
+
 	private String buildTitle(Request request) {
 		Locale locale = request.getLocale();
 		if (Strings.isBlank(language) && Strings.isBlank(category) && Strings.isBlank(letter) && Strings.isBlank(text)) {
@@ -194,7 +205,7 @@ public class WordsSearchView extends AbstractView {
 			} else if (letter.equals("number")) {
 				title.append(wordsMsg.get("number_letter", locale));
 			} else {
-				title.append(letter.toUpperCase(locale));				
+				title.append(letter.toUpperCase(locale));
 			}
 		}
 		if (Strings.isNotBlank(text)) {
@@ -208,7 +219,7 @@ public class WordsSearchView extends AbstractView {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
 				if (i > 0) {
-					title.append(" ").append(wordsMsg.get("and", locale));					
+					title.append(" ").append(wordsMsg.get("and", locale));
 				}
 				title.append(" ");
 				title.append("\"").append(word).append("\"");
@@ -219,15 +230,15 @@ public class WordsSearchView extends AbstractView {
 		}
 		return title.toString();
 	}
-	
+
 	public String getTitle() {
 		return this.title;
 	}
-	
+
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	public boolean isClean() {
 		boolean blank = Strings.isBlank(text);
 		blank &= Strings.isBlank(letter);
@@ -236,11 +247,11 @@ public class WordsSearchView extends AbstractView {
 		blank &= Strings.isBlank(source);
 		return blank;
 	}
-	
+
 	public boolean isBlank() {
 		return list.isEmpty();
-	}	
-		
+	}
+
 	private List<Option> buildCategoryOptions(Request request) {
 		List<Option> options = Lists.newArrayList();
 		Locale locale = request.getLocale();
@@ -250,7 +261,7 @@ public class WordsSearchView extends AbstractView {
 			option.setLabel(wordsMsg.get("any", locale));
 			option.setKey("default");
 			option.setSelected(StringUtils.isBlank(category));
-			options.add(option);			
+			options.add(option);
 		}
 		for (Option cat : wordsInterfaceHelper.getCategoryOptions(locale)) {
 			Option option = new Option();
@@ -262,7 +273,7 @@ public class WordsSearchView extends AbstractView {
 		}
 		return options;
 	}
-	
+
 	private String buildUrl(Request request,String text, String language, String category, String letter, String state) {
 		UrlBuilder url = new UrlBuilder(request.getLocalContext());
 		url.folder(request.getLanguage()).folder("search");
@@ -283,7 +294,7 @@ public class WordsSearchView extends AbstractView {
 			option.setLabel(wordsMsg.get("any", locale));
 			option.setKey("default");
 			option.setSelected(StringUtils.isBlank(language));
-			options.add(option);			
+			options.add(option);
 		}
 		for (Option lang : wordsInterfaceHelper.getLanguageOptions(locale)) {
 			Option option = new Option();
@@ -295,7 +306,7 @@ public class WordsSearchView extends AbstractView {
 		}
 		return options;
 	}
-	
+
 	private List<Option> buildLetterOptions(Request request) {
 		Locale locale = request.getLocale();
 		List<Option> options = Lists.newArrayList();
@@ -325,11 +336,11 @@ public class WordsSearchView extends AbstractView {
 	public List<WordListPerspective> getList() throws ModelException {
 		return this.list;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
-	
+
 	public String getState() {
 		return state;
 	}
@@ -337,15 +348,15 @@ public class WordsSearchView extends AbstractView {
 	public String getLanguage() {
 		return language;
 	}
-	
+
 	public String getCategory() {
 		return category;
 	}
-	
+
 	public String getEffectiveQuery() {
 		return effectiveQuery;
 	}
-	
+
 	public String getLetter() {
 		return letter;
 	}
@@ -353,7 +364,7 @@ public class WordsSearchView extends AbstractView {
 	public Filters getFilters() {
 		return filters;
 	}
-	
+
 	private Filters buildFilters(Request request) {
 		Locale locale = request.getLocale();
 		Filters filters = new Filters();
@@ -401,7 +412,7 @@ public class WordsSearchView extends AbstractView {
 		}
 		return filters;
 	}
-	
+
 	private List<Option> buildPages(Request request) {
 		List<Option> pages = Lists.newArrayList();
 		int pageCount = (int) Math.ceil((float)count/(float)pageSize);
@@ -432,19 +443,19 @@ public class WordsSearchView extends AbstractView {
 		}
 		return pages;
 	}
-	
+
 	public List<Option> getPages() {
 		return pages;
 	}
-	
+
 	public String getNextPage() {
 		return nextPage;
 	}
-	
+
 	public String getPreviousPage() {
 		return previousPage;
 	}
-	
+
 	private Option buildOption(int num, Request request) {
 		Option option = new Option();
 		UrlBuilder url = new UrlBuilder(request.getBaseContext()).folder(request.getLanguage()).folder("search");
@@ -458,19 +469,19 @@ public class WordsSearchView extends AbstractView {
 		option.setSelected(page==num-1);
 		return option;
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {
 		this.wordsInterfaceHelper = wordsInterfaceHelper;
 	}
-	
+
 	public void setLoadManager(LoadManager loadManager) {
 		this.loadManager = loadManager;
 	}

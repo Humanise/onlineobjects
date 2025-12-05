@@ -37,7 +37,7 @@ public class AnalyticsComponent extends AbstractComponent {
 		String code = configurationService.getAnalyticsCode();
 		if (StringUtils.isNotBlank(code)) {
 			String url = "https://www.googletagmanager.com/gtag/js?id=" + code;
-			out.startScript().withAttribute("async", "async").withSrc(url);
+			out.startScript().withAttribute("async", "async").withSrc(url).endScript();
 			out.startScript();
 			out.write("window.dataLayer = window.dataLayer || [];\n"
 					+ "  function gtag(){dataLayer.push(arguments);}\n"

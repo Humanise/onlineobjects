@@ -7,7 +7,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import dk.in2isoft.onlineobjects.core.exceptions.TooBusyException;
 
 public class LoadManager {
-	private RateLimiter limiter = RateLimiter.create(1);
+	private RateLimiter limiter = RateLimiter.create(5);
 	// private static EventCountCircuitBreaker breaker = new
 	// EventCountCircuitBreaker(60, 1, TimeUnit.MINUTES, 40);
 	private long timeout = 5;

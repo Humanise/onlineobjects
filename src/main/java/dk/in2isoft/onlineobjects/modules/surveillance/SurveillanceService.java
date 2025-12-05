@@ -33,7 +33,7 @@ import dk.in2isoft.onlineobjects.services.EmailService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class SurveillanceService {
-	
+
 	private RequestList longestRunningRequests;
 	private ConcurrentLinkedQueue<String> exceptions;
 	private ConcurrentLinkedQueue<LiveLogEntry> logEntries;
@@ -50,7 +50,7 @@ public class SurveillanceService {
 		exceptions = new ConcurrentLinkedQueue<String>();
 		logEntries = new ConcurrentLinkedQueue<LiveLogEntry>();
 	}
-	
+
 	public void sendReport() throws EndUserException {
 		String body = getReportBody();
 		sendMailToMonitors("OnlineObjects report", body);
@@ -59,7 +59,7 @@ public class SurveillanceService {
 	private void sendMailToMonitors(String subject, String body) throws EndUserException {
 		String[] mails = getMontorMails();
 		for (String mail : mails) {
-			emailService.sendMessage(subject, body, mail);				
+			emailService.sendMessage(subject, body, mail);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class SurveillanceService {
 		}
 		return new String[]{};
 	}
-	
+
 	public void logInfo(String title,String details) {
 		LiveLogEntry entry = new LiveLogEntry();
 		entry.setTitle(title);
@@ -110,7 +110,7 @@ public class SurveillanceService {
 			logEntries.poll();
 		}
 	}
-	
+
 	public void log(Privileged user, LogType type) {
 		Operator operator = modelService.newAdminOperator();
 		LogEntry entry = new LogEntry();
@@ -149,13 +149,15 @@ public class SurveillanceService {
 		entry.put("agent", request.getRequest().getHeader("User-Agent"));
 		entry.put("path", request.getRequest().getRequestURI());
 		entry.put("query", request.getRequest().getQueryString());
+		entry.put("status", request.getResponse().getStatus());
+		entry.put("ip", request.getRequest().getRemoteAddr());
 		requestLog.info(Strings.toJSON(entry));
 	}
-	
+
 	public void surveyNotFound(Request request) {
 		this.requestsNotFound.register(request);
 	}
-	
+
 	public void survey(Exception e, Request request) {
 		Throwable known = getKnownException(e);
 		String trace = ExceptionUtils.getFullStackTrace(known);
@@ -165,7 +167,7 @@ public class SurveillanceService {
 			exceptions.poll();
 		}
 	}
-	
+
 	private Throwable getKnownException(Throwable root) {
 		Throwable cause = root;
 		while (cause!=null) {
@@ -174,18 +176,18 @@ public class SurveillanceService {
 			}
 			cause = cause.getCause();
 		}
-		
+
 		return root;
 	}
-	
+
 	public ImmutableList<RequestInfo> getLongestRunningRequests() {
 		return ImmutableList.copyOf(longestRunningRequests.getSet());
 	}
-	
+
 	public Collection<String> getLatestExceptions() {
 		return exceptions;
 	}
-	
+
 	public List<LiveLogEntry> getLogEntries() {
 		return Lists.newArrayList(logEntries);
 	}
@@ -197,9 +199,9 @@ public class SurveillanceService {
 	public Logger audit() {
 		return auditLog;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -207,9 +209,9 @@ public class SurveillanceService {
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
 }

@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -56,17 +57,17 @@ public class Request implements Operator {
 	private String baseContext;
 
 	private String relativePath;
-	
+
 	private long startTime;
-	
+
 	private Locale locale;
-	
+
 	private String domainName;
-	
+
 	private String application;
 
 	private String uri;
-	
+
 	private Request(HttpServletRequest request, HttpServletResponse response) {
 		super();
 		this.response = response;
@@ -76,7 +77,7 @@ public class Request implements Operator {
 		this.startTime = System.nanoTime();
 		//debug();
 	}
-	
+
 	public static Request get(HttpServletRequest request, HttpServletResponse response) {
 		Request attribute = (Request) request.getAttribute("OnlineObjectsRequest");
 		if (attribute==null) {
@@ -85,7 +86,7 @@ public class Request implements Operator {
 		}
 		return attribute;
 	}
-	
+
 	public synchronized void debug() {
 		log.info("------------ new request ------------");
 		log.info("requestUri: "+request.getRequestURI());
@@ -135,21 +136,21 @@ public class Request implements Operator {
 		locale = new Locale("en");
 		this.uri = uri;
 	}
-	
+
 	public String getLanguage() {
 		return locale.getLanguage();
 	}
-	
+
 	public String getUri() {
 		return uri;
 	}
-	
+
 	public void setLanguage(String language) {
-		if (!locale.getLanguage().equals(language)) {			
+		if (!locale.getLanguage().equals(language)) {
 			this.locale = new Locale(language);
 		}
 	}
-	
+
 	public Locale getLocale() {
 		return locale;
 	}
@@ -176,11 +177,11 @@ public class Request implements Operator {
 		return StringUtils.join(sub, ".");
 	}
 
-	
+
 	public String getDomainName() {
 		return domainName;
 	}
-	
+
 	public boolean isIP() {
 		return domainName!=null && domainName.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+");
 	}
@@ -276,7 +277,7 @@ public class Request implements Operator {
 	public String getStringOrNull(String key) {
 		return request.getParameter(key);
 	}
-	
+
 	public List<String> getStrings(String name) {
 		List<String> strings = Lists.newArrayList();
 		String[] values = request.getParameterValues(name);
@@ -307,7 +308,7 @@ public class Request implements Operator {
 		}
 		return found;
 	}
-	
+
 	public List<Long> getLongs(String key) {
 		List<Long> found = Lists.newArrayList();
 		String[] values = request.getParameterValues(key);
@@ -317,12 +318,12 @@ public class Request implements Operator {
 					found.add(Long.parseLong(value));
 				} catch (NumberFormatException e) {
 					// ignore
-				}			
+				}
 			}
 		}
 		return found;
 	}
-	
+
 	/**
 	 * The request parameter "id" as a positive Long or null if invalid
 	 * @return
@@ -334,7 +335,7 @@ public class Request implements Operator {
 		}
 		return id;
 	}
-	
+
 	public Long getId(String parameter, Long dflt) {
 		// TODO Auto-generated method stub
 
@@ -344,7 +345,7 @@ public class Request implements Operator {
 		}
 		return id;
 	}
-	
+
 	public Long getId(String parameter) throws BadRequestException {
 		Long id = getId(parameter, null);
 		if (id == null) {
@@ -352,7 +353,7 @@ public class Request implements Operator {
 		}
 		return id;
 	}
-	
+
 	public Long getId() throws BadRequestException {
 		Long id = getId((Long) null);
 		if (id == null) {
@@ -360,7 +361,7 @@ public class Request implements Operator {
 		}
 		return id;
 	}
-	
+
 	public Long getLong(String key, Long whenNullOrInvalid) {
 		String value = request.getParameter(key);
 		if (Strings.isBlank(value)) {
@@ -423,7 +424,7 @@ public class Request implements Operator {
 	public Optional<Boolean> optionalBoolean(String key) {
 		return Optional.ofNullable(getBoolean(key, null));
 	}
-	
+
 	public String getString(String key, String error) throws BadRequestException {
 		String value = request.getParameter(key);
 		if (Strings.isBlank(value)) {
@@ -454,9 +455,9 @@ public class Request implements Operator {
 		response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 		response.setHeader("Location", url);
 	}
-	
+
 	private UserSession session;
-	
+
 	public void setSession(UserSession session) {
 		this.session = session;
 	}
@@ -473,7 +474,7 @@ public class Request implements Operator {
 		StringBuilder context = new StringBuilder();
 		String baseDomain = getBaseDomain();
 		if (baseDomain!=null) {
-			context.append(baseDomain);			
+			context.append(baseDomain);
 		} else {
 			context.append(domainName);
 		}
@@ -492,7 +493,7 @@ public class Request implements Operator {
 		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(request.getServletContext());
 		return applicationContext.getBean(beanClass);
 	}
-	
+
 	public long getStartTime() {
 		return startTime;
 	}
@@ -530,7 +531,7 @@ public class Request implements Operator {
 		response.getWriter().write(json);
 	}
 
-	
+
 	@Nullable public <T> T getObject(String name, Class<@NonNull T> type) {
 		try {
 			Gson gson = new Gson();
@@ -540,7 +541,7 @@ public class Request implements Operator {
 		}
 	}
 
-	
+
 	@Nullable public <T> T getObject(Class<@NonNull T> type) {
 		try {
 			String body = IOUtils.toString(request.getReader());
@@ -554,8 +555,8 @@ public class Request implements Operator {
 		return null;
 	}
 
-	
-	
+
+
 	public List<WordModification> getObject(String name, Type type) {
 		try {
 			Gson gson = new Gson();
@@ -575,12 +576,12 @@ public class Request implements Operator {
 		getLong("wordId");
 		getObject("enrichment", Pair.class);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("URI: ").append(request.getRequestURI()).append("\n");
-		
+
 		Enumeration<String> parameterNames = request.getParameterNames();
 		while (parameterNames.hasMoreElements()) {
 			String name = parameterNames.nextElement();
@@ -588,15 +589,15 @@ public class Request implements Operator {
 		}
 		return sb.toString();
 	}
-	
+
 	private OperationProvider operationProvider;
 
 	private Operation operation;
-	
+
 	public void setOperationProvider(OperationProvider operationProvider) {
 		this.operationProvider = operationProvider;
 	}
-	
+
 	@Override
 	public Operation getOperation() {
 		if (operation == null) {
@@ -604,7 +605,7 @@ public class Request implements Operator {
 		}
 		return operation;
 	}
-	
+
 	@Override
 	public void commit() {
 		if (operation != null) {
@@ -612,12 +613,12 @@ public class Request implements Operator {
 			operation = null;
 		}
 	}
-	
+
 	@Override
 	public void close() {
 		commit();
 	}
-	
+
 	@Override
 	public void rollBack() {
 		if (operation != null) {
@@ -625,13 +626,13 @@ public class Request implements Operator {
 			operation = null;
 		}
 	}
-	
-	
+
+
 	@Override
 	public long getIdentity() {
 		return getSession().getIdentity();
 	}
-	
+
 	@Override
 	public Operator as(Privileged privileged) {
 		if (privileged.getIdentity() == this.getIdentity()) return this;
@@ -656,7 +657,7 @@ public class Request implements Operator {
 	}
 
 	public boolean acceptsHtml() {
-		String value = getRequest().getHeader("Accept");
+		String value = getRequest().getHeader(HttpHeaders.ACCEPT);
 		if (value!=null) {
 			return value.contains("text/html");
 		}
@@ -674,5 +675,15 @@ public class Request implements Operator {
 	public String getBody() throws IOException {
 		// TODO: Encoding?
 		return IOUtils.toString(request.getReader());
+	}
+
+	public String getUserAgent() {
+
+		return request.getHeader(HttpHeaders.USER_AGENT);
+	}
+
+	public String getReferer() {
+
+		return request.getHeader(HttpHeaders.REFERER);
 	}
 }

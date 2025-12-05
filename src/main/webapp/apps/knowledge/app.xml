@@ -196,7 +196,7 @@
                 <button name="answerQuestion" text="Answer" class="intel_action"/>
               </div>
               <div class="js-question-intel intel_response intel_prose" style="display: none;">
-                <div class="js-question-intel-text"></div>
+                <div class="js-question-intel-text"> </div>
                 <button name="saveAnswer" text="Save" class="intel_action"/>
               </div>
             </div>
