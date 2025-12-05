@@ -33,16 +33,16 @@ public class Strings {
 
 	public static final String UNICODE_AA_LARGE = "\u00C5";
 	public static final String UNICODE_AA = "\u00E5";
-	
+
 	public static final String UNICODE_AE_LARGE = "\u00C6";
 	public static final String UNICODE_AE = "\u00E6";
-	
+
 	public static final String UNICODE_OE_LARGE = "\u00D8";
 	public static final String UNICODE_OE = "\u00F8";
-	
+
 	public static final String UNICODE_TRADEMARK = "\u2122";
 	public static final String UNICODE_REGISTERED_TRADEMARK = "\u00AE";
-	
+
 	public static final String LEFT_DOUBLE_QUOTATION_MARK = "\u201C";
 	public static final String RIGHT_DOUBLE_QUOTATION_MARK = "\u201D";
 
@@ -51,13 +51,13 @@ public class Strings {
 	public static final String SINGLE_HIGH_REVERSED_9_QUOTATION_MARK = "\u201B";
 	public static final String SINGLE_LOW_9_QUOTATION_MARK = "\u201A";
 	public static final String DOUBLE_LOW_9_QUOTATION_MARK = "\u201E";
-	
+
 	public static final String[] ALPHABETH = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",Strings.UNICODE_AE,Strings.UNICODE_OE,Strings.UNICODE_AA};
 	public static final String TRIANGLE_HEADED_RIGHTWARDS_ARROW = "\u279D";
-	
+
 	public static final Object RIGHTWARDS_ARROW = "\u2192";
 	public static final String MIDDLE_DOT = "\u00B7";
-	
+
 	// private static Logger log = LogManager.getLogger(LangUtil.class);
 
 	public static String concatWords(String first, String second) {
@@ -71,16 +71,16 @@ public class Strings {
 			return first + " " + second;
 		}
 	}
-	
+
 	public static String deAccent(String str) {
 		if (str==null) {
 			return null;
 		}
-	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
 	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 	    return pattern.matcher(nfdNormalizedString).replaceAll("");
 	}
-	
+
 	/**
 	 * For use when indexing - has no other usage
 	 * @param text
@@ -161,7 +161,7 @@ public class Strings {
 		}
 		return new String(pw);
 	}
-	
+
 	public static boolean isDefined(String[] strings) {
 		return strings != null && strings.length > 0;
 	}
@@ -228,7 +228,7 @@ public class Strings {
 		try {
 			return URLDecoder.decode(string,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			
+
 		}
 		return string;
 	}
@@ -239,7 +239,7 @@ public class Strings {
 			encoded = encoded.replaceAll("\\.", "%2E");
 			return encoded;
 		} catch (UnsupportedEncodingException e) {
-			
+
 		}
 		return string;
 	}
@@ -260,7 +260,7 @@ public class Strings {
 		}
 		return false;
 	}
-	
+
 	public static String toJSON(Object object) {
 		Gson gson = new Gson();
 		return gson.toJson(object);
@@ -274,7 +274,7 @@ public class Strings {
 			return Optional.empty();
 		}
 	}
-	
+
 	public static String simplifyURL(String url) {
 		if (Strings.isBlank(url)) {
 			return "";
@@ -291,7 +291,7 @@ public class Strings {
 		url = url.replaceFirst("^www\\.", "");
 		String[] parts = url.split("/");
 		StringBuilder simplified = new StringBuilder();
-		
+
 		for (int i = 0; i < parts.length; i++) {
 			if (i==0) {
 				simplified.append(parts[i]);
@@ -301,10 +301,10 @@ public class Strings {
 				simplified.append(Strings.decodeURL(part).trim());
 			}
 		}
-		
+
 		return simplified.toString();
 	}
-	
+
 	public static String getSimplifiedDomain(String url) {
 		if (Strings.isBlank(url)) {
 			return "";
@@ -362,7 +362,7 @@ public class Strings {
 			return StringEscapeUtils.escapeXml(text);
 		}
 		// TODO Consider using a primitive array
-		List<Pair<Integer,Integer>> positions = Lists.newArrayList(); 
+		List<Pair<Integer,Integer>> positions = Lists.newArrayList();
 		String lower = text.toLowerCase();
 		for (int i = 0; i < words.length; i++) {
 			String word = words[i].toLowerCase();
@@ -379,8 +379,8 @@ public class Strings {
 		if (positions.isEmpty()) {
 			return text;
 		}
-		
-		
+
+
 		Collections.sort(positions, new Comparator<Pair<Integer,Integer>>() {
 
 			@Override
@@ -391,7 +391,7 @@ public class Strings {
 				}
 				return comparison;
 			}
-			
+
 		});
 
 		StringBuilder out = new StringBuilder();
@@ -407,7 +407,7 @@ public class Strings {
 				out.append("</em>");
 				pos = to;
 			}
-			
+
 		}
 		out.append(text.substring(pos));
 		return out.toString();
@@ -418,7 +418,7 @@ public class Strings {
 		if (b==null) b = "";
 		return a.toLowerCase().compareTo(b.toLowerCase());
 	}
-	
+
 	public static int getVisibleLength(String text) {
 		if (text==null || text.length()==0) {
 			return 0;

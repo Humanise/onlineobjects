@@ -30,7 +30,7 @@ public class SimpleEntityPerspective {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public static SimpleEntityPerspective create(Entity entity) {
 		if (entity==null) {
 			return null;

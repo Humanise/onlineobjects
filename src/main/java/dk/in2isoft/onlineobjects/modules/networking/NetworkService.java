@@ -41,11 +41,11 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse.State;
 
 public class NetworkService {
-	
+
 	private static final Logger log = LogManager.getLogger(NetworkService.class);
-	
-	private static final Set<String> TRACKING_PARAMS = Sets.newHashSet("utm_source","utm_medium","utm_campaign","utm_term","utm_content"); 
-	
+
+	private static final Set<String> TRACKING_PARAMS = Sets.newHashSet("utm_source","utm_medium","utm_campaign","utm_term","utm_content");
+
 	public String getStringSilently(String url) {
 		try {
 			return getString(new URL(url));
@@ -72,11 +72,11 @@ public class NetworkService {
 		}
 		return null;
 	}
-	
+
 	public NetworkResponse get(String spec) throws URISyntaxException, IOException {
 		return get(new URI(spec));
 	}
-	
+
 	public NetworkResponse getSilently(String url) {
 		try {
 			return get(new URI(url));
@@ -85,7 +85,7 @@ public class NetworkService {
 		}
 		return null;
 	}
-	
+
 	public URI resolveRedirects(URI url) {
 		int i = 0;
 		while (i < 5) {
@@ -93,11 +93,11 @@ public class NetworkService {
 			try {
 				HttpClient client = HttpClients.custom().disableRedirectHandling().build();
 				HttpContext context = new BasicHttpContext();
-	
-				// connect and receive 
+
+				// connect and receive
 				HttpGet get = new HttpGet(url);
 				HttpResponse response = client.execute(get, context);
-	
+
 				// obtain redirect target
 				Header locationHeader = response.getFirstHeader("location");
 				if (locationHeader!=null) {
@@ -111,7 +111,7 @@ public class NetworkService {
 				} else {
 					break;
 				}
-				
+
 			} catch (URISyntaxException | IOException e) {
 				break;
 			}
@@ -156,17 +156,17 @@ public class NetworkService {
 			String encoding = null;
 			String contentType = null;
 			if (isHttpOrHttps(uri)) {
-				
+
 				int timeout = 10;
 				RequestConfig config = RequestConfig.custom()
 				  .setConnectTimeout(timeout * 1000)
 				  .setConnectionRequestTimeout(timeout * 1000)
 				  .setSocketTimeout(timeout * 1000).build();
-				
+
 				client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 				method = new HttpGet(uri);
 				if (uri.getHost().endsWith("sundhed.dk")) {
-					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");					
+					method.addHeader("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");
 				} else {
 					method.addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36");
 					method.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -179,9 +179,9 @@ public class NetworkService {
 							URI red = new URI(locationHeader.getValue());
 							return get(red, redirects - 1);
 						} catch (URISyntaxException e) {
-							
+
 						}
-						
+
 					}
 				}
 				int code = res.getStatusLine().getStatusCode();
@@ -222,12 +222,12 @@ public class NetworkService {
 				method.releaseConnection();
 			}
 			if (client != null) client.close();
-		}		
+		}
 	}
 
 	public boolean isHttpOrHttps(URI uri) {
 		String scheme = uri.getScheme();
 		return scheme!=null && (scheme.equals("http") || scheme.equals("https"));
 	}
-	
+
 }

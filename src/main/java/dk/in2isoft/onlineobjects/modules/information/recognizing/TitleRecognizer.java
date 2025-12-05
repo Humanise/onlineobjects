@@ -20,7 +20,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 
 public class TitleRecognizer implements Recognizer {
-	
+
 	private static final Logger log = LogManager.getLogger(TitleRecognizer.class);
 
 	@Override
@@ -42,7 +42,7 @@ public class TitleRecognizer implements Recognizer {
 		log.trace("findTitle: " + watch.getTime());
 		watch.reset();
 		watch.start();
-		
+
 		List<Element> candidates = findCandidates(document);
 		log.trace("candidate count: {}", candidates.size());
 		watch.stop();
@@ -96,13 +96,13 @@ public class TitleRecognizer implements Recognizer {
 		if (mainTitle.endsWith("Wikipedia")) {
 			siteTitle = "Wikipedia";
 		}
-		
+
 		mainTitle = extractActualTitle(mainTitle, siteTitle);
-		
+
 		String openGraphTitle = getOpenGraphTitle(document);
 		String twitterTitle = getTwitterTitle(document);
 		String facebookTitle = getFacebookTitle(document);
-		
+
 		Set<String> titles = new HashSet<>();
 		if (Strings.isNotBlank(mainTitle)) titles.add(normalize(mainTitle));
 		if (Strings.isNotBlank(openGraphTitle)) titles.add(normalize(openGraphTitle));
@@ -110,14 +110,14 @@ public class TitleRecognizer implements Recognizer {
 		if (Strings.isNotBlank(facebookTitle)) titles.add(normalize(facebookTitle));
 		return titles;
 	}
-	
+
 	private String normalize(String str) {
 		return str.toLowerCase().replaceAll("\\W", "");
 	}
-	
+
 	private Element findMain(List<Element> elements, Set<String> titles, StopWatch watch) {
 		if (elements.isEmpty()) return null;
-		
+
 		if (!titles.isEmpty()) {
 			Optional<Element> found = elements.stream().filter(el -> {
 				return "h1".equals(el.getLocalName()) && titles.contains(normalize(DOM.getText(el)));
@@ -141,7 +141,7 @@ public class TitleRecognizer implements Recognizer {
 			titleLength = (int) titles.stream().mapToInt(s -> s.length()).average().getAsDouble();
 		}
 		int x = titleLength;
-		
+
 		if (candidates.size() > 1000) {
 			candidates.sort((a,b) -> {
 				if (!a.rank.equals(b.rank)) {
@@ -154,11 +154,11 @@ public class TitleRecognizer implements Recognizer {
 			});
 			candidates = candidates.subList(0, 1000);
 		}
-		
+
 		compare(candidates, titles);
-		
+
 		candidates.stream().map(c -> c.element.getLocalName()).distinct().forEach(str -> log.trace(str));
-		
+
 		candidates.sort((a,b) -> {
 			int textComparison = b.comparison.compareTo(a.comparison);
 			if (textComparison != 0) {
@@ -173,10 +173,10 @@ public class TitleRecognizer implements Recognizer {
 			List<Candidate> topRankedBySimilarity = candidates.stream().
 			sorted((a,b) -> {
 				int compareTo = b.rank.compareTo(a.rank);
-				if (compareTo != 0) return compareTo; 
+				if (compareTo != 0) return compareTo;
 				return b.comparison.compareTo(a.comparison);
 			}).collect(Collectors.toList());
-			
+
 			if (!topRankedBySimilarity.isEmpty()) {
 				Candidate topRank = topRankedBySimilarity.get(0);
 				if (topRank.position < topSimilar.position) {
@@ -196,7 +196,7 @@ public class TitleRecognizer implements Recognizer {
 			}
 			candidate.comparison = comparison;
 		}
-		
+
 	}
 
 	private List<Candidate> make(List<Element> candidates) {
@@ -268,7 +268,7 @@ public class TitleRecognizer implements Recognizer {
 		Double comparison = 0.0;
 		Double rank = 0.0;
 		int position = 0;
-		
+
 		@Override
 		public String toString() {
 			// TODO Auto-generated method stub

@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import dk.in2isoft.commons.lang.Strings;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -18,15 +22,10 @@ import nu.xom.ParsingException;
 import nu.xom.Text;
 import nu.xom.ValidityException;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import dk.in2isoft.commons.lang.Strings;
-
 public class DecoratedDocument {
 
 	//private Logger log = LogManager.getLogger(DecoratedDocument.class);
-	
+
 	private static final Set<String> INLINES = Sets.newHashSet("b", "big", "i", "small", "tt","abbr", "acronym", "cite", "code", "dfn", "em", "kbd", "strong", "samp", "var","a", "bdo", "br", "img", "map", "object", "q", "script", "span", "sub", "sup");
 
 	private String text;
@@ -34,18 +33,18 @@ public class DecoratedDocument {
 	private List<Fragment> fragments;
 	private List<Decoration> decorations;
 	private boolean built;
-	
+
 	public DecoratedDocument(Document document) {
 		this.document = document;
 		this.fragments = Lists.newArrayList();
 		this.decorations = Lists.newArrayList();
 	}
-	
+
 	private void buildText() {
 		if (built) {
 			return;
 		}
-		
+
 		StringBuilder allText = new StringBuilder();
 		int pos = 0;
 		List<Text> nodes = DOM.findAllText(document);
@@ -53,14 +52,14 @@ public class DecoratedDocument {
 			Text node = nodes.get(i);
 			if (i>0) {
 				boolean newLine = isNewline(node);
-				
+
 				if (newLine) {
 					allText.append("\n\n");
 					pos+=2;
 				}
 			}
-			
-			
+
+
 			Fragment fragment = new Fragment();
 			fragment.node = node;
 			fragment.from = pos;
@@ -101,7 +100,7 @@ public class DecoratedDocument {
 		}
 		return false;
 	}
-	
+
 	private Node getPrevious(Node node) {
 		ParentNode parent = node.getParent();
 		int count = parent.getChildCount();
@@ -122,7 +121,7 @@ public class DecoratedDocument {
 			int from = fragment.from;
 			int to = fragment.to;
 			//log.info(to + " vs " + fragment.to );
-			List<Decoration> localDecorations = Lists.newArrayList(); 
+			List<Decoration> localDecorations = Lists.newArrayList();
 			for (Decoration decoration : decorations) {
 				if (decoration.from > to || decoration.to < from) {
 					continue;
@@ -147,18 +146,18 @@ public class DecoratedDocument {
 			parent.removeChild(index);
 		}
 	}
-	
+
 	private void buildReplacement(Fragment fragment, List<Decoration> decorations) {
 		String text = fragment.node.getValue();
 		Set<Integer> breaks = Sets.newHashSet(0,text.length());
-		
+
 		for (Decoration decoration : decorations) {
 			breaks.add(decoration.from);
 			breaks.add(decoration.to);
 		}
 		List<Integer> ordered = Lists.newArrayList(breaks);
 		ordered.sort(null);
-		
+
 		List<Part> parts = Lists.newArrayList();
 		int cur = ordered.remove(0);
 		for (Integer point : ordered) {
@@ -169,13 +168,13 @@ public class DecoratedDocument {
 					part.decorations.add(decoration);
 				}
 			}
-			parts.add(part);			
+			parts.add(part);
 			cur = point;
 		}
-		
+
 		fragment.replacement = convert(parts);
 	}
-	
+
 	private Nodes convert(List<Part> parts) {
 		Nodes replacement = new Nodes();
 		for (Part part : parts) {
@@ -197,7 +196,7 @@ public class DecoratedDocument {
 		}
 		return replacement;
 	}
-	
+
 	public void decorate(int from, int to, String tag) {
 		decorate(from, to, tag, null);
 	}
@@ -210,16 +209,16 @@ public class DecoratedDocument {
 		decoration.attributes = attributes;
 		decorations.add(decoration);
 	}
-	
+
 	public String getText() {
 		this.buildText();
 		return text;
 	}
-	
+
 	public Document getDocument() {
 		return document;
 	}
-	
+
 	public static DecoratedDocument parse(String xml) throws ValidityException, ParsingException, IOException {
 		Builder builder = new Builder();
 		try (StringReader reader = new StringReader(xml)) {
@@ -228,26 +227,26 @@ public class DecoratedDocument {
 			return decorated;
 		}
 	}
-	
+
 	private class Fragment {
 		Text node;
 		Nodes replacement;
 		int from;
 		int to;
-		
+
 		@Override
 		public String toString() {
-			return "[" + from + " " + Strings.RIGHTWARDS_ARROW + " " + to + "]"; 
+			return "[" + from + " " + Strings.RIGHTWARDS_ARROW + " " + to + "]";
 		}
 	}
-	
+
 	private class Decoration {
 		public Map<String, Object> attributes;
 		int from;
 		int to;
 		String tag;
 	}
-	
+
 	private class Part {
 		String text;
 		List<Decoration> decorations = Lists.newArrayList();

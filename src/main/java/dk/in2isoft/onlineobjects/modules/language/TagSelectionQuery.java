@@ -8,9 +8,9 @@ import dk.in2isoft.onlineobjects.core.CustomQuery;
 import dk.in2isoft.onlineobjects.core.Privileged;
 
 public class TagSelectionQuery implements CustomQuery<ItemData> {
-	
+
 	private long privileged;
-	
+
 	public TagSelectionQuery(Privileged privileged) {
 		super();
 		this.privileged = privileged.getIdentity();
@@ -35,8 +35,8 @@ public class TagSelectionQuery implements CustomQuery<ItemData> {
 				+ "	tag_entity.name\n"
 				+ "ORDER BY\n"
 				+ "	lower(tag_entity.name)";
-		
-		
+
+
 		return SQL;
 	}
 
@@ -48,7 +48,7 @@ public class TagSelectionQuery implements CustomQuery<ItemData> {
 		ItemData item = new ItemData();
 		item.setId(((Number) row[0]).longValue());
 		item.setValue(((Number) row[0]));
-		
+
 		item.setText((String) (row[1]==null ? "none" : row[1]));
 		item.setBadge(((Number) row[2]).toString());
 		return item;

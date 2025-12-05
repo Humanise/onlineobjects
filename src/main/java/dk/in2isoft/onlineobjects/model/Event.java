@@ -10,7 +10,7 @@ public class Event extends Entity {
 
 	public static final String FIELD_STARTTIME = "startTime";
 	public static final String FIELD_ENDTIME = "endTime";
-	
+
 	private Date startTime;
 	private Date endTime;
 	private String location;
@@ -42,7 +42,7 @@ public class Event extends Entity {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	
+
 	public String getLocation() {
 		return location;
 	}

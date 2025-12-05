@@ -32,32 +32,32 @@ import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class KnowledgeAnalyzeView extends AbstractView implements InitializingBean {
-	
+
 	private ModelService modelService;
 	private TextDocumentAnalyzer textDocumentAnalyzer;
-	
+
 	private InternetAddress internetAddress;
-	
+
 	private List<Pair<String,Object>> properties;
 	private TextDocumentAnalytics analytics;
 	private Map<String, Collection<String>> wordsByPartOfSpeech;
 	private List<Pair<InternetAddress, Double>> similar;
-	
+
 	private StringBuilder message;
 	private List<String> names;
-	
+
 	public KnowledgeAnalyzeView() {
 		properties = Lists.newArrayList();
 		message = new StringBuilder();
 	}
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		Long id = request.getId();
 		internetAddress = modelService.getRequired(InternetAddress.class, id, request);
-		
+
 		analytics = textDocumentAnalyzer.analyze(internetAddress, request);
-		
+
 		properties.add(Pair.of("Entity name", internetAddress.getName()));
 		properties.add(Pair.of("Entity address", internetAddress.getAddress()));
 		for (Property property : internetAddress.getProperties()) {
@@ -67,15 +67,15 @@ public class KnowledgeAnalyzeView extends AbstractView implements InitializingBe
 		properties.add(Pair.of("Locale - guessed", analytics.getGuessedLocale()));
 		properties.add(Pair.of("Locale - used", analytics.getUsedLocale()));
 		Multimap<String, String> textByPOS = HashMultimap.create();
-		analytics.getSignificantWords().forEach((part) -> 
+		analytics.getSignificantWords().forEach((part) ->
 			textByPOS.put(part.getPartOfSpeech(), part.getText().toLowerCase())
 		);
 		wordsByPartOfSpeech = textByPOS.asMap();
-		
+
 		compare(request);
 		findPeople(request);
 	}
-	
+
 	private void findPeople(Operator operator) throws ModelException, ExplodingClusterFuckException {
 		List<List<String>> nameCandidates = analytics.getNameCandidates();
 		Set<String> uniques = Sets.newHashSet();
@@ -97,20 +97,20 @@ public class KnowledgeAnalyzeView extends AbstractView implements InitializingBe
 				this.names.add(sb.toString());
 			}
 		}
-		
+
 	}
-	
+
 	public List<String> getNames() {
 		return names;
 	}
-	
+
 	private void compare(Operator operator) throws ModelException {
-		
+
 		List<Pair<InternetAddress,Double>> similarities = new ArrayList<>();
-		
+
 		List<Relation> relationsFrom = modelService.getRelationsFrom(internetAddress, InternetAddress.class, Kind.similarity.toString(), operator);
 		List<Relation> relationsTo = modelService.getRelationsTo(internetAddress, InternetAddress.class, Kind.similarity.toString(), operator);
-		
+
 		for (Relation relation : relationsFrom) {
 			if (relation.getTo() instanceof InternetAddress && relation.getStrength()!=null) {
 				similarities.add(Pair.of((InternetAddress)relation.getTo(), relation.getStrength()));
@@ -122,42 +122,42 @@ public class KnowledgeAnalyzeView extends AbstractView implements InitializingBe
 			}
 		}
 		this.similar = similarities.stream().filter((x) -> x.getValue()>-1).sorted((a,b) -> b.getValue().compareTo(a.getValue())).collect(Collectors.toList());
-		
+
 	}
-	
+
 	private List<WordListPerspective> findNames(Collection<String> words, Operator operator) throws ModelException, ExplodingClusterFuckException {
 		WordCategoryPerspectiveQuery query = new WordCategoryPerspectiveQuery().withWords(words);
 		query.withCategories(LexicalCategory.CODE_PROPRIUM_FIRST, LexicalCategory.CODE_PROPRIUM_MIDDLE, LexicalCategory.CODE_PROPRIUM_LAST);
 		return modelService.search(query, operator).getList();
 	}
 
-	
+
 	public TextDocumentAnalytics getAnalytics() {
 		return analytics;
 	}
-	
+
 	public Map<String, Collection<String>> getWordsByPartOfSpeech() {
 		return wordsByPartOfSpeech;
 	}
-	
+
 	public List<Pair<String, Object>> getProperties() {
 		return properties;
 	}
-	
+
 	public List<Pair<InternetAddress, Double>> getSimilar() {
 		return similar;
 	}
-	
+
 	public String getMessage() {
 		return message.toString();
 	}
 
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-			
+
 	public void setTextDocumentAnalyzer(TextDocumentAnalyzer textDocumentAnalyzer) {
 		this.textDocumentAnalyzer = textDocumentAnalyzer;
 	}

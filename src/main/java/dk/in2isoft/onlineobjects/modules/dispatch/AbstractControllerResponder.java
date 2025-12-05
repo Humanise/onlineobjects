@@ -17,8 +17,8 @@ public class AbstractControllerResponder {
 	public AbstractControllerResponder() {
 		super();
 	}
-	
-	
+
+
 	protected void invokeMothod(AbstractController controller, Request request, Method method) throws IOException, StupidProgrammerException, EndUserException {
 		try {
 			Object result = method.invoke(controller, new Object[] { request });
@@ -43,7 +43,7 @@ public class AbstractControllerResponder {
 			}
 		}
 	}
-	
+
 	public final void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

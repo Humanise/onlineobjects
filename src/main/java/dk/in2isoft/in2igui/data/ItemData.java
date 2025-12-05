@@ -15,7 +15,7 @@ public class ItemData implements Option {
 
 	public ItemData() {
 	}
-	
+
 	public ItemData(Object value) {
 		this.value = value;
 	}
@@ -29,11 +29,11 @@ public class ItemData implements Option {
 	public String getText() {
 		return text;
 	}
-	
+
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public ItemData withText(String text) {
 		this.text = text;
 		return this;
@@ -54,7 +54,7 @@ public class ItemData implements Option {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	
+
 	public ItemData withIcon(String icon) {
 		this.icon = icon;
 		return this;

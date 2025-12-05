@@ -12,13 +12,13 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class FieldsComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.fields";
-	
+
 	private String labels;
 
 	public FieldsComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		labels = (String) state[0];
@@ -30,11 +30,11 @@ public class FieldsComponent extends AbstractComponent {
 			labels
 		};
 	}
-	
+
 	public boolean isLabelsAbove() {
 		return "above".equals(labels);
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		if (!isLabelsAbove()) {
@@ -43,7 +43,7 @@ public class FieldsComponent extends AbstractComponent {
 			writer.startElement("div").withClass("hui_form_fields");
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
 		if (!isLabelsAbove()) {

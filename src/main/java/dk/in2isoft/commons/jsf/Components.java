@@ -39,7 +39,7 @@ public class Components {
 	public static <T> @Nullable T getExpressionValue(UIComponent component, String name, FacesContext context) {
 		return getExpressionValue(component, name, null, context);
 	}
-	
+
 	public static <T> @Nullable T getExpressionValue(UIComponent component, @NonNull String name, @Nullable T localValue, FacesContext context) {
 
 		ValueExpression valueExpression = component.getValueExpression(name);
@@ -88,11 +88,11 @@ public class Components {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		return Request.get((HttpServletRequest) context.getRequest(), (HttpServletResponse) context.getResponse());
 	}
-	
+
 	public static <T> @Nullable T getBean(Class<T> type) {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext((ServletContext) context.getContext());
-		
+
 		Map<String,T> beans = webApplicationContext.getBeansOfType(type);
 		if (!beans.isEmpty()) {
 			return beans.values().iterator().next();
@@ -109,7 +109,7 @@ public class Components {
 		}
 		return null;
 	}
-	
+
 	public static String buildLanguageUrl(Request request, Locale locale) {
 		String[] path = request.getLocalPath();
 		String requestURI = request.getUri();
@@ -136,11 +136,11 @@ public class Components {
 		}
 		String queryString = request.getRequest().getQueryString();
 		if (Strings.isNotBlank(queryString)) {
-			url.append("?").append(queryString);			
+			url.append("?").append(queryString);
 		}
 		return url.toString();
 	}
-	
+
 	public static ScriptWriter getScriptWriter(FacesContext context) {
 		Map<String, Object> map = context.getExternalContext().getRequestMap();
 		ScriptWriter writer;

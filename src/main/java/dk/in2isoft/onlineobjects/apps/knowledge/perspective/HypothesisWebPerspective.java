@@ -25,7 +25,7 @@ public class HypothesisWebPerspective implements KnowledgeWebPerspective, Catego
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
@@ -69,7 +69,7 @@ public class HypothesisWebPerspective implements KnowledgeWebPerspective, Catego
 	public void setContradicts(List<StatementWebPerspective> contradicting) {
 		this.contradicts = contradicting;
 	}
-	
+
 	public void setQuestions(List<QuestionWebPerspective> questions) {
 		this.questions = questions;
 	}
@@ -77,7 +77,7 @@ public class HypothesisWebPerspective implements KnowledgeWebPerspective, Catego
 	public List<QuestionWebPerspective> getQuestions() {
 		return questions;
 	}
-	
+
 	public List<Option> getWords() {
 		return words;
 	}
@@ -85,11 +85,11 @@ public class HypothesisWebPerspective implements KnowledgeWebPerspective, Catego
 	public void setWords(List<Option> words) {
 		this.words = words;
 	}
-	
+
 	public List<Option> getTags() {
 		return tags;
 	}
-	
+
 	public void setTags(List<Option> tags) {
 		this.tags = tags;
 	}

@@ -22,10 +22,10 @@ import dk.in2isoft.onlineobjects.ui.DependencyService;
 public class BodyComponent extends HtmlBody {
 
 	public static final String TYPE = "onlineobjects.body";
-	
+
 	private boolean plain;
 	private boolean light;
-	
+
 	public java.lang.String getStyleClass() {
 		if (plain) {
 			return null;
@@ -44,7 +44,7 @@ public class BodyComponent extends HtmlBody {
 		return styleClass;
 
     }
-	
+
 	@Override
 	public void encodeEnd(FacesContext context) throws IOException {
 
@@ -54,18 +54,18 @@ public class BodyComponent extends HtmlBody {
 		TagWriter out = new TagWriter(this, context);
 		ScriptWriter writer = Components.getScriptWriter(context);
 		String js = writer.toString();
-		
+
 		if (configurationService.isOptimizeResources()) {
-			
+
 			DependencyService dependencyService = Components.getBean(DependencyService.class);
-		 	
+
 			if (Strings.isNotBlank(js)) {
 				out.startScopedScript().write("hui.on(function() {").write(js).write("});").endScopedScript();
 			}
 			String scriptUrl = dependencyService.handleScripts(graph);
 		 	out.startScript().withAttribute("async", "async").withAttribute("defer", "defer").src(scriptUrl).endScript();
 		} else {
-			
+
 			for (String url : graph.getScripts()) {
 			 	out.startScript().src(DependencyService.pathToUrl(url)).endScript();
 			}
@@ -79,7 +79,7 @@ public class BodyComponent extends HtmlBody {
 			}
 		}
 		out.flush();
-		
+
 		super.encodeEnd(context);
 	}
 

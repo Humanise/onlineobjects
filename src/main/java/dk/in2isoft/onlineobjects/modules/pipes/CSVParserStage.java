@@ -43,10 +43,10 @@ public class CSVParserStage extends PipelineStageAdapter {
 					context.warn(this,"line "+num+": key length ("+keys.length+") and line length ("+nextLine.length+") does not match: "+Arrays.toString(nextLine));
 				}
 				num++;
-				
+
 			}
 		} catch (IOException e) {
-			
+
 		} finally {
 			if (reader!=null) {
 				try {

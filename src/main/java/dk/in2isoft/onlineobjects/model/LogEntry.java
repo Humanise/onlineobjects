@@ -68,6 +68,6 @@ public class LogEntry {
 	public void setData(String data) {
 		this.data = data;
 	}
-	
-	
+
+
 }

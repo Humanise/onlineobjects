@@ -8,15 +8,15 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ListWriter extends MarkupWriter {
-	
-	
+
+
 	public ListWriter(Request request) throws IOException {
 		HttpServletResponse response = request.getResponse();
 		response.setCharacterEncoding(Strings.UTF8);
 		response.setContentType("text/xml");
 		this.writer = response.getWriter();
 	}
-	
+
 	public ListWriter startList() {
 		writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		startTag("list");
@@ -27,7 +27,7 @@ public class ListWriter extends MarkupWriter {
 		endTag("list");
 		return this;
 	}
-	
+
 	public ListWriter window(int total, int size, int page) {
 		startTag("window");
 		withAttribute("total", total);
@@ -53,7 +53,7 @@ public class ListWriter extends MarkupWriter {
 		endTag("header");
 		return this;
 	}
-	
+
 	public ListWriter header(String text, int width) {
 		startTag("header");
 		withAttribute("title", text);
@@ -71,7 +71,7 @@ public class ListWriter extends MarkupWriter {
 		endTag("row");
 		return this;
 	}
-	
+
 	public ListWriter startCell() {
 		startTag("cell");
 		return this;
@@ -91,16 +91,16 @@ public class ListWriter extends MarkupWriter {
 		endTag("icons");
 		return this;
 	}
-	
+
 	public ListWriter startIcon() {
 		startTag("icon");
 		return this;
 	}
-	
+
 	public ListWriter startActionIcon(String icon) {
 		startTag("icon");
 		withAttribute("icon", icon);
-		
+
 		withAttribute("action", true);
 		return this;
 	}
@@ -109,7 +109,7 @@ public class ListWriter extends MarkupWriter {
 		endTag("icon");
 		return this;
 	}
-	
+
 	public ListWriter startLine() {
 		startTag("line");
 		return this;
@@ -204,7 +204,7 @@ public class ListWriter extends MarkupWriter {
 		withAttribute("action", true);
 		return this;
 	}
-	
+
 	public ListWriter revealing() {
 		withAttribute("revealing", true);
 		return this;

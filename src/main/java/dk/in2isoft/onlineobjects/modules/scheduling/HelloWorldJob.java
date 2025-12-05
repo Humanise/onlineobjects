@@ -7,9 +7,9 @@ import org.quartz.JobExecutionException;
 
 
 public class HelloWorldJob extends ServiceBackedJob {
-	
+
 	private static final Logger log = LogManager.getLogger(HelloWorldJob.class);
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		log.info("Starting");
 		JobStatus status = getStatus(context);

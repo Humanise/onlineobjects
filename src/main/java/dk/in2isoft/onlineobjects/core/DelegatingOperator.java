@@ -4,13 +4,13 @@ public class DelegatingOperator implements Operator {
 
 	private long identity;
 	private Operator original;
-	
+
 
 	public DelegatingOperator(Operator original, Privileged privileged) {
 		this.identity = privileged.getIdentity();
 		this.original = original;
 	}
-	
+
 	@Override
 	public long getIdentity() {
 		// TODO Auto-generated method stub

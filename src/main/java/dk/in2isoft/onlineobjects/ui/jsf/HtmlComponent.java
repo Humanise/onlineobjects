@@ -13,7 +13,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class HtmlComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.html";
-	
+
 	public HtmlComponent() {
 		super(FAMILY);
 	}
@@ -32,7 +32,7 @@ public class HtmlComponent extends AbstractComponent {
 		String language = "en";
 		Locale locale = context.getViewRoot().getLocale();
 		if (locale == null) {
-			locale = context.getExternalContext().getRequestLocale();			
+			locale = context.getExternalContext().getRequestLocale();
 		}
 		if (locale!=null && locale.getLanguage()!=null) {
 			language = locale.getLanguage();

@@ -10,9 +10,9 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -28,7 +28,7 @@ public class PasswordRecoveryService {
 	private MemberService memberService;
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
-	
+
 	public boolean sendRecoveryMail(String usernameOrEmail, Operator operator) throws EndUserException {
 		if (!memberService.isValidUsername(usernameOrEmail) && !memberService.isWellFormedEmail(usernameOrEmail)) {
 			throw new BadRequestException(Error.invalidUsernameOrEmail);
@@ -42,7 +42,7 @@ public class PasswordRecoveryService {
 		}
 		return false;
 	}
-	
+
 	public boolean sendRecoveryMail(User user, Operator operator) throws EndUserException {
 		surveillanceService.audit().info("Request to recover password for user={}", user.getUsername());
 		Privileged admin = securityService.getAdminPrivileged();
@@ -50,11 +50,11 @@ public class PasswordRecoveryService {
 		EmailAddress usersPrimaryEmail = memberService.getUsersPrimaryEmail(user, operator);
 		Person person = memberService.getUsersPerson(user, operator);
 		if (usersPrimaryEmail!=null && person!=null) {
-			return sendRecoveryMail(user, person, usersPrimaryEmail, operator);			
+			return sendRecoveryMail(user, person, usersPrimaryEmail, operator);
 		}
 		return false;
 	}
-	
+
 	public boolean sendRecoveryMail(User user, Person person, EmailAddress email, Operator operator) throws EndUserException {
 		String random = Strings.generateRandomString(30);
 		user.overrideFirstProperty(Property.KEY_PASSWORD_RECOVERY_CODE, random);
@@ -71,7 +71,7 @@ public class PasswordRecoveryService {
 		parms.put("url",url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/passwordrecovery-template.html", parms);
-		
+
 		emailService.sendHtmlMessage("Reset password for OnlineObjects", html, email.getAddress(),person.getName());
 		surveillanceService.audit().info("Did send e-mail to recover password for user={}", user.getUsername());
 		return true;
@@ -82,7 +82,7 @@ public class PasswordRecoveryService {
 		SearchResult<User> result = modelService.search(query, operator);
 		return result.getFirst();
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -100,11 +100,11 @@ public class PasswordRecoveryService {
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}

@@ -15,7 +15,7 @@ public class ParameterComponent extends AbstractComponent {
 	public ParameterComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		key = (String) state[0];
@@ -42,5 +42,5 @@ public class ParameterComponent extends AbstractComponent {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
 }

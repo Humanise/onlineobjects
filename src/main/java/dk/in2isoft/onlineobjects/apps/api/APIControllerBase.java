@@ -21,7 +21,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public abstract class APIControllerBase extends ApplicationController {
-	
+
 	protected LanguageService languageService;
 	protected HTMLService htmlService;
 	protected SecurityService securityService;
@@ -34,7 +34,7 @@ public abstract class APIControllerBase extends ApplicationController {
 	protected MemberService memberService;
 	protected PasswordRecoveryService passwordRecoveryService;
 	protected SurveillanceService surveillanceService;
-	
+
 	public APIControllerBase() {
 		super("api");
 	}
@@ -55,23 +55,23 @@ public abstract class APIControllerBase extends ApplicationController {
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setInboxService(InboxService inboxService) {
 		this.inboxService = inboxService;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
@@ -79,23 +79,23 @@ public abstract class APIControllerBase extends ApplicationController {
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
-	
+
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}
-	
+
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
-	
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}

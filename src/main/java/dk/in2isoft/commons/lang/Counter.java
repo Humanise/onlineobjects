@@ -10,15 +10,15 @@ import com.google.common.collect.Maps;
 public class Counter<T> {
 
 	private Map<T,Integer> map = Maps.newHashMap();
-	
+
 	public void addOne(T key) {
 		add(key, 1);
 	}
-	
+
 	public Map<T, Integer> getMap() {
 		return map;
 	}
-	
+
 	public @Nullable T getTop() {
 		T found = (T) null;
 		Set<T> keys = map.keySet();

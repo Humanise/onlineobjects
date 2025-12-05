@@ -1,15 +1,15 @@
 package dk.in2isoft.onlineobjects.ui;
 
 public class AsynchronousProcessDescriptor {
-	
+
 	private boolean completed;
 	private boolean error;
 	private float value;
-	
+
 	public AsynchronousProcessDescriptor() {
-		
+
 	}
-	
+
 	public boolean isCompleted() {
 		return completed;
 	}

@@ -7,7 +7,7 @@ import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 public class GalleryItem implements ImageContainer {
 
 	private Image image;
-	
+
 	private SimpleEntityPerspective owner;
 
 	public SimpleEntityPerspective getOwner() {
@@ -17,12 +17,12 @@ public class GalleryItem implements ImageContainer {
 	public void setOwner(SimpleEntityPerspective owner) {
 		this.owner = owner;
 	}
-	
+
 	public static GalleryItem create(Image image, User user) {
 		GalleryItem item = new GalleryItem();
 		item.setImage(image);
 		if (user!=null) {
-			item.setOwner(SimpleEntityPerspective.create(user)); 
+			item.setOwner(SimpleEntityPerspective.create(user));
 		}
 		return item;
 	}

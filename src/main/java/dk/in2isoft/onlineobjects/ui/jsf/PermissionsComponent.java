@@ -20,7 +20,7 @@ public class PermissionsComponent extends AbstractComponent {
 
 
 	public static final String FAMILY = "onlineobjects.permissions";
-	
+
 	public PermissionsComponent() {
 		super(FAMILY);
 	}
@@ -33,13 +33,13 @@ public class PermissionsComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		SecurityService securityService = Components.getBean(SecurityService.class);
-		
+
 		Entity entity = Components.getExpressionValue(this, "entity", context);
-		
+
 		out.startDiv().withClass("oo_permissions").withId(getClientId());
 		boolean publicView = securityService.canView(entity, securityService.getPublicUser(), getRequest());
 		CheckboxComponent check = new CheckboxComponent();

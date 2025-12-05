@@ -37,28 +37,28 @@ public class KnowledgeListQuery implements CustomQuery<KnowledgeListRow> {
 		return "select entity.id,"
 
 				+ "case"
-				+ "	when internetaddress.id is not null then '" + InternetAddress.class.getSimpleName() + "'" 
+				+ "	when internetaddress.id is not null then '" + InternetAddress.class.getSimpleName() + "'"
 				+ "	when question.id is not null then '" + Question.class.getSimpleName() + "'"
-				+ "	when hypothesis.id is not null then '" + Hypothesis.class.getSimpleName() + "'" 
-				+ "	when \"statement\".id is not null then '" + Statement.class.getSimpleName() + "'" 
-				+ " end as \"type\"," 
+				+ "	when hypothesis.id is not null then '" + Hypothesis.class.getSimpleName() + "'"
+				+ "	when \"statement\".id is not null then '" + Statement.class.getSimpleName() + "'"
+				+ " end as \"type\","
 
 				+ " favorite_relation.sub_entity_id NOTNULL as favorite,"
 				+ " inbox_relation.sub_entity_id NOTNULL as inbox,"
 
-				+ " COALESCE(question.\"text\", \"statement\".\"text\", hypothesis.\"text\", entity.\"name\") as text," 
+				+ " COALESCE(question.\"text\", \"statement\".\"text\", hypothesis.\"text\", entity.\"name\") as text,"
 
-				+ " internetaddress.address as url" 
+				+ " internetaddress.address as url"
 
 				+ " from entity"
 
 				+ " left join question on entity.id = question.id"
 
-				+ " left join internetaddress on entity.id = internetaddress.id" 
+				+ " left join internetaddress on entity.id = internetaddress.id"
 
-				+ " left join \"statement\" on entity.id = statement.id" 
-				+ " left join hypothesis on entity.id = hypothesis.id" 
-				
+				+ " left join \"statement\" on entity.id = statement.id"
+				+ " left join hypothesis on entity.id = hypothesis.id"
+
 				+ " inner join privilege on privilege.\"object\" = entity.id and privilege.subject = :privileged"
 				+ " left join relation as favorite_relation on entity.id = favorite_relation.sub_entity_id"
 				+ " and favorite_relation.super_entity_id = (select relation.sub_entity_id from relation where kind = '" + Relation.KIND_SYSTEM_USER_FAVORITES + "' and relation.super_entity_id = :privileged limit 1)"

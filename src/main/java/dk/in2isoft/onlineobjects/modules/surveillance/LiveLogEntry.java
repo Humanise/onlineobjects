@@ -5,7 +5,7 @@ import java.util.Date;
 public class LiveLogEntry {
 
 	public enum Level {info,warn,error}
-	
+
 	private Date date;
 	private String title;
 	private String details;
@@ -17,7 +17,7 @@ public class LiveLogEntry {
 		this.date = new Date();
 		this.level = Level.info;
 	}
-	
+
 	public LiveLogEntry(String text) {
 		this();
 		this.title = text;

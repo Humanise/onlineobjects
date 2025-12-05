@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.modules.language;
 import java.io.Serializable;
 
 public class TextPart implements Serializable {
-	
+
 	private static final long serialVersionUID = 3902017762321253134L;
 
 	private String text;
@@ -14,11 +14,11 @@ public class TextPart implements Serializable {
 		this.text = text;
 		this.partOfSpeech = pos;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
-	
+
 	public String getPartOfSpeech() {
 		return partOfSpeech;
 	}
@@ -64,5 +64,5 @@ public class TextPart implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 
 public class Code {
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> T cast(Object object) {
 		return (T) object;

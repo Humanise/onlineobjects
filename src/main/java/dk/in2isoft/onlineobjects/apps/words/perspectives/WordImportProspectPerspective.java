@@ -6,7 +6,7 @@ import java.util.Map;
 public class WordImportProspectPerspective {
 
 	private String text;
-	
+
 	private Map<String,Collection<String>> existing;
 
 	public String getText() {
@@ -24,5 +24,5 @@ public class WordImportProspectPerspective {
 	public void setExisting(Map<String, Collection<String>> map) {
 		this.existing = map;
 	}
-	
+
 }

@@ -23,7 +23,7 @@ public class NavigatorComponent extends AbstractComponent {
 	public NavigatorComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		var = (String) state[0];
@@ -53,7 +53,7 @@ public class NavigatorComponent extends AbstractComponent {
 		Object value = expression.getValue(getFacesContext().getELContext());
 		return (ListModel<Image>) value;
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		ListModel<Image> model = getModel();

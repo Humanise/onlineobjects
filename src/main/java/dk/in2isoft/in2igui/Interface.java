@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 public interface Interface {
 
 	public void render(HttpServletRequest request, HttpServletResponse response) throws IOException;
-	
+
 	public File getFile();
-	
+
 	public void setParameter(String name, Object value);
 }

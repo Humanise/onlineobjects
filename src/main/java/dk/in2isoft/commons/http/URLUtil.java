@@ -15,9 +15,9 @@ public class URLUtil {
 			return false;
 		}
 	}
-	
+
 	public static String toFileName(String url) {
-		
+
 		int li = url.lastIndexOf("/");
 		if (li!=-1) {
 			return Files.cleanFileName(url.substring(li+1));

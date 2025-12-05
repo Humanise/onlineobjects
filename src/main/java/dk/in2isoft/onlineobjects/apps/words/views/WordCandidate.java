@@ -8,7 +8,7 @@ public class WordCandidate {
 	private boolean primaryLanguage;
 	private int count;
 	private List<String> languages;
-	
+
 
 	public void setText(String text) {
 		this.text = text;

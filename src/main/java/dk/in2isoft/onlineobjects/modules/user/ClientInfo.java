@@ -10,7 +10,7 @@ public class ClientInfo {
 	private String clientBuild;
 	private String hardware;
 	private String hardwareVersion;
-	
+
 	public ClientInfo() {}
 
 	public ClientInfo(String nickname) {

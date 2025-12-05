@@ -26,14 +26,14 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 	private boolean inPosition;
 
 	private String ordering;
-	
+
 	private boolean descending;
-	
+
 	private boolean publicView;
-	
+
 	private List<Other> from;
 	private List<Other> to;
-	
+
 
 	public Query(Class<T> clazz) {
 		super();
@@ -61,17 +61,17 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		ordering = "obj.name";
 		return this;
 	}
-	
+
 	public Query<T> descending() {
 		descending=true;
 		return this;
 	}
-	
+
 	public Query<T> descending(boolean descending) {
 		this.descending=descending;
 		return this;
 	}
-	
+
 	public Query<T> ascending() {
 		descending=false;
 		return this;
@@ -83,12 +83,12 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		}
 		return this;
 	}
-	
+
 	public Query<T> withIds(Long... ids) {
 		this.ids = ids;
 		return this;
 	}
-	
+
 	public Query<T> withIds(Collection<Long> ids) {
 		this.ids = ids.toArray(new Long[] {});
 		return this;
@@ -224,7 +224,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 
 	public Query<T> from(List<? extends Entity> entities) {
 		for (Entity entity : entities) {
-			this.from.add(new Other(entity,null));			
+			this.from.add(new Other(entity,null));
 		}
 		return this;
 	}
@@ -243,7 +243,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 
 	public Query<T> to(List<? extends Entity> entities) {
 		for (Entity entity : entities) {
-			this.to.add(new Other(entity,null));			
+			this.to.add(new Other(entity,null));
 		}
 		return this;
 	}
@@ -252,7 +252,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		super.toEntity = entity;
 		return this;
 	}
-	
+
 	public Query<T> to(Long id, String kind) {
 		to.add(new Other(id, kind));
 		return this;
@@ -348,12 +348,12 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		}
 		if (ids!=null && ids.length==0) {
 			hql.append(" and obj.id = -99"); // TODO Find a better way finding nothing
-			
+
 		}
 		if (customProperties.size() > 0) {
 			for (int i = 0; i < customProperties.size(); i++) {
 				PropertyLimitation propertyLimitation = customProperties.get(i);
-				hql.append(" and p.key=:propertyKey"+i+" and p.value " + propertyLimitation.getComparison() + " :propertyValue"+i);				
+				hql.append(" and p.key=:propertyKey"+i+" and p.value " + propertyLimitation.getComparison() + " :propertyValue"+i);
 			}
 		}
 		if (fieldLimitations.size() > 0) {
@@ -408,7 +408,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 					hql.append(" or ");
 				}
 				hql.append("priv.subject=").append(privileged[i].getIdentity());
-				
+
 			}
 			hql.append(")");
 		}
@@ -507,25 +507,25 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 	public void inPosition() {
 		inPosition = true;
 	}
-	
+
 	private class Other {
 		String relationKind;
 		private long id;
-		
+
 		public Other(long id,String relationKind) {
 			this.id = id;
 			this.relationKind = relationKind;
 		}
-		
+
 		public Other(Entity item,String relationKind) {
 			this.id = item.getId();
 			this.relationKind = relationKind;
 		}
-		
+
 		public long getId() {
 			return id;
 		}
-		
+
 		public String getRelationKind() {
 			return relationKind;
 		}

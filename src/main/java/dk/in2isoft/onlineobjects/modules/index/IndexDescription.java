@@ -3,12 +3,12 @@ package dk.in2isoft.onlineobjects.modules.index;
 public class IndexDescription {
 
 	private String name;
-	
+
 	private Long userId;
-	
+
 	public IndexDescription() {
 	}
-	
+
 	public IndexDescription(String name) {
 		this.name = name;
 	}

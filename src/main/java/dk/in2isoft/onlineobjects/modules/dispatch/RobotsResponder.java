@@ -26,12 +26,12 @@ public class RobotsResponder implements Responder {
 
 		HttpServletResponse response = request.getResponse();
 		if (path.endsWith("/apple-app-site-association")) {
-			String out = "{\n" + 
-				"  \"webcredentials\": {\n" + 
-				"    \"apps\": [\n" + 
-				"      \"" + configurationService.getAppleAppSiteAssociation() + "\"\n" + 
-				"    ]\n" + 
-				"  }\n" + 
+			String out = "{\n" +
+				"  \"webcredentials\": {\n" +
+				"    \"apps\": [\n" +
+				"      \"" + configurationService.getAppleAppSiteAssociation() + "\"\n" +
+				"    ]\n" +
+				"  }\n" +
 				"}";
 			response.setContentType("application/json");
 			try (PrintWriter writer = response.getWriter()) {

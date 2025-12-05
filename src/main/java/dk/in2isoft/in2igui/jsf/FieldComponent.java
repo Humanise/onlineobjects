@@ -16,14 +16,14 @@ import dk.in2isoft.commons.lang.Strings;
 public class FieldComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.field";
-	
+
 	private String label;
 	private boolean large;
 
 	public FieldComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		label = (String) state[0];
@@ -36,7 +36,7 @@ public class FieldComponent extends AbstractComponent {
 			label, large
 		};
 	}
-	
+
 	private boolean isAbove() {
 		UIComponent parent = this.getParent();
 		if (parent!=null && parent instanceof FieldsComponent) {
@@ -44,7 +44,7 @@ public class FieldComponent extends AbstractComponent {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String label = getLabel(context);
@@ -82,7 +82,7 @@ public class FieldComponent extends AbstractComponent {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
+
 	private String getLabel(FacesContext context) {
 		return Components.getBindingAsString(this, "label", label, context);
 	}
@@ -90,7 +90,7 @@ public class FieldComponent extends AbstractComponent {
 	public boolean isLarge() {
 		return large;
 	}
-	
+
 	public void setLarge(boolean large) {
 		this.large = large;
 	}

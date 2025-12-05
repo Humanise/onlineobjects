@@ -16,12 +16,12 @@ public class PipelineContext {
 		this.pipeline = pipeline;
 		this.index = index;
 	}
-	
+
 	public void forvardFile(File file) {
 		PipelineStage next = pipeline.getNextStage(index);
 		next.receiveFile(file);
 	}
-	
+
 	public void forwardMappedLine(Map<String,String> map) {
 		PipelineStage next = pipeline.getNextStage(index);
 		try {
@@ -47,7 +47,7 @@ public class PipelineContext {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void forwardResultSet(ResultSet rs) throws SQLException {
 		PipelineStage next = pipeline.getNextStage(index);
 		next.receiveResultSet(rs);

@@ -4,8 +4,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.onlineobjects.modules.suggestion.SuggestionsCategory;
 
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 
@@ -26,7 +26,7 @@ public class StatementWebPerspectiveBuilder extends EntityViewPerspectiveBuilder
 		User user = modelService.getRequired(User.class, operator.getIdentity(), operator);
 		knowledgeService.categorize(statement, perspective, user, operator);
 		knowledgeService.addTags(statement, perspective, operator);
-		
+
 		return perspective;
 	}
 }

@@ -51,7 +51,7 @@ import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
 
 public class TestDanNetImporter extends AbstractSpringTask {
-	
+
 	private static final String PATH = "/Users/jbm/Udvikling/Workspace/onlineobjects/src/test/resources/DanNet-2.1_owl/";
 	private static final Logger log = LogManager.getLogger(TestDanNetImporter.class);
 	private static Graph graph;
@@ -71,10 +71,10 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	private static Node domain = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/domain");
 	private static Node nearSynonym = NodeFactory.createURI("http://www.wordnet.dk/owl/instance/2009/03/schema/nearSynonymOf");
 	private static final Node containsWordSence = NodeFactory.createURI("http://www.w3.org/2006/03/wn/wn20/schema/containsWordSense");
-	
-	
+
+
 	private static final Map<String,String> map = Maps.newHashMap();
-	
+
 	{
 		map.put("http://www.w3.org/2006/03/wn/wn20/schema/NounWordSense", LexicalCategory.CODE_NOMEN);
 		map.put("http://www.w3.org/2006/03/wn/wn20/schema/AdjectiveWordSense", LexicalCategory.CODE_ADJECTIVUM);
@@ -82,13 +82,13 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		map.put("http://www.w3.org/2006/03/wn/wn20/schema/VerbWordSense", LexicalCategory.CODE_VERBUM);
 		map.put("http://www.w3.org/2006/03/wn/wn20/schema/AdverbWordSense", LexicalCategory.CODE_ADVERBIUM);
 	}
-	
+
 	private enum Direction {in,out}
 
 	// Settings...
 	private boolean logToSystemOut = true;
 	private boolean logModelWarnings = false;
-	
+
 	private boolean clearSynonyms = true;
 	private boolean clearDisciplines = true;
 	private boolean clearGeneralizations = true;
@@ -97,14 +97,14 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	private boolean createGeneralizations = true;
 	private boolean createSynonyms = true;
 	private boolean updateProperties = true;
-	
+
 	private Set<String> consideredWords = Sets.newHashSet();
 	private Set<String> disregardedWords = Sets.newHashSet("heel");
-	
+
 	// State...
 	private Language danish;
 	private HashMap<String, LexicalCategory> lexicalCategories;
-	
+
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		watch = new StopWatch();
@@ -112,21 +112,21 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		Model model = loadModel();
 
 		graph = model.getGraph();
-		
+
 		query = new QueryHandler(graph);
-		
+
 	}
-	
+
 	@Before
 	public void setup() throws Exception {
 
-		
+
 		wordIndexer.setEnabled(false);
 	}
-	
+
 	@Test
 	public void testIt() throws Exception {
-		
+
 		Operator adminOperator = modelService.newAdminOperator();
 		danish = languageService.getLanguageForCode("da", adminOperator);
 		lexicalCategories = Maps.newHashMap();
@@ -143,10 +143,10 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		//start = 9838;
 		log.info("Total = "+total);
 		log.info("Starting at "+start);
-		
+
 		//consideredWords.add("tidsmåler");
 		//consideredWords.add("krat");
-		
+
 /*
 		clearSynonyms = false;
 		clearDisciplines = false;
@@ -156,9 +156,9 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		createGeneralizations = false;
 		//createSynonyms = false;
 		updateProperties = false;
-*/		
+*/
 		//createSynonyms = false;
-		
+
 		// Loop through all words
 		ExtendedIterator<Triple> words = graph.find(null, RDF.type.asNode(), wordURI);
 		{
@@ -171,12 +171,12 @@ public class TestDanNetImporter extends AbstractSpringTask {
 				Node word = triple.getSubject();
 				Node lexNode = first(query.objectsFor(word, lexicalForm));
 				String text = lexNode.getLiteralLexicalForm();
-				
+
 				// Filter words
 				if (Code.isNotEmpty(consideredWords) && !consideredWords.contains(text)) {
 					continue;
 				}
-				
+
 				if (disregardedWords.contains(text)) {
 					continue;
 				}
@@ -186,50 +186,50 @@ public class TestDanNetImporter extends AbstractSpringTask {
 				print(" · lexicalForm",lexNode);
 				print(" · partOfSpeech",first(query.objectsFor(word, partOfSpeech)));
 				print("");
-				
-				
+
+
 				ExtendedIterator<Triple> senses = graph.find(null, wordRelation, word);
 				while (senses.hasNext()) {
-					
+
 					Triple relation = (Triple) senses.next();
 					Node sense = relation.getSubject();
 					print(" - sense", getSimpleURI(sense));
-					
+
 					Node type = first(query.objectsFor(sense, RDF.type.asNode()));
-					
+
 					String label = getLabel(sense);
-					
-					
+
+
 					Word localWord = findLocalWord(sense, label, adminOperator);
-					
+
 					// Lexical category...
 					updateCategory(type, localWord, adminOperator);
-					
+
 					// Language...
 					updateLanguage(danish, localWord, adminOperator);
-					
+
 					print(" - sense - label",label);
 					print(" - sense - out", getRelations(sense, null));
 					print(" - sense - in", getRelations(null, sense));
-					
+
 					ExtendedIterator<Node> synSets = query.subjectsFor(containsWordSence, sense);
 					while (synSets.hasNext()) {
 						Node synset = synSets.next();
-						
+
 						print(" - sense - synset", getSimpleURI(synset));
 						print(" - sense - synset - out", getRelations(synset, null));
 						print(" - sense - synset - in", getRelations(null, synset));
-						
+
 						if (updateProperties) {
 							updateWordProperties(localWord, synset, adminOperator);
 						}
-						
+
 						if (clearSynonyms) {
 							removeExistingSynonyms(localWord, adminOperator);
 						}
-						
+
 						if (clearDisciplines) {
-							removeExistingDisciplines(localWord, adminOperator);							
+							removeExistingDisciplines(localWord, adminOperator);
 						}
 						if (clearGeneralizations) {
 							removeExistingGeneralizations(localWord, adminOperator);
@@ -257,7 +257,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 							for (Node node : antiPartOfs) {
 								print(" - sense - synset - contains - sense", getLabel(node));
 								createContains(localWord, node, adminOperator);
-								
+
 							}
 							List<Node> holonyms = getRelatedSenses(synset, partHolonymOf, Direction.out);
 							for (Node holonym : holonyms) {
@@ -270,9 +270,9 @@ public class TestDanNetImporter extends AbstractSpringTask {
 								createPartOf(localWord, antiHolonym, adminOperator);
 							}
 						}
-						
+
 						if (createGeneralizations) {
-						
+
 							// Hyponym = Specialization / Subordinate
 
 							List<Node> specializations = getRelatedSenses(synset, hyponymOf, Direction.in);
@@ -280,7 +280,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 								print(" - sense - synset - specialization - synset - sense", getLabel(specialization));
 								createSpecialization(localWord, specialization, adminOperator);
 							}
-							
+
 							// Anti-hyponym = Hypernym / Generalization / Superordinate
 
 							List<Node> generalizations = getRelatedSenses(synset, hyponymOf, Direction.out);
@@ -302,7 +302,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 								print(" - sense - synset - anti-synonym", getLabel(synonym));
 								createSynonym(localWord, synonym, false, adminOperator);
 							}
-							
+
 							// Create synonyms for the other words in the same synset
 							ExtendedIterator<Node> wordsInSynset = query.objectsFor(synset, containsWordSence);
 							while (wordsInSynset.hasNext()) {
@@ -311,9 +311,9 @@ public class TestDanNetImporter extends AbstractSpringTask {
 									continue; // Skip existing
 								}
 								print(" - sense - synset - sense", getLabel(wordsenseOfSynset));
-								
+
 								createSynonym(localWord, wordsenseOfSynset, true, adminOperator);
-								
+
 							}
 						}
 						if (synSets.hasNext()) {
@@ -399,7 +399,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		} else {
 			print("Unable to find existing sense");
 		}
-		
+
 	}
 
 	private String getLabel(Node node) {
@@ -462,7 +462,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		DanNetGlossary parsed = DanNetUtil.parseGlossary(glossary.getLiteralLexicalForm());
 		localWord.removeProperties(Property.KEY_SEMANTICS_GLOSSARY);
 		localWord.removeProperties(Property.KEY_SEMANTICS_EXAMPLE);
-		
+
 		if (Strings.isNotBlank(parsed.getGlossary())) {
 			localWord.addProperty(Property.KEY_SEMANTICS_GLOSSARY, parsed.getGlossary());
 		}
@@ -515,7 +515,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 			log.error("Language exists: "+language.getName());
 		}
 	}
-	
+
 
 	private Word findWord(String text, String sourceId, Operator operator) {
 		Query<Word> query2 = Query.after(Word.class).withField(Word.TEXT_FIELD, text).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId);
@@ -534,7 +534,7 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		reader.close();
 		log.info("imported: "+fileName+" : "+new Duration(watch.getTime()));
 	}
-	
+
 	private Node first(ExtendedIterator<Node> iterator) {
 		if (iterator.hasNext()) {
 			return iterator.next();
@@ -581,12 +581,12 @@ public class TestDanNetImporter extends AbstractSpringTask {
 		read(model,"madeofMeronymOf.rdf");
 		read(model,"partHolonymOf.rdf");
 		read(model,"partMeronymOf.rdf");
-		
+
 		read(model,"domain.rdf");
 		return model;
 	}
 
-	
+
 	@Autowired
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
@@ -596,5 +596,5 @@ public class TestDanNetImporter extends AbstractSpringTask {
 	public void setWordIndexer(WordIndexer wordIndexer) {
 		this.wordIndexer = wordIndexer;
 	}
-	
+
 }

@@ -22,36 +22,36 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 
 public class WordIndexer implements ModelEventListener, Indexer {
-		
+
 	private WordIndexDocumentBuilder documentBuilder;
 	private ModelService modelService;
 	private SecurityService securityService;
-	
+
 	private IndexManager indexManager;
-	
+
 	private static final Logger log = LogManager.getLogger(WordIndexer.class);
-	
+
 	private boolean enabled = true;
 
 	public void clear() throws EndUserException {
 		indexManager.clear();
 	}
-	
+
 	@Override
 	public List<IndexDescription> getIndexInstances(Operator operator) {
 		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
 	}
-	
+
 	@Override
 	public boolean is(IndexDescription description) {
 		return description.getName().equals(indexManager.getDirectoryName());
 	}
-	
+
 	@Override
 	public long getObjectCount(IndexDescription description, Operator operator) {
 		return modelService.count(Query.after(Word.class), operator);
 	}
-	
+
 	private void indexWord(Word word) {
 		if (!enabled) {
 			return;
@@ -87,11 +87,11 @@ public class WordIndexer implements ModelEventListener, Indexer {
 			indexManager.update(map);
 		} catch (EndUserException e) {
 			log.error("Unable to reindex", e);
-		}			
+		}
 	}
-	
+
 	// Listeners
-	
+
 	public void entityWasCreated(Entity entity) {
 		if (entity instanceof Word) {
 			indexWord((Word) entity);
@@ -101,7 +101,7 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	public void entityWasUpdated(Entity entity) {
 		if (entity instanceof Word) {
 			indexWord((Word) entity);
-		}		
+		}
 	}
 
 	public void entityWasDeleted(Entity entity) {
@@ -142,25 +142,25 @@ public class WordIndexer implements ModelEventListener, Indexer {
 	}
 
 	// Settings
-	
+
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
 	// Wiring...
-	
+
 	public void setIndexManager(IndexManager indexManager) {
 		this.indexManager = indexManager;
 	}
-	
+
 	public void setDocumentBuilder(WordIndexDocumentBuilder documentBuilder) {
 		this.documentBuilder = documentBuilder;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

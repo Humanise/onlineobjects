@@ -43,7 +43,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 	private List<WordListPerspective> latestWords;
 
 	private List<Option> alphabeth;
-	
+
 	public WordsInterfaceHelper() {
 		alphabeth = Lists.newArrayList();
 		for (String character : Strings.ALPHABETH) {
@@ -52,7 +52,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 		alphabeth.add(new Option("other","&"));
 		alphabeth.add(new Option("number","#"));
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		languageFacetsDataProvider.addListener(() -> {
@@ -82,7 +82,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 		}
 		return latestWords;
 	}
-	
+
 	public List<Option> getLanguageOptions(Locale locale) {
 		String language = locale.getLanguage();
 		if (!languagesCache.containsKey(language)) {
@@ -90,7 +90,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 		}
 		return languagesCache.get(language);
 	}
-	
+
 	public boolean isKnownLanguage(String langCode) {
 		return languageFacetsDataProvider.getData().containsKey(langCode);
 	}
@@ -102,7 +102,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 		}
 		return categoriesCache.get(language);
 	}
-	
+
 	private List<Option> buildLanguageOptions(Locale locale) {
 		return languageFacetsDataProvider.getData().keySet().stream().distinct().map(code -> {
 			Option option = new Option();
@@ -120,27 +120,27 @@ public class WordsInterfaceHelper implements InitializingBean {
 			return option;
 		}).sorted((a,b) -> a.getLabel().compareTo(b.getLabel())).collect(Collectors.toList());
 	}
-		
+
 	public List<Option> getLetterOptions(Locale locale) {
 		return alphabeth;
 	}
-	
+
 	public boolean isLetter(String str) {
 		return str!=null && Strings.contains(str, Strings.ALPHABETH);
 	}
-	
+
 	public Messages getWordsMessages() {
 		return wordsMessages;
 	}
-	
+
 	public Messages getLanguageMessages() {
 		return languageMessages;
 	}
-	
+
 	public Messages getCategoryMessages() {
 		return categoryMessages;
 	}
-	
+
 	// Wiring...
 
 	public void setEventService(EventService eventService) {
@@ -150,7 +150,7 @@ public class WordsInterfaceHelper implements InitializingBean {
 	public void setLanguageFacetsDataProvider(LanguageFacetsDataProvider languageFacetsDataProvider) {
 		this.languageFacetsDataProvider = languageFacetsDataProvider;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

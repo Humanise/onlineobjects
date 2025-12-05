@@ -26,7 +26,7 @@ public class RowsComponent extends AbstractComponent {
 	public RowsComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -37,14 +37,14 @@ public class RowsComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { name, height };
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
 		String cls = "hui_rows";
 		out.startDiv().withClass(cls).withId(id);
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

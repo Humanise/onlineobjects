@@ -5,21 +5,21 @@ import java.util.Map;
 import org.quartz.Job;
 
 public class JobDescription {
-	
+
 	private Class<? extends Job> jobClass;
-	
+
 	private String group;
-	
+
 	private String name;
-	
+
 	private String cron;
-	
+
 	private int repeatMinutes;
 
 	private Map<String,Object> properties;
-	
+
 	private boolean paused;
-	
+
 	public Class<? extends Job> getJobClass() {
 		return jobClass;
 	}

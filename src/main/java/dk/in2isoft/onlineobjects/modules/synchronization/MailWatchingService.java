@@ -21,17 +21,17 @@ import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.services.EmailService;
 
 public class MailWatchingService {
-	
+
 	private static Logger log = LogManager.getLogger(MailWatchingService.class);
 
 	private Date latest = new Date();
-	
+
 	private boolean running;
-	
+
 	private MailListener mailListener;
 	private SurveillanceService surveillanceService;
 	private EmailService emailService;
-	
+
 	public void check(JobStatus status) {
 		if (running) {
 			return;
@@ -44,7 +44,7 @@ public class MailWatchingService {
 		try {
 			surveillanceService.logInfo("Checking for new mail", "Finding mail after: "+latest);
 
-			status.log("Connecting to mail server");			
+			status.log("Connecting to mail server");
 			Session session = Session.getDefaultInstance(props, null);
 			store = session.getStore("imaps");
 			store.connect(emailService.getHost(), emailService.getUsername(), emailService.getPassword());
@@ -82,15 +82,15 @@ public class MailWatchingService {
 			running = false;
 		}
 	}
-	
+
 	public void setMailListener(MailListener mailListener) {
 		this.mailListener = mailListener;
 	}
-	
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}
-	
+
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}

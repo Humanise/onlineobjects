@@ -5,7 +5,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.util.iterator.ExtendedIterator;
 
 public class QueryHandler {
-	
+
 	private Graph graph;
 
 	public QueryHandler(Graph graph) {

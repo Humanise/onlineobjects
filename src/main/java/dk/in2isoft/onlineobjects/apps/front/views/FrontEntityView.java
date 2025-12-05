@@ -9,8 +9,8 @@ import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Privilege;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -22,13 +22,13 @@ public class FrontEntityView extends AbstractView {
 
 	private ModelService modelService;
 	private SecurityService securityService;
-	
+
 	private String title;
 	private List<PrivilegePerspective> privileges = new ArrayList<>();
 	private List<Option> properties = new ArrayList<>();
 	private List<RelationPerspective> relationsFrom = new ArrayList<>();
 	private List<RelationPerspective> relationsTo = new ArrayList<>();
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		if (!securityService.isAdminUser(request)) {
@@ -60,7 +60,7 @@ public class FrontEntityView extends AbstractView {
 			properties.add(Option.of(prop.getKey(), prop.getValue()));
 		}
 		entity.getProperties();
-		
+
 		modelService.find().relations(request).from(entity).stream(50).forEach(relation -> {
 			RelationPerspective pers = new RelationPerspective();
 			pers.entity = EntityPerspective.from(relation.getTo(), locale);
@@ -85,43 +85,43 @@ public class FrontEntityView extends AbstractView {
 		}
 		return null;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public List<PrivilegePerspective> getPrivileges() {
 		return privileges;
 	}
-	
+
 	public List<Option> getProperties() {
 		return properties;
 	}
-	
+
 	public List<RelationPerspective> getRelationsFrom() {
 		return relationsFrom;
 	}
-	
+
 	public List<RelationPerspective> getRelationsTo() {
 		return relationsTo;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public static class PrivilegePerspective {
 		public EntityPerspective user;
 		public String permissions;
-		
+
 		public EntityPerspective getUser() {
 			return user;
 		}
-		
+
 		public String getPermissions() {
 			return permissions;
 		}
@@ -130,11 +130,11 @@ public class FrontEntityView extends AbstractView {
 	public static class RelationPerspective {
 		EntityPerspective entity;
 		String kind;
-		
+
 		public EntityPerspective getEntity() {
 			return entity;
 		}
-		
+
 		public String getKind() {
 			return kind;
 		}
@@ -145,29 +145,29 @@ public class FrontEntityView extends AbstractView {
 		String type;
 		long id;
 		String href;
-		
+
 		public String getName() {
 			return name;
 		}
-		
+
 		public String getType() {
 			return type;
 		}
-		
+
 		public long getId() {
 			return id;
 		}
-		
+
 		public String getHref() {
 			return href;
 		}
-		
+
 		public static EntityPerspective from(Entity entity, Locale locale) {
 			EntityPerspective perspective = new EntityPerspective();
 			perspective.id = entity.getId();
 			perspective.name = Strings.isBlank(entity.getName()) ? "<No name>" : entity.getName();
 			perspective.type = entity.getClass().getSimpleName();
-			perspective.href = "/" + locale.getLanguage() + "/" + entity.getClass().getSimpleName().toLowerCase() + "/" + entity.getId(); 
+			perspective.href = "/" + locale.getLanguage() + "/" + entity.getClass().getSimpleName().toLowerCase() + "/" + entity.getId();
 			return perspective;
 		}
 
@@ -176,7 +176,7 @@ public class FrontEntityView extends AbstractView {
 			perspective.id = id;
 			perspective.name = "?";
 			perspective.type = type.getSimpleName();
-			perspective.href = "/" + locale.getLanguage() + "/" + type.getSimpleName().toLowerCase() + "/" + id; 
+			perspective.href = "/" + locale.getLanguage() + "/" + type.getSimpleName().toLowerCase() + "/" + id;
 			return perspective;
 		}
 	}

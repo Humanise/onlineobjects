@@ -54,13 +54,13 @@ import dk.in2isoft.onlineobjects.util.images.ImageTransformation;
 public class PhotosPhotoView extends AbstractView {
 
 	private static final Logger log = LogManager.getLogger(PhotosPhotoView.class);
-	
+
 	private ModelService modelService;
 	private SecurityService securityService;
 	private ImageService imageService;
 	private PersonService personService;
 	private Photos photos;
-	
+
 	private String language;
 	private Image image;
 	private ImageInfo imageInfo;
@@ -79,7 +79,7 @@ public class PhotosPhotoView extends AbstractView {
 	private List<ImageGallery> galleries;
 	private List<GalleryLink> galleryLinks;
 	private Long context;
-	
+
 	private String fullPersonName;
 	private Long imageId;
 	private boolean featured;
@@ -87,7 +87,7 @@ public class PhotosPhotoView extends AbstractView {
 	private String taken;
 
 	private Size size;
-	
+
 	public void before(Request request) throws Exception {
 		{
 			String[] path = request.getLocalPath();
@@ -113,7 +113,7 @@ public class PhotosPhotoView extends AbstractView {
 			rotated = imageInfo.isRotated();
 			this.size = photos.getDisplaySize(image);
 			trace(watch, "Sizes");
-			
+
 			canModify = securityService.canModify(image, request) && request.getSession().has(Ability.usePhotosApp);
 			trace(watch, "canModify");
 
@@ -121,8 +121,8 @@ public class PhotosPhotoView extends AbstractView {
 				secret = !securityService.canView(image, request.as(securityService.getPublicUser()));
 			}
 			buildSizes();
-			
-			
+
+
 			location = modelService.getParent(image, Location.class, request);
 
 			user = modelService.getOwner(image, request);
@@ -146,7 +146,7 @@ public class PhotosPhotoView extends AbstractView {
 				nextId = ids.get(next);
 				previousId = ids.get(previous);
 			}
-			
+
 			Locale locale = request.getLocale();
 			properties = Lists.newArrayList();
 			properties.add(new SelectItem(image.getWidth()+" x "+image.getHeight()+" - "+getMegaPixels()+" Megapixel",msg.get("size", locale)));
@@ -183,12 +183,12 @@ public class PhotosPhotoView extends AbstractView {
 
 			String[] path = request.getLocalPath();
 			language = path[0];
-			
-			
+
+
 			featured = imageService.isFeatured(image, request);
-			
+
 			this.colors = image.getPropertyValue(Property.KEY_PHOTO_COLORS);
-			
+
 			buildPreview();
 		}
 	}
@@ -208,7 +208,7 @@ public class PhotosPhotoView extends AbstractView {
 	}
 
 	private void trace(StopWatch watch, String string) {
-		log.info(watch.getTime() + ": " + string); 
+		log.info(watch.getTime() + ": " + string);
 		watch.reset();
 	}
 
@@ -220,7 +220,7 @@ public class PhotosPhotoView extends AbstractView {
 					return Arrays.stream(galleryLink.photoIds).asLongStream().boxed().collect(toList());
 				}
 			}
-			
+
 			ImageGallery gallery = modelService.get(ImageGallery.class, context, request);
 			if (gallery != null) {
 				List<Relation> relations = modelService.find().relations(request).from(gallery).to(Image.class).list();
@@ -242,31 +242,31 @@ public class PhotosPhotoView extends AbstractView {
 		this.imageSizes = sizes.stream().map(s -> s.getWidth()).distinct().sorted(Collections.reverseOrder()).map(s -> "(min-width: " + s + "px) " + s + "px").collect(Collectors.joining(", "));
 		imageSourceSet = photos.asSourceSet(sizes);
 	}
-	
+
 	private List<ScaledImage> pictureSources;
-	
+
 	public List<ScaledImage> getPictureSources() {
 		return pictureSources;
 	}
-	
+
 	private String sizes;
 
 	private String imageSizes;
 
 	private String imageSourceSet;
-	
+
 	public String getImageSourceSet() {
 		return imageSourceSet;
 	}
-	
+
 	public String getImageSizes() {
 		return imageSizes;
 	}
-	
+
 	public String getSizes() {
 		return this.sizes;
 	}
-	
+
 	public String getNextUrl() {
 		return urlInContext(nextId);
 	}
@@ -284,13 +284,13 @@ public class PhotosPhotoView extends AbstractView {
 		}
 		return sb.toString();
 	}
-	
+
 	private String preview;
-	
+
 	public String getPreview() {
 		return preview;
 	}
-	
+
 	public void buildPreview() {
 		ImageTransformation transform = new ImageTransformation();
 		transform.setWidth(100);
@@ -304,7 +304,7 @@ public class PhotosPhotoView extends AbstractView {
 	public boolean isFeatured() {
 		return featured;
 	}
-	
+
 	public List<SelectItem> getProperties() {
 		return properties;
 	}
@@ -312,90 +312,90 @@ public class PhotosPhotoView extends AbstractView {
 	public List<ImageGallery> getGalleries() {
 		return galleries;
 	}*/
-	
+
 	public List<GalleryLink> getGalleryLinks() {
 		return galleryLinks;
 	}
-	
+
 	public Person getPerson() {
 		return person;
 	}
-	
+
 	public String getFullPersonName() {
 		return fullPersonName;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public boolean isSecret() {
 		return secret;
 	}
-	
+
 	public ImageInfo getImageInfo() {
 		return imageInfo;
 	}
-	
+
 	public Long getContext() {
 		return context;
 	}
-	
+
 	public long getNextId() {
 		return nextId;
 	}
-	
+
 	public long getPreviousId() {
 		return previousId;
 	}
-	
+
 	public String getTitle() {
 		if (Strings.isBlank(image.getName())) {
 			return "No title";
 		}
 		return image.getName();
 	}
-	
+
 	public String getDescription() {
 		return StringUtils.trim(imageInfo.getDescription());
 	}
-	
+
 	public Location getLocation() {
 		return location;
 	}
-	
+
 	public MapPoint getMapPoint() {
 		return mapPoint;
 	}
-	
+
 	public double getMegaPixels() {
 		return Math.round(image.getWidth()*image.getHeight()/(double)10000)/(double)100;
 	}
-	
+
 	public List<Pair<Word, String>> getWords() {
 		return words;
 	}
-	
+
 	public Image getPersonImage() {
 		return personImage;
 	}
-	
+
 	public Long getImageId() {
 		return imageId;
 	}
-	
+
 	public String getLanguage() {
 		return language;
 	}
-	
+
 	public boolean isCanModify() {
 		return canModify;
 	}
-	
+
 	public String getColors() {
 		return colors;
 	}
@@ -403,7 +403,7 @@ public class PhotosPhotoView extends AbstractView {
 	public String getTaken() {
 		return taken;
 	}
-	
+
 	public boolean isRotated() {
 		return rotated;
 	}
@@ -411,7 +411,7 @@ public class PhotosPhotoView extends AbstractView {
 	public Size getSize() {
 		return size;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -425,11 +425,11 @@ public class PhotosPhotoView extends AbstractView {
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
-	
+
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-	
+
 	public void setPhotos(Photos helper) {
 		this.photos = helper;
 	}

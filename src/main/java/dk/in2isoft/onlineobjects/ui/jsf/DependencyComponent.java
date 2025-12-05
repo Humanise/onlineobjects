@@ -16,14 +16,14 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class DependencyComponent extends AbstractComponent implements DependableComponent {
 
 	public static final String FAMILY = "onlineobjects.dependency";
-	
+
 	private String src;
 	private String from;
-	
+
 	public DependencyComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		src = (String) state[0];
@@ -37,7 +37,7 @@ public class DependencyComponent extends AbstractComponent implements Dependable
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 	}
-	
+
 	@Override
 	public String[] getScripts(FacesContext context) {
 		String src = getSrc(context);
@@ -46,7 +46,7 @@ public class DependencyComponent extends AbstractComponent implements Dependable
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String[] getStyles(FacesContext context) {
 		String src = getSrc(context);
@@ -55,7 +55,7 @@ public class DependencyComponent extends AbstractComponent implements Dependable
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Class<? extends UIComponent>[] getComponents(FacesContext context) {
 		return null;
@@ -68,7 +68,7 @@ public class DependencyComponent extends AbstractComponent implements Dependable
 	public String getSrc() {
 		return src;
 	}
-	
+
 	public String getSrc(FacesContext context) {
 		@Nullable
 		String value = getExpression("src", src, context);

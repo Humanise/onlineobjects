@@ -20,7 +20,7 @@ public abstract class DesktopControlerBase extends ApplicationController {
 	protected HTMLService htmlService;
 	protected SecurityService securityService;
 	protected static final Logger log = LogManager.getLogger(DesktopController.class);
-	
+
 	public DesktopControlerBase() {
 		super("desktop");
 	}

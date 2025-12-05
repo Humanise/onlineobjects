@@ -14,7 +14,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class PreloaderComponent extends AbstractComponent {
 
 	public static final String FAMILY = "hui.preloader";
-		
+
 	public PreloaderComponent() {
 		super(FAMILY);
 	}
@@ -27,7 +27,7 @@ public class PreloaderComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 	}

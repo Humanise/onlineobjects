@@ -13,10 +13,10 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -54,7 +54,7 @@ public class PhotosController extends PhotosControllerBase {
 	@Path(expression = "/<language>/gallery/<integer>")
 	@View(jsf = "gallery.xhtml")
 	public void gallery(Request request) {}
-	
+
 	@Path(exactly="updateTitle")
 	public void updateImageTitle(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
@@ -121,7 +121,7 @@ public class PhotosController extends PhotosControllerBase {
 		}
 		request.sendObject(list);
 	}
-	
+
 	@Path
 	public void deleteImage(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getLong("imageId");
@@ -164,7 +164,7 @@ public class PhotosController extends PhotosControllerBase {
 				securityService.makePublicVisible(location, request);
 			} else {
 				securityService.makePublicHidden(location, request);
-			}			
+			}
 		}
 		List<Relation> galleryRelations = modelService.find().relations(request).from(ImageGallery.class).to(image).list();
 		for (Relation relation : galleryRelations) {
@@ -176,7 +176,7 @@ public class PhotosController extends PhotosControllerBase {
 			}
 		}
 	}
-	
+
 	@Path
 	public SimpleEntityPerspective createGallery(Request request) throws IOException, EndUserException {
 		ImageGallery gallery = imageGalleryService.createGallery(request);
@@ -213,20 +213,20 @@ public class PhotosController extends PhotosControllerBase {
 		long id = request.getLong("id");
 		imageGalleryService.deleteGallery(id, request);
 	}
-	
+
 	@Path
 	public void removeImageFromGallery(Request request) throws SecurityException, ModelException, NotFoundException {
 		long imageId = request.getLong("imageId");
 		long galleryId = request.getLong("galleryId");
 		Image image = modelService.getRequired(Image.class, imageId, request);
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, galleryId, request);
-		
+
 		Optional<Relation> relation = modelService.getRelation(gallery, image, request);
 		if (relation.isPresent()) {
 			modelService.delete(relation.get(), request);
 		}
 	}
-	
+
 	@Path
 	public void addImagesToGallery(Request request) throws SecurityException, ModelException, NotFoundException, BadRequestException {
 		GalleryModificationRequest per = request.getObject("info", GalleryModificationRequest.class);
@@ -259,7 +259,7 @@ public class PhotosController extends PhotosControllerBase {
 		}
 		imageGalleryService.changeSequence(info.getGalleryId(), ids, request);
 	}
-	
+
 	private float getMaxImagePosition(Entity gallery, Operator operator) throws ModelException {
 		float max = 0;
 		List<Relation> relations = modelService.getRelationsFrom(gallery, Image.class, operator);
@@ -268,7 +268,7 @@ public class PhotosController extends PhotosControllerBase {
 		}
 		return max;
 	}
-	
+
 	@Path
 	public List<Image> imageFinderGallery(Request request) {
 		Query<Image> query = Query.of(Image.class).as(request).orderByCreated().descending();
@@ -282,7 +282,7 @@ public class PhotosController extends PhotosControllerBase {
 		if (image==null) {
 			throw new BadRequestException("Unabe to load image");
 		}
-		
+
 		ImageMetaData metaData = imageService.getMetaData(image);
 		return metaData;
 	}

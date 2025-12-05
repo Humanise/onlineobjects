@@ -21,7 +21,7 @@ public class DependencyController extends ServiceController {
 	private final Logger clientSideLog = LogManager.getLogger("client");
 
 	private DependencyService dependencyService;
-	
+
 	private Pattern scriptPattern = Pattern.compile(SCRIPT_PATH);
 	private Pattern stylePattern = Pattern.compile(STYLE_PATH);
 

@@ -7,7 +7,7 @@ public interface Operator extends Privileged, AutoCloseable {
 	public void commit();
 
 	public void rollBack();
-	
+
 	public Operator as(Privileged privileged);
 
 	public void close();

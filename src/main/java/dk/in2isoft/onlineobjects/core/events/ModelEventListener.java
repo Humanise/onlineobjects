@@ -10,7 +10,7 @@ public interface ModelEventListener {
 	public void entityWasUpdated(Entity entity);
 
 	public void entityWasDeleted(Entity entity);
-	
+
 	public void relationWasCreated(Relation relation);
 
 	public void relationWasUpdated(Relation relation);

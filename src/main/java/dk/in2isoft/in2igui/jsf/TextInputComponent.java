@@ -191,11 +191,11 @@ public class TextInputComponent extends AbstractComponent {
 	public Integer getMaxHeight() {
 		return maxHeight;
 	}
-	
+
 	public boolean isLarge() {
 		return large;
 	}
-	
+
 	public void setLarge(boolean large) {
 		this.large = large;
 	}

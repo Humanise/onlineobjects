@@ -13,7 +13,7 @@ public class CommunityController extends ApplicationController {
 	public CommunityController() {
 		super("community");
 	}
-	
+
 	@Override
 	public List<Locale> getLocales() {
 		return null;

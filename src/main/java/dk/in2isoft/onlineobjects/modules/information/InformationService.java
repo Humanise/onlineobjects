@@ -213,7 +213,7 @@ public class InformationService {
 
 					status.log("Comparing: " + tokensA.size() + "/" + tokensB.size());
 
-					similarity = semanticService.compare(tokensA, tokensB);					
+					similarity = semanticService.compare(tokensA, tokensB);
 				} else {
 					status.log("One of the two where null");
 					similarity = 0;

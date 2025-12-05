@@ -8,16 +8,16 @@ import org.apache.commons.validator.routines.EmailValidator;
 import dk.in2isoft.commons.lang.Strings;
 
 public class ValidationUtil {
-	
+
 	//private static final Pattern PASSWORD = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
-	
+
 	public static boolean isWellFormedEmail(String email) {
 		if (email==null || !email.equals(email.trim())) {
 			return false;
 		}
 		return EmailValidator.getInstance(false, false).isValid(email);
 	}
-	
+
 	public static boolean isValidUsername(String username) {
 		if (Strings.isBlank(username)) {
 			return false;
@@ -56,7 +56,7 @@ public class ValidationUtil {
 			URI.create(str);
 			return true;
 		} catch (Exception e) {
-			
+
 		}
 		return false;
 	}

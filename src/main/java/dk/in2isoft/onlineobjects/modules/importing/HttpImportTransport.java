@@ -22,22 +22,22 @@ import dk.in2isoft.onlineobjects.modules.importing.ImportSession.Status;
 public class HttpImportTransport<T> implements ImportTransport {
 
 	private static final Logger log = LogManager.getLogger(HttpImportTransport.class);
-	
+
 	private String uri;
 	private Status status = Status.waiting;
 	private ImportListener<T> listener;
-	
+
 	private T result;
-	
+
 	public HttpImportTransport(String uri, ImportListener<T> listener) {
 		this.uri = uri;
 		this.listener = listener;
 	}
-	
+
 	public T getResult() {
 		return result;
 	}
-	
+
 	public void start() {
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(uri);

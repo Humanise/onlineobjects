@@ -14,7 +14,7 @@ public class XMLDocument extends TextDocument {
 	private static Logger log = LogManager.getLogger(XMLDocument.class);
     private Document DOMDocument;
     private nu.xom.Document XOMDocument;
-    	
+
     public XMLDocument(String raw) {
     	super(raw);
     }
@@ -36,7 +36,7 @@ public class XMLDocument extends TextDocument {
         }
 	    return DOMDocument;
 	}
-	
+
 	public nu.xom.Document getXOMDocument() {
 		if (XOMDocument == null) {
 			String rawString = getRawString();

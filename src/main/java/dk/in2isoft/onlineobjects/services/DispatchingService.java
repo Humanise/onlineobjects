@@ -39,14 +39,14 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class DispatchingService {
 
 	private static Logger log = LogManager.getLogger(DispatchingService.class);
-	
+
 	private ModelService modelService;
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
 	private ConfigurationService configurationService;
 
 	private List<Responder> responders;
-		
+
 	public boolean doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 
 		if (configurationService.isSimulateSlowRequest()) {
@@ -56,15 +56,15 @@ public class DispatchingService {
 		}
 		if (shouldSimulateError(servletRequest)) {
 			servletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return true;			
-		}		
+			return true;
+		}
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		boolean handled = false;
 		Request request = Request.get(servletRequest, servletResponse);
 		request.setOperationProvider(modelService);
-		Boolean shouldRollback = false;		
-		
+		Boolean shouldRollback = false;
+
 		try {
 			securityService.ensureUserSession(request);
 		} catch (SecurityException ex) {
@@ -72,7 +72,7 @@ public class DispatchingService {
 			displayError(request, ex);
 			return true;
 		}
-		
+
 		for (Responder responder : responders) {
 			if (!handled && responder.applies(request)) {
 				handled = true;
@@ -233,7 +233,7 @@ public class DispatchingService {
 		out.print("</div>"
 				+ "</body>"
 				+ "</html>");
-		;
+
 	}
 
 
@@ -243,25 +243,25 @@ public class DispatchingService {
 		String url = httpServletRequest.getRequestURL().toString() + (query == null ? "" : "?" + query);
 		log.error(ex.getMessage() + " - " + url, ex);
 	}
-	
+
 	// Wiring...
-	
+
 	public void setResponders(List<Responder> responders) {
 		this.responders = responders;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-		
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

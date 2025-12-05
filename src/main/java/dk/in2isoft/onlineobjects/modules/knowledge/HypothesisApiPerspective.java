@@ -27,7 +27,7 @@ public class HypothesisApiPerspective implements CategorizableViewPerspective, A
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
@@ -70,5 +70,5 @@ public class HypothesisApiPerspective implements CategorizableViewPerspective, A
 	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 	}
-	
+
 }

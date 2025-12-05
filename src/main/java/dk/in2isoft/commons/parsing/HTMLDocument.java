@@ -21,21 +21,21 @@ import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
 public class HTMLDocument extends XMLDocument {
-	
+
 	//private static Logger log = LogManager.getLogger(HTMLDocument.class);
 
 	private String title;
     private String originalUrl;
-	
+
 	public HTMLDocument(String raw) {
 		super(raw);
 	}
-	
+
     public HTMLDocument(nu.xom.Document doc) {
     	super(doc);
     }
 
-	
+
 	public String getTitle() {
 		if (this.title==null) {
 			nu.xom.Document doc = getXOMDocument();
@@ -52,12 +52,12 @@ public class HTMLDocument extends XMLDocument {
 		}
 		return this.title;
 	}
-    	        
+
     public String getText() {
         nu.xom.Document doc = getXOMDocument();
         return new DocumentToText().getText(doc);
     }
-        
+
     public String getExtractedText() {
 		String rawString = getRawString();
 		if (Strings.isNotBlank(rawString)) {
@@ -69,7 +69,7 @@ public class HTMLDocument extends XMLDocument {
 		}
     	return null;
     }
-    
+
     public List<HTMLReference> getFeeds() {
 		List<HTMLReference> refs = Lists.newArrayList();
         nu.xom.Document doc = getXOMDocument();
@@ -89,7 +89,7 @@ public class HTMLDocument extends XMLDocument {
 		}
     	return refs;
     }
-	
+
 	public List<HTMLReference> getReferences() {
 		Document doc = getDOMDocument();
 		List<HTMLReference> refs = new ArrayList<HTMLReference>();
@@ -122,9 +122,9 @@ public class HTMLDocument extends XMLDocument {
 	    }
 	    return refs;
 	}
-	
+
 	public static HTMLDocument fromContent(String content) {
-		
+
 		return null;
 	}
 

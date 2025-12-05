@@ -15,7 +15,7 @@ public class Entity extends Item {
 	public static String NAMESPACE = Item.NAMESPACE+"Entity/";
 	public static String TYPE = Item.TYPE+"/Entity";
 	public static final String FIELD_NAME = "name";
-	
+
 	protected String name;
 	private Collection<Property> properties = new ArrayList<Property>();
 
@@ -29,7 +29,7 @@ public class Entity extends Item {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String getNamespace() {
 		return NAMESPACE;
@@ -49,7 +49,7 @@ public class Entity extends Item {
 	public String toString() {
 		return getClass().getSimpleName()+" ("+this.getId()+") : "+this.name;
 	}
-	
+
 	public Collection<Property> getProperties() {
 		return properties;
 	}
@@ -57,7 +57,7 @@ public class Entity extends Item {
 	public void setProperties(Collection<Property> properties) {
 		this.properties = properties;
 	}
-	
+
 	public String getPropertyValue(String key) {
 		for (Iterator<Property> iter = properties.iterator(); iter.hasNext();) {
 			Property element = iter.next();
@@ -67,11 +67,11 @@ public class Entity extends Item {
 		}
 		return null;
 	}
-	
+
 	public boolean getPropertyBooleanValue(String key) {
 		return "true".equals(getPropertyValue(key));
 	}
-	
+
 	public Date getPropertyDateValue(String key) {
 		for (Iterator<Property> iter = properties.iterator(); iter.hasNext();) {
 			Property element = iter.next();
@@ -81,7 +81,7 @@ public class Entity extends Item {
 		}
 		return null;
 	}
-	
+
 	public Double getPropertyDoubleValue(String key) {
 		for (Iterator<Property> iter = properties.iterator(); iter.hasNext();) {
 			Property element = iter.next();
@@ -91,7 +91,7 @@ public class Entity extends Item {
 		}
 		return null;
 	}
-	
+
 	public Collection<Property> getProperties(String key) {
 		Collection<Property> props = new ArrayList<Property>();
 		for (Property property : properties) {
@@ -101,7 +101,7 @@ public class Entity extends Item {
 		}
 		return props;
 	}
-	
+
 	public List<String> getPropertyValues(String key) {
 		List<String> props = new ArrayList<String>();
 		for (Property property : properties) {
@@ -111,7 +111,7 @@ public class Entity extends Item {
 		}
 		return props;
 	}
-	
+
 	public void overrideProperties(String key,Collection<String> values) {
 		for (Iterator<Property> iter = properties.iterator(); iter.hasNext();) {
 			Property property = iter.next();

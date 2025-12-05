@@ -15,7 +15,7 @@ public class FacesResponder implements Responder {
 		String localPathAsString = request.getRequest().getRequestURI();
 		return localPathAsString.startsWith("/faces/");
 	}
-	
+
 	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
 		String localPath = request.getRequest().getRequestURI();
 		RequestDispatcher requestDispatcher = request.getRequest().getRequestDispatcher(localPath);

@@ -14,11 +14,11 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
 public class FileDownload {
-	
+
 	//private static Logger log = LogManager.getLogger(FileDownload.class);
-	
+
 	private String contentType;
-	
+
 	public void download(String url, File tempFile)
 	throws IOException {
 
@@ -42,7 +42,7 @@ public class FileDownload {
 			if (contentTypeHeader!=null) {
 				contentType = contentTypeHeader.getValue();
 			}
-			
+
 			InputStream stream = method.getResponseBodyAsStream();
 			FileOutputStream output = new FileOutputStream(tempFile);
 			int c;

@@ -18,7 +18,7 @@ public class TestImportInformation extends AbstractSpringTask {
 
 	private InformationService informationService;
 	private SchedulingService schedulingService;
-	
+
 	@Test
 	public void run() throws ModelException {
 		JobStatus status = new JobStatus();
@@ -27,7 +27,7 @@ public class TestImportInformation extends AbstractSpringTask {
 		status.setSchedulingService(schedulingService);
 		informationService.importInformation("http://politiken.dk/rss/senestenyt.rss", status);
 	}
-	
+
 	@Autowired
 	public void setInformationService(InformationService informationService) {
 		this.informationService = informationService;

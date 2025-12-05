@@ -23,15 +23,15 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 
 public abstract class AbstractComponent extends UIComponentBase {
-	
+
 	private String family;
-	
+
 	protected String testName;
-	
+
 	public AbstractComponent(String family) {
 		this.family = family;
 	}
-	
+
 	@Override
 	public final void restoreState(FacesContext context, Object state) {
 		Object[] stt = (Object[]) state;
@@ -46,7 +46,7 @@ public abstract class AbstractComponent extends UIComponentBase {
 			saveState()
 		};
 	}
-	
+
 	protected String getContext() {
 		return Request.get(getFacesContext()).getBaseContext();
 	}
@@ -54,11 +54,11 @@ public abstract class AbstractComponent extends UIComponentBase {
 	protected Locale getLocale() {
 		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
 	}
-	
+
 	protected abstract Object[] saveState();
-	
+
 	protected abstract void restoreState(Object[] state);
-	
+
 	@Override
 	public final String getFamily() {
 		return family;
@@ -71,7 +71,7 @@ public abstract class AbstractComponent extends UIComponentBase {
 			encodeBegin(context, writer);
 		}
 	}
-	
+
 	@Override
 	public final void encodeChildren(FacesContext context) throws IOException {
 		if (isRendered()) {
@@ -80,7 +80,7 @@ public abstract class AbstractComponent extends UIComponentBase {
 			super.encodeChildren(context);
 		}
 	}
-	
+
 	@Override
 	public final void encodeEnd(FacesContext context) throws IOException {
 		if (isRendered() && shouldEncodeChildren()) {
@@ -89,28 +89,28 @@ public abstract class AbstractComponent extends UIComponentBase {
 			super.encodeEnd(context);
 		}
 	}
-	
+
 	protected boolean shouldEncodeChildren() {
 		return true;
 	}
-	
-	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {};
 
-	protected void encodeChildren(FacesContext context, TagWriter out) throws IOException {};
-	
+	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {}
+
+	protected void encodeChildren(FacesContext context, TagWriter out) throws IOException {}
+
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {}
 
 	public void add(UIComponent child) {
 		getChildren().add(child);
 	}
-	
+
 	public <T> @Nullable T getBinding(String name) {
 		ValueExpression valueExpression = this.getValueExpression(name);
 		if (valueExpression!=null) {
 			return Code.cast(valueExpression.getValue(FacesContext.getCurrentInstance().getELContext()));
 		}
 		return null;
-	};
+	}
 
 	public <T> @Nullable T getBean(Class<T> cls) {
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(Components.getRequest().getRequest().getServletContext());
@@ -120,28 +120,28 @@ public abstract class AbstractComponent extends UIComponentBase {
 		} else {
 			return Code.cast(beansOfType.values().iterator().next());
 		}
-	};
-	
+	}
+
 	protected Messages getMessages() {
 		return new Messages(getClass());
 	}
-	
+
 	public boolean getExpression(@NonNull String name, boolean localValue, FacesContext context) {
 		return Components.getExpressionValue(this, name, localValue, context);
-	};
+	}
 
 	public @Nullable <T> T getExpression(@NonNull String name, T localValue, FacesContext context) {
 		return Components.getExpressionValue(this, name, localValue, context);
-	};
+	}
 
 	public @Nullable <T> T getExpression(@NonNull String name, FacesContext context) {
 		return Components.getExpressionValue(this, name, null, context);
-	};
+	}
 
 	protected Request getRequest() {
 		return Request.get(getFacesContext());
 	}
-	
+
 	protected boolean isNotBlank(String string) {
 		return Strings.isNotBlank(string);
 	}
@@ -150,7 +150,7 @@ public abstract class AbstractComponent extends UIComponentBase {
 	protected boolean isInteger(String str) {
 		return Strings.isInteger(str);
 	}
-	
+
 	protected void requireScript(String string) {
         FacesContext context = getFacesContext();
         ScriptComponent script = new ScriptComponent();

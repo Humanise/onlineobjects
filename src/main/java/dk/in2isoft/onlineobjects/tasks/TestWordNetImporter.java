@@ -47,22 +47,22 @@ import edu.mit.jwi.item.Synset;
 import edu.mit.jwi.item.WordID;
 
 public class TestWordNetImporter extends AbstractSpringTask {
-	
-	
+
+
 	private POS category = POS.NOUN;
 	private String categoryCode = LexicalCategory.CODE_NOMEN;
 
 	private static final Logger log = LogManager.getLogger(TestWordNetImporter.class);
-	
+
 	private WordService wordService;
-	
+
 	private Set<String> words = Sets.newHashSet(); //"acacia"
 	int skip = 0;
 	int rows = Integer.MAX_VALUE;
 	private boolean updateLocally;
 	private boolean updateBaseInfo;
 	private boolean updateRelations;
-	
+
 	@Before
 	public void before() {
 		//words.add("cat");
@@ -71,19 +71,19 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		//rows = 20;
 		//words.add("'s Gravenhage".toLowerCase());
 		updateRelations = true;
-		
+
 		category = POS.NOUN;
 		categoryCode = LexicalCategory.CODE_NOMEN;
-		
+
 		//words.add("java");
 	}
-	
+
 	@Test
 	public void run() throws Exception {
 		File file = new File(getProperty("wordNetDataDir"));
 		IDictionary dict = new Dictionary(file);
 		dict.open();
-		
+
 		Operator operator = modelService.newAdminOperator();
 		int total = 0;
 		{
@@ -103,24 +103,24 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		//List<WordRelationModification> relationModifications = Lists.newArrayList();
 		for (;wordIterator.hasNext() && rows>0; rows--) {
 			num++;
-			
+
 			IIndexWord indexWord = wordIterator.next();
-			
+
 			String root = getText(indexWord.getLemma());
 			if (!words.isEmpty() && !words.contains(root.toLowerCase())) {
 				continue;
 			}
 			print(num + " of " + total + " = " + percent(total, num) + "%");
 			print("Root : " + root);
-			
+
 			List<IWordID> wordIDs = indexWord.getWordIDs();
 			for (IWordID wordID : wordIDs) {
 				IWord word = dict.getWord(wordID);
-				
+
 				print("· Word : " + getText(word.getLemma()));
 				print("· · Glossary: " + word.getSynset().getGloss());
 				print("· · ID: " + wordID);
-				
+
 				if (updateBaseInfo) {
 					WordModification mod = new WordModification();
 					mod.source = "http://wordnet.princeton.edu";
@@ -149,7 +149,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 					List<IWord> wordsFromSameSynset = word.getSynset().getWords();
 					for (IWord wordFromSynset : wordsFromSameSynset) {
 						print("· · Synonym: " + getText(wordFromSynset.getLemma()));
-						
+
 						WordRelationModification modification = WordRelationModification.create(getSourceId(word.getID()),Relation.KIND_SEMANTICS_SYNONYMOUS,getSourceId(wordFromSynset.getID()));
 						update(modification, operator);
 						operator.commit();
@@ -161,7 +161,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 							IWord hypernym = dict.getWord(hypernymId);
 							print("· · " + pointer.getName() + ": " + getText(hypernym.getLemma()));
 						}
-						
+
 					}
 					for (Pointer pointer : pointers) {
 						List<ISynsetID> relatedSynsets = word.getSynset().getRelatedSynsets(pointer);
@@ -170,7 +170,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 							String wds = relatedSynset.getWords().stream().map((a) -> getText(a.getLemma())).reduce("", (a,b) -> {return a.length()>0 ? a + "," + b : b;});
 							print("· · " + pointer.getName() + ": " + wds);
 						}
-						
+
 					}
 				}
 			}
@@ -182,7 +182,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 		}
 		operator.commit();
 	}
-	
+
     private String getSourceId(IWordID wordID) {
     	StringBuilder sb = new StringBuilder();
     	sb.append(WordID.wordIDPrefix);
@@ -195,7 +195,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
         sb.append(wordID.getLemma());
         return sb.toString();
     }
-	
+
 	private void update(WordRelationModification modification, Operator admin) throws ModelException, SecurityException {
 		Word from = wordService.getWordBySourceId(modification.getFromSourceId(), admin);
 		if (from==null) {
@@ -220,7 +220,7 @@ public class TestWordNetImporter extends AbstractSpringTask {
 	private float percent(int total, int num) {
 		return Math.round(((float)num)/((float)total)*100*100)/(float)100;
 	}
-	
+
 	private boolean callServer(List<WordModification> modification) {
 		String secret = getProperty("remoteApiSecret");
 		if (Strings.isBlank(secret)) {
@@ -232,21 +232,21 @@ public class TestWordNetImporter extends AbstractSpringTask {
 			log.error("No url");
 			return false;
 		}
-		
+
 		if (!url.endsWith("/")) {
 			url += "/";
 		}
 		url += "v1.0/words/import";
-		
-		
+
+
 		HttpUriRequest method = RequestBuilder.post()
                 .setUri(URI.create(url))
                 .addParameter("secret", secret)
                 .addParameter("modifications", Strings.toJSON(modification))
                 .build();
-		
+
 		CloseableHttpClient client = HttpClients.createDefault();
-		
+
 		log.info("Calling server:" + modification.size());
 		try (CloseableHttpResponse response = client.execute(method)) {
 			int statusCode = response.getStatusLine().getStatusCode();
@@ -266,14 +266,14 @@ public class TestWordNetImporter extends AbstractSpringTask {
 	private void print(String msg) {
 		System.out.println(msg);
 	}
-	
+
 	private String getText(String lemma) {
 		return lemma.replaceAll("[_]+", " ");
 	}
-	
+
 	@Autowired
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 }

@@ -20,7 +20,7 @@ public class WordsIndexView extends AbstractView {
 
 	private static final int PAGING = 10;
 	private ModelService modelService;
-	
+
 	private List<WordListPerspective> list;
 	private static List<Option> alphabeth;
 	static {
@@ -33,7 +33,7 @@ public class WordsIndexView extends AbstractView {
 	private int count;
 	private int page;
 	private String character;
-	
+
 	private int pageSize = 20;
 	private List<Option> pages;
 
@@ -62,7 +62,7 @@ public class WordsIndexView extends AbstractView {
 		pages = Lists.newArrayList();
 		int pageCount = (int) Math.ceil(count / pageSize) + 1;
 		if (pageCount>1) {
-		
+
 			int min = Math.max(1,page-PAGING);
 			int max = Math.min(pageCount, page+PAGING);
 			if (min>1) {
@@ -81,15 +81,15 @@ public class WordsIndexView extends AbstractView {
 				pages.add(buildOption(pageCount, lang));
 			}
 		}}
-	
+
 	public List<WordListPerspective> getList() throws ModelException {
 		return this.list;
 	}
-	
+
 	public List<Option> getPages() {
 		return pages;
 	}
-	
+
 	private Option buildOption(int num, String language) {
 		Option option = new Option();
 		option.setValue("/"+language+"/index/"+character+"/"+num);
@@ -97,21 +97,21 @@ public class WordsIndexView extends AbstractView {
 		option.setSelected(page==num-1);
 		return option;
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
-	
+
 	public String getCharacter() {
 		return character;
 	}
-	
+
 	public List<Option> getAlphabeth() {
 		return alphabeth;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

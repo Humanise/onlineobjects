@@ -1,11 +1,11 @@
 package dk.in2isoft.onlineobjects.util.remote;
 
 public class RemoteWebSite {
-	
+
 	private String title;
-	
+
 	private String url;
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}

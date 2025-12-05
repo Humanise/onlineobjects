@@ -12,7 +12,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 public class ConfirmComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.confirm";
-	
+
 	private String text;
 	private String okText;
 	private String cancelText;
@@ -20,7 +20,7 @@ public class ConfirmComponent extends AbstractComponent {
 	public ConfirmComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 	}
@@ -30,7 +30,7 @@ public class ConfirmComponent extends AbstractComponent {
 		return new Object[] {
 		};
 	}
-	
+
 	@Override
 	public boolean isTransient() {
 		return !true;

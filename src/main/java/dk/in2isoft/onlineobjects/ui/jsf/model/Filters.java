@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Filters {
 
-	public enum Variant {index,block};
+	public enum Variant {index,block}
 	private List<Filter> filters;
-	
+
 	public Filters() {
 		filters = new ArrayList<>();
 	}
-	
+
 	public List<Filter> getFilters() {
 		return filters;
 	}

@@ -3,14 +3,14 @@ package dk.in2isoft.onlineobjects.modules.surveillance;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class RequestInfo {
-	
+
 	private long totalRunningTime;
 	private long maxRunningTime;
 	private long minRunningTime;
 	private long averageRunningTime;
 	private String uri;
 	private int counts;
-	
+
 	public RequestInfo(Request request) {
 		this.maxRunningTime = request.getRunningTime();
 		this.minRunningTime = maxRunningTime;
@@ -19,7 +19,7 @@ public class RequestInfo {
 		uri = request.getRequest().getRequestURI();
 		counts = 1;
 	}
-	
+
 	public void merge(Request request) {
 		if (!request.getRequest().getRequestURI().equals(uri)) {
 			throw new IllegalArgumentException("Not the same URI");
@@ -31,19 +31,19 @@ public class RequestInfo {
 		counts++;
 		averageRunningTime = totalRunningTime/counts;
 	}
-	
+
 	public long getMaxRunningTime() {
 		return maxRunningTime;
 	}
-	
+
 	public long getMinRunningTime() {
 		return minRunningTime;
 	}
-	
+
 	public long getAverageRunningTime() {
 		return averageRunningTime;
 	}
-	
+
 	public int getCounts() {
 		return counts;
 	}

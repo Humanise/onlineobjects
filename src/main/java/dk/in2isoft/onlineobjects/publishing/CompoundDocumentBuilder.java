@@ -20,16 +20,16 @@ import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
 public class CompoundDocumentBuilder extends DocumentBuilder {
-	
+
 	private ModelService modelService;
 	private ConversionService conversionService;
 
 	private static ImmutableMap<String, String> styles = ImmutableMap.of(Property.KEY_STYLE_MARGIN_TOP, "top", Property.KEY_STYLE_MARGIN_BOTTOM, "bottom", Property.KEY_STYLE_MARGIN_LEFT, "left", Property.KEY_STYLE_MARGIN_RIGHT, "right");
-	
+
 	public CompoundDocumentBuilder() {
 		super();
 	}
-	
+
 	@Override
 	public Class<? extends Entity> getEntityType() {
 		return CompoundDocument.class;
@@ -61,7 +61,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 			}
 		}
 	}
-	
+
 	private void insertMargins(Element section, Entity part) {
 		for (Entry<String, String> entry : styles.entrySet()) {
 			String value = part.getPropertyValue(entry.getKey());
@@ -70,7 +70,7 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 			}
 		}
 	}
-	
+
 
 	@Override
 	public Entity create(Operator priviledged) throws EndUserException {
@@ -78,11 +78,11 @@ public class CompoundDocumentBuilder extends DocumentBuilder {
 		modelService.create(document, priviledged);
 		return document;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setConversionService(ConversionService conversionService) {
 		this.conversionService = conversionService;
 	}

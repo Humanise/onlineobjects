@@ -29,13 +29,13 @@ public class ImageCleanupJob extends JobBase {
 
 	@Autowired
 	ImageService images;
-	
+
 	@Autowired
 	FileService files;
-	
+
 	@Autowired
 	SecurityService securityService;
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		Operator operator = model.newAdminOperator();
 		List<Image> list = model.list(Query.of(Image.class), operator);
@@ -70,7 +70,7 @@ public class ImageCleanupJob extends JobBase {
 				securityService.makePublicVisible(location, request);
 			} else {
 				securityService.makePublicHidden(location, request);
-			}			
+			}
 		}
 		List<Relation> galleryRelations = model.find().relations(request).from(ImageGallery.class).to(image).list();
 		for (Relation relation : galleryRelations) {

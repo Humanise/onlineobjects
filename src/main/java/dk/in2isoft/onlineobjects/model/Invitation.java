@@ -4,17 +4,17 @@ public class Invitation extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/Invitation";
 	public static String NAMESPACE = Entity.NAMESPACE+"Invitation/";
-	
+
 	public static String FIELD_CODE = "code";
-	
+
 	public static String STATE_ACTIVE = "active";
 	public static String STATE_CANCELED = "canceled";
 	public static String STATE_ACCEPTED = "accepted";
 	public static String STATE_REJECTED = "rejected";
-	
+
 	private String code;
 	private String message;
-	private String state; 
+	private String state;
 
 	public Invitation() {
 		super();

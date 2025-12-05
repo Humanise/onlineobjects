@@ -14,7 +14,7 @@ public class WidgetList {
 	public void setItems(List<WidgetListItem> items) {
 		this.items = items;
 	}
-	
+
 	public void addItem(WidgetListItem item) {
 		items.add(item);
 	}

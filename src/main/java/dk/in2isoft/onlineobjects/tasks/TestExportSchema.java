@@ -6,7 +6,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTask;
 
 public class TestExportSchema extends AbstractSpringTask {
-	
+
 	@Test
 	public void run() throws ModelException {
 		/*
@@ -14,7 +14,7 @@ public class TestExportSchema extends AbstractSpringTask {
 		SchemaExport export = new SchemaExport(cfg);
 		export.setOutputFile(getProperty("schema.file"));
 		export.execute(false, false, false, false);
-		
+
 		SchemaUpdate update = new SchemaUpdate(cfg);
 		update.setOutputFile(getProperty("schema.update.file"));
 		update.execute(false, false);

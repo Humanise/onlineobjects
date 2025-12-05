@@ -14,13 +14,13 @@ import dk.in2isoft.in2igui.jsf.PreloaderComponent;
 @Dependencies(
 	js = {"/core/js/oo_photoviewer.js"},
 	css = {"/core/css/oo_photoviewer.css"},
-	requires = {OnlineObjectsComponent.class}, 
+	requires = {OnlineObjectsComponent.class},
 	uses = {PreloaderComponent.class}
 )
 public class PhotoViewerComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.photoviewer";
-		
+
 	public PhotoViewerComponent() {
 		super(FAMILY);
 	}
@@ -33,7 +33,7 @@ public class PhotoViewerComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 	}

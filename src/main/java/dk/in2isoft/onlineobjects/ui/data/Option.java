@@ -5,11 +5,11 @@ public class Option {
 	private String label;
 	private Object value;
 	private boolean selected;
-	
+
 	public Option() {
-		
+
 	}
-	
+
 	public Option(String label, Object value) {
 		super();
 		this.label = label;
@@ -23,15 +23,15 @@ public class Option {
 	public String getLabel() {
 		return label;
 	}
-	
+
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
+
 	public Object getValue() {
 		return value;
 	}
-	
+
 	public void setValue(Object value) {
 		this.value = value;
 	}
@@ -39,7 +39,7 @@ public class Option {
 	public boolean isSelected() {
 		return selected;
 	}
-	
+
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}

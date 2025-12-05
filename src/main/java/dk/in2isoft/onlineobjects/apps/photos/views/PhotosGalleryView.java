@@ -20,8 +20,8 @@ import dk.in2isoft.onlineobjects.core.Ability;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -34,22 +34,22 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.MasonryItem;
 import dk.in2isoft.onlineobjects.util.Dates;
 
 public class PhotosGalleryView extends AbstractView {
-	
+
 	private ModelService modelService;
 	private Photos photos;
-	
+
 	private ImageGallery imageGallery;
 	private String title;
-	
+
 	private String username;
 
 	private User user;
-	
+
 	private boolean modifiable;
 
 	private ListModel<Image> listModel;
 	private List<Image> images;
-	
+
 	private Date from;
 	private Date to;
 	private String info;
@@ -82,11 +82,11 @@ public class PhotosGalleryView extends AbstractView {
 					this.setPageSize(images.size());
 					return new ListModelResult<Image>(images,images.size());
 				}
-				
+
 			};
-			
+
 			buildInfo(locale);
-			
+
 			view = request.getString("view");
 			if (Strings.isBlank(view)) {
 				view = "grid";
@@ -99,7 +99,7 @@ public class PhotosGalleryView extends AbstractView {
 			StringBuilder sb = new StringBuilder();
 			String fromShort = Dates.formatShortDate(from, locale);
 			String toShort = Dates.formatShortDate(to, locale);
-			
+
 			sb.append(fromShort);
 			if (!fromShort.equals(toShort)) {
 				sb.append(" ").append(Strings.RIGHTWARDS_ARROW).append(" ");
@@ -127,9 +127,9 @@ public class PhotosGalleryView extends AbstractView {
 			images.add(image);
 		}
 	}
-	
+
 	private String presentationData;
-	
+
 	private void buildPresentationData() {
 		List<Map<?,?>> data = new ArrayList<>();
 		for (Image image : images) {
@@ -142,13 +142,13 @@ public class PhotosGalleryView extends AbstractView {
 		}
 		presentationData = Strings.toJSON(data);
 	}
-	
+
 	public String getPresentationData() {
 		return presentationData;
 	}
-	
+
 	private List<MasonryItem> masonryList;
-	
+
 	public List<MasonryItem> getMasonryList() {
 		if (masonryList==null) {
 			masonryList = Lists.newArrayList();
@@ -171,51 +171,51 @@ public class PhotosGalleryView extends AbstractView {
 		}
 		return masonryList;
 	}
-	
+
 	public String getView() {
 		return view;
 	}
-	
+
 	public String getInfo() {
 		return info;
 	}
-	
+
 	public Date getFrom() {
 		return from;
 	}
-	
+
 	public Date getTo() {
 		return to;
 	}
-	
+
 	public ListModel<Image> getListModel() {
 		return listModel;
 	}
-	
+
 	public ImageGallery getImageGallery() {
 		return imageGallery;
 	}
-	
+
 	protected User getUser() {
 		return user;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public boolean isModifiable() {
 		return modifiable;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	@Autowired
 	public void setPhotos(Photos photos) {
 		this.photos = photos;

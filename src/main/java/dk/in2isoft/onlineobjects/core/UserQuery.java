@@ -12,14 +12,14 @@ import dk.in2isoft.onlineobjects.model.User;
 public class UserQuery implements ItemQuery<User> {
 
 	private String secret;
-	
+
 	private static String base = "from " + User.class.getName() + " as user, " +
-			Client.class.getName() + " as client, " + 
+			Client.class.getName() + " as client, " +
 			Relation.class.getName() + " as rel " +
 			" inner join client.properties as prop" +
 			" where rel.from = user and rel.to = client "+
-			" and prop.key='" + Property.KEY_AUTHENTICATION_SECRET + "' and prop.value = :secret"; 
-	
+			" and prop.key='" + Property.KEY_AUTHENTICATION_SECRET + "' and prop.value = :secret";
+
 	@Override
 	public Query<User> createItemQuery(Session session) {
 		String hql = "select user " + base;

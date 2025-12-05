@@ -14,7 +14,7 @@ public class WordFacetsQuery implements CustomQuery<WordStatistic> {
 " left JOIN relation as word_category on (word_category.sub_entity_id=word.id and word_category.super_entity_id in (select id from lexicalcategory))"+
 " left JOIN lexicalcategory on word_category.super_entity_id=lexicalcategory.id  group by language, category order by count desc";
 /*
-		
+
 		return "SELECT  "+
 				"  count(word.id) as count, "+
 				"  language.code as language, "+
@@ -36,7 +36,7 @@ public class WordFacetsQuery implements CustomQuery<WordStatistic> {
 	public String getCountSQL() {
 		return null;
 	}
-	
+
 	public WordStatistic convert(Object[] row) {
 		WordStatistic stat = new WordStatistic();
 		stat.setCount(((Number) row[0]).intValue());
@@ -46,6 +46,6 @@ public class WordFacetsQuery implements CustomQuery<WordStatistic> {
 	}
 
 	public void setParameters(NativeQuery<?> sql) {
-		
+
 	}
 }

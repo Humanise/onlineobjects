@@ -16,16 +16,16 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class StylesheetComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.stylesheet";
-	
+
 	private String href;
 	private boolean core;
 	private String msie;
 	private boolean integrateCache;
-	
+
 	public StylesheetComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		core = (Boolean) state[0];
@@ -59,11 +59,11 @@ public class StylesheetComponent extends AbstractComponent {
 					url.append(href.substring(0,idx));
 					url.append(".");
 					url.append(bean.getStartTime().getTime());
-					url.append(href.substring(idx));					
+					url.append(href.substring(idx));
 				} else {
 					url.append(href);
-					url.append("?").append(bean.getStartTime().getTime());					
-				}				
+					url.append("?").append(bean.getStartTime().getTime());
+				}
 			}
 			if (Strings.isNotBlank(msie)) {
 				writer.write("<!--[if ").write(msie).write("]>");
@@ -90,7 +90,7 @@ public class StylesheetComponent extends AbstractComponent {
 	public String getHref() {
 		return href;
 	}
-	
+
 	public String getHref(FacesContext context) {
 		return getExpression("href", href, context);
 	}

@@ -6,9 +6,9 @@ public class Hypothesis extends Entity implements TextHolding {
 
 	public static String TYPE = Entity.TYPE+"/Hypothesis";
 	public static String NAMESPACE = Entity.NAMESPACE+"Hypothesis/";
-	
+
 	private String text;
-	
+
 	public Hypothesis() {
 		super();
 	}

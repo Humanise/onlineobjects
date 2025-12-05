@@ -9,7 +9,7 @@ public class GeoDistance {
 
 	public GeoDistance(double decimal) {
 		this.decimal = decimal;
-		
+
 		fromDec2DMS();
 	}
 
@@ -20,7 +20,7 @@ public class GeoDistance {
 
 		fromDMS2Dec();
 	}
-	
+
 	private void fromDec2DMS() {
 		// define variables local to this method
 		double dfFrac; // fraction after decimal
@@ -62,9 +62,9 @@ public class GeoDistance {
 
 		return;
 	}
-	
+
 	private void fromDMS2Dec() {
-		
+
 		// fraction after decimal
 		// Determine fraction from minutes and seconds
 		double dfFrac = minutes / 60 + seconds / 3600;
@@ -77,19 +77,19 @@ public class GeoDistance {
 
 		return;
 	}
-	
+
 	public double getDecimal() {
 		return decimal;
 	}
-	
+
 	public double getDegrees() {
 		return degrees;
 	}
-	
+
 	public double getMinutes() {
 		return minutes;
 	}
-	
+
 	public double getSeconds() {
 		return seconds;
 	}

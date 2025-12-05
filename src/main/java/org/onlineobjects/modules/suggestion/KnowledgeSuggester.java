@@ -42,9 +42,9 @@ public class KnowledgeSuggester {
 	private KnowledgeService knowledgeService;
 	private SemanticService semanticService;
 	private CacheService cacheService;
-	
+
 	private enum ModelState {SYNCHED, INITIATING, UPDATING, IMPRECISE, EMPTY}
-	
+
 	private Map<Long, ModelState> userToModelFreshnessMapping = new HashMap<>();
 	/*
 	private DoccatModel getQuestionModel(Operator operator) throws EndUserException {
@@ -63,7 +63,7 @@ public class KnowledgeSuggester {
 	public void removeUser(Privileged user) {
 		userToModelFreshnessMapping.remove(user.getIdentity());
 	}
-	
+
 	private Optional<DoccatModel> getExistingQuestionModel(Operator operator) throws EndUserException {
 		return cacheService.get(operator.getIdentity(), operator, DoccatModel.class);
 	}
@@ -102,7 +102,7 @@ public class KnowledgeSuggester {
 			return category;
 		}
 		category.setDirty(isDirty(operator));
-		
+
 		String text = statement.getText();
 		String[] tokens = semanticService.getTokensAsString(text, Locale.ENGLISH);
 
@@ -130,7 +130,7 @@ public class KnowledgeSuggester {
 		results = results.stream().sorted((a, b) -> {
 			return Double.compare(b.getStrength(), a.getStrength());
 		}).collect(Collectors.toList());
-		
+
 		category.setSuggestions(results);
 		return category;
 	}
@@ -167,7 +167,7 @@ public class KnowledgeSuggester {
 	}
 
 	// Wiring
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

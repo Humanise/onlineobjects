@@ -42,11 +42,11 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 
 	private ConfigurationService configurationService;
 	private CacheManager manager;
-	private static final Logger log = LogManager.getLogger(CacheService.class);	
+	private static final Logger log = LogManager.getLogger(CacheService.class);
 	private CacheAccess<String, String> documentCache = null;
 	private CacheAccess<String, Object> perspectiveCache = null;
-	
-	
+
+
 	public <T> T getCached(Entity entity, Class<T> perspective, Callable<T> producer) {
 		if (configurationService.isDisableCache()) {
 			try {
@@ -79,8 +79,8 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		}
 	}
 
-	private MultiValuedMap<Class<?>,CacheEntry<?>> cache = new ArrayListValuedHashMap<>(); 
-	
+	private MultiValuedMap<Class<?>,CacheEntry<?>> cache = new ArrayListValuedHashMap<>();
+
 	public <T> T replace(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
 		String typeName = type.getSimpleName();
 		String key = buildKey(id, privileged, type);
@@ -125,7 +125,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 	}
 
 	public <T> T cache(String name, Duration duration, Callable<T> producer) throws Exception {
-		
+
 		Object object = perspectiveCache.get(name);
 		if (object == null) {
 			object = producer.call();
@@ -136,7 +136,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		}
 		return (T) object;
 	}
-	
+
 	public <T> T cache(long id, Privileged privileged, Class<T> type, Callable<CacheEntry<T>> producer) throws EndUserException {
 		String typeName = type.getSimpleName();
 		String key = buildKey(id, privileged, type);
@@ -147,7 +147,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 				Object value = perspectiveCache.get(key);
 				if (value!=null && type.isAssignableFrom(value.getClass())) {
 					log.debug("Cache value hit: {} {}", typeName, id);
-					return Code.cast(value);					
+					return Code.cast(value);
 				} else {
 					log.debug("Cache value miss: {} {}", typeName, id);
 				}
@@ -178,30 +178,30 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 			}
 		}
 	}
-	
+
 	private void evict(long... ids) {
-		
+
 		Set<Class<?>> keys = cache.keySet();
 		for (Class<?> type : keys) {
 			Collection<CacheEntry<?>> entries = cache.get(type);
 			Set<CacheEntry<?>> toRemove = new HashSet<>();
 			for (CacheEntry<?> entry : entries) {
 				Collection<Long> cids = entry.getIds();
-				if (cids != null) { 
+				if (cids != null) {
 					for (long id : ids) {
 						if (cids.contains(id)) {
 							log.debug("Evicting: {}", entry);
 							toRemove.add(entry);
 						}
 					}
-				}					
+				}
 			}
 			for (CacheEntry<?> cacheEntry : toRemove) {
 				cache.removeMapping(type, cacheEntry);
 			}
-		}		
+		}
 	}
-	
+
 	public String getCachedDocument(String key, Callable<String> producer) {
 		String found = documentCache.get(key);
 		if (found!=null) {
@@ -221,7 +221,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		}
 		return null;
 	}
-	
+
 	private Cache getCache(Class<?> cls) {
 		String cacheName = cls.getName();
 		Cache cache = manager.getCache(cacheName);
@@ -237,13 +237,13 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		}
 		return cache;
 	}
-	
+
 	public void flushToDisk() {
 		manager.shutdown();
 		JCS.shutdown();
 		initManager();
 	}
-	
+
 	@Override
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
@@ -256,7 +256,7 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		DiskStoreConfiguration diskConfig = new DiskStoreConfiguration().path(path);
 		Configuration config = new Configuration().diskStore(diskConfig);
 		manager = CacheManager.create(config);
-		
+
 		documentCache = JCS.getInstance("default");
 		log.debug("Document cache stats: {}", documentCache.getStats());
 

@@ -24,9 +24,9 @@ import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 public class PhotosUserView extends AbstractView {
 
 	private ModelService modelService;
-	private PhotoService photoService; 
+	private PhotoService photoService;
 	private SecurityService securityService;
-	
+
 	private String username;
 	private User user;
 	private Person person;
@@ -35,7 +35,7 @@ public class PhotosUserView extends AbstractView {
 	private Long wordId;
 	private List<CloudItem<Word>> cloud;
 	private String root;
-	
+
 	public void before(Request request) throws Exception {
 		String[] path = request.getLocalPath();
 		username = path[2];
@@ -45,12 +45,12 @@ public class PhotosUserView extends AbstractView {
 			throw new NotFoundException("User not found");
 		}
 		root = request.getLocalPathAsString()+"/";
-		
+
 		this.user = pair.getKey();
 		this.person = pair.getValue();
 		text = request.getString("text");
 		wordId = request.getLong("wordId", null);
-		
+
 		WordCloudQuery cloudQuery = new WordCloudQuery(user,Image.class);
 		if (user.getIdentity()!=request.getSession().getIdentity()) {
 			cloudQuery.withViewId(securityService.getPublicUser().getIdentity());
@@ -69,7 +69,7 @@ public class PhotosUserView extends AbstractView {
 			item.setFraction(fraction);
 			item.setLevel(Math.round(fraction * 10f));
 		}
-		
+
 		listModel = new ListModel<Image>() {
 
 			@Override
@@ -82,45 +82,45 @@ public class PhotosUserView extends AbstractView {
 				SearchResult<Image> searchResult = photoService.search(query, request);
 				return new ListModelResult<Image>(searchResult.getList(),searchResult.getTotalCount());
 			}
-			
+
 		};
 		listModel.setPageSize(42);
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public String getPersonName() {
 		return person.getFullName();
 	}
-	
+
 	public List<CloudItem<Word>> getCloud() {
 		return cloud;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
-	
+
 	public String getRoot() {
 		return root;
 	}
-	
+
 	public ListModel<Image> getImageList() {
 		return listModel;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setPhotoService(PhotoService photoService) {
 		this.photoService = photoService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

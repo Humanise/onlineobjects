@@ -10,7 +10,7 @@ import dk.in2isoft.onlineobjects.ui.data.SimilarityPerspective;
 public class InternetAddressViewPerspective implements CategorizableViewPerspective, ViewPerspectiveWithTags {
 
 	private long id;
-	private String type = InternetAddress.class.getSimpleName(); 
+	private String type = InternetAddress.class.getSimpleName();
 	private String title;
 	private String url;
 	private String urlText;
@@ -39,7 +39,7 @@ public class InternetAddressViewPerspective implements CategorizableViewPerspect
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getType() {
 		return type;
 	}

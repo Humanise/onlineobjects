@@ -3,10 +3,11 @@ package dk.in2isoft.onlineobjects.modules.language;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+
 import dk.in2isoft.onlineobjects.core.Pair;
 
 public class TextDocumentAnalytics implements Serializable {
-	
+
 	private static final long serialVersionUID = -801269486410776021L;
 
 	private String documentTitle;
@@ -23,7 +24,7 @@ public class TextDocumentAnalytics implements Serializable {
 	private List<List<TextPart>> taggedSentences;
 	private List<TextPart> significantWords;
 	private List<Pair<TextPart, Integer>> significantWordFrequency;
-	
+
 	public String getText() {
 		return text;
 	}

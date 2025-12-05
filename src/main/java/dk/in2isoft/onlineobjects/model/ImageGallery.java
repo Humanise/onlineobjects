@@ -10,11 +10,11 @@ public class ImageGallery extends Entity implements Document {
 	public static final String PROPERTY_FRAMESTYLE = "item.entity.imagegallery.framestyle";
 	public static String TYPE = Entity.TYPE+"/ImageGallery";
 	public static String NAMESPACE = Entity.NAMESPACE+"ImageGallery/";
-	
+
 	private int tiledColumns;
 	private int tiledHeight;
 	private int tiledWidth;
-	
+
 	public ImageGallery() {
 		super();
 		this.tiledColumns = 3;
@@ -25,7 +25,7 @@ public class ImageGallery extends Entity implements Document {
 	public String getType() {
 		return TYPE;
 	}
-	
+
 	public int getTiledColumns() {
 		return tiledColumns;
 	}

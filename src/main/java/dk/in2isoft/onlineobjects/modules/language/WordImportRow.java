@@ -31,7 +31,7 @@ public class WordImportRow {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
 	@Override
 	public String toString() {
 		return Strings.concatWords(text,language,category);

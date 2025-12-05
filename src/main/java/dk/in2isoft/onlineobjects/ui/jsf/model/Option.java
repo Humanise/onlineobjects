@@ -8,7 +8,7 @@ public class Option extends SelectItem implements dk.in2isoft.in2igui.data.Optio
 
 	private boolean selected;
 	private boolean disabled;
-	
+
 	private String key;
 	private String icon;
 	private String badge;
@@ -16,23 +16,23 @@ public class Option extends SelectItem implements dk.in2isoft.in2igui.data.Optio
 	public Option(Object value, String label) {
 		super(value, label);
 	}
-	
+
 	public Option() {
-		
+
 	}
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
+
 	public boolean isSelected() {
 		return selected;
 	}
-	
+
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 	}
-	
+
 	public boolean isDisabled() {
 		return disabled;
 	}
@@ -54,7 +54,7 @@ public class Option extends SelectItem implements dk.in2isoft.in2igui.data.Optio
 	public String getIcon() {
 		return icon;
 	}
-	
+
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
@@ -66,6 +66,6 @@ public class Option extends SelectItem implements dk.in2isoft.in2igui.data.Optio
 	public void setBadge(String badge) {
 		this.badge = badge;
 	}
-	
-	
+
+
 }

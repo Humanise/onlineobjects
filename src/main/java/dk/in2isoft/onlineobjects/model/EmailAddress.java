@@ -8,12 +8,12 @@ public class EmailAddress extends Entity {
 	public static final String ADDRESS_PROPERTY = "address";
 	public static String TYPE = Entity.TYPE+"/EmailAddress";
 	public static String NAMESPACE = Entity.NAMESPACE+"EmailAddress/";
-	
+
 	public static String CONTEXT_PRIVATE = "private";
 	public static String CONTEXT_WORK = "work";
 	public static String CONTEXT_SCHOOL = "school";
 	public static String CONTEXT_OTHER = "other";
-	
+
 	private String context;
 	private String address;
 

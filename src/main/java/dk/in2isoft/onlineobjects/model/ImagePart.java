@@ -6,7 +6,7 @@ public class ImagePart extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/ImagePart";
 	public static String NAMESPACE = Entity.NAMESPACE+"ImagePart/";
-	
+
 	public ImagePart() {
 		super();
 	}

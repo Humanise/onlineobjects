@@ -11,7 +11,7 @@ public class ResultRow {
 	public void change(Object[] row) {
 		this.row = row == null ? new Object[] {} : row;
 	}
-	
+
 	public String getString(int index) {
 		return row[index] != null ? row[index].toString() : null;
 	}

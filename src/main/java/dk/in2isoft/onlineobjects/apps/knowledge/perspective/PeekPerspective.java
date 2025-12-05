@@ -33,7 +33,7 @@ public class PeekPerspective {
 	public void setRendering(String rendering) {
 		this.rendering = rendering;
 	}
-	
+
 	public void addAction(String text, String key) {
 		Action action = new Action();
 		action.text = text;

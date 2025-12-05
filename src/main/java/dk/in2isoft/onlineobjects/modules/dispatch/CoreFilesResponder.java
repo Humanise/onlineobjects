@@ -15,14 +15,14 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class CoreFilesResponder implements Responder {
 
 	private static Logger log = LogManager.getLogger(CoreFilesResponder.class);
-	
+
 	private ConfigurationService configurationService;
-	
+
 	public boolean applies(Request request) {
 		String[] path = request.getFullPath();
 		return path.length > 0 && path[0].equals("core");
 	}
-	
+
 	public void dispatch(Request request, FilterChain chain) throws IOException {
 		String[] path = request.getFullPath();
 
@@ -34,8 +34,8 @@ public class CoreFilesResponder implements Responder {
 			request.getResponse().setStatus(404);
 		}
 	}
-	
-	
+
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

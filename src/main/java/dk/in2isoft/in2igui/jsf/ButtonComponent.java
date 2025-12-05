@@ -37,7 +37,7 @@ public class ButtonComponent extends AbstractComponent {
 	private Integer left;
 	private Integer right;
 	private String href;
-	
+
 	public ButtonComponent() {
 		super(TYPE);
 	}

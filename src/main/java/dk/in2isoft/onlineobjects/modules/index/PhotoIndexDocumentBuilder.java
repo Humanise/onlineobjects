@@ -22,10 +22,10 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 
 public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
-	
+
 	private ModelService modelService;
 	private SecurityService securityService;
-	
+
 	public Document build(Image image, Operator operator) throws ModelException {
 		Operator admin = operator.as(securityService.getAdminPrivileged());
 		image = modelService.get(Image.class, image.getId(), operator.as(admin));
@@ -38,7 +38,7 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		if (Strings.isNotBlank(glossary)) {
 			text.append(" ").append(glossary);
 		}
-		
+
 		Document doc = new Document();
 		doc.add(new TextField("text", text.toString(), Field.Store.YES));
 		doc.add(new LongField("fileSize", image.getFileSize(), Field.Store.YES));
@@ -69,13 +69,13 @@ public class PhotoIndexDocumentBuilder implements IndexDocumentBuilder<Image> {
 		doc.add(new TextField("public",publico ? "true" : "false",Field.Store.YES));
 		return doc;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

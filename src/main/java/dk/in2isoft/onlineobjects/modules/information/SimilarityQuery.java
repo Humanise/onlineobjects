@@ -35,7 +35,7 @@ public class SimilarityQuery implements CustomQuery<Similarity> {
 	public String getSQL() {
 
 		String sql = "select relation.sub_entity_id as id, relation.strength from relation,internetaddress"
-				+ " where relation.kind='common.similarity' and relation.strength>0.15 and relation.super_entity_id=:id and internetaddress.id=relation.sub_entity_id" 
+				+ " where relation.kind='common.similarity' and relation.strength>0.15 and relation.super_entity_id=:id and internetaddress.id=relation.sub_entity_id"
 				+ " union"
 				+ " select relation.super_entity_id as id, relation.strength from relation,internetaddress"
 				+ " where relation.kind='common.similarity' and relation.strength>0.15 and relation.sub_entity_id=:id and internetaddress.id=relation.super_entity_id"

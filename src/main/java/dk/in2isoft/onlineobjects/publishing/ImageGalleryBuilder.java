@@ -21,7 +21,7 @@ import nu.xom.Node;
 public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder {
 
 	private static String NAMESPACE = "http://uri.onlineobjects.com/publishing/Document/ImageGallery/";
-	
+
 	private ModelService modelService;
 	private ConversionService conversionService;
 	private ConfigurationService configurationService;
@@ -31,7 +31,7 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 	public ImageGalleryBuilder() {
 		super();
 	}
-	
+
 	@Override
 	public Class<? extends Entity> getEntityType() {
 		return ImageGallery.class;
@@ -121,11 +121,11 @@ public class ImageGalleryBuilder extends DocumentBuilder implements FeedBuilder 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setConversionService(ConversionService conversionService) {
 		this.conversionService = conversionService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

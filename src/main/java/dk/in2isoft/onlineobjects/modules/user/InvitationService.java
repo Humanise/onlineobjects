@@ -11,8 +11,8 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
@@ -32,9 +32,9 @@ public class InvitationService {
 	private ConfigurationService configurationService;
 	private MemberService memberService;
 	private SecurityService securityService;
-	
+
 	public final static String INVITATION_TEMPLATE = "dk/in2isoft/onlineobjects/invitation-template.html";
-	
+
 	public Invitation getInvitation(String code, Operator operator) {
 		Query<Invitation> query = new Query<Invitation>(Invitation.class).withField(Invitation.FIELD_CODE, code);
 		return modelService.search(query, operator).getFirst();
@@ -46,14 +46,14 @@ public class InvitationService {
 		Person person = new Person();
 		person.setFullName(name);
 		modelService.create(person, operator);
-		
+
 		EmailAddress email = new EmailAddress();
 		email.setAddress(emailAddress);
 		modelService.create(email, operator);
-		
+
 		Relation personEmail = new Relation(person,email);
 		modelService.create(personEmail, operator);
-		
+
 		Invitation invitation = createInvitation(sender, person, message, operator);
 		sendInvitation(invitation, operator);
 		return invitation;
@@ -114,7 +114,7 @@ public class InvitationService {
 		if (!Invitation.STATE_ACTIVE.equals(invitation.getState())) {
 			throw new EndUserException("The invitation is not active. The state is: " + invitation.getState());
 		}
-		
+
 		Operator admin = operator.as(securityService.getAdminPrivileged());
 		Person person;
 		{
@@ -123,12 +123,12 @@ public class InvitationService {
 			invitation.setState(Invitation.STATE_ACCEPTED);
 			modelService.update(invitation, admin);
 		}
-		
+
 		User newUser = memberService.signUp(session, username, password, person.getFullName(), email, operator);
 		if (newUser.getIdentity() != session.getIdentity()) {
 			throw new StupidProgrammerException("The new user has not been logged in");
 		}
-		
+
 		// Create relation between user and invitation
 		Relation invitaionUserRelation = new Relation(invitation, newUser);
 		invitaionUserRelation.setKind(Relation.KIND_INIVATION_INVITED);

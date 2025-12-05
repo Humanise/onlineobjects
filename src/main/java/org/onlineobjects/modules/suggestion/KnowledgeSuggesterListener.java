@@ -18,10 +18,10 @@ import dk.in2isoft.onlineobjects.services.InitializingService;
 public class KnowledgeSuggesterListener implements ModelEventListener, InitializingService {
 	private KnowledgeSuggester knowledgeSuggester;
 	private ModelService modelService;
-	
+
 	@Override
 	public void initialize() {
-		
+
 		try (Operator adminOperator = modelService.newAdminOperator()) {
 			Query<User> query = Query.after(User.class).withCustomProperty(Property.KEY_ABILITY, Ability.earlyAdopter.name());
 			try (Results<User> scroll = modelService.scroll(query, adminOperator)) {
@@ -32,7 +32,7 @@ public class KnowledgeSuggesterListener implements ModelEventListener, Initializ
 			}
 		}
 	}
-	
+
 	@Override
 	public void entityWasCreated(Entity entity) {
 		checkUser(entity);
@@ -95,7 +95,7 @@ public class KnowledgeSuggesterListener implements ModelEventListener, Initializ
 			}
 		}
 	}
-	
+
 	/*
 	 * TODO: Only invalidate the correct user
 	 */
@@ -107,7 +107,7 @@ public class KnowledgeSuggesterListener implements ModelEventListener, Initializ
 	public void setKnowledgeSuggester(KnowledgeSuggester knowledgeSuggester) {
 		this.knowledgeSuggester = knowledgeSuggester;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

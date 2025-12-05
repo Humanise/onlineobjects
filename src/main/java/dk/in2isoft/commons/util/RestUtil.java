@@ -11,7 +11,7 @@ public class RestUtil {
 	public static boolean matches(String pattern,String subject) {
 		return compile(pattern).matcher(subject).matches();
 	}
-	
+
 	public static Pattern compile(String pattern) {
 		pattern = StringUtils.replace(pattern, "<username>", "[a-z0-9_]+");
 		pattern = StringUtils.replace(pattern, "<integer>", "[0-9]+");

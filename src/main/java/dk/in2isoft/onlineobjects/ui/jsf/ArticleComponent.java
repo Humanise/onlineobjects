@@ -16,7 +16,7 @@ public class ArticleComponent extends AbstractComponent {
 	public static final String FAMILY = "onlineobjects.article";
 	private String variant;
 	private String styleClass;
-	
+
 	public ArticleComponent() {
 		super(FAMILY);
 	}
@@ -39,7 +39,7 @@ public class ArticleComponent extends AbstractComponent {
 	public void setVariant(String var) {
 		this.variant = var;
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startDiv(new ClassBuilder("oo_article").add("oo_article", variant).add(styleClass));

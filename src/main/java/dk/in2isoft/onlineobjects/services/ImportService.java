@@ -5,11 +5,11 @@ import dk.in2isoft.onlineobjects.modules.importing.DataImporter;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 
 public class ImportService {
-	
+
 	private FileService fileService;
-	
+
 	private SessionService sessionService;
-		
+
 	public ImportService() {
 	}
 
@@ -23,7 +23,7 @@ public class ImportService {
 		sessionService.registerSubSession(session);
 		return session;
 	}
-	
+
 	public void setFileService(FileService fileService) {
 		this.fileService = fileService;
 	}
@@ -32,5 +32,5 @@ public class ImportService {
 		ImportSession session = sessionService.getSubSession(id,ImportSession.class);
 		return session;
 	}
-	
+
 }

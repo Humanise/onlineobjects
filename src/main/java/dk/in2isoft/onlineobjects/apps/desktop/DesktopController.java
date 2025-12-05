@@ -21,8 +21,8 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -45,7 +45,7 @@ public class DesktopController extends DesktopControlerBase {
 	@Path(expression = "/")
 	@View(jsf = "front.xhtml")
 	public void front(Request request) {
-		
+
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class DesktopController extends DesktopControlerBase {
 			super.unknownRequest(request);
 		}
 	}
-	
+
 	@Path
 	public void getUserInfo(Request request) throws IOException, EndUserException {
 		User user = modelService.getUser(request);
@@ -69,7 +69,7 @@ public class DesktopController extends DesktopControlerBase {
 		info.setUsername(user.getUsername());
 		request.sendObject(info);
 	}
-	
+
 	@Path
 	public void importUrl(Request request) throws IOException {
 		final String url = request.getString("url");
@@ -78,7 +78,7 @@ public class DesktopController extends DesktopControlerBase {
 		listener.setHtmlService(htmlService);
 
 		ImportSession session = importService.createImportSession(request.getSession());
-		
+
 		HttpImportTransport<Entity> handler = new HttpImportTransport<Entity>(url,listener);
 		session.setTransport(handler);
 		session.startInBackground();
@@ -94,14 +94,14 @@ public class DesktopController extends DesktopControlerBase {
 		listener.setImageService(imageService);
 
 		ImportSession session = importService.createImportSession(request.getSession());
-		
-		UploadImportTransport<Entity> transport = new UploadImportTransport<Entity>();		
+
+		UploadImportTransport<Entity> transport = new UploadImportTransport<Entity>();
 		transport.setImportListener(listener);
 		transport.setRequest(request);
-		
+
 		session.setTransport(transport);
 		session.start();
-				
+
 		ImportPerspective info = new ImportPerspective(session);
 		request.sendObject(info);
 	}
@@ -111,10 +111,10 @@ public class DesktopController extends DesktopControlerBase {
 		ImportSession session = importService.getImportSession(request.getString("id"));
 		//System.out.println("Check: "+session.getId()+" / "+session.getStatus());
 		ImportPerspective info = new ImportPerspective(session);
-		
+
 		request.sendObject(info);
 	}
-	
+
 	@Path
 	public void analyzeURL(Request request) throws IOException {
 		String url = request.getString("url");
@@ -125,12 +125,12 @@ public class DesktopController extends DesktopControlerBase {
 		info.setDescription(StringUtils.abbreviate(doc.getText(), 500));
 		request.sendObject(info);
 	}
-	
+
 	@Path
 	public void saveInternetAddress(Request request) throws ModelException, SecurityException, InterruptedException, BadRequestException {
 		InternetAddressInfo info = request.getObject("info", InternetAddressInfo.class);
 		if (info==null) {
-			throw new BadRequestException("Illegal format");			
+			throw new BadRequestException("Illegal format");
 		}
 		InternetAddress address;
 		if (info.getId()!=null) {
@@ -147,20 +147,20 @@ public class DesktopController extends DesktopControlerBase {
 		address.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
 		modelService.createOrUpdate(address, request);
 	}
-	
+
 	@Path
 	public void getWidget(Request request) throws ModelException, IOException {
 		Entity entity = modelService.get(Entity.class, request.getLong("id"), request);
 		request.sendObject(new WidgetPerspective(entity));
 	}
-	
+
 	@Path
 	public WidgetList listBookmarks(Request request) throws IOException {
 		String text = request.getString("text");
 		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
 		List<InternetAddress> result = modelService.search(query, request).getList();
-		
+
 		WidgetList list = new WidgetList();
 		for (InternetAddress address : result) {
 			WidgetListItem item = new WidgetListItem();
@@ -169,7 +169,7 @@ public class DesktopController extends DesktopControlerBase {
 		}
 		return list;
 	}
-	
+
 
 	@Path
 	public void complete(Request request) throws IOException {
@@ -177,7 +177,7 @@ public class DesktopController extends DesktopControlerBase {
 		Query<InternetAddress> query = new Query<InternetAddress>(InternetAddress.class).as(request.getSession()).withWords(text);
 		query.withPaging(0, 30);
 		SearchResult<InternetAddress> result = modelService.search(query, request);
-		
+
 		List<InternetAddress> addresses = result.getList();
 		List<KeyboardNavigatorItem> items = Lists.newArrayList();
 		for (InternetAddress address : addresses) {

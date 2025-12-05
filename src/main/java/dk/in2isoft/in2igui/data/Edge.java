@@ -5,9 +5,9 @@ public class Edge {
 	private String from;
 	private String to;
 	private String label;
-	
+
 	public Edge() {
-		
+
 	}
 
 	public Edge(String from, String to) {
@@ -22,7 +22,7 @@ public class Edge {
 		this.from = from;
 		this.to = to;
 	}
-	
+
 	public String getFrom() {
 		return from;
 	}

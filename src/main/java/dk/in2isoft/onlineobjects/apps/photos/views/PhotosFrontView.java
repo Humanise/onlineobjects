@@ -33,12 +33,12 @@ public class PhotosFrontView extends AbstractView {
 	private List<MasonryItem> masonryList;
 	private ListModel<GalleryItem> model;
 	private CacheService cache;
-	
+
 	@Override
 	public void before(Request request) throws Exception {
 		List<SimplePhotoPerspective> list = list(request);
 		String language = request.getLanguage();
-				
+
 		masonryList = Lists.newArrayList();
 		for (SimplePhotoPerspective image : list) {
 			MasonryItem item = new MasonryItem();
@@ -65,7 +65,7 @@ public class PhotosFrontView extends AbstractView {
 				List<GalleryItem> list = convert(result.getList(), request);
 				return new ListModelResult<GalleryItem>(list,result.getTotalCount());
 			}
-			
+
 		};
 		model.setPageSize(40);
 		this.model = model;
@@ -81,11 +81,11 @@ public class PhotosFrontView extends AbstractView {
 			return images;
 		});
 	}
-	
+
 	public ListModel<GalleryItem> getImageList() {
 		return this.model;
 	}
-	
+
 	private List<GalleryItem> convert(List<Image> images, Operator privileged) {
 		List<GalleryItem> list = new ArrayList<GalleryItem>();
 		for (Image image : images) {
@@ -94,16 +94,16 @@ public class PhotosFrontView extends AbstractView {
 				user = modelService.getOwner(image, privileged);
 			} catch (ModelException ignore) {}
 			list.add(GalleryItem.create(image, user));
-		}		
+		}
 		return list;
 	}
-	
+
 	public List<MasonryItem> getMasonryList() {
 		return masonryList;
 	}
 
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -111,7 +111,7 @@ public class PhotosFrontView extends AbstractView {
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setCache(CacheService cache) {
 		this.cache = cache;
 	}

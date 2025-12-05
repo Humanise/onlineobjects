@@ -10,7 +10,7 @@ public class User extends Entity implements Privileged {
 	public static String TYPE = Entity.TYPE+"/User";
 	public static String NAMESPACE = Entity.NAMESPACE+"User/";
 	public static final String FIELD_USERNAME = "username";
-	
+
 	private String username;
 	private String password;
 	private String salt;
@@ -31,14 +31,14 @@ public class User extends Entity implements Privileged {
 	public String getNamespace() {
 		return NAMESPACE;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
 
 	public void setUsername(String username) {
 		if (name==null || name.equals(this.username)) {
-			this.name = username;			
+			this.name = username;
 		}
 		this.username = username;
 	}

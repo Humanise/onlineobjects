@@ -22,18 +22,18 @@ import dk.in2isoft.onlineobjects.model.Relation;
 public class ConfigurableIndexer<E extends Entity> implements ModelEventListener, Indexer {
 
 	private Class<E> type;
-	
+
 	private IndexManager indexManager;
 	private ModelService modelService;
 
 	private IndexDocumentBuilder<E> documentBuilder;
-	
+
 	private static final Logger log = LogManager.getLogger(ConfigurableIndexer.class);
 
 	public Class<E> getType() {
 		return type;
 	}
-	
+
 	@Override
 	public List<IndexDescription> getIndexInstances(Operator operator) {
 		return Lists.newArrayList(new IndexDescription(indexManager.getDirectoryName()));
@@ -44,22 +44,22 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 		// TODO Auto-generated method stub
 		return description.getName().equals(indexManager.getDirectoryName());
 	}
-	
+
 	@Override
 	public long getObjectCount(IndexDescription description, Operator operator) {
 		return modelService.count(Query.after(type), operator);
 	}
-	
+
 	public void clear() throws EndUserException {
 		indexManager.clear();
 	}
-	
+
 	public void entityWasCreated(Entity entity) {
 		if (type.isAssignableFrom(entity.getClass())) {
 			index(entity);
 		}
 	}
-	
+
 	public void index(Entity entity) {
 		Operator operator = modelService.newAdminOperator();
 		try {
@@ -88,13 +88,13 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 			indexManager.update(map);
 		} catch (EndUserException e) {
 			log.error("Unable to reindex", e);
-		}			
+		}
 	}
 
 	public void entityWasUpdated(Entity entity) {
 		if (type.isAssignableFrom(entity.getClass())) {
 			index(entity);
-		}		
+		}
 	}
 
 	public void entityWasDeleted(Entity entity) {
@@ -135,19 +135,19 @@ public class ConfigurableIndexer<E extends Entity> implements ModelEventListener
 	}
 
 	// Wiring...
-	
+
 	public void setIndexManager(IndexManager indexManager) {
 		this.indexManager = indexManager;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setDocumentBuilder(IndexDocumentBuilder<E> documentBuilder) {
 		this.documentBuilder = documentBuilder;
 	}
-	
+
 	public void setType(Class<E> type) {
 		this.type = type;
 	}

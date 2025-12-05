@@ -52,7 +52,7 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 	private ObjectPool<Transformer> pool;
 
 	private Templates templates;
-	
+
 	private ConfigurationService configurationService;
 
 	private List<String> baseCSS;
@@ -79,10 +79,10 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 			public boolean validateObject(Transformer arg0) {
 				return true;
 			}
-			
+
 		});
 	}
-	
+
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		baseCSS = readJSONStrings("info/core_css.json");
@@ -90,7 +90,7 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 	}
 
 	private void render(StreamSource source, OutputStream output, String context, boolean devMode) throws IOException {
-		Transformer transformer = null;;
+		Transformer transformer = null;
 		try {
 			if (devMode) {
 				transformer = createTransformer(true);
@@ -153,17 +153,17 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 		// create a Validator instance, which can be used to validate an instance document
 		Validator validator = schema.newValidator();
 		validator.setErrorHandler(new ErrorHandler() {
-			
+
 			@Override
 			public void warning(SAXParseException exception) throws SAXException {
 				log.warn(exception.getMessage());
 			}
-			
+
 			@Override
 			public void fatalError(SAXParseException exception) throws SAXException {
 				log.fatal(exception.getMessage());
 			}
-			
+
 			@Override
 			public void error(SAXParseException exception) throws SAXException {
 				log.error("[" + exception.getLineNumber() + ":" + exception.getColumnNumber() + "] " + exception.getMessage());
@@ -181,7 +181,7 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 	private File getFile(String path) {
 		return configurationService.getFile("hui/" + path);
 	}
-	
+
 	private void setHeaders(HttpServletRequest request, HttpServletResponse response) {
 		//String accept = request.getHeader("Accept");
 		response.setContentType("text/html");
@@ -210,13 +210,13 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 			e.printStackTrace(new PrintStream(stream));
 		}
 	}
-	
+
 	public String renderFragment(String ui) throws IOException {
 		String rendered = render("<?xml version=\"1.0\"?><subgui xmlns=\"uri:hui\">"+ ui + "</subgui>");
 		rendered = rendered.replaceAll("<![^>]+>", ""); // TODO instruct render to not output doctype
 		return rendered;
 	}
-	
+
 	public String render(String xmlData) throws IOException {
 		if (!xmlData.startsWith("<?xml")) {
 			xmlData="<?xml version=\"1.0\"?>"+xmlData;
@@ -267,11 +267,11 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 		List<String> files = map.stream().map(s -> "/hui/" + s).collect(Collectors.toList());
 		return files;
 	}
-	
+
 	public List<String> getBaseJS() {
 		return baseJS;
 	}
-	
+
 	private Transformer createTransformer(boolean newTemplates) throws TransformerFactoryConfigurationError, TransformerConfigurationException {
 		if (templates == null || newTemplates) {
 			StringBuilder xslString = new StringBuilder();
@@ -287,9 +287,9 @@ public class HUIService implements ApplicationListener<ContextRefreshedEvent> {
 		}
 		return templates.newTransformer();
 	}
-	
+
 	// Wiring...
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

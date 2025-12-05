@@ -6,9 +6,9 @@ public class HtmlPart extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/HtmlPart";
 	public static String NAMESPACE = Entity.NAMESPACE+"HtmlPart/";
-	
+
 	private String html;
-	
+
 	public HtmlPart() {
 		super();
 	}

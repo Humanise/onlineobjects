@@ -74,7 +74,7 @@ public class ScriptWriter {
 				compress(file, script);
 			}
 			if (file.exists()) {
-				try (FileReader fileReader = new FileReader(file)) {					
+				try (FileReader fileReader = new FileReader(file)) {
 					IOUtils.copy(fileReader, this.writer);
 				}
 			}

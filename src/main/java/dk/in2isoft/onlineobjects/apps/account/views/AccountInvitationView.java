@@ -15,11 +15,11 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 
 public class AccountInvitationView extends AbstractView {
-	
+
 	private ModelService modelService;
 	private InvitationService invitationService;
 	private SecurityService securityService;
-	
+
 	private Invitation invitation;
 	private User inviterUser;
 	private Person inviterPerson;
@@ -28,7 +28,7 @@ public class AccountInvitationView extends AbstractView {
 	private String code;
 
 	public void before(Request request) throws Exception {
-		// TODO: Use a more safe perspective 
+		// TODO: Use a more safe perspective
 		Operator admin = request.as(securityService.getAdminPrivileged());
 		invitation = invitationService.getInvitation(getCode(), admin);
 		if (invitation!=null) {
@@ -39,14 +39,14 @@ public class AccountInvitationView extends AbstractView {
 		}
 		code = request.getString("code");
 	}
-	
+
 	public String getFormattedMessage() {
 		if (invitation !=null && invitation.getMessage()!=null) {
 			return StringEscapeUtils.escapeHtml(invitation.getMessage()).replaceAll("\\n", "<br/>");
 		}
 		return null;
 	}
-	
+
 	public String getNewUsername() {
 		String givenName = person.getGivenName();
 		if (givenName!=null) {
@@ -54,27 +54,27 @@ public class AccountInvitationView extends AbstractView {
 		}
 		return "";
 	}
-	
+
 	public Invitation getInvitation() {
 		return invitation;
 	}
-	
+
 	public Person getInviterPerson() {
 		return inviterPerson;
 	}
-	
+
 	public String getEmail() {
 		return email.getAddress();
 	}
-	
+
 	public Person getPerson() {
 		return person;
 	}
-	
+
 	public User getInviterUser() {
 		return inviterUser;
 	}
-	
+
 	public String getCode() {
 		return code;
 	}
@@ -86,7 +86,7 @@ public class AccountInvitationView extends AbstractView {
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

@@ -24,7 +24,7 @@ public class SymbolComponent extends AbstractComponent {
 	public SymbolComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -36,7 +36,7 @@ public class SymbolComponent extends AbstractComponent {
 			name
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		// TODO Not implemented yet
@@ -53,5 +53,5 @@ public class SymbolComponent extends AbstractComponent {
 	public String getName(FacesContext context) {
 		return Components.getExpressionValue(this, "name", name, context);
 	}
-	
+
 }

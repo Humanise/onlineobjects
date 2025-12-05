@@ -22,7 +22,7 @@ public class FileFetcherStage extends PipelineStageAdapter {
 	public void run() {
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod();
-		File temp = null; 
+		File temp = null;
 		OutputStream outputStream = null;
 		try {
 			context.info(this, "Starting");
@@ -42,6 +42,6 @@ public class FileFetcherStage extends PipelineStageAdapter {
 				context.info(this, "Cleaning");
 			}
 		}
-		
+
 	}
 }

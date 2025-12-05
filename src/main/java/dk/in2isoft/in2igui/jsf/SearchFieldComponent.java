@@ -63,7 +63,7 @@ public class SearchFieldComponent extends AbstractComponent {
 		}
 		writer.endElement("input");
 		writer.endSpan();
-		
+
 		ScriptWriter js = writer.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.SearchField").property("element", id);
 		if (name != null) {

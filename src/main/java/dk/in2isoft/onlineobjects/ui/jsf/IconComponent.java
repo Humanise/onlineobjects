@@ -20,7 +20,7 @@ public class IconComponent extends AbstractComponent {
 	private String icon;
 	private String styleClass;
 	private int size = 16;
-	
+
 	public IconComponent() {
 		super(FAMILY);
 	}
@@ -37,13 +37,13 @@ public class IconComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {name,icon,styleClass,size};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String icon = getExpression("icon", this.icon, context);
 		boolean addController = isNotBlank(name);
 		String id = getClientId();
-		
+
 		writer.startSpan().withClass(new ClassBuilder("oo_icon").addVariant("oo_icon", size).add(styleClass).addVariant("oo_icon", icon));
 		if (addController) {
 			writer.withId(id);
@@ -53,11 +53,11 @@ public class IconComponent extends AbstractComponent {
 			writer.getScriptWriter().startScript().startNewObject("oo.Icon").property("element", id).comma().property("name", name).endNewObject().endScript();
 		}
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

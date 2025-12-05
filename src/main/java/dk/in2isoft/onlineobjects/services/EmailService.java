@@ -19,9 +19,9 @@ import dk.in2isoft.onlineobjects.core.exceptions.Error;
 
 public class EmailService {
 
-	private static final Logger log = LogManager.getLogger(EmailService.class); 
+	private static final Logger log = LogManager.getLogger(EmailService.class);
 	private ConfigurationService configurationService;
-		
+
 	private String host;
 	private String username;
 	private String password;
@@ -46,11 +46,11 @@ public class EmailService {
 		template.merge(context, writer);
 		return writer.toString();
 	}
-	
+
 	public void sendMessage(String subject, String textBody, String address, String name) throws EndUserException {
 		sendMessage(subject, textBody, null, address, name);
 	}
-	
+
 	public void sendHtmlMessage(String subject, String htmlBody, String address, String name) throws EndUserException {
 		sendMessage(subject, null, htmlBody, address, name);
 	}

@@ -8,7 +8,7 @@ public class HQLBuilder {
 	private StringBuilder select;
 	private StringBuilder where;
 	private StringBuilder orderBy;
-	
+
 	public HQLBuilder() {
 		super();
 		this.method="select";
@@ -17,7 +17,7 @@ public class HQLBuilder {
 		this.where = new StringBuilder();
 		this.orderBy = new StringBuilder();
 	}
-	
+
 	public HQLBuilder from(String str) {
 		if (from.length()>0) {
 			from.append(",");
@@ -25,7 +25,7 @@ public class HQLBuilder {
 		from.append(str);
 		return this;
 	}
-	
+
 	public HQLBuilder where(String str) {
 		if (where.length()>0) {
 			where.append(" and ");
@@ -33,7 +33,7 @@ public class HQLBuilder {
 		where.append(str);
 		return this;
 	}
-	
+
 	public HQLBuilder orderBy(String str) {
 		if (orderBy.length()>0) {
 			orderBy.append(",");
@@ -55,7 +55,7 @@ public class HQLBuilder {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(method).append(" ");

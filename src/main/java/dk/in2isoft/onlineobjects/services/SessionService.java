@@ -16,10 +16,10 @@ import dk.in2isoft.onlineobjects.core.SubSession;
 public class SessionService {
 
 	private static final Logger log = LogManager.getLogger(SessionService.class);
-	
-	
+
+
 	private List<SubSession> subSessions = Lists.newArrayList();
-	
+
 	public void sessionCreated(HttpSessionEvent event) {
 		HttpSession session = event.getSession();
 		//session.setMaxInactiveInterval(10);
@@ -29,7 +29,7 @@ public class SessionService {
 	public void sessionDestroyed(HttpSessionEvent event) {
 		log.debug("Session destroyed: "+event.getSession().getId());
 	}
-	
+
 	public void registerSubSession(SubSession subSession) {
 		this.subSessions.add(subSession);
 	}

@@ -25,7 +25,7 @@ public class KnowledgeQuery extends IndexQuery {
 	private List<Long> authorIds;
 	private Boolean inbox;
 	private Boolean favorite;
-	
+
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -77,15 +77,15 @@ public class KnowledgeQuery extends IndexQuery {
 	public void setAuthorIds(List<Long> authorIds) {
 		this.authorIds = authorIds;
 	}
-	
+
 	public void setInbox(Boolean inbox) {
 		this.inbox = inbox;
 	}
-	
+
 	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 	}
-	
+
 	public static String build(KnowledgeQuery query) {
 		String[] textParts = Strings.getWords(query.getText());
 

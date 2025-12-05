@@ -61,7 +61,7 @@ public class WordListPerspective {
 	public void setGlossary(String glossary) {
 		this.glossary = glossary;
 	}
-	
+
 	@Override
 	public String toString() {
 		return Strings.concatWords(text,language,lexicalCategory,glossary);

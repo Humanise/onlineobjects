@@ -36,7 +36,7 @@ import dk.in2isoft.onlineobjects.ui.XSLTInterface;
 import nu.xom.Serializer;
 
 public class XSLTUtil {
-	
+
 	private static Logger log = LogManager.getLogger(XSLTUtil.class);
 
 	private static void applyXSLT(Source xml, Source xslt, Result output, Map<String, String> parameters)
@@ -88,13 +88,13 @@ public class XSLTUtil {
 		Source xmlSource = new DOMSource(doc.getDocumentElement());
 		applyXSLT(xmlSource, xslt, new StreamResult(output), parameters);
 	}
-	
+
 	private static void applyXSLT(String xmlData, File[] xsltFile, OutputStream output, Map<String, String> parameters)
 			throws EndUserException {
 		StringReader xslReader = new StringReader(buildXSLT(xsltFile,parameters));
 		applyXSLT(xmlData, new StreamSource(xslReader), output, parameters);
 	}
-	
+
 	private static String buildXSLT(File[] xsltFile, Map<String, String> parameters) {
 		StringBuilder xsl = new StringBuilder();
 		xsl.append("<?xml version='1.0' encoding='UTF-8'?>");

@@ -16,14 +16,14 @@ import nu.xom.Elements;
 public class JsoupUtils {
     protected DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-    
+
     public nu.xom.Document toXOM(org.jsoup.nodes.Document in) {
     	org.jsoup.nodes.Element inRoot = in.child(0);
 		String tagName = inRoot.tagName();
 		nu.xom.Element dummy = new nu.xom.Element(tagName, "http://www.w3.org/1999/xhtml");
         NodeTraversor.traverse(new XOMBuilder(dummy), in.child(0));
     	Elements roots = dummy.getChildElements();
-    	
+
     	Element root = roots.get(0);
     	root.detach();
 		return new nu.xom.Document(root);
@@ -48,7 +48,7 @@ public class JsoupUtils {
                 if (tagName.contains(":")) {
                 	String[] parts = tagName.split(":");
                 	if (parts.length > 1) {
-    					tagName = parts[1];                		
+    					tagName = parts[1];
                 	}
                 }
                 nu.xom.Element el = new nu.xom.Element(tagName, "http://www.w3.org/1999/xhtml");
@@ -79,7 +79,7 @@ public class JsoupUtils {
 		}
 
 		private String sanitize(String str) {
-			
+
             char[] data = str.toCharArray();
             for (int i = 0, len = data.length; i < len; i++) {
                 int ch = data[i];

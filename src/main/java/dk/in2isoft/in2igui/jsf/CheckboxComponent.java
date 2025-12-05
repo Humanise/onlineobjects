@@ -24,7 +24,7 @@ public class CheckboxComponent extends AbstractComponent {
 	public CheckboxComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -39,7 +39,7 @@ public class CheckboxComponent extends AbstractComponent {
 			name, key, label, value
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -48,7 +48,7 @@ public class CheckboxComponent extends AbstractComponent {
 		out.startSpan("hui_checkbox_button").endSpan();
 		out.startSpan("hui_checkbox_label").write(label).endSpan();
 		out.endA();
-		
+
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.Checkbox").property("element", id);
 		if (name!=null) {
@@ -62,7 +62,7 @@ public class CheckboxComponent extends AbstractComponent {
 		}
 		js.endNewObject().endScript();
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

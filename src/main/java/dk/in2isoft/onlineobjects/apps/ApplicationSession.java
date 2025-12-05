@@ -8,7 +8,7 @@ import dk.in2isoft.onlineobjects.ui.AsynchronousProcessDescriptor;
 public class ApplicationSession {
 
 	private Map<String, AsynchronousProcessDescriptor> asynchronousProcesses;
-	
+
 	public ApplicationSession() {
 		super();
 		asynchronousProcesses = new HashMap<String, AsynchronousProcessDescriptor>();

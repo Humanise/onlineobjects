@@ -9,8 +9,8 @@ import com.google.common.io.Files;
 
 import dk.in2isoft.commons.http.FilePusher;
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.service.ServiceController;
@@ -24,7 +24,7 @@ public class ImageController extends ServiceController {
 	private ImageService imageService;
 	private ModelService modelService;
 	private ImageTransformationService imageTransformationService;
-	
+
 	private Pattern idPattern;
 	private Pattern widthPattern;
 	private Pattern heightPattern;
@@ -92,7 +92,7 @@ public class ImageController extends ServiceController {
 		}
 		process(request, param);
 	}
-	
+
 	private int parseInt(String str) {
 		if (str==null) {
 			return 0;
@@ -121,7 +121,7 @@ public class ImageController extends ServiceController {
 		return null;
 	}
 
-	private void process(Request request, Parameters parameters) throws IOException, EndUserException {		
+	private void process(Request request, Parameters parameters) throws IOException, EndUserException {
 		File file;
 		Image image = modelService.get(Image.class, parameters.id, request);
 		if (image==null) {
@@ -155,8 +155,8 @@ public class ImageController extends ServiceController {
 				trans.setRotation(rotation.longValue());
 			}
 		}
-		
-		
+
+
 		if (trans.isTransformed()) {
 			file = imageTransformationService.transform(parameters.id, trans);
 			if ("png".equals(trans.getFormat())) {
@@ -178,7 +178,7 @@ public class ImageController extends ServiceController {
 	}
 
 	// Wiring...
-	
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
@@ -190,7 +190,7 @@ public class ImageController extends ServiceController {
 	public void setImageTransformationService(ImageTransformationService imageTransformationService) {
 		this.imageTransformationService = imageTransformationService;
 	}
-	
+
 	private class Parameters {
 		public float quality;
 		long id;

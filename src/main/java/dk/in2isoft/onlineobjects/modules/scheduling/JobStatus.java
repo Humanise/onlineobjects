@@ -6,7 +6,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.utils.Key;
 
 public class JobStatus {
-	
+
 	private Logger log;
 	private float progress;
 	private SchedulingService schedulingService;
@@ -16,7 +16,7 @@ public class JobStatus {
 	public float getProgress() {
 		return progress;
 	}
-	
+
 	public boolean isInterrupted() {
 		return interrupted;
 	}
@@ -35,7 +35,7 @@ public class JobStatus {
 		schedulingService.log(text,key);
 		log.warn(text+" - "+key.getName()+" : "+key.getGroup());
 	}
-	
+
 	public void log(String string) {
 		schedulingService.log(string, key);
 		log.info(string+" - "+key.getName()+" : "+key.getGroup());
@@ -55,11 +55,11 @@ public class JobStatus {
 		schedulingService.error(string, key);
 		log.error(string+" - "+key.getName()+" : "+key.getGroup(), e);
 	}
-	
+
 	public void setKey(Key<?> key) {
 		this.key = key;
 	}
-	
+
 	public void setLog(Logger log) {
 		this.log = log;
 	}
@@ -83,7 +83,7 @@ public class JobStatus {
 		}
 		return jobStatus;
 	}
-	
+
 	public void setSchedulingService(SchedulingService schedulingService) {
 		this.schedulingService = schedulingService;
 	}

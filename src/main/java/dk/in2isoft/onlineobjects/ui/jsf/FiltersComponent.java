@@ -25,7 +25,7 @@ public class FiltersComponent extends AbstractComponent {
 	public FiltersComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		variant = (String) state[0];
@@ -100,23 +100,23 @@ public class FiltersComponent extends AbstractComponent {
 			}
 		}
 	}
-	
+
 	@Override
 	public void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 	}
-	
+
 	public String getVariant() {
 		return variant;
 	}
-	
+
 	public void setVariant(String width) {
 		this.variant = width;
 	}
-	
+
 	public String getStyleClass() {
 		return styleClass;
 	}
-	
+
 	public void setStyleClass(String padding) {
 		this.styleClass = padding;
 	}

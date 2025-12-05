@@ -19,15 +19,15 @@ public class UserSession implements Privileged {
 	private Map<Class<? extends ApplicationController>, ApplicationSession> toolSessions;
 
 	private long identity = -1;
-	
+
 	private String id;
-	
+
 	private Set<Ability> abilities;
 
 	public UserSession(User user) {
 		this(user, new HashSet<>());
 	}
-	
+
 	public UserSession(User user, Set<Ability> abilities) {
 		this.id = Strings.generateRandomString(50);
 		toolSessions = new HashMap<Class<? extends ApplicationController>, ApplicationSession>();
@@ -37,7 +37,7 @@ public class UserSession implements Privileged {
 	public String getId() {
 		return id;
 	}
-	
+
 	public static UserSession get(HttpSession session) {
 		Object object = session.getAttribute(SESSION_ATTRIBUTE);
 		if (object instanceof UserSession) {
@@ -45,7 +45,7 @@ public class UserSession implements Privileged {
 		}
 		return null;
 	}
-	
+
 	protected void setUser(User user, Set<Ability> abilities) {
 		if (user==null) {
 			throw new IllegalArgumentException("Cannot set the user to null");
@@ -60,11 +60,11 @@ public class UserSession implements Privileged {
 		this.identity = user.getIdentity();
 		this.abilities = abilities;
 	}
-	
+
 	public boolean has(Ability ability) {
 		return abilities.contains(ability);
 	}
-	
+
 	public long getIdentity() {
 		return identity;
 	}
@@ -85,6 +85,6 @@ public class UserSession implements Privileged {
 	public String toString() {
 		return "User session for user: " + identity;
 	}
-	
-	
+
+
 }

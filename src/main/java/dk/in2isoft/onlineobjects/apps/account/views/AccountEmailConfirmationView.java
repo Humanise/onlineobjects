@@ -3,8 +3,8 @@ package dk.in2isoft.onlineobjects.apps.account.views;
 import dk.in2isoft.commons.jsf.AbstractView;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Pair;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -17,11 +17,11 @@ public class AccountEmailConfirmationView extends AbstractView {
 
 	private String key;
 	private String email;
-	
+
 	private boolean found;
-	
+
 	public void before(Request request) throws Exception {
-		
+
 		key = request.getString("key");
 		email = request.getString("email");
 		if (Strings.isBlank(key) || Strings.isBlank(email)) {
@@ -36,17 +36,17 @@ public class AccountEmailConfirmationView extends AbstractView {
 			// TODO Maybe log this
 		}
 	}
-	
+
 	public boolean isFound() {
 		return found;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}

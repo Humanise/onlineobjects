@@ -28,11 +28,11 @@ public class StatementEditPerspective {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public void setAuthors(List<ItemData> authors) {
 		this.authors = authors;
 	}
-	
+
 	public List<ItemData> getAuthors() {
 		return authors;
 	}

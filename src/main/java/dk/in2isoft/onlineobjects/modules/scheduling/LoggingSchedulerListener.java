@@ -18,13 +18,13 @@ import org.quartz.utils.Key;
 import dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry;
 
 public class LoggingSchedulerListener implements SchedulerListener, JobListener, TriggerListener {
-	
+
 	private Queue<LiveLogEntry> log;
 
 	public LoggingSchedulerListener(Queue<LiveLogEntry> log) {
 		this.log = log;
 	}
-	
+
 	private void log(String text, Key<?> key) {
 		log.add(new LiveLogEntry("- "+text,key.getName(),key.getGroup()));
 	}

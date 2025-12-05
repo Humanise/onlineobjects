@@ -17,9 +17,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import dk.in2isoft.commons.lang.Strings;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Client;
@@ -36,14 +36,14 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class SecurityService {
-	
+
 	private static final Logger log = LogManager.getLogger(SecurityService.class);
 
 	public static final String ADMIN_USERNAME = "admin";
 	public static final String PUBLIC_USERNAME = "public";
-	
+
 	public static Set<String> RESERVED_USERNAMES = Sets.newHashSet(ADMIN_USERNAME,PUBLIC_USERNAME);
-	
+
 	private ModelService modelService;
 	private ConfigurationService configurationService;
 	private SurveillanceService surveillanceService;
@@ -75,7 +75,7 @@ public class SecurityService {
 		surveillanceService.audit().warn("Failed login request for username={}", username);
 		return false;
 	}
-	
+
 	public boolean changeUser(Request request, String username, String password, Operator operator) {
 		boolean changed = changeUser(request.getSession(), username, password, operator);
 		if (changed) {
@@ -88,12 +88,12 @@ public class SecurityService {
 		HttpSession session = request.getRequest().getSession();
 		session.setAttribute(UserSession.SESSION_ATTRIBUTE, request.getSession());
 	}
-	
+
 	private Set<Ability> getAbilities(User user) {
 		Collection<String> properties = user.getPropertyValues(Property.KEY_ABILITY);
 		return Ability.convert(properties);
 	}
-		
+
 	public User getUser(String username, String password, Operator operator) {
 		User user = modelService.getUser(username, operator);
 		if (user==null) {
@@ -106,7 +106,7 @@ public class SecurityService {
 		}
 		return null;
 	}
-	
+
 	public void changePassword(String username, String existingPassword,String newPassword, Operator operator) throws SecurityException, ModelException, BadRequestException, ExplodingClusterFuckException {
 		User user = getUser(username, existingPassword, operator);
 		if (user==null) {
@@ -168,11 +168,11 @@ public class SecurityService {
 		}
 		return false;
 	}
-	
+
 	public Privilege getPrivilege(long id,Privileged priviledged, Operator operator) {
 		return modelService.getPrivilege(id, priviledged.getIdentity(), operator.getOperation());
 	}
-	
+
 	public List<Privileged> expand(Privileged priviledged) {
 		List<Privileged> privs = Lists.newArrayList(priviledged);
 		User publicUser = getPublicUser();
@@ -181,9 +181,9 @@ public class SecurityService {
 		}
 		return privs;
 	}
-	
+
 	public boolean isOnlyPrivileged(Item item,Privileged privileged, Operator operator) {
-		
+
 		List<Long> ids = modelService.getPrivilegedUsers(item.getId(), operator);
 		return ids.size() == 1 && ids.get(0) == privileged.getIdentity();
 	}
@@ -204,7 +204,7 @@ public class SecurityService {
 		}
 		return false;
 	}
-	
+
 	public boolean canDelete(Item item,Privileged privileged, Operator operator) {
 		if (item instanceof User) {
 			User user = (User) item;
@@ -229,7 +229,7 @@ public class SecurityService {
 		}
 		return false;
 	}
-	
+
 	public boolean canDelete(Item item, Operator operator) {
 		return canDelete(item, operator, operator);
 	}
@@ -253,7 +253,7 @@ public class SecurityService {
 		}
 		return false;
 	}
-	
+
 	private boolean canExactlyView(Item item, Privileged privileged, Operator operator) {
 		Privilege privilege = getPrivilege(item.getId(), privileged, operator);
 		if (privilege==null) {
@@ -262,7 +262,7 @@ public class SecurityService {
 			return privilege.isView();
 		}
 	}
-	
+
 	private boolean canExactlyDelete(Item item, Privileged other, Operator operator) {
 		Privilege privilege = modelService.getPrivilege(item.getId(), other.getIdentity(), operator.getOperation());
 		if (privilege==null) {
@@ -280,7 +280,7 @@ public class SecurityService {
 			return privilege.isAlter();
 		}
 	}
-	
+
 	public User getPublicUser() {
 		if (publicUser==null) {
 			Operation operation = modelService.newOperation();
@@ -320,7 +320,7 @@ public class SecurityService {
 		UserQuery q = new UserQuery();
 		q.setSecret(secret);
 		SearchResult<User> result = modelService.search(q, operator);
-		return result.getFirst();		
+		return result.getFirst();
 	}
 
 	public String getSecret(ClientInfo info, User user, Operator operator) throws ModelException, SecurityException {
@@ -369,7 +369,7 @@ public class SecurityService {
 	public void makePublicVisible(Item item, Operator operator) throws SecurityException, ModelException {
 		modelService.grantPrivileges(item, getPublicUser(), true, false, false, operator);
 	}
-	
+
 	public void makePublicHidden(Item item, Operator operator) throws SecurityException {
 		if (!canModify(item, operator)) {
 			throw new SecurityException("The user cannot make this non public");
@@ -379,7 +379,7 @@ public class SecurityService {
 	}
 
 	public void grantPublicView(Item item, boolean view, Operator granter) throws ModelException, SecurityException {
-		modelService.grantPrivileges(item, getPublicUser(), view, false, false, granter);		
+		modelService.grantPrivileges(item, getPublicUser(), view, false, false, granter);
 	}
 
 	public void grantFullPrivileges(Item item, Privileged user, Operator granter) throws ModelException, SecurityException {
@@ -389,7 +389,7 @@ public class SecurityService {
 	private String getKey(HttpServletRequest servletRequest) {
 		String auth = servletRequest.getHeader("Authorization");
 		if (auth !=null) {
-			
+
 			Pattern pattern = Pattern.compile("Bearer (.*)");
 			Matcher matcher = pattern.matcher(auth);
 			if (matcher.matches()) {
@@ -455,12 +455,12 @@ public class SecurityService {
 		}
 		return null;
 	}
-*/	
+*/
 	public String buildSecret() {
 		return Strings.generateRandomString(50);
 	}
-	
-	
+
+
 
 	public boolean isCoreUser(User user) {
 		return SecurityService.ADMIN_USERNAME.equals(user.getUsername()) || SecurityService.PUBLIC_USERNAME.equals(user.getUsername());
@@ -478,19 +478,19 @@ public class SecurityService {
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}
-	
+
 	public void setPasswordEncryptionService(PasswordEncryptionService passwordEncryptionService) {
 		this.passwordEncryptionService = passwordEncryptionService;
 	}
-	
+
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}

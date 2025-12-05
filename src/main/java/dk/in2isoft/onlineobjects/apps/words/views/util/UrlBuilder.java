@@ -4,13 +4,13 @@ import dk.in2isoft.commons.lang.Strings;
 
 public class UrlBuilder {
 	private StringBuilder sb = new StringBuilder();
-	
+
 	private boolean hasParameters;
-	
+
 	public UrlBuilder(String path) {
 		folder(path);
 	}
-	
+
 	public UrlBuilder folder(Number num) {
 		return folder(num.toString());
 	}
@@ -29,7 +29,7 @@ public class UrlBuilder {
 		}
 		return this;
 	}
-	
+
 	public UrlBuilder parameter(String key,Object value) {
 		if (value!=null) {
 			String str = value.toString();

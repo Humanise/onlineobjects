@@ -32,7 +32,7 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 
 			String src = "http://www.danskernesnavne.navneforskning.ku.dk/";
 			InternetAddress source = wordService.getSource(src, operator);
-			
+
 			List<Long> ids = modelService.list(new Quer(), operator);
 			{
 				int total = ids.size();
@@ -69,7 +69,7 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 	}
 
 	private class Quer implements CustomQuery<Long> {
-		
+
 		private String sql = " from word, relation, lexicalcategory where relation.sub_entity_id = word.id and relation.super_entity_id=lexicalcategory.id and lexicalcategory.code like 'proprium.personal%'";
 
 		@Override
@@ -79,20 +79,20 @@ public class NamesSourceCleanupJob extends ServiceBackedJob implements Interrupt
 
 		@Override
 		public String getCountSQL() {
-			
+
 			return "select count(word.id) as count" + sql;
 		}
 
 		@Override
 		public Long convert(Object[] row) {
-			
+
 			return ((Number)row[0]).longValue();
 		}
 
 		@Override
 		public void setParameters(NativeQuery<?> sql) {
-			
+
 		}
-		
+
 	}
 }

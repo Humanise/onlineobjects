@@ -20,21 +20,21 @@ public class ListData extends HashMap<String, Object> {
 		map.put("page", page);
 		this.put("window", map);
 	}
-	
+
 	public void addHeader(String title) {
 		List<Map<String,Object>> headers = getHeaders();
 		Map<String, Object> map = Maps.newHashMap();
 		map.put("title", title);
 		headers.add(map);
 	}
-	
+
 	public void newRow(Long id,String kind) {
 		HashMap<String, Object> map = Maps.newHashMap();
 		map.put("id", id);
 		map.put("kind", kind);
 		getRows().add(map);
 	}
-	
+
 	public void newRow(Long id,String kind, Object data) {
 		HashMap<String, Object> map = Maps.newHashMap();
 		map.put("id", id);
@@ -42,11 +42,11 @@ public class ListData extends HashMap<String, Object> {
 		map.put("data", data);
 		getRows().add(map);
 	}
-	
+
 	public void newRow() {
 		newRow(null, null);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void addCell(String text, String icon) {
 		List<Map<String,Object>> rows = getRows();
@@ -68,7 +68,7 @@ public class ListData extends HashMap<String, Object> {
 	public void addCell(boolean bool) {
 		addCell(String.valueOf(bool));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private List<Map<String,Object>> getRows() {
 		if (!this.containsKey("rows")) {
@@ -76,7 +76,7 @@ public class ListData extends HashMap<String, Object> {
 		}
 		return (List<Map<String, Object>>) get("rows");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private List<Map<String,Object>> getHeaders() {
 		if (!this.containsKey("headers")) {

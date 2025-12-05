@@ -8,7 +8,7 @@ import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.PhoneNumber;
 
 public class UserProfileInfo {
-	
+
 	private long userId;
 
 	private String givenName;
@@ -18,7 +18,7 @@ public class UserProfileInfo {
 	private String additionalName;
 
 	private Boolean sex;
-	
+
 	private String resume;
 
 	private Collection<String> interests;
@@ -31,7 +31,7 @@ public class UserProfileInfo {
 	private List<InternetAddress> urls;
 
 	public UserProfileInfo() {
-		
+
 	}
 
 	public String getGivenName() {

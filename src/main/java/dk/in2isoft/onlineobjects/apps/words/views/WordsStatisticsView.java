@@ -10,7 +10,7 @@ import dk.in2isoft.onlineobjects.modules.language.LanguageStatisticsDataProvider
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class WordsStatisticsView extends AbstractView {
-	
+
 	private LanguageStatisticsDataProvider statisticsDataProvider;
 	private List<LanguageStatistic> languages;
 
@@ -19,13 +19,13 @@ public class WordsStatisticsView extends AbstractView {
 		Map<Locale, List<LanguageStatistic>> data = statisticsDataProvider.getData().getCategoriesByLanguage();
 		this.languages = data.get(request.getLocale());
 	}
-	
+
 	public List<LanguageStatistic> getLanguages() {
 		return languages;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setStatisticsDataProvider(LanguageStatisticsDataProvider statisticsDataProvider) {
 		this.statisticsDataProvider = statisticsDataProvider;
 	}

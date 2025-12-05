@@ -15,13 +15,13 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class RenderingComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.rendering";
-	
+
 	private String styleClass;
-	
+
 	public RenderingComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		styleClass = (String) state[0];
@@ -36,7 +36,7 @@ public class RenderingComponent extends AbstractComponent {
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startDiv(new ClassBuilder("oo_rendering").add(getStyleClass(context)));
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
 		writer.endDiv();

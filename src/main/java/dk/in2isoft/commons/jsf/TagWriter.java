@@ -27,42 +27,42 @@ public class TagWriter {
 			this.scriptWriter = Components.getScriptWriter(context);
 		}
 	}
-	
+
 	public ScriptWriter getScriptWriter() {
 		return scriptWriter;
 	}
-	
+
 	public TagWriter startElement(String name) throws IOException {
 		writer.startElement(name, component);
 		return this;
 	}
-	
+
 	public TagWriter endElement(String name) throws IOException {
 		writer.endElement(name);
 		return this;
 	}
-	
+
 	public TagWriter withAttribute(String name,Object value) throws IOException {
 		writer.writeAttribute(name, value, null);
 		return this;
 	}
-	
+
 	public TagWriter withClass(Object className) throws IOException {
 		return withAttribute("class", className);
 	}
-	
+
 	public TagWriter withId(Object id) throws IOException {
 		return withAttribute("id", id);
 	}
-	
+
 	public TagWriter withHref(Object href) throws IOException {
 		return withAttribute("href", href);
 	}
-	
+
 	public TagWriter withSrc(Object src) throws IOException {
 		return withAttribute("src", src);
 	}
-	
+
 	public TagWriter withStyle(Object style) throws IOException {
 		return withAttribute("style", style);
 	}
@@ -107,21 +107,21 @@ public class TagWriter {
 		}
 		return this;
 	}
-	
+
 	///////// A /////////
-	
+
 	public TagWriter startA() throws IOException {
 		return startElement("a");
 	}
-	
+
 	public TagWriter startA(Object className) throws IOException {
 		return startElement("a").withClass(className);
 	}
-	
+
 	public TagWriter startVoidA(Object className) throws IOException {
 		return startElement("a").withAttribute("href","javascript://").withClass(className);
 	}
-	
+
 	public TagWriter startVoidA() throws IOException {
 		return startElement("a").withAttribute("href","javascript://");
 	}
@@ -129,7 +129,7 @@ public class TagWriter {
 	public TagWriter endA() throws IOException {
 		return endElement("a");
 	}
-	
+
 	/////////// LISTS /////////
 
 	public TagWriter startOl() throws IOException {
@@ -179,9 +179,9 @@ public class TagWriter {
 	public TagWriter endLi() throws IOException {
 		return endElement("li");
 	}
-	
+
 	/////////// SPAN //////////
-	
+
 	public TagWriter startSpan() throws IOException {
 		return startElement("span");
 	}
@@ -189,13 +189,13 @@ public class TagWriter {
 	public TagWriter startSpan(Object className) throws IOException {
 		return startElement("span").withClass(className);
 	}
-	
+
 	public TagWriter endSpan() throws IOException {
 		return endElement("span");
 	}
-	
+
 	/////////// Strong //////////
-	
+
 	public TagWriter startStrong() throws IOException {
 		return startElement("strong");
 	}
@@ -203,13 +203,13 @@ public class TagWriter {
 	public TagWriter startStrong(Object className) throws IOException {
 		return startElement("strong").withClass(className);
 	}
-	
+
 	public TagWriter endStrong() throws IOException {
 		return endElement("strong");
 	}
-	
+
 	/////////// I //////////
-	
+
 	public TagWriter startI() throws IOException {
 		return startElement("i");
 	}
@@ -217,13 +217,13 @@ public class TagWriter {
 	public TagWriter startI(Object className) throws IOException {
 		return startElement("i").withClass(className);
 	}
-	
+
 	public TagWriter endI() throws IOException {
 		return endElement("i");
 	}
-	
+
 	/////////// EM //////////
-	
+
 	public TagWriter startEm() throws IOException {
 		return startElement("em");
 	}
@@ -231,13 +231,13 @@ public class TagWriter {
 	public TagWriter startEm(Object className) throws IOException {
 		return startElement("em").withClass(className);
 	}
-	
+
 	public TagWriter endEm() throws IOException {
 		return endElement("em");
 	}
-	
+
 	/////////// IMG //////////
-	
+
 	public TagWriter startImg() throws IOException {
 		return startElement("img");
 	}
@@ -245,21 +245,21 @@ public class TagWriter {
 	public TagWriter startImg(Object className) throws IOException {
 		return startElement("img").withClass(className);
 	}
-	
+
 	public TagWriter endImg() throws IOException {
 		return endElement("img");
 	}
-	
+
 	/////////// DIV //////////
-	
+
 	public TagWriter startDiv() throws IOException {
 		return startElement("div");
 	}
-	
+
 	public TagWriter startDiv(Object className) throws IOException {
 		return startElement("div").withClass(className);
 	}
-	
+
 	public TagWriter endDiv() throws IOException {
 		return endElement("div");
 	}
@@ -269,13 +269,13 @@ public class TagWriter {
 	public TagWriter startInput() throws IOException {
 		return startElement("input");
 	}
-		
+
 	public TagWriter endInput() throws IOException {
 		return endElement("input");
 	}
-	
+
 	////////// SCRIPT ////////
-	
+
 	public TagWriter startScript() throws IOException {
 		startElement("script").withAttribute("type", "text/javascript");
 		return this;
@@ -284,7 +284,7 @@ public class TagWriter {
 	public TagWriter endScript() throws IOException {
 		return endElement("script");
 	}
-	
+
 	public TagWriter startScopedScript() throws IOException {
 		startElement("script").withAttribute("type", "text/javascript");
 		write("\n(function() {\n");
@@ -308,7 +308,7 @@ public class TagWriter {
 	}
 
 	public TagWriter writeScript(Object src) throws IOException {
-		
+
 		startElement("script").withAttribute("type", "text/javascript").withAttribute("charset", "utf-8");
 		withAttribute("src", src);
 		endElement("script");
@@ -360,7 +360,7 @@ public class TagWriter {
 	public TagWriter property(String name, Double value) throws IOException {
 		return write("'").write(name).write("':").write(value==null ? "null" : value);
 	}
-	
+
 	public TagWriter endNewObject() throws IOException {
 		return write("})");
 	}

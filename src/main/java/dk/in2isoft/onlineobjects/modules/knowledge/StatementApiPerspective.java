@@ -34,11 +34,11 @@ public class StatementApiPerspective implements CategorizableViewPerspective, Ap
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public Boolean isInbox() {
 		return inbox;
 	}

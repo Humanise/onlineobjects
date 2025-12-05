@@ -28,7 +28,7 @@ public class FoundationComponent extends AbstractComponent {
 	public FoundationComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -40,7 +40,7 @@ public class FoundationComponent extends AbstractComponent {
 			name
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -80,7 +80,7 @@ public class FoundationComponent extends AbstractComponent {
 		}
 
 		out.endDiv();
-		
+
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.Foundation").property("element", id);
 		String name = getName(context);

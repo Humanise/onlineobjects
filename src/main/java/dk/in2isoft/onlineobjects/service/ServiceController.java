@@ -7,10 +7,10 @@ public abstract class ServiceController extends AbstractController {
 	public ServiceController(String name) {
 		super(name);
 	}
-	
+
 	@Override
 	protected String getDimension() {
 		return "services";
 	}
-		
+
 }

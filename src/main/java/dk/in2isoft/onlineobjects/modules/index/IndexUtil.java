@@ -2,13 +2,13 @@ package dk.in2isoft.onlineobjects.modules.index;
 
 import java.util.Collection;
 
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.BooleanClause.Occur;
 
 public class IndexUtil {
-	
+
 	public static Query newLongQuery(String field,Collection<Long> ids) {
 		if (ids.size()==1) {
 			Long next = ids.iterator().next().longValue();

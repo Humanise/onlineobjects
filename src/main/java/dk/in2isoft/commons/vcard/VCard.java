@@ -66,7 +66,7 @@ public class VCard {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public List<VCardEmail> getEmails() {
 		return emails;
 	}

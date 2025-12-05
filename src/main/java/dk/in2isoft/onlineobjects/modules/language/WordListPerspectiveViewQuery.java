@@ -18,39 +18,39 @@ import dk.in2isoft.onlineobjects.model.Entity;
 public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspective> {
 
 	public enum Ordering {
-		created ("created desc"), 
+		created ("created desc"),
 		id ("id desc"),
 		text("text_lower asc");
-		
+
 		private String x;
-		
+
 		Ordering(String x) {
 			this.x = x;
 		}
-	
+
 		public String toString() {
 			return x;
 		}
-	};
-	
+	}
+
 	private Ordering ordering = Ordering.created;
 
 	private int pageNumber;
 
 	private int pageSize;
-	
+
 	private String startingWith;
-	
+
 	private String language;
-	
+
 	private String category;
 
 	private boolean startingWithSymbol;
-	
+
 	private List<String> words;
-	
+
 	private Collection<Long> ids;
-	
+
 	public WordListPerspective convert(Object[] row) {
 		WordListPerspective impression = new WordListPerspective();
 		impression.setId(((BigInteger) row[0]).longValue());
@@ -65,19 +65,19 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 		}
 		return impression;
 	}
-	
+
 	public String getCountSQL() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(id) as num from word_list_view");
 		sql.append(buildWhere());
 		return sql.toString();
 	}
-	
+
 	private String buildWhere() {
 		StringBuilder sql = new StringBuilder();
 		if (Strings.isNotBlank(startingWith)) {
 			sql.append(sql.length()>0 ? " and " : " where ");
-			sql.append(" letter=:startingWith"); 
+			sql.append(" letter=:startingWith");
 		}
 		if (startingWithSymbol) {
 			sql.append(sql.length()>0 ? " and " : " where ");
@@ -98,7 +98,7 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 			} else {
 				sql.append(" id=-1");
 			}
-			
+
 		}
 		if (ids!=null && !ids.isEmpty()) {
 			sql.append(sql.length()>0 ? " and " : " where ");
@@ -120,7 +120,7 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 		}
 		return sql.toString();
 	}
-	
+
 	public void setParameters(NativeQuery<?> sql) {
 		if (Strings.isNotBlank(startingWith)) {
 			sql.setParameter("startingWith", startingWith, StandardBasicTypes.STRING);
@@ -138,17 +138,17 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 			sql.setParameterList("ids", ids, StandardBasicTypes.LONG);
 		}
 	}
-		
+
 	public WordListPerspectiveViewQuery orderByCreated() {
 		this.ordering = Ordering.created;
 		return this;
 	}
-	
+
 	public WordListPerspectiveViewQuery orderByText() {
 		this.ordering = Ordering.text;
 		return this;
 	}
-	
+
 	public WordListPerspectiveViewQuery orderById() {
 		this.ordering = Ordering.id;
 		return this;
@@ -163,7 +163,7 @@ public class WordListPerspectiveViewQuery implements CustomQuery<WordListPerspec
 		this.startingWithSymbol = true;
 		return this;
 	}
-	
+
 	public WordListPerspectiveViewQuery withWords(List<String> str) {
 		this.words = str;
 		return this;

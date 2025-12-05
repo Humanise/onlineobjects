@@ -17,7 +17,7 @@ import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
 import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
-	
+
 	private boolean interrupted;
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -35,7 +35,7 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 		} catch (EndUserException e) {
 			status.error("Error while clearing index", e);
 		}*/
-		
+
 		//Query.after(Word.class).withCustomProperty("common.source", Comparison.LIKE, "http://www.wordnet.dk/%");
 		Operator operator = modelService.newAdminOperator();
 		WordListPerspectiveQuery query = new WordListPerspectiveQuery().orderByUpdated();
@@ -66,7 +66,7 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 		JobStatus status = getStatus(context);
 		WordIndexer wordIndexer = schedulingSupportFacade.getWordIndexer();
 		ModelService modelService = schedulingSupportFacade.getModelService();
-		
+
 		try {
 			status.log("Clearing index");
 			wordIndexer.clear();
@@ -85,7 +85,7 @@ public class WordIndexJob extends ServiceBackedJob implements InterruptableJob {
 				status.log("Interrupting indexing");
 				break;
 			}
-			
+
 			int newPercent = Math.round(((float)num)/(float)count*100);
 			if (newPercent>percent) {
 				percent = newPercent;

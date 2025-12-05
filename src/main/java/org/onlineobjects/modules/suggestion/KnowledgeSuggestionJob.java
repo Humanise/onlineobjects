@@ -11,13 +11,13 @@ import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 @DisallowConcurrentExecution
 public class KnowledgeSuggestionJob extends ServiceBackedJob implements InterruptableJob {
-	
+
 	private JobStatus status;
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		status = getStatus(context);
 		status.setProgress(0);
-		schedulingSupportFacade.getKnowledgeSuggester().beat();		
+		schedulingSupportFacade.getKnowledgeSuggester().beat();
 		status.setProgress(1);
 	}
 

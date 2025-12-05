@@ -5,13 +5,13 @@ import java.io.IOException;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.AbstractCommandLineInterface;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.StorageService;
 
 public class ImageTransformationService extends AbstractCommandLineInterface {
-	
+
 	private StorageService storageService;
 	private ConfigurationService configurationService;
 
@@ -32,7 +32,7 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		}
 		return converted;
 	}
-	
+
 	public void transform(File original, ImageTransformation transform, File converted) throws EndUserException {
 		if (!original.isFile()) {
 			throw new NotFoundException("The file does not exist");
@@ -88,7 +88,7 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 		}
 		return sb.toString();
 	}
-	
+
 	private String buildImageMagick(File original, ImageTransformation transform, File converted) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(configurationService.getImageMagickPath());
@@ -130,15 +130,15 @@ public class ImageTransformationService extends AbstractCommandLineInterface {
 			sb.append(" -flip");
 		}
 		sb.append(" ").append(converted.getAbsolutePath());
-		
-		
+
+
 		return sb.toString();
 	}
-		
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

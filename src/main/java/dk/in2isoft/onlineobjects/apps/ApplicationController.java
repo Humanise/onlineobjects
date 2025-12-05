@@ -21,42 +21,42 @@ public abstract class ApplicationController extends AbstractController implement
 
 	protected EventService eventService;
 	protected ModelService modelService;
-	
+
 	public ApplicationController(String name) {
 		super(name);
 	}
-	
+
 
 	public void afterPropertiesSet() throws Exception {
-		
+
 	}
-	
+
 	public abstract List<Locale> getLocales();
 
-	
+
 	public String getMountPoint() {
 		return getName();
 	}
-	
+
 	public ApplicationSession createToolSession() {
 		return new ApplicationSession();
 	}
 
 	public void entityWasCreated(Entity entity) {
-		
+
 	}
-	
+
 	public void entityWasDeleted(Entity entity) {
-		
+
 	}
-	
+
 	public void entityWasUpdated(Entity entity) {
-		
+
 	}
-	
+
 	public void relationWasCreated(Relation relation) {
 	}
-	
+
 	public void relationWasDeleted(Relation relation) {
 	}
 
@@ -80,7 +80,7 @@ public abstract class ApplicationController extends AbstractController implement
 			return false;
 		}
 	}
-	
+
 	@Override
 	protected String getDimension() {
 		return "apps";
@@ -89,7 +89,7 @@ public abstract class ApplicationController extends AbstractController implement
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

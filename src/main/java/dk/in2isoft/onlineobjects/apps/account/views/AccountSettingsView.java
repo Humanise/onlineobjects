@@ -21,7 +21,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class AccountSettingsView extends AbstractView {
 
 	private ModelService modelService;
-	
+
 	private Person person;
 
 	private User user;
@@ -29,9 +29,9 @@ public class AccountSettingsView extends AbstractView {
 	private EmailAddress email;
 
 	private String primaryEmail;
-	
+
 	private boolean allowed;
-	
+
 	private String language;
 
 	private MemberService memberService;
@@ -45,7 +45,7 @@ public class AccountSettingsView extends AbstractView {
 	private Date agreementAcceptanceTime;
 
 	private String fullName;
-	
+
 	public void before(Request request) throws Exception {
 		Messages msg = new Messages(AccountController.class);
 		user = modelService.getUser(request);
@@ -63,7 +63,7 @@ public class AccountSettingsView extends AbstractView {
 		} else {
 			fullName = msg.get("no_name", locale);
 		}
-		
+
 		email = modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, request);
 		Date emailConfirmationTime = null;
 		if (email!=null) {
@@ -76,19 +76,19 @@ public class AccountSettingsView extends AbstractView {
 		this.hasAcceptedTerms = memberService.hasAcceptedTerms(user, user);
 		agreementAcceptanceTime = user.getPropertyDateValue(Property.KEY_TERMS_ACCEPTANCE_TIME);
 	}
-	
+
 	public boolean isHasAcceptedTerms() {
 		return hasAcceptedTerms;
 	}
-	
+
 	public String getSecret() {
 		return user.getPropertyValue(Property.KEY_AUTHENTICATION_SECRET);
 	}
-	
+
 	public boolean isAllowed() {
 		return allowed;
 	}
-	
+
 	public String getUsername() {
 		return user.getUsername();
 	}
@@ -112,11 +112,11 @@ public class AccountSettingsView extends AbstractView {
 	public String getPrimaryEmail() {
 		return primaryEmail;
 	}
-	
+
 	public boolean isEmailConfirmed() {
 		return emailConfirmed;
 	}
-	
+
 	public Object getEmailConfirmationDate() {
 		return emailConfirmationDate;
 	}
@@ -124,19 +124,19 @@ public class AccountSettingsView extends AbstractView {
 	public String getLanguage() {
 		return language;
 	}
-	
+
 	public Date getAgreementAcceptanceTime() {
 		return agreementAcceptanceTime;
 	}
-	
+
 	// Wiring...
 
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 }

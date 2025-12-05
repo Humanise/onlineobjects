@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.util.remote;
 
 public class RemoteImageGallery {
-	
+
 	private String url;
 	private String title;
 

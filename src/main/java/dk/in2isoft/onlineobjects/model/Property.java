@@ -5,22 +5,22 @@ import java.util.Date;
 public class Property {
 
 	public static final String KEY_AUTHENTICATION_SECRET = "authentication.secret";
-	
+
 	public static final String KEY_COMMON_TAG = "common.tag";
 	public static final String KEY_COMMON_PREFERRED = "common.preferred";
 	public static final String KEY_COMMON_DESCRIPTION = "common.description";
-	
+
 	public static final String KEY_DATA_SOURCE = "data.source";
 	public static final String KEY_DATA_VALIDATED = "data.validated";
-	
+
 	public static final String KEY_SEMANTICS_GLOSSARY = "semantics.glossary";
 	public static final String KEY_SEMANTICS_EXAMPLE = "semantics.example";
-	
+
 	public static final String KEY_STYLE_MARGIN_TOP = "style.margin.top";
 	public static final String KEY_STYLE_MARGIN_BOTTOM = "style.margin.bottom";
 	public static final String KEY_STYLE_MARGIN_LEFT = "style.margin.left";
 	public static final String KEY_STYLE_MARGIN_RIGHT = "style.margin.right";
-	
+
 	public static final String KEY_HUMAN_INTEREST = "human.interest";
 	public static final String KEY_HUMAN_FAVORITE_MUSIC = "human.favorite.music";
 	public static final String KEY_HUMAN_FAVORITE_MUSIC_TRACK = "human.favorite.music.track";
@@ -28,7 +28,7 @@ public class Property {
 	public static final String KEY_HUMAN_FAVORITE_TELEVISIONPROGRAM = "human.favorite.televisionprogram";
 	public static final String KEY_HUMAN_FAVORITE_BOOK = "human.favorite.book";
 	public static final String KEY_HUMAN_RESUME = "human.resume";
-	
+
 	public static final String KEY_PHOTO_CAMERA_MODEL = "photo.camera.model";
 	public static final String KEY_PHOTO_CAMERA_MAKE = "photo.camera.make";
 	public static final String KEY_PHOTO_TAKEN = "photo.taken";
@@ -76,7 +76,7 @@ public class Property {
 		this.value = value;
 		this.key = key;
 	}
-	
+
 	public Property(String key, Date value) {
 		super();
 		this.dateValue = value;
@@ -141,5 +141,5 @@ public class Property {
 	public Date getDateValue() {
 		return dateValue;
 	}
-	
+
 }

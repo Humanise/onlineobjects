@@ -14,35 +14,35 @@ public class Relation extends Item {
 	public static final String ANSWERS = "information.answers"; /* A answers B */
 	public static final String KIND_INFORMATION_ABOUT = "information.about"; /* A is about B */
 
-	public static final String SUPPORTS = "information.supports"; /* A is supported by B - for, validates*/ 
+	public static final String SUPPORTS = "information.supports"; /* A is supported by B - for, validates*/
 	public static final String CONTRADTICS = "information.contradicts"; /* A is contradicted by B - */
-	
+
 	public static final String KIND_STRUCTURE_CONTAINS = "structure.contains";
 	public static final String KIND_STRUCTURE_SPECIALIZATION = "structure.specialization";
-	
+
 	public static final String KIND_SEMANTICS_ANALOGOUS = "semantics.analogous";
 	public static final String KIND_SEMANTICS_EQUIVALENT = "semantics.equivalent";
 	public static final String KIND_SEMANTICS_SYNONYMOUS = "semantics.synonymous";
 	public static final String KIND_SEMANTICS_ANTONYMOUS = "semantics.antonymous";
 	public static final String KIND_SEMANTICS_MORPHEME = "semantics.morpheme";
 	public static final String KIND_SEMANTICS_CONTAINS = "semantics.holonym"; /* A contains B */
-	public static final String KIND_SEMANTICS_GENRALTIZATION = "semantics.hypernym"; /* A has the hypernym / superordinate / generalization B */ 
+	public static final String KIND_SEMANTICS_GENRALTIZATION = "semantics.hypernym"; /* A has the hypernym / superordinate / generalization B */
 	public static final String KIND_SEMANTICS_DISCIPLINE = "semantics.discipline"; /* A is part of the discipline B */
 
 	public static final String KIND_WEB_CONTENT = "web.content";
 	public static final String KIND_WEB_PRIMARY = "web.primary";
-	
+
 	public static final String KIND_SYSTEM_USER_SELF = "system.user.self";
 	public static final String KIND_SYSTEM_USER_EMAIL = "system.user.email";
 	public static final String KIND_SYSTEM_USER_IMAGE = "system.user.image";
 	public static final String KIND_SYSTEM_USER_FAVORITES = "system.user.favorites";
 	public static final String KIND_SYSTEM_USER_INBOX = "personal.inbox"; // TODO Rename to system.user.inbox
-	
+
 	public static final String KIND_INIVATION_INVITER = "invitation.inviter";
 	public static final String KIND_INIVATION_INVITED = "invitation.invited";
-	
+
 	public static final String KIND_SOCIAL_FRIEND = "social.friend";
-	
+
 	public static final String KIND_FAMILY_PARENT = "family.parent";
 	public static final String KIND_FAMILY_PARENT_MOTHER = "family.parent.mother";
 	public static final String KIND_FAMILY_PARENT_FATHER = "family.parent.father";
@@ -53,13 +53,13 @@ public class Relation extends Item {
 	public static final String KIND_EVENT_ATTENDEE = "event.attendee";
 	public static final String KIND_EVENT_ORGANIZER = "event.organizer";
 
-	
+
 	private Entity from; /* super */
 
 	private Entity to; /* sub */
 
 	private String kind;
-	
+
 	private float position;
 
 	private Double strength;
@@ -131,5 +131,5 @@ public class Relation extends Item {
 		this.kind = kind.toString();
 	}
 
-	
+
 }

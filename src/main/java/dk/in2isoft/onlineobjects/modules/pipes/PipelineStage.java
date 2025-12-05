@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface PipelineStage {
-	
+
 	public void run();
 
 	public void receiveFile(File file);
@@ -17,8 +17,8 @@ public interface PipelineStage {
 	public void receiveMappedLineKeys(String[] keys) throws IOException;
 
 	public void setContext(PipelineContext pipelineContext);
-	
+
 	public void receiveResultSet(ResultSet rs) throws SQLException;
-	
+
 	public void cleanUp();
 }

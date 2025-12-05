@@ -5,7 +5,7 @@ public class SearchResult {
 	private String title;
 	private long id;
 	private String type;
-	
+
 	public SearchResult(String title, String type, long id) {
 		super();
 		this.title = title;

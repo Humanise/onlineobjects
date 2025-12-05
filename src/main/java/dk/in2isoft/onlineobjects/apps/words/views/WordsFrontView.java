@@ -11,14 +11,14 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
 public class WordsFrontView extends AbstractView {
-	
+
 	private List<WordListPerspective> latestWords;
 	private List<Option> alphabeth;
 	private List<Option> languages;
 	private List<Option> categories;
-	
+
 	private WordsInterfaceHelper wordsInterfaceHelper;
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		Locale locale = request.getLocale();
@@ -26,27 +26,27 @@ public class WordsFrontView extends AbstractView {
 		languages = wordsInterfaceHelper.getLanguageOptions(locale);
 		categories = wordsInterfaceHelper.getCategoryOptions(locale);
 	}
-	
+
 	public List<WordListPerspective> getLatestWords() throws ModelException {
 		return latestWords;
 	}
-	
+
 	public List<Option> getAlphabeth() {
 		return alphabeth;
 	}
-	
+
 	public List<Option> getLanguages() {
 		return languages;
 	}
-	
+
 	public List<Option> getCategories() {
 		return categories;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {
 		this.wordsInterfaceHelper = wordsInterfaceHelper;
 	}
-	
+
 }

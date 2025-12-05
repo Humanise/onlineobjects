@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 public abstract class AnyModelChangeListener implements ModelEventListener {
 
 	private Collection<Class<? extends Item>> types = Sets.newHashSet();
-	
+
 	public AnyModelChangeListener() {
 	}
 
@@ -24,7 +24,7 @@ public abstract class AnyModelChangeListener implements ModelEventListener {
 			this.types.add(type);
 		}
 	}
-	
+
 	public AnyModelChangeListener addType(Class<? extends Item> type) {
 		this.types.add(type);
 		return this;

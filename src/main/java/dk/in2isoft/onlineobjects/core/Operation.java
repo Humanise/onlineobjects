@@ -13,7 +13,7 @@ public class Operation {
 
 	private Session session;
 	private List<Pair<ModelEventType, Object>> events;
-	
+
 	public Operation(Session session) {
 		this.session = session;
 		this.events = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Operation {
 	}
 
 	public void addDeleteEvent(Item item) {
-		events.add(Pair.of(ModelEventType.delete, item));		
+		events.add(Pair.of(ModelEventType.delete, item));
 	}
 }
 

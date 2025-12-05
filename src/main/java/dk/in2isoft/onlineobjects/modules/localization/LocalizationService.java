@@ -20,7 +20,7 @@ public class LocalizationService {
 	    .appendSuffix(" second", " seconds")
 	    .toFormatter();
 	}
-	
+
 	public String formatMilis(long milis) {
 		Period period = new Period(milis).normalizedStandard();
 		return daysHoursMinutes.print(period);

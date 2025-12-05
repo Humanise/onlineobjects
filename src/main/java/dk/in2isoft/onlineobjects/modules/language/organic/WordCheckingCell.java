@@ -8,9 +8,9 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.organic.Cell;
 
 public class WordCheckingCell extends Cell {
-	
+
 	private String checkedScent = "word.checked";
-	
+
 	private ModelService modelService;
 
 	@Override

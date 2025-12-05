@@ -41,7 +41,7 @@ import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
 public class DOM {
-	
+
 	private static final Logger log = LogManager.getLogger(DOM.class);
 
 	public static List<Element> getAncestors(Node node) {
@@ -64,7 +64,7 @@ public class DOM {
 			travel(child, consumer);
 		}
 	}
-	
+
 	public static void getTextStart(Node node, StringBuilder sb, int length) {
 		if (node != null) {
 			if (node instanceof Text) {
@@ -87,7 +87,7 @@ public class DOM {
 		getTextStart(node, sb, length);
 		return sb.toString();
 	}
-	
+
 	public static String getText(Node node) {
 		String text = "";
 		if (node != null) {
@@ -229,9 +229,9 @@ public class DOM {
 		} catch (XMLException e) {
 			log.warn("Unable to convert DOM to XOM", e);
 			return null;
-		} 
+		}
 	}
-	
+
 	public static org.jdom2.Document toJDOM(Document domDocument) {
 		DOMBuilder jdomBuilder = new DOMBuilder();
         return jdomBuilder.build(domDocument);
@@ -272,7 +272,7 @@ public class DOM {
 		org.jsoup.nodes.Document document = Jsoup.parse(wild);
 		return new dk.in2isoft.commons.xml.JsoupUtils().toXOM(document);
 	}
-	
+
 	public static nu.xom.Document parseWildHhtml(File wild, String encoding) {
 		try {
 			org.jsoup.nodes.Document document = Jsoup.parse(wild, encoding);
@@ -290,7 +290,7 @@ public class DOM {
 			Builder bob = new Builder(tagsoup);
 			return bob.build(reader);
 		} catch (ParsingException e) {
-			
+
 		} catch (IOException e) {
 
 		} catch (SAXNotRecognizedException e) {
@@ -375,7 +375,7 @@ public class DOM {
 	}
 
 	public static List<Element> getAllPrevious(Element element) {
-		List<Element> found = new ArrayList<>(); 
+		List<Element> found = new ArrayList<>();
 		ParentNode parent = element.getParent();
 		int count = parent.getChildCount();
 		for (int i = 0; i < count; i++) {

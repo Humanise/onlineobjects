@@ -24,9 +24,9 @@ public class FileService {
 
 	private MimeUtil2 mimeUtil;
 	private Map<String,String> mimeTypeToFileName;
-	
+
 	private ConfigurationService config;
-	
+
 	public FileService() {
 		mimeUtil = new MimeUtil2();
 		mimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.ExtensionMimeDetector");
@@ -40,17 +40,17 @@ public class FileService {
 	public File getUploadDir() {
 		return config.getTempDir();
 	}
-	
+
 	public String getMimeType(File file) {
 		Collection<?> types = mimeUtil.getMimeTypes(file);
 		MimeType mimeType = MimeUtil2.getMostSpecificMimeType(types);
 		return mimeType.toString();
 	}
-	
+
 	public String getExtensionForMimeType(String mimeType) {
 		return mimeTypeToFileName.get(mimeType);
 	}
-	
+
 	public String getSafeFileName(String name, String extension) {
 		StringBuilder sb = new StringBuilder();
 		if (StringUtils.isBlank(name)) {
@@ -63,11 +63,11 @@ public class FileService {
 		}
 		return sb.toString();
 	}
-	
+
 	public String cleanFileName(String fileName) {
 		return Files.cleanFileName(fileName);
 	}
-	
+
 	public static String readTextUTF8(File file) throws IOException {
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
 		Reader reader = new InputStreamReader(is, "UTF-8");
@@ -75,7 +75,7 @@ public class FileService {
 		IOUtils.copy(reader, writer);
 		return writer.getBuffer().toString();
 	}
-	
+
 	public void setConfig(ConfigurationService config) {
 		this.config = config;
 	}

@@ -6,7 +6,7 @@ import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.modules.knowledge.ApiPerspective;
 
 public class APISearchResult extends SearchResult<KnowledgeListRow> implements ApiPerspective {
-	
+
 	private long version;
 
 	public APISearchResult(List<KnowledgeListRow> result, int totalCount) {
@@ -22,7 +22,7 @@ public class APISearchResult extends SearchResult<KnowledgeListRow> implements A
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}

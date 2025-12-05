@@ -12,7 +12,7 @@ public abstract class PipelineStageAdapter implements PipelineStage {
 
 	public PipelineStageAdapter() {
 	}
-	
+
 	public void setContext(PipelineContext context) {
 		this.context = context;
 	}
@@ -24,7 +24,7 @@ public abstract class PipelineStageAdapter implements PipelineStage {
 	public void receiveMappedLine(Map<String, String> map) throws IOException {
 		throw new UnsupportedOperationException("This stage does not support mapped lines");
 	}
-	
+
 	public void receiveResultSet(ResultSet rs) throws SQLException {
 		throw new UnsupportedOperationException("This stage does not support result sets");
 	}
@@ -38,7 +38,7 @@ public abstract class PipelineStageAdapter implements PipelineStage {
 	}
 
 	public void cleanUp() {
-			
+
 	}
-	
+
 }

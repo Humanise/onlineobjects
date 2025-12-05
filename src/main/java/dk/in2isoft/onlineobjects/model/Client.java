@@ -5,7 +5,7 @@ public class Client extends Entity {
 	public static String TYPE = Entity.TYPE+"/Client";
 	public static String NAMESPACE = Entity.NAMESPACE+"Client/";
 	private static String ICON = "common/object";
-	
+
 	private String UUID;
 
 	public Client() {
@@ -28,5 +28,5 @@ public class Client extends Entity {
 		UUID = uUID;
 	}
 
-	
+
 }

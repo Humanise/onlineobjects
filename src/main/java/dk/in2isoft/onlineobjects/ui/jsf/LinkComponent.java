@@ -23,7 +23,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class LinkComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.link";
-	
+
 	private String variant;
 	private String title;
 	private String href;
@@ -35,11 +35,11 @@ public class LinkComponent extends AbstractComponent {
 	private String name;
 	private String app;
 	private boolean focusable = true;
-	
+
 	public LinkComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public Object[] saveState() {
 		return new Object[] { variant, core, href, styleClass, onclick, title, plain, name, app, focusable, subtle };
@@ -82,7 +82,7 @@ public class LinkComponent extends AbstractComponent {
 		}
 		else if (StringUtils.isNotBlank(id)) {
 			writer.withId(id);
-		} 
+		}
 		if (StringUtils.isNotBlank(onclick)) {
 			writer.withAttribute("onclick", onclick);
 		}
@@ -100,7 +100,7 @@ public class LinkComponent extends AbstractComponent {
 			writer.withAttribute("tabindex", "-1");
 		}
 	}
-	
+
 	public static String buildUrl(String href,String app,boolean core) {
 		if (href.startsWith("http") || href.startsWith("#") || href.startsWith("javascript:")) {
 			return href;
@@ -122,7 +122,7 @@ public class LinkComponent extends AbstractComponent {
 			return url.toString();
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endA();
@@ -165,7 +165,7 @@ public class LinkComponent extends AbstractComponent {
 	public String getHref() {
 		return href;
 	}
-	
+
 	public String getHref(FacesContext context) {
 		return getExpression("href", href, context);
 	}
@@ -181,11 +181,11 @@ public class LinkComponent extends AbstractComponent {
 	public String getStyleClass(FacesContext context) {
 		return getExpression("styleClass",styleClass, context);
 	}
-	
+
 	public void setOnclick(String onclick) {
 		this.onclick = onclick;
 	}
-	
+
 	public String getOnclick() {
 		return onclick;
 	}
@@ -193,11 +193,11 @@ public class LinkComponent extends AbstractComponent {
 	public String getOnclick(FacesContext context) {
 		return getExpression("onclick", onclick, context);
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -213,11 +213,11 @@ public class LinkComponent extends AbstractComponent {
 	public void setPlain(boolean plain) {
 		this.plain = plain;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

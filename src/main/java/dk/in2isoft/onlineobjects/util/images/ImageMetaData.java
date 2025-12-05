@@ -16,19 +16,19 @@ public class ImageMetaData {
 	private Integer rotation;
 	private Boolean flippedVertically;
 	private Boolean flippedHorizontally;
-	
+
 	public void setDateTime(Date dateTime) {
 		this.dateTime = dateTime;
 	}
-	
+
 	public Date getDateTime() {
 		return dateTime;
 	}
-	
+
 	public void setCameraMake(String make) {
 		this.cameraMake = make;
 	}
-	
+
 	public String getCameraMake() {
 		return cameraMake;
 	}

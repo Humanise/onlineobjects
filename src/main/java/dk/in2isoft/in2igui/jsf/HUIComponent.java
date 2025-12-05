@@ -10,7 +10,7 @@ import dk.in2isoft.commons.jsf.Dependencies;
 @Dependencies(
 	js = { "/hui/js/hui.js", "/hui/js/ui.js", "/hui/js/Component.js"},
 	uses = {OverlayComponent.class, ButtonComponent.class}
-) 
+)
 public class HUIComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.ui";

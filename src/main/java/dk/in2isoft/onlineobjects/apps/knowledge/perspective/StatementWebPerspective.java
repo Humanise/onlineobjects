@@ -29,7 +29,7 @@ public class StatementWebPerspective implements KnowledgeWebPerspective, Categor
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
@@ -81,11 +81,11 @@ public class StatementWebPerspective implements KnowledgeWebPerspective, Categor
 	public void setWords(List<Option> words) {
 		this.words = words;
 	}
-	
+
 	public List<Option> getTags() {
 		return tags;
 	}
-	
+
 	public void setTags(List<Option> tags) {
 		this.tags = tags;
 	}

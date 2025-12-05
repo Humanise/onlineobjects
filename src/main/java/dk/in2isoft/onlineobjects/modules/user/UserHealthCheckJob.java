@@ -1,10 +1,10 @@
 package dk.in2isoft.onlineobjects.modules.user;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
@@ -16,7 +16,7 @@ public class UserHealthCheckJob extends ServiceBackedJob {
 	private static final Logger log = LogManager.getLogger(UserHealthCheckJob.class);
 	public static final String NAME = "user-health-check";
 	public static final String GROUP = "core";
-	
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap map = context.getMergedJobDataMap();

@@ -5,8 +5,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.onlineobjects.core.ModelService;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.modules.images.ImageImporter;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -17,7 +17,7 @@ public class ImageReplacer extends ImageImporter {
 	public ImageReplacer(ModelService modelService,ImageService imageService) {
 		super(modelService, imageService);
 	}
-	
+
 	@Override
 	protected Image getImage(String fileName, Map<String, String> parameters, Request request)
 			throws EndUserException {
@@ -31,7 +31,7 @@ public class ImageReplacer extends ImageImporter {
 		imageService.clearCache(image);
 		return image;
 	}
-	
+
 	protected void postProcessImage(Image image, Map<String, String> parameters, Request request)
 			throws EndUserException {
 		imageService.clearCache(image);

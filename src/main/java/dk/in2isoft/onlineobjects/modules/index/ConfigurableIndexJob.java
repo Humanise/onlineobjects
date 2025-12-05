@@ -21,13 +21,13 @@ import dk.in2isoft.onlineobjects.modules.scheduling.JobBase;
 import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
 
 public class ConfigurableIndexJob<E extends Entity> extends JobBase implements InterruptableJob {
-	
+
 	private boolean interrupted;
-	
+
 	private ConfigurableIndexer<E> configurableIndexer;
-	
+
 	private ModelService modelService;
-	
+
 	private SecurityService securityService;
 
 	public final void execute(JobExecutionContext context) throws JobExecutionException {
@@ -61,7 +61,7 @@ public class ConfigurableIndexJob<E extends Entity> extends JobBase implements I
 				status.log("Interrupting indexing");
 				break;
 			}
-			
+
 			int newPercent = Math.round(((float)num)/(float)count*100);
 			if (newPercent>percent) {
 				percent = newPercent;
@@ -86,7 +86,7 @@ public class ConfigurableIndexJob<E extends Entity> extends JobBase implements I
 	public void interrupt() throws UnableToInterruptJobException {
 		interrupted = true;
 	}
-	
+
 	public void setConfigurableIndexer(ConfigurableIndexer<E> configurableIndexer) {
 		this.configurableIndexer = configurableIndexer;
 	}
@@ -95,7 +95,7 @@ public class ConfigurableIndexJob<E extends Entity> extends JobBase implements I
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	@Autowired
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;

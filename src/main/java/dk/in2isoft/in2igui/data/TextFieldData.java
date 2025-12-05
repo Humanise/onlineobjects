@@ -3,7 +3,7 @@ package dk.in2isoft.in2igui.data;
 public class TextFieldData extends WidgetData {
 
 	private String value;
-	
+
 	public TextFieldData(String name) {
 		super(name);
 	}

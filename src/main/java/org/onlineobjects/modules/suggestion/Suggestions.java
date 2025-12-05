@@ -5,7 +5,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Statement;
 
 public class Suggestions {
-	
+
 	private KnowledgeSuggester knowledgeSuggester;
 
 	public SuggestionsCategory suggestionsForStatement(Statement statement, Operator operator) throws EndUserException {

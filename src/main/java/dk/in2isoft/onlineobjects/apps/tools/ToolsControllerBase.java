@@ -17,7 +17,7 @@ public abstract class ToolsControllerBase extends ApplicationController {
 	protected InvitationService invitationService;
 	protected PersonService personService;
 	protected SecurityService securityService;
-	
+
 	public ToolsControllerBase() {
 		super("tools");
 	}
@@ -34,23 +34,23 @@ public abstract class ToolsControllerBase extends ApplicationController {
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
-	
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
-	
+
 	public void setInformationService(InformationService informationService) {
 		this.informationService = informationService;
 	}
-	
+
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-	
+
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

@@ -28,26 +28,26 @@ public class LocationInputComponent extends AbstractComponent {
 			name,key
 		};
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
 		key = (String) state[1];
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startSpan("hui_locationinput").withId(getClientId());
-		
+
 		out.startSpan("hui_locationinput_latitude").startSpan().startInput().endInput().endSpan().endSpan();
-		
+
 		out.startSpan("hui_locationinput_longitude").startSpan().startInput().endInput().endSpan().endSpan();
-		
+
 		out.startVoidA("hui_locationinput_picker").endA();
 		out.endSpan();
-		
+
 		LocationData location = getBinding("value");
-		
+
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.LocationInput").property("element", getClientId());
 		if (name!=null) {
@@ -79,5 +79,5 @@ public class LocationInputComponent extends AbstractComponent {
 	public String getKey() {
 		return key;
 	}
-	
+
 }

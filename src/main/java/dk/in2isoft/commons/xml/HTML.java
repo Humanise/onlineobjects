@@ -14,7 +14,7 @@ public class HTML {
 			"br", "cite", "code", "data", "del", "dfn", "em", "i", "ins", "kbd", "mark", "q",
 			"rp", "rt", "rtc", "ruby", "s", "samp", "small", "span", "strong",
 			"sub", "sup", "time", "u", "var", "wbr");
-	
+
 	public static String escape(String str) {
 		str = Strings.stripNonValidXMLCharacters(str);
 		return StringEscapeUtils.escapeXml(str);

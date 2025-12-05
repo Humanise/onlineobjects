@@ -23,7 +23,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 	public static final String TYPE = "hui.include";
 
 	private String path;
-	
+
 	public IncludeComponent() {
 		super(TYPE);
 	}
@@ -39,7 +39,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 	}
 
 	private String html;
-	
+
 	private String getHTML() {
 		if (html != null) return html;
 		File file = getFile();
@@ -47,7 +47,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		try {
 			html = hui.render(file, getRequest().getRequest());
 		} catch (IOException e) {
-			
+
 		}
 		return html;
 	}
@@ -59,14 +59,14 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		}
 		return _head;
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String body = extractTag("body", getHTML());
 		body = filterScripts(body,out.getScriptWriter());
 		out.write(body);
 	}
-	
+
 	private List<String> extractCSS(String html) {
 		List<String> css = new ArrayList<>();
 		if (html != null) {
@@ -81,7 +81,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		}
 		return css;
 	}
-	
+
 	private List<String> extractJS(String html) {
 		List<String> list = new ArrayList<>();
 		if (html != null) {
@@ -96,7 +96,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		}
 		return list;
 	}
-	
+
 	private String filterScripts(String html, dk.in2isoft.commons.jsf.ScriptWriter scriptWriter) throws IOException {
 		if (html == null) return html;
 		int pos = 0;
@@ -125,7 +125,7 @@ public class IncludeComponent extends AbstractComponent implements DependableCom
 		File file = new File(filePath.toString());
 		return file;
 	}
-	
+
 	private String extractTag(String tag, String html) {
 		Pattern p = Pattern.compile("<"+tag+"[^>]*>");
 		Matcher matcher = p.matcher(html);

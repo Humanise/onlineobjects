@@ -7,12 +7,12 @@ import dk.in2isoft.onlineobjects.core.ItemQuery;
 import dk.in2isoft.onlineobjects.model.LogEntry;
 
 public class LogQuery implements ItemQuery<LogEntry> {
-	
+
 	private int page = 0;
 	private int size = 100;
-	
+
 	private String getHQL(boolean count) {
-		return (count ? "select count(obj.id)" : "select obj") + " from " + LogEntry.class.getCanonicalName() + " as obj" + (count ? "" : " order by obj.id desc"); 
+		return (count ? "select count(obj.id)" : "select obj") + " from " + LogEntry.class.getCanonicalName() + " as obj" + (count ? "" : " order by obj.id desc");
 	}
 
 
@@ -35,7 +35,7 @@ public class LogQuery implements ItemQuery<LogEntry> {
 		this.size = size;
 		return this;
 	}
-	
+
 	public LogQuery withPage(int page) {
 		this.page = page;
 		return this;

@@ -13,32 +13,32 @@ public class AccountPasswordView extends AbstractView {
 	private User user;
 
 	private String key;
-	
+
 	private boolean found;
-	
+
 	public void before(Request request) throws Exception {
-		
+
 		key = request.getString("key");
 		if (Strings.isNotBlank(key)) {
 			user = passwordRecoveryService.getUserByRecoveryKey(key, request);
 			found = user!=null;
 		}
 	}
-	
+
 	public boolean isFound() {
 		return found;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public String getKey() {
 		return key;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}

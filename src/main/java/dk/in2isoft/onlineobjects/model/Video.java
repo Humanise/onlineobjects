@@ -7,12 +7,12 @@ public class Video extends Entity {
 	public static final String PROPERTY_DESCRIPTION = "item.enity.video.description";
 	public static String TYPE = Entity.TYPE+"/Video";
 	public static String NAMESPACE = Entity.NAMESPACE+"Video/";
-	
+
 	private long fileSize;
 	private String contentType;
 	private int width;
 	private int height;
-	
+
 	public Video() {
 		super();
 	}
@@ -20,7 +20,7 @@ public class Video extends Entity {
 	public String getType() {
 		return TYPE;
 	}
-	
+
 	@Override
 	public String getNamespace() {
 		return NAMESPACE;
@@ -29,7 +29,7 @@ public class Video extends Entity {
 	public String getIcon() {
 		return "common/object";
 	}
-	
+
 	public String getContentType() {
 		return contentType;
 	}

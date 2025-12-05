@@ -21,12 +21,12 @@ public class Danish extends Language {
 	public boolean isWord(String word) {
 		return !NumberUtils.isNumber(word);
 	}
-	
+
 	@Override
 	public String stem(String word) {
 		return stemmer.stem(word);
 	}
-	
+
 	@Override
 	public boolean isCommonWord(String word) {
 		return stopWords.contains(word) || word.length()<2;

@@ -5,7 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class Numbers {
-	
+
 	public static String formatDecimal(Number number, int deciamls) {
 		DecimalFormat format = new DecimalFormat();
 		format.setMaximumFractionDigits(deciamls);

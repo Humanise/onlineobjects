@@ -24,7 +24,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class MapComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.map";
-	
+
 	private String variant;
 	private String name;
 	private int height = 200;
@@ -34,7 +34,7 @@ public class MapComponent extends AbstractComponent {
 	public MapComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		variant = (String) state[0];
@@ -48,7 +48,7 @@ public class MapComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {variant,name,height,dynamic,editable};
 	}
-	
+
 	public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
 		if (dynamic && event instanceof PostAddToViewEvent) {
 	        FacesContext context = FacesContext.getCurrentInstance();
@@ -57,7 +57,7 @@ public class MapComponent extends AbstractComponent {
 			context.getViewRoot().addComponentResource(context, componentResource,"body");
 	    }
 	    super.processEvent(event);
-	};
+	}
 
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
@@ -79,7 +79,7 @@ public class MapComponent extends AbstractComponent {
 			out.startVoidA("oo_map_add").text(msg.get("add_location", context.getViewRoot().getLocale())).endA();
 		}
 		out.endDiv();
-		
+
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("oo.Map").property("element", getClientId());
 		js.comma().property("dynamic", dynamic);
@@ -92,9 +92,9 @@ public class MapComponent extends AbstractComponent {
 			js.write(",location:{latitude:"+point.getLatitude()+",longitude:"+point.getLongitude()+"}");
 		}
 		js.endNewObject().endScript();
-		
+
 	}
-	
+
 	private String buildInfo(MapPoint point) {
 		StringBuilder sb = new StringBuilder();
 		if (point!=null) {

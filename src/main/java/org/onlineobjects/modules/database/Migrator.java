@@ -10,7 +10,7 @@ import liquibase.integration.spring.SpringLiquibase;
 public class Migrator {
 
 	private static Logger log = LogManager.getLogger(Migrator.class);
-	
+
 	private ModelService modelService;
 
 	public void migrate() {
@@ -23,7 +23,7 @@ public class Migrator {
 			log.error("Unable to migrate database", e);
 		}
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

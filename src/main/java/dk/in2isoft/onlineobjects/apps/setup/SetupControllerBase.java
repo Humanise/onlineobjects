@@ -41,7 +41,7 @@ public abstract class SetupControllerBase extends ApplicationController {
 	public boolean isAllowed(Request request) {
 		return securityService.isAdminUser(request.getSession());
 	}
-	
+
 	@Override
 	public boolean askForUserChange(Request request) {
 		return request.isLocalRoot();
@@ -62,27 +62,27 @@ public abstract class SetupControllerBase extends ApplicationController {
 	public void setLocalizationService(LocalizationService localizationService) {
 		this.localizationService = localizationService;
 	}
-	
+
 	public void setOnlinePublisherService(OnlinePublisherService onlinePublisherService) {
 		this.onlinePublisherService = onlinePublisherService;
 	}
-	
+
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
-	
+
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}
-	
+
 	public void setWordsLoadManager(LoadManager loadManager) {
 		this.wordsLoadManager = loadManager;
 	}

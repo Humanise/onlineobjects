@@ -17,10 +17,10 @@ import org.apache.logging.log4j.Logger;
 public class VCardParser {
 
 	private static Logger log = LogManager.getLogger(VCardParser.class);
-	
+
 	private VCard latestCard;
 	List<VCard> cards = new ArrayList<VCard>();
-	
+
 	public VCardParser() {
 		super();
 	}
@@ -42,7 +42,7 @@ public class VCardParser {
 		log.debug("Cardnum="+cards.size());
 		return cards;
 	}
-	
+
 	private void parseLine(String line) {
 		ParsedLine parsed = new ParsedLine(line);
 		if (parsed.getName().equals("BEGIN")) {
@@ -74,13 +74,13 @@ public class VCardParser {
 			latestCard.getPhones().add(new VCardPhone(parsed.getData()[0]));
 		}
 	}
-	
+
 	private class ParsedLine {
-		
+
 		private String name = "";
 		private String[] data = new String[] {};
 		private Map<String, String> properties = new HashMap<String, String>();
-		
+
 		ParsedLine(String line) {
 			int i = line.indexOf(":");
 			if (i>-1) {
@@ -99,11 +99,11 @@ public class VCardParser {
 				log.debug(ArrayUtils.toString(data, ","));
 			}
 		}
-		
+
 		String getName() {
 			return name;
 		}
-		
+
 		String[] getData() {
 			return data;
 		}

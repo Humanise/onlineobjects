@@ -15,7 +15,7 @@ public class HTMLService {
 	private static final Logger log = LogManager.getLogger(HTMLService.class);
 
 	private NetworkService networkService;
-	
+
 	public HTMLDocument getDocumentSilently(URI uri) {
 		NetworkResponse response = null;
 		try {
@@ -43,12 +43,12 @@ public class HTMLService {
 		}
 		return null;
 	}
-	
+
 	public HTMLDocument getDocumentSilently(File file,String encoding) {
 		return new HTMLDocument(Files.readString(file, encoding));
 	}
 
-	
+
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}

@@ -7,7 +7,7 @@ public class RemoteAccount extends Entity {
 
 	private String username;
 	private String domain;
-	
+
 	public RemoteAccount() {
 		super();
 	}

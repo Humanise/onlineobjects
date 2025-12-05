@@ -31,11 +31,11 @@ public class PeopleListView extends AbstractView {
 				PairSearchResult<User, Person> search = modelService.searchPairs(query, request);
 				return new ListModelResult<UserInfo>(convert(search.getList(), request),search.getTotalCount());
 			}
-			
+
 		};
 		model.setPageSize(10);
 	}
-	
+
 	private List<UserInfo> convert(List<Pair<User,Person>> list, Operator privileged) {
 		List<UserInfo> result = new ArrayList<UserInfo>();
 		for (Pair<User, Person> pair : list) {
@@ -49,13 +49,13 @@ public class PeopleListView extends AbstractView {
 		}
 		return result;
 	}
-	
+
 	public ListModel<UserInfo> getUserList() {
 		return model;
 	}
 
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

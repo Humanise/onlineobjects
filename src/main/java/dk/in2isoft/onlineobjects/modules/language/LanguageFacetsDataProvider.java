@@ -17,14 +17,14 @@ import dk.in2isoft.onlineobjects.modules.caching.CachedDataProvider;
 public class LanguageFacetsDataProvider extends CachedDataProvider<Multimap<String,String>> {
 
 	private ModelService modelService;
-		
+
 	@Override
 	protected Collection<Class<? extends Item>> getObservedTypes() {
 		Collection<Class<? extends Item>> types = new ArrayList<>();
 		types.add(Word.class);
 		return types;
 	}
-		
+
 	@Override
 	protected Multimap<String,String> buildData() {
 		Operator adminOperator = modelService.newAdminOperator();

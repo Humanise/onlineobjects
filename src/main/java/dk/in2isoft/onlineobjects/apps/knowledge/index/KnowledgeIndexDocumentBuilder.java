@@ -127,7 +127,7 @@ public class KnowledgeIndexDocumentBuilder {
 		for (Tag tag : tags) {
 			doc.add(new StringField("tag", String.valueOf(tag.getId()), Field.Store.NO));
 		}
-		
+
 
 		StringBuilder text = new StringBuilder();
 		Query<Person> authors = Query.of(Person.class).from(entity, Relation.KIND_COMMON_AUTHOR).as(owner);

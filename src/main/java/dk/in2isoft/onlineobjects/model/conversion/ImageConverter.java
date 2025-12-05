@@ -25,10 +25,10 @@ public class ImageConverter extends EntityConverter {
 		Element height = new Element("height",Image.NAMESPACE);
 		height.appendChild(String.valueOf(image.getHeight()));
 		root.appendChild(height);
-		
+
 		return root;
 	}
-	
+
 	@Override
 	public Class<? extends Entity> getType() {
 		return Image.class;

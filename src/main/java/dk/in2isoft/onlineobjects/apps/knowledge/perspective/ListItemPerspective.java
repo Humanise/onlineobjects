@@ -5,7 +5,7 @@ import java.util.List;
 import dk.in2isoft.onlineobjects.core.Pair;
 
 public class ListItemPerspective {
-	
+
 	private long id;
 	private long statementId;
 	private long addressId;

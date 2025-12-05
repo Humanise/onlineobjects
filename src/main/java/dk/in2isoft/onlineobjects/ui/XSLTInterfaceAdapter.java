@@ -14,7 +14,7 @@ import nu.xom.converters.DOMConverter;
 
 
 public abstract class XSLTInterfaceAdapter extends XSLTInterface {
-	
+
 	private ConversionService conversionService;
 
 	public XSLTInterfaceAdapter(ConversionService conversionService) {
@@ -25,7 +25,7 @@ public abstract class XSLTInterfaceAdapter extends XSLTInterface {
 	public final org.w3c.dom.Document getData(Privileged privileged) throws ModelException {
 		return DOMConverter.convert(build(privileged),new DOMImplementationImpl());
 	}
-	
+
 	@Override
 	public final Document getDocument(Privileged privileged) throws ModelException {
 		return build(privileged);
@@ -45,7 +45,7 @@ public abstract class XSLTInterfaceAdapter extends XSLTInterface {
 	protected Node convertToNode(Entity entity, Operator privileged) throws ModelException {
 		return this.conversionService.generateXML(entity, privileged);
 	}
-	
+
 	protected abstract void buildContent(Element parent, Privileged privileged) throws ModelException;
 
 	protected Element create(String name) {

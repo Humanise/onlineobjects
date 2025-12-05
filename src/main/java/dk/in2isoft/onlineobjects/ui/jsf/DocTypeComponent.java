@@ -13,7 +13,7 @@ public class DocTypeComponent extends AbstractComponent {
 
 
 	public static final String FAMILY = "onlineobjects.doctype";
-	
+
 	public DocTypeComponent() {
 		super(FAMILY);
 	}
@@ -26,7 +26,7 @@ public class DocTypeComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.write("<!DOCTYPE html>");

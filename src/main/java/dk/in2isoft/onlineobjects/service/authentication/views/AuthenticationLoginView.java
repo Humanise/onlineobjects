@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class AuthenticationLoginView extends AbstractView {
-	
+
 	private static final Messages messages = new Messages(AuthenticationLoginView.class);
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -22,11 +22,11 @@ public class AuthenticationLoginView extends AbstractView {
 	private Locale locale;
 	private boolean loggedIn;
 	private String logOutLink;
-	
+
 	public static enum Actions {
 		loggedOut, authorizationRequired, invalidLogin, loggedIn
 	}
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		super.before(request);
@@ -36,7 +36,7 @@ public class AuthenticationLoginView extends AbstractView {
 		if (user != null) {
 			currentUserName = user.getUsername();
 		}
-		loggedIn = !securityService.isPublicUser(session); 
+		loggedIn = !securityService.isPublicUser(session);
 		locale = request.getRequest().getLocale();
 		if (!"da".equals(locale.getLanguage()) && !"en".equals(locale.getLanguage())) {
 			locale = Locale.ENGLISH;
@@ -47,7 +47,7 @@ public class AuthenticationLoginView extends AbstractView {
 		}
 		logOutLink = "/logout?redirect=" + request.getString("redirect");
 	}
-	
+
 	private String getValidAction(Request request) {
 		String action = request.getString("action");
 		for (Actions value : Actions.values()) {
@@ -57,35 +57,35 @@ public class AuthenticationLoginView extends AbstractView {
 		}
 		return null;
 	}
-	
+
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}
-	
+
 	public String getCurrentUserName() {
 		return currentUserName;
 	}
-	
+
 	public String getRedirect() {
 		return redirect;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
-	
+
 	public Locale getLocale() {
 		return locale;
 	}
-	
+
 	public String getLogOutLink() {
 		return logOutLink;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

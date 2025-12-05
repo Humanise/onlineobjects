@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
@@ -41,11 +40,11 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -73,7 +72,7 @@ public class KnowledgeService {
 	private ModelService modelService;
 	private KnowledgeSearcher readerSearcher;
 	private InternetAddressService internetAddressService;
-	private PileService pileService; 
+	private PileService pileService;
 	private MemberService memberService;
 	private InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder;
 	private CacheService cacheService;
@@ -177,7 +176,7 @@ public class KnowledgeService {
 		InternetAddress address = modelService.getRequired(InternetAddress.class, internetAddressId, operator);
 		return addStatementToInternetAddress(text, address, operator);
 	}
-	
+
 	public Statement addStatementToInternetAddress(String text, InternetAddress address, Operator operator) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		if (Strings.isBlank(text)) {
 			throw new BadRequestException("No text");
@@ -211,7 +210,7 @@ public class KnowledgeService {
 		statement.setName(StringUtils.abbreviate(text, 50));
 		statement.setText(text);
 	}
-	
+
 	public Question newQuestion(String text) throws BadRequestException {
 		if (Strings.isBlank(text)) {
 			throw new BadRequestException("A question must have text");
@@ -361,7 +360,7 @@ public class KnowledgeService {
 			return p;
 		}).collect(toList()));
 
-		
+
 		SuggestionsCategory suggestionsForStatement = suggestions.suggestionsForStatement(statement, request);
 		Iterator<Suggestion> i = suggestionsForStatement.getSuggestions().iterator();
 		while (i.hasNext()) {
@@ -369,13 +368,13 @@ public class KnowledgeService {
 				i.remove();
 			}
 		}
-		
+
 		perspective.setQuestionSuggestions(suggestionsForStatement);
-		
+
 		User user = modelService.getUser(request);
 		addWords(statement, perspective, request);
 		addTags(statement, perspective, request);
-		
+
 		categorize(statement, perspective, user, request);
 		return perspective;
 	}
@@ -399,7 +398,7 @@ public class KnowledgeService {
 			return option;
 		}).collect(Collectors.toList()));
 	}
-	
+
 	private static class Versioner {
 		private long version;
 		public static Versioner from(Item item) {
@@ -407,7 +406,7 @@ public class KnowledgeService {
 			v.version = item.getUpdated().getTime();
 			return v;
 		}
-		
+
 		public <T extends Item> Versioner and(Collection<T> items) {
 			for (Item item : items) {
 				version = Math.max(version, item.getUpdated().getTime());
@@ -419,7 +418,7 @@ public class KnowledgeService {
 			}
 			return this;
 		}
-		
+
 		public long get() {
 			return version;
 		}
@@ -458,7 +457,7 @@ public class KnowledgeService {
 		perspective.setVersion(Versioner.from(question).and(answers).get());
 		return perspective;
 	}
-	
+
 	public QuestionWebPerspective getQuestionWebPerspective(Long id, Operator request)
 			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, id, request);
@@ -475,12 +474,12 @@ public class KnowledgeService {
 		answers.addAll(statementAnswers.stream().map(StatementWebPerspective::from).collect(toList()));
 		answers.addAll(hypothesisAnswers.stream().map(HypothesisWebPerspective::from).collect(toList()));
 		perspective.setAnswers(answers);
-		
+
 		addWords(question, perspective, request);
 		addTags(question, perspective, request);
 		return perspective;
 	}
-	
+
 	public HypothesisWebPerspective getHypothesisWebPerspective(Long id, Operator operator)
 			throws ModelException, NotFoundException, SecurityException {
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, id, operator);
@@ -521,12 +520,12 @@ public class KnowledgeService {
 		addTags(hypothesis, perspective, operator);
 		return perspective;
 	}
-	
+
 	public InternetAddressViewPerspective getInternetAddressWebPerspective(long id, Operator request) throws ModelException, NotFoundException, BadRequestException, SecurityException, ExplodingClusterFuckException {
 
 		boolean hightlight = false; //request.getBoolean("highlight");
 		User user = modelService.getUser(request);
-		
+
 		Settings settings = new Settings();
 		settings.setHighlight(hightlight);
 		settings.setCssNamespace("article_");
@@ -570,7 +569,7 @@ public class KnowledgeService {
 		}
 		if (favorite != null) {
 			pileService.changeFavoriteStatus(question, favorite, user, operator);
-		}	
+		}
 	}
 
 	public void updateStatement(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, NotFoundException, BadRequestException {
@@ -584,7 +583,7 @@ public class KnowledgeService {
 		}
 		if (favorite != null) {
 			pileService.changeFavoriteStatus(statement, favorite, user, operator);
-		}	
+		}
 	}
 
 	public void updateHypothesis(Long id, String text, Boolean inbox, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException, NotFoundException, BadRequestException {
@@ -598,7 +597,7 @@ public class KnowledgeService {
 		}
 		if (favorite != null) {
 			pileService.changeFavoriteStatus(hypothesis, favorite, user, operator);
-		}					
+		}
 	}
 
 	public void addQuestionToStatement(Long questionId, Long statementId, Operator operator)
@@ -630,7 +629,7 @@ public class KnowledgeService {
 		}
 	}
 
-	
+
 	public void removeQuestionFromStatement(Long questionId, Long statementId, Operator operator)
 			throws ModelException, NotFoundException, SecurityException {
 		Question question = modelService.getRequired(Question.class, questionId, operator);
@@ -657,21 +656,21 @@ public class KnowledgeService {
 			modelService.delete(relation, operator);
 		}
 	}
-	
+
 	public void addStatementToHypothesis(Long hypothesisId, String kind, Long statementId, Operator operator) throws ModelException, NotFoundException, SecurityException {
 
 		Hypothesis hypothesis = modelService.getRequired(Hypothesis.class, hypothesisId, operator);
 		Statement statement = modelService.getRequired(Statement.class, statementId, operator);
 		relate(hypothesis, kind, statement, operator);
 	}
-	
+
 	private void relate(Question question, Statement statement, Operator operator) throws ModelException, SecurityException {
 		Optional<Relation> found = modelService.find().relations(operator).from(statement).to(question).withKind(Relation.ANSWERS).first();
 		if (!found.isPresent()) {
 			modelService.createRelation(statement, question, Relation.ANSWERS, operator);
 		}
 	}
-	
+
 	private void relate(Question question, Hypothesis hypothesis, Operator operator) throws ModelException, SecurityException {
 		Optional<Relation> found = modelService.find().relations(operator).from(hypothesis).to(question).withKind(Relation.ANSWERS).first();
 		if (!found.isPresent()) {
@@ -704,7 +703,7 @@ public class KnowledgeService {
 		}
 		if (favorite != null) {
 			pileService.changeFavoriteStatus(address, favorite, user, operator);
-		}							
+		}
 	}
 
 	public InternetAddressApiPerspective getAddressPerspective(Long id, Operator operator) throws EndUserException {
@@ -717,9 +716,9 @@ public class KnowledgeService {
 			addressPerspective.setUrl(address.getAddress());
 			Set<Long> ids = new HashSet<>();
 			Settings settings = new Settings();
-			
+
 			InternetAddressViewPerspective internetAddressViewPerspective = internetAddressViewPerspectiveBuilder.build(address.getId(), settings, user, ids, operator);
-			
+
 			addressPerspective.setHtml(internetAddressViewPerspective.getFormatted());
 			addressPerspective.setText(internetAddressViewPerspective.getText());
 			categorize(address, addressPerspective, user, operator);
@@ -728,7 +727,7 @@ public class KnowledgeService {
 			return new CacheEntry<>(address.getId(), operator.getIdentity(), ids, addressPerspective);
 		});
 	}
-	
+
 	public QuestionEditPerspective getQuestionEditPerspective(Long id, Operator operator) throws ModelException, NotFoundException {
 		@Nullable
 		Question statement = modelService.get(Question.class, id, operator);
@@ -778,7 +777,7 @@ public class KnowledgeService {
 		profile.setUsername(user.getUsername());
 		EmailAddress email = memberService.getUsersPrimaryEmail(user, operator);
 		if (email!=null) {
-			profile.setEmail(email.getAddress());			
+			profile.setEmail(email.getAddress());
 		}
 		Person person = memberService.getUsersPerson(user, operator);
 		if (person!=null) {
@@ -804,23 +803,23 @@ public class KnowledgeService {
 	}
 
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setReaderSearcher(KnowledgeSearcher readerSearcher) {
 		this.readerSearcher = readerSearcher;
 	}
-	
+
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setInternetAddressViewPerspectiveBuilder(InternetAddressViewPerspectiveBuilder internetAddressViewPerspectiveBuilder) {
 		this.internetAddressViewPerspectiveBuilder = internetAddressViewPerspectiveBuilder;
 	}
@@ -828,11 +827,11 @@ public class KnowledgeService {
 	public void setPileService(PileService pileService) {
 		this.pileService = pileService;
 	}
-	
+
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}
-	
+
 	public void setSuggestions(Suggestions suggestions) {
 		this.suggestions = suggestions;
 	}

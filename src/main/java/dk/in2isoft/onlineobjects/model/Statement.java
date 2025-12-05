@@ -6,9 +6,9 @@ public class Statement extends Entity implements TextHolding {
 
 	public static String TYPE = Entity.TYPE+"/Statement";
 	public static String NAMESPACE = Entity.NAMESPACE+"Statement/";
-	
+
 	private String text;
-	
+
 	public Statement() {
 		super();
 	}

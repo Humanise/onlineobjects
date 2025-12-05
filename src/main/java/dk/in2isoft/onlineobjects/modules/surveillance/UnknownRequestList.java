@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class UnknownRequestList {
 	private SortedSet<RequestInfo> set;
-	
+
 	public UnknownRequestList() {
 		TreeSet<RequestInfo> s = new TreeSet<RequestInfo>(new Comparator<RequestInfo>() {
 
@@ -21,7 +21,7 @@ public class UnknownRequestList {
 		});
 		this.set = Collections.synchronizedSortedSet(s);
 	}
-	
+
 	public void register(Request request) {
 		synchronized (set) {
 			RequestInfo existing = getInfoByPath(request);
@@ -42,7 +42,7 @@ public class UnknownRequestList {
 			}
 		}
 	}
-	
+
 	private RequestInfo getInfoByPath(Request request) {
 		for (RequestInfo info : set) {
 			if (info.getUri().equals(request.getRequest().getRequestURI())) {

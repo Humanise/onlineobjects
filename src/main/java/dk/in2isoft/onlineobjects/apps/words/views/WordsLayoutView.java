@@ -19,7 +19,7 @@ public class WordsLayoutView extends AbstractView {
 	private List<Option> alphabeth;
 	private boolean canModify;
 	private boolean loggedIn;
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		front = request.getLocalPath().length < 2;
@@ -29,7 +29,7 @@ public class WordsLayoutView extends AbstractView {
 		canModify = request.getSession().has(Ability.modifyWords);
 		loggedIn = !securityService.isPublicUser(request.getSession());
 	}
-		
+
 	private String selectedMenuItem(Request request) {
 		String[] path = request.getLocalPath();
 		if (path.length==0 || path.length==1) {
@@ -53,12 +53,12 @@ public class WordsLayoutView extends AbstractView {
 	public boolean isFront() {
 		return front;
 	}
-	
+
 	public String getSelectedMenuItem() {
 		return selectedMenuItem;
 	}
-	
-	
+
+
 	public List<Option> getAlphabeth() {
 		return alphabeth;
 	}
@@ -76,11 +76,11 @@ public class WordsLayoutView extends AbstractView {
 	}
 
 	// Wiring...
-	
+
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {
 		this.wordsInterfaceHelper = wordsInterfaceHelper;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

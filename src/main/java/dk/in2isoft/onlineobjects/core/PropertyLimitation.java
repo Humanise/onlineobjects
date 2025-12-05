@@ -4,16 +4,16 @@ public class PropertyLimitation {
 
 	public enum Comparison {
 		EQUALS ("="),/* LESSTHAN ("<"), MORETHAN (">"), IN (" in "),*/ LIKE (" like ");
-		
+
 		private String x;
 		Comparison(String x) {
 			this.x = x;
 		}
-	
+
 		public String toString() {
 			return x;
 		}
-	};
+	}
 
 	private Integer minimumOccurrence = 1;
 	private Integer maximumOccurrence;

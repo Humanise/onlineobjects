@@ -11,7 +11,7 @@ import nu.xom.ParentNode;
 import nu.xom.Text;
 
 public class ListRecognizer implements Recognizer {
-	
+
 	private String[] headings = {"kilder","henvisninger","references","see also"};
 
 	@Override
@@ -21,7 +21,7 @@ public class ListRecognizer implements Recognizer {
 
 	@Override
 	public double recognize(Element element) {
-		
+
 		if (DOM.isAny(element, "ul","ol")) {
 			ParentNode parent = element.getParent();
 			if (parent instanceof Element)
@@ -64,7 +64,7 @@ public class ListRecognizer implements Recognizer {
 				}
 			}
 			String heading = getHeading(element);
-			
+
 			if (isOkHeading(heading)) {
 				return 0;
 			}
@@ -72,7 +72,7 @@ public class ListRecognizer implements Recognizer {
 		}
 		return 0;
 	}
-	
+
 	private boolean isOkHeading(String heading) {
 		for (String string : headings) {
 			if (heading.startsWith(string)) {

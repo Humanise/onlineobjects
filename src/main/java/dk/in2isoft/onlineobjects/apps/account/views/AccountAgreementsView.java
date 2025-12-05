@@ -17,13 +17,13 @@ public class AccountAgreementsView extends AbstractView {
 	private MemberService memberService;
 	private ModelService modelService;
 	private SecurityService securityService;
-	
+
 	private boolean accepted;
 	private List<Agreement> agreements;
 	private Date acceptanceTime;
 	private boolean publicUser;
 	private String language;
-	
+
 	public void before(Request request) throws Exception {
 		User user = modelService.getUser(request);
 		accepted = memberService.hasAcceptedTerms(user, user);
@@ -32,37 +32,37 @@ public class AccountAgreementsView extends AbstractView {
 		publicUser = securityService.isPublicUser(request);
 		language = request.getLanguage();
 	}
-		
+
 	public boolean isAccepted() {
 		return accepted;
 	}
-	
+
 	public List<Agreement> getAgreements() {
 		return agreements;
 	}
-	
+
 	public Date getAcceptanceTime() {
 		return acceptanceTime;
 	}
-	
+
 	public boolean isPublicUser() {
 		return publicUser;
 	}
-	
+
 	public String getLanguage() {
 		return language;
 	}
-		
+
 	// Wiring...
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

@@ -11,9 +11,9 @@ import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 @DisallowConcurrentExecution
 public class SimilarityJob extends ServiceBackedJob implements InterruptableJob {
-	
+
 	private JobStatus status;
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		InformationService informationService = schedulingSupportFacade.getInformationService();
 		status = getStatus(context);

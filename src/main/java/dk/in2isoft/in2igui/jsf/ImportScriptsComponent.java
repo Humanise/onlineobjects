@@ -22,7 +22,7 @@ public class ImportScriptsComponent extends AbstractComponent {
 	public ImportScriptsComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 	}
@@ -32,7 +32,7 @@ public class ImportScriptsComponent extends AbstractComponent {
 		return new Object[] {
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		Request request = Components.getRequest();
@@ -50,10 +50,10 @@ public class ImportScriptsComponent extends AbstractComponent {
 			}
 		} else {
 			writer.writeScript(request.getBaseContext()+"/hui/bin/minimized.js"+stamp).newLine();
-			
+
 		}
 		writer.startElement("script").withAttribute("data-hui-context", request.getBaseContext()).endElement("script");
-		
+
 		writer.startScript().newLine();
 		writer.write("hui.ui.context = '").write(request.getBaseContext()).write("';").newLine();
 		writer.write("hui.ui.language = '").write(request.getLanguage()).write("';").newLine();

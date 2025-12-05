@@ -18,7 +18,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class ImageViewerComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.photoviewer";
-		
+
 	public ImageViewerComponent() {
 		super(FAMILY);
 	}
@@ -31,7 +31,7 @@ public class ImageViewerComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 	}

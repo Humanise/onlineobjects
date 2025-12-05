@@ -20,7 +20,7 @@ import dk.in2isoft.onlineobjects.modules.scheduling.JobStatus;
 import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 public class WordnetSourceCleanupJob extends ServiceBackedJob implements InterruptableJob {
-	
+
 	private boolean interrupted;
 
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -29,7 +29,7 @@ public class WordnetSourceCleanupJob extends ServiceBackedJob implements Interru
 		WordService wordService = schedulingSupportFacade.getWordService();
 		Operator admin = schedulingSupportFacade.getModelService().newAdminOperator();
 		try {
-		
+
 			String src = "http://wordnet.dk/";
 			InternetAddress source = wordService.getSource(src , admin );
 			//select word.id,relation.kind from word inner join property on property.entity_id=word.id and property.key='data.source' and property.value like 'http://www.wordnet.dk/%' left join relation on relation.super_entity_id=word.id and relation.kind='common.source' where relation.kind is null
@@ -55,7 +55,7 @@ public class WordnetSourceCleanupJob extends ServiceBackedJob implements Interru
 						break;
 					}
 				}
-								
+
 		} catch (EndUserException e) {
 			status.error("Error while updating sources", e);
 			admin.rollBack();

@@ -24,7 +24,7 @@ import dk.in2isoft.onlineobjects.modules.index.IndexManager;
 import dk.in2isoft.onlineobjects.modules.index.IndexUtil;
 
 public class PhotoService {
-	
+
 	private IndexManager indexManager;
 	private ModelService modelService;
 	private SecurityService securityService;
@@ -40,7 +40,7 @@ public class PhotoService {
 			Privileged viewer = query.getViewer();
 			Collection<Long> viewers = Lists.newArrayList();
 			viewers.add(securityService.getPublicUser().getId());
-			
+
 			if (viewer!=null) {
 				viewers.add(query.getViewer().getIdentity());
 			}
@@ -54,7 +54,7 @@ public class PhotoService {
 			if (Code.isNotEmpty(wordIds)) {
 				combined.add(IndexUtil.newLongQuery("wordId", wordIds), Occur.MUST);
 			}
-			
+
 			List<Long> ids = indexManager.getIds(combined, 0, 2000);
 			if (ids.isEmpty()) {
 				ids.add(-1l);
@@ -69,17 +69,17 @@ public class PhotoService {
 		//query.withPrivileged(user);
 		return modelService.search(modelQuery, operator);
 	}
-	
+
 	// Wiring...
-	
+
 	public void setIndexManager(IndexManager indexManager) {
 		this.indexManager = indexManager;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

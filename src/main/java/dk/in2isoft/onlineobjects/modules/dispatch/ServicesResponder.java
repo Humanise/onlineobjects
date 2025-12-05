@@ -9,21 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.service.ServiceController;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class ServicesResponder extends AbstractControllerResponder implements Responder {
-	
+
 	private List<ServiceController> serviceControllers;
-	
+
 	public boolean applies(Request request) {
 		String[] path = request.getFullPath();
 		return path.length > 0 && path[0].equals("service");
 	}
-	
+
 	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
 
 		String[] path = request.getFullPath();
@@ -42,7 +42,7 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 			}
 		}
 	}
-	
+
 	private boolean pushServiceFile(String[] path, HttpServletResponse response) {
 		String[] full = path.clone();
 		full[0] = "services";
@@ -57,7 +57,7 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		}
 		return false;
 	}
-	
+
 	private ServiceController getServiceController(Request request, String name) {
 		for (ServiceController controller : serviceControllers) {
 			if (name.equals(controller.getName())) {
@@ -66,7 +66,7 @@ public class ServicesResponder extends AbstractControllerResponder implements Re
 		}
 		return null;
 	}
-	
+
 	public void setServiceControllers(List<ServiceController> serviceControllers) {
 		this.serviceControllers = serviceControllers;
 	}

@@ -3,11 +3,11 @@ package dk.in2isoft.commons.jsf;
 public class StyleBuilder {
 
 	StringBuilder sb;
-	
+
 	public StyleBuilder() {
 		this.sb = new StringBuilder();
 	}
-	
+
 	public StyleBuilder withWidth(Number width) {
 		if (width!=null) {
 			sb.append("width:").append(width).append("px;");
@@ -24,14 +24,14 @@ public class StyleBuilder {
 		sb.append("max-width:").append(width).append(";");
 		return this;
 	}
-	
+
 	public StyleBuilder withHeight(Number height) {
 		if (height!=null) {
 			sb.append("height:").append(height).append("px;");
 		}
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return sb.toString();

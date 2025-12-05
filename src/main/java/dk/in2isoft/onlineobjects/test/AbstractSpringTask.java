@@ -20,13 +20,13 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:applicationContext.xml")
 public abstract class AbstractSpringTask extends AbstractJUnit4SpringContextTests {
-	
+
 	@Autowired
 	protected ConfigurationService configurationService;
-	
+
 	@Autowired
 	private ApplicationContext context;
-	
+
 	@Autowired
 	protected ModelService modelService;
 
@@ -41,7 +41,7 @@ public abstract class AbstractSpringTask extends AbstractJUnit4SpringContextTest
 	protected Privileged getPublicUser() {
 		return securityService.getPublicUser();
 	}
-	
+
 
 
 	public void setContext(ApplicationContext context) {
@@ -67,7 +67,7 @@ public abstract class AbstractSpringTask extends AbstractJUnit4SpringContextTest
 		}
 		return null;
 	}
-	
+
 	public final void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

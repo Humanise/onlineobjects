@@ -10,17 +10,17 @@ import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.ui.data.CloudItem;
 
 public class WordCloudQuery implements CustomQuery<CloudItem<Word>> {
-	
+
 	private long privileged;
 	private Class<? extends Entity> type;
 	private Long viewId;
-	
+
 	public WordCloudQuery(Privileged privileged, Class<? extends Entity> type) {
 		super();
 		this.privileged = privileged.getIdentity();
 		this.type = type;
 	}
-	
+
 	public WordCloudQuery withViewId(Long viewId) {
 		this.viewId = viewId;
 		return this;

@@ -20,11 +20,11 @@ public abstract class AccountControllerBase extends ApplicationController {
 	protected SecurityService securityService;
 	protected InvitationService invitationService;
 	protected MemberService memberService;
-	
+
 	public AccountControllerBase() {
 		super(AccountController.MOUNT);
 	}
-	
+
 	@Override
 	public boolean isAllowed(Request request) {
 		String path = request.getLocalPathAsString();
@@ -39,7 +39,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 		}
 		return !securityService.isPublicUser(request.getSession());
 	}
-	
+
 	@Override
 	public boolean askForUserChange(Request request) {
 		return true;
@@ -57,13 +57,13 @@ public abstract class AccountControllerBase extends ApplicationController {
 		}
 		return super.getLanguage(request);
 	}
-	
+
 	// Wiring...
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setInvitationService(InvitationService invitationService) {
 		this.invitationService = invitationService;
 	}

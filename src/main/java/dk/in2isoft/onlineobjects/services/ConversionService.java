@@ -10,11 +10,11 @@ import nu.xom.Node;
 
 
 public class ConversionService {
-	
+
 	private List<EntityConverter> converters;
 
 	//private static Logger log = LogManager.getLogger(ConversionFacade.class);
-		
+
 	public EntityConverter getConverter(Class<? extends Entity> classObj) {
 		for (EntityConverter converter : converters) {
 			if (converter.getType().isAssignableFrom(classObj)) {
@@ -23,16 +23,16 @@ public class ConversionService {
 		}
 		return new EntityConverter();
 	}
-	
+
 	public EntityConverter getConverter(Entity entity) {
 		return getConverter(entity.getClass());
 	}
-		
+
 	public final Node generateXML(Entity entity, Operator privileged) throws ModelException {
 		EntityConverter converter = getConverter(entity);
 		return converter.generateXML(entity, privileged);
 	}
-	
+
 	public void setConverters(List<EntityConverter> converters) {
 		this.converters = converters;
 	}

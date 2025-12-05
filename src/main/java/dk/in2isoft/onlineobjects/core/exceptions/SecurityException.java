@@ -9,7 +9,7 @@ public class SecurityException extends EndUserException {
 	public SecurityException() {
 		super();
 	}
-	
+
 	@Override
 	public int getHttpStatusCode() {
 		return HttpServletResponse.SC_UNAUTHORIZED;

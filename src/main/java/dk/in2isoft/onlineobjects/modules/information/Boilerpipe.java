@@ -1,9 +1,7 @@
 package dk.in2isoft.onlineobjects.modules.information;
 
-import nu.xom.Document;
-
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -14,18 +12,19 @@ import de.l3s.boilerpipe.sax.BoilerpipeSAXInput;
 import de.l3s.boilerpipe.sax.HTMLDocument;
 import de.l3s.boilerpipe.sax.HTMLHighlighter;
 import dk.in2isoft.commons.lang.Strings;
+import nu.xom.Document;
 
 public class Boilerpipe implements ContentExtractor {
 
 	private static final Logger log = LogManager.getLogger(Boilerpipe.class);
 
     public String extract(String rawString) {
-    	
+
     	if (Strings.isBlank(rawString)) {
     		return "";
     	}
     	final BoilerpipeExtractor extractor = CommonExtractors.ARTICLE_EXTRACTOR;
-    	
+
 		final HTMLDocument htmlDoc = new HTMLDocument(rawString);
 
 		de.l3s.boilerpipe.document.TextDocument doc;
@@ -34,12 +33,12 @@ public class Boilerpipe implements ContentExtractor {
 			extractor.process(doc);
 
 			final InputSource is = htmlDoc.toInputSource();
-	    	
-	    	
+
+
 			final HTMLHighlighter highlighted = HTMLHighlighter.newExtractingInstance();
 			highlighted.setOutputHighlightOnly(true);
 			highlighted.setExtraStyleSheet("");
-			
+
 			return highlighted.process(doc, is);
 		} catch (IllegalArgumentException e) {
 			log.warn("Unable to extract markup", e);
@@ -50,7 +49,7 @@ public class Boilerpipe implements ContentExtractor {
 		} catch (SAXException e) {
 			log.warn("Unable to extract markup", e);
 		} catch (Exception e) {
-			log.warn("Unable to extract markup", e);			
+			log.warn("Unable to extract markup", e);
 		}
 		return null;
     }

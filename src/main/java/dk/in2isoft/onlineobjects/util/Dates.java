@@ -10,12 +10,12 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Dates {
-	
+
 	private static Map<String,String> LONG = new HashMap<String, String>();
 	private static Map<String,String> MEDIUM = new HashMap<String, String>();
 	private static Map<String,String> SHORT = new HashMap<String, String>();
 	private static Map<String,String> DATEWITHTIME = new HashMap<String, String>();
-	
+
 	static {
 		LONG.put("en", "EEEE MMMM d. yyyy 'at' HH:mm:ss");
 		LONG.put("da", "EEEE 'd.' d. MMMM yyyy 'kl.' HH:mm:ss");
@@ -92,14 +92,14 @@ public class Dates {
 		return format((System.currentTimeMillis() - date.getTime())/1000);
 	}
 
-	public static String format(Duration duration) {		
+	public static String format(Duration duration) {
 		return format(duration.getSeconds());
 	}
 
-	public static String format(long seconds) {		
-		
+	public static String format(long seconds) {
+
 		long secs = seconds % 60;
-		
+
 		long minutes = (seconds / 60) % 60;
 
 		long hours = (seconds / 60 / 60) % 24;

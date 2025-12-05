@@ -2,14 +2,14 @@ package dk.in2isoft.commons.xml;
 
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Text;
 
-import com.google.common.collect.Sets;
-
 public class DocumentToText {
-	
+
 	private Set<String> ignore = Sets.newHashSet("script","head","style","noscript");
 
 	private Set<String> singleBlocks = Sets.newHashSet(
@@ -41,7 +41,7 @@ public class DocumentToText {
 			"video");
 
 	private Set<String> doubleBlocks = Sets.newHashSet("p","h1","h2","h3","h4","h5","h6","ol","ul","dl","blockquote");
-	
+
 	private int newLines = 0;
 
     public String getText(Document doc) {
@@ -50,7 +50,7 @@ public class DocumentToText {
         String text = data.toString();
         return clean(text);
     }
-    
+
     public String clean(String text) {
     	String whitespace_chars =  ""       /* dummy empty string for homogeneity */
                 + "\\u0009" // CHARACTER TABULATION
@@ -59,12 +59,12 @@ public class DocumentToText {
                 + "\\u000C" // FORM FEED (FF)
                 + "\\u000D" // CARRIAGE RETURN (CR)
                 + "\\u0020" // SPACE
-                + "\\u0085" // NEXT LINE (NEL) 
+                + "\\u0085" // NEXT LINE (NEL)
                 + "\\u00A0" // NO-BREAK SPACE
                 + "\\u1680" // OGHAM SPACE MARK
                 + "\\u180E" // MONGOLIAN VOWEL SEPARATOR
-                + "\\u2000" // EN QUAD 
-                + "\\u2001" // EM QUAD 
+                + "\\u2000" // EN QUAD
+                + "\\u2001" // EM QUAD
                 + "\\u2002" // EN SPACE
                 + "\\u2003" // EM SPACE
                 + "\\u2004" // THREE-PER-EM SPACE
@@ -79,7 +79,7 @@ public class DocumentToText {
                 + "\\u202F" // NARROW NO-BREAK SPACE
                 + "\\u205F" // MEDIUM MATHEMATICAL SPACE
                 + "\\u3000" // IDEOGRAPHIC SPACE
-                ;        
+                ;
     	// Remove trailing and leading
         text = text.replaceAll("(?m)["+whitespace_chars+"]+$", "").replaceAll("(?m)^["+whitespace_chars+"]+", "");
         // Normalize to common space
@@ -110,7 +110,7 @@ public class DocumentToText {
                     value = value.replaceAll("\\t"," ");
                     value = value.replaceAll("\n", " ");
                     value = value.replaceAll("\\s{2,}", " ");
-                    //value = value.replaceAll("\\s{2,}", " ");                	
+                    //value = value.replaceAll("\\s{2,}", " ");
     				data.append(value);
                 }
             }

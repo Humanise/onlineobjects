@@ -34,7 +34,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 
 	private Map<String,String> categories;
 	private Map<String,String> languages;
-	
+
 	public LanguageConsistencyChecker() {
 		categories = Maps.newHashMap();
 		categories.put(LexicalCategory.CODE_NOMEN, "Noun");
@@ -73,7 +73,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 		languages.put("hi", "\u0939\u093f\u0928\u094d\u0926\u0940");
 		languages.put("la", "Latine");
 	}
-	
+
 	@Override
 	public void check() throws ModelException, SecurityException {
 		Operator adminUser = modelService.newAdminOperator();
@@ -97,7 +97,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 			}
 			adminUser.commit();
 			Map<String,LexicalCategory> map = Maps.newHashMap();
-			
+
 			for (Entry<String, String> entry : categories.entrySet()) {
 				Query<LexicalCategory> query = Query.of(LexicalCategory.class).withField(LexicalCategory.CODE, entry.getKey());
 				SearchResult<LexicalCategory> result = modelService.search(query, adminUser);
@@ -128,26 +128,26 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 			adminUser.commit();
 			LexicalCategory noun = map.get(LexicalCategory.CODE_NOMEN);
 			LexicalCategory proprium = map.get(LexicalCategory.CODE_PROPRIUM);
-			LexicalCategory appellativ = map.get(LexicalCategory.CODE_PROPRIUM);		
-	
-			LexicalCategory firstName = map.get(LexicalCategory.CODE_PROPRIUM_FIRST);		
-			LexicalCategory middleName = map.get(LexicalCategory.CODE_PROPRIUM_MIDDLE);	
+			LexicalCategory appellativ = map.get(LexicalCategory.CODE_PROPRIUM);
+
+			LexicalCategory firstName = map.get(LexicalCategory.CODE_PROPRIUM_FIRST);
+			LexicalCategory middleName = map.get(LexicalCategory.CODE_PROPRIUM_MIDDLE);
 			LexicalCategory lastName = map.get(LexicalCategory.CODE_PROPRIUM_LAST);
-			
+
 			List<Pair<LexicalCategory, LexicalCategory>> relations = Lists.newArrayList();
 			relations.add(Pair.of(noun, proprium));
 			relations.add(Pair.of(noun, appellativ));
 			relations.add(Pair.of(proprium, firstName));
 			relations.add(Pair.of(proprium, middleName));
 			relations.add(Pair.of(proprium, lastName));
-			
+
 			for (Iterator<Pair<LexicalCategory, LexicalCategory>> i = relations.iterator(); i.hasNext();) {
 				Pair<LexicalCategory, LexicalCategory> pair = i.next();
 				LexicalCategory parent = pair.getKey();
 				LexicalCategory child = pair.getValue();
 				Optional<Relation> relation = modelService.getRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
 				if (!relation.isPresent()) {
-					log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");		
+					log.info("Creating "+parent.getName()+" > "+child.getName()+" relation");
 					modelService.createRelation(parent, child, Relation.KIND_STRUCTURE_SPECIALIZATION, adminUser);
 				}
 			}
@@ -161,7 +161,7 @@ public class LanguageConsistencyChecker implements ConsistencyChecker {
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

@@ -26,7 +26,7 @@ public class VideoPlayerComponent extends AbstractComponent {
 	public VideoPlayerComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -42,7 +42,7 @@ public class VideoPlayerComponent extends AbstractComponent {
 			name,type,width,height,src
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String contentType = type;
@@ -56,7 +56,7 @@ public class VideoPlayerComponent extends AbstractComponent {
 			xHtml = data.getHtml(width, height);
 			posterUrl = data.getPosterUrl(width, height);
 		}
-		
+
 		String id = getClientId();
 		StyleBuilder style = new StyleBuilder().withHeight(height).withWidth(width);
 		writer.startDiv("in2igui_videoplayer").withId(id).withStyle(style);

@@ -19,7 +19,7 @@ public abstract class AbstractInterface implements Interface {
 	private List<Widget> widgets = new ArrayList<Widget>();
 	private Map<String,Object> parameters = new HashMap<String, Object>();
 	private HUIService huiService;
-	
+
 	public AbstractInterface(HUIService huiService) {
 		this.huiService = huiService;
 	}
@@ -30,7 +30,7 @@ public abstract class AbstractInterface implements Interface {
 			huiService.render(file, request, response);
 		} else if (file != null && !parameters.isEmpty()) {
 			String string = FileService.readTextUTF8(file);
-			
+
 			for (Entry<String, Object> entry : parameters.entrySet()) {
 				String name = "\\{"+entry.getKey()+"\\}";
 				String value = entry.getValue()!=null ? entry.getValue().toString() : "";
@@ -45,7 +45,7 @@ public abstract class AbstractInterface implements Interface {
 			huiService.render(gui.toString(), request,response);
 		}
 	}
-	
+
 	public void setParameter(String name, Object value) {
 		parameters.put(name, value);
 	}

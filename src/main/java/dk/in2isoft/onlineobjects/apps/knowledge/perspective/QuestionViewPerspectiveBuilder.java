@@ -4,8 +4,8 @@ import java.util.List;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
@@ -26,7 +26,7 @@ public class QuestionViewPerspectiveBuilder extends EntityViewPerspectiveBuilder
 		List<Statement> answers = modelService.getParents(question, Relation.ANSWERS, Statement.class, operator);
 
 		HTMLWriter html = new HTMLWriter();
-		
+
 		writeList(html, "Answers", answers, operator);
 
 		perspective.setRendering(html.toString());

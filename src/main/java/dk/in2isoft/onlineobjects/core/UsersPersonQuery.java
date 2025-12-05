@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.core;
 
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.HQLBuilder;
@@ -12,7 +12,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 
 public class UsersPersonQuery implements PairQuery<User, Person> {
-	
+
 	private String username;
 	private String[] words;
 	private int pageNumber;
@@ -47,7 +47,7 @@ public class UsersPersonQuery implements PairQuery<User, Person> {
 		hql.where("rel.to=person");
 		hql.where("rel.from=user");
 		hql.where("rel.kind='" + Relation.KIND_SYSTEM_USER_SELF + "'");
-		
+
 		if (username!=null) {
 			hql.where("user.username=:username");
 		}

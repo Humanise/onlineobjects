@@ -9,9 +9,9 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.HeaderPart;
@@ -23,7 +23,7 @@ import dk.in2isoft.onlineobjects.model.Relation;
 public class ImageGalleryService {
 
 	private ModelService modelService;
-	
+
 	public ImageGallery createGallery(Operator priviledged) throws EndUserException {
 
 		// Create an image gallery
@@ -62,10 +62,10 @@ public class ImageGalleryService {
 		}
 		modelService.delete(gallery, privileged);
 	}
-	
+
 	public void changeSequence(long galleryId, final List<Long> imageIds, Operator privileged) throws ModelException, NotFoundException, SecurityException {
 		ImageGallery gallery = modelService.getRequired(ImageGallery.class, galleryId, privileged);
-		
+
 		List<Relation> relations = modelService.getRelationsFrom(gallery, Image.class, privileged);
 		Collections.sort(relations, new Comparator<Relation>() {
 
@@ -87,7 +87,7 @@ public class ImageGalleryService {
 	}
 
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

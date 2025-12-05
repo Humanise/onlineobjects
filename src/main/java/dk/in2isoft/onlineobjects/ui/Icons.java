@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Icons {
 	public static final Map<String,Character> font = new HashMap<String, Character>();
-	
+
 	static {
 		font.put("phone", 'p');
 		font.put("user", 'u');

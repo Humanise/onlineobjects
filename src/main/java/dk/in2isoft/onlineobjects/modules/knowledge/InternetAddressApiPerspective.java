@@ -28,11 +28,11 @@ public class InternetAddressApiPerspective implements CategorizableViewPerspecti
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}

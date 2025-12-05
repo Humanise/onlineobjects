@@ -17,8 +17,8 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.words.importing.TextImporter;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Pair;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Language;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
@@ -34,7 +34,7 @@ public class WordsImportView extends AbstractView {
 	private LanguageService languageService;
 	private ImportService importService;
 	private SemanticService semanticService;
-	
+
 	private String id;
 	private Language language;
 	private String status;
@@ -45,14 +45,14 @@ public class WordsImportView extends AbstractView {
 	private List<WordListPerspective> impressions;
 	private List<Pair<String, Integer>> languages;
 	private long queryTime;
-	
+
 	private Language findLanguage(String fromContent, Request request) throws BadRequestException {
 		String[] path = request.getLocalPath();
 		String pathLang = path[0];
 		String queryLang = request.getString("language");
 		Language language = null;
 		if (Strings.isNotBlank(queryLang)) {
-			language = languageService.getLanguageForCode(queryLang, request);			
+			language = languageService.getLanguageForCode(queryLang, request);
 		}
 		if (language==null) {
 			language = languageService.getLanguageForCode(fromContent, request);
@@ -79,26 +79,26 @@ public class WordsImportView extends AbstractView {
 			TextImporter handler = (TextImporter) session.getTransport();
 			this.title = handler.getTitle();
 			this.text = handler.getText();
-						
+
 			String[] allWords = semanticService.getWords(this.text);
 			semanticService.lowercaseWords(allWords);
 			wordFrequency = semanticService.getSortedWordFrequency(allWords);
 			String[] words = semanticService.getUniqueWords(allWords);
-									
+
 			WordListPerspectiveQuery perspectiveQuery = new WordListPerspectiveQuery().withWords(words).orderByText();
 			StopWatch watch = new StopWatch();
 			watch.start();
 			this.impressions = modelService.list(perspectiveQuery, request);
 			watch.stop();
 			this.queryTime = watch.getTime();
-			
+
 			Multimap<String,String> wordsToLanguages = HashMultimap.create();
 			for (WordListPerspective perspective : impressions) {
 				if (perspective.getLanguage()!=null) {
-					wordsToLanguages.put(perspective.getText().toLowerCase(), perspective.getLanguage());					
+					wordsToLanguages.put(perspective.getText().toLowerCase(), perspective.getLanguage());
 				}
 			}
-			
+
 			Counter<String> languageCounts = new Counter<String>();
 			Set<String> set = wordsToLanguages.keySet();
 			for (String word : set) {
@@ -108,22 +108,22 @@ public class WordsImportView extends AbstractView {
 				}
 			}
 			language = findLanguage(languageCounts.getTop(), request);
-			
+
 			languages = Lists.newArrayList();
-			
+
 			Set<Entry<String,Integer>> entrySet = languageCounts.getMap().entrySet();
 			for (Entry<String, Integer> entry : entrySet) {
 				languages.add(Pair.of(entry.getKey(), entry.getValue()));
 			}
-			
-			
+
+
 			this.uniqueWords = Lists.newArrayList();
 			for (Pair<String, Integer> pair : wordFrequency) {
 				String text = pair.getKey();
 				WordCandidate item = new WordCandidate();
 				item.setText(text);
 				item.setCount(pair.getValue());
-				
+
 				for (WordListPerspective word : this.impressions) {
 					if (text.equals(word.getText().toLowerCase())) {
 						item.setKnown(true);
@@ -137,61 +137,61 @@ public class WordsImportView extends AbstractView {
 			}
 		}
 	}
-	
+
 	public List<WordListPerspective> getImpressions() {
 		return impressions;
 	}
-	
+
 	public List<Pair<String, Integer>> getWordFrequency() {
 		return wordFrequency;
 	}
-		
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public long getQueryTime() {
 		return queryTime;
 	}
-		
+
 	public Language getLanguage() {
 		return language;
 	}
-	
+
 	public List<Pair<String, Integer>> getLanguages() {
 		return languages;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
-	
+
 	public List<WordCandidate> getUniqueWords() {
 		return uniqueWords;
 	}
-	
+
 	// Services...
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
-	
+
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}

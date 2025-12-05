@@ -14,12 +14,12 @@ import dk.in2isoft.onlineobjects.util.images.ImageProperties;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public class GenericImportListener implements ImportListener<Entity> {
-	
+
 	private ImageService imageService;
 	private HTMLService htmlService;
-	
+
 	private Entity result;
-	
+
 	@Override
 	public void processFile(File file, String mimeType, String name, Map<String, String> parameters, Request request) throws IOException, EndUserException {
 		ImageProperties properties = imageService.getImageProperties(file);
@@ -35,11 +35,11 @@ public class GenericImportListener implements ImportListener<Entity> {
 	public Entity getResponse() {
 		return result;
 	}
-		
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
-	
+
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
 	}
@@ -48,5 +48,5 @@ public class GenericImportListener implements ImportListener<Entity> {
 	public String getProcessName() {
 		return null;
 	}
-	
+
 }

@@ -9,7 +9,7 @@ import com.google.common.collect.Maps;
 import dk.in2isoft.in2igui.data.MarkupWriter;
 
 public class HTMLWriter extends MarkupWriter {
-	
+
 	private StringWriter stringWriter;
 
 	public HTMLWriter() {
@@ -47,7 +47,7 @@ public class HTMLWriter extends MarkupWriter {
 		endTag("li");
 		return this;
 	}
-	
+
 	public HTMLWriter startP() {
 		startTag("p");
 		return this;
@@ -62,7 +62,7 @@ public class HTMLWriter extends MarkupWriter {
 		startTag("blockquote");
 		return this;
 	}
-	
+
 	public HTMLWriter endBlockquote() {
 		endTag("blockquote");
 		return this;
@@ -77,7 +77,7 @@ public class HTMLWriter extends MarkupWriter {
 		endTag("strong");
 		return this;
 	}
-	
+
 	public HTMLWriter startSpan() {
 		startTag("span");
 		return this;
@@ -87,12 +87,12 @@ public class HTMLWriter extends MarkupWriter {
 		endTag("span");
 		return this;
 	}
-	
+
 	public HTMLWriter startA() {
 		startTag("a");
 		return this;
 	}
-	
+
 	public HTMLWriter startVoidA() {
 		startTag("a");
 		withAttribute("href", "javascript://");
@@ -133,7 +133,7 @@ public class HTMLWriter extends MarkupWriter {
 	}
 
 	public HTMLWriter withHref(Object href) {
-		
+
 		withAttribute("href", href);
 		return this;
 	}
@@ -142,14 +142,14 @@ public class HTMLWriter extends MarkupWriter {
 		withAttribute("class", clss);
 		return this;
 	}
-	
+
 	public HTMLWriter text(Object str) {
 		if (str!=null) {
 			text(str.toString());
 		}
 		return this;
 	}
-	
+
 	public HTMLWriter html(String str) {
 		raw(str);
 		return this;
@@ -162,7 +162,7 @@ public class HTMLWriter extends MarkupWriter {
 	}
 
 	public HTMLWriter withData(Object data) {
-		String value = data !=null && data instanceof String ? data.toString() : Strings.toJSON(data); 
+		String value = data !=null && data instanceof String ? data.toString() : Strings.toJSON(data);
 		withAttribute("data", value);
 		return this;
 	}
@@ -170,7 +170,7 @@ public class HTMLWriter extends MarkupWriter {
 	public HTMLWriter withDataMap(Object... data) {
 		return withData(buildData(data));
 	}
-	
+
 	private Map<String, Object> buildData(Object... parts) {
 		Map<String, Object> data = Maps.newLinkedHashMap();
 		for (int i = 0; i < parts.length; i++) {
@@ -183,7 +183,7 @@ public class HTMLWriter extends MarkupWriter {
 	}
 
 	public HTMLWriter withData(String name,Object data) {
-		String value = data !=null && data instanceof String ? data.toString() : Strings.toJSON(data); 
+		String value = data !=null && data instanceof String ? data.toString() : Strings.toJSON(data);
 		withAttribute("data-"+name, value);
 		return this;
 	}

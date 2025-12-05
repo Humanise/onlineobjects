@@ -14,9 +14,6 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import nu.xom.Document;
-import nu.xom.converters.DOMConverter;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.xerces.dom.DOMImplementationImpl;
 import org.w3c.dom.DOMConfiguration;
@@ -31,10 +28,12 @@ import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
 import dk.in2isoft.commons.lang.Strings;
+import nu.xom.Document;
+import nu.xom.converters.DOMConverter;
 
 public class Serializing {
 
-	
+
 	public static void writeAsXHTML(Document document, File file) {
 		// Create an "identity" transformer - copies input to output
 		Transformer t;
@@ -56,14 +55,14 @@ public class Serializing {
 			Result result = new StreamResult(file);
 			t.transform(new DOMSource(domDoc), result);
 		} catch (TransformerConfigurationException e) {
-			
+
 		} catch (TransformerFactoryConfigurationError e) {
-			
+
 		} catch (TransformerException e) {
-			
+
 		}
 	}
-	
+
 	public static String toString(org.w3c.dom.Document doc) {
 		try {
 			DOMImplementationRegistry reg = DOMImplementationRegistry.newInstance();
@@ -94,7 +93,7 @@ public class Serializing {
 				Node node = nodes.item(i);
 				try {
 					if (node instanceof Element) {
-						str.append(serializer.writeToString(node));						
+						str.append(serializer.writeToString(node));
 					}
 					if (node instanceof Text) {
 						str.append(StringEscapeUtils.escapeXml(node.getNodeValue()));

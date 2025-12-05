@@ -16,13 +16,13 @@ import dk.in2isoft.commons.lang.Strings;
 public class PagesComponent extends AbstractComponent {
 
 	public static final String FAMILY = "hui.pages";
-	
+
 	private String name;
 
 	public PagesComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -37,7 +37,7 @@ public class PagesComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startDiv("hui_pages").withId(getClientId());
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();
@@ -56,5 +56,5 @@ public class PagesComponent extends AbstractComponent {
 	public String getName() {
 		return name;
 	}
-	
+
 }

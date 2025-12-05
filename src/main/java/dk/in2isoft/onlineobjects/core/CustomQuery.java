@@ -6,7 +6,7 @@ import org.hibernate.query.NativeQuery;
 public interface CustomQuery<T> {
 
 	public String getSQL();
-	
+
 	public String getCountSQL();
 
 	// Convert to ResultRow

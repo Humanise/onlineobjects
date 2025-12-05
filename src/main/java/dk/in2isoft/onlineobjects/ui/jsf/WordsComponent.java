@@ -20,10 +20,10 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class WordsComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.words";
-	
+
 	private boolean editable;
 	private String name;
-	
+
 	public WordsComponent() {
 		super(FAMILY);
 	}
@@ -38,7 +38,7 @@ public class WordsComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {editable,name};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		List<Pair<Word,String>> words = getExpression("words", context);

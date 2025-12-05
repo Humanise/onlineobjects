@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.model;
 
 public class Privilege {
-	
+
 	private long id;
 	private long subject;
 	private long object;
@@ -9,17 +9,17 @@ public class Privilege {
 	private boolean delete;
 	private boolean view;
 	private boolean reference;
-	
+
 	public Privilege() {
 		super();
 	}
-	
+
 	public Privilege(long subject, long object) {
 		super();
 		this.subject = subject;
 		this.object = object;
 	}
-	
+
 	public Privilege(long subject, long object, boolean allRights) {
 		super();
 		this.subject = subject;
@@ -36,7 +36,7 @@ public class Privilege {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public long getObject() {
 		return object;
 	}
@@ -49,7 +49,7 @@ public class Privilege {
 	public void setSubject(long subject) {
 		this.subject = subject;
 	}
-	
+
 	public boolean isAlter() {
 		return alter;
 	}
@@ -74,5 +74,5 @@ public class Privilege {
 	public void setView(boolean view) {
 		this.view = view;
 	}
-	
+
 }

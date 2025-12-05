@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegExpUtil {
-	
+
 	public static String[] getGroups(String text,Pattern pattern) {
 		Matcher matcher = pattern.matcher(text);
 		if (matcher.find()) {
@@ -17,9 +17,9 @@ public class RegExpUtil {
 				return found;
 			}
 		}
-		return null;		
+		return null;
 	}
-	
+
 	public static String[] getGroups(String text,String expression) {
 		Pattern pattern = Pattern.compile(expression);
 		return getGroups(text, pattern);

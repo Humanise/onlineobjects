@@ -13,7 +13,7 @@ import dk.in2isoft.onlineobjects.util.ValidationUtil;
 public class UserValidator implements EntityValidator {
 
 	private ModelService modelService;
-	
+
 	@Override
 	public void validate(Entity entity) throws ModelException {
 		if (entity instanceof User) {

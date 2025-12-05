@@ -30,7 +30,7 @@ import nu.xom.Nodes;
 import nu.xom.XPathContext;
 
 public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
-	
+
 	private PageRenderingService pageRenderingService;
 	private ConfigurationService configurationService;
 	private CompoundDocumentBuilder compoundDocumentBuilder;
@@ -95,7 +95,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			if (column.getChildCount() < position) {
 				throw new EndUserException("The position in the column is invalid");
 			}
-			
+
 			Entity part = createPart(type);
 			modelService.create(part, operator);
 			Relation relation = new Relation(document, part);
@@ -126,7 +126,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			modelService.update(document, operator);
 		}
 	}
-	
+
 	private void setAttribute(Element element, String name, String value) {
 		Attribute attribute = element.getAttribute(name);
 		if (StringUtils.isBlank(value) && attribute!=null) {
@@ -137,7 +137,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 			element.addAttribute(new Attribute(name,value));
 		}
 	}
-	
+
 	private Entity createPart(String type) throws EndUserException {
 		if ("header".equals(type)) {
 			HeaderPart part = new HeaderPart();
@@ -213,7 +213,7 @@ public class CompoundDocumentRemotingFacade extends AbstractRemotingFacade {
 	public ConfigurationService getConfigurationService() {
 		return configurationService;
 	}
-	
+
 	public void setCompoundDocumentBuilder(CompoundDocumentBuilder compoundDocumentBuilder) {
 		this.compoundDocumentBuilder = compoundDocumentBuilder;
 	}

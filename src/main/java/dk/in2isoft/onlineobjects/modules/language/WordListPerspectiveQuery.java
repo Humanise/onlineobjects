@@ -18,43 +18,43 @@ import dk.in2isoft.onlineobjects.model.Relation;
 public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective> {
 
 	public enum Ordering {
-		created ("item.created desc"), 
+		created ("item.created desc"),
 		updated ("item.updated desc"),
 		id ("word.id desc"),
 		text("lower(word.text) asc");
-		
+
 		private String x;
-		
+
 		Ordering(String x) {
 			this.x = x;
 		}
-	
+
 		public String toString() {
 			return x;
 		}
-	};
-	
+	}
+
 	private Ordering ordering = Ordering.created;
 
 	private int pageNumber;
 
 	private int pageSize;
-	
+
 	private String startingWith;
-	
+
 	private boolean startingWithSymbol;
-	
+
 	private List<String> words;
-	
+
 	private Collection<Long> ids;
-	
-	private static final String SQL = 
+
+	private static final String SQL =
 	" from word"+
 	" left JOIN item on item.id=word.id "+
-	
+
 	" left outer JOIN relation as word_language on (word_language.sub_entity_id=word.id and word_language.super_entity_id in (select id from language))"+
 	" left outer JOIN language on (word_language.super_entity_id=language.id)"+
-	
+
 	" left JOIN relation as word_category on (word_category.sub_entity_id=word.id and word_category.super_entity_id in (select id from lexicalcategory))"+
 	" left JOIN relation as word_source on (word_source.super_entity_id=word.id and word_source.kind='" + Relation.KIND_COMMON_SOURCE + "')"+
 	" left JOIN lexicalcategory on word_category.super_entity_id=lexicalcategory.id"+
@@ -74,23 +74,23 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 		}
 		return impression;
 	}
-	
+
 	public String getCountSQL() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(word.id) as num  from word");
 		sql.append(buildWhere());
 		return sql.toString();
 	}
-	
+
 	private String buildWhere() {
 		StringBuilder sql = new StringBuilder();
 		if (startingWith!=null) {
 			sql.append(sql.length()>0 ? " and " : " where ");
-			sql.append(" lower(word.text) like :startingWith"); 
+			sql.append(" lower(word.text) like :startingWith");
 		}
 		if (startingWithSymbol) {
 			sql.append(sql.length()>0 ? " and " : " where ");
-			sql.append(" lower(substring(word.text from 1 for 1)) not in (:alphabeth)"); 			
+			sql.append(" lower(substring(word.text from 1 for 1)) not in (:alphabeth)");
 		}
 		if (words!=null) {
 			sql.append(sql.length()>0 ? " and " : " where ");
@@ -99,7 +99,7 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 			} else {
 				sql.append(" word.id=-1");
 			}
-			
+
 		}
 		if (ids!=null && !ids.isEmpty()) {
 			sql.append(sql.length()>0 ? " and " : " where ");
@@ -122,7 +122,7 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 		}
 		return sql.toString();
 	}
-	
+
 	public void setParameters(NativeQuery<?> sql) {
 		if (startingWith!=null) {
 			sql.setParameter("startingWith", startingWith+"%", StandardBasicTypes.STRING);
@@ -137,22 +137,22 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 			sql.setParameterList("alphabeth", Strings.ALPHABETH, StandardBasicTypes.STRING);
 		}
 	}
-	
+
 	public WordListPerspectiveQuery orderByUpdated() {
 		this.ordering = Ordering.updated;
 		return this;
 	}
-	
+
 	public WordListPerspectiveQuery orderByCreated() {
 		this.ordering = Ordering.created;
 		return this;
 	}
-	
+
 	public WordListPerspectiveQuery orderByText() {
 		this.ordering = Ordering.text;
 		return this;
 	}
-	
+
 	public WordListPerspectiveQuery orderById() {
 		this.ordering = Ordering.id;
 		return this;
@@ -167,7 +167,7 @@ public class WordListPerspectiveQuery implements CustomQuery<WordListPerspective
 		this.startingWithSymbol = true;
 		return this;
 	}
-	
+
 	public WordListPerspectiveQuery withWords(List<String> str) {
 		this.words = str;
 		return this;

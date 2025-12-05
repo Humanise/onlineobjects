@@ -28,7 +28,7 @@ public class ActionsRecognizer implements Recognizer {
 		};
 
 	private String[] prefixes = {"læs også:", "click to follow"};
-	
+
 	@Override
 	public String getName() {
 		return "action";
@@ -53,10 +53,10 @@ public class ActionsRecognizer implements Recognizer {
 	}
 
 	public double recognizeLeaf(Element element) {
-		
+
 		String text = DOM.getText(element).toLowerCase().trim();
 		for (String string : texts) {
-			
+
 			if (text.equals(string)) {
 				return -1;
 			}
@@ -76,7 +76,7 @@ public class ActionsRecognizer implements Recognizer {
 				}
 			}
 		}
-		
+
 		String cls = element.getAttributeValue("class");
 		if (cls!=null && cls.matches("newsletter")) {
 			return -1;

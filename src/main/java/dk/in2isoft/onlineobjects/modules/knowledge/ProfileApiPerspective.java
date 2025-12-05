@@ -10,11 +10,11 @@ public class ProfileApiPerspective implements ApiPerspective {
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}

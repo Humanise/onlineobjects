@@ -49,17 +49,17 @@ public class KnowledgeSolrIndexWriter {
 			}
 		}
 	}
-	
+
 	@Autowired
 	public void setSolrService(SolrService solr) {
 		this.solr = solr;
 	}
-	
+
 	@Autowired
 	public void setConfigurationService(ConfigurationService configuration) {
 		this.configuration = configuration;
 	}
-	
+
 	@Autowired
 	public void setIntelligence(Intelligence intelligence) {
 		this.intelligence = intelligence;

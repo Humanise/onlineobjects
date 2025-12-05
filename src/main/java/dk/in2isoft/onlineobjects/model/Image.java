@@ -10,12 +10,12 @@ public class Image extends Entity {
 	public static final String PROPERTY_DESCRIPTION = "item.enity.image.description";
 	public static String TYPE = Entity.TYPE+"/Image";
 	public static String NAMESPACE = Entity.NAMESPACE+"Image/";
-	
+
 	private long fileSize;
 	private String contentType;
 	private int width;
 	private int height;
-	
+
 	public Image() {
 		super();
 	}
@@ -23,7 +23,7 @@ public class Image extends Entity {
 	public String getType() {
 		return TYPE;
 	}
-	
+
 	@Override
 	public String getNamespace() {
 		return NAMESPACE;
@@ -32,7 +32,7 @@ public class Image extends Entity {
 	public String getIcon() {
 		return "common/image";
 	}
-	
+
 	public String getContentType() {
 		return contentType;
 	}

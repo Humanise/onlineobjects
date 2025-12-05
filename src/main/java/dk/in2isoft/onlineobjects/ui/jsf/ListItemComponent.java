@@ -12,7 +12,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class ListItemComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.listitem";
-	
+
 	public ListItemComponent() {
 		super(FAMILY);
 	}
@@ -25,7 +25,7 @@ public class ListItemComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startLi("oo_list_item");

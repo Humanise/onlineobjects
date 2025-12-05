@@ -29,19 +29,19 @@ public abstract class AbstractModelQuery<T> implements ModelQuery {
 	public Class<T> getClazz() {
 		return clazz;
 	}
-	
+
 	public List<FieldLimitation> getFieldLimitations() {
 		return fieldLimitations;
 	}
-	
+
 	public Privileged[] getPrivileged() {
 		return privileged;
 	}
-	
+
 	public String[] getWords() {
 		return words;
 	}
-	
+
 	public int getPageSize() {
 		return pageSize;
 	}
@@ -65,7 +65,7 @@ public abstract class AbstractModelQuery<T> implements ModelQuery {
 	public Entity getParent() {
 		return parent;
 	}*/
-	
+
 	public Entity getToEntity() {
 		return toEntity;
 	}

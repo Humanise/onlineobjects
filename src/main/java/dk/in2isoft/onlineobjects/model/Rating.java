@@ -7,7 +7,7 @@ public class Rating extends Entity {
 	private static String ICON = "Element/Folder";
 
 	private double rating;
-	
+
 	public Rating() {
 		super();
 	}

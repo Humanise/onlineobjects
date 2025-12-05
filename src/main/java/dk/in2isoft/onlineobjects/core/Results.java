@@ -9,16 +9,16 @@ public class Results<T> implements AutoCloseable {
 	protected Results(ScrollableResults<T> results) {
 		this.results = results;
 	}
-	
+
 	public boolean next() {
 		return results.next();
 	}
-	
+
 	public T get() {
 		T object = results.get();
 		return ModelService.getSubject(object);
 	}
-	
+
 	public void close() {
 		results.close();
 	}

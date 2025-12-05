@@ -7,7 +7,7 @@ import org.hibernate.query.NativeQuery;
 public class UserStatisticsQuery implements CustomQuery<UserStatisticsQuery.UserStatistic> {
 
 	private SecurityService securityService;
-	
+
 	public UserStatisticsQuery(SecurityService securityService) {
 		super();
 		this.securityService = securityService;
@@ -32,11 +32,11 @@ public class UserStatisticsQuery implements CustomQuery<UserStatisticsQuery.User
 	@Override
 	public UserStatisticsQuery.UserStatistic convert(Object[] row) {
 		UserStatisticsQuery.UserStatistic result = new UserStatisticsQuery.UserStatistic();
-		result.entityCount = ((Number) row[0]).longValue(); 
+		result.entityCount = ((Number) row[0]).longValue();
 		if (row[1] != null) {
 			result.latestModification = (Date) row[1];
 		}
-		result.userId = ((Number) row[2]).longValue(); 
+		result.userId = ((Number) row[2]).longValue();
 		return result;
 	}
 

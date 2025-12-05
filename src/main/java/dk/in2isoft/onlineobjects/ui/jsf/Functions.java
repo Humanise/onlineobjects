@@ -35,7 +35,7 @@ public class Functions {
 		if (date!=null && "short".equals(format)) {
 			return Dates.formatShortDate(date, getLocale());
 		}
-		
+
 		return value.toString();
 	}
 

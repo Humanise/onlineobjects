@@ -28,27 +28,27 @@ public class FeedWriter {
 		}
 	}
 
-	public void startFeed() throws XMLStreamException {		
+	public void startFeed() throws XMLStreamException {
 		writer.writeStartDocument(Strings.UTF8, "1.0");
 		writer.writeStartElement("rss");
 		writer.writeAttribute("version", "2.0");
 	}
-	
+
 	public void endFeed() throws XMLStreamException {
 		writer.writeEndElement();
 		writer.writeEndDocument();
 	}
-	
+
 	public void startChannel(String title, String url) throws XMLStreamException {
 		startElement("channel");
 		writeElement("title", title);
 		writeElement("link", url);
 	}
-	
+
 	public void endChannel() throws XMLStreamException {
 		endElement("channel");
 	}
-	
+
 	public void writeItem(String title,String description, Date date) throws XMLStreamException {
 		startElement("item");
 		writeElement("title", title);
@@ -56,27 +56,27 @@ public class FeedWriter {
 		writeElement("pubDate", formatDate(date));
 		endElement("item");
 	}
-	
+
 	private void writeElement(String name, String value) throws XMLStreamException {
 		startElement(name);
 		write(value);
 		endElement(name);
 	}
-	
+
 	private void startElement(String name) throws XMLStreamException {
 		writer.writeStartElement(name);
 	}
-	
+
 	private void endElement(String name) throws XMLStreamException {
 		writer.writeEndElement();
 	}
-	
+
 	private void write(String string) throws XMLStreamException {
 		if (string!=null) {
 			writer.writeCharacters(string);
 		}
 	}
-	
+
 	private String formatDate(Date date) {
 		return DateFormatUtils.format(date, "EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
 	}

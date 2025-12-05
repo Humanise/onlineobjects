@@ -19,7 +19,7 @@ public class BlockComponent extends AbstractComponent {
 	private String cssFloat;
 	private Integer top;
 	private Integer bottom;
-	
+
 	public BlockComponent() {
 		super(FAMILY);
 	}
@@ -36,7 +36,7 @@ public class BlockComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {style,cssFloat,top,bottom};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		ClassBuilder cls = new ClassBuilder("oo_block");

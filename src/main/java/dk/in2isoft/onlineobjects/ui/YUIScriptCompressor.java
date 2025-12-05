@@ -6,10 +6,10 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
@@ -35,7 +35,7 @@ public class YUIScriptCompressor implements ScriptCompressor {
 		};
 		return errorReporter;
 	}
-	
+
 	public void compress(Reader in, Writer out) throws IOException {
 		JavaScriptCompressor compressor = new JavaScriptCompressor(in, getErrorReporter());
 		int linebreak = -1;
@@ -43,9 +43,9 @@ public class YUIScriptCompressor implements ScriptCompressor {
 		boolean warn = false;
 		boolean preserveAllSemiColons = false;
 		boolean preserveStringLiterals = false;
-		compressor.compress(out, linebreak, munge, warn, preserveAllSemiColons, preserveStringLiterals);		
+		compressor.compress(out, linebreak, munge, warn, preserveAllSemiColons, preserveStringLiterals);
 	}
-	
+
 	@Override
 	public String compress(String js) {
 		try {

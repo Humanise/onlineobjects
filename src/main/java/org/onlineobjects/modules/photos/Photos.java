@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.util.images.ImageService;
 import dk.in2isoft.onlineobjects.util.images.ImageTransformation;
 
 public class Photos {
-	
+
 	private ImageService imageService;
 
 	public static List<Size> PHOTO_CONTAINER_SIZES = List.of(
@@ -49,7 +49,7 @@ public class Photos {
 		sharpen = Math.max(0.2f, Math.min(sharpen, 1f));
 		return sharpen;
 	}
-	
+
 	public String urlFor(Long imageId, ImageTransformation transformation) {
 		StringBuilder url = new StringBuilder();
 		url.append("/service/image/id" + imageId);
@@ -67,7 +67,7 @@ public class Photos {
 		}
 		return url.toString();
 	}
-	
+
 	public Size fit(Size box, Size container, boolean upscale) {
 		float boxRatio = (float)box.getWidth() / (float)box.getHeight();
 		float containerRatio = (float)container.getWidth() / (float)container.getHeight();
@@ -85,7 +85,7 @@ public class Photos {
 		  }
 		  return Size.of(width, height);
 	}
-	
+
 	public String getCombinedCamera(ImageInfo info) {
 		String model = info.getCameraModel();
 		String make = info.getCameraMake();
@@ -138,7 +138,7 @@ public class Photos {
 	public String asSourceSet(List<ScaledImage> sizes) {
 		return sizes.stream().map(s -> s.getUrl() + " " + s.getWidth() + "w").distinct().collect(joining(", "));
 	}
-	
+
 	@Autowired
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;

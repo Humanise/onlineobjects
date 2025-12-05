@@ -37,7 +37,7 @@ public class WordsImportListView extends AbstractView {
 	private LanguageService languageService;
 	private ImportService importService;
 	private SemanticService semanticService;
-	
+
 	private String id;
 	private Language language;
 	private String status;
@@ -45,7 +45,7 @@ public class WordsImportListView extends AbstractView {
 	private long queryTime;
 	private List<Option> categories;
 	private List<Option> languageOptions;
-	
+
 	private List<WordImportProspectPerspective> list;
 
 
@@ -56,27 +56,27 @@ public class WordsImportListView extends AbstractView {
 	public List<Option> getLanguageOptions() {
 		return languageOptions;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public long getQueryTime() {
 		return queryTime;
 	}
-		
+
 	public Language getLanguage() {
 		return language;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
-	
+
 	public List<WordImportProspectPerspective> getList() {
 		return list;
 	}
@@ -97,21 +97,21 @@ public class WordsImportListView extends AbstractView {
 			WordsImporter handler = (WordsImporter) session.getTransport();
 			this.title = handler.getTitle();
 			String text = handler.getText();
-			
+
 			List<String> words = semanticService.getUniqueNoEmptyLines(text);
 			List<String> lowercaseWords = semanticService.lowercaseWordsCopy(words);
 			categories = buildCategories(request);
 			languageOptions = buildLanguageOptions(request);
-			
+
 			if (words.size()<100) {
-			
+
 				WordListPerspectiveQuery perspectiveQuery = new WordListPerspectiveQuery().withWords(lowercaseWords).orderByText();
 				List<WordListPerspective> found = modelService.list(perspectiveQuery, request);
-	
+
 				for (String word : words) {
 					WordImportProspectPerspective perspective = new WordImportProspectPerspective();
 					perspective.setText(word);
-					Multimap<String, String> x = HashMultimap.create(); 
+					Multimap<String, String> x = HashMultimap.create();
 					for (WordListPerspective wordListPerspective : found) {
 						if (wordListPerspective.getText()==null) {
 							continue;
@@ -123,19 +123,19 @@ public class WordsImportListView extends AbstractView {
 						}
 					}
 					perspective.setExisting(x.asMap());
-					
+
 					list.add(perspective);
 				}
-				
-				
-				
+
+
+
 				Multimap<String,String> wordsToLanguages = HashMultimap.create();
 				for (WordListPerspective perspective : found) {
 					if (perspective.getLanguage()!=null) {
-						wordsToLanguages.put(perspective.getText(), perspective.getLanguage());					
+						wordsToLanguages.put(perspective.getText(), perspective.getLanguage());
 					}
 				}
-				
+
 				Counter<String> languageCounts = new Counter<String>();
 				Set<String> set = wordsToLanguages.keySet();
 				for (String word : set) {
@@ -157,7 +157,7 @@ public class WordsImportListView extends AbstractView {
 		String queryLang = request.getString("language");
 		Language language = null;
 		if (Strings.isNotBlank(queryLang)) {
-			language = languageService.getLanguageForCode(queryLang, request);			
+			language = languageService.getLanguageForCode(queryLang, request);
 		}
 		if (language==null) {
 			language = languageService.getLanguageForCode(fromContent, request);
@@ -169,8 +169,8 @@ public class WordsImportListView extends AbstractView {
 			throw new BadRequestException("Unsupported language");
 		}
 		return language;
-	}	
-	
+	}
+
 	private List<Option> buildCategories(Request request) {
 		Locale locale = request.getLocale();
 
@@ -179,7 +179,7 @@ public class WordsImportListView extends AbstractView {
 
 		Option unknown = new Option(null,msg.get("code","none", locale));
 		categories.add(unknown);
-		
+
 		Query<LexicalCategory> query = Query.of(LexicalCategory.class).orderByName();
 		List<LexicalCategory> list = modelService.list(query, request);
 		for (LexicalCategory category : list) {
@@ -191,7 +191,7 @@ public class WordsImportListView extends AbstractView {
 		}
 		return categories;
 	}
-	
+
 	private List<Option> buildLanguageOptions(Request request) {
 
 		Messages msg = new Messages(Language.class);
@@ -207,21 +207,21 @@ public class WordsImportListView extends AbstractView {
 		}
 		return languageOptions;
 	}
-	
+
 	// Services...
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
-	
+
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}

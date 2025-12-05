@@ -11,12 +11,12 @@ public class EntitylistSynchronizer<T extends Entity> {
 
 	private List<T> originals = null;
 	private List<T> dummies;
-	
+
 	public EntitylistSynchronizer (List<T> originals, List<T> dummies) {
 		this.originals = originals;
 		this.dummies = dummies;
 	}
-	
+
 	public List<T> getNew() {
 		List<T> list = new ArrayList<T>();
 		for (T entity : dummies) {
@@ -26,7 +26,7 @@ public class EntitylistSynchronizer<T extends Entity> {
 		}
 		return list;
 	}
-	
+
 	public List<T> getDeleted() {
 		List<T> list = new ArrayList<T>();
 		for (T original : originals) {
@@ -42,7 +42,7 @@ public class EntitylistSynchronizer<T extends Entity> {
 		}
 		return list;
 	}
-	
+
 	public Map<T,T> getUpdated() {
 		Map<T,T> list = new HashMap<T,T>();
 		for (T original : originals) {

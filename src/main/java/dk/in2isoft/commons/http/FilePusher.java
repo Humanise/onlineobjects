@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 public class FilePusher {
-    
+
     private File file;
     private boolean download;
     private boolean clientSideCaching;
-    
+
     public FilePusher(File file) {
         this.file=file;
     }
-    
+
     public void setDownload(boolean download) {
         this.download = download;
     }
@@ -26,7 +26,7 @@ public class FilePusher {
 	public void setClientSideCaching(boolean clientSideCaching) {
 		this.clientSideCaching = clientSideCaching;
 	}
-    
+
     public void push(HttpServletResponse response, String contentType) {
     	if (!file.exists()) {
             try {
@@ -70,5 +70,5 @@ public class FilePusher {
             catch (IllegalStateException ignore) {}
         }
     }
-    
+
 }

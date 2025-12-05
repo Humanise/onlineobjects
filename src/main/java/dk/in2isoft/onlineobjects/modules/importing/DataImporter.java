@@ -20,20 +20,20 @@ import com.google.common.collect.Maps;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.ApplicationSession;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.ui.AsynchronousProcessDescriptor;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DataImporter {
-	
+
 	private static Logger log = LogManager.getLogger(DataImporter.class);
 	private ImportListener<?> listener;
 	private FileService fileService;
 	private String successResponse = "SUCCESS";
-	
+
 	public DataImporter(FileService fileService) {
 		super();
 		this.fileService = fileService;
@@ -53,7 +53,7 @@ public class DataImporter {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(0);
 		factory.setRepository(fileService.getUploadDir());
-		
+
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		ProgressListener progressListener = new ProgressListener() {
 			public void update(long pBytesRead, long pContentLength, int pItems) {
@@ -104,7 +104,7 @@ public class DataImporter {
 			response.getWriter().write(successResponse);
 		}
 	}
-	
+
 	public void setSuccessResponse(String successResponse) {
 		this.successResponse = successResponse;
 	}

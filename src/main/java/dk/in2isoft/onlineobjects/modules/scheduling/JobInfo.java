@@ -57,7 +57,7 @@ public class JobInfo {
 	public void setTriggerState(String triggerState) {
 		this.triggerState = triggerState;
 	}
-	
+
 	public String getTriggerState() {
 		return triggerState;
 	}

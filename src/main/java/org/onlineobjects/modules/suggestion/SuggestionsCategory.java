@@ -6,9 +6,9 @@ import java.util.List;
 public class SuggestionsCategory {
 
 	private String description;
-	
+
 	private List<Suggestion> suggestions = Collections.EMPTY_LIST;
-	
+
 	private boolean dirty;
 
 	public String getDescription() {

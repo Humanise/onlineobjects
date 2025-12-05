@@ -4,7 +4,7 @@ public class FeedPerspective {
 
 	private String title;
 	private long id;
-	
+
 	public FeedPerspective(String title, long id) {
 		this.title = title;
 		this.id = id;

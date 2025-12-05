@@ -21,7 +21,7 @@ public class GraphService extends AbstractCommandLineInterface {
 	private static Logger log = LogManager.getLogger(GraphService.class);
 	private static final ImmutableList<String> formats = ImmutableList.of("png","jpg","xdot","svg");
 	private static final ImmutableList<String> algorithms = ImmutableList.of("circo","dot","fdp","neato","twopi");
-	
+
 	private ConfigurationService configurationService;
 
 	private String getCommand(String name) throws ConfigurationException {

@@ -21,11 +21,11 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 	private List<InitializingService> initializingServices;
 
 	private Date startTime;
-	
+
 	public LifeCycleService() {
 		startTime = new Date();
 	}
-	
+
 	@Override
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
@@ -44,19 +44,19 @@ public class LifeCycleService implements ApplicationListener<ApplicationContextE
 			surveillanceService.audit().info("Event: {}", event.getClass().getSimpleName());
 		}
 	}
-	
+
 	public Date getStartTime() {
 		return startTime;
 	}
-	
+
 	public void setConsistencyService(ConsistencyService consistencyService) {
 		this.consistencyService = consistencyService;
 	}
-		
+
 	public void setSurveillanceService(SurveillanceService surveillanceService) {
 		this.surveillanceService = surveillanceService;
 	}
-	
+
 	public void setInitializingServices(List<InitializingService> initializingServices) {
 		this.initializingServices = initializingServices;
 	}

@@ -25,7 +25,7 @@ public class BoxComponent extends AbstractComponent {
 	public BoxComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		width = (String) state[0];
@@ -68,7 +68,7 @@ public class BoxComponent extends AbstractComponent {
 		}
 		return cls.toString();
 	}
-	
+
 	private String toLength(String str) {
 		if (isInteger(str)) {
 			return str + "px";
@@ -83,27 +83,27 @@ public class BoxComponent extends AbstractComponent {
 			out.endDiv();
 		}
 	}
-	
+
 	public String getWidth() {
 		return width;
 	}
-	
+
 	public void setWidth(String width) {
 		this.width = width;
 	}
-	
+
 	public String getPadding() {
 		return padding;
 	}
-	
+
 	public void setPadding(String padding) {
 		this.padding = padding;
 	}
-	
+
 	public String getMargin() {
 		return margin;
 	}
-	
+
 	public void setMargin(String margin) {
 		this.margin = margin;
 	}
@@ -115,11 +115,11 @@ public class BoxComponent extends AbstractComponent {
 	public void setSpacious(boolean spacious) {
 		this.spacious = spacious;
 	}
-	
+
 	public boolean isNarrow() {
 		return narrow;
 	}
-	
+
 	public void setNarrow(boolean narrow) {
 		this.narrow = narrow;
 	}

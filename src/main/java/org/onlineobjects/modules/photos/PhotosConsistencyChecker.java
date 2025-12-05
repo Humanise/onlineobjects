@@ -16,7 +16,7 @@ public class PhotosConsistencyChecker implements ConsistencyChecker {
 	private PileService piles;
 	private ModelService model;
 	private SecurityService security;
-	
+
 	@Override
 	public void check() throws ModelException, SecurityException, ExplodingClusterFuckException {
 		model.asAdmin((Operator operator) -> {
@@ -28,11 +28,11 @@ public class PhotosConsistencyChecker implements ConsistencyChecker {
 	public void setPiles(PileService piles) {
 		this.piles = piles;
 	}
-	
+
 	public void setModel(ModelService model) {
 		this.model = model;
 	}
-	
+
 	public void setSecurity(SecurityService security) {
 		this.security = security;
 	}

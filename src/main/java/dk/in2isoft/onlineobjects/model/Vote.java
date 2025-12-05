@@ -5,7 +5,7 @@ public class Vote extends Entity {
 	public static String TYPE = Entity.TYPE+"/Vote";
 	public static String NAMESPACE = Entity.NAMESPACE+"Vote/";
 	private static String ICON = "Element/Folder";
-	
+
 	public Vote() {
 		super();
 	}

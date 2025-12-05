@@ -12,7 +12,7 @@ public class CacheEntry<T> {
 
 	public CacheEntry() {
 	}
-	
+
 	public CacheEntry(long id, long privileged, Collection<Long> ids, T value) {
 		super();
 		this.id = id;
@@ -28,11 +28,11 @@ public class CacheEntry<T> {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public Collection<Long> getIds() {
 		return ids;
 	}
-	
+
 	public void setIds(Collection<Long> ids) {
 		this.ids = ids;
 	}

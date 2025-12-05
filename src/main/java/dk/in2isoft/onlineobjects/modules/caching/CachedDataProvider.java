@@ -15,7 +15,7 @@ public abstract class CachedDataProvider<T> implements InitializingBean {
 
 	public enum state {
 		empty, ok, dirty, busy
-	};
+	}
 
 	private EventService eventService;
 	private Set<Runnable> listeners = Sets.newHashSet();
@@ -65,7 +65,7 @@ public abstract class CachedDataProvider<T> implements InitializingBean {
 		Thread t = new Thread(job);
 		t.start();
 	}
-	
+
 	private void tell() {
 		for (Runnable runnable : listeners) {
 			runnable.run();

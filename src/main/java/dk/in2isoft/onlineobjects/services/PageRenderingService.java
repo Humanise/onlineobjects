@@ -26,7 +26,7 @@ import nu.xom.Element;
 public class PageRenderingService {
 
 	private static String NAMESPACE = "http://uri.onlineobjects.com/publishing/WebPage/";
-	
+
 	private ModelService modelService;
 	private ConversionService conversionService;
 	private WebModelService webModelService;
@@ -42,7 +42,7 @@ public class PageRenderingService {
 			throw new EndUserException("The page does not have a document!");
 		}
 		DocumentBuilder builder = getBuilder(document.getClass());
-		
+
 		if (request.isSet("feed") && builder instanceof FeedBuilder) {
 			//String format = request.getString("feed");
 			FeedBuilder source = (FeedBuilder) builder;
@@ -54,7 +54,7 @@ public class PageRenderingService {
 			}
 			return;
 		}
-		
+
 		// Get the website
 		WebSite site = webModelService.getWebSiteOfPage(page, request);
 		// Create root
@@ -63,15 +63,15 @@ public class PageRenderingService {
 
 		Element title = new Element("title", NAMESPACE);
 		title.appendChild(page.getTitle());
-		
+
 		// Append context
 		Element context = new Element("context", NAMESPACE);
 		context.appendChild(conversionService.generateXML(site, request));
 		context.appendChild(conversionService.generateXML(page, request));
-		
+
 		WebNode node = (WebNode)modelService.getParent(page,WebNode.class, request);
 		context.appendChild(conversionService.generateXML(node, request));
-		
+
 		Element nodes = new Element("nodes", NAMESPACE);
 		List<Relation> childRelations = modelService.getRelationsFrom(site, WebNode.class, request);
 		for (Relation relation : childRelations) {
@@ -84,10 +84,10 @@ public class PageRenderingService {
 		content.addAttribute(new Attribute("id",String.valueOf(document.getId())));
 		content.appendChild(builder.build((Document)document, request));
 		root.appendChild(content);
-		
+
 		String template = page.getPropertyValue(WebPage.PROPERTY_TEMPLATE);
 		if (template==null) template = "basic";
-		
+
 		File pageStylesheet = configurationService.getFile(new String[] {"WEB-INF","apps","community","xslt","page.xsl"});
 		File stylesheet = configurationService.getFile(new String[] {"WEB-INF","apps","community","web","documents",document.getClass().getSimpleName(),"xslt","stylesheet.xsl"});
 		File frame = configurationService.getFile(new String[] {"WEB-INF","apps","community","web","layouts","horizontal.xsl"});
@@ -100,13 +100,13 @@ public class PageRenderingService {
 				request.getResponse().setContentType("text/xml");
 				request.getResponse().getWriter().write(root.toXML());
 			} else {
-				XSLTUtil.applyXSLT(root.toXML(), new File[] {pageStylesheet,stylesheet,frame}, request.getResponse(),parameters);				
+				XSLTUtil.applyXSLT(root.toXML(), new File[] {pageStylesheet,stylesheet,frame}, request.getResponse(),parameters);
 			}
 		} catch (IOException e) {
 			throw new EndUserException(e);
 		}
 	}
-	
+
 	public DocumentBuilder getBuilder(Class<? extends Entity> type) {
 		for (DocumentBuilder builder : documentBuilders) {
 			if (builder.getEntityType().equals(type)) {
@@ -130,7 +130,7 @@ public class PageRenderingService {
 		parameters.put("base-domain-context", request.getBaseDomainContext());
 		parameters.put("development-mode", devmode);
 		parameters.put("edit-mode",request.getBoolean("edit") ? "true" : "false");
-		
+
 		StringBuilder path = new StringBuilder();
 		int level = request.getFullPath().length;
 		for (int i = 0; i < level; i++) {
@@ -140,7 +140,7 @@ public class PageRenderingService {
 		parameters.put("path-core", path.toString());
 		return parameters;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -162,7 +162,7 @@ public class PageRenderingService {
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setDocumentBuilders(List<DocumentBuilder> documentBuilders) {
 		this.documentBuilders = documentBuilders;
 	}

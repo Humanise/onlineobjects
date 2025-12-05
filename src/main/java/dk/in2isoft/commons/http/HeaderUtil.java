@@ -10,22 +10,22 @@ import com.google.common.collect.ImmutableMap;
 import dk.in2isoft.commons.util.RegExpUtil;
 
 public class HeaderUtil {
-	
+
 	private static long secondsInWeek = 604800;
 	private static long secondsIn31days = 2678400;
-	
+
 	private static Map<String,String> mimeTypes = new ImmutableMap.Builder<String, String>().put("html", "text/html").put("htm", "text/html").put(
 			"xhtml", "application/xhtml+xml").put("js", "text/javascript").put("css", "text/css").put("png",
 			"image/png").put("gif", "image/gif").put("jpg", "image/jpeg").put("jpeg", "image/jpeg").put("swf",
 			"application/x-shockwave-flash").put("woff", "application/x-font-woff").put("eot", "application/vnd.ms-fontobject").put("otf", "application/octet-stream").put("ttf", "application/octet-stream").put("svg", "image/svg+xml").build();
-	
-	public static void setOneWeekCache(HttpServletResponse response) {		
+
+	public static void setOneWeekCache(HttpServletResponse response) {
         response.setDateHeader("Expires", System.currentTimeMillis()+604800*1000);
         response.setHeader("Cache-Control","public; max-age="+secondsInWeek);
         response.setDateHeader("Date", System.currentTimeMillis());
 	}
-	
-	public static void setOneMonthCache(HttpServletResponse response) {		
+
+	public static void setOneMonthCache(HttpServletResponse response) {
         response.setDateHeader("Expires", System.currentTimeMillis()+secondsIn31days*1000);
         response.setHeader("Cache-Control","public; max-age="+secondsIn31days);
         response.setDateHeader("Date", System.currentTimeMillis());
@@ -57,7 +57,7 @@ public class HeaderUtil {
 	public static void setInternalServerError(HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
-	
+
 	public static String getContentTypeEncoding(String value) {
 		if (value!=null) {
 			String[] groups = RegExpUtil.getGroups(value, "[Cc]harset=([a-zA-Z0-9\\-]+)");

@@ -28,7 +28,7 @@ public class DocumentCleaner {
 	private Set<String> validLeaves = new HashSet<>();
 	private Set<String> inlineTags = new HashSet<>();
 	private Set<String> blockTags = new HashSet<>();
-	
+
 	private Set<String> bannedTags = new HashSet<>();
 	private Set<String> semanticAttributes = new HashSet<>();
 
@@ -39,7 +39,7 @@ public class DocumentCleaner {
 	private boolean allowMetaTags;
 	private boolean allowStructureTags;
 	private boolean allowUnnecessaryTags;
-	
+
 	private static final Logger log = LogManager.getLogger(DocumentCleaner.class);
 
 	public DocumentCleaner() {
@@ -51,7 +51,7 @@ public class DocumentCleaner {
 		validAttributes.put("img", "title");
 		validAttributes.put("img", "width");
 		validAttributes.put("img", "height");
-		
+
 		validAttributes.put("meta", "name");
 		validAttributes.put("meta", "content");
 		validAttributes.put("meta", "property");
@@ -120,7 +120,7 @@ public class DocumentCleaner {
 				"tfoot",
 				"ul",
 				"video"));
-		
+
 		validTags.addAll(Sets.newHashSet("html","head","body","title"));
 		validTags.addAll(Sets.newHashSet("h1","h2","h3","h4","h5","h6","p"));
 		validTags.addAll(Sets.newHashSet("strong","em","a","img","br","hr"));
@@ -133,10 +133,10 @@ public class DocumentCleaner {
 		validTags.addAll(Sets.newHashSet("blockquote","pre"));
 		validTags.addAll(Sets.newHashSet("div"));
 
-		// TODO: This should be an option 
+		// TODO: This should be an option
 		structureTags.addAll(Sets.newHashSet("section","article","aside","main","header","footer","nav","figure","figcaption","details","summary"));
-		
-		
+
+
 		bannedTags.add("script");
 		bannedTags.add("style");
 		bannedTags.add("noscript");
@@ -149,30 +149,30 @@ public class DocumentCleaner {
 		validLeaves.add("html");
 		validLeaves.add("head");
 		validLeaves.add("meta");
-		
+
 		semanticAttributes.add("about");
 		semanticAttributes.add("typeof");
 		semanticAttributes.add("role");
 		semanticAttributes.add("itemprop");
 		semanticAttributes.add("itemtype");
 	}
-	
+
 	public void setAllowDataAttributes(boolean allowDataAttributes) {
 		this.allowDataAttributes = allowDataAttributes;
 	}
-	
+
 	public void setAllowClasses(boolean allowClasses) {
 		this.allowClasses = allowClasses;
 	}
-	
+
 	public void setAllowSemanticAttributes(boolean allowSemanticAttributes) {
 		this.allowSemanticAttributes = allowSemanticAttributes;
 	}
-	
+
 	public void setAllowMetaTags(boolean allowMetaTags) {
 		this.allowMetaTags = allowMetaTags;
 	}
-	
+
 	public void setUrl(String url) {
 		if (Strings.isBlank(url)) {
 			uri = null;
@@ -184,7 +184,7 @@ public class DocumentCleaner {
 			}
 		}
 	}
-	
+
 	public void clean(nu.xom.Document document) {
 		if (document.getRootElement()==null) {
 			return;
@@ -194,17 +194,17 @@ public class DocumentCleaner {
 			if (!allowStructureTags && structureTags.contains(element.getLocalName())) {
 				element.setLocalName("div");
 			}
-		});			
+		});
 		// TODO lowercase all elements
 		Set<nu.xom.Node> nodesToRemove = Sets.newHashSet();
-		DOM.travel(document, node -> {			
+		DOM.travel(document, node -> {
 			if (node instanceof Comment) {
 				nodesToRemove.add(node);
 			}
 			else if (node instanceof Element) {
 				Element element = (Element) node;
 				String nodeName = element.getLocalName().toLowerCase();
-				
+
 				element.getAttributeCount();
 				for (int j = element.getAttributeCount() - 1; j >= 0; j--) {
 					Attribute attribute = element.getAttribute(j);
@@ -212,7 +212,7 @@ public class DocumentCleaner {
 						element.removeAttribute(attribute);
 					}
 				}
-				
+
 				if (!isValidTag(nodeName)) {
 					nodesToRemove.add(element);
 					return;
@@ -255,12 +255,12 @@ public class DocumentCleaner {
 						log.warn("Error resolving image URL",e);
 					}
 				}
-				
+
 			});
 		}
 		removeLeaves(document);
 		nodesToRemove.clear();
-		DOM.travel(document, node -> {			
+		DOM.travel(document, node -> {
 			if (node instanceof Element) {
 				Element element = (Element) node;
 				if (isUnnecessary(element)) {
@@ -352,12 +352,12 @@ public class DocumentCleaner {
 		}
 		return validAttributes.containsEntry(nodeName, attrName);
 	}
-	
+
 	private void removeLeaves(nu.xom.Document document) {
 		Set<Element> toRemove = new HashSet<>();
 		DOM.travelElements(document, node -> {
 			int childCount = node.getChildCount();
-			boolean leaf = true; 
+			boolean leaf = true;
 			for (int j = 0; j < childCount; j++) {
 				nu.xom.Node child = node.getChild(j);
 				if (child instanceof Element) {
@@ -410,7 +410,7 @@ public class DocumentCleaner {
 			if (!validTags.contains(nodeName)) {
 				nodesToRemove.add(node);
 			}
-			
+
 			NamedNodeMap attributes = node.getAttributes();
 			Map<String,String> atts = Maps.newHashMap();
 			for (int j = 0; j < attributes.getLength(); j++) {
@@ -433,7 +433,7 @@ public class DocumentCleaner {
 				}
 			}
 		}
-		
+
 		for (Node node : nodesToRemove) {
 			Node parent = node.getParentNode();
 			if (parent!=null) {

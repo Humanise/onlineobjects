@@ -11,9 +11,9 @@ public class Locations {
 	static {
 		format = new DecimalFormat();
 		format.setMinimumFractionDigits(0);
-		format.setMaximumFractionDigits(2);		
+		format.setMaximumFractionDigits(2);
 	}
-	
+
 	public static String formatLatitude(double latitude) {
 
 		GeoDistance distance = new GeoDistance(Math.abs(latitude));
@@ -25,7 +25,7 @@ public class Locations {
 		sb.append(format.format(distance.getSeconds()));
 		sb.append(Strings.DOUBLE_APOSTROPHE);
 		sb.append(latitude>0 ? " North" : " South");
-		
+
 		return sb.toString();
 	}
 
@@ -40,7 +40,7 @@ public class Locations {
 		sb.append(format.format(distance.getSeconds()));
 		sb.append(Strings.DOUBLE_APOSTROPHE);
 		sb.append(longitude>0 ? " East" : " West");
-		
+
 		return sb.toString();
 	}
 }

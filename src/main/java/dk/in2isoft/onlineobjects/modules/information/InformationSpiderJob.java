@@ -17,10 +17,10 @@ import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 public class InformationSpiderJob extends ServiceBackedJob implements InterruptableJob {
 
 	private boolean interrupted;
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		InformationService informationService = schedulingSupportFacade.getInformationService();
-		
+
 		List<String> feeds = Lists.newArrayList(
 
 				"http://daringfireball.net/index.xml",

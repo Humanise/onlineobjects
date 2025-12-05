@@ -71,53 +71,53 @@ import dk.in2isoft.onlineobjects.util.Dates;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class SetupController extends SetupControllerBase {
-		
+
 	@Path(exactly = "applications.gui")
 	@View(ui = "applications.gui.xml")
 	public void applications(Request request) {}
-	
+
 	@Path(exactly = "images.gui")
 	@View(ui = "images.gui.xml")
 	public void images(Request request) {}
-	
+
 	@Path(expression = "/")
 	@View(ui = "index.gui.xml")
 	public void index(Request request) {}
-	
+
 	@Path(exactly = "indices.gui")
 	@View(ui = "indices.gui.xml")
 	public void indices(Request request) {}
-	
+
 	@Path(exactly = "integration.gui")
 	@View(ui = "integration.gui.xml")
 	public void integration(Request request) {}
-	
+
 	@Path(exactly = "internetaddresses.gui")
 	@View(ui = "internetaddresses.gui.xml")
 	public void internetaddresses(Request request) {}
-	
+
 	@Path(exactly = "model.gui")
 	@View(ui = "model.gui.xml")
 	public void model(Request request) {}
-	
+
 	@Path(exactly = "scheduler.gui")
 	@View(ui = "scheduler.gui.xml")
 	public void scheduler(Request request) {}
-	
+
 	@Path(exactly = "settings.gui")
 	@View(ui = "settings.gui.xml")
 	public void settings(Request request) {}
-	
+
 	@Path(exactly = "surveillance.gui")
 	@View(ui = "surveillance.gui.xml")
 	public void surveillance(Request request) {}
-	
+
 	@Path(exactly = "users.gui")
 	@View(ui = "users.gui.xml")
 	public void users(Request request) {}
 
-	
-	
+
+
 	@Path(expression = "/settings/data", method = Method.GET)
 	public Object settingsData(Request request) throws IOException,EndUserException {
 		return Map.of(
@@ -151,11 +151,11 @@ public class SetupController extends SetupControllerBase {
 		int pageSize = 40;
 		Query<User> query = Query.of(User.class).withWords(request.getString("search")).withPaging(page, pageSize);
 		SearchResult<User> result = modelService.search(query, request);
-		
+
 		List<UserStatisticsQuery.UserStatistic> list = modelService.list(new UserStatisticsQuery(securityService), request);
-		
+
 		ListWriter writer = new ListWriter(request);
-		
+
 		writer.startList();
 		writer.window(result.getTotalCount(), pageSize, page);
 		writer.startHeaders();
@@ -186,7 +186,7 @@ public class SetupController extends SetupControllerBase {
 				writer.text(email.getAddress());
 
 				Date confirmationTime = email.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
-				if (confirmationTime!=null) {			
+				if (confirmationTime!=null) {
 					writer.text(" ~ ").text(Dates.getDaysFromNow(confirmationTime) + " days");
 				} else {
 					writer.startIcons();
@@ -245,7 +245,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		writer.endList();
 	}
-	
+
 	private UserStatistic getStatistics(List<UserStatistic> list, User user) {
 		for (UserStatistic stat : list) {
 			if (stat.userId == user.getId()) {
@@ -259,7 +259,7 @@ public class SetupController extends SetupControllerBase {
 	public void listUsersObjects(Request request) throws IOException,EndUserException {
 		long id = request.getLong("userId");
 		String type = request.getString("type");
-		
+
 		User user = modelService.get(User.class, id, request);
 		if (user==null) {
 			return;
@@ -287,7 +287,7 @@ public class SetupController extends SetupControllerBase {
 		User publicUser = securityService.getPublicUser();
 
 		ListWriter writer = new ListWriter(request);
-		
+
 		writer.startList();
 		writer.window(result.getTotalCount(), 30, page);
 		writer.startHeaders();
@@ -313,7 +313,7 @@ public class SetupController extends SetupControllerBase {
 			}
 			if (privilege.isDelete()) {
 				writer.icon("monochrome/delete");
-			}			
+			}
 			writer.endCell();
 			writer.startCell().nowrap();
 			if (publicPrivilege!=null) {
@@ -334,11 +334,11 @@ public class SetupController extends SetupControllerBase {
 	}
 
 	private void listUserInfo(Request request, User user) throws IOException, ModelException {
-		
+
 		Person person = memberService.getUsersPerson(user, request);
 		EmailAddress email = memberService.getUsersPrimaryEmail(user, request);
 		ListWriter writer = new ListWriter(request);
-		
+
 		writer.startList();
 		writer.startHeaders();
 		writer.header("Key",40);
@@ -355,7 +355,7 @@ public class SetupController extends SetupControllerBase {
 			Date emailRequestTime = email.getPropertyDateValue(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME);
 			writer.startRow().cell("Confirmation sent:").startCell();
 			if (emailRequestTime != null) {
-				writer.text(emailRequestTime).text(" ~ ").text(Dates.formatDurationFromNow(emailRequestTime));				
+				writer.text(emailRequestTime).text(" ~ ").text(Dates.formatDurationFromNow(emailRequestTime));
 			} else {
 				writer.text("Unknown");
 			}
@@ -363,10 +363,10 @@ public class SetupController extends SetupControllerBase {
 			Date confirmationTime = email.getPropertyDateValue(Property.KEY_CONFIRMATION_TIME);
 			if (confirmationTime!=null) {
 				writer.startRow().cell("Primary email confirmed").startCell();
-				writer.text(confirmationTime.toString());				
+				writer.text(confirmationTime.toString());
 				writer.text(" ~ ").text(Dates.formatDurationFromNow(confirmationTime));
 				writer.endCell().endRow();
-				
+
 			}
 
 		}
@@ -398,7 +398,7 @@ public class SetupController extends SetupControllerBase {
 
 	private void listUsersClients(Request request, User user) throws IOException, ModelException {
 		ListWriter writer = new ListWriter(request);
-		
+
 		writer.startList();
 		writer.startHeaders();
 		writer.header("Name");
@@ -448,7 +448,7 @@ public class SetupController extends SetupControllerBase {
 		perspective.setAbilities(Ability.convert(user.getPropertyValues(Property.KEY_ABILITY)));
 		return perspective;
 	}
-	
+
 	@Path
 	public void deleteClient(Request request) throws EndUserException {
 		Long id = request.getId();
@@ -472,7 +472,7 @@ public class SetupController extends SetupControllerBase {
 		User user = modelService.getRequired(User.class, id, request);
 		memberService.deleteMember(user, request);
 	}
-	
+
 	@Path
 	public void sendPasswordReset(Request request) throws EndUserException {
 		Long id = request.getId();
@@ -481,7 +481,7 @@ public class SetupController extends SetupControllerBase {
 			throw new EndUserException("Unable to send recovery mail");
 		}
 	}
-	
+
 	@Path
 	public void sendEmailConfirmation(Request request) throws EndUserException {
 		Long id = request.getId();
@@ -507,7 +507,7 @@ public class SetupController extends SetupControllerBase {
 			throw new NotFoundException("User not found (id="+perspective.getId()+")");
 		}
 		if (securityService.canChangeUsername(user)) {
-			user.setUsername(perspective.getUsername());			
+			user.setUsername(perspective.getUsername());
 		}
 		if (Strings.isNotBlank(perspective.getEmail())) {
 			memberService.changePrimaryEmail(user, perspective.getEmail(), request);
@@ -534,7 +534,7 @@ public class SetupController extends SetupControllerBase {
 			securityService.grantPublicView(user, perspective.isPublicView(), request);
 		}
 	}
-	
+
 	@Path
 	public void listJobLog(Request request) throws IOException {
 		ListWriter writer = new ListWriter(request);
@@ -553,14 +553,14 @@ public class SetupController extends SetupControllerBase {
 		}
 		writer.endList();
 	}
-	
+
 	@Path
 	public void listJobs(Request request) throws SecurityException, IOException {
 		Messages msg = new Messages(this);
 		Locale locale = request.getLocale();
 		PeriodFormatter pf = new PeriodFormatterBuilder().appendHours().appendSeparator(":").appendMinutes().appendSeparator(":").appendSeconds().toFormatter();
 		boolean active = schedulingService.isRunning();
-		
+
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
 		writer.startHeaders();
@@ -571,7 +571,7 @@ public class SetupController extends SetupControllerBase {
 		for (JobInfo status : jobList) {
 			Map<String,Object> data = Mapper.<String,Object>build("group", status.getGroup()).add("name", status.getName()).add("status", status.getTriggerState()).add("running", Boolean.valueOf(status.isRunning())).get();
 			boolean paused = "PAUSED".equals(status.getTriggerState());
-			
+
 			writer.startRow().withId(status.getGroup()+"-"+status.getName()).withData(data);
 			writer.startCell();
 			if (status.isRunning()) {
@@ -631,7 +631,7 @@ public class SetupController extends SetupControllerBase {
 	public void pauseJob(Request request) throws SecurityException, IOException {
 		schedulingService.pauseJob(request.getString("name"), request.getString("group"));
 	}
-	
+
 	@Path
 	public void resumeJob(Request request) throws SecurityException, IOException {
 		schedulingService.resumeJob(request.getString("name"), request.getString("group"));
@@ -652,7 +652,7 @@ public class SetupController extends SetupControllerBase {
 		status.setRunning(schedulingService.isRunning());
 		return status;
 	}
-	
+
 	@Path
 	public void getSurveillanceList(Request request) throws IOException, ModelException {
 		String kind = request.getString("kind");
@@ -665,7 +665,7 @@ public class SetupController extends SetupControllerBase {
 			data.addHeader("Max");
 			data.addHeader("Min");
 			data.addHeader("Total");
-			
+
 			for (RequestInfo info : requests) {
 				data.newRow();
 				data.addCell(info.getUri());
@@ -678,11 +678,11 @@ public class SetupController extends SetupControllerBase {
 			request.sendObject(data);
 		} else if ("liveLog".equals(kind)) {
 			ListWriter writer = new ListWriter(request);
-			
+
 			writer.startList();
-			
+
 			writer.startHeaders().header("Time").header("Title").header("Details").endHeaders();
-			
+
 			Locale locale = request.getLocale();
 			List<dk.in2isoft.onlineobjects.modules.surveillance.LiveLogEntry> entries = surveillanceService.getLogEntries();
 			Collections.reverse(entries);
@@ -696,7 +696,7 @@ public class SetupController extends SetupControllerBase {
 			writer.endList();
 		} else if ("log".equals(kind)) {
 			ListWriter writer = new ListWriter(request);
-			
+
 			int page = request.getInt("page");
 			int size = 100;
 
@@ -704,9 +704,9 @@ public class SetupController extends SetupControllerBase {
 			SearchResult<LogEntry> result = modelService.search(query, request);
 			writer.startList();
 			writer.window(result.getTotalCount(), size, page);
-			
+
 			writer.startHeaders().header("Time").header("Level").header("User").header("Type").endHeaders();
-			
+
 			Locale locale = request.getLocale();
 
 			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",locale);
@@ -729,7 +729,7 @@ public class SetupController extends SetupControllerBase {
 				writer.endRow();
 			}
 			writer.endList();
-			
+
 		} else {
 			ListData data = new ListData();
 			Collection<String> exceptions = surveillanceService.getLatestExceptions();
@@ -748,7 +748,7 @@ public class SetupController extends SetupControllerBase {
 	public void sendSurveillanceReport(Request request) throws EndUserException {
 		surveillanceService.sendReport();
 	}
-	
+
 	@Path
 	public ListData listEntities(Request request) throws SecurityException, ClassNotFoundException, IOException {
 		User publicUser = securityService.getPublicUser();
@@ -778,7 +778,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		return list;
 	}
-	
+
 	@Path
 	public Collection<ItemData> getClasses(Request request) {
 		Collection<Class<? extends Entity>> classes = modelService.getEntityClasses();
@@ -797,7 +797,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		return items;
 	}
-	
+
 	@Path
 	public EntityInfo getEntityInfo(Request request) {
 		long id = request.getLong("id");
@@ -811,14 +811,14 @@ public class SetupController extends SetupControllerBase {
 		}
 		return info;
 	}
-	
+
 	@Path
 	public void updateEntityInfo(Request request) throws ModelException, SecurityException {
 		EntityInfo info = request.getObject("data", EntityInfo.class);
 		Entity entity = modelService.get(Entity.class, info.getId(), request);
 		securityService.grantPublicView(entity, info.isPublicView(), request);
 	}
-	
+
 	@Path
 	public List<Image> listImages(Request request) throws EndUserException {
 		String text = request.getString("text");
@@ -848,9 +848,9 @@ public class SetupController extends SetupControllerBase {
 
 	@Path
 	public void listPublishers(Request request) throws EndUserException, IOException {
-		
+
 		List<InternetAddress> sites = onlinePublisherService.getSites(request);
-		
+
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
 		writer.startHeaders().header("Name").header("Address").endHeaders();
@@ -862,7 +862,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		writer.endList();
 	}
-	
+
 	@Path
 	public void savePublisher(Request request) throws IOException,EndUserException {
 		PublisherPerspective perspective = request.getObject("publisher", PublisherPerspective.class);
@@ -883,10 +883,10 @@ public class SetupController extends SetupControllerBase {
 	public void listInternetAddresses(Request request) throws ModelException, IOException {
 		int page = request.getInt("page");
 		int size = 50;
-		
+
 		Query<InternetAddress> query = Query.after(InternetAddress.class).withPaging(page, 50);
 		SearchResult<InternetAddress> result = modelService.search(query, request);
-		
+
 		ListWriter writer = new ListWriter(request);
 		writer.startList();
 		writer.window(result.getTotalCount(), size, page);
@@ -915,10 +915,10 @@ public class SetupController extends SetupControllerBase {
 		perspective.setRendering(buildRendering(address,content));
 		return perspective;
 	}
-	
+
 	private String buildRendering(InternetAddress address, String content) {
 		HTMLWriter html = new HTMLWriter();
-		
+
 		html.startH1().text(address.getName()).endH1();
 		html.startP().startA().withHref(address.getAddress()).text(address.getAddress()).endA().endP();
 		if (Strings.isNotBlank(content)) {
@@ -933,7 +933,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		return html.toString();
 	}
-	
+
 	@Path
 	public List<ItemData> getIndexOptions(Request request) {
 		List<ItemData> options = Lists.newArrayList();
@@ -944,7 +944,7 @@ public class SetupController extends SetupControllerBase {
 				item.setValue(Strings.toJSON(name));
 				item.setKind("index");
 				options.add(item);
-			});			
+			});
 		});
 		return options;
 	}
@@ -980,11 +980,11 @@ public class SetupController extends SetupControllerBase {
 		writer.endHeaders();
 		for (Document document : list) {
 			writer.startRow().cell(document.get("id")).cell(document.get("type")).cell(document.get("text"));
-			writer.endRow();			
+			writer.endRow();
 		}
 		writer.endList();
 	}
-	
+
 	@Path
 	public void getIndexStatistics(Request request) throws IOException, EndUserException {
 		IndexDescription desc = request.getObject("name", IndexDescription.class);
@@ -1005,7 +1005,7 @@ public class SetupController extends SetupControllerBase {
 		writer.startRow().cell("Database count").cell(indexService.getObjectCount(desc, request)).endRow();
 		writer.endList();
 	}
-	
+
 	@Path
 	public void createMember(Request request) throws IOException, EndUserException {
 		String username = request.getString("username", "No username");
@@ -1017,7 +1017,7 @@ public class SetupController extends SetupControllerBase {
 		}
 		memberService.createMember(request, username, password, fullName, email);
 	}
-	
+
 	@Path
 	public List<Option> abilityOptions(Request request) {
 		List<Option> options = new ArrayList<>();

@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class DependencyService {
-	
+
 	public static final String[] TAIL_PATH = new String[] {"core","js","tail.js"};
 	private Map<String,String[]> storedScripts = new HashMap<>();
 	private Map<String,String[]> storedStyles = new HashMap<>();
@@ -81,7 +81,7 @@ public class DependencyService {
 		}
 		w.write(paths, hash);
 	}
-	
+
 	public static String pathToUrl(String path) {
 		if (path.startsWith("/apps/")) {
 			return path.replaceFirst("/apps/[^/]+/","/");
@@ -91,9 +91,9 @@ public class DependencyService {
 		}
 		return path;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

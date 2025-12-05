@@ -27,16 +27,16 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class LanguageStatisticsDataProvider extends CachedDataProvider<LanguageStatistics> {
 
 	private ModelService modelService;
-	
+
 	private Locale[] locales = {new Locale("en"),new Locale("da")};
-	
+
 	@Override
 	protected Collection<Class<? extends Item>> getObservedTypes() {
 		Collection<Class<? extends Item>> types = new ArrayList<>();
 		types.add(Word.class);
 		return types;
 	}
-		
+
 	@Override
 	protected LanguageStatistics buildData() {
 		LanguageStatistics statistics = new LanguageStatistics();

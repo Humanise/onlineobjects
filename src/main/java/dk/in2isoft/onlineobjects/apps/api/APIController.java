@@ -24,11 +24,11 @@ import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -78,7 +78,7 @@ public class APIController extends APIControllerBase {
 		PrintWriter writer = response.getWriter();
 		writer.write(extractText(url));
 	}
-	
+
 	@Path(exactly={"v1.0","signup","check"})
 	public MemberCheckResponse checkNewMember(Request request) throws ModelException {
 		String username = request.getString("username");
@@ -149,9 +149,9 @@ public class APIController extends APIControllerBase {
 			surveillanceService.audit().warn("Failed to authenticate because of missing password");
 			throw new BadRequestException(Error.noPassword);
 		}
-		
+
 		ClientInfo info = getClientInfo(request);
-		
+
 		User user = securityService.getUser(username, password, request);
 		if (user==null) {
 			surveillanceService.audit().warn("Failed to authenticate username={}", username);
@@ -182,7 +182,7 @@ public class APIController extends APIControllerBase {
 		info.setClientBuild(request.getString("clientBuild"));
 		return info;
 	}
-	
+
 	@Path(exactly={"v1.0","validateClient"})
 	public void validateClient(Request request) throws IOException, EndUserException {
 		String clientId = request.getString("client");
@@ -192,7 +192,7 @@ public class APIController extends APIControllerBase {
 			throw new SecurityException("User not found");
 		}
 	}
-	
+
 	@Path(exactly={"v1.0","bookmark"})
 	@Deprecated
 	public void bookmark(Request request) throws IOException, EndUserException {
@@ -206,7 +206,7 @@ public class APIController extends APIControllerBase {
 			knowledgeService.addStatementToInternetAddress(quote, internetAddress, request);
 		}
 	}
-	
+
 	@Path(exactly={"v1.0", "image", "add"})
 	public void addImage(Request request) throws IOException, EndUserException {
 		checkUser(request);
@@ -225,7 +225,7 @@ public class APIController extends APIControllerBase {
 				}
 				return user;
 			}
-			
+
 			@Override
 			protected void preProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
 				String tags = parameters.get("tags");
@@ -249,15 +249,15 @@ public class APIController extends APIControllerBase {
 		});
 		importer.importMultipart(this, request);
 	}
-	
+
 	/* ------- Knowledge ------- */
-	
+
 	private void checkUser(Request request) throws SecurityException {
 		if (securityService.isPublicUser(request)) {
 			throw new SecurityException(Error.userNotFound);
 		}
 	}
-	
+
 	@Path(exactly = { "v1.0", "knowledge", "list" })
 	public APISearchResult knowledgeList(Request request) throws IOException, EndUserException {
 		checkUser(request);
@@ -339,7 +339,7 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "question", "delete" })
 	public void deleteQuestion(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		Long id = request.getId(); 
+		Long id = request.getId();
 		knowledgeService.deleteQuestion(id, request);
 	}
 
@@ -457,11 +457,11 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "hypothesis", "delete" })
 	public void deleteHypothesis(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		Long id = request.getId(); 
+		Long id = request.getId();
 		knowledgeService.deleteHypothesis(id, request);
 	}
 
-	
+
 	@Path(exactly = { "v1.0", "knowledge", "statement" })
 	public StatementApiPerspective viewStatement(Request request) throws IOException, EndUserException {
 		checkUser(request);
@@ -473,7 +473,7 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "statement", "delete" })
 	public void deleteStatement(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		Long id = request.getId(); 
+		Long id = request.getId();
 		knowledgeService.deleteStatement(id, request);
 	}
 
@@ -482,7 +482,7 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		User user = modelService.getUser(request);
 		Long id = request.getId();
-		
+
 		String text = request.getString("text", "Text is required");
 		knowledgeService.updateStatement(id, text, null, null, user, request);
 		return knowledgeService.getStatementPerspective(id, user, request);
@@ -591,7 +591,7 @@ public class APIController extends APIControllerBase {
 		checkUser(request);
 		Long id = request.getId();
 		return knowledgeService.getAddressPerspective(id, request);
-	}	
+	}
 
 	@Path(exactly = { "v1.1", "knowledge", "internetaddress" }, method = Method.POST)
 	public InternetAddressApiPerspective patchAddress(Request request) throws IOException, EndUserException {
@@ -606,7 +606,7 @@ public class APIController extends APIControllerBase {
 		// (should be handled in another way)
 		request.commit();
 		return knowledgeService.getAddressPerspective(id, request);
-	}	
+	}
 
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "add" })
 	public InternetAddressApiPerspective addInternetAddress(Request request) throws IOException, EndUserException {
@@ -620,7 +620,7 @@ public class APIController extends APIControllerBase {
 		addressRequest.setQuestionId(request.getLong("questionId", null));
 		addressRequest.setTitle(request.getString("title"));
 		addressRequest.setQuote(request.getString("quote"));
-		
+
 		InternetAddress internetAddress = knowledgeService.createInternetAddress(addressRequest, request);
 		return knowledgeService.getAddressPerspective(internetAddress.getId(), request);
 	}
@@ -628,7 +628,7 @@ public class APIController extends APIControllerBase {
 	@Path(exactly = { "v1.0", "knowledge", "internetaddress", "delete" })
 	public void deleteInternetAddress(Request request) throws IOException, EndUserException {
 		checkUser(request);
-		Long id = request.getId(); 
+		Long id = request.getId();
 		knowledgeService.deleteInternetAddress(id, request);
 	}
 
@@ -637,14 +637,14 @@ public class APIController extends APIControllerBase {
 		Locale locale = new Locale(request.getString("locale", "No locale supplied"));
 		User user = modelService.getUser(request);
 		return memberService.getAgreements(user, locale);
-	}	
+	}
 
 	@Path(exactly = { "v1.0", "words", "import" })
 	public void importWord(Request request) throws IOException, EndUserException {
 		if (!securityService.isAdminUser(request)) {
 			throw new SecurityException();
 		}
-		
+
 		WordModification modification = request.getObject("modification", WordModification.class);
 		Type listType = new TypeToken<List<WordModification>>() {}.getType();
 		List<WordModification> modifications = request.getObject("modifications", listType);
@@ -657,7 +657,7 @@ public class APIController extends APIControllerBase {
 		} else {
 			throw new BadRequestException("No modifications provided");
 		}
-		
+
 	}
 
 	private String extractText(String url) {

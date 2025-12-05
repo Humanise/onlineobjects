@@ -5,12 +5,12 @@ public class Word extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/Word";
 	public static String NAMESPACE = Entity.NAMESPACE+"Word/";
-	
+
 	public static final String LEXICAL_CATEGORY_PROPERTY = "lexicalcategory";
 	public static final String TEXT_FIELD = "text";
-	
+
 	private String text;
-		
+
 	public Word() {
 		super();
 	}
@@ -31,5 +31,5 @@ public class Word extends Entity {
 	public String getText() {
 		return text;
 	}
-	
+
 }

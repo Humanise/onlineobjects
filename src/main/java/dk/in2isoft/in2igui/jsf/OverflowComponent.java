@@ -28,7 +28,7 @@ public class OverflowComponent extends AbstractComponent {
 	public OverflowComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -41,7 +41,7 @@ public class OverflowComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { name, height, full, shadowVariant };
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -58,7 +58,7 @@ public class OverflowComponent extends AbstractComponent {
 		}
 		out.startDiv("hui_overflow_body");
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

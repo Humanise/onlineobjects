@@ -14,7 +14,7 @@ import dk.in2isoft.onlineobjects.model.Item;
 public class StorageService implements InitializingBean,ApplicationListener<ContextRefreshedEvent> {
 
 	private static Logger log = LogManager.getLogger(StorageService.class);
-	
+
 	private ConfigurationService configurationService;
 	private File storage;
 	private File items;
@@ -41,14 +41,14 @@ public class StorageService implements InitializingBean,ApplicationListener<Cont
 			}
 		}
 	}
-	
+
 	public void afterPropertiesSet() throws Exception {
 	}
-	
+
 	public File getItemFolder(Item item) {
 		return getItemFolder(item.getId());
 	}
-	
+
 	public File getItemFolder(long id) {
 		String idstr = String.valueOf(id);
 		File subFolder = getSubFolder(idstr);
@@ -60,9 +60,9 @@ public class StorageService implements InitializingBean,ApplicationListener<Cont
 		}
 		return itemFolder;
 	}
-	
+
 	public File getSubFolder(String id) {
-		
+
 		String subFolderName = id.substring(0, Math.min(3, id.length()));
 		subFolderName = StringUtils.leftPad(subFolderName, 3, '0');
 		File folder = new File(items,subFolderName);

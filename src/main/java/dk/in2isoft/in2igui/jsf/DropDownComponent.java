@@ -28,7 +28,7 @@ public class DropDownComponent extends AbstractComponent {
 	public DropDownComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -42,7 +42,7 @@ public class DropDownComponent extends AbstractComponent {
 			name, key, value
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		ClassBuilder cls = new ClassBuilder("hui_dropdown");
@@ -51,9 +51,9 @@ public class DropDownComponent extends AbstractComponent {
 		writer.startSpan("hui_dropdown_text").endSpan();
 		writer.endA();
 		ScriptWriter js = writer.getScriptWriter().startScript();
-		
+
 		js.startNewObject("hui.ui.DropDown").property("element", id);
-		
+
 		if (name!=null) {
 			js.comma().property("name",name);
 		}
@@ -70,7 +70,7 @@ public class DropDownComponent extends AbstractComponent {
 		}
 		js.endNewObject().endScript();
 	}
-	
+
 	private String getItems(FacesContext context) {
 		Object value = Components.getExpressionValue(this, "items", null, context);
 		if (value instanceof List<?>) {
@@ -116,15 +116,15 @@ public class DropDownComponent extends AbstractComponent {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
+
 	public Object getValue() {
 		return value;
 	}
-	
+
 	public Object getValue(FacesContext context) {
 		return getExpression("value", value, context);
 	}
-	
+
 	public void setValue(Object value) {
 		this.value = value;
 	}

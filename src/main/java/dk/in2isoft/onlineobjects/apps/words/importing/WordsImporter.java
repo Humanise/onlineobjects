@@ -9,9 +9,9 @@ import org.apache.commons.io.IOUtils;
 
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.Word;
-import dk.in2isoft.onlineobjects.modules.importing.ImportTransport;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession.Status;
+import dk.in2isoft.onlineobjects.modules.importing.ImportTransport;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class WordsImporter implements ImportListener<Word>,ImportTransport,TextImporter {
@@ -19,7 +19,7 @@ public class WordsImporter implements ImportListener<Word>,ImportTransport,TextI
 	private Status status = Status.waiting;
 	private String text;
 	private String title;
-	
+
 	public String getProcessName() {
 		return "wordsImport";
 	}
@@ -32,7 +32,7 @@ public class WordsImporter implements ImportListener<Word>,ImportTransport,TextI
 		IOUtils.closeQuietly(stream);
 		status = Status.success;
 	}
-	
+
 	@Override
 	public Word getResponse() {
 		return null;
@@ -43,9 +43,9 @@ public class WordsImporter implements ImportListener<Word>,ImportTransport,TextI
 	}
 
 	public void start() {
-		
+
 	}
-	
+
 	public Object getResult() {
 		return null;
 	}

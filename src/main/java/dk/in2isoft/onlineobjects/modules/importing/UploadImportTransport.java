@@ -28,20 +28,20 @@ public class UploadImportTransport<T> implements ImportTransport {
 	private float progress;
 	private Request request;
 	private static final Logger log = LogManager.getLogger(UploadImportTransport.class);
-	
+
 	public UploadImportTransport() {
-		
+
 	}
-	
+
 	public UploadImportTransport(Request request) {
 		this.request = request;
 	}
 
 	public void start() {
-		
+
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(0);
-		
+
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		ProgressListener progressListener = new ProgressListener() {
 			public void update(long pBytesRead, long pContentLength, int pItems) {
@@ -89,7 +89,7 @@ public class UploadImportTransport<T> implements ImportTransport {
 			log.error("Failed to upload file",e);
 		}
 	}
-	
+
 	public float getProgress() {
 		return progress;
 	}
@@ -105,7 +105,7 @@ public class UploadImportTransport<T> implements ImportTransport {
 	public void setRequest(Request request) {
 		this.request = request;
 	}
-	
+
 	public void setImportListener(ImportListener<T> importListener) {
 		this.importListener = importListener;
 	}

@@ -18,9 +18,9 @@ import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 
 public class ImageGalleryImporter extends ImageImporter {
-	
+
 	private List<SimpleEntityPerspective> imported;
-	private SecurityService security; 
+	private SecurityService security;
 
 	public ImageGalleryImporter(ModelService modelService, ImageService imageService, SecurityService securityService) {
 		super(modelService, imageService);
@@ -53,7 +53,7 @@ public class ImageGalleryImporter extends ImageImporter {
 		}
 		return max;
 	}
-	
+
 	@Override
 	public Object getResponse() {
 		return imported;

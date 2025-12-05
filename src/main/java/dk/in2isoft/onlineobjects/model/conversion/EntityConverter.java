@@ -9,7 +9,7 @@ import nu.xom.Node;
 import nu.xom.Text;
 
 public class EntityConverter {
-	
+
 	public final Node generateXML(Entity entity, Operator privileged) throws ModelException {
 		Element root = new Element("Entity",Entity.NAMESPACE);
 		root.addAttribute(new Attribute("id",String.valueOf(entity.getId())));
@@ -23,11 +23,11 @@ public class EntityConverter {
 		}
 		return root;
 	}
-	
+
 	public Class<? extends Entity> getType() {
 		return Entity.class;
 	}
-	
+
 	protected Node generateSubXML(Entity entity, Operator privileged) throws ModelException {
 		return null;
 	}

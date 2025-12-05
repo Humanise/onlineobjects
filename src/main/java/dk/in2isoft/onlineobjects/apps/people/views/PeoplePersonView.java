@@ -8,8 +8,8 @@ import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.Relation;
@@ -21,11 +21,11 @@ import dk.in2isoft.onlineobjects.ui.jsf.ListModel;
 import dk.in2isoft.onlineobjects.ui.jsf.ListModelResult;
 
 public class PeoplePersonView extends AbstractView {
-	
+
 	private PersonService personService;
 	private ModelService modelService;
 	private SecurityService securityService;
-	
+
 	private User user;
 	private Person person;
 	private Image image;
@@ -33,7 +33,7 @@ public class PeoplePersonView extends AbstractView {
 	private ListModel<Image> latestImages;
 	private boolean canModify;
 	private String usersName;
-	
+
 	public void before(Request request) throws Exception {
 		String[] path = request.getLocalPath();
 		usersName = path.length==2 ? path[1] : path[0];
@@ -61,11 +61,11 @@ public class PeoplePersonView extends AbstractView {
 	public ListModel<Image> getLatestImages() {
 		return latestImages;
 	}
-	
+
 	private ListModel<Image> buildLatestImages(Request request) {
 		ListModel<Image> latestImages = new ListModel<Image>() {
 			private ListModelResult<Image> result;
-			
+
 			@Override
 			public ListModelResult<Image> getResult() {
 				if (result!=null) return result;
@@ -82,31 +82,31 @@ public class PeoplePersonView extends AbstractView {
 		latestImages.setPageSize(16);
 		return latestImages;
 	}
-	
+
 	private String getUsersName() {
 		return this.usersName;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public UserProfileInfo getInfo() throws ModelException {
 		return this.profileInfo;
 	}
-	
+
 	public Person getPerson() {
 		return person;
 	}
-	
+
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public boolean isCanModify() {
 		return canModify;
 	}
-	
+
 	public boolean isFound() {
 		return user!=null;
 	}

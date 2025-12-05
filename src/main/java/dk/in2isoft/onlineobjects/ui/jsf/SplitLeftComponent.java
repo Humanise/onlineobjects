@@ -17,13 +17,13 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class SplitLeftComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.splitleft";
-	
+
 	private int size;
-	
+
 	public SplitLeftComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		size = (Integer) state[0];

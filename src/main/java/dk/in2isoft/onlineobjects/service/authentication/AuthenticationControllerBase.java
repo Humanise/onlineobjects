@@ -13,11 +13,11 @@ public abstract class AuthenticationControllerBase extends ServiceController {
 	protected PasswordRecoveryService passwordRecoveryService;
 	protected ModelService modelService;
 
-	
+
 	public AuthenticationControllerBase() {
 		super("authentication");
 	}
-	
+
 	// Wiring...
 
 	public void setSecurityService(SecurityService securityService) {
@@ -27,11 +27,11 @@ public abstract class AuthenticationControllerBase extends ServiceController {
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setPasswordRecoveryService(PasswordRecoveryService passwordRecoveryService) {
 		this.passwordRecoveryService = passwordRecoveryService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

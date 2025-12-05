@@ -24,7 +24,7 @@ import opennlp.tools.doccat.DocumentSample;
 import opennlp.tools.util.ObjectStream;
 
 public class QuestionTrainingStream implements ObjectStream<DocumentSample> {
-	
+
 	private List<Pair<String, String[]>> stuff = new ArrayList<>();
 	private Iterator<Pair<String, String[]>> iter;
 

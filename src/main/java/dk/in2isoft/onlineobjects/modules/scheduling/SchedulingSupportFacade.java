@@ -94,11 +94,11 @@ public class SchedulingSupportFacade {
 	public void setWordIndexer(WordIndexer wordIndexer) {
 		this.wordIndexer = wordIndexer;
 	}
-	
+
 	public void setSchedulingService(SchedulingService schedulingService) {
 		this.schedulingService = schedulingService;
 	}
-	
+
 	public SchedulingService getSchedulingService() {
 		return schedulingService;
 	}
@@ -110,7 +110,7 @@ public class SchedulingSupportFacade {
 	public void setOnlinePublisherService(OnlinePublisherService onlinePublisherService) {
 		this.onlinePublisherService = onlinePublisherService;
 	}
-	
+
 	public ConfigurableIndexer<? extends Entity> getConfigurableIndexer(Class<? extends Entity> type) {
 		for (ConfigurableIndexer<? extends Entity> indexer : configurableIndexers) {
 			if (type.equals(indexer.getType())) {
@@ -119,15 +119,15 @@ public class SchedulingSupportFacade {
 		}
 		return null;
 	}
-	
+
 	public void setConfigurableIndexers(Collection<ConfigurableIndexer<? extends Entity>> configurableIndexers) {
 		this.configurableIndexers = configurableIndexers;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 	public WordService getWordService() {
 		return wordService;
 	}
@@ -143,15 +143,15 @@ public class SchedulingSupportFacade {
 	public LanguageService getLanguageService() {
 		return this.languageService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public MemberService getMemberService() {
 		return memberService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
@@ -172,5 +172,5 @@ public class SchedulingSupportFacade {
 		this.knowledgeSuggester = knowledgeSuggester;
 	}
 
-	
+
 }

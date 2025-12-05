@@ -23,7 +23,7 @@ public class UploadComponent extends AbstractComponent {
 	public UploadComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -34,7 +34,7 @@ public class UploadComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { name, url };
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -50,7 +50,7 @@ public class UploadComponent extends AbstractComponent {
 			out.endDiv();
 		}
 		out.endDiv();
-		
+
 		// Script...
 		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("hui.ui.Upload");
@@ -80,7 +80,7 @@ public class UploadComponent extends AbstractComponent {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}

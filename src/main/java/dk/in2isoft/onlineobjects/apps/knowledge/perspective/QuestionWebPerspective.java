@@ -23,7 +23,7 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
@@ -67,11 +67,11 @@ public class QuestionWebPerspective implements CategorizableViewPerspective, Vie
 	public void setWords(List<Option> words) {
 		this.words = words;
 	}
-	
+
 	public List<Option> getTags() {
 		return tags;
 	}
-	
+
 	@Override
 	public void setTags(List<Option> tags) {
 		this.tags = tags;

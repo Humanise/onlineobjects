@@ -9,7 +9,7 @@ import okhttp3.HttpUrl;
 public class CruxExtractor implements ContentExtractor {
 
     public String extract(String rawString) {
-    	
+
     	String url = "https://example.com/article.html";
     	HttpUrl httpURL = HttpUrl.Companion.parse(url);
     	Article article = new ArticleExtractor(httpURL, rawString)

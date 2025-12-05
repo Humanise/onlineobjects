@@ -11,7 +11,7 @@ public class FinderConfiguration {
 	private Search search;
 	private Creation creation;
 	private Selection selection;
-	
+
 	public FinderConfiguration() {
 	}
 
@@ -48,15 +48,15 @@ public class FinderConfiguration {
 	public Search getSearch() {
 		return search;
 	}
-	
+
 	public FinderList getList() {
 		return list;
 	}
-	
+
 	public Creation getCreation() {
 		return creation;
 	}
-	
+
 	public void setCreation(Creation creation) {
 		this.creation = creation;
 	}
@@ -80,7 +80,7 @@ public class FinderConfiguration {
 			this.url = url;
 		}
 	}
-	
+
 	public class Search {
 		private String parameter;
 

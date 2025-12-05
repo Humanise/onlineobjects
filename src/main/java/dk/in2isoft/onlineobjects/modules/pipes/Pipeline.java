@@ -10,14 +10,14 @@ import org.joda.time.format.ISOPeriodFormat;
 
 public class Pipeline {
 	private List<PipelineStage> stages = new ArrayList<PipelineStage>();
-	
+
 	private static Logger log = LogManager.getLogger(Pipeline.class);
-	
+
 	public void addStage(PipelineStage stage) {
 		stage.setContext(new PipelineContext(this,stages.size()));
 		stages.add(stage);
 	}
-	
+
 	public void run() {
 		long start = System.currentTimeMillis();
 		stages.get(0).run();
@@ -39,11 +39,11 @@ public class Pipeline {
 	public void warn(PipelineStage stage, String msg) {
 		log.warn(stage.getClass().getSimpleName()+" : "+msg);
 	}
-		
+
 	public void info(PipelineStage stage, String msg) {
 		log.info(stage.getClass().getSimpleName()+" : "+msg);
 	}
-		
+
 	public void debug(PipelineStage stage, String msg) {
 		log.debug(stage.getClass().getSimpleName()+" : "+msg);
 	}

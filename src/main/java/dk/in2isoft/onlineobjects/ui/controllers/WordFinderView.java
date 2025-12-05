@@ -12,15 +12,15 @@ import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 public class WordFinderView extends AbstractView {
-	
+
 	private WordsInterfaceHelper wordsInterfaceHelper;
-	
+
 	private List<Option> categories;
 	private List<Option> languages;
 
 	public WordFinderView() {
 	}
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		Locale locale = request.getLocale();
@@ -35,14 +35,14 @@ public class WordFinderView extends AbstractView {
 		}
 		languages = wordsInterfaceHelper.getLanguageOptions(locale);
 	}
-	
+
 	public List<Option> getCategories() {
 		return categories;
 	}
-	
+
 
 	public List<Option> getLanguages() {
-		return languages; 
+		return languages;
 	}
 
 	public void setWordsInterfaceHelper(WordsInterfaceHelper wordsInterfaceHelper) {

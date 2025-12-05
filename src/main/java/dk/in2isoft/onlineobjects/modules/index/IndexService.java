@@ -10,15 +10,15 @@ import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 
 public class IndexService {
-	
+
 	private ConfigurationService configurationService;
 
 	public static String WORDS_INDEX = "app-words-general";
 	public static String PHOTOS_INDEX = "app-photos-general";
-	
+
 	private List<IndexManager> managers = Lists.newArrayList();
 	private List<Indexer> indexers;
-	
+
 	public IndexManager getIndex(String name) {
 		if (Strings.isBlank(name)) {
 			return null;
@@ -33,7 +33,7 @@ public class IndexService {
 		managers.add(indexManager);
 		return indexManager;
 	}
-	
+
 	public IndexManager getIndex(User user) {
 		String name = "user_"+user.getId();
 		return getIndex(name);
@@ -46,11 +46,11 @@ public class IndexService {
 		}
 		return names;
 	}
-	
+
 	public List<Indexer> getIndexers() {
 		return indexers;
 	}
-	
+
 	public Long getObjectCount(IndexDescription description, Operator operator) {
 		for (Indexer indexer : indexers) {
 			if (indexer.is(description)) {
@@ -59,18 +59,18 @@ public class IndexService {
 		}
 		return null;
 	}
-	
+
 	// Wiring...
 
 	public void setIndexers(List<Indexer> indexers) {
 		this.indexers = indexers;
 	}
 
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
 	public void setManagers(List<IndexManager> managers) {
 		this.managers = managers;
 	}

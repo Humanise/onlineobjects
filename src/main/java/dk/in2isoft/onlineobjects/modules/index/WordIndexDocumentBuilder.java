@@ -17,11 +17,11 @@ import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordService;
 
 public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
-	
+
 	private WordService wordService;
 
 	public Document build(Word word, Operator operator) throws ModelException {
-		
+
 		WordImpression impression = wordService.getImpression(word, operator);
 		StringBuilder text = new StringBuilder();
 		text.append(word.getText()).append(" ");
@@ -35,7 +35,7 @@ public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 		String categoryCode = category == null ? "none" : category.getCode();
 		Language language = impression.getLanguage();
 		String languageCode = language == null ? "none" : language.getCode();
-		
+
 		Entity source = impression.getSource();
 		String src = source!=null ? String.valueOf(source.getId()) : "none";
 
@@ -54,7 +54,7 @@ public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 		String letter = Strings.getAlphabethStartLetter(text);
 		return letter;
 	}
-	
+
 	public Document build(WordListPerspective perspective) throws ModelException {
 		StringBuilder text = new StringBuilder(perspective.getText());
 		if (Strings.isNotBlank(perspective.getGlossary())) {
@@ -75,5 +75,5 @@ public class WordIndexDocumentBuilder implements IndexDocumentBuilder<Word> {
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 }

@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.apps.setup;
 
 public class ApplicationInfo {
-	
+
 	private String name;
 	private String domain;
 	private Long id;

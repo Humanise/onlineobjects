@@ -24,7 +24,7 @@ public class RowComponent extends AbstractComponent {
 	public RowComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		min = (String) state[0];
@@ -36,7 +36,7 @@ public class RowComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { min, height, max };
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String cls = "hui_rows_row";
@@ -46,7 +46,7 @@ public class RowComponent extends AbstractComponent {
 		data.put("height", height);
 		out.startDiv().withClass(cls).withAttribute("data", Strings.toJSON(data));
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

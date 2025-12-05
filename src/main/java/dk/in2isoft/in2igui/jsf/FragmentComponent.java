@@ -20,7 +20,7 @@ public class FragmentComponent extends AbstractComponent {
 	public FragmentComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -32,12 +32,12 @@ public class FragmentComponent extends AbstractComponent {
 			name
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startDiv().withId(getClientId());
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public abstract class AbstractCommandLineInterface {
 
 	private static Logger log = LogManager.getLogger(AbstractCommandLineInterface.class);
-	
+
 	protected synchronized String execute(String cmd) throws IOException {
 		try {
 			Process p = Runtime.getRuntime().exec(cmd,new String[] {"PATH=/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/local/bin:/usr/sbin"});

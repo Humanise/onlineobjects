@@ -24,7 +24,7 @@ public class LinkComponent extends AbstractComponent {
 	public LinkComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		text = (String) state[0];
@@ -39,7 +39,7 @@ public class LinkComponent extends AbstractComponent {
 			text,name,click,styleClass
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
@@ -48,7 +48,7 @@ public class LinkComponent extends AbstractComponent {
 		writer.withId(id);
 		writer.startSpan().write(text);
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
@@ -81,7 +81,7 @@ public class LinkComponent extends AbstractComponent {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setClass(String cls) {
 		this.styleClass = cls;
 	}
@@ -93,7 +93,7 @@ public class LinkComponent extends AbstractComponent {
 	public String getClick() {
 		return click;
 	}
-	
+
 	public String getClick(FacesContext context) {
 		return getExpression("click",click,context);
 	}

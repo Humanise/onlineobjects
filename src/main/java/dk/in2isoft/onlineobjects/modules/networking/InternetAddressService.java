@@ -17,9 +17,9 @@ import dk.in2isoft.commons.xml.DocumentToText;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
 import dk.in2isoft.onlineobjects.model.Property;
@@ -33,13 +33,13 @@ import nu.xom.DocType;
 import nu.xom.Document;
 
 public class InternetAddressService {
-	
+
 	private StorageService storageService;
 	private NetworkService networkService;
 	private ModelService modelService;
 	private InboxService inboxService;
 	private CacheService cacheService;
-	
+
 	private static final Logger log = LogManager.getLogger(InternetAddressService.class);
 
 	public HTMLDocument getHTMLDocument(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
@@ -55,7 +55,7 @@ public class InternetAddressService {
 		htmlDocument.setOriginalUrl(address.getAddress());
 		return htmlDocument;
 	}
-	
+
 	public Document getXHTML(InternetAddress address, Operator operator) throws SecurityException, ModelException {
 		String key = InternetAddress.class.getSimpleName()+"_xhtml_"+address.getId();
 		String xhtml = cacheService.getCachedDocument(key, () -> {
@@ -68,7 +68,7 @@ public class InternetAddressService {
 			if (Strings.isBlank(encoding)) {
 				encoding = Strings.UTF8;
 			}
-			
+
 			Document document = dk.in2isoft.commons.xml.DOM.parseWildHhtml(content, encoding);
 			if (document == null) {
 				log.warn("Empty doc after parsing content of: {}", address);
@@ -115,7 +115,7 @@ public class InternetAddressService {
 		return text;
 	}
 
-	
+
 	public File getContent(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		File folder = storageService.getItemFolder(address);
 		File original = new File(folder, "original");
@@ -137,7 +137,7 @@ public class InternetAddressService {
 				modelService.update(address, privileged);
 			}
 		}
-		
+
 		return original;
 	}
 
@@ -161,7 +161,7 @@ public class InternetAddressService {
 			uri = networkService.removeTrackingParameters(uri);
 			verifyAsHttp(uri);
 			resolvedUrl = uri.toString();
-			
+
 			// If the URL has changed -> check again
 			if (!url.equals(resolvedUrl)) {
 				address = findExisting(operator, resolvedUrl);
@@ -174,11 +174,11 @@ public class InternetAddressService {
 		}
 		address = new InternetAddress();
 		address.setAddress(resolvedUrl);
-		
+
 		if (Strings.isNotBlank(title)) {
 			address.setName(title.trim());
 		} else if (response!=null) {
-			// TODO: This is very expensive 
+			// TODO: This is very expensive
 			address.setName(getTitle(response, resolvedUrl));
 		}
 		if (response!=null && response.getEncoding() != null) {
@@ -225,7 +225,7 @@ public class InternetAddressService {
 		verifyAsHttp(uri);
 		return uri;
 	}
-	
+
 	private InternetAddress findExisting(Operator operator, String url) {
 		Query<InternetAddress> query = Query.after(InternetAddress.class).as(operator).withField(InternetAddress.FIELD_ADDRESS, url);
 		InternetAddress address = modelService.search(query, operator).getFirst();
@@ -237,21 +237,21 @@ public class InternetAddressService {
 			throw new BadRequestException("The scheme of '" + uri + "' is unsupported");
 		}
 	}
-	
+
 	// Wiring...
-	
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}
-	
+
 	public void setInboxService(InboxService inboxService) {
 		this.inboxService = inboxService;
 	}

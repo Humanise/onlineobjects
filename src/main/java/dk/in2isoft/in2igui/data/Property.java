@@ -6,9 +6,9 @@ public class Property {
 	private String value;
 
 	public Property() {
-		
+
 	}
-	
+
 	public Property(String label, String value) {
 		this.label = label;
 		this.value = value;

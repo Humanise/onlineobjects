@@ -26,7 +26,7 @@ import dk.in2isoft.onlineobjects.modules.networking.NetworkResponse;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 
 public class FeedService {
-	
+
 	private NetworkService networkService;
 
 	public List<Item> getFeedItems(String url) throws NetworkException {
@@ -61,12 +61,12 @@ public class FeedService {
         	List<Item> items = Lists.newArrayList();
         	Feed atom = (Feed) feed;
         	List<Entry> entries = Code.castList(atom.getEntries());
-        	for (Entry entry : entries) {				
+        	for (Entry entry : entries) {
         		Item item = new Item();
         		item.setTitle(entry.getTitle());
         		List<Link> alternateLinks = Code.castList(entry.getAlternateLinks());
         		for (Link link : alternateLinks) {
-        			item.setLink(link.getHref());					
+        			item.setLink(link.getHref());
         			break;
 				}
         		items.add(item);
@@ -75,7 +75,7 @@ public class FeedService {
         }
         return null;
 	}
-	
+
 	public dk.in2isoft.onlineobjects.modules.feeds.Feed parse(File file) throws BadRequestException {
         WireFeedInput input = new WireFeedInput();
         WireFeed wireFeed;
@@ -102,7 +102,7 @@ public class FeedService {
 			IOUtils.closeQuietly(reader);
 		}
 	}
-	
+
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}

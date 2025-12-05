@@ -13,13 +13,13 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class FragmentComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.fragment";
-	
+
 	private String name;
 
 	public FragmentComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -41,9 +41,9 @@ public class FragmentComponent extends AbstractComponent {
 			js.comma().property("name", name);
 		}
 		js.endNewObject().endScript();
-		
+
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -35,11 +35,11 @@ import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -59,9 +59,9 @@ import dk.in2isoft.onlineobjects.util.Messages;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class MemberService {
-	
+
 	private static final Logger log = LogManager.getLogger(MemberService.class);
-	
+
 	private ModelService modelService;
 	private WebModelService webModelService;
 	private SecurityService securityService;
@@ -69,7 +69,7 @@ public class MemberService {
 	private EmailService emailService;
 	private SchedulingService schedulingService;
 	private SurveillanceService surveillanceService;
-	
+
 	private Multimap<String,Date> agreementConfigs = HashMultimap.create();
 
 	public boolean isValidPassword(String password) {
@@ -122,9 +122,9 @@ public class MemberService {
 
 	public User signUp(String username, String password, String fullName, String email, Operator operator) throws EndUserException {
 		User user = createMember(operator, username, password, fullName, email);
-		
+
 		markTermsAcceptance(user, operator.as(user));
-		
+
 		return user;
 	}
 
@@ -133,7 +133,7 @@ public class MemberService {
 		User user = signUp(username, password, fullName, email, operator);
 
 		securityService.changeUser(session, username, password, operator);
-		
+
 		return user;
 	}
 
@@ -155,37 +155,37 @@ public class MemberService {
 		synchronized(email.intern()) {
 			// TODO: Move this to the core
 			validateNewMember(username, password, email, adminOperator);
-			
+
 			// Create a user
 			User user = new User();
 			user.setUsername(username);
 			securityService.setPassword(user, password);
 			modelService.create(user, creator);
-	
+
 			// Make sure only the user has access to itself
 			modelService.removePrivileges(user, creator, adminOperator);
 			securityService.grantFullPrivileges(user, user, adminOperator);
-			
+
 			Operator userOperator = creator.as(user);
 			// Make sure we do not accidentally use it again
 			creator = null;
-	
+
 			// Create a person
 			Person person = new Person();
 			person.setFullName(fullName);
 			modelService.create(person, userOperator);
-			
+
 			// Create email
 			EmailAddress emailAddress = new EmailAddress();
 			emailAddress.setAddress(email);
 			modelService.create(emailAddress, userOperator);
-			
+
 			// Create relation between person and email
 			modelService.createRelation(person, emailAddress, userOperator);
-	
+
 			// Create relation between person and email
 			modelService.createRelation(user, emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, userOperator);
-	
+
 			// Create relation between user and person
 			modelService.createRelation(user, person, Relation.KIND_SYSTEM_USER_SELF, userOperator);
 			/*
@@ -195,10 +195,10 @@ public class MemberService {
 			site.setName(buildWebSiteTitle(fullName));
 			modelService.createItem(site, user);
 			securityService.makePublicVisible(site, user);
-	
+
 			// Create relation between user and web site
 			modelService.createRelation(user, site,user);
-	
+
 			webModelService.createWebPageOnSite(site.getId(),ImageGallery.class, user);
 			*/
 			userOperator.commit();
@@ -240,7 +240,7 @@ public class MemberService {
 					}
 				}
 			}
-			
+
 		}
 		modelService.delete(user, operator);
 		surveillanceService.audit().info("Completed deletion of user={} by privileged={}", user.getUsername(), operator.getIdentity());
@@ -251,10 +251,10 @@ public class MemberService {
 	 * @param user
 	 * @param email
 	 * @param privileged
-	 * @return 
+	 * @return
 	 * @throws ModelException
 	 * @throws SecurityException
-	 * @throws BadRequestException 
+	 * @throws BadRequestException
 	 */
 	public EmailAddress changePrimaryEmail(User user, String email, Operator privileged) throws ModelException, SecurityException, BadRequestException {
 		surveillanceService.audit().info("Request to change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
@@ -287,7 +287,7 @@ public class MemberService {
 		surveillanceService.audit().info("Completed change email={} of user={} by privileged={}", email, user.getUsername(), privileged.getIdentity());
 		return emailAddress;
 	}
-	
+
 	public boolean isPrimaryEmailTaken(String email, Operator operator) throws ModelException {
 		return getUserByPrimaryEmail(email, operator.as(securityService.getAdminPrivileged())) != null;
 	}
@@ -301,7 +301,7 @@ public class MemberService {
 	 */
 	public User getUserByPrimaryEmail(String email, Operator privileged) throws ModelException {
 		Query<EmailAddress> query = Query.after(EmailAddress.class).withFieldInAnyCase(EmailAddress.ADDRESS_PROPERTY, email).orderByCreated();
-		
+
 		List<EmailAddress> list = modelService.list(query, privileged);
 		for (EmailAddress emailAddress : list) {
 			User user = modelService.getParent(emailAddress, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
@@ -311,11 +311,11 @@ public class MemberService {
 		}
 		return null;
 	}
-	
+
 	public EmailAddress getUsersPrimaryEmail(User user, Operator privileged) throws ModelException {
 		return modelService.getChild(user, Relation.KIND_SYSTEM_USER_EMAIL, EmailAddress.class, privileged);
 	}
-	
+
 	public User getUserOfPrimaryEmail(EmailAddress email, Operator privileged) throws ModelException {
 		return modelService.getParent(email, Relation.KIND_SYSTEM_USER_EMAIL, User.class, privileged);
 	}
@@ -326,7 +326,7 @@ public class MemberService {
 		if (fullName.endsWith("s")) {
 			fullName+="'";
 		} else {
-			fullName+="'s";			
+			fullName+="'s";
 		}
 		return fullName+" hjemmeside";
 	}*/
@@ -348,7 +348,7 @@ public class MemberService {
 		info.setUrls(modelService.getChildren(person, InternetAddress.class,priviledged));
 		return info;
 	}
-	
+
 	public void save(UserProfileInfo info,Person person,Operator priviledged) throws EndUserException {
 		person.setGivenName(info.getGivenName());
 		person.setAdditionalName(info.getAdditionalName());
@@ -365,9 +365,9 @@ public class MemberService {
 		updateDummyPhoneNumbers(person, info.getPhones(), priviledged);
 		updateDummyInternetAddresses(person, info.getUrls(), priviledged);
 	}
-	
+
 	private void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Operator session) throws EndUserException {
-		
+
 		// Remove empty addresses
 		for (Iterator<EmailAddress> i = addresses.iterator(); i.hasNext();) {
 			EmailAddress emailAddress = i.next();
@@ -375,28 +375,28 @@ public class MemberService {
 				i.remove();
 			}
 		}
-		
+
 		List<EmailAddress> existing = modelService.getChildren(parent, EmailAddress.class, session);
 		EntitylistSynchronizer<EmailAddress> sync = new EntitylistSynchronizer<EmailAddress>(existing,addresses);
-		
+
 		for (Entry<EmailAddress, EmailAddress> entry : sync.getUpdated().entrySet()) {
 			EmailAddress original = entry.getKey();
 			EmailAddress dummy = entry.getValue();
 			original.setAddress(dummy.getAddress());
 			original.setContext(dummy.getContext());
 		}
-		
+
 		for (EmailAddress emailAddress : sync.getNew()) {
 			modelService.create(emailAddress, session);
 			modelService.createRelation(parent, emailAddress, session);
 		}
-		
+
 		for (EmailAddress emailAddress : sync.getDeleted()) {
 			modelService.delete(emailAddress, session);
 		}
 	}
 
-	
+
 	private void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Operator priviledged) throws EndUserException {
 
 		// Remove empty addresses
@@ -408,19 +408,19 @@ public class MemberService {
 		}
 		List<PhoneNumber> existing = modelService.getChildren(parent, PhoneNumber.class, priviledged);
 		EntitylistSynchronizer<PhoneNumber> sync = new EntitylistSynchronizer<PhoneNumber>(existing,phones);
-		
+
 		for (Entry<PhoneNumber, PhoneNumber> entry : sync.getUpdated().entrySet()) {
 			PhoneNumber original = entry.getKey();
 			PhoneNumber dummy = entry.getValue();
 			original.setNumber(dummy.getNumber());
 			original.setContext(dummy.getContext());
 		}
-		
+
 		for (PhoneNumber number : sync.getNew()) {
 			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
-		
+
 		for (PhoneNumber number : sync.getDeleted()) {
 			modelService.delete(number, priviledged);
 		}
@@ -437,24 +437,24 @@ public class MemberService {
 		}
 		List<InternetAddress> existing = modelService.getChildren(parent, InternetAddress.class, priviledged);
 		EntitylistSynchronizer<InternetAddress> sync = new EntitylistSynchronizer<InternetAddress>(existing,urls);
-		
+
 		for (Entry<InternetAddress, InternetAddress> entry : sync.getUpdated().entrySet()) {
 			InternetAddress original = entry.getKey();
 			InternetAddress dummy = entry.getValue();
 			original.setAddress(dummy.getAddress());
 			original.setContext(dummy.getContext());
 		}
-		
+
 		for (InternetAddress number : sync.getNew()) {
 			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
-		
+
 		for (InternetAddress number : sync.getDeleted()) {
 			modelService.delete(number, priviledged);
 		}
 	}
-	
+
 	public void scheduleHealthCheck(User user) {
 		JobDataMap data = new JobDataMap();
 		data.put(UserHealthCheckJob.USER_ID, user.getId());
@@ -498,7 +498,7 @@ public class MemberService {
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailconfirmation-template.html", parms);
-		
+
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),name);
 		email.overrideFirstProperty(Property.KEY_EMAIL_CONFIRMATION_REQUEST_TIME, new Date());
 		surveillanceService.audit().info("Did send email confirmation to user={} via mail={}", user.getUsername(), email.getAddress());
@@ -541,7 +541,7 @@ public class MemberService {
 		parms.put("url", url.toString());
 		parms.put("base-url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
-		
+
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail, fullName);
 		surveillanceService.audit().info("Did send email change request to user={} for email={} by privileged={}", user.getUsername(), newEmail, operator.getIdentity());
 	}
@@ -640,13 +640,13 @@ public class MemberService {
 		File file = configurationService.getFile("WEB-INF","agreements", fileName);
 		return file;
 	}
-	
+
 	private Optional<Date> getLatestAgreementDate() {
 		return agreementConfigs.values().stream().sorted((a,b) -> b.compareTo(a)).findFirst();
 	}
-	
+
 	public void setAgreementConfigs(Map<String,List<String>> configs) {
-		
+
 		for (Entry<String, List<String>> entry : configs.entrySet()) {
 			for (String dateStr : entry.getValue()) {
 				try {
@@ -657,12 +657,12 @@ public class MemberService {
 
 			}
 		}
-		
+
 	}
 
 	// Wiring...
-	
-	
+
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
@@ -690,11 +690,11 @@ public class MemberService {
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
-	
+
 	public void setSchedulingService(SchedulingService schedulingService) {
 		this.schedulingService = schedulingService;
 	}

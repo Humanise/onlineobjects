@@ -13,8 +13,8 @@ import dk.in2isoft.onlineobjects.core.EntitylistSynchronizer;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Address;
@@ -29,11 +29,11 @@ import dk.in2isoft.onlineobjects.modules.user.UserProfileInfo;
 public class PersonService {
 
 	private ModelService modelService;
-		
+
 	public Address getPersonsPreferredAddress(Person person, Operator privileged) throws ModelException {
 		return modelService.getChild(person, Property.KEY_COMMON_PREFERRED, Address.class, privileged);
 	}
-	
+
 	public Person getOrCreatePerson(String text, Operator privileged) throws ModelException, SecurityException, BadRequestException {
 		if (Strings.isBlank(text)) {
 			throw new BadRequestException("A person must have a name");
@@ -51,7 +51,7 @@ public class PersonService {
 		}
 		return person;
 	}
-	
+
 	public String getFullPersonName(Person person, int maxLength) {
 		String fullName = person.getFullName();
 		String given = person.getGivenName();
@@ -65,12 +65,12 @@ public class PersonService {
 			if (givenAdditionFirstFamily.length()<=maxLength) {
 				return givenAdditionFirstFamily;
 			}
-			
+
 			String givenFamily = Strings.concatWords(given, family);
 			if (givenFamily.length()<=maxLength) {
 				return givenFamily;
 			}
-			
+
 			String givenFirstFamily = Strings.concatWords(givenFirst, family);
 			if (givenFirstFamily.length()<=maxLength) {
 				return givenFirstFamily;
@@ -85,7 +85,7 @@ public class PersonService {
 		}
 		return name.trim().substring(0, 1).toUpperCase()+".";
 	}
-	
+
 	public void updatePersonsPreferredAddress(Person person, Address address, Operator privileged) throws ModelException, SecurityException {
 		Address existing = getPersonsPreferredAddress(person, privileged);
 		if (existing!=null) {
@@ -118,9 +118,9 @@ public class PersonService {
 		info.setUrls(modelService.getChildren(person, InternetAddress.class,priviledged));
 		return info;
 	}
-	
+
 	public void updateDummyEmailAddresses(Entity parent,List<EmailAddress> addresses, Operator session) throws EndUserException {
-		
+
 		// Remove empty addresses
 		for (Iterator<EmailAddress> i = addresses.iterator(); i.hasNext();) {
 			EmailAddress emailAddress = i.next();
@@ -128,28 +128,28 @@ public class PersonService {
 				i.remove();
 			}
 		}
-		
+
 		List<EmailAddress> existing = modelService.getChildren(parent, EmailAddress.class, session);
 		EntitylistSynchronizer<EmailAddress> sync = new EntitylistSynchronizer<EmailAddress>(existing,addresses);
-		
+
 		for (Entry<EmailAddress, EmailAddress> entry : sync.getUpdated().entrySet()) {
 			EmailAddress original = entry.getKey();
 			EmailAddress dummy = entry.getValue();
 			original.setAddress(dummy.getAddress());
 			original.setContext(dummy.getContext());
 		}
-		
+
 		for (EmailAddress emailAddress : sync.getNew()) {
 			modelService.create(emailAddress, session);
 			modelService.createRelation(parent, emailAddress, session);
 		}
-		
+
 		for (EmailAddress emailAddress : sync.getDeleted()) {
 			modelService.delete(emailAddress, session);
 		}
 	}
 
-	
+
 	public void updateDummyPhoneNumbers(Entity parent,List<PhoneNumber> phones, Operator priviledged) throws EndUserException {
 
 		// Remove empty addresses
@@ -161,24 +161,24 @@ public class PersonService {
 		}
 		List<PhoneNumber> existing = modelService.getChildren(parent, PhoneNumber.class, priviledged);
 		EntitylistSynchronizer<PhoneNumber> sync = new EntitylistSynchronizer<PhoneNumber>(existing,phones);
-		
+
 		for (Entry<PhoneNumber, PhoneNumber> entry : sync.getUpdated().entrySet()) {
 			PhoneNumber original = entry.getKey();
 			PhoneNumber dummy = entry.getValue();
 			original.setNumber(dummy.getNumber());
 			original.setContext(dummy.getContext());
 		}
-		
+
 		for (PhoneNumber number : sync.getNew()) {
 			modelService.create(number, priviledged);
 			modelService.createRelation(parent, number, priviledged);
 		}
-		
+
 		for (PhoneNumber number : sync.getDeleted()) {
 			modelService.delete(number, priviledged);
 		}
 	}
-	
+
 	public Integer getYearsOld(Person person) {
 		if (person==null || person.getBirthday()==null) {
 			return null;
@@ -187,7 +187,7 @@ public class PersonService {
 		Period period = new Period(new DateTime(person.getBirthday()),now);
 		return period.getYears();
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

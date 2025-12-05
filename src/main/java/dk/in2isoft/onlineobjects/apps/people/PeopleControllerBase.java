@@ -8,8 +8,8 @@ import com.google.common.collect.Lists;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.modules.user.MemberService;
 import dk.in2isoft.onlineobjects.services.ImportService;
@@ -26,7 +26,7 @@ public class PeopleControllerBase extends ApplicationController {
 	public PeopleControllerBase() {
 		super("people");
 	}
-		
+
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
 	}
@@ -49,7 +49,7 @@ public class PeopleControllerBase extends ApplicationController {
 		}
 		return image;
 	}
-	
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
@@ -57,11 +57,11 @@ public class PeopleControllerBase extends ApplicationController {
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setImportService(ImportService importService) {
 		this.importService = importService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}

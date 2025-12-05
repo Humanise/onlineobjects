@@ -23,7 +23,7 @@ public class PanelComponent extends AbstractComponent {
 	public PanelComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -35,7 +35,7 @@ public class PanelComponent extends AbstractComponent {
 			name
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -43,7 +43,7 @@ public class PanelComponent extends AbstractComponent {
 		out.startDiv(cls).withId(id);
 		out.startDiv("hui_panel_body");
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

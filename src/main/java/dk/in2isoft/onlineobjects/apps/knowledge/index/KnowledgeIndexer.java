@@ -35,23 +35,23 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	private static final String APP_READER_USER  = "app-reader-user-";
 
 	private KnowledgeIndexDocumentBuilder documentBuilder;
-	
+
 	private IndexService indexService;
 	private ModelService modelService;
 	private SecurityService securityService;
 	private KnowledgeSolrIndexWriter knowledgeSolrIndexWriter;
-	
+
 	private static final Logger log = LogManager.getLogger(KnowledgeIndexer.class);
-	
+
 	public void clear(Privileged privileged) throws EndUserException {
 		getIndexManager(privileged).clear();
 	}
-	
+
 	@Override
 	public boolean is(IndexDescription description) {
 		return description.getName().startsWith(APP_READER_USER );
 	}
-	
+
 	@Override
 	public long getObjectCount(IndexDescription description, Operator operator) {
 		DummyPrivileged privileged = new DummyPrivileged(description.getUserId());
@@ -62,7 +62,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		}
 		return count;
 	}
-	
+
 	@Override
 	public List<IndexDescription> getIndexInstances(Operator operator) {
 		Query<User> query = Query.after(User.class);
@@ -73,7 +73,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			return desc;
 		}).collect(Collectors.toList());
 	}
-	
+
 	public void reIndex(Operator operator) throws EndUserException {
 
 		clear(operator);
@@ -126,7 +126,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			}
 		}
 	}
-	
+
 	public void index(InternetAddress address) {
 		Privileged privileged = securityService.getAdminPrivileged();
 		Operator operator = modelService.newOperator(privileged);
@@ -151,7 +151,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 		getIndexManager(owner).update(entity, document);
 		knowledgeSolrIndexWriter.index(entity, owner, document);
 	}
-	
+
 	public void index(Question question) {
 		Privileged privileged = securityService.getAdminPrivileged();
 		Operator operator = modelService.newOperator(privileged);
@@ -168,7 +168,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			operator.rollBack();
 		}
 	}
-	
+
 	public void index(Hypothesis hypothesis) {
 		Privileged privileged = securityService.getAdminPrivileged();
 		Operator operator = modelService.newOperator(privileged);
@@ -184,7 +184,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			operator.rollBack();
 		}
 	}
-	
+
 	public void index(Statement statement) {
 		Privileged privileged = securityService.getAdminPrivileged();
 		Operator operator = modelService.newOperator(privileged);
@@ -202,7 +202,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 			operator.rollBack();
 		}
 	}
-	
+
 	private IndexManager getIndexManager(Privileged privileged) {
 		return indexService.getIndex(getIndexName(privileged));
 	}
@@ -210,7 +210,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	private String getIndexName(Privileged privileged) {
 		return APP_READER_USER + privileged.getIdentity();
 	}
-	
+
 	public void entityWasCreated(Entity entity) {
 		check(entity);
 	}
@@ -237,7 +237,7 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	public void entityWasDeleted(Entity entity) {
 		/** @see ReaderIndexer#allPrivilegesWasRemoved */
 	}
-	
+
 	@Override
 	public void allPrivilegesWasRemoved(Item item, List<User> users) {
 		if (item instanceof InternetAddress || item instanceof Statement || item instanceof Question || item instanceof Hypothesis) {
@@ -267,23 +267,23 @@ public class KnowledgeIndexer implements ModelEventListener, ModelPrivilegesEven
 	}
 
 	// Wiring...
-	
+
 	public void setDocumentBuilder(KnowledgeIndexDocumentBuilder documentBuilder) {
 		this.documentBuilder = documentBuilder;
 	}
-	
+
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setKnowledgeSolrIndexWriter(KnowledgeSolrIndexWriter knowledgeSolrIndexWriter) {
 		this.knowledgeSolrIndexWriter = knowledgeSolrIndexWriter;
 	}

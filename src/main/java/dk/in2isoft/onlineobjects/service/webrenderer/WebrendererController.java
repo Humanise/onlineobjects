@@ -14,9 +14,9 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class WebrendererController extends ServiceController {
 
 	//private static Logger log = LogManager.getLogger(WebrendererController.class);
-	
+
 	private ConfigurationService configurationService;
-	
+
 	public WebrendererController() {
 		super("webrenderer");
 	}
@@ -55,8 +55,8 @@ public class WebrendererController extends ServiceController {
 		pusher.push(request.getResponse(), mime);
 		tempFile.delete();
 	}
-	
-	private void checkError(Process p) 
+
+	private void checkError(Process p)
 	throws EndUserException, IOException {
 		InputStream s = p.getErrorStream();
 		int c;
@@ -67,7 +67,7 @@ public class WebrendererController extends ServiceController {
 		if (sw.getBuffer().length()>0) {
 			throw new EndUserException(sw.toString());
 		}
-		
+
 	}
 
 	public void setConfigurationService(ConfigurationService configurationService) {

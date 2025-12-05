@@ -7,7 +7,7 @@ import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 public class GalleryModificationRequest {
 
 	private long galleryId;
-	
+
 	private List<SimpleEntityPerspective> images;
 
 	public long getGalleryId() {

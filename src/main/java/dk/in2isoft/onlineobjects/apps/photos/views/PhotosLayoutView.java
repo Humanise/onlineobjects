@@ -10,8 +10,8 @@ import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.UsersPersonQuery;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Person;
@@ -26,18 +26,18 @@ public class PhotosLayoutView extends AbstractView {
 	private ModelService modelService;
 	private PhotosGalleryView photosGalleryView;
 	private PersonService personService;
-	
+
 	private String username;
 	private String fullPersonName;
 	private User user;
 	private Person person;
-	
+
 	private boolean allImages;
 
 	private boolean modifiable;
 
 	private Image userImage;
-	
+
 	public void before(Request request) throws Exception {
 		String[] path = request.getLocalPath();
 		String type = path[1];
@@ -69,21 +69,21 @@ public class PhotosLayoutView extends AbstractView {
 	}
 
 	private GalleryLink allPhotos;
-	
+
 	public GalleryLink getAllPhotos() {
 		if (allPhotos != null) return allPhotos;
 		Query<Image> query = Query.after(Image.class).as(getRequest()).orderByCreated().descending();
-		
+
 		List<Long> ids = modelService.listIds(query, getRequest());
 		allPhotos = new GalleryLink();
 		allPhotos.title = "All photos";
 		allPhotos.photoCount = ids.size();
-		allPhotos.photoIds = ids.stream().mapToInt(Long::intValue).toArray(); 
+		allPhotos.photoIds = ids.stream().mapToInt(Long::intValue).toArray();
 		return allPhotos;
 	}
-	
+
 	private List<GalleryLink> galleryLinks;
-	
+
 	public List<GalleryLink> getGalleryLinks() throws ModelException {
 		if (galleryLinks != null) return galleryLinks;
 		Request request = getRequest();
@@ -105,37 +105,37 @@ public class PhotosLayoutView extends AbstractView {
 		galleryLinks = links;
 		return links;
 	}
-	
+
 	public boolean isAllImages() {
 		return allImages;
 	}
-	
+
 	public Image getUserImage() {
 		return userImage;
 	}
-	
+
 	public boolean isModifiable() {
 		return modifiable;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public String getPersonName() {
 		return fullPersonName;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setPhotosGalleryView(PhotosGalleryView photosGalleryView) {
 		this.photosGalleryView = photosGalleryView;
 	}
-	
+
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}

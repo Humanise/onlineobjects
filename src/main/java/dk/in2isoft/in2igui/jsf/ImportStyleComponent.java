@@ -20,7 +20,7 @@ public class ImportStyleComponent extends AbstractComponent {
 	public ImportStyleComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 	}
@@ -30,7 +30,7 @@ public class ImportStyleComponent extends AbstractComponent {
 		return new Object[] {
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		Request request = Components.getRequest();
@@ -44,7 +44,7 @@ public class ImportStyleComponent extends AbstractComponent {
 		} else {
 			writer.writeStylesheet(request.getBaseContext()+"/hui/bin/minimized.css"+stamp).newLine();
 		}
-		
+
 		writer.write("<!--[if lt IE 7]>").newLine();
 		writer.writeStylesheet(request.getBaseContext()+"/hui/css/msie6.css"+stamp).newLine();
 		writer.write("<![endif]-->").newLine();

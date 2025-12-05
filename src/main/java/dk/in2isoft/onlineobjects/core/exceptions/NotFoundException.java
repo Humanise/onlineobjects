@@ -14,7 +14,7 @@ public class NotFoundException extends EndUserException {
 	public int getHttpStatusCode() {
 		return HttpServletResponse.SC_NOT_FOUND;
 	}
-	
+
 	public NotFoundException(Class<?> type, Number id) {
 		super("Object of type " + type.getSimpleName() + " and id=" + id + " was not found");
 	}

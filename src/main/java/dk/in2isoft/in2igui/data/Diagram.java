@@ -10,7 +10,7 @@ public class Diagram {
 
 	private List<Node> nodes = Lists.newArrayList();
 	private List<Edge> edges = Lists.newArrayList();
-	
+
 	private int maxNodeCount = Integer.MAX_VALUE;
 
 	public List<Node> getNodes() {
@@ -56,7 +56,7 @@ public class Diagram {
 	public void setMaxNodeCount(int maxNodes) {
 		this.maxNodeCount = maxNodes;
 	}
-	
+
 	public boolean isFull() {
 		return nodes.size() >= maxNodeCount;
 	}

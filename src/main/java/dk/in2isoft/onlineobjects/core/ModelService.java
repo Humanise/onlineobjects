@@ -48,8 +48,8 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.events.EventService;
 import dk.in2isoft.onlineobjects.core.events.ModelEventType;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
@@ -73,14 +73,14 @@ public class ModelService implements InitializingBean, OperationProvider {
 	private SecurityService securityService;
 	private Migrator migrator;
 	private ConfigurationService configuration;
-	
-	private List<Class<?>> classes = Lists.newArrayList(); 
-	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList(); 
+
+	private List<Class<?>> classes = Lists.newArrayList();
+	private List<Class<? extends Entity>> entityClasses = Lists.newArrayList();
 	private List<EntityValidator> entityValidators;
 	private long operationCount;
 
 	private Finder finder;
-		
+
 	public SessionFactory getSessionfactory() {
 		return sessionFactory;
 	}
@@ -91,7 +91,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		userValidator.setModelService(this);
 		entityValidators.add(userValidator);
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		if (configuration.isMigrateDatabaseSchema()) {
@@ -113,11 +113,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 	            BootstrapServiceRegistry bootstrapRegistry =
 	                    new BootstrapServiceRegistryBuilder()
 	                    .applyIntegrator(new Integrator() {
-							
+
 							@Override
 							public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory,
 									SessionFactoryServiceRegistry serviceRegistry) {
-							    EventListenerRegistry eventListenerRegistry = 
+							    EventListenerRegistry eventListenerRegistry =
 							    serviceRegistry.getService(EventListenerRegistry.class);
 							    //eventListenerRegistry.appendListeners(EventType.PERSIST, eventService);
 							    eventListenerRegistry.appendListeners(EventType.POST_COMMIT_UPDATE, eventService);
@@ -125,23 +125,23 @@ public class ModelService implements InitializingBean, OperationProvider {
 							    eventListenerRegistry.appendListeners(EventType.POST_COMMIT_DELETE, eventService);
 							    //eventListenerRegistry.appendListeners(EventType.SAVE, eventService);
 							    //eventListenerRegistry.appendListeners(EventType.POST_UPDATE, eventService);
-							    
+
 							}
-							
+
 							@Override
 							public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-								
+
 							}
 						})
 	                    .build();
-	              
-	            StandardServiceRegistryBuilder registryBuilder = 
+
+	            StandardServiceRegistryBuilder registryBuilder =
 	                    new StandardServiceRegistryBuilder(bootstrapRegistry);
 
 				registry = registryBuilder.configure().build();
 				*/
 				registry = new StandardServiceRegistryBuilder().configure().build();
-				
+
 
 				MetadataSources sources = new MetadataSources(registry);
 
@@ -161,10 +161,10 @@ public class ModelService implements InitializingBean, OperationProvider {
 	public DataSource getDataSource() {
 		Configuration configuration = new Configuration().configure();
 		Properties properties = configuration.getProperties();
-		
+
 		PGSimpleDataSource ds = new PGSimpleDataSource() ;
 		ds.setURL(properties.getProperty("hibernate.connection.url"));
-		ds.setUser( properties.getProperty("hibernate.connection.username") );       
+		ds.setUser( properties.getProperty("hibernate.connection.username") );
 		ds.setPassword( properties.getProperty("hibernate.connection.password") );
 		return ds;
 	}
@@ -193,11 +193,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 			throw new ModelException("Could not find class with simple name=" + simpleName);
 		}
 	}
-	
+
 	public Collection<Class<? extends Entity>> getEntityClasses() {
 		return entityClasses;
 	}
-	
+
 	public Class<? extends Entity> getEntityClass(String simpleName) {
 		for (Class<? extends Entity> cls : entityClasses) {
 			if (cls.getSimpleName().equals(simpleName)) {
@@ -206,15 +206,15 @@ public class ModelService implements InitializingBean, OperationProvider {
 		}
 		return null;
 	}
-	
+
 	public Operator newOperator(Privileged privileged) {
 		return new SimpleOperator(privileged, this);
 	}
-	
+
 	public Operator newPublicOperator() {
 		return new SimpleOperator(securityService.getPublicUser(), this);
 	}
-	
+
 	public Operator newAdminOperator() {
 		return new SimpleOperator(securityService.getAdminPrivileged(), this);
 	}
@@ -226,7 +226,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		operationCount++;
 		return new Operation(session);
 	}
-	
+
 	@Override
 	public void execute(Operation operation) {
 		operationCount--;
@@ -276,7 +276,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	private boolean equals(Pair<ModelEventType, Object> pair, Pair<ModelEventType, Object> x) {
-		
+
 		Object a = x.getValue();
 		Object b = pair.getValue();
 		if (a instanceof Item && b instanceof Item) {
@@ -349,7 +349,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			grantPrivilegesPrivately(item, privileged, true, true, true, session);
 		}
 	}
-	
+
 
 	/**
 	 * Will create a core user if it doesn't already exist
@@ -382,7 +382,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		T address = getRequired(type, id, operator);
 		delete(address, operator);
 	}
-	
+
 	private void deleteEntity(Entity entity, Operator operator) throws ModelException, SecurityException {
 		if (!securityService.canDelete(entity, operator)) {
 			throw new SecurityException("Privilieged=" + operator + " cannot delete Entity=" + entity);
@@ -392,7 +392,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	private void removeAllRelations(Entity entity, Operator operator) {
-		
+
 		Session session = operator.getOperation().getSession();
 		{
 			String hql = "delete Privilege p where p.object in (select relation.id from Relation relation where relation.from=:entity or relation.to=:entity)";
@@ -434,7 +434,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		operator.getOperation().addDeleteEvent(item);
 	}
 
-	
+
 	public void update(Item item, Operator operational) throws SecurityException,
 	ModelException {
 		if (!canUpdate(item, operational)) {
@@ -446,7 +446,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		item.setUpdated(new Date());
 		session.update(item);
 		operation.addChangeEvent(item);
-		
+
 	}
 
 	private void validate(Item item) throws ModelException, SecurityException {
@@ -484,7 +484,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		if (privileged.getIdentity() < 1) {
 			return false;
 		}
-		return true;		
+		return true;
 	}
 
 	public boolean canUpdate(Item item, Operator privileged) {
@@ -627,7 +627,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 				log.warn("Empty user requested");
 			} else {
 				session = operation.getSession();
-				
+
 				Query<User> q = session.createQuery("from User as user left join fetch user.properties where lower(user.username)=lower(:username)", User.class);
 				q.setParameter("username", username);
 				for (User user : q.list()) {
@@ -780,7 +780,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			List<T> result = Lists.newArrayList();
 			for (Object t : list) {
 				if (t instanceof Object[]) {
-					result.add(query.convert((Object[]) t));					
+					result.add(query.convert((Object[]) t));
 				} else {
 					result.add(query.convert(new Object[] {t}));
 				}
@@ -790,7 +790,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 			log.error("SQL:"+e.getSQL());
 			throw new ModelException("Error executing SQL", e);
 		} catch (HibernateException e) {
-			
+
 			throw new ModelException("Error executing SQL", e);
 		}
 	}
@@ -955,11 +955,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	private void removeAllPrivileges(Item item, Operation operation) {
-		
+
 		Query<User> query = createQuery("select user from User as user, Privilege as priv where priv.object=:object and priv.subject=user.id", User.class, operation.getSession());
 		query.setParameter("object", item.getId());
 		List<User> users = query.list();
-		
+
 		String hql = "from Privilege as p where p.object = :id or p.subject = :id";
 		Query<Privilege> q = createQuery(hql, Privilege.class, operation.getSession());
 		q.setParameter("id", item.getId());
@@ -967,7 +967,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		for (Privilege privilege : list) {
 			operation.getSession().delete(privilege);
 		}
-		
+
 		log.info("Deleting privileges for: " + item.getClass().getName() + "; count: " + list.size());
 		operation.addPrivilegesRemoved(item,users);
 	}
@@ -1049,7 +1049,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getSubject(T obj) {
-		
+
 		if (obj instanceof HibernateProxy) {
 			obj = (T) ((AbstractLazyInitializer) ((HibernateProxy) obj).getHibernateLazyInitializer()).getImplementation();
 		}
@@ -1061,7 +1061,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 	}
 
 	// Wiring...
-	
+
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
@@ -1069,11 +1069,11 @@ public class ModelService implements InitializingBean, OperationProvider {
 	public EventService getEventService() {
 		return eventService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setFinder(Finder finder) {
 		this.finder = finder;
 	}
@@ -1081,12 +1081,12 @@ public class ModelService implements InitializingBean, OperationProvider {
 	public void setMigrator(Migrator migrator) {
 		this.migrator = migrator;
 	}
-	
+
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;
 	}
 
-	public void asAdmin(FailableConsumer<Operator, ? extends Throwable> runnable) {		
+	public void asAdmin(FailableConsumer<Operator, ? extends Throwable> runnable) {
 		Operator operator = newAdminOperator();
 		try {
 			runnable.accept(operator);

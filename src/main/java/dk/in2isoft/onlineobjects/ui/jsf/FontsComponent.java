@@ -23,22 +23,22 @@ import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 public class FontsComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.fonts";
-	
+
 	private String additional;
-	
+
 	public FontsComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public Object[] saveState() {
 		return new Object[] {};
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		List<String> urls = new ArrayList<>();

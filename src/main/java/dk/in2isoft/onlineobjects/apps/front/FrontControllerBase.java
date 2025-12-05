@@ -11,7 +11,7 @@ import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class FrontControllerBase extends ApplicationController {
-	
+
 	private SecurityService securityService;
 
 	public FrontControllerBase() {
@@ -21,7 +21,7 @@ public abstract class FrontControllerBase extends ApplicationController {
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
 	}
-	
+
 	@Override
 	public boolean isAllowed(Request request) {
 		UserSession user = request.getSession();
@@ -33,7 +33,7 @@ public abstract class FrontControllerBase extends ApplicationController {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String getMountPoint() {
 		return "www";

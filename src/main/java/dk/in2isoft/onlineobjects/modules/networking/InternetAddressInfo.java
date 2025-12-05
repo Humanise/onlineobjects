@@ -9,9 +9,9 @@ public class InternetAddressInfo {
 	private String address;
 	private String description;
 	private Collection<String> tags;
-	
+
 	public InternetAddressInfo() {
-		
+
 	}
 
 	public void setName(String name) {

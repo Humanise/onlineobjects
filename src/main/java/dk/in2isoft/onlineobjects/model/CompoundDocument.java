@@ -3,15 +3,15 @@ package dk.in2isoft.onlineobjects.model;
 import java.io.IOException;
 import java.io.StringReader;
 
-import nu.xom.Builder;
-import nu.xom.Element;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 import dk.in2isoft.onlineobjects.publishing.CompoundDocumentBuilder;
 import dk.in2isoft.onlineobjects.publishing.Document;
 import dk.in2isoft.onlineobjects.publishing.DocumentBuilder;
+import nu.xom.Builder;
+import nu.xom.Element;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 @Appearance(icon="file/generic")
 public class CompoundDocument extends Entity implements Document {
@@ -19,9 +19,9 @@ public class CompoundDocument extends Entity implements Document {
 	public static String TYPE = Entity.TYPE+"/CompoundDocument";
 	public static String NAMESPACE = Entity.NAMESPACE+"CompoundDocument/";
 	public static String CONTENT_NAMESPACE = "http://uri.onlineobjects.com/publishing/Document/CompoundDocument/";
-	
+
 	private String structure;
-	
+
 	public CompoundDocument() {
 		super();
 	}
@@ -41,7 +41,7 @@ public class CompoundDocument extends Entity implements Document {
 	public void setStructure(String structure) {
 		this.structure = structure;
 	}
-	
+
 	public nu.xom.Document getStructureDocument() throws EndUserException {
 
 		if (structure==null) {

@@ -9,7 +9,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.User;
 
 public class UserConsistencyChecker implements ConsistencyChecker {
-	
+
 	private static Logger log = LogManager.getLogger(UserConsistencyChecker.class);
 
 	private ModelService modelService;
@@ -59,11 +59,11 @@ public class UserConsistencyChecker implements ConsistencyChecker {
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setPasswordEncryptionService(PasswordEncryptionService passwordEncryptionService) {
 		this.passwordEncryptionService = passwordEncryptionService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

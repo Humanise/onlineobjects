@@ -23,10 +23,10 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.SecurityService;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.InternetAddress;
@@ -43,20 +43,20 @@ import dk.in2isoft.onlineobjects.services.LanguageService;
 import dk.in2isoft.onlineobjects.util.ValidationUtil;
 
 public class WordService {
-	
+
 	private static final Logger log = LogManager.getLogger(WordService.class);
 
 	private IndexManager index;
 	private ModelService modelService;
 	private LanguageService languageService;
 	private SecurityService securityService;
-	
+
 	private boolean enableMaterializedView;
 
 	private List<String> trademarks = Lists.newArrayList("rockwool");
-	
+
 	public SearchResult<WordListPerspective> search(WordQuery query, Operator operator) throws ExplodingClusterFuckException, ModelException {
-		
+
 		if (enableMaterializedView && Strings.isBlank(query.getText())) {
 			WordListPerspectiveViewQuery listQuery = new WordListPerspectiveViewQuery().withPaging(query.getPage(), query.getPageSize()).orderByText();
 			String letter = query.getLetter();
@@ -104,7 +104,7 @@ public class WordService {
 		}
 		watch.stop();
 		log.trace("Database query time="+watch.getTime());
-		
+
 		Collections.sort(result.getList(), (o1, o2) -> {
 			int index1 = ids.indexOf(o1.getId());
 			int index2 = ids.indexOf(o2.getId());
@@ -119,7 +119,7 @@ public class WordService {
 		result.setDescription(searchQuery.getQuery());
 		return result;
 	}
-	
+
 	private IndexSearchQuery buildQuery(WordQuery query) {
 
 		String text = query.getText();
@@ -128,9 +128,9 @@ public class WordService {
 		String category = query.getCategory();
 		String[] words = query.getWords();
 		String source = query.getSource();
-		
+
 		boolean order = true;
-		
+
 		StringBuilder searchQuery = new StringBuilder();
 		if (StringUtils.isNotBlank(text)) {
 			String[] textWords = Strings.getWords(text);
@@ -169,7 +169,7 @@ public class WordService {
 			}
 			searchQuery.append("(letter:").append(QueryParserUtil.escape(letter)).append(")");
 		}
-				
+
 		if (Strings.isNotBlank(language)) {
 			if (searchQuery.length()>0) {
 				searchQuery.append(" AND ");
@@ -193,7 +193,7 @@ public class WordService {
 				searchQuery.append(" AND ");
 			}
 			searchQuery.append("NOT source:none");
-			
+
 		}
 		if (Strings.isDefined(words)) {
 			if (searchQuery.length()>0) {
@@ -216,7 +216,7 @@ public class WordService {
 		}
 		return isq;
 	}
-	
+
 	public WordImpression getImpression(Word word, Operator operator) throws ModelException {
 		WordImpression impression = new WordImpression();
 		if (trademarks.contains(word.getText().toLowerCase())) {
@@ -249,7 +249,7 @@ public class WordService {
 		}
 		return impressions;
 	}
-	
+
 	public Word createWord(String languageCode, String category, String text, Operator operator) throws ModelException, BadRequestException, SecurityException, NotFoundException {
 		if (StringUtils.isBlank(languageCode)) {
 			throw new BadRequestException("No language provided");
@@ -310,9 +310,9 @@ public class WordService {
 		}
 		watch.stop();
 		log.info("Source lookup time=" + watch.getTime());
-		
+
 		//Word word = getWordBySourceId(modification.sourceId, privileged);
-		
+
 		List<WordMatch> matches = Lists.newArrayList();
 		for (WordListPerspective perspective : list) {
 			WordMatch match = new WordMatch();
@@ -338,7 +338,7 @@ public class WordService {
 				// Category matches if found is uncategorized or is equal to the modification
 				match.category = Strings.isBlank(perspective.getLexicalCategory()) || Strings.equals(modification.lexicalCategory, perspective.getLexicalCategory());
 			}
-			
+
 			Word word = modelService.get(Word.class, perspective.getId(), operator);
 			match.word = word;
 			String sourceId = word.getPropertyValue(Property.KEY_DATA_SOURCE);
@@ -351,21 +351,21 @@ public class WordService {
 				}
 			}
 			if (Strings.isNotBlank(perspective.getGlossary()) && !match.source) {
-				// Skip words that have a glossary 
+				// Skip words that have a glossary
 				log.warn("Skipping because it has a glossary: " + Strings.toJSON(perspective));
 				continue;
 			}
 			// TODO: Check glossary - fail or skip if it is already set with something else
-			
+
 			match.text = perspective.getText().equals(modification.text);
 			match.perspective = perspective;
-			matches.add(match);				
+			matches.add(match);
 		}
 		Word word;
 		if (!matches.isEmpty()) {
 			Collections.sort(matches);
 			log.info("Mathces: " + Strings.toJSON(matches));
-			
+
 			WordMatch best = matches.get(0);
 			log.info("Best match: " + Strings.toJSON(best.perspective));
 			word = best.word;
@@ -416,7 +416,7 @@ public class WordService {
 		securityService.grantPublicView(address, true, operator);
 		return address;
 	}
-	
+
 	private void updateWord(Word word, WordModification modification, InternetAddress source, Operator operator) throws ModelException, BadRequestException, SecurityException {
 		Language language = languageService.getLanguageForCode(modification.language, operator);
 		if (language == null) {
@@ -474,7 +474,7 @@ public class WordService {
 			}
 		}
 	}
-	
+
 	private void changeLanguage(Word word, Language language, Operator operator) throws ModelException, SecurityException {
 		List<Relation> parents = modelService.find().relations(operator).to(word).from(Language.class).list();
 		boolean found = false;
@@ -514,22 +514,22 @@ public class WordService {
 		boolean text;
 		boolean language;
 		boolean category;
-		
+
 		@Override
 		public int compareTo(WordMatch other) {
-			int score = getScore(this); 
+			int score = getScore(this);
 			int otherScore = getScore(other);
 			if (score == otherScore) {
 				return this.word.getCreated().compareTo(other.word.getCreated());
 			}
 			return score > otherScore ? -1 : 1;
 		}
-		
+
 		private int getScore(WordMatch other) {
 			return (other.source ? 10 : 0) + (other.text ? 1 : 0) + (other.language ? 1 : 0) + (other.category ? 1 : 0);
 		}
 	}
-	
+
 	public Word getWordBySourceId(String sourceId, Operator privileged) {
 		Query<Word> query = Query.after(Word.class).withCustomProperty(Property.KEY_DATA_SOURCE, sourceId).as(privileged);
 		List<Word> list = modelService.list(query, privileged);
@@ -541,7 +541,7 @@ public class WordService {
 		}
 		return null;
 	}
-	
+
 	public void ensureOriginator(Word word, Operator operator) throws ModelException, SecurityException, NotFoundException {
 		User user = modelService.getUser(operator);
 		User existing = modelService.getChild(word, Relation.KIND_COMMON_ORIGINATOR, User.class, operator.as(securityService.getAdminPrivileged()));
@@ -549,21 +549,21 @@ public class WordService {
 			modelService.createRelation(word, user, Relation.KIND_COMMON_ORIGINATOR, operator);
 		}
 	}
-	
+
 	// Wiring...
-	
+
 	public void setIndex(IndexManager index) {
 		this.index = index;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

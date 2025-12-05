@@ -19,9 +19,9 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 public class UglifyScriptCompressor extends AbstractCommandLineInterface implements ScriptCompressor {
 
 	private static final Logger log = LogManager.getLogger(UglifyScriptCompressor.class);
-	
+
 	private ConfigurationService configuration;
-	
+
 	@Override
 	public String compress(String js) {
 		try {
@@ -53,10 +53,10 @@ public class UglifyScriptCompressor extends AbstractCommandLineInterface impleme
 			if (in.markSupported()) {
 				in.reset();
 			}
-			IOUtils.copy(in, out);			
+			IOUtils.copy(in, out);
 		}
 	}
-	
+
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;
 	}

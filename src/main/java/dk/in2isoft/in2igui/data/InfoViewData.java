@@ -10,11 +10,11 @@ public class InfoViewData extends ArrayList<InfoViewDataItem> {
 	public void addHeader(String text) {
 		add(new InfoViewDataItem("header",null,text));
 	}
-	
+
 	public void addProperty(String label, String text) {
 		add(new InfoViewDataItem("property",label,text));
 	}
-	
+
 	public void addObjects(String label, Collection<ObjectData> objects) {
 		add(new InfoViewDataItem("objects",label,objects));
 	}

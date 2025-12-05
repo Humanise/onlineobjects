@@ -29,7 +29,7 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DeveloperView extends AbstractView {
-	
+
 	private ModelService modelService;
 	private SecurityService securityService;
 	private ConfigurationService configurationService;
@@ -42,7 +42,7 @@ public class DeveloperView extends AbstractView {
 		// TODO Auto-generated method stub
 		loadIcons();
 	}
-	
+
 	public List<String> getIcons() {
 		loadIcons();
 		return icons;
@@ -80,7 +80,7 @@ public class DeveloperView extends AbstractView {
 	public List<String> getModelTypeNames() {
 		return modelService.getEntityClasses().stream().map(Class::getSimpleName).collect(Collectors.toList());
 	}
-	
+
 	public List<Item> getUsers() {
 		if (users == null) {
 			Request request = getRequest();
@@ -98,29 +98,29 @@ public class DeveloperView extends AbstractView {
 		}
 		return users;
 	}
-	
+
 	public Date getNow() {
 		return new Date();
 	}
-	
+
 	public class Item {
 		private User user;
 		private Person person;
 		private boolean userCanModifyPerson;
 		private boolean publicCanViewPerson;
-		
+
 		public User getUser() {
 			return user;
 		}
-		
+
 		public Person getPerson() {
 			return person;
 		}
-		
+
 		public boolean isUserCanModifyPerson() {
 			return userCanModifyPerson;
 		}
-		
+
 		public void setUserCanModifyPerson(boolean userCanModifyPerson) {
 			this.userCanModifyPerson = userCanModifyPerson;
 		}
@@ -133,17 +133,17 @@ public class DeveloperView extends AbstractView {
 			return publicCanViewPerson;
 		}
 	}
-	
+
 	// Wiring...
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

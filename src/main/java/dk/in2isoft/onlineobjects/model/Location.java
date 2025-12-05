@@ -6,11 +6,11 @@ public class Location extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/Location";
 	public static String NAMESPACE = Entity.NAMESPACE+"Location/";
-	
+
 	private double longitude;
 	private double latitude;
 	private double altitude;
-	
+
 	public Location() {
 		super();
 	}
@@ -46,37 +46,37 @@ public class Location extends Entity {
 	public double getAltitude() {
 		return altitude;
 	}
-	
+
 	/* Util */
-	
+
 	public double getLatitudeDegrees() {
 		return new GeoDistance(Math.abs(latitude)).getDegrees();
 	}
-	
+
 	public double getLatitudeMinutes() {
 		return new GeoDistance(Math.abs(latitude)).getMinutes();
 	}
-	
+
 	public double getLatitudeSeconds() {
 		return new GeoDistance(Math.abs(latitude)).getSeconds();
 	}
-	
+
 	public boolean isLatitudeNorth() {
 		return latitude>0;
 	}
-	
+
 	public double getLongitudeDegrees() {
 		return new GeoDistance(Math.abs(longitude)).getDegrees();
 	}
-	
+
 	public double getLongitudeMinutes() {
 		return new GeoDistance(Math.abs(longitude)).getMinutes();
 	}
-	
+
 	public double getLongitudeSeconds() {
 		return new GeoDistance(Math.abs(longitude)).getSeconds();
 	}
-	
+
 	public boolean isLongitudeEast() {
 		return longitude>0;
 	}

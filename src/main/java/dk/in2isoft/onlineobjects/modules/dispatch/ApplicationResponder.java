@@ -15,8 +15,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.service.authentication.views.AuthenticationLoginView.Actions;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
@@ -26,25 +26,25 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 
 	static Logger log = LogManager.getLogger(ApplicationResponder.class);
 	private Map<String, String> mappings;
-	
+
 	private HashMap<String, ApplicationController> controllers;
-		
+
 	public void afterPropertiesSet() throws Exception {
 		String domain = configurationService.getRootDomain();
-				
+
 		mappings = new HashMap<>();
 		for (ApplicationController ctrl : controllers.values()) {
 			mappings.put(ctrl.getMountPoint()+"."+domain, ctrl.getName());
 		}
 
 	}
-	
+
 	public boolean applies(Request request) {
 		return true;
 	}
-	
+
 	public void dispatch(Request request, FilterChain chain) throws IOException, EndUserException {
-		
+
 		String[] path = request.getFullPath();
 		if (configurationService.getRootDomain()==null && path.length>1 && path[0].equals("app")) {
 			request.setLocalContext((String[]) ArrayUtils.subarray(path, 0, 2));
@@ -58,7 +58,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 			}
 		}
 	}
-	
+
 	private ApplicationController getApplicationController(Request request, String name) {
 		return controllers.get(name);
 	}
@@ -97,7 +97,7 @@ public class ApplicationResponder extends AbstractControllerResponder implements
 			}
 		}
 	}
-	
+
 	private boolean pushFile(Request request) throws IOException {
 		String[] filePath = new String[] { "apps", request.getApplication() };
 		String[] path = (String[]) ArrayUtils.addAll(filePath, request.getLocalPath());

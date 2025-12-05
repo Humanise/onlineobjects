@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.model.User;
 public class PileService {
 
 	private ModelService modelService;
-	
+
 	public Pile getOrCreateGlobalPile(String key, Operator operator) throws ModelException, SecurityException {
 		Query<Pile> query = Query.after(Pile.class).withCustomProperty(Pile.PROPERTY_KEY, key);
 		Pile first = modelService.search(query, operator).getFirst();
@@ -27,7 +27,7 @@ public class PileService {
 		}
 		return first;
 	}
-	
+
 	public Pile getOrCreatePileByKey(String key, User user, Operator operator) throws ModelException, SecurityException {
 		operator = operator.as(user);
 		Query<Pile> query = Query.after(Pile.class).withCustomProperty(Pile.PROPERTY_KEY, key).from(user);
@@ -90,7 +90,7 @@ public class PileService {
 	public void changeFavoriteStatus(Entity entity, Boolean favorite, User user, Operator operator) throws ModelException, SecurityException {
 		addOrRemoveFromPile(user, Relation.KIND_SYSTEM_USER_FAVORITES, entity, favorite, operator);
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {

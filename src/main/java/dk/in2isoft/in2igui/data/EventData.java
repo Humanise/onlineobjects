@@ -56,11 +56,11 @@ public class EventData {
 	public void setOrganizers(Collection<ObjectData> organizers) {
 		this.organizers = organizers;
 	}
-	
+
 	public void addAttendee(long id,String title) {
 		attendees.add(new ObjectData(id,title));
 	}
-	
+
 	public void addOrganizer(long id,String title) {
 		organizers.add(new ObjectData(id,title));
 	}

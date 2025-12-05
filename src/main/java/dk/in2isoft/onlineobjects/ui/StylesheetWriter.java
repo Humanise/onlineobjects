@@ -31,7 +31,7 @@ public class StylesheetWriter {
 	private PrintWriter writer;
 	private String context;
 	private Logger log = LogManager.getLogger(StylesheetWriter.class);
-	
+
 	public StylesheetWriter(Request request, ConfigurationService configurationService) throws IOException {
 		HttpServletResponse response = request.getResponse();
 		response.setContentType("text/css");

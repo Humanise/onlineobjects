@@ -15,7 +15,7 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 
 public class UserService {
-	
+
 	private ModelService modelService;
 
 	public List<UserInfo> list(UsersPersonQuery query, Operator operator) throws ModelException {
@@ -31,7 +31,7 @@ public class UserService {
 		}
 		return list;
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

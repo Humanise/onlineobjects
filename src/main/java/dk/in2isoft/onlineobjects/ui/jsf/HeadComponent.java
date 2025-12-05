@@ -28,7 +28,7 @@ import dk.in2isoft.onlineobjects.ui.ScriptCompressor;
 public class HeadComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.head";
-	
+
 	private static String inlineJs;
 
 	//private static final Logger log = LogManager.getLogger(HeadComponent.class);
@@ -61,7 +61,7 @@ public class HeadComponent extends AbstractComponent {
 			out.endElement("link");
 		}
 	}
-	
+
 	/*
 	 * TODO: Generate preload header
 	@Override
@@ -77,7 +77,7 @@ public class HeadComponent extends AbstractComponent {
 
 		String styleUrl = dependencyService.handleStyles(graph);
 	 	getRequest().getResponse().addHeader("Link", "<" + styleUrl + ">; rel=preload; as=style");
-		
+
 		super.processUpdates(context);
 	}*/
 
@@ -90,8 +90,8 @@ public class HeadComponent extends AbstractComponent {
 			return VisitResult.ACCEPT;
 		});
 		ConfigurationService configurationService = getBean(ConfigurationService.class);
-		
-		
+
+
 		Request request = Components.getRequest();
 		if (!configurationService.isOptimizeResources()) {
 			for (String url : graph.getStyles()) {
@@ -115,7 +115,7 @@ public class HeadComponent extends AbstractComponent {
 		out.newLine().startElement("script").withAttribute("data-hui-context", "/hui").withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
 
 		out.startScript().newLine();
-		
+
 		out.write("window.oo = window.oo || {};").newLine();
 		if (StringUtils.isNotBlank(request.getLanguage())) {
 			out.write("oo.language = '").write(request.getLanguage()).write("';").newLine();
@@ -123,7 +123,7 @@ public class HeadComponent extends AbstractComponent {
 		out.endElement("script").newLine();
 		out.endElement("head");
 	}
-	
+
 	private void writeInlineJs(ConfigurationService configurationService, TagWriter out) throws IOException {
 		String content = getInline(configurationService, getBean(ScriptCompressor.class));
 		if (content!=null) {

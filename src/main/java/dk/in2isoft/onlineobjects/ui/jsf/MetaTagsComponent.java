@@ -18,7 +18,7 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class MetaTagsComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.metatags";
-		
+
 	public MetaTagsComponent() {
 		super(FAMILY);
 	}
@@ -31,9 +31,9 @@ public class MetaTagsComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
-	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {		
+	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		ConfigurationService bean = getBean(ConfigurationService.class);
 		Collection<Locale> locales = bean.getApplicationLocales(getRequest().getApplication());
 		Request request = getRequest();
@@ -45,7 +45,7 @@ public class MetaTagsComponent extends AbstractComponent {
 					writer.startElement("link").withAttribute("rel", "alternate");
 					writer.withAttribute("hreflang", locale.getLanguage());
 					writer.withHref(Components.buildLanguageUrl(request, locale));
-					writer.endElement("link");					
+					writer.endElement("link");
 				}
 			}
 		}
@@ -53,7 +53,7 @@ public class MetaTagsComponent extends AbstractComponent {
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
-		
+
 	}
 
 }

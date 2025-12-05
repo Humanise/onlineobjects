@@ -5,7 +5,7 @@ public class SimpleOperator implements Operator {
 	private long identity;
 	private OperationProvider operationProvider;
 	private Operation operation;
-	
+
 	public SimpleOperator(Privileged privileged, OperationProvider operationProvider) {
 		super();
 		this.identity = privileged.getIdentity();
@@ -32,7 +32,7 @@ public class SimpleOperator implements Operator {
 			operation = null;
 		}
 	}
-	
+
 	@Override
 	public void close() {
 		commit();

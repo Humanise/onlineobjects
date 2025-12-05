@@ -24,7 +24,7 @@ public class SelectionComponent extends AbstractComponent {
 	private String source;
 	private String name;
 	private Object value;
-	
+
 	public SelectionComponent() {
 		super(FAMILY);
 	}
@@ -42,7 +42,7 @@ public class SelectionComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] {styleClass,variant,source,name,value};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startDiv(new ClassBuilder("oo_selection").add("oo_list", variant).add(styleClass)).withId(getClientId());
@@ -75,10 +75,10 @@ public class SelectionComponent extends AbstractComponent {
 		js.endNewObject();
 		js.endScript();
 	}
-	
+
 	@Override
 	public void encodeChildren(FacesContext context, TagWriter writer) throws IOException {
-		
+
 	}
 
 	public void setVariant(String variant) {

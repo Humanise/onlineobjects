@@ -19,7 +19,7 @@ public class ButtonsComponent extends AbstractComponent {
 	public ButtonsComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -47,7 +47,7 @@ public class ButtonsComponent extends AbstractComponent {
 		}
 		out.startDiv(cls);
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

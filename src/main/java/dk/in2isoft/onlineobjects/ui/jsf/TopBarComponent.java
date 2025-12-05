@@ -44,8 +44,8 @@ public class TopBarComponent extends AbstractComponent {
 	private static List<String> privateApps = Lists.newArrayList(); //, "desktop", "tools"
 	private static Map<String,String> icons = new HashMap<>();
 
-	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in","create_account"};;
-	
+	private static String[] textKeys = new String[] {"forgot_password","username","password","log_in","log_out","change_user","account","profile","you_are_logged_in","create_account"};
+
 	static {
 		icons.put("words", "app_words");
 		icons.put("people", "app_people");
@@ -78,7 +78,7 @@ public class TopBarComponent extends AbstractComponent {
 		Locale locale = request.getLocale();
 		String texts = buildTexts(locale, msg);
 
-		
+
 		out.startDiv("oo_topbar").withId(getClientId()).withAttribute("data-texts", texts);
 		// TODO: Get this via application controller
 		if ("knowledge".equals(request.getApplication())) {
@@ -106,13 +106,13 @@ public class TopBarComponent extends AbstractComponent {
 			if (selected) {
 				cls += " is-selected";
 			}
-			out.startA(cls).withAttribute("data-icon", icons.get(app));;
+			out.startA(cls).withAttribute("data-icon", icons.get(app));
 			out.withHref(configurationService.getApplicationContext(app, null, request));
 			out.text(msg.get("app_" + app, locale)).endA().endLi();
 		}
 
 		boolean publicUser = securityService.isPublicUser(request.getSession());
-		
+
 		if (!publicUser && !privateApps.isEmpty()) {
 			for (String app : privateApps) {
 				boolean selected = request.isApplication(app);
@@ -144,7 +144,7 @@ public class TopBarComponent extends AbstractComponent {
 				out.startSpan().withClass("oo_icon oo_icon-16 oo_icon-user oo_topbar_user_icon").endSpan();
 				out.write(user.getName()).endA().endLi();
 			} catch (EndUserException e) {
-				
+
 			}
 		}
 		out.endUl();

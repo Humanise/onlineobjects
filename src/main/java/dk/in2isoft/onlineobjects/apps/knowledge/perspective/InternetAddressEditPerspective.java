@@ -20,11 +20,11 @@ public class InternetAddressEditPerspective {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public void setAuthors(List<ItemData> authors) {
 		this.authors = authors;
 	}
-	
+
 	public List<ItemData> getAuthors() {
 		return authors;
 	}
@@ -44,7 +44,7 @@ public class InternetAddressEditPerspective {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	public static void validate(InternetAddressEditPerspective perspective) throws BadRequestException {
 		if (perspective==null) {
 			throw new BadRequestException("No data");

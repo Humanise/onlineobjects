@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedHashMultimap;
@@ -30,9 +30,9 @@ import nu.xom.ParentNode;
 import nu.xom.Text;
 
 public class SimpleContentExtractor implements ContentExtractor {
-	
+
 	private static final Logger log = LogManager.getLogger(SimpleContentExtractor.class);
-	
+
 	private Set<String> illegals = Sets.newHashSet("script","style","noscript");
 
 	public Document extract(Document document) {
@@ -58,26 +58,26 @@ public class SimpleContentExtractor implements ContentExtractor {
 		} else {
 			log.warn("No ancestor found: longestText.size: " + longestText.size());
 		}
-		
+
 		return pair.getKey();
 	}
-	
+
 	private Pair<Document, Element> createEmptyDocument(Document original) {
 		String ns = original.getRootElement().getNamespaceURI();
 		Element html = new Element("html",ns);
 		Element body = new Element("body",ns);
 		html.appendChild(body);
 		Document copy = new Document(html);
-		
+
 		return Pair.of(copy, body);
 	}
-	
+
 	private Element findHeading(Document document) {
 		Nodes headers = document.query("//*[local-name()='h1']");
 		if (headers.size()==1) {
 			return (Element) headers.get(0);
 		}
-		
+
 		Element found = null;
 		double foundSimilarity = -1;
 		String title = null;
@@ -86,7 +86,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		if (titles.size() > 0) {
 			title = DOM.getText(titles.get(0));
 		}
-		
+
 		NormalizedLevenshtein l = new NormalizedLevenshtein();
 		for (int i = 0; i < headers.size(); i++) {
 			Element element = (Element) headers.get(i);
@@ -101,15 +101,15 @@ public class SimpleContentExtractor implements ContentExtractor {
 				found = element;
 			}
 		}
-		
+
 		return found;
 	}
-	
+
 	private Document simplify(Document document) {
-		
-				
+
+
 		Set<Node> nodesToRemove = Sets.newHashSet();
-		
+
 		DOM.travel(document, node -> {
 			if (node instanceof Comment) {
 				nodesToRemove.add(node);
@@ -122,23 +122,23 @@ public class SimpleContentExtractor implements ContentExtractor {
 						element.removeAttribute(attribute);
 					}
 				}
-				
+
 				if (!isValid(element)) {
 					nodesToRemove.add(element);
 				}
-			}			
+			}
 		});
-		
+
 		for (Node node : nodesToRemove) {
 			ParentNode parent = node.getParent();
 			if (parent!=null && parent instanceof Element) {
 				parent.removeChild(node);
 			}
 		}
-		
+
 		return document;
 	}
-	
+
 	private boolean isValid(Element element) {
 		String name = element.getLocalName().toLowerCase();
 		if (illegals.contains(name)) {
@@ -176,19 +176,19 @@ public class SimpleContentExtractor implements ContentExtractor {
 				}
 			}
 		});
-		
-		List<Element> lst = Lists.newArrayList(); 
-		
+
+		List<Element> lst = Lists.newArrayList();
+
 		map.entries().stream().sorted((o1,o2) -> {
 			return o2.getKey().compareTo(o1.getKey());
 		}).limit(2).collect(Collectors.toList()).forEach(entry -> {
 			//log.info(entry.getKey() + ": "+entry.getValue().toXML());
 			lst.add(entry.getValue());
 		});
-		
+
 		return lst;
 	}
-	
+
 	private Element findNearestAncestor(List<? extends Node> nodes) {
 		if (nodes.isEmpty()) {
 			return null;
@@ -206,7 +206,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 		if (!keys.isEmpty()) {
 			List<Element> collection = Lists.newArrayList(paths.get(keys.iterator().next()));
 			Collections.reverse(collection);
-			
+
 			for (Element prospect : collection) {
 				for (Node key : keys) {
 					if (!paths.containsEntry(key, prospect)) {
@@ -218,12 +218,12 @@ public class SimpleContentExtractor implements ContentExtractor {
 		}
 		return common;
 	}
-		
+
 	private int getTextLength(Node node) {
 		int length = 0;
 		if (node instanceof Text) {
 			String value = node.getValue();
-			length += Strings.getVisibleLength(value); 
+			length += Strings.getVisibleLength(value);
 		} else if (node instanceof Element) {
 			int count = node.getChildCount();
 			for (int i = 0; i < count; i++) {
@@ -236,7 +236,7 @@ public class SimpleContentExtractor implements ContentExtractor {
 				} else if (child instanceof Text) {
 					length+=getTextLength(child);
 				}
-				
+
 			}
 		}
 		return length;

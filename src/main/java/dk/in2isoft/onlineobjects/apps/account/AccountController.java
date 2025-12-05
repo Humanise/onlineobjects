@@ -12,12 +12,12 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.View;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
@@ -29,9 +29,9 @@ import dk.in2isoft.onlineobjects.ui.data.Response;
 
 
 public class AccountController extends AccountControllerBase {
-	
+
 	private static final Logger log = LogManager.getLogger(AccountController.class);
-	
+
 	public static final String MOUNT = "account";
 
 	@Path(expression = "/(<language>)?")
@@ -75,7 +75,7 @@ public class AccountController extends AccountControllerBase {
 		}
 		memberService.performEmailChangeByKey(key, request);
 	}
-	
+
 	@Path
 	public void changePassword(Request request) throws BadRequestException, SecurityException, ModelException, ExplodingClusterFuckException, NotFoundException {
 		User user = getUser(request);
@@ -113,7 +113,7 @@ public class AccountController extends AccountControllerBase {
 		return modelService.getRequired(User.class, request.getIdentity(), request);
 	}
 
-	
+
 	@Path
 	public void changePasswordUsingKey(Request request) throws BadRequestException, SecurityException, ModelException, ExplodingClusterFuckException {
 		String key = request.getString("key", "Key must be provided");
@@ -144,7 +144,7 @@ public class AccountController extends AccountControllerBase {
 		}
 		return response;
 	}
-	
+
 	@Path
 	public void deleteAccount(Request request) throws ModelException, SecurityException, BadRequestException {
 		String username = request.getString("username", Error.noUsername);
@@ -175,7 +175,7 @@ public class AccountController extends AccountControllerBase {
 			request.getResponse().addHeader("Access-Control-Allow-Origin", origin);
 			request.getResponse().addHeader("Access-Control-Allow-Credentials", "true");
 		}
-		
+
 		request.sendObject(info);
 	}
 

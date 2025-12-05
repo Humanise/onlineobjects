@@ -11,11 +11,11 @@ import dk.in2isoft.commons.lang.Code;
 import dk.in2isoft.onlineobjects.core.CustomQuery;
 
 public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspective> {
-	
+
 	private Set<String> words = new HashSet<>();
 	private Set<String> categories = new HashSet<>();
-	
-	private static final String JOINS = 
+
+	private static final String JOINS =
 			" left JOIN relation as word_category on (word_category.sub_entity_id=word.id and word_category.super_entity_id in (select id from lexicalcategory))" +
 			" left JOIN lexicalcategory on word_category.super_entity_id=lexicalcategory.id";
 
@@ -26,7 +26,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 		impression.setLexicalCategory((String) row[2]);
 		return impression;
 	}
-	
+
 	public String getCountSQL() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("select count(word.id) as num from word");
@@ -34,7 +34,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 		sql.append(buildWhere());
 		return sql.toString();
 	}
-	
+
 	private String buildWhere() {
 		StringBuilder sql = new StringBuilder();
 		if (Code.isNotEmpty(words)) {
@@ -55,7 +55,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 		sql.append(buildWhere());
 		return sql.toString();
 	}
-	
+
 	public void setParameters(NativeQuery<?> sql) {
 		if (Code.isNotEmpty(words)) {
 			sql.setParameterList("words", words, StandardBasicTypes.STRING);
@@ -64,7 +64,7 @@ public class WordCategoryPerspectiveQuery implements CustomQuery<WordListPerspec
 			sql.setParameterList("categories", categories, StandardBasicTypes.STRING);
 		}
 	}
-	
+
 	public WordCategoryPerspectiveQuery withWords(Collection<String> str) {
 		for (String string : str) {
 			words.add(string.toLowerCase());

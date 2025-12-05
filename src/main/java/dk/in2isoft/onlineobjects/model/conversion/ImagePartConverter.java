@@ -13,7 +13,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 
 public class ImagePartConverter extends EntityConverter {
-	
+
 	private ModelService modelService;
 	private ConversionService conversionService;
 
@@ -28,7 +28,7 @@ public class ImagePartConverter extends EntityConverter {
 		}
 		return root;
 	}
-	
+
 	@Override
 	public Class<? extends Entity> getType() {
 		return ImagePart.class;
@@ -37,7 +37,7 @@ public class ImagePartConverter extends EntityConverter {
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setConversionService(ConversionService conversionService) {
 		this.conversionService = conversionService;
 	}

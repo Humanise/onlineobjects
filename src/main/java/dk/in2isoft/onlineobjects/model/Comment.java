@@ -6,7 +6,7 @@ public class Comment extends Entity {
 	public static String NAMESPACE = Entity.NAMESPACE+"Comment/";
 
 	private String text;
-	
+
 	public Comment() {
 		super();
 	}

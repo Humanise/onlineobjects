@@ -28,7 +28,7 @@ public class Node {
 	}
 
 	public void setId(Long id) {
-		this.id = id==null ? null : id.toString(); 
+		this.id = id==null ? null : id.toString();
 	}
 
 	public List<Property> getProperties() {
@@ -38,7 +38,7 @@ public class Node {
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
-	
+
 	public void addProperty(String label, String value) {
 		properties.add(new Property(label,value));
 	}

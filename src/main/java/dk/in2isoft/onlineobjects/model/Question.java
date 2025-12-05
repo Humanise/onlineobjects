@@ -6,9 +6,9 @@ public class Question extends Entity implements TextHolding {
 
 	public static String TYPE = Entity.TYPE+"/Question";
 	public static String NAMESPACE = Entity.NAMESPACE+"Question/";
-	
+
 	private String text;
-	
+
 	public Question() {
 		super();
 	}

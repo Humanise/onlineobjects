@@ -6,7 +6,7 @@ public class LexicalCategory extends Entity {
 	public static final String CODE = "code";
 	public static String TYPE = Entity.TYPE+"/LexicalCategory";
 	public static String NAMESPACE = Entity.NAMESPACE+"LexicalCategory/";
-	
+
 
 	public static String CODE_NOMEN = "nomen";
 	public static String CODE_PROPRIUM = "proprium";
@@ -24,9 +24,9 @@ public class LexicalCategory extends Entity {
 	public static String CODE_ARTICULUS = "articulus";
 	public static String CODE_NUMERUS = "numerus";
 	public static String CODE_ONOMATOPOEIA = "onomatopoeia";
-	
+
 	private String code;
-		
+
 	public LexicalCategory() {
 		super();
 	}

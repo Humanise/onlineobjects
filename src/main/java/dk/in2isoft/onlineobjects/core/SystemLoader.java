@@ -12,11 +12,11 @@ public class SystemLoader implements ServletContextListener {
 	private static Logger log = LogManager.getLogger(SystemLoader.class);
 
 	public void contextDestroyed(ServletContextEvent event) {
-        log.info("Shutting down");		
+        log.info("Shutting down");
 		JCS.shutdown();
 	}
 
 	public void contextInitialized(ServletContextEvent event) {
-        log.info("OnlineObjects - ready for takeoff");		
+        log.info("OnlineObjects - ready for takeoff");
 	}
 }

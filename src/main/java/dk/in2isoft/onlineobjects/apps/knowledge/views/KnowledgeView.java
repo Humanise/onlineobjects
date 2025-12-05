@@ -15,15 +15,15 @@ import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.jsf.model.Option;
 
 public class KnowledgeView extends AbstractView implements InitializingBean {
-	
+
 	private InternetAddressViewPerspectiveBuilder builder;
-	
+
 	private String extractionAlgorithm;
 
 	private List<Option> extractionOptions;
-	
+
 	private boolean debug;
-	
+
 	@Override
 	public void before(Request request) throws Exception {
 		extractionOptions = Lists.newArrayList();
@@ -36,7 +36,7 @@ public class KnowledgeView extends AbstractView implements InitializingBean {
 		}
 		debug = request.getSession().has(Ability.viewDebuggingInfo);
 	}
-	
+
 	public String getExtractionAlgorithm() {
 		return extractionAlgorithm;
 	}
@@ -44,11 +44,11 @@ public class KnowledgeView extends AbstractView implements InitializingBean {
 	public List<Option> getExtractionAlgorithms() {
 		return extractionOptions;
 	}
-	
+
 	public void setBuilder(InternetAddressViewPerspectiveBuilder builder) {
 		this.builder = builder;
 	}
-	
+
 	public boolean isDebug() {
 		return debug;
 	}

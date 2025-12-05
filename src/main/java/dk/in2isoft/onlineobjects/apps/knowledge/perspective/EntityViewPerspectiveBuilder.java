@@ -64,11 +64,11 @@ public class EntityViewPerspectiveBuilder {
 		}
 		html.endDiv();
 	}
-	
+
 	public final void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
 	}

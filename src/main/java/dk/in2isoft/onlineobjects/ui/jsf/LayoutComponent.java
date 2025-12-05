@@ -15,10 +15,10 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class LayoutComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.layout";
-	
+
 	private String variant = "rounded";
 	private boolean sidebar = true;
-	
+
 	public LayoutComponent() {
 		super(FAMILY);
 	}
@@ -33,7 +33,7 @@ public class LayoutComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { variant, sidebar };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startDiv("oo_layout oo_layout_with_sidebar oo_layout_"+variant);
@@ -47,9 +47,9 @@ public class LayoutComponent extends AbstractComponent {
 		writer.startDiv("oo_layout_middle");
 		UIComponent sidebarComponent = getFacet("sidebar");
 		if (sidebar && sidebarComponent!=null) {
-			writer.startDiv("oo_layout_body oo_layout_body_sidebar");						
+			writer.startDiv("oo_layout_body oo_layout_body_sidebar");
 		} else {
-			writer.startDiv("oo_layout_body");			
+			writer.startDiv("oo_layout_body");
 		}
 	}
 
@@ -75,11 +75,11 @@ public class LayoutComponent extends AbstractComponent {
 	public void setVariant(String variant) {
 		this.variant = variant;
 	}
-	
+
 	public void setSidebar(boolean sidebar) {
 		this.sidebar = sidebar;
 	}
-	
+
 	public boolean isSidebar() {
 		return sidebar;
 	}

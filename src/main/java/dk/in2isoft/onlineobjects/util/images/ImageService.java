@@ -54,7 +54,7 @@ import dk.in2isoft.onlineobjects.services.StorageService;
 import dk.in2isoft.onlineobjects.util.images.ImageInfo.ImageLocation;
 
 public class ImageService extends AbstractCommandLineInterface {
-	
+
 	public static final String FEATURED_PILE = "photos.featured";
 	private static final int NONE = 0;
 	private static final int HORIZONTAL = 1;
@@ -73,7 +73,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	private static Logger log = LogManager.getLogger(ImageService.class);
 	private Set<String> mimes = Sets.newHashSet("image/jpeg", "image/png", "image/gif", "application/pdf");
 	private Set<String> extensions = Sets.newHashSet("jpg", "png", "gif", "pdf");
-	
+
 	private StorageService storageService;
 	private ConfigurationService configurationService;
 	private FileService fileService;
@@ -84,7 +84,7 @@ public class ImageService extends AbstractCommandLineInterface {
 
 	public ImageService() {
 	}
-	
+
 	private String magickTypeToMimeType(String magick) {
 		if ("PNG".equals( magick)) {
 			return "image/png";
@@ -97,7 +97,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		return null;
 	}
-	
+
 	public ImageProperties getImageProperties(File file) throws EndUserException {
 		log.debug(file.getAbsolutePath());
 		log.debug("Exists: " + file.exists());
@@ -124,7 +124,7 @@ public class ImageService extends AbstractCommandLineInterface {
 			throw new EndUserException(e);
 		}
 	}
-	
+
 	public boolean isSupportedMimeType(String mime) {
 		return mime!=null && mimes.contains(mime);
 	}
@@ -132,7 +132,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	public boolean isSupportedExtension(String extension) {
 		return extension!=null && extensions.contains(extension);
 	}
-	
+
 	public String getColors(Image image) throws EndUserException {
 		File file = getImageFile(image);
 		ImageProperties props = getImageProperties(file);
@@ -140,7 +140,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		int height = props.getHeight();
 		String top = getAverageColor(file, width, Math.round(height/3f), 0, 0);
 		String middle = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f));
-		String bottom = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f*2)); 
+		String bottom = getAverageColor(file, width, Math.round(height/3f), 0, Math.round(height/3f*2));
 		return "rgb(" + top + "),rgb(" + middle + "),rgb(" + bottom + ")";
 	}
 
@@ -153,7 +153,7 @@ public class ImageService extends AbstractCommandLineInterface {
 			throw new EndUserException(e);
 		}
 	}
-	
+
 	public void clearCache(Image image) {
 		File folder = storageService.getItemFolder(image);
 		FilenameFilter filter = new StartsWithFilenameFilter("transformed", StartsWithFilenameFilter.NEVER);
@@ -162,14 +162,14 @@ public class ImageService extends AbstractCommandLineInterface {
 			file.delete();
 		}
 	}
-	
+
 	public ImageMetaData getMetaData(Image image) {
 		return getMetaData(getImageFile(image));
 	}
-	
+
 	public void get() {
 	}
-	
+
 	public ImageMetaData getMetaData(File file) {
 		ImageMetaData imageMetaData = new ImageMetaData();
 		try {
@@ -179,15 +179,15 @@ public class ImageService extends AbstractCommandLineInterface {
 			Directory exifDirectory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 			Directory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
 			Directory iptcDirectory = metadata.getFirstDirectoryOfType(IptcDirectory.class);
-			
+
 
 			ExifSubIFDDirectory exifSubIFD = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 			if (exifSubIFD != null) {
-				Date date = exifSubIFD.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);				
+				Date date = exifSubIFD.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 				//ExifSubIFDDescriptor descriptor = new ExifSubIFDDescriptor(exifSubIFD);
 				imageMetaData.setOriginalDateTime(date);
 			}
-			
+
 			if (exifDirectory!=null) {
 				if (exifDirectory.containsTag(ExifIFD0Directory.TAG_DATETIME)) {
 					imageMetaData.setDateTime(exifDirectory.getDate(ExifIFD0Directory.TAG_DATETIME));
@@ -262,17 +262,17 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		return imageMetaData;
 	}
-	
+
 	private double getDecimal(Rational[] triple, String ref) {
 		GeoDistance point = new GeoDistance(triple[0].doubleValue(),triple[1].doubleValue(),triple[2].doubleValue());
 		double decimal = point.getDecimal();
 		if (ref.equals("S") || ref.equals("W")) {
 			decimal*=-1;
 		}
-		
+
 		return decimal;
 	}
-	
+
 	public void synchronizeContentType(Image image, Operator priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		String mimeType = fileService.getMimeType(file);
@@ -281,7 +281,7 @@ public class ImageService extends AbstractCommandLineInterface {
 			modelService.update(image, priviledged);
 		}
 	}
-	
+
 	public void clearMetaData(Image image, Operator priviledged) throws EndUserException {
 		var properties = new String[] {
 			Property.KEY_PHOTO_TAKEN,
@@ -298,7 +298,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		modelService.update(image, priviledged);
 	}
-	
+
 	public void synchronizeMetaData(Image image, Operator priviledged) throws EndUserException {
 		File file = getImageFile(image);
 		ImageMetaData metaData = getMetaData(file);
@@ -385,7 +385,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		info.setRotation(image.getPropertyDoubleValue(Property.KEY_PHOTO_ROTATION));
 		return info;
 	}
-	
+
 	public void updateImageInfo(ImageInfo info, Operator priviledged) throws ModelException, SecurityException {
 
 		Image image = modelService.get(Image.class, info.getId(),priviledged);
@@ -411,11 +411,11 @@ public class ImageService extends AbstractCommandLineInterface {
 			modelService.createRelation(location, image, priviledged);
 		} else {
 			location.setLatitude(info.getLocation().getLatitude());
-			location.setLongitude(info.getLocation().getLongitude());			
+			location.setLongitude(info.getLocation().getLongitude());
 			modelService.update(location, priviledged);
 		}
 	}
-	
+
 	public Image createImageFromFile(File file, String name, Operator privileged) throws ModelException {
 		try {
 			ImageProperties properties = getImageProperties(file);
@@ -431,7 +431,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		return null;
 	}
-	
+
 	public void updateImageLocation(Image image, ImageLocation imageLocation, Operator priviledged) throws ModelException, SecurityException {
 		Location existing = modelService.getParent(image, Location.class, priviledged);
 		if (imageLocation==null && existing==null) {
@@ -450,9 +450,9 @@ public class ImageService extends AbstractCommandLineInterface {
 		} else {
 			// Add
 			existing.setLatitude(imageLocation.getLatitude());
-			existing.setLongitude(imageLocation.getLongitude());			
+			existing.setLongitude(imageLocation.getLongitude());
 			modelService.update(existing, priviledged);
-		}		
+		}
 	}
 
 
@@ -498,7 +498,7 @@ public class ImageService extends AbstractCommandLineInterface {
 		}
 		return null;
 	}
-	
+
 	public void deleteImage(Image image, Operator privileged) throws ModelException, SecurityException {
 		Location location = modelService.getParent(image, Location.class, privileged);
 		if (location!=null) {
@@ -523,7 +523,7 @@ public class ImageService extends AbstractCommandLineInterface {
 	}
 
 	// Wiring...
-	
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}
@@ -543,11 +543,11 @@ public class ImageService extends AbstractCommandLineInterface {
 	public void setPileService(PileService pileService) {
 		this.pileService = pileService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setImageTransformationService(ImageTransformationService imageTransformationService) {
 		this.imageTransformationService = imageTransformationService;
 	}

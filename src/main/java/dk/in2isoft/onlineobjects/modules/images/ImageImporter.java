@@ -10,9 +10,9 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.model.Image;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.modules.importing.ImportListener;
@@ -61,15 +61,15 @@ public class ImageImporter implements ImportListener<Object> {
 		modelService.create(image, request);
 		return image;
 	}
-	
+
 	protected void preProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
-		
+
 	}
 
 	protected Privileged getUser(Map<String, String> parameters, Request request) throws EndUserException {
 		return request.getSession();
 	}
-	
+
 	protected boolean isRequestLegal(Map<String, String> parameters, Request request) throws EndUserException {
 		return true;
 	}
@@ -77,7 +77,7 @@ public class ImageImporter implements ImportListener<Object> {
 	protected void postProcessImage(Image image, Map<String, String> parameters, Request request) throws EndUserException {
 		// Override this
 	}
-	
+
 	@Override
 	public Object getResponse() {
 		return null;

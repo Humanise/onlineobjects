@@ -25,7 +25,7 @@ public class BarButtonComponent extends AbstractComponent {
 	public BarButtonComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		text = (String) state[0];
@@ -40,7 +40,7 @@ public class BarButtonComponent extends AbstractComponent {
 			text,name,highlighted,icon
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();

@@ -6,8 +6,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import dk.in2isoft.commons.lang.HTMLWriter;
 import dk.in2isoft.onlineobjects.core.Operator;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
 import dk.in2isoft.onlineobjects.model.Relation;
@@ -38,7 +38,7 @@ public class HypothesisViewPerspectiveBuilder extends EntityViewPerspectiveBuild
 		writeList(html, "Supporting", supports, operator);
 
 		writeList(html, "Contradicting", contradicts, operator);
-		
+
 		perspective.setRendering(html.toString());
 		return perspective;
 	}

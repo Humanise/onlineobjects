@@ -33,7 +33,7 @@ public class MissingSimilarityQuery implements CustomQuery<SimilarityResult> {
 
 	@Override
 	public String getSQL() {
-		
+
 		String sql = " SELECT A.id AS a_id, B.id AS b_id, usr.id AS user_id FROM internetaddress AS A CROSS JOIN internetaddress AS B " +
 
 			" INNER JOIN privilege AS a_priv ON A.id = a_priv.object AND a_priv.view=TRUE AND a_priv.alter=TRUE" +
@@ -51,7 +51,7 @@ public class MissingSimilarityQuery implements CustomQuery<SimilarityResult> {
 			" AND NOT EXISTS (SELECT 1 FROM privilege AS rel_priv WHERE relation.id = rel_priv.object AND rel_priv.subject=usr.id AND rel_priv.view=TRUE AND rel_priv.alter=TRUE )" +
 
 			" ORDER BY a_id, b_id DESC";
-		
+
 		sql = "SELECT A.id AS a_id, B.id AS b_id,usr.id as user_id FROM internetaddress AS A CROSS JOIN internetaddress AS B  " +
 				"INNER JOIN privilege AS a_priv ON A.id = a_priv.object AND a_priv.view=TRUE AND a_priv.alter=TRUE " +
 				"INNER JOIN privilege AS b_priv ON B.id = b_priv.object AND b_priv.view=TRUE AND b_priv.alter=TRUE " +
@@ -62,9 +62,9 @@ public class MissingSimilarityQuery implements CustomQuery<SimilarityResult> {
 		// Ordering is disabled since it is very expensive
 		//sql+= " ORDER BY a_id DESC, b_id DESC";
 		sql+= " LIMIT 100";
-		
-		
-		
+
+
+
 		return sql;
 	}
 

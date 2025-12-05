@@ -42,7 +42,7 @@ public class DeveloperController extends ApplicationController {
 
 	@Autowired
 	Intelligence intelligence;
-	
+
 	@Autowired
 	SolrService solr;
 
@@ -69,7 +69,7 @@ public class DeveloperController extends ApplicationController {
 	@Path(exactly = {"finder.html"})
 	@View(jsf = "finder.xhtml")
 	public void finder(Request request) {}
-	
+
 	@Path(exactly = {"users"})
 	@View(jsf = "users.xhtml")
 	public void users(Request request) {
@@ -107,7 +107,7 @@ public class DeveloperController extends ApplicationController {
 	public List<Locale> getLocales() {
 		return null;
 	}
-	
+
 	@Override
 	public boolean isAllowed(Request request) {
 		return configurationService.isDevelopmentMode() || configurationService.isTestMode();
@@ -117,7 +117,7 @@ public class DeveloperController extends ApplicationController {
 	public void throwNotFound(Request request) throws IOException, EndUserException {
 		throw new NotFoundException();
 	}
-	
+
 	@Path(exactly={"bad-request"})
 	public void throwBadRequest(Request request) throws IOException, EndUserException {
 		throw new BadRequestException();

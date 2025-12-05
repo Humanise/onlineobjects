@@ -10,7 +10,7 @@ public class BadRequestException extends EndUserException {
 	public int getHttpStatusCode() {
 		return HttpServletResponse.SC_BAD_REQUEST;
 	}
-	
+
 	public BadRequestException() {
 		super();
 	}

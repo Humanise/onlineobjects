@@ -4,7 +4,7 @@ public class ObjectData {
 	private String title;
 	private long id;
 	private String icon;
-	
+
 	public ObjectData(long id, String title) {
 		this.id = id;
 		this.title = title;
@@ -27,6 +27,6 @@ public class ObjectData {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	
-	
+
+
 }

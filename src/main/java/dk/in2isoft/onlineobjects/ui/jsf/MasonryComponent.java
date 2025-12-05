@@ -24,7 +24,7 @@ public class MasonryComponent extends AbstractComponent {
 	public MasonryComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -39,15 +39,15 @@ public class MasonryComponent extends AbstractComponent {
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		List<MasonryItem> list = Components.getExpressionValue(this, "list", context);
 		out.startDiv("oo_masonry").withId(getClientId());
-		
+
 		for (MasonryItem item : list) {
 			out.startA().withAttribute("data", Strings.toJSON(item)).withHref(item.href).text(item.title).endA();
 			out.text(" ");
 		}
-		
+
 		out.endDiv();
-		
-		ScriptWriter js = out.getScriptWriter().startScript();		
+
+		ScriptWriter js = out.getScriptWriter().startScript();
 		js.startNewObject("oo.Masonry").property("element", getClientId());
 		if (Strings.isNotBlank(name)) {
 			js.comma().property("name", name);

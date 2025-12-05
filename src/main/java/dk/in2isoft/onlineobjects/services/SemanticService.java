@@ -38,7 +38,7 @@ import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
 
 public class SemanticService {
-	
+
 	public static final String WORD_EXPRESSION = "[0-9a-zA-Z\u0027\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF\\-\u02BC\u2019]+";
 
 	public static final String QUOTES = "'\"«»’[]()-" +
@@ -51,19 +51,19 @@ public class SemanticService {
 		Strings.SINGLE_LOW_9_QUOTATION_MARK +
 		Strings.DOUBLE_LOW_9_QUOTATION_MARK;
 
-	
+
 	private static final Set<String> PUNCTUATION = Sets.newHashSet(".",";",":",",","-","–");
-	
+
 	private static final Pattern NON_WORD_PATTERN = Pattern.compile("[^\\p{L}\\p{Lu}0-9]+");
 	private static final Pattern NUMBER_CODE_PATTERN = Pattern.compile("[^\\p{L}\\p{Lu}]+");
 	private static final Pattern MAC_PATTERN = Pattern.compile("^[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}$");
-	
+
 	private ConfigurationService configurationService;
 
 	private static Pattern wordPattern = Pattern.compile(WORD_EXPRESSION);
-	
+
 	private static Pattern ABBREVIATION_PATTERN = Pattern.compile("[A-Z]+");
-	
+
 	private static final Logger log = LogManager.getLogger(SemanticService.class);
 
 	private static final Pattern NUMBER_WITH_UNIT_PATTERN = Pattern.compile("[0-9]+[A-Za-z]+");
@@ -89,11 +89,11 @@ public class SemanticService {
 		}
 		return list.toArray(new String[]{});
 	}
-	
+
 	public boolean isAbbreviation(String word) {
 		return ABBREVIATION_PATTERN.matcher(word).matches();
 	}
-	
+
 	public boolean isNumberWithUnit(String word) {
 		return NUMBER_WITH_UNIT_PATTERN.matcher(word).matches();
 	}
@@ -107,19 +107,19 @@ public class SemanticService {
 	public boolean isRegularWord(String text) {
 		return Strings.isNotBlank(text) && !NUMBER_CODE_PATTERN.matcher(text).matches() && !isMacAddress(text) && !text.contains("@") && !isNumberWithUnit(text) && !isHashTag(text) && !isSourceTag(text);
 	}
-	
+
 	public boolean isMacAddress(String text) {
 		return text!=null && text.length()==17 && MAC_PATTERN.matcher(text).matches();
 	}
-	
+
 	public boolean isHashTag(String text) {
 		return text!=null && text.startsWith("#");
 	}
-	
+
 	public boolean isSourceTag(String text) {
 		return text!=null && text.startsWith("/");
 	}
-	
+
 	/**
 	 * Checks that a string is not pure punctuation etc.
 	 * @param str
@@ -131,7 +131,7 @@ public class SemanticService {
 		}
 		return !NON_WORD_PATTERN.matcher(str).matches();
 	}
-	
+
 	public String stripQuotes(String str) {
 		if (str==null) {
 			return null;
@@ -141,7 +141,7 @@ public class SemanticService {
 		}
 		return StringUtils.strip(str, QUOTES);
 	}
-	
+
 	public String stripWeirdStuff(String str) {
 		if (str==null) {
 			return null;
@@ -151,7 +151,7 @@ public class SemanticService {
 		}
 		return StringUtils.strip(str, QUOTES);
 	}
-	
+
 	public String[] getWords(String text) {
 		return getWords(text, null);
 	}
@@ -183,7 +183,7 @@ public class SemanticService {
 		}
 		return list.toArray(new String[]{});
 	}
-	
+
 	public Map<String, Integer> getWordFrequency(String[] words) {
 		final Map<String,Integer> frequency = Maps.newHashMap();
 		for (String word : words) {
@@ -195,7 +195,7 @@ public class SemanticService {
 		}
 		return frequency;
 	}
-	
+
 	public List<Pair<String, Integer>> getSortedWordFrequency(String[] words) {
 		List<Pair<String, Integer>> list = Lists.newArrayList();
 		Map<String, Integer> frequency = getWordFrequency(words);
@@ -214,7 +214,7 @@ public class SemanticService {
 		String[] words = getWords(text,language);
 		return getWordFrequency(words);
 	}
-	
+
 	public double compare(String text1, String text2, Language language) {
 		text1 = text1.toLowerCase();
 		text2 = text2.toLowerCase();
@@ -222,7 +222,7 @@ public class SemanticService {
 		String[] words2 = getWords(text2,language);
 		String[] allWords = (String[]) ArrayUtils.addAll(words1, words2);
 		allWords = getUniqueWords(allWords);
-		
+
 		return compare(words1, words2);
 	}
 
@@ -233,7 +233,7 @@ public class SemanticService {
 		normalizeInPlace(ba);
 		return (findDotProduct(na, ba) + 1) / 2d;
 	}
-	
+
 	public double compare(String[] words1, String[] words2) {
 		String[] allWords = (String[]) ArrayUtils.addAll(words1, words2);
 		allWords = getUniqueWords(allWords);
@@ -243,7 +243,7 @@ public class SemanticService {
 
 		double[] norm1 = normalize(freq1);
 		double[] norm2 = normalize(freq2);
-		
+
 		double comparison = findDotProduct(norm1,norm2);
 		if (Double.isNaN(comparison)) {
 			// TODO: Maybe div-by-zero in normalize
@@ -267,7 +267,7 @@ public class SemanticService {
 		}
 		return freq;
 	}
-	
+
 	private double findEuclidianNorm(double[] doc)
 	{
 	   double sum=0;
@@ -276,7 +276,7 @@ public class SemanticService {
 	   }
 	   return Math.sqrt(sum);
 	}
-	
+
 	private double[] normalize(double[] doc)
 	{
 		int len = doc.length;
@@ -287,7 +287,7 @@ public class SemanticService {
 		}
 		return norm;
 	}
-	
+
 	private double findDotProduct(double[] query, double[] doc)
 	{
 		int len = query.length;
@@ -330,7 +330,7 @@ public class SemanticService {
 		}
 		return copy;
 	}
-	
+
 	public String ensureSentenceStop(String text) {
 		StringBuilder sb = new StringBuilder();
 		String[] lines = text.split("[\\r\\n]+");
@@ -360,13 +360,13 @@ public class SemanticService {
 		SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
 		return sentenceDetector.sentPosDetect(text);
 	}
-	
+
 	public Span[] getTokenSpans(String text, Locale locale) {
 		TokenizerModel model = getTokenizerModel(locale);
 		Tokenizer tokenizer = new TokenizerME(model);
 		return tokenizer.tokenizePos(text);
 	}
-	
+
 	public String[] getTokensAsString(String text, Locale locale) {
 		TokenizerModel model = getTokenizerModel(locale);
 		if (model == null) {
@@ -375,20 +375,20 @@ public class SemanticService {
 		Tokenizer tokenizer = new TokenizerME(model);
 		return tokenizer.tokenize(text);
 	}
-	
+
 	public String[] spansToStrings(Span[] spans, String text) {
 		return Span.spansToStrings(spans, text);
 	}
-	
+
 	public String[] getPartOfSpeach(String[] sentence, Locale locale) {
 		POSModel model = getPartOfSpeachModel(locale);
 		POSTaggerME tagger = new POSTaggerME(model);
 		String[] tags = tagger.tag(sentence);
 		return tags;
 	}
-	
-	private final Map<Locale,SentenceModel> sentenceModels = Maps.newHashMap(); 
-	
+
+	private final Map<Locale,SentenceModel> sentenceModels = Maps.newHashMap();
+
 	public synchronized SentenceModel getSentenceModel(Locale locale) {
 		if (sentenceModels.containsKey(locale)) {
 			return sentenceModels.get(locale);
@@ -409,9 +409,9 @@ public class SemanticService {
 		}
 		return null;
 	}
-	
-	private final Map<Locale,POSModel> posModels = Maps.newHashMap(); 
-	
+
+	private final Map<Locale,POSModel> posModels = Maps.newHashMap();
+
 	private synchronized POSModel getPartOfSpeachModel(Locale locale) {
 		if (posModels.containsKey(locale)) {
 			return posModels.get(locale);
@@ -431,9 +431,9 @@ public class SemanticService {
 		}
 		return null;
 	}
-	
-	private final Map<Locale,TokenizerModel> tokenizerModels = Maps.newHashMap(); 
-	
+
+	private final Map<Locale,TokenizerModel> tokenizerModels = Maps.newHashMap();
+
 	private synchronized TokenizerModel getTokenizerModel(Locale locale) {
 		if (tokenizerModels.containsKey(locale)) {
 			return tokenizerModels.get(locale);
@@ -486,11 +486,11 @@ public class SemanticService {
 
 		return array.toArray(new String[] {});
 	}
-	
-	
-	
+
+
+
 	// Wiring...
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

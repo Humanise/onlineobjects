@@ -90,11 +90,11 @@ public class ImageInfo {
 	public static class ImageLocation {
 		private Double latitude;
 		private Double longitude;
-		
+
 		public ImageLocation() {
-			
+
 		}
-		
+
 		public ImageLocation(double latitude, double longitude) {
 			super();
 			this.latitude = latitude;

@@ -10,12 +10,12 @@ public class SearchResult<T> {
 	private List<T> result;
 	private int totalCount;
 	private String description;
-	
+
 	public SearchResult(List<T> result, int totalCount) {
 		this.result = result;
 		this.totalCount = totalCount;
 	}
-	
+
 	public int getTotalCount() {
 		return totalCount;
 	}
@@ -23,7 +23,7 @@ public class SearchResult<T> {
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
 	}
-		
+
 	public List<T> getList() {
 		return result;
 	}
@@ -42,7 +42,7 @@ public class SearchResult<T> {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public static <T> SearchResult<T> empty() {
 		List<T> list = Lists.newArrayList();
 		return new SearchResult<T>(list,0);

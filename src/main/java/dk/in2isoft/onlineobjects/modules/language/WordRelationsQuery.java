@@ -16,12 +16,12 @@ public class WordRelationsQuery implements CustomQuery<WordRelationRow> {
 			"from relation, word as super_word, word as sub_word " +
 			"where relation.super_entity_id = super_word.id and relation.sub_entity_id = sub_word.id " +
 			"and ((relation.super_entity_id=:wordId and relation.kind in (:outgoingKinds)) or (relation.sub_entity_id=:wordId and relation.kind in (:incomingKinds)))";
-	
+
 	private long wordId;
 
 	private List<String> outgoingKinds;
 	private List<String> incomingKinds;
-	
+
 	public WordRelationsQuery(Word word) {
 		super();
 		this.wordId = word.getId();

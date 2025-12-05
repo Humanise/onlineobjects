@@ -3,11 +3,11 @@ package dk.in2isoft.commons.geo;
 public class GeoPoint implements GeoLatLng {
 	private GeoDistance latitude;
 	private GeoDistance longitude;
-	
+
 	public GeoPoint() {
-		
+
 	}
-	
+
 	public GeoPoint(GeoDistance latitude, GeoDistance longitude) {
 		super();
 		this.latitude = latitude;
@@ -17,15 +17,15 @@ public class GeoPoint implements GeoLatLng {
 	public void setLatitude(GeoDistance latitude) {
 		this.latitude = latitude;
 	}
-	
+
 	public GeoDistance getLatitude() {
 		return latitude;
 	}
-	
+
 	public void setLongitude(GeoDistance longitude) {
 		this.longitude = longitude;
 	}
-	
+
 	public GeoDistance getLongitude() {
 		return longitude;
 	}

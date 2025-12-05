@@ -62,12 +62,12 @@ public class IndexManager {
 	private String directoryName = "index";
 	private StandardAnalyzer analyzer;
 	private ObjectPool<IndexReader> pool;
-	
+
 	private static final Logger log = LogManager.getLogger(IndexManager.class);
-	
+
 	public IndexManager() {
 		analyzer = new StandardAnalyzer(Version.LUCENE_40, CharArraySet.EMPTY_SET);
-		
+
 		PooledObjectFactory<IndexReader> x = new BasePooledObjectFactory<IndexReader>() {
 
 			@Override
@@ -88,7 +88,7 @@ public class IndexManager {
 				// TODO Auto-generated method stub
 				return new DefaultPooledObject<IndexReader>(obj);
 			}
-			
+
 			@Override
 			public void destroyObject(PooledObject<IndexReader> p) throws Exception {
 				IndexReader reader = p.getObject();
@@ -107,27 +107,27 @@ public class IndexManager {
 		config.setMaxIdle(4);
 		pool = new GenericObjectPool<IndexReader>(x, config );
 	}
-	
+
 	public IndexManager(String directoryName) {
 		this();
 		this.directoryName = directoryName;
 	}
-	
+
 	private Directory indexFile;
 
 	private Directory getIndexFile() throws ExplodingClusterFuckException {
 		if (indexFile != null) return indexFile;
 		File dir = new File(configurationService.getIndexDir(),directoryName);
 		try {
-			indexFile = new SimpleFSDirectory(dir); 
+			indexFile = new SimpleFSDirectory(dir);
 			return indexFile;
 		} catch (IOException e) {
 			throw new ExplodingClusterFuckException("Unable to read index");
 		}
 	}
-	
+
 	private boolean indexEnsured = false;
-	
+
 	private void ensureIndex() throws ExplodingClusterFuckException {
 		if (indexEnsured) return;
 		Directory directory = getIndexFile();
@@ -135,12 +135,12 @@ public class IndexManager {
 			if (!DirectoryReader.indexExists(directory)) {
 				openWriter().close();
 				indexEnsured = true;
-			}		
+			}
 		} catch (IOException e) {
 			throw new ExplodingClusterFuckException("Unable to ensure index", e);
 		}
 	}
-	
+
 	private IndexReader openReader() throws ExplodingClusterFuckException {
 		try {
 			//log.info("active: {}, idle: {}",pool.getNumActive(),pool.getNumIdle());
@@ -149,7 +149,7 @@ public class IndexManager {
 			throw new ExplodingClusterFuckException(e);
 		}
 	}
-	
+
 	private void closeReader(IndexReader reader) {
 		try {
 			pool.returnObject(reader);
@@ -157,7 +157,7 @@ public class IndexManager {
 			log.error(e);
 		}
 	}
-	
+
 	private IndexWriter openWriter() throws ExplodingClusterFuckException {
 		Directory dir = getIndexFile();
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_40, analyzer);
@@ -170,7 +170,7 @@ public class IndexManager {
 			throw new ExplodingClusterFuckException("Unable to create index writer",e);
 		}
 	}
-	
+
 	public synchronized void update(Entity entity, Document document) throws EndUserException  {
 		IndexWriter writer = null;
 		try {
@@ -189,7 +189,7 @@ public class IndexManager {
 		document.add(new StringField("id", String.valueOf(entity.getId()),Store.YES));
 		document.add(new StringField("type", entity.getClass().getSimpleName().toLowerCase(),Store.YES));
 	}
-	
+
 	public synchronized void update(Map<Entity ,Document> map) throws EndUserException  {
 		IndexWriter writer = null;
 		try {
@@ -199,7 +199,7 @@ public class IndexManager {
 				Document document = entry.getValue();
 				Entity entity = entry.getKey();
 				populate(entity, document);
-				writer.updateDocument(new Term("id",String.valueOf(entity.getId())),document);				
+				writer.updateDocument(new Term("id",String.valueOf(entity.getId())),document);
 			}
 			writer.commit();
 		} catch (IOException e) {
@@ -230,21 +230,21 @@ public class IndexManager {
 			closeReader(reader);
 		}
 	}
-	
+
 	public Document getDocument(Entity entity) {
 		TermQuery query = new TermQuery(new Term("id", String.valueOf(entity.getId())));
 		try {
 			SearchResult<IndexSearchResult> search = search(query, null, 0, 1);
 			IndexSearchResult first = search.getFirst();
 			if (first!=null) {
-				return first.getDocument();				
+				return first.getDocument();
 			}
 		} catch (ExplodingClusterFuckException e) {
 			// TODO handle this
 		}
 		return null;
 	}
-	
+
 	public List<Long> getIds(String text, int start, int size) throws ExplodingClusterFuckException {
 		List<Long> ids = Lists.newArrayList();
 		SearchResult<IndexSearchResult> searchResult = search(text, null, start, size);
@@ -255,7 +255,7 @@ public class IndexManager {
 		}
 		return ids;
 	}
-	
+
 	public List<Long> getIds(Query query, int start, int size) throws ExplodingClusterFuckException {
 		List<Long> ids = Lists.newArrayList();
 		SearchResult<IndexSearchResult> searchResult = search(query, null, start, size);
@@ -266,7 +266,7 @@ public class IndexManager {
 		}
 		return ids;
 	}
-	
+
 	public Query buildQuery(String text) {
 		String field = "text";
 		QueryParser parser = new QueryParser(Version.LUCENE_40, field , analyzer);
@@ -274,7 +274,7 @@ public class IndexManager {
 		try {
 			return parser.parse(text);
 		} catch (ParseException e) {
-			
+
 		}
 		return null;
 	}
@@ -305,7 +305,7 @@ public class IndexManager {
 			return new SearchResult<IndexSearchResult>(found, 0);
 		}
 	}
-	
+
 	public SearchResult<IndexSearchResult> search(Query query, Sort sort, int page, int size) throws ExplodingClusterFuckException {
 		List<IndexSearchResult> found = Lists.newArrayList();
 		int total = 0;
@@ -340,7 +340,7 @@ public class IndexManager {
 		}
 		return new SearchResult<IndexSearchResult>(found, total);
 	}
-	
+
 	public List<Long> getAllIds() throws ExplodingClusterFuckException {
 		List<Long> ids = Lists.newArrayList();
 		IndexReader reader = null;
@@ -385,7 +385,7 @@ public class IndexManager {
 		}
 		return ids;
 	}
-	
+
 	public void clear() throws EndUserException {
 		IndexWriter writer = null;
 		try {
@@ -398,7 +398,7 @@ public class IndexManager {
 			closeWriter(writer);
 		}
 	}
-	
+
 	public int getDocumentCount() throws EndUserException {
 		IndexReader reader = null;
 		try {
@@ -408,7 +408,7 @@ public class IndexManager {
 			closeReader(reader);
 		}
 	}
-	
+
 	public void delete(long id) throws EndUserException {
 		IndexWriter writer = null;
 		try {
@@ -421,7 +421,7 @@ public class IndexManager {
 			closeWriter(writer);
 		}
 	}
-	
+
 	private void closeWriter(IndexWriter writer) {
 		if (writer!=null) {
 			try {
@@ -445,7 +445,7 @@ public class IndexManager {
 	public String getDirectoryName() {
 		return directoryName;
 	}
-	
+
 	public void setDirectoryName(String directoryName) {
 		this.directoryName = directoryName;
 	}

@@ -28,7 +28,7 @@ public class BarComponent extends AbstractComponent {
 	public BarComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		variant = (String) state[0];
@@ -42,7 +42,7 @@ public class BarComponent extends AbstractComponent {
 			variant,name,contentWidth
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		out.startDiv(variant!=null ? "hui_bar hui_bar-"+variant : "hui_bar");
@@ -57,7 +57,7 @@ public class BarComponent extends AbstractComponent {
 		}
 		out.startDiv("hui_bar_left");
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv().endDiv();

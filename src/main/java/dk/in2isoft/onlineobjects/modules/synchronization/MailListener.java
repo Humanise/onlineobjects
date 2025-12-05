@@ -39,7 +39,7 @@ public class MailListener {
 	private MemberService memberService;
 
 	private InboxService inboxService;
-	
+
 	public void mailArrived(Message message, JobStatus status) {
 		Address[] from;
 		boolean recognized = false;
@@ -58,7 +58,7 @@ public class MailListener {
 			}
 
 			Object content = message.getContent();
-			
+
 			// If the email is multi part...
 			if (content instanceof Multipart) {
 				Multipart mp = (Multipart) content;
@@ -67,7 +67,7 @@ public class MailListener {
 				for (int j = 0; j < count; j++) {
 					BodyPart part = mp.getBodyPart(j);
 					String contentType = part.getContentType();
-					
+
 					log.debug("-- part-type: " + contentType);
 					log.debug("-- part-disp: " + part.getDisposition());
 
@@ -147,23 +147,23 @@ public class MailListener {
 			IOUtils.closeQuietly(inputStream);
 		}
 	}
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	public void setFileService(FileService fileService) {
 		this.fileService = fileService;
 	}
-	
+
 	public void setInboxService(InboxService inboxService) {
 		this.inboxService = inboxService;
 	}

@@ -217,7 +217,7 @@ public class ModelController extends ModelControllerBase {
 			otherNode.addProperty("type", other.getClass().getSimpleName());
 			diagram.addNode(otherNode);
 			diagram.addEdge(center, relation.getKind(), otherNode);
-		});;
+		});
 		// TODO build filtering+limit into query
 		modelService.find().relations(request).to(entity).stream().filter(filterDissimilar).limit(20).forEach(relation -> {
 			Entity other = relation.getFrom();

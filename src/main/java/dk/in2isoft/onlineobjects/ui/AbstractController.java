@@ -38,7 +38,7 @@ public abstract class AbstractController {
 		Method[] methods = getClass().getDeclaredMethods();
 		for (Method method : methods) {
 			Path annotation = method.getAnnotation(Path.class);
-			
+
 			if (annotation!=null) {
 				String[] exactly = annotation.exactly();
 				Responder responder = new Responder();
@@ -97,11 +97,11 @@ public abstract class AbstractController {
 
 	private boolean dispatchToJSF(Request request, String path) throws IOException, EndUserException {
 		ServletContext context = request.getRequest().getServletContext();
-		
+
 		String urlPath = getDimension() + "/" + getName() + "/" + path;
 		File file = new File(configurationService.getBasePath() + File.separator + urlPath);
 		if (!file.exists()) {
-			urlPath = "jsf/" + getName() + "/" + path;						
+			urlPath = "jsf/" + getName() + "/" + path;
 		}
 
 		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/" + urlPath);
@@ -119,7 +119,7 @@ public abstract class AbstractController {
 			}
 		}
 	}
-	
+
 	public void unknownRequest(Request request) throws IOException, EndUserException {
 		throw new NotFoundException("Not found");
 	}
@@ -166,7 +166,7 @@ public abstract class AbstractController {
 			}
 		}
 	}
-	
+
 	public final File getFile(String... path) {
 		File file = getFile(false, path);
 		if (file.exists()) {
@@ -181,7 +181,7 @@ public abstract class AbstractController {
 		filePath.append(File.separator);
 		if (webInf) {
 			filePath.append("WEB-INF");
-			filePath.append(File.separator);			
+			filePath.append(File.separator);
 		}
 		filePath.append(getDimension());
 		filePath.append(File.separator);
@@ -199,17 +199,17 @@ public abstract class AbstractController {
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
 	public boolean logAccessExceptions() {
 		return true;
 	}
-	
+
 	public void setHuiService(HUIService huiService) {
 		this.huiService = huiService;
 	}
-	
+
 	private class Responder {
-		String httpMethod; 
+		String httpMethod;
 		Method method;
 		String[] path;
 		Pattern pattern;

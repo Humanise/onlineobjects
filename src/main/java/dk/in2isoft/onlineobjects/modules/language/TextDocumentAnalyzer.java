@@ -41,7 +41,7 @@ public class TextDocumentAnalyzer {
 	public TextDocumentAnalytics analyzeSimple(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
 		TextDocumentAnalytics analytics = new TextDocumentAnalytics();
 		Document extracted = internetAddressService.getExtracted(address, privileged);
-		
+
 		String text;
 		if (extracted!=null) {
 			analytics.setDocumentTitle(new HTMLDocument(extracted).getTitle());
@@ -59,12 +59,12 @@ public class TextDocumentAnalyzer {
 	public TextDocumentAnalytics analyze(InternetAddress address, Operator privileged) {
 		return cacheService.getCached(address, TextDocumentAnalytics.class, () -> buildAnalytics(address, privileged));
 	}
-	
+
 	private TextDocumentAnalytics buildAnalytics(InternetAddress address, Operator privileged) throws SecurityException, ModelException {
-		
+
 		TextDocumentAnalytics analytics = new TextDocumentAnalytics();
 		Document extracted = internetAddressService.getExtracted(address, privileged);
-		
+
 		String text;
 		if (extracted!=null) {
 			analytics.setDocumentTitle(new HTMLDocument(extracted).getTitle());
@@ -80,7 +80,7 @@ public class TextDocumentAnalyzer {
 
 		Locale analyzedLocale = languageService.getLocale(text);
 		Locale locale = languageService.getSupportedLocale(analyzedLocale);
-		
+
 		analytics.setGuessedLocale(analyzedLocale);
 		analytics.setUsedLocale(locale);
 		analytics.setSimpleWords(Lists.newArrayList(semanticService.getWords(text)));
@@ -94,7 +94,7 @@ public class TextDocumentAnalyzer {
 		String[] sentences = semanticService.getSentences(text, locale);
 
 		ArrayList<List<String>> nameCandidates = Lists.newArrayList();
-		
+
 		List<TextPart> significantWords = Lists.newArrayList();
 
 		Counter<TextPart> significantWordCounter = new Counter<>();
@@ -108,7 +108,7 @@ public class TextDocumentAnalyzer {
 			insignificantWords.putAll("VA", Sets.newHashSet("fik","får","blive","bliver","vil","skal","ville","var","er","kan","være","har","have","lagt","været","siger","kan","blev","blevet","havde","se","ser","ses","få","fået","står","gik","lå","tyder","set","taget","stå","gå","gået","viser"));
 			insignificantWords.putAll("AN", Sets.newHashSet("sådan","meget","mere","flere","mulige","tæt","alle","mest"));
 			insignificantWords.putAll("NC", Sets.newHashSet("kl."));
-			
+
 		} else {
 			insignificantTags = Sets.newHashSet("DT","IN","TO","-RRB-","-LRB-","CC",",",".",":","''","``","PRP$","PRP","WP","WP$","WDT","RB","WRB");
 			insignificantWords.putAll("VBP", Sets.newHashSet("are"));
@@ -116,7 +116,7 @@ public class TextDocumentAnalyzer {
 			insignificantWords.putAll("NNS", Sets.newHashSet("’s"));
 			insignificantWords.putAll("NNP", Sets.newHashSet("that’s"));
 			insignificantWords.putAll("NN", Sets.newHashSet("we’re"));
-			
+
 			insignificantWords.putAll("VB", Sets.newHashSet("be","let","go","have","do","know","give"));
 			insignificantWords.putAll("VBZ", Sets.newHashSet("is","'s","has","’s"));
 			insignificantWords.putAll("VBP", Sets.newHashSet("do","have","want","don’t","'ve"));
@@ -130,7 +130,7 @@ public class TextDocumentAnalyzer {
 			insignificantWords.putAll("RBR", Sets.newHashSet("more"));
 			insignificantWords.putAll("POS", Sets.newHashSet("'s"));
 			insignificantWords.putAll("PDT", Sets.newHashSet("all"));
-			
+
 		}
 		for (String sentence : sentences) {
 			List<String> NNPs = new ArrayList<>();
@@ -167,12 +167,12 @@ public class TextDocumentAnalyzer {
 		analytics.setNaturalWords(Lists.newArrayList(naturalWords));
 		analytics.setSentences(Lists.newArrayList(sentences));
 		analytics.setTaggedSentences(taggedSentences);
-		
+
 		{
 			List<Pair<TextPart, Integer>> significantWordFrequency = significantWordCounter.getMap().entrySet().stream().sorted((a,b) -> {return b.getValue().compareTo(a.getValue());}).map((x) -> Pair.of(x.getKey(), x.getValue())).collect(Collectors.toList());
 			analytics.setSignificantWordFrequency(significantWordFrequency);
 		}
-		
+
 		return analytics;
 	}
 
@@ -184,19 +184,19 @@ public class TextDocumentAnalyzer {
 	}
 
 	// Wiring...
-	
+
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}
-	
+
 	public void setCacheService(CacheService cacheService) {
 		this.cacheService = cacheService;
 	}

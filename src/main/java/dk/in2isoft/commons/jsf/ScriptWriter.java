@@ -7,7 +7,7 @@ import java.io.Writer;
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class ScriptWriter {
-	
+
 	private Writer writer;
 	private boolean partial;
 	private boolean started;
@@ -33,16 +33,16 @@ public class ScriptWriter {
 		}
 		return this;
 	}
-	
+
 	public ScriptWriter() {
 		this.writer = new StringWriter();
 	}
-	
+
 	public ScriptWriter(Writer writer) {
 		this.partial = true;
 		this.writer = writer;
 	}
-	
+
 	public ScriptWriter write(Object str) throws IOException {
 		if (!started) {
 			throw new IllegalStateException("Script writer not started");
@@ -52,7 +52,7 @@ public class ScriptWriter {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		return writer.toString();
@@ -106,7 +106,7 @@ public class ScriptWriter {
 	public ScriptWriter property(String name, Double value) throws IOException {
 		return write("'").write(name).write("':").write(value==null ? "null" : value);
 	}
-	
+
 	public ScriptWriter endNewObject() throws IOException {
 		return write("});");
 	}

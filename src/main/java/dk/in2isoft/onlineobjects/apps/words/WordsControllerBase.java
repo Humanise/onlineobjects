@@ -25,7 +25,7 @@ public class WordsControllerBase extends ApplicationController {
 	public WordsControllerBase() {
 		super("words");
 	}
-	
+
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
 	}
@@ -51,15 +51,15 @@ public class WordsControllerBase extends ApplicationController {
 	public void setWordsModelService(WordsModelService wordsModelService) {
 		this.wordsModelService = wordsModelService;
 	}
-	
+
 	public void setFeedService(FeedService feedService) {
 		this.feedService = feedService;
 	}
-	
+
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}

@@ -12,13 +12,13 @@ import dk.in2isoft.onlineobjects.ui.Request;
 public class In2iGuiResponder implements Responder {
 
 	private ConfigurationService configurationService;
-	
-	
+
+
 	public boolean applies(Request request) {
 		String[] path = request.getFullPath();
 		return path.length > 0 && path[0].equals("hui");
 	}
-	
+
 	public void dispatch(Request request, FilterChain chain) throws IOException {
 
 		String[] path = request.getFullPath();
@@ -29,7 +29,7 @@ public class In2iGuiResponder implements Responder {
 			request.notFound();
 		}
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

@@ -12,23 +12,23 @@ public class UserInfo {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-	
+
 	public Person getPerson() {
 		return person;
 	}
-	
+
 	public void setImage(Image image) {
 		this.image = image;
 	}
-	
+
 	public Image getImage() {
 		return image;
 	}

@@ -28,7 +28,7 @@ public class BoundPanelComponent extends AbstractComponent {
 	public BoundPanelComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -44,7 +44,7 @@ public class BoundPanelComponent extends AbstractComponent {
 			name, hideOnClick, width, modal, variant
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -59,7 +59,7 @@ public class BoundPanelComponent extends AbstractComponent {
 			out.withStyle("width:"+width+"px;");
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();
@@ -72,7 +72,7 @@ public class BoundPanelComponent extends AbstractComponent {
 		if ("true".equals(modal)) {
 			js.comma().property("modal", true);
 		} else if (modal!=null) {
-			js.comma().property("modal", modal);			
+			js.comma().property("modal", modal);
 		}
 		String name = getName(context);
 		if (name!=null) {

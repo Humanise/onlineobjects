@@ -6,7 +6,7 @@ public class Item {
 
 	public static String NAMESPACE = "http://uri.onlineobjects.com/model/Item/";
 	public static String TYPE = "Item";
-	
+
 	private long id;
 	private Date created;
 	private Date updated;
@@ -29,7 +29,7 @@ public class Item {
 	public String getNamespace() {
 		return NAMESPACE;
 	}
-	
+
 	public boolean isNew() {
 		return this.id==0;
 	}

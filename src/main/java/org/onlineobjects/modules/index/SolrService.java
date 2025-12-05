@@ -18,7 +18,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 @ApplicationScope
 public class SolrService {
-	
+
 	public enum Collection {knowledge}
 
 	private HttpJdkSolrClient client;
@@ -60,5 +60,5 @@ public class SolrService {
 		}
 		return null;
 	}
-	
+
 }

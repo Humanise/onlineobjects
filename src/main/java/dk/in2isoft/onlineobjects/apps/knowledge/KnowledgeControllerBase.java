@@ -33,7 +33,7 @@ import dk.in2isoft.onlineobjects.services.StorageService;
 import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class KnowledgeControllerBase extends ApplicationController {
-	
+
 	protected NetworkService networkService;
 	protected HTMLService htmlService;
 	protected PileService pileService;
@@ -59,7 +59,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	public KnowledgeControllerBase() {
 		super("knowledge");
 	}
-	
+
 	@Override
 	public void unknownRequest(Request request) throws IOException,
 			EndUserException {
@@ -75,7 +75,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 			super.unknownRequest(request);
 		}
 	}
-	
+
 	@Override
 	public boolean askForUserChange(Request request) {
 		return true;
@@ -84,7 +84,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
 	}
-	
+
 	@Override
 	public String getLanguage(Request request) {
 		String[] path = request.getLocalPath();
@@ -93,7 +93,7 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		}
 		return super.getLanguage(request);
 	}
-	
+
 	@Override
 	public boolean isAllowed(Request request) {
 		if (request.testLocalPathFull() || request.testLocalPathFull("da") || request.testLocalPathFull("en")) {
@@ -107,89 +107,89 @@ public abstract class KnowledgeControllerBase extends ApplicationController {
 		}
 		return !securityService.isPublicUser(request.getSession());
 	}
-	
+
 	// Wiring...
 
 	public void setNetworkService(NetworkService networkService) {
 		this.networkService = networkService;
 	}
-	
+
 	public void setHtmlService(HTMLService htmlService) {
 		this.htmlService = htmlService;
 	}
-	
+
 	public void setPileService(PileService pileService) {
 		this.pileService = pileService;
 	}
-	
+
 	public void setFeedService(FeedService feedService) {
 		this.feedService = feedService;
 	}
-	
+
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
 	}
-	
+
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
 	}
-	
+
 	public void setReaderIndexer(KnowledgeIndexer readerIndexer) {
 		this.readerIndexer = readerIndexer;
 	}
-	
+
 	public void setLanguageService(LanguageService languageService) {
 		this.languageService = languageService;
 	}
-	
+
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}
-	
+
 	public void setInternetAddressViewPerspectiveBuilder(InternetAddressViewPerspectiveBuilder articleBuilder) {
 		this.internetAddressViewPerspectiveBuilder = articleBuilder;
 	}
-	
+
 	public void setReaderSearcher(KnowledgeSearcher readerSearcher) {
 		this.readerSearcher = readerSearcher;
 	}
-	
+
 	public void setQuestionViewPerspectiveBuilder(QuestionViewPerspectiveBuilder questionViewPerspectiveBuilder) {
 		this.questionViewPerspectiveBuilder = questionViewPerspectiveBuilder;
 	}
-	
+
 	public void setHypothesisViewPerspectiveBuilder(HypothesisViewPerspectiveBuilder hypothesisViewPerspectiveBuilder) {
 		this.hypothesisViewPerspectiveBuilder = hypothesisViewPerspectiveBuilder;
 	}
-	
+
 	public void setStatementWebPerspectiveBuilder(StatementWebPerspectiveBuilder statementWebPerspectiveBuilder) {
 		this.statementWebPerspectiveBuilder = statementWebPerspectiveBuilder;
 	}
-	
+
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-	
+
 	public void setInternetAddressService(InternetAddressService internetAddressService) {
 		this.internetAddressService = internetAddressService;
 	}
-	
+
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}
-	
+
 	public void setIntelligence(Intelligence intelligence) {
 		this.intelligence = intelligence;
 	}
-	
+
 	@Autowired
 	public void setKnowledgeSolrIndexReader(KnowledgeSolrIndexReader knowledgeSolrIndexReader) {
 		this.knowledgeSolrIndexReader = knowledgeSolrIndexReader;

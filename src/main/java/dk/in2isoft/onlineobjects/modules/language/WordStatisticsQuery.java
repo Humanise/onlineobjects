@@ -19,7 +19,7 @@ public class WordStatisticsQuery implements CustomQuery<WordStatistic> {
 			" left outer JOIN language on (word_language.super_entity_id=language.id)"+
 			" left JOIN relation as word_category on (word_category.sub_entity_id=word.id and word_category.super_entity_id in (select id from lexicalcategory))"+
 			" left JOIN lexicalcategory on word_category.super_entity_id=lexicalcategory.id  group by language, category";
-	
+
 	private boolean distinct;
 
 	public String getSQL() {
@@ -29,7 +29,7 @@ public class WordStatisticsQuery implements CustomQuery<WordStatistic> {
 	public String getCountSQL() {
 		return null;
 	}
-	
+
 	public WordStatisticsQuery distinct() {
 		distinct = true;
 		return this;
@@ -44,6 +44,6 @@ public class WordStatisticsQuery implements CustomQuery<WordStatistic> {
 	}
 
 	public void setParameters(NativeQuery<?> sql) {
-		
+
 	}
 }

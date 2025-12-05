@@ -16,14 +16,14 @@ import dk.in2isoft.onlineobjects.util.Dates;
 public class DateComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.date";
-	
+
 	private boolean weekday = true;
 	private boolean time = true;
-	
+
 	public DateComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		weekday = (Boolean) state[0];
@@ -34,7 +34,7 @@ public class DateComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { weekday, time};
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		Date value = getBinding("value");
@@ -44,11 +44,11 @@ public class DateComponent extends AbstractComponent {
 			writer.write(str);
 		}
 	}
-	
+
 	public void setWeekday(boolean weekday) {
 		this.weekday = weekday;
 	}
-	
+
 	public void setTime(boolean time) {
 		this.time = time;
 	}

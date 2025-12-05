@@ -15,9 +15,9 @@ public abstract class XSLTInterface {
 	protected static final String NAMESPACE_PAGE = "http://uri.onlineobjects.com/page/";
 
 	public abstract File getStylesheet();
-	
+
 	public abstract Document getData(Privileged privileged) throws ModelException;
-	
+
 	public abstract nu.xom.Document getDocument(Privileged privileged) throws ModelException;
 
 	public void display(Request request) throws IOException, EndUserException {

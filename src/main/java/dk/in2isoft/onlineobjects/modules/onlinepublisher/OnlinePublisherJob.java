@@ -11,16 +11,16 @@ import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 @DisallowConcurrentExecution
 public class OnlinePublisherJob extends ServiceBackedJob implements InterruptableJob {
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobStatus status = getStatus(context);
 		OnlinePublisherService publisherService = schedulingSupportFacade.getOnlinePublisherService();
 		publisherService.callAllPublishers(status);
-		
+
 	}
 
 	public void interrupt() throws UnableToInterruptJobException {
-		
+
 	}
 
 }

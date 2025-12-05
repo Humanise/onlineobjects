@@ -40,21 +40,21 @@ public class WordsWordView extends AbstractView {
 	private ModelService modelService;
 	private WordService wordService;
 	private LoadManager loadManager;
-	
+
 	private String text;
 	private List<WordImpression> words;
 	private Language language;
 	private Locale locale;
-	
+
 	private List<RelationOption> relationOptions;
 	private List<String> RELATIONS_UNDIRECTED = Lists.newArrayList(Relation.KIND_SEMANTICS_EQUIVALENT, Relation.KIND_SEMANTICS_SYNONYMOUS, Relation.KIND_SEMANTICS_ANTONYMOUS);
 	private List<String> RELATIONS_DIRECTED = Lists.newArrayList(Relation.KIND_SEMANTICS_MORPHEME, Relation.KIND_SEMANTICS_GENRALTIZATION, Relation.KIND_SEMANTICS_DISCIPLINE, Relation.KIND_SEMANTICS_CONTAINS);
 	private List<String> RELATIONS_OUTGOING = Lists.newArrayList(Relation.KIND_SEMANTICS_EQUIVALENT, Relation.KIND_SEMANTICS_SYNONYMOUS, Relation.KIND_SEMANTICS_ANTONYMOUS, Relation.KIND_SEMANTICS_MORPHEME, Relation.KIND_SEMANTICS_GENRALTIZATION, Relation.KIND_SEMANTICS_CONTAINS, Relation.KIND_SEMANTICS_DISCIPLINE);
 	private List<String> RELATIONS_INCOMING = Lists.newArrayList(Relation.KIND_SEMANTICS_EQUIVALENT, Relation.KIND_SEMANTICS_SYNONYMOUS, Relation.KIND_SEMANTICS_ANTONYMOUS, Relation.KIND_SEMANTICS_MORPHEME, Relation.KIND_SEMANTICS_GENRALTIZATION, Relation.KIND_SEMANTICS_CONTAINS);
-	
-	
+
+
 	private static final Comparator<WordRelation> ORDERING = Ordering.natural().onResultOf(relation -> relation.getWord().getText());
-	
+
 	@Override
 	protected void before(Request request) throws Exception {
 		loadManager.failIfBusy();
@@ -74,15 +74,15 @@ public class WordsWordView extends AbstractView {
 					group.setKind(kind);
 					List<WordRelation> relations = Lists.newArrayList(map.get(kind));
 					Collections.sort(relations,ORDERING);
-					
+
 					HTMLWriter html = new HTMLWriter();
 					Messages msg = new Messages(WordsController.class);
-					
+
 					html.startLi().startStrong().text(msg.get(group.getKind(),locale)).text(":").endStrong().text(" ");
 					int limit = 30;
 					int index = 0;
 					for (WordRelation relation : relations) {
-						StringBuilder href = new StringBuilder("/").append(locale.getLanguage()).append("/word/").append(Strings.encodeURL(relation.getWord().getText().toLowerCase())).append(".html#").append(relation.getWord().getId()); 
+						StringBuilder href = new StringBuilder("/").append(locale.getLanguage()).append("/word/").append(Strings.encodeURL(relation.getWord().getText().toLowerCase())).append(".html#").append(relation.getWord().getId());
 						html.startA().withHref(href).withClass("words_word_relation oo_link").withData("relation",relation.getId()).withData("word",relation.getWord().getId());
 						html.startSpan().text(relation.getWord().getText()).endSpan();
 						html.endA();
@@ -100,7 +100,7 @@ public class WordsWordView extends AbstractView {
 					}
 					html.endLi();
 					group.setRaw(html.toString());
-					
+
 					Collections.sort(relations, ORDERING);
 					int size = 5000;
 					if (relations.size()>size) {
@@ -115,23 +115,23 @@ public class WordsWordView extends AbstractView {
 				for (InternetAddress address : links) {
 					System.out.println("Parent: "+address.getAddress());
 				}
-				
+
 				List<Relation> parentRelations = modelService.getParentRelations(impression.getWord(), InternetAddress.class);
 				for (Relation parentRelation : parentRelations) {
 					System.out.println("Parent: "+parentRelation.getFrom()+ " --- "+parentRelation.getKind());
 				}*/
-				
-				
+
+
 				impression.setRelations(relationsList);
 			}
 		}
 		watch.stop();
 		//System.out.println(watch.getTime()+"ms");
 	}
-	
+
 	private String getWord(String[] path) {
 		if (path.length > 2) {
-			StringBuilder str = new StringBuilder(path[2]); 
+			StringBuilder str = new StringBuilder(path[2]);
 			for (int i = 3; i < path.length; i++) {
 				str.append("/").append(path[i]);
 			}
@@ -142,7 +142,7 @@ public class WordsWordView extends AbstractView {
 
 	private Multimap<String, WordRelation> getRelations(WordImpression impression, Operator operator) throws ModelException {
 		Multimap<String, WordRelation> map = HashMultimap.create();
-		
+
 		WordRelationsQuery query = new WordRelationsQuery(impression.getWord());
 		query.setOutgoingKinds(RELATIONS_OUTGOING);
 		query.setIncomingKinds(RELATIONS_INCOMING);
@@ -166,12 +166,12 @@ public class WordsWordView extends AbstractView {
 			if (!contains(map, kind, relation)) {
 				map.put(kind, relation);
 			}
-			
+
 		}
-		
+
 		return map;
 	}
-	
+
 	/*
 	private Multimap<String, WordRelation> getRelations(WordImpression impression) throws ModelException {
 		Multimap<String, WordRelation> map = HashMultimap.create();
@@ -180,7 +180,7 @@ public class WordsWordView extends AbstractView {
 			WordRelation rel = new WordRelation();
 			rel.setId(relation.getId());
 			rel.setWord((Word) relation.getTo());
-			
+
 			if (!contains(map, relation.getKind(), rel)) {
 				if (RELATIONS_ONE_WAY.contains(relation.getKind())) {
 					map.put(relation.getKind()+".reverse", rel);
@@ -204,7 +204,7 @@ public class WordsWordView extends AbstractView {
 		}
 		return map;
 	}*/
-	
+
 	private boolean contains(Multimap<String, WordRelation> map, String type, WordRelation relation) {
 		Collection<WordRelation> collection = map.get(type);
 		for (WordRelation wordRelation : collection) {
@@ -214,10 +214,10 @@ public class WordsWordView extends AbstractView {
 		}
 		return false;
 	}
-	
+
 	public List<RelationOption> getRelationOptions() {
 		if (relationOptions!=null) return relationOptions;
-		
+
 		Messages msg = new Messages(WordsController.class);
 		relationOptions = Lists.newArrayList();
 		for (String kind : RELATIONS_UNDIRECTED) {
@@ -232,7 +232,7 @@ public class WordsWordView extends AbstractView {
 			option.setLabel(msg.get(kind, locale));
 			option.setReverse(true);
 			relationOptions.add(option);
-			
+
 			RelationOption reverse = new RelationOption();
 			reverse.setKind(kind);
 			reverse.setLabel(msg.get(kind+".reverse", locale));
@@ -244,21 +244,21 @@ public class WordsWordView extends AbstractView {
 	public String getText() {
 		return text;
 	}
-	
+
 	public List<WordImpression> getWords() {
 		return words;
 	}
-	
+
 	public Language getLanguage() {
 		return language;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setWordService(WordService wordService) {
 		this.wordService = wordService;
 	}

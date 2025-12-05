@@ -10,12 +10,12 @@ import dk.in2isoft.onlineobjects.model.Rating;
 import dk.in2isoft.onlineobjects.model.User;
 
 public class RatingService {
-	
+
 	private ModelService modelService;
-	
+
 	public void rate(Entity entity, double rate, User user, Operator operator) throws SecurityException, ModelException {
 		rate = makeValidRate(rate);
-		Query<Rating> query = Query.of(Rating.class).from(entity).as(user); 
+		Query<Rating> query = Query.of(Rating.class).from(entity).as(user);
 		Rating rating = modelService.search(query, operator).getFirst();
 		if (rating!=null) {
 			rating.setRating(rate);
@@ -28,15 +28,15 @@ public class RatingService {
 			modelService.createRelation(user, rating, operator);
 		}
 	}
-	
+
 	public double makeValidRate(double rate) {
 		rate = Math.min(1, rate);
 		rate = Math.max(-1, rate);
 		return rate;
 	}
-	
+
 	public void rateAdditive(Entity entity, double rate, User user, Operator operator) throws SecurityException, ModelException {
-		Query<Rating> query = Query.of(Rating.class).from(entity).as(user); 
+		Query<Rating> query = Query.of(Rating.class).from(entity).as(user);
 		Rating rating = modelService.search(query, operator).getFirst();
 		if (rating!=null) {
 			double newRate = makeValidRate(rating.getRating()+rate);

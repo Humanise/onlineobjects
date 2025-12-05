@@ -316,7 +316,7 @@ public class EnglishPorterStemmer implements WordStemmer {
 	      if (k > 1) { step1(); step2(); step3(); step4(); step5(); step6(); }
 	      i_end = k+1; i = 0;
 	   }
-	   
+
 	   public String stem(String str) {
 	   		char[] chars = str.toCharArray();
 	   		add(chars,chars.length);

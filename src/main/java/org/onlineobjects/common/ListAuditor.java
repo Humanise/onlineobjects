@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 public class ListAuditor implements Auditor {
 
 	private List<String> log = Lists.newArrayList();
-	
+
 	@Override
 	public void info(String message) {
 		log.add("INFO: "+message);

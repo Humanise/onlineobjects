@@ -9,7 +9,7 @@ public class DanNetUtil {
 	public static DanNetGlossary parseGlossary(String str) {
 		DanNetGlossary output = new DanNetGlossary();
 		str = StringEscapeUtils.unescapeHtml(str).trim();
-		if (!"(ingen definition)".equals(str.toLowerCase())) { 
+		if (!"(ingen definition)".equals(str.toLowerCase())) {
 			if (str.contains("(Brug:")) {
 				String[] parts = str.split("\\(Brug:");
 				if (parts.length==2) {
@@ -28,14 +28,14 @@ public class DanNetUtil {
 						examples= usage.split("\\|\\|");
 					}
 					for (String string : examples) {
-						
+
 						String[] sub = string.split("\\|\\|");
 						for (String subThing : sub) {
 							subThing = subThing.trim();
 							if (Strings.isNotBlank(subThing)) {
 								output.getExamples().add(subThing);
 							}
-							
+
 						}
 					}
 				}

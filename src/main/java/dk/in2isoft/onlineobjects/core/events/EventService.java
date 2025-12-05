@@ -24,15 +24,15 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 
 	private List<ModelEventListener> modelEventListeners = new CopyOnWriteArrayList<ModelEventListener>();
 	private static Logger log = LogManager.getLogger(EventService.class);
-	
+
 	public void setModelEventListeners(List<ModelEventListener> modelEventListeners) {
 		this.modelEventListeners.addAll(modelEventListeners);
 	}
-	
+
 	public void addModelEventListener(ModelEventListener listener) {
 		this.modelEventListeners.add(listener);
 	}
-	
+
 	public void fireItemWasCreated(Item item) {
 		log.info("Item was created: "+item);
 		for (ModelEventListener listener : modelEventListeners) {
@@ -44,7 +44,7 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 			}
 		}
 	}
-	
+
 	public void fireItemWasUpdated(Item item) {
 		log.info("Item was updated: "+item);
 		for (ModelEventListener listener : modelEventListeners) {
@@ -77,12 +77,12 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean requiresPostCommitHandling(EntityPersister persister) {
 		return true;
 	}
-	
+
 	@Override
 	public void onPostUpdate(PostUpdateEvent event) {
 		log.debug("onPostUpdate: {}" ,event.getEntity());
@@ -90,7 +90,7 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 
 	@Override
 	public void onPostUpdateCommitFailed(PostUpdateEvent event) {
-		
+
 	}
 
 	@Override
@@ -106,12 +106,12 @@ public class EventService implements PostCommitUpdateEventListener, PostCommitIn
 	@Override
 	public void onPostInsertCommitFailed(PostInsertEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onPostDeleteCommitFailed(PostDeleteEvent event) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

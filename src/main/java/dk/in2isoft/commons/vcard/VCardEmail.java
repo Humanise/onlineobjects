@@ -3,7 +3,7 @@ package dk.in2isoft.commons.vcard;
 public class VCardEmail {
 
 	private String address;
-	
+
 	public VCardEmail(String address) {
 		super();
 		this.address = address;

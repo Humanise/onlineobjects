@@ -26,11 +26,11 @@ public class QuestionApiPerspective implements CategorizableViewPerspective, Api
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
@@ -38,11 +38,11 @@ public class QuestionApiPerspective implements CategorizableViewPerspective, Api
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public List<StatementApiPerspective> getAnswers() {
 		return answers;
 	}
-	
+
 	public void setAnswers(List<StatementApiPerspective> answers) {
 		this.answers = answers;
 	}

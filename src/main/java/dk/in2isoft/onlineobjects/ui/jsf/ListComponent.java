@@ -23,7 +23,7 @@ public class ListComponent extends AbstractComponent {
 	private String var;
 	private String variant;
 	private String styleClass;
-	
+
 	public ListComponent() {
 		super(FAMILY);
 	}
@@ -52,7 +52,7 @@ public class ListComponent extends AbstractComponent {
 	public boolean getRendersChildren() {
 		return StringUtils.isNotBlank(var);
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		writer.startOl(new ClassBuilder("oo_list").add("oo_list", variant).add(styleClass));
@@ -62,7 +62,7 @@ public class ListComponent extends AbstractComponent {
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
 		writer.endOl();
 	}
-	
+
 	@Override
 	public void encodeChildren(FacesContext context, TagWriter writer) throws IOException {
 		List<?> list = getBinding("value");

@@ -3,7 +3,7 @@ package dk.in2isoft.in2igui.data;
 public abstract class WidgetData {
 
 	private String name;
-	
+
 	public WidgetData(String name) {
 		super();
 		this.name = name;

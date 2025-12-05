@@ -16,15 +16,15 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 
 public class PasswordEncryptionService {
-	
+
 	private static Logger log = LogManager.getLogger(PasswordEncryptionService.class);
-	
+
 	public boolean authenticate(String attemptedPassword, String encryptedPassword, String salt) {
 		try {
 			// Encrypt the clear-text password using the same salt that was used to
 			// encrypt the original password
 			String encryptedAttemptedPassword = getEncryptedPassword(attemptedPassword, salt);
-	
+
 			// Authentication succeeds if encrypted password that the user entered
 			// is equal to the stored hash
 			return Strings.equals(encryptedPassword, encryptedAttemptedPassword);

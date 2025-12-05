@@ -26,19 +26,19 @@ import dk.in2isoft.onlineobjects.model.User;
 public class InboxService implements InitializingBean {
 
 	private static Logger log = LogManager.getLogger(InboxService.class);
-	
+
 	private ModelService modelService;
 	private SecurityService securityService;
 
 	private EventService eventService;
-	
+
 	private Map<Long,Integer> counts;
-	
+
 	public InboxService() {
 		super();
 		counts = new HashMap<Long, Integer>();
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		eventService.addModelEventListener(new AnyModelChangeListener() {
@@ -64,18 +64,18 @@ public class InboxService implements InitializingBean {
 		}
 		return inbox;
 	}
-	
+
 	public void add(User user, Entity entity, Operator operator) throws ModelException, SecurityException {
 		if (!modelService.getRelation(user, entity, operator).isPresent()) {
 			modelService.createRelation(getOrCreateInbox(user, operator), entity, operator);
 		}
 	}
-	
+
 	public int getCount(User user, Operator operator) throws ModelException, SecurityException {
 		if (counts.containsKey(user.getId())) {
 			return counts.get(user.getId());
 		}
-		
+
 		// TODO Optimize this by caching id=count
 		Pile inbox = getOrCreateInbox(user, operator);
 		Query<Entity> query = Query.after(Entity.class).from(inbox).as(user);
@@ -84,7 +84,7 @@ public class InboxService implements InitializingBean {
 		counts.put(user.getId(), count);
 		return count;
 	}
-	
+
 	public int getCountSilently(User user, Operator operator) {
 		if (user==null) {
 			log.error("The user is null, will silently rebort zero");
@@ -97,7 +97,7 @@ public class InboxService implements InitializingBean {
 			return 0;
 		}
 	}
-	
+
 	public boolean remove(User user, long id, Operator operator) throws ModelException, SecurityException {
 		Pile inbox = getOrCreateInbox(user, operator);
 		Entity entity = modelService.get(Entity.class, id, operator);
@@ -108,7 +108,7 @@ public class InboxService implements InitializingBean {
 		modelService.delete(relation.get(), operator);
 		return true;
 	}
-	
+
 	// Wiring...
 
 	public void setModelService(ModelService modelService) {
@@ -118,7 +118,7 @@ public class InboxService implements InitializingBean {
 	public void setEventService(EventService eventService) {
 		this.eventService = eventService;
 	}
-	
+
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
 	}

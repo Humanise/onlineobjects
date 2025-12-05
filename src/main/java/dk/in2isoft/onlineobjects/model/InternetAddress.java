@@ -5,7 +5,7 @@ public class InternetAddress extends Entity {
 	public static String TYPE = Entity.TYPE+"/InternetAddress";
 	public static String NAMESPACE = Entity.NAMESPACE+"InternetAddress/";
 	public static String FIELD_ADDRESS = "address";
-	
+
 	private String address;
 	private String context;
 
@@ -16,7 +16,7 @@ public class InternetAddress extends Entity {
 	public String getType() {
 		return TYPE;
 	}
-	
+
 	@Override
 	public String getIcon() {
 		return "common/internet";

@@ -4,7 +4,7 @@ import com.github.jsonldjava.shaded.com.google.common.base.Objects;
 
 public class ScaledImage extends Size {
 	private String url;
-	
+
 	public static ScaledImage of(Size s, String url) {
 		ScaledImage si = new ScaledImage();
 		si.setWidth(s.getWidth());
@@ -12,7 +12,7 @@ public class ScaledImage extends Size {
 		si.setUrl(url);
 		return si;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "{width: " + getWidth() + ", height: " + getHeight() + "}";

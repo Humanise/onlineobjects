@@ -27,7 +27,7 @@ public class RelationQuery {
 	private ModelService modelService;
 	private SecurityService securityService;
 	private Operation operation;
-	
+
 	public RelationQuery(ModelService modelService, SecurityService securityService, Operation operation) {
 		this.modelService = modelService;
 		this.securityService = securityService;
@@ -75,8 +75,8 @@ public class RelationQuery {
 		this.fromClass = type;
 		return this;
 	}
-	
-	
+
+
 	protected RelationQuery as(Privileged privileged) {
 		if (!securityService.isAdminUser(privileged)) {
 			if (!securityService.isPublicUser(privileged)) {
@@ -86,13 +86,13 @@ public class RelationQuery {
 		}
 		return this;
 	}
-	
+
 	private String getCountHQL() {
 		StringBuilder hql = new StringBuilder("select count(distinct rel) from Relation as rel");
 		buildHQL(hql);
 		return hql.toString();
 	}
-	
+
 	public String getHQL() {
 		StringBuilder hql = new StringBuilder("select distinct rel from Relation as rel");
 		buildHQL(hql);
@@ -138,7 +138,7 @@ public class RelationQuery {
 			hql.append(" and fromPriv.object=rel.from.id and fromPriv.subject in (:privileged)");
 		}
 	}
-	
+
 	private void decorate(Query<?> query) {
 		if (this.id!=null) {
 			query.setParameter("id", this.id, StandardBasicTypes.LONG);
@@ -199,14 +199,14 @@ public class RelationQuery {
 		List<Relation> list = Code.castList(query.list());
 		return list;
 	}
-	
+
 	public void delete(Operator operator) throws ModelException, SecurityException {
-		for (Relation relation : list()) {			
-			modelService.delete(relation, operator);			
+		for (Relation relation : list()) {
+			modelService.delete(relation, operator);
 		}
 	}
 
-	public boolean exists() {		
+	public boolean exists() {
 		return count() > 0;
 	}
 }

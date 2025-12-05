@@ -7,9 +7,9 @@ import dk.in2isoft.onlineobjects.model.annotations.Appearance;
 public class Pile extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/Pile";
-	
+
 	public static String PROPERTY_KEY = "key";
-	
+
 	public Pile() {
 		super();
 	}

@@ -48,17 +48,17 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 public class SchedulingService implements ApplicationListener<ApplicationContextEvent>, InitializingBean, ApplicationContextAware {
 
 	private final static Logger log = LogManager.getLogger(SchedulingService.class);
-	
+
 	private Queue<LiveLogEntry> liveLog = Queues.synchronizedQueue(new CircularFifoQueue<LiveLogEntry>(200));
-	
+
 	private SchedulingSupportFacade schedulingSupportFacade;
-	
+
 	private ConfigurationService configurationService;
 
 	private org.quartz.Scheduler scheduler;
-	
+
 	private List<JobDescription> jobDescriptions;
-	
+
 	private Map<JobKey,String> triggerDescriptions = Maps.newHashMap();
 
 	private ApplicationContext applicationContext;
@@ -67,7 +67,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
-	
+
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
 			try {
@@ -121,9 +121,9 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	public void afterPropertiesSet() throws Exception {
 		SchedulerFactory sf = new StdSchedulerFactory();
 		scheduler = sf.getScheduler();
@@ -132,7 +132,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		scheduler.getListenerManager().addSchedulerListener(listener);
 		scheduler.getListenerManager().addJobListener(listener);
 		scheduler.getListenerManager().addTriggerListener(listener);
-		
+
 	}
 
 	public SpringBeanJobFactory springBeanJobFactory() {
@@ -140,23 +140,23 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	    jobFactory.setApplicationContext(applicationContext);
 	    return jobFactory;
 	}
-	
+
 	public void log(String text) {
 		liveLog.add(new LiveLogEntry(text));
 	}
-	
+
 	public void log(String text, Key<?> key) {
 		if (key==null) {
 			log(text);
 		} else {
-			liveLog.add(new LiveLogEntry(text,key.getName(),key.getGroup()));			
+			liveLog.add(new LiveLogEntry(text,key.getName(),key.getGroup()));
 		}
 	}
 
 	public void warn(String text, Key<?> key) {
 		LiveLogEntry entry;
 		if (key!=null) {
-			entry = new LiveLogEntry(text,key.getName(),key.getGroup());			
+			entry = new LiveLogEntry(text,key.getName(),key.getGroup());
 		} else {
 			entry = new LiveLogEntry(text);
 		}
@@ -168,7 +168,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		LiveLogEntry entry = new LiveLogEntry(text);
 		if (key!=null) {
 			entry.setName(key.getName());
-			entry.setGroup(key.getName());			
+			entry.setGroup(key.getName());
 		}
 		entry.setLevel(LiveLogEntry.Level.error);
 		liveLog.add(entry);
@@ -182,7 +182,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			log.error("Unable to start scheduler",e);
 		}
 	}
-	
+
 	public void pause() {
 		try {
 			log("Pausing scheduler");
@@ -191,7 +191,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			log.error("Unable to pause scheduler",e);
 		}
 	}
-	
+
 	public boolean isRunning() {
 		try {
 			return !scheduler.isInStandbyMode() && scheduler.isStarted();
@@ -200,7 +200,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		}
 		return false;
 	}
-	
+
 	public void toggle() {
 		try {
 			if (scheduler.isInStandbyMode() || !scheduler.isStarted()) {
@@ -215,9 +215,9 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		} catch (SchedulerException e) {
 			log.error("Unable to pause scheduler",e);
 		}
-		
+
 	}
-	
+
 	public void setActive(boolean active) {
 		try {
 			if (active) {
@@ -235,7 +235,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 					scheduler.standby();
 				} else {
 					log.info("Scheduling service already inactive");
-				}				
+				}
 			}
 		} catch (SchedulerException e) {
 			log.error("Unable to pause scheduler",e);
@@ -245,7 +245,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	public void setCoreScheduler(Scheduler coreSchedulerFactory) {
 		this.scheduler = coreSchedulerFactory;
 	}
-	
+
 	public List<JobInfo> getJobList() {
 		List<JobInfo> list = Lists.newArrayList();
 		try {
@@ -257,7 +257,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 				for (JobKey key : jobKeys) {
 					JobDetail jobDetail = scheduler.getJobDetail(key);
 					jobDetail.getDescription();
-					
+
 					JobInfo status = new JobInfo();
 					status.setGroup(key.getGroup());
 					status.setName(key.getName());
@@ -272,7 +272,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 							break;
 						}
 					}
-					
+
 					List<? extends Trigger> triggers = scheduler.getTriggersOfJob(key);
 					if (triggers!=null && !triggers.isEmpty()) {
 						Trigger trigger = triggers.get(0);
@@ -305,7 +305,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		}
 		return false;
 	}
-	
+
 	public void runJob(String name, String group) {
 		runJob(name, group, null);
 	}
@@ -322,7 +322,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			log.error("Exception while running job", e);
 		}
 	}
-	
+
 	public void pauseJob(String name, String group) {
 		try {
 			JobKey key = JobKey.jobKey(name, group);
@@ -340,7 +340,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		try {
 			JobKey key = JobKey.jobKey(name, group);
 			JobDetail jobDetail = scheduler.getJobDetail(key);
-			if (jobDetail!=null) {				
+			if (jobDetail!=null) {
 				log("Resuming job",key);
 				scheduler.resumeJob(key);
 			}
@@ -353,7 +353,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		try {
 			JobKey key = JobKey.jobKey(name, group);
 			JobDetail jobDetail = scheduler.getJobDetail(key);
-			if (jobDetail!=null) {				
+			if (jobDetail!=null) {
 				log("Stopping job",key);
 				scheduler.interrupt(key);
 			}
@@ -381,16 +381,16 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		}
 		return null;
 	}
-	
+
 	private List<? extends Trigger> getJobDetail(String name, String group) {
 		try {
 			JobDetail detail = scheduler.getJobDetail(JobKey.jobKey(name, group));
 			return scheduler.getTriggersOfJob(detail.getKey());
 		} catch (SchedulerException e) {
 			log.error("Exception while running job", e);
-		}		
+		}
 		return null;
-		
+
 	}
 
 	public List<LiveLogEntry> getLiveLog() {
@@ -403,9 +403,9 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		Collections.reverse(entries);
 		return entries;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setSchedulingSupportFacade(SchedulingSupportFacade schedulingSupportFacade) {
 		this.schedulingSupportFacade = schedulingSupportFacade;
 	}
@@ -413,7 +413,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 	public void setJobDescriptions(List<JobDescription> jobDescriptions) {
 		this.jobDescriptions = jobDescriptions;
 	}
-	
+
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}

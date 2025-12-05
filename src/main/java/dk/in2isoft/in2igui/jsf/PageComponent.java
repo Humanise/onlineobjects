@@ -14,13 +14,13 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class PageComponent extends AbstractComponent {
 
 	public static final String FAMILY = "hui.page";
-	
+
 	private String key;
 
 	public PageComponent() {
 		super(FAMILY);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		key = (String) state[0];
@@ -42,7 +42,7 @@ public class PageComponent extends AbstractComponent {
 			out.withStyle("display:none;");
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();
@@ -55,5 +55,5 @@ public class PageComponent extends AbstractComponent {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
+
 }

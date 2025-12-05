@@ -29,7 +29,7 @@ public class ListComponent extends AbstractComponent {
 	public ListComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -43,7 +43,7 @@ public class ListComponent extends AbstractComponent {
 			name, source, variant
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter out) throws IOException {
 		String id = getClientId();
@@ -66,7 +66,7 @@ public class ListComponent extends AbstractComponent {
 			out.endDiv();
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endDiv();

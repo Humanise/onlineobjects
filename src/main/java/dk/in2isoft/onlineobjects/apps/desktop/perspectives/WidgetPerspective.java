@@ -6,7 +6,7 @@ public class WidgetPerspective {
 
 	private Entity entity;
 	private String type;
-	
+
 	public WidgetPerspective(Entity entity) {
 		this.entity = entity;
 		this.type = entity.getClass().getSimpleName();

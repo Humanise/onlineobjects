@@ -21,7 +21,7 @@ public class BoxComponent extends AbstractComponent {
 	public BoxComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];

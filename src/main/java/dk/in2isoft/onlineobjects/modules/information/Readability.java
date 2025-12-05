@@ -7,19 +7,19 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import dk.in2isoft.commons.parsing.HTMLDocument;
 
 public class Readability {
 
     private static final String CONTENT_SCORE = "readabilityContentScore";
-    
+
     final Logger log = LogManager.getLogger(Readability.class);
 
     private final Document mDocument;
@@ -51,14 +51,14 @@ public class Readability {
     // @formatter:off
     /**
      * Runs readability.
-     * 
-     * Workflow: 
-     * 1. Prep the document by removing script tags, css, etc. 
-     * 2. Build readability's DOM tree. 
-     * 3. Grab the article content from the current dom tree. 
-     * 4. Replace the current DOM tree with the new one. 
+     *
+     * Workflow:
+     * 1. Prep the document by removing script tags, css, etc.
+     * 2. Build readability's DOM tree.
+     * 3. Grab the article content from the current dom tree.
+     * 4. Replace the current DOM tree with the new one.
      * 5. Read peacefully.
-     * 
+     *
      * @param preserveUnlikelyCandidates
      */
     // @formatter:on
@@ -102,7 +102,7 @@ public class Readability {
 
     /**
      * Get the combined inner HTML of all matched elements.
-     * 
+     *
      * @return
      */
     public final String html() {
@@ -121,7 +121,7 @@ public class Readability {
     	HTMLDocument htmlDocument = new HTMLDocument(mDocument.html());
 		return htmlDocument.getDOMDocument();
     }
-    
+
     public final nu.xom.Document getXomDocument() {
     	HTMLDocument htmlDocument = new HTMLDocument(mDocument.html());
 		return htmlDocument.getXOMDocument();
@@ -129,7 +129,7 @@ public class Readability {
 
     /**
      * Get the combined outer HTML of all matched elements.
-     * 
+     *
      * @return
      */
     public final String outerHtml() {
@@ -139,7 +139,7 @@ public class Readability {
     /**
      * Get the article title as an H1. Currently just uses document.title, we
      * might want to be smarter in the future.
-     * 
+     *
      * @return
      */
     protected Element getArticleTitle() {
@@ -196,7 +196,7 @@ public class Readability {
     /**
      * Prepare the article node for display. Clean out any inline styles,
      * iframes, forms, strip extraneous &lt;p&gt; tags, etc.
-     * 
+     *
      * @param articleContent
      */
     private void prepArticle(Element articleContent) {
@@ -252,7 +252,7 @@ public class Readability {
     /**
      * Initialize a node with the readability object. Also checks the
      * className/id for special names to add to its score.
-     * 
+     *
      * @param node
      */
     private static void initializeNode(Element node) {
@@ -291,7 +291,7 @@ public class Readability {
      * Using a variety of metrics (content score, classname, element types),
      * find the content that ismost likely to be the stuff a user wants to read.
      * Then return it wrapped up in a div.
-     * 
+     *
      * @param preserveUnlikelyCandidates
      * @return
      */
@@ -301,7 +301,7 @@ public class Readability {
          * the class name "comment", etc), and turn divs into P tags where they
          * have been used inappropriately (as in, where they contain no other
          * block level elements.)
-         * 
+         *
          * Note: Assignment from index for performance. See
          * http://www.peachpit.com/articles/article.aspx?p=31567&seqNum=5 TODO:
          * Shouldn't this be a reverse traversal?
@@ -348,7 +348,7 @@ public class Readability {
         /**
          * Loop through all paragraphs, and assign a score to them based on how
          * content-y they look. Then add their score to their parent node.
-         * 
+         *
          * A score is determined by things like number of commas, class names,
          * etc. Maybe eventually link density.
          **/
@@ -497,7 +497,7 @@ public class Readability {
     /**
      * Get the inner text of a node - cross browser compatibly. This also strips
      * out any excess whitespace to be found.
-     * 
+     *
      * @param e
      * @param normalizeSpaces
      * @return
@@ -514,7 +514,7 @@ public class Readability {
 
     /**
      * Get the number of times a string s appears in the node e.
-     * 
+     *
      * @param e
      * @param s
      * @return
@@ -528,14 +528,14 @@ public class Readability {
 
     /**
      * Remove the style attribute on every e and under.
-     * 
+     *
      * @param e
      */
     private static void cleanStyles(Element e) {
         if (e == null) {
             return;
         }
-        
+
         Elements elements = e.getAllElements();
         for (Element element : elements) {
             if (!"readability-styled".equals(element.className())) {
@@ -549,7 +549,7 @@ public class Readability {
      * Get the density of links as a percentage of the content. This is the
      * amount of text that is inside a link divided by the total text in the
      * node.
-     * 
+     *
      * @param e
      * @return
      */
@@ -566,7 +566,7 @@ public class Readability {
     /**
      * Get an elements class/id weight. Uses regular expressions to tell if this
      * element looks good or bad.
-     * 
+     *
      * @param e
      * @return
      */
@@ -608,7 +608,7 @@ public class Readability {
 
     /**
      * Remove extraneous break tags from a node.
-     * 
+     *
      * @param e
      */
     private static void killBreaks(Element e) {
@@ -618,7 +618,7 @@ public class Readability {
     /**
      * Clean a node of all elements of type "tag". (Unless it's a youtube/vimeo
      * video. People love movies.)
-     * 
+     *
      * @param e
      * @param tag
      */
@@ -642,7 +642,7 @@ public class Readability {
      * Clean an element of all tags of type "tag" if they look fishy. "Fishy" is
      * an algorithm based on content length, classnames, link density, number of
      * images & embeds, etc.
-     * 
+     *
      * @param e
      * @param tag
      */
@@ -653,7 +653,7 @@ public class Readability {
          * Gather counts for other typical elements embedded within. Traverse
          * backwards so we can remove nodes at the same time without effecting
          * the traversal.
-         * 
+         *
          * TODO: Consider taking into account original contentScore here.
          */
         for (Element node : tagsList) {
@@ -716,7 +716,7 @@ public class Readability {
     /**
      * Clean out spurious headers from an Element. Checks things like classnames
      * and link density.
-     * 
+     *
      * @param e
      */
     private static void cleanHeaders(Element e) {
@@ -733,7 +733,7 @@ public class Readability {
 
     /**
      * Print debug logs
-     * 
+     *
      * @param msg
      */
     protected void dbg(String msg) {
@@ -742,7 +742,7 @@ public class Readability {
 
     /**
      * Print debug logs with stack trace
-     * 
+     *
      * @param msg
      * @param t
      */
@@ -828,7 +828,7 @@ public class Readability {
 
     /**
      * Reads the content score.
-     * 
+     *
      * @param node
      * @return
      */
@@ -843,7 +843,7 @@ public class Readability {
     /**
      * Increase or decrease the content score for an Element by an
      * increment/decrement.
-     * 
+     *
      * @param node
      * @param increment
      * @return
@@ -857,7 +857,7 @@ public class Readability {
 
     /**
      * Scales the content score for an Element with a factor of scale.
-     * 
+     *
      * @param node
      * @param scale
      * @return
@@ -873,7 +873,7 @@ public class Readability {
      * Jsoup's Element.getElementsByTag(Element e) includes e itself, which is
      * different from W3C standards. This utility function is exclusive of the
      * Element e.
-     * 
+     *
      * @param e
      * @param tag
      * @return
@@ -886,7 +886,7 @@ public class Readability {
 
     /**
      * Helper utility to determine whether a given String is empty.
-     * 
+     *
      * @param s
      * @return
      */

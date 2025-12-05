@@ -11,7 +11,7 @@ public abstract class MarkupWriter {
 
 	protected PrintWriter writer;
 	boolean open = false;
-		
+
 	protected void close() {
 		if (open) {
 			writer.write(">");
@@ -22,7 +22,7 @@ public abstract class MarkupWriter {
 	protected void text(String str) {
 		close();
 		try {
-			str = Strings.stripNonValidXMLCharacters(str);			
+			str = Strings.stripNonValidXMLCharacters(str);
 			StringEscapeUtils.escapeXml(writer,str);
 		} catch (IOException e) {
 			// Ignore
@@ -40,7 +40,7 @@ public abstract class MarkupWriter {
 		writer.write(tag);
 		open = true;
 	}
-	
+
 	protected void endTag(String tag) {
 		close();
 		writer.write("</");

@@ -12,9 +12,9 @@ import dk.in2isoft.onlineobjects.modules.scheduling.ServiceBackedJob;
 
 @DisallowConcurrentExecution
 public class SendReportJob extends ServiceBackedJob {
-	
+
 	private static Logger log = LogManager.getLogger(SendReportJob.class);
-	
+
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobStatus status = getStatus(context);
 		try {

@@ -25,7 +25,7 @@ public class FormComponent extends AbstractComponent {
 	public FormComponent() {
 		super(TYPE);
 	}
-	
+
 	@Override
 	public void restoreState(Object[] state) {
 		name = (String) state[0];
@@ -39,7 +39,7 @@ public class FormComponent extends AbstractComponent {
 			name, action, method
 		};
 	}
-	
+
 	@Override
 	public void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 		String id = getClientId();
@@ -52,7 +52,7 @@ public class FormComponent extends AbstractComponent {
 			writer.withAttribute("method", method);
 		}
 	}
-	
+
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter out) throws IOException {
 		out.endElement("form");
@@ -60,7 +60,7 @@ public class FormComponent extends AbstractComponent {
 		js.startNewObject("hui.ui.Form").property("element", getClientId());
 		if (name!=null) {
 			js.comma().property("name", name);
-		}		
+		}
 		js.endNewObject().endScript();
 	}
 

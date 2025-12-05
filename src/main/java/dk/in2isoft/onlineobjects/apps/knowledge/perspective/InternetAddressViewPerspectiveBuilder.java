@@ -29,10 +29,10 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.Query;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.ExplodingClusterFuckException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Hypothesis;
@@ -90,7 +90,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		trace("Get analytics", watch);
 		Document xom = DOM.parseXOM(analytics.getXml());
 		trace("Parse dom", watch);
-		
+
 		ArticleData data = buildData(address, ids, operator);
 		trace("Build data", watch);
 
@@ -114,7 +114,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			option.setLabel(word.getName());
 			return option;
 		}).collect(Collectors.toList()));
-		
+
 		knowledgeService.categorize(address, article, user, operator);
 		trace("Categorize", watch);
 
@@ -159,7 +159,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			ids.add(statement.getId());
 		}
 		article.setQuotes(quoteList);
-		
+
 		List<Hypothesis> hypotheses = modelService.getChildren(address, Relation.KIND_STRUCTURE_CONTAINS, Hypothesis.class, session);
 		List<QuotePerspective> perpectives = hypotheses.stream().map((Hypothesis hypothesis) -> {
 			QuotePerspective perspective = new QuotePerspective();
@@ -171,7 +171,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		}).collect(Collectors.toList());
 		article.setHypotheses(perpectives);
 	}
-	
+
 	private ArticleData buildData(InternetAddress address, Set<Long> ids, Operator session) throws ModelException {
 		ArticleData data = new ArticleData();
 		data.address = address;
@@ -223,11 +223,11 @@ public class InternetAddressViewPerspectiveBuilder {
 				log.warn("No XOM document");
 				return;
 			}
-			
+
 			perspective.setText(analytics.getText());
 
 			watch.split();
-			
+
 			Document annotated = annotate(perspective, data, settings, xom, watch, session);
 			trace("Annotated", watch);
 
@@ -235,20 +235,20 @@ public class InternetAddressViewPerspectiveBuilder {
 			formatted.html(DOM.getBodyXML(annotated));
 			trace("Get body", watch);
 
-			
-			
+
+
 			renderSimilar(data, session, perspective, watch);
-			
+
 			perspective.setFormatted(formatted.toString());
 
 		}
 	}
-	
+
 	private void trace(String msg, StopWatch watch) {
 		long prev = watch.getSplitTime();
 		watch.split();
 		log.trace(msg + ": " + watch.getSplitTime() + " (" + (watch.getSplitTime() - prev) + ")");
-		
+
 	}
 
 	private void renderSimilar(ArticleData data, Operator session, InternetAddressViewPerspective perspetive, StopWatch watch) throws ModelException {
@@ -258,7 +258,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		List<Long> ids = list.stream().map(e -> e.getId()).collect(Collectors.toList());
 		List<InternetAddress> addresses = modelService.list(Query.after(InternetAddress.class).as(session).withIds(ids), session);
 		trace("List similar", watch);
-		
+
 		Function<Long,InternetAddress> find = id -> {
 			for (InternetAddress internetAddress : addresses) {
 				if (internetAddress.getId()==id) {
@@ -267,7 +267,7 @@ public class InternetAddressViewPerspectiveBuilder {
 			}
 			return null;
 		};
-		
+
 		List<SimilarityPerspective> similarities = new ArrayList<>();
 		for (Similarity similarity : list) {
 			SimilarityPerspective similarityPerspective = new SimilarityPerspective();
@@ -280,7 +280,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	}
 
 	private Document annotate(InternetAddressViewPerspective article, ArticleData data, Settings settings, Document xomDocument, StopWatch watch, Operator operator) throws ModelException, ExplodingClusterFuckException {
-		
+
 		List<QuotePerspective> statements = article.getQuotes();
 
 		DecoratedDocument decorated = new DecoratedDocument(xomDocument);
@@ -306,13 +306,13 @@ public class InternetAddressViewPerspectiveBuilder {
 				info.put("type", Statement.class.getSimpleName());
 				info.put("description", "Statement: " + StringUtils.abbreviate(statement.getText(), 30));
 				info.put("text", statement.getText());
-				
+
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", statement.getId());
 				attributes.put("class", settings.getCssNamespace() + "statement js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "mark", attributes);
-				
+
 				statement.setFirstPosition(Math.min(result.getFrom(), statement.getFirstPosition()));
 			}
 			if (!found.isEmpty()) {
@@ -329,13 +329,13 @@ public class InternetAddressViewPerspectiveBuilder {
 				info.put("id", hypothesis.getId());
 				info.put("type", Hypothesis.class.getSimpleName());
 				info.put("description", "Hypothesis: " + StringUtils.abbreviate(hypothesis.getText(), 30));
-				
+
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", hypothesis.getId());
 				attributes.put("class", settings.getCssNamespace() + "hypothesis js_reader_item");
 				attributes.put("data-info", Strings.toJSON(info));
 				decorated.decorate(result.getFrom(), result.getTo(), "mark", attributes);
-				
+
 				hypothesis.setFirstPosition(Math.min(result.getFrom(), hypothesis.getFirstPosition()));
 			}
 			if (!found.isEmpty()) {
@@ -355,7 +355,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				info.put("id", word.getId());
 				info.put("type", Word.class.getSimpleName());
 				info.put("description", "Word: " + StringUtils.abbreviate(word.getText(), 30));
-				
+
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", word.getId());
 				attributes.put("class", settings.getCssNamespace() + "word js_reader_item");
@@ -377,7 +377,7 @@ public class InternetAddressViewPerspectiveBuilder {
 				info.put("id", tag.getId());
 				info.put("type", Tag.class.getSimpleName());
 				info.put("description", "Tag: " + StringUtils.abbreviate(tag.getName(), 30));
-				
+
 				Map<String, Object> attributes = new HashMap<>();
 				attributes.put("data-id", tag.getId());
 				attributes.put("class", settings.getCssNamespace() + "tag js_reader_item");
@@ -387,7 +387,7 @@ public class InternetAddressViewPerspectiveBuilder {
 		}
 
 		trace("Decorate tags", watch);
-		
+
 		Collections.sort(statements,(a,b) -> {
 			return a.getFirstPosition() - b.getFirstPosition();
 		});
@@ -424,11 +424,11 @@ public class InternetAddressViewPerspectiveBuilder {
 				wrapper.addAttribute(new Attribute("class", settings.getCssNamespace() + "picture"));
 				ParentNode parent = node.getParent();
 				parent.insertChild(wrapper, parent.indexOf(node));
-				
+
 				Element body = new Element("span", namespaceURI);
 				body.addAttribute(new Attribute("class", settings.getCssNamespace() + "picture_body"));
 				body.addAttribute(new Attribute("style", "padding-bottom: "+ (ratio * 100) + "%;"));
-				
+
 				body.appendChild(parent.removeChild(node));
 				wrapper.appendChild(body);
 
@@ -517,17 +517,17 @@ public class InternetAddressViewPerspectiveBuilder {
 		attributes.put("class", cls);
 		return attributes;
 	}
-	
+
 	private class ArticleData {
 		InternetAddress address;
 		List<Word> words;
 		List<Tag> tags;
 	}
-	
+
 	public static class Settings {
 		private boolean highlight;
 		private String cssNamespace;
-		
+
 		public Settings() {
 			cssNamespace = "";
 		}
@@ -558,7 +558,7 @@ public class InternetAddressViewPerspectiveBuilder {
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setKnowledgeService(KnowledgeService knowledgeService) {
 		this.knowledgeService = knowledgeService;
 	}
@@ -566,15 +566,15 @@ public class InternetAddressViewPerspectiveBuilder {
 	public void setSemanticService(SemanticService semanticService) {
 		this.semanticService = semanticService;
 	}
-		
+
 	public void setContentExtractors(Map<String,ContentExtractor> contentExtractors) {
 		this.contentExtractors = contentExtractors;
 	}
-	
+
 	public Map<String,ContentExtractor> getContentExtractors() {
 		return contentExtractors;
 	}
-	
+
 	public void setTextDocumentAnalyzer(TextDocumentAnalyzer analyzer) {
 		this.textDocumentAnalyzer = analyzer;
 	}

@@ -17,7 +17,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 public class LocationPickerComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.locationpicker";
-		
+
 	public LocationPickerComponent() {
 		super(FAMILY);
 	}
@@ -30,7 +30,7 @@ public class LocationPickerComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
 	}

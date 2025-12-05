@@ -22,7 +22,7 @@ import dk.in2isoft.onlineobjects.util.Messages;
 public class FooterComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.footer";
-		
+
 	public FooterComponent() {
 		super(FAMILY);
 	}
@@ -35,10 +35,10 @@ public class FooterComponent extends AbstractComponent {
 	public Object[] saveState() {
 		return new Object[] { };
 	}
-	
+
 	@Override
 	protected void encodeBegin(FacesContext context, TagWriter writer) throws IOException {
-		
+
 		ConfigurationService configurationService = getBean(ConfigurationService.class);
 		Collection<Locale> locales = configurationService.getApplicationLocales(getRequest().getApplication());
 		Request request = getRequest();
@@ -82,7 +82,7 @@ public class FooterComponent extends AbstractComponent {
 
 	@Override
 	protected void encodeEnd(FacesContext context, TagWriter writer) throws IOException {
-		
+
 	}
 
 }

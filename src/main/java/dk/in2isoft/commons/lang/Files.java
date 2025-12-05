@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.io.FileWriteMode;
 
 public class Files {
-	
+
 	private static final Logger log = LogManager.getLogger(Files.class);
 
 	static public boolean deleteDirectory(File path) {
@@ -56,12 +56,12 @@ public class Files {
 	public static String readString(File file) {
 		return readString(file, Strings.UTF8);
 	}
-	
+
 	public static String readString(File file, String encoding) {
 		if (encoding==null) {
 			encoding = Strings.UTF8;
 		}
-		try (FileInputStream inputStream = new FileInputStream(file)){			
+		try (FileInputStream inputStream = new FileInputStream(file)){
 			return IOUtils.toString(inputStream, encoding);
 		} catch (IOException e) {
 			// Ignore

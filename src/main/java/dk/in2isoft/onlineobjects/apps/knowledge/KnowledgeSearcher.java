@@ -42,7 +42,7 @@ public class KnowledgeSearcher {
 	private ModelService modelService;
 	private IndexService indexService;
 	private static Logger log = LogManager.getLogger(KnowledgeSearcher.class);
-	
+
 	public SearchResult<Entity> search(Request request, int page, int pageSize) throws ExplodingClusterFuckException, SecurityException {
 		KnowledgeQuery readerQuery = new KnowledgeQuery();
 		readerQuery.setText(request.getString("text"));
@@ -52,7 +52,7 @@ public class KnowledgeSearcher {
 		readerQuery.setPageSize(pageSize);
 		readerQuery.setWordIds(request.getLongs("tags"));
 		readerQuery.setAuthorIds(request.getLongs("authors"));
-		
+
 		return search(readerQuery, request);
 	}
 
@@ -139,8 +139,8 @@ public class KnowledgeSearcher {
 		sortByIds(list, ids);
 
 		int totalCount = found.getKey();
-		
-		
+
+
 		return new SearchResult<>(list, totalCount);
 	}
 
@@ -186,15 +186,15 @@ public class KnowledgeSearcher {
 	private IndexManager getIndex(Privileged privileged) {
 		return indexService.getIndex("app-reader-user-" + privileged.getIdentity());
 	}
-	
+
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}
-	
+
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
 	}
-	
+
 }

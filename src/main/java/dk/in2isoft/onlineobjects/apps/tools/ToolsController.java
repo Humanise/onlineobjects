@@ -25,10 +25,10 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SearchResult;
 import dk.in2isoft.onlineobjects.core.UserSession;
-import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
+import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.EmailAddress;
 import dk.in2isoft.onlineobjects.model.Entity;
@@ -78,7 +78,7 @@ public class ToolsController extends ToolsControllerBase {
 		dataImporter.setListener(new ImageImporter(modelService,imageService));
 		dataImporter.importMultipart(this, request);
 	}
-	
+
 	@Path
 	public ListObjects listImages(Request request) throws EndUserException {
 		String text = request.getString("text");
@@ -90,7 +90,7 @@ public class ToolsController extends ToolsControllerBase {
 			query.withCustomProperty(Property.KEY_COMMON_TAG, tag);
 		}
 		List<Image> persons = modelService.list(query, request);
-		
+
 		for (Image image : persons) {
 			ListDataRow row = new ListDataRow();
 			row.addColumn("id", image.getId());
@@ -127,7 +127,7 @@ public class ToolsController extends ToolsControllerBase {
 		image.overrideProperties(Property.KEY_COMMON_TAG, tags);
 		modelService.update(image, request);
 	}
-	
+
 	@Path
 	public void listPersons(Request request) throws EndUserException, IOException {
 		String subset = request.getString("subset");
@@ -140,7 +140,7 @@ public class ToolsController extends ToolsControllerBase {
 		Query<Person> query = new Query<Person>(Person.class).as(session);
 		query.withWords(text);
 		List<Person> persons = modelService.list(query, request);
-		
+
 		ListWriter out = new ListWriter(request);
 		out.startList();
 		out.startHeaders().header("Name").header("Addresses").endHeaders();
@@ -183,7 +183,7 @@ public class ToolsController extends ToolsControllerBase {
 	@Path
 	public Map<String,Object> loadPerson(Request request) throws ModelException, NotFoundException, BadRequestException {
 		Long id = request.getId();
-		
+
 		Map<String,Object> data = new HashMap<String, Object>();
 		Person person = modelService.getRequired(Person.class, id, request);
 		data.put("person", person);
@@ -194,7 +194,7 @@ public class ToolsController extends ToolsControllerBase {
 		// TODO Use personpespective
 		return data;
 	}
-	
+
 	@Path
 	public void savePerson(Request request) throws EndUserException {
 		PersonPerspective perspective = request.getObject("data", PersonPerspective.class);
@@ -217,7 +217,7 @@ public class ToolsController extends ToolsControllerBase {
 		personService.updateDummyEmailAddresses(person, perspective.getEmails(), request);
 		personService.updateDummyPhoneNumbers(person, perspective.getPhones(), request);
 	}
-	
+
 	@Path
 	public Invitation createInvitation(Request request) throws EndUserException {
 		String name = request.getString("name", "No name");
@@ -230,7 +230,7 @@ public class ToolsController extends ToolsControllerBase {
 	private @NonNull User getUser(Request request) throws ModelException, NotFoundException {
 		return modelService.getRequired(User.class, request.getSession().getIdentity(), request);
 	}
-	
+
 	@Path
 	public void deletePerson(Request request) throws ModelException, NotFoundException, SecurityException, BadRequestException {
 		Long id = request.getId();
@@ -245,7 +245,7 @@ public class ToolsController extends ToolsControllerBase {
 		}
 		modelService.delete(person, request);
 	}
-	
+
 	@Path
 	public ListData listPrivateBookmarks(Request request) throws EndUserException {
 		String search = request.getString("search");
@@ -264,7 +264,7 @@ public class ToolsController extends ToolsControllerBase {
 			}
 		}
 		SearchResult<InternetAddress> result = modelService.search(query, request);
-		
+
 		List<InternetAddress> addresses = result.getList();
 		ListData list = new ListData();
 		list.setWindow(result.getTotalCount(), 30, page);
@@ -279,7 +279,7 @@ public class ToolsController extends ToolsControllerBase {
 		}
 		return list;
 	}
-	
+
 	@Path
 	public InternetAddressInfo getInternetAddress(Request request) throws ModelException {
 		Long id = request.getLong("id", null);
@@ -297,7 +297,7 @@ public class ToolsController extends ToolsControllerBase {
 		}
 		return null;
 	}
-	
+
 	@Path
 	public void saveInternetAddress(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		InternetAddressInfo info = request.getObject("data", InternetAddressInfo.class);
@@ -316,17 +316,17 @@ public class ToolsController extends ToolsControllerBase {
 		address.overrideProperties(Property.KEY_COMMON_TAG, info.getTags());
 		modelService.createOrUpdate(address, request);
 	}
-	
+
 	@Path
 	public void addInternetAddress(Request request) throws EndUserException {
 		try {
-			informationService.addInternetAddress(request.getString("url"), request);			
+			informationService.addInternetAddress(request.getString("url"), request);
 		} catch (IllegalArgumentException e) {
 			throw new BadRequestException("Unable to create address");
 		}
 	}
-	
-	
+
+
 	@Path
 	public List<ItemData> getImageTags(Request request) throws EndUserException {
 		return getTags(Image.class, request);
@@ -357,7 +357,7 @@ public class ToolsController extends ToolsControllerBase {
 		WordByInternetAddressQuery query = new WordByInternetAddressQuery(request);
 		return modelService.list(query, request);
 	}
-	
+
 	@Override
 	public boolean isAllowed(Request request) {
 		return !securityService.isPublicUser(request.getSession());

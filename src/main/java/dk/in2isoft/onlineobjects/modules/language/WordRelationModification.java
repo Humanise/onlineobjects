@@ -28,7 +28,7 @@ public class WordRelationModification {
 	public void setRelationKind(String relationKind) {
 		this.relationKind = relationKind;
 	}
-	
+
 	public static WordRelationModification create(String from, String kind, String to) {
 		WordRelationModification mod = new WordRelationModification();
 		mod.setFromSourceId(from);

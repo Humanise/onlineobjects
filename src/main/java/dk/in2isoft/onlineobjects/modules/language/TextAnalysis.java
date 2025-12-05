@@ -12,8 +12,8 @@ public class TextAnalysis {
 	private List<String> uniqueWords;
 	private List<String> unknownWords;
 	private List<WordListPerspective> knownWords;
-	
-	
+
+
 
 	public List<String> getUnknownWords() {
 		return unknownWords;

@@ -12,9 +12,9 @@ import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.View;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.model.Image;
@@ -32,9 +32,9 @@ public class AuthenticationController extends AuthenticationControllerBase {
 	@Path(expression = "/")
 	@View(jsf = "login.xhtml")
 	public void login(Request request) {
-		
+
 	}
-	
+
 	@Override
 	public String getLanguage(Request request) {
 		String lang = request.getRequest().getLocale().getLanguage();
@@ -66,7 +66,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 			request.redirect(".?action=invalidLogin&redirect="+redirect);
 		}
 	}
-	
+
 
 	@Path
 	public void changeUser(Request request) throws IOException, EndUserException {
@@ -87,18 +87,18 @@ public class AuthenticationController extends AuthenticationControllerBase {
 			securityService.startSession(request);
 		}
 	}
-	
+
 
 	@Path
 	public void recoverPassword(Request request) throws IOException, EndUserException {
 		String usernameOrEmail = request.getString("usernameOrMail","No username or e-mail provided");
 		if (passwordRecoveryService.sendRecoveryMail(usernameOrEmail, request)) {
-			
+
 		} else {
 			throw new BadRequestException("Username or e-mail not found");
 		}
 	}
-	
+
 	@Path(exactly={"signup"})
 	public void signup(Request request) throws IOException, EndUserException {
 		String username = request.getString("username");
@@ -138,7 +138,7 @@ public class AuthenticationController extends AuthenticationControllerBase {
 		info.setLinks(links);
 		request.sendObject(info);
 	}
-	
+
 
 	@Path
 	public void logout(Request request) throws IOException, EndUserException {

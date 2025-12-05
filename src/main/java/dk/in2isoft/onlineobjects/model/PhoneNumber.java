@@ -4,12 +4,12 @@ public class PhoneNumber extends Entity {
 
 	public static String TYPE = Entity.TYPE+"/PhoneNumber";
 	public static String NAMESPACE = Entity.NAMESPACE+"PhoneNumber/";
-	
+
 	public static String CONTEXT_PRIVATE = "private";
 	public static String CONTEXT_WORK = "work";
 	public static String CONTEXT_SCHOOL = "school";
 	public static String CONTEXT_OTHER = "other";
-	
+
 	private String context;
 	private String number;
 

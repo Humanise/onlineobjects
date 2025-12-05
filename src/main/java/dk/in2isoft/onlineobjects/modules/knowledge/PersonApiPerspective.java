@@ -8,11 +8,11 @@ public class PersonApiPerspective implements ApiPerspective {
 	public long getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
