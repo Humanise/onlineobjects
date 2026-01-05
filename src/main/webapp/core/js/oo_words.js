@@ -31,5 +31,8 @@ oo.Words.prototype = {
   },
   _reload : function() {
     oo.update({id:this.element.id,$success : this._attach.bind(this)});
+  },
+  reload : function() {
+    this._reload();
   }
 };

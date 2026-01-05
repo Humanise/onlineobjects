@@ -19,6 +19,7 @@ public class OutputComponent extends AbstractComponent {
 	private String emptyText;
 	private boolean lower;
 	private boolean escape = true;
+	private boolean breaks;
 	private Object value;
 
 	public OutputComponent() {
@@ -27,7 +28,7 @@ public class OutputComponent extends AbstractComponent {
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] { value, emptyText, lower, escape };
+		return new Object[] { value, emptyText, lower, escape, breaks };
 	}
 
 	@Override
@@ -36,6 +37,7 @@ public class OutputComponent extends AbstractComponent {
 		emptyText = (String) state[1];
 		lower = (Boolean) state[2];
 		escape = (Boolean) state[3];
+		breaks = (Boolean) state[4];
 	}
 
 	@Override
@@ -50,8 +52,18 @@ public class OutputComponent extends AbstractComponent {
 				text = text.toLowerCase();
 			}
 			if (escape) {
-				text = StringUtils.replace(text, "\n", "<br/>");
-				writer.text(text);
+				if (breaks) {
+					String[] lines = text.split("\n");
+					for (int i = 0; i < lines.length; i++) {
+						String line = lines[i];
+						if (i > 0) {
+							writer.write("<br/>");
+						}
+						writer.text(line);
+					}
+				} else {
+					writer.text(text);
+				}
 			} else {
 				writer.write(text);
 			}
@@ -72,6 +84,14 @@ public class OutputComponent extends AbstractComponent {
 
 	public void setLower(boolean lower) {
 		this.lower = lower;
+	}
+
+	public void setBreaks(boolean breaks) {
+		this.breaks = breaks;
+	}
+
+	public boolean isBreaks() {
+		return breaks;
 	}
 
 	public boolean isEscape() {

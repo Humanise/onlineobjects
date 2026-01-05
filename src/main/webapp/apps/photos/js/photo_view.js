@@ -107,6 +107,10 @@ var photoView = {
   },
   _onKey: function(e) {
     e = hui.event(e);
+    const activeElement = document.activeElement;
+    if (activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeElement.tagName)) {
+      return;
+    }
     if (e.rightKey) {
       this.next();
     } else if (e.leftKey) {
@@ -216,7 +220,9 @@ var photoView = {
       url : '/updateDescription',
       parameters : {id : this.imageId, description : text},
       $success : function() {
-        oo.update({id:'photos_photo_description'});
+        oo.update({id:'photos_photo_description', $success:() => {
+          hui.ui.get('descriptionPages').next()
+        }});
       },
       $failure : function() {
         hui.ui.msg.fail({text:'Unable to update description'});
@@ -242,6 +248,34 @@ var photoView = {
 
   },
 
+  'globalContext.contextInfo!'(e) {
+    if (e.value.type == 'Word') {
+      return {
+        actions: [
+          {text: 'Remove from photo', data: {type: e.value.type, id: e.value.id, action: 'removeFromPhoto'}}
+        ]
+      }
+    }
+  },
+  'globalContext.action!'(e) {
+    var data = e.value.data;
+    if (data && data.type == 'Word' && data.action == 'removeFromPhoto') {
+      hui.ui.request({
+        message : {start:'Removing word', delay:300, success:'The word is removed'},
+        url : '/removeWord',
+        parameters : {image : this.imageId, word : data.id},
+        $success() {
+          hui.ui.get('words').reload();
+          e.source.hide();
+        },
+        $failure : function() {
+          hui.ui.msg.fail({text:'Unable to remove word'});
+          info.callback();
+        }
+      })
+    }
+  },
+
   $add$words : function(info) {
     if (!this.imageId) {
       throw 'No id';
@@ -253,19 +287,6 @@ var photoView = {
       $success : info.callback,
       $failure : function() {
         hui.ui.msg.fail({text:'Unable to add word'});
-        info.callback();
-      }
-    })
-  },
-
-  $delete$words : function(info) {
-    hui.ui.request({
-      message : {start:'Removing word', delay:300, success:'The word is removed'},
-      url : '/removeWord',
-      parameters : {image : this.imageId, word : info.id},
-      $success : info.callback,
-      $failure : function() {
-        hui.ui.msg.fail({text:'Unable to remove word'});
         info.callback();
       }
     })

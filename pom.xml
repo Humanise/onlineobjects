@@ -156,7 +156,6 @@
       <version>2.2.700</version>
     </dependency>
 
-
     <dependency>
       <groupId>nu.xom</groupId>
       <artifactId>xom</artifactId>
@@ -206,13 +205,13 @@
       <version>11.0.24</version>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-annotations</artifactId>
       <version>11.0.24</version>
     </dependency>
-
-
+    -->
 
 
     <!-- Servlet stuff -->
@@ -474,6 +473,11 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
       <version>1.15</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>

@@ -1,0 +1,35 @@
+.oo_object_inline {
+  position: relative;
+}
+.oo_object_inline_more {
+  position: absolute;
+  right: -12px;
+  top: -12px;
+  cursor: pointer;
+  opacity: 0;
+  padding: 3px;
+  font-size: 12px;
+  width: 12px;
+  height: 12px;
+  line-height: 1;
+}
+.oo_object_inline_more:before {
+  content: "\e907";
+  font-family: "OnlineObjects";
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1;
+  font-weight: normal;
+}
+.oo_object_inline:hover .oo_object_inline_more {
+  visibility: visible;
+  opacity: 0.3;
+}
+.oo_object_inline:hover .oo_object_inline_more:hover {
+  opacity: 1;
+}
+.oo_object_inline_more.is-active {
+  visibility: visible;
+  opacity: 1;
+}

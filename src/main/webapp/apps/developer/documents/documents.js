@@ -1,6 +1,8 @@
 (function() {
 
-  var huml = `# Hep hey!
+  var huml = `# Humle
+
+HUManise Markleft LanguagE
 
 jksfk fjksd fjdks fjkj fdsl
 
@@ -13,24 +15,30 @@ jksfk fjksd fjdks fjkj fdsl
   
 
   hui.control({
-    $ready : function() {
-      hui.ui.get('code').setValue(huml);
-      this['code.valueChanged!'](huml);
-      hui.ui.get('list').setData([{title: 'This is a test'}])
+    'ready!' : function() {
+      this.components.list.setData([{title: 'This is a test'}])
+      this.components.code.setValue(huml);
+      this['code.valueChanged!']({value: huml});
     },
-    list : '@list',
+    list : '@list', // TODO: possible syntax
+    rendering: '#rendering', // TODO: possible syntax
+    
+    components : {
+      list: 'list',
+      code: 'code'
+    },
     nodes: {
       rendering: '#rendering',
       json: '#json'
     },
-    'list.render!' : function(obj) {
-      return hui.build('span', {text: obj.title});
+    'list.render!' : function(e) {
+      return hui.build('span', {text: e.value.title});
     },
     'list.select!' : function(e) {
-      console.log(e.data);
+      console.log(e.value);
     },
-    'code.valueChanged!' : function(str) {
-      let doc = new DocumentParser().parse(str);
+    'code.valueChanged!' : function(e) {
+      let doc = new DocumentParser().parse(e.value);
       let rnd = new DocumentRenderer();
       this.nodes.rendering.innerHTML = rnd.toHTML(doc);
       this.nodes.json.innerHTML = rnd.toJSON(doc);

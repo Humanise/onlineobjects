@@ -282,17 +282,17 @@ hui.control({
     }})
   },
 
-  'click! summarizeInternetAddress' : function() {
+  'summarizeInternetAddress.click!' : function() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/summarize?id=' + item.id;
     this._intel(url);
   },
-  'click! pointsInternetAddress' : function() {
+  'pointsInternetAddress.click!' : function() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/points?id=' + item.id;
     this._intel(url);
   },
-  'click! authorInternetAddress' : function() {
+  'authorInternetAddress.click!' : function() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/people?id=' + item.id;
     this._intel(url);
@@ -321,15 +321,15 @@ hui.control({
       }.bind(this)
     })
   },
-  'internetaddressRelated.render!' : function(item) {
-    return appController._render_relation(item);
+  'internetaddressRelated.render!' : function(e) {
+    return appController._render_relation(e.source);
     /*
     return hui.build('div.perspective_relation', {children:[
       hui.build('div.perspective_relation_title',{text: item.title})
     ]});*/
   },
-  'internetaddressRelated.select!' : function(item) {
-    appController.show(item.data);
+  'internetaddressRelated.select!' : function(e) {
+    appController.show(e.source.data);
   }
 })
 

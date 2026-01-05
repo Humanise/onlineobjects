@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import org.onlineobjects.modules.intelligence.LanguageModel;
+import org.onlineobjects.ui.ContextResponse;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -44,6 +45,7 @@ import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
+import dk.in2isoft.onlineobjects.modules.language.WordImpression;
 import dk.in2isoft.onlineobjects.modules.language.WordListPerspective;
 import dk.in2isoft.onlineobjects.modules.language.WordQuery;
 import dk.in2isoft.onlineobjects.ui.Request;
@@ -359,5 +361,32 @@ public class ModelController extends ModelControllerBase {
 	@Path(exactly = {"intel","models"})
 	public List<LanguageModel> languageModels(Request request) {
 		return intelligence.getModels();
+	}
+
+	@Path(exactly = {"context"})
+	public ContextResponse context(Request request) throws BadRequestException, ModelException, NotFoundException {
+		String type = request.getString("type");
+		Long id = request.getId();
+		var response = new ContextResponse();
+		String text = "";
+		Class<? extends Entity> entityClass = modelService.getEntityClass(type);
+		Entity entity = modelService.get(entityClass, id, request);
+		if (entity == null) {
+			throw new NotFoundException();
+		}
+		if (entity instanceof User) {
+			var user = (User) entity;
+			var link = configurationService.getApplicationContext("photos", "/users/" + user.getUsername(), request);
+			response.addAction().text("Photos").url(link);
+		}
+		if (entity instanceof Word) {
+			WordImpression impression = wordService.getImpression((Word) entity, request);
+			text = impression.getGlossary();
+			String url = configurationService.getApplicationContext("words", "word/" + impression.getWord().getText(), request);
+			response.addAction().text("View word").url(url);
+		}
+		response.setTitle(entity.getName());
+		response.setText(text);
+		return response;
 	}
 }

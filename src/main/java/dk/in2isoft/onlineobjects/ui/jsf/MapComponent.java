@@ -49,11 +49,12 @@ public class MapComponent extends AbstractComponent {
 		return new Object[] {variant,name,height,dynamic,editable};
 	}
 
+	@Override
 	public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
 		if (dynamic && event instanceof PostAddToViewEvent) {
 	        FacesContext context = FacesContext.getCurrentInstance();
 	        ScriptComponent componentResource = new ScriptComponent();
-	        componentResource.setSrc("http://maps.google.com/maps/api/js?sensor=false");
+	        componentResource.setSrc("https://maps.google.com/maps/api/js?sensor=false");
 			context.getViewRoot().addComponentResource(context, componentResource,"body");
 	    }
 	    super.processEvent(event);

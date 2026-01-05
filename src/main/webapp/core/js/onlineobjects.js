@@ -74,6 +74,7 @@ oo.update = function(options) {
     headers : {'OnlineObjects-Scripts' : 'united'},
     $success : function(t) {
       var e = hui.build('div',{html:t.responseText});
+      var newNodes = [];
       for (var i=0; i < nodes.length; i++) {
         var oldNode = nodes[i];
         hui.ui.destroyDescendants(oldNode);
@@ -89,6 +90,7 @@ oo.update = function(options) {
           } else {
             hui.log('No associated script found');
           }
+          newNodes.push(newNode);
         } catch (e) {
           hui.log(e);
         }
@@ -99,13 +101,15 @@ oo.update = function(options) {
       if (options.$success) {
         options.$success();
       }
+      for (var i = 0; i < newNodes.length; i++) {
+        hui.ui.tellGlobalListeners(newNodes[i], 'attach');
+      }
     },$exception : function(a,b) {
       hui.log(a);
       hui.log(b);
     },
     $finally : function() {
       hui.each(fades,function(fade) {
-        hui.log(fade)
         hui.animate({node:fade,css:{opacity:'0'},duration:100,ease:hui.ease.slowFastSlow,$complete : function() {
           hui.dom.remove(fade);
         }});
@@ -227,5 +231,40 @@ hui.on(['hui'],function() {
     if (!hui.ui.Panel) return;
     hui.stop(e);
     oo.signUp();
+  })
+});
+
+hui.on(['hui.ui'], () => {
+  hui.ui.listen({
+    'attach!'(event) {
+      event.source.querySelectorAll('*[data-oo-object]').forEach((node) => {
+        hui.on(node, 'click', (e) => {
+          hui.query('*[data-oo-object].is-active').removeClass('is-active');
+          var data = node.getAttribute('data-oo-object').split(':');
+          var obj = {
+            type: data[0],
+            id: data[1]
+          }
+
+          var c = oo._context = oo._context || (() => {
+            var c = hui.ui.Context.create({name: 'globalContext'});
+            c.on({
+              'hide!'() {
+                hui.query('*[data-oo-object].is-active').removeClass('is-active');
+              }
+            });
+            return c;
+          })();
+          c.clear();
+          c.show({target: node});
+          hui.cls.add(node, 'is-active');
+          c.load({url:'/service/model/context?type=' + obj.type + '&id=' + obj.id})
+          var result = hui.ui.tellGlobalListeners(c, 'contextInfo', obj);
+          if (result && result.actions) {
+            c.addActions(result.actions)
+          }
+        })
+      })
+    }
   })
 });

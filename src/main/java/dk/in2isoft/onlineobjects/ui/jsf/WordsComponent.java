@@ -10,13 +10,17 @@ import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Dependencies;
 import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
+import dk.in2isoft.in2igui.jsf.ContextComponent;
 import dk.in2isoft.in2igui.jsf.OverlayComponent;
+import dk.in2isoft.in2igui.jsf.SymbolComponent;
 import dk.in2isoft.onlineobjects.core.Pair;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.util.Messages;
 
 @FacesComponent(value=WordsComponent.FAMILY)
-@Dependencies(js = { "/core/js/oo_words.js" }, css = { "/core/css/oo_words.css" }, requires = { OnlineObjectsComponent.class}, uses = { OverlayComponent.class })
+@Dependencies(js = { "/core/js/oo_words.js" }, css = { "/core/css/oo_words.css" },
+	requires = { OnlineObjectsComponent.class },
+	uses = { OverlayComponent.class, SymbolComponent.class, ContextComponent.class })
 public class WordsComponent extends AbstractComponent {
 
 	public static final String FAMILY = "onlineobjects.words";
@@ -48,7 +52,14 @@ public class WordsComponent extends AbstractComponent {
 		if (words!=null) {
 			for (Pair<Word,String> pair : words) {
 				Word word = pair.getKey();
-				out.startA("oo_words_word").withHref(pair.getValue()).withAttribute("data", word.getId()).text(word.getText()).endA().text(" ");
+				out.startSpan("oo_words_word oo_object_inline");
+				out.startA().withHref(pair.getValue()).withAttribute("data", word.getId()).text(word.getText()).endA().text(" ");
+				if (editable) {
+					out.startSpan().withClass("oo_object_inline_more");
+					out.withAttribute("data-oo-object", identity(word));
+					out.endSpan();
+				}
+				out.endSpan();
 			}
 		}
 		if (editable) {
@@ -64,6 +75,10 @@ public class WordsComponent extends AbstractComponent {
 			}
 			js.endNewObject().endScript();
 		}
+	}
+
+	private String identity(Word word) {
+		return word.getClass().getSimpleName() + ":" + word.getId();
 	}
 
 	public void setEditable(boolean editable) {

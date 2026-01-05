@@ -1,0 +1,25 @@
+@use 'shared' as *;
+
+.oo_object_inline {
+  position: relative;
+  &_more {
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    display: none;
+    cursor: pointer;
+    opacity: .3;
+    padding: 3px;
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    line-height: 1;
+    @include icon-before('more');
+  }
+  &:hover &_more {
+    display: block;
+    &:hover {
+      opacity: 1;
+    };
+  }
+}

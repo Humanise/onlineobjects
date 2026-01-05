@@ -33,7 +33,7 @@ oo.Map.prototype = {
     if (loc) {
 
       var scale = window.devicePixelRatio > 1 ? 2 : 1;
-      var url = 'http://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&scale=' + scale + '&maptype=satellite&sensor=false&key=AIzaSyC0jPmRh2M5ZNKHhBiRWd5RATUuP3Ia9gM';
+      var url = 'https://maps.googleapis.com/maps/api/staticmap?center='+loc.latitude+','+loc.longitude+'&zoom=14&size='+(this.element.offsetWidth)+'x'+(this.element.offsetHeight)+'&scale=' + scale + '&maptype=satellite&sensor=false&key=AIzaSyC0jPmRh2M5ZNKHhBiRWd5RATUuP3Ia9gM';
       this.element.style.backgroundImage = 'url(' + url + ')';
       this.element.style.backgroundSize = 'cover';
     }

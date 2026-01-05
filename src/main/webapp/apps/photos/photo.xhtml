@@ -55,7 +55,10 @@
                 </div>
                 <p class="photos_photo_by">
                   By
-                  <o:link app="photos" href="/users/#{photosPhotoView.user.username}/">#{photosPhotoView.fullPersonName}</o:link>
+                  <span class="oo_object_inline">
+                    <o:link app="photos" href="/users/#{photosPhotoView.user.username}/">#{photosPhotoView.fullPersonName}</o:link>
+                    <span class="oo_object_inline_more" data-oo-object="User:#{photosPhotoView.user.id}"></span>
+                  </span>
                   <c:if test="#{not empty photosPhotoView.taken}"> on #{photosPhotoView.taken}</c:if>
                 </p>
                 <div class="photos_photo_words">
@@ -63,19 +66,21 @@
                 </div>
                   <c:if test="#{not photosPhotoView.canModify and not empty photosPhotoView.description}">
                     <p class="photos_photo_description">
-                      <o:out value="#{photosPhotoView.description}" escape="false"/>
+                      <o:out value="#{photosPhotoView.description}" breaks="false"/>
                     </p>
                   </c:if>
                   <c:if test="#{photosPhotoView.canModify}">
                     <div style="margin-top: 10px;">
                     <gui:pages name="descriptionPages">
                       <gui:page>
+                        <div id="photos_photo_description">
                         <c:if test="#{not empty photosPhotoView.description}">
                           <p class="photos_photo_description">
-                            <o:out value="#{photosPhotoView.description}" escape="false"/>
+                            <o:out value="#{photosPhotoView.description}" breaks="true"/>
                           </p>
                         </c:if>
-                        <div style="padding: 0 0px 10px;">
+                        </div>
+                        <div style="padding: 10px 0px 10px;">
                           <gui:button variant="light" text="#{msg.edit_description}" small="true" name="addDescription"/>
                         </div>
                       </gui:page>
