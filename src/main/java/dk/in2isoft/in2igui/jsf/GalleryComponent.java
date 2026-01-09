@@ -11,7 +11,7 @@ import dk.in2isoft.commons.jsf.ScriptWriter;
 import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value = GalleryComponent.TYPE)
-@Dependencies(js = { "/hui/js/DragDrop.js", "/hui/js/Gallery.js" }, css = { "/hui/css/gallery.css" }, requires = { HUIComponent.class}, uses = { SourceComponent.class })
+@Dependencies(js = { "/hui/js/hui_ui_drag.js", "/hui/js/Gallery.js" }, css = { "/hui/css/gallery.css" }, requires = { HUIComponent.class}, uses = { SourceComponent.class })
 public class GalleryComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.gallery";

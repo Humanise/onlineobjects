@@ -14,7 +14,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 
 @FacesComponent(value=ListComponent.TYPE)
 @Dependencies(
-		js = {"/hui/js/DragDrop.js", "/hui/js/List.js"},
+		js = {"/hui/js/hui_ui_drag.js", "/hui/js/List.js"},
 		css = {"/hui/css/list.css"},
 				requires = {HUIComponent.class}, uses = {SourceComponent.class,IconComponent.class}
 	)
