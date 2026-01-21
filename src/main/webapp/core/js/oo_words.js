@@ -8,7 +8,7 @@ oo.Words = function(options) {
 
 oo.Words.prototype = {
   _attach : function() {
-    hui.listen(this.element,'click',this._onClick.bind(this));
+    //hui.listen(this.element,'click',this._onClick.bind(this));
   },
   _onClick : function(e) {
     e = hui.event(e);
