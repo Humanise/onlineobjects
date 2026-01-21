@@ -3,7 +3,9 @@
   flex-direction: column;
 }
 .developer_menu {
-  height: 30px;
+  height: 20px;
+  color: #eee;
+  padding: 5px 10px 5px;
 }
 .developer_body {
   height: calc(100vh - 30px);

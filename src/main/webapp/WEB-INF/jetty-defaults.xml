@@ -7,7 +7,7 @@
 
   <context-param>
     <param-name>org.eclipse.jetty.servlet.SessionDomain</param-name>
-    <param-value>.onlineobjects.test</param-value>
+    <param-value>.onlineobjects.local</param-value>
   </context-param>
 
 </web-app>

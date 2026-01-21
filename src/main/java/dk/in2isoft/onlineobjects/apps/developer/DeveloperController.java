@@ -104,6 +104,7 @@ public class DeveloperController extends ApplicationController {
 		DispatchingService.pushFile(request.getResponse(), file);
 	}
 
+	@Override
 	public List<Locale> getLocales() {
 		return null;
 	}
