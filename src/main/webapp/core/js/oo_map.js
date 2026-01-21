@@ -61,7 +61,7 @@ oo.Map.prototype = {
   },
   _edit : function() {
     if (!this._editPanel) {
-      var panel = this._editPanel = hui.ui.BoundPanel.create({variant:'light',modal:'transparent',padding:10});
+      var panel = this._editPanel = hui.ui.Panel.create({closable: true, autoHide: false, padding: 10});
       var form = this._editForm = hui.ui.Form.create();
       form.buildGroup(null,[
         {label:'Title',type:'TextInput',options:{key:'title'}},

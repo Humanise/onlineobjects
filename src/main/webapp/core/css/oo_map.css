@@ -1,19 +1,16 @@
-div.oo_map {
+.oo_map {
   background-position: 50%;
 }
-
-div.oo_map_busy {
+.oo_map_busy {
   opacity: 0.5;
 }
-
-div.oo_map_content {
+.oo_map_content {
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   background-repeat: no-repeat;
   background-origin: border-box;
 }
-
-a.oo_map_add {
+.oo_map_add {
   display: block;
   height: 30px;
   line-height: 30px;
@@ -23,14 +20,11 @@ a.oo_map_add {
   text-decoration: none;
   color: #999;
   font-size: 11pt;
-  font-weight: 200;
 }
-
-a.oo_map_add:hover {
+.oo_map_add:hover {
   background: rgba(0, 0, 0, 0.02);
 }
-
-a.oo_map_pin {
+.oo_map_pin {
   width: 29px;
   height: 30px;
   background: url("../gfx/oo_map_pin.png");
@@ -40,8 +34,7 @@ a.oo_map_pin {
   margin-left: -7px;
   margin-top: -25px;
 }
-
-a.oo_map_edit {
+.oo_map_edit {
   position: absolute;
   right: -1px;
   bottom: -1px;
@@ -53,14 +46,12 @@ a.oo_map_edit {
   font-size: 11px;
   color: #666;
 }
-
-div.oo_map_info {
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+.oo_map_info {
+  font-family: "Inter", "Helvetica Neue", "Helvetica", Arial, sans-serif;
   padding: 5px 10px;
   font-size: 12px;
 }
-
-div.oo_map_info th {
+.oo_map_info th {
   font-weight: normal;
   text-align: right;
   color: #999;

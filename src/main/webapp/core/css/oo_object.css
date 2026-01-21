@@ -22,14 +22,12 @@
   line-height: 1;
   font-weight: normal;
 }
+.oo_object_inline_more.is-active {
+  opacity: 1;
+}
 .oo_object_inline:hover .oo_object_inline_more {
-  visibility: visible;
   opacity: 0.3;
 }
 .oo_object_inline:hover .oo_object_inline_more:hover {
-  opacity: 1;
-}
-.oo_object_inline_more.is-active {
-  visibility: visible;
   opacity: 1;
 }
