@@ -32,6 +32,13 @@ sudo npm install uglify-js -g
 
 ### Developing
 
+
+#### Running via Jetty with reload
+
+```
+watchexec -w src/main/java -r mvn jetty:run 
+```
+
 #### Compiling assets
 
 ```

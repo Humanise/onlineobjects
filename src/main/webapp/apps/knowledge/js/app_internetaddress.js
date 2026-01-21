@@ -27,7 +27,7 @@ hui.control({
 
     var html = data.formatted;
     if (!html) {
-      html = '<h1>'+hui.string.escape(data.title || 'Loading...')+'<h1>';
+      html = '<h1>' + hui.string.escape(data.title || 'Loading...') + '<h1>';
     }
     this.nodes.formatted.innerHTML = html;
     
@@ -52,7 +52,7 @@ hui.control({
     hui.on(this.nodes.selectionDetails, 'mousedown', (e) => {e.stopPropagation()});
     hui.on(this.nodes.selectionDetails, 'mouseup', (e) => {e.stopPropagation()});
     
-    hui.listen(this.root,'click',this._click.bind(this));
+    hui.listen(this.root, 'click', this._click.bind(this));
     this._listenForText();
   },
   $$afterResize : function() {
@@ -64,18 +64,19 @@ hui.control({
       this.components.multipleSelectionPanel.hide();
     }
   },
-  'viewMode.valueChanged!' : function(value) {
+  'viewMode.valueChanged!'(e) {
+    const value = e.value;
     hui.find('.js-internetaddress-formatted').style.display = (value == 'formatted' ? '' : 'none')
     hui.find('.js-internetaddress-text').style.display = (value == 'text' ? '' : 'none')
     this.reset();
   },
-  'internetaddressWords.render!' : function(obj) {
-    return appController._renderWord(obj);
+  'internetaddressWords.render!'(e) {
+    return appController._renderWord(e.value);
   },
-  'internetaddressTags.render!' : function(obj) {
-    return appController._renderTag(obj);
+  'internetaddressTags.render!'(e) {
+    return appController._renderTag(e.value);
   },
-  'mainScroller.scrolled!' : function() {
+  'mainScroller.scrolled!'() {
     this._adjustSelectionPanel();
   },
 
@@ -93,10 +94,10 @@ hui.control({
       panel.show({target: e.getElement()});
     }
   },
-  'multipleSelectionItems.render!' : function(item) {
-    return hui.build('div.multiple_selection_item', {text: item.info.description});
+  'multipleSelectionItems.render!'(e) {
+    return hui.build('div.multiple_selection_item', {text: e.value.info.description});
   },
-  'multipleSelectionItems.select!' : function(e) {
+  'multipleSelectionItems.select!'(e) {
     this._inspectItem(e.data);
     this.components.multipleSelectionPanel.hide();
   },
@@ -205,12 +206,12 @@ hui.control({
     }
     return found;
   },
-  'highlightSelection.click!' : function(button) {
+  'highlightSelection.click!'(e) {
     var warn;
     if (this._text.length < 10) { warn = 'Really create such a short quote?' }
     if (warn) {
       hui.ui.confirmOverlay({
-        target: button,
+        target: e.source,
         text: warn,
         modal: true,
         $ok : this._createStatement.bind(this)
@@ -224,13 +225,13 @@ hui.control({
     appController.createStatementOnAddress(this._text);
     this.components.selectionPanel.hide();
   },
-  'tagSelectedText.click!' : function(button) {
+  'tagSelectedText.click!'(e) {
     var warn;
     if (this._text.length > 50) { warn = 'Really create such a long tag?' }
     if (this._text.length < 2) { warn = 'Really create such a short tag?' }
     if (warn) {
       hui.ui.confirmOverlay({
-        target: button,
+        target: e.source,
         text: warn,
         modal: true,
         $ok : this._tagSelectedText.bind(this)
@@ -250,7 +251,7 @@ hui.control({
     n.style.display = 'none';
     this._defineLevel = 'simple';
   },
-  'defineSelectedText.click!' : function(button) {
+  'defineSelectedText.click!'() {
     this._define();
   },
   _define : function(params) {
@@ -282,17 +283,17 @@ hui.control({
     }})
   },
 
-  'summarizeInternetAddress.click!' : function() {
+  'summarizeInternetAddress.click!'() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/summarize?id=' + item.id;
     this._intel(url);
   },
-  'pointsInternetAddress.click!' : function() {
+  'pointsInternetAddress.click!'() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/points?id=' + item.id;
     this._intel(url);
   },
-  'authorInternetAddress.click!' : function() {
+  'authorInternetAddress.click!'() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/people?id=' + item.id;
     this._intel(url);
@@ -321,14 +322,10 @@ hui.control({
       }.bind(this)
     })
   },
-  'internetaddressRelated.render!' : function(e) {
+  'internetaddressRelated.render!'(e) {
     return appController._render_relation(e.source);
-    /*
-    return hui.build('div.perspective_relation', {children:[
-      hui.build('div.perspective_relation_title',{text: item.title})
-    ]});*/
   },
-  'internetaddressRelated.select!' : function(e) {
+  'internetaddressRelated.select!'(e) {
     appController.show(e.source.data);
   }
 })
