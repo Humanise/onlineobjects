@@ -17,7 +17,7 @@ import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.commons.lang.Strings;
 
 @FacesComponent(value = ButtonComponent.TYPE)
-@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Button.js" }, css = { "/hui/css/button.css" }, requires = { HUIComponent.class })
+@Dependencies(js = { "/hui/js/hui_animation.js", "/hui/js/Button.js" }, css = { "/hui/css/button.css" }, requires = { HUIComponent.class }, uses = { SymbolComponent.class })
 public class ButtonComponent extends AbstractComponent {
 
 	public static final String TYPE = "hui.button";
@@ -37,6 +37,7 @@ public class ButtonComponent extends AbstractComponent {
 	private Integer left;
 	private Integer right;
 	private String href;
+	private String symbol;
 
 	public ButtonComponent() {
 		super(TYPE);
@@ -58,11 +59,12 @@ public class ButtonComponent extends AbstractComponent {
 		tiny = (Boolean) state[11];
 		disabled = (Boolean) state[12];
 		large = (Boolean) state[13];
+		symbol = (String) state[14];
 	}
 
 	@Override
 	public Object[] saveState() {
-		return new Object[] { text, name, highlighted, small, click, styleClass, submit, variant, left, right, mini, tiny, disabled, large };
+		return new Object[] { text, name, highlighted, small, click, styleClass, submit, variant, left, right, mini, tiny, disabled, large, symbol };
 	}
 
 	@Override
@@ -71,7 +73,9 @@ public class ButtonComponent extends AbstractComponent {
 		ConfirmComponent confirm = Components.getChild(this, ConfirmComponent.class);
 		String name = getName(context);
 		String click = getClick(context);
-		if (confirm==null && Strings.isBlank(name) && Strings.isBlank(click) && !submit) return;
+		if (confirm==null && Strings.isBlank(name) && Strings.isBlank(click) && !submit) {
+			return;
+		}
 		String id = getClientId();
 		ScriptWriter js = out.getScriptWriter();
 		js.startScript();
@@ -113,6 +117,13 @@ public class ButtonComponent extends AbstractComponent {
 			writer.withStyle(css);
 		}
 		writer.withTestName(testName);
+		if (symbol != null) {
+			writer.startSpan("hui_symbol");
+			writer.startElement("svg").withAttribute("xmlns", "http://www.w3.org/2000/svg").withAttribute("viewBox", "0 0 32 32");
+			writer.startElement("use").withAttribute("xlink:href", "/hui/symbols/all.svg#icon-" + symbol).endElement("use");
+			writer.endElement("svg");
+			writer.endSpan();
+		}
 		String text = getText(context);
 		writer.write(text);
 		writer.endA();
@@ -273,4 +284,11 @@ public class ButtonComponent extends AbstractComponent {
 		this.href = href;
 	}
 
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+
+	public String getSymbol() {
+		return symbol;
+	}
 }

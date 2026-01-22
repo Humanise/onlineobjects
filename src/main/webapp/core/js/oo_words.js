@@ -8,7 +8,7 @@ oo.Words = function(options) {
 
 oo.Words.prototype = {
   _attach : function() {
-    //hui.listen(this.element,'click',this._onClick.bind(this));
+    hui.listen(this.element,'click',this._onClick.bind(this));
   },
   _onClick : function(e) {
     e = hui.event(e);
@@ -18,9 +18,10 @@ oo.Words.prototype = {
       if (hui.cls.has(a,'oo_words_add')) {
         this._showFinder();
       } else {
+        /*
         hui.ui.confirmOverlay({element:a,text:'Delete word?',$ok : function() {
           this.fire('delete',{id:parseInt(a.getAttribute('data')),callback:this._reload.bind(this)});
-        }.bind(this)})
+        }.bind(this)})*/
       }
     }
   },

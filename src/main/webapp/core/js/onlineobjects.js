@@ -239,6 +239,8 @@ hui.on(['hui.ui'], () => {
     'attach!'(event) {
       event.source.querySelectorAll('*[data-oo-object]').forEach((node) => {
         hui.on(node, 'click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           hui.query('*[data-oo-object].is-active').removeClass('is-active');
           var data = node.getAttribute('data-oo-object').split(':');
           var obj = {

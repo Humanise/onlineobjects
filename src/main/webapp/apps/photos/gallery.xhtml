@@ -54,10 +54,8 @@
               <input type="file" multiple="multiple" class="js-upload"/>
               <o:icon icon="add"/><strong>#{msg.upload_photos}</strong>
             </span>
-            <o:link plain="true" name="addToGallery" styleClass="photos_gallery_bar_button">
-              <o:icon icon="add"/><strong>#{msg.add_photos}</strong>
-            </o:link>
-            <o:link plain="true" name="deleteGallery" styleClass="photos_gallery_bar_button"><o:icon icon="delete"/><strong>#{msg.delete_gallery}</strong></o:link>
+            <gui:button text="#{msg.add_photos}" name="addToGallery" symbol="add" variant="light"/>
+            <gui:button text="#{msg.delete_gallery}" name="deleteGallery" symbol="delete" variant="light"/>
           </c:if>
           </div>
         </div>
