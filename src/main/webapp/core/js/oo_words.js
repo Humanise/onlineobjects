@@ -14,8 +14,8 @@ oo.Words.prototype = {
     e = hui.event(e);
     var a = e.findByTag('a');
     if (a) {
-      e.stop();
       if (hui.cls.has(a,'oo_words_add')) {
+        e.stop();
         this._showFinder();
       } else {
         /*
