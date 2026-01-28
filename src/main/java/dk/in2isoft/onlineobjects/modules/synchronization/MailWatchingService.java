@@ -3,15 +3,15 @@ package dk.in2isoft.onlineobjects.modules.synchronization;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.search.ComparisonTerm;
-import javax.mail.search.ReceivedDateTerm;
-import javax.mail.search.SearchTerm;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.NoSuchProviderException;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.search.ComparisonTerm;
+import jakarta.mail.search.ReceivedDateTerm;
+import jakarta.mail.search.SearchTerm;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

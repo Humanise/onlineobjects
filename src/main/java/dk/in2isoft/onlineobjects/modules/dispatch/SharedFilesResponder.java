@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.modules.dispatch;
 import java.io.File;
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
+import jakarta.servlet.FilterChain;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;

@@ -2,7 +2,7 @@ package dk.in2isoft.in2igui.data;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.ui.Request;

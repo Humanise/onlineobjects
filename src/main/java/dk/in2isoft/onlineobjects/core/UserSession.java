@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;

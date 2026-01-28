@@ -3,8 +3,8 @@ package dk.in2isoft.onlineobjects.modules.dispatch;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletResponse;
 
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;

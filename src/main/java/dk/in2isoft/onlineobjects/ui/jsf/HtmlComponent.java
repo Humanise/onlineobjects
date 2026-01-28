@@ -3,8 +3,8 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.context.FacesContext;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.TagWriter;

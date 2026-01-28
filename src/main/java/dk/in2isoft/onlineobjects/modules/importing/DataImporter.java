@@ -5,14 +5,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload2.core.DiskFileItem;
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.core.FileUploadException;
+import org.apache.commons.fileupload2.core.ProgressListener;
+import org.apache.commons.fileupload2.jakarta.servlet6.JakartaServletDiskFileUpload;
+import org.apache.commons.fileupload2.jakarta.servlet6.JakartaServletFileUpload;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +24,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.FileService;
 import dk.in2isoft.onlineobjects.ui.AsynchronousProcessDescriptor;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class DataImporter {
 
@@ -46,16 +45,19 @@ public class DataImporter {
 		log.info("Starting upload");
 		ApplicationSession session = request.getSession().getApplicationSession(controller);
 		final AsynchronousProcessDescriptor process = session.createAsynchronousProcessDescriptor(listener.getProcessName());
-		if (!ServletFileUpload.isMultipartContent(request.getRequest())) {
+		if (!JakartaServletFileUpload.isMultipartContent(request.getRequest())) {
 			process.setError(true);
 			throw new BadRequestException("The request is not multi-part!");
 		}
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setSizeThreshold(0);
-		factory.setRepository(fileService.getUploadDir());
+		DiskFileItemFactory.builder().get();
 
-		ServletFileUpload upload = new ServletFileUpload(factory);
+		DiskFileItemFactory factory = DiskFileItemFactory.builder().get();
+		//factory.setSizeThreshold(0);
+		//factory.setRepository(fileService.getUploadDir());
+
+		JakartaServletDiskFileUpload upload = new JakartaServletDiskFileUpload(factory);
 		ProgressListener progressListener = new ProgressListener() {
+			@Override
 			public void update(long pBytesRead, long pContentLength, int pItems) {
 				if (pContentLength == -1) {
 					process.setValue(0);
@@ -69,19 +71,19 @@ public class DataImporter {
 
 		// Parse the request
 		try {
-			List<FileItem> items = upload.parseRequest(request.getRequest());
+			List<DiskFileItem> items = upload.parseRequest(request.getRequest());
 			Map<String,String> parameters = Maps.newHashMap();
-			for (FileItem item : items) {
+			for (DiskFileItem item : items) {
 				if (item.isFormField()) {
 					parameters.put(item.getFieldName(), item.getString());
 				}
 			}
-			for (FileItem item : items) {
+			for (DiskFileItem item : items) {
 				if (!item.isFormField()) {
 					try {
 						item.getInputStream();
 						if (item instanceof DiskFileItem) {
-							File file = ((DiskFileItem)item).getStoreLocation();
+							File file = item.getPath().toFile();
 							listener.processFile(file, fileService.getMimeType(file), item.getName(), parameters, request);
 						}
 					} catch (Exception e) {

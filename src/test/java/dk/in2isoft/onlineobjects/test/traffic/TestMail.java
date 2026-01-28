@@ -6,25 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.mail.Address;
-import javax.mail.BodyPart;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.search.ComparisonTerm;
-import javax.mail.search.SearchTerm;
-import javax.mail.search.SentDateTerm;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail2.core.EmailException;
+import org.apache.commons.mail2.jakarta.DefaultAuthenticator;
+import org.apache.commons.mail2.jakarta.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
@@ -35,12 +20,26 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
+import jakarta.mail.Address;
+import jakarta.mail.BodyPart;
+import jakarta.mail.Folder;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.NoSuchProviderException;
+import jakarta.mail.Session;
+import jakarta.mail.Store;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.search.ComparisonTerm;
+import jakarta.mail.search.SearchTerm;
+import jakarta.mail.search.SentDateTerm;
 
 //@Ignore
 public class TestMail extends AbstractSpringTestCase {
-	
+
 	private static final Logger log = LogManager.getLogger(TestMail.class);
-	
+
 	@Autowired
 	private ImageService imageService;
 
@@ -58,7 +57,7 @@ public class TestMail extends AbstractSpringTestCase {
 		email.setSSLOnConnect(true);
 		email.send();
 	}
-	
+
 	@Test
 	public void testRead() {
 		Properties props = System.getProperties();
@@ -86,7 +85,7 @@ public class TestMail extends AbstractSpringTestCase {
 						usersEmail = iad.getAddress();
 					}
 				}
-				
+
 				try {
 					Object content = message.getContent();
 					if (content instanceof Multipart) {
@@ -98,14 +97,14 @@ public class TestMail extends AbstractSpringTestCase {
 							String contentType = part.getContentType();
 							log.info("-- part-type: "+contentType);
 							log.info("-- part-disp: "+part.getDisposition());
-							
+
 							if (contentType.toLowerCase().startsWith("image/jpg")) {
 								handleImage(usersEmail,"image/jpg",part.getInputStream());
 							}
 							else if (contentType.startsWith("multipart")) {
 								MimeMultipart x = new MimeMultipart(part.getDataHandler().getDataSource());
 								log.info("SUB: "+x.getCount());
-								
+
 								for (int k = 0; k < x.getCount(); k++) {
 									BodyPart subPart = x.getBodyPart(k);
 									String subContentType = subPart.getContentType();
@@ -114,7 +113,7 @@ public class TestMail extends AbstractSpringTestCase {
 										handleImage(usersEmail,"image/jpg",subPart.getInputStream());
 									}
 								}
-								
+
 							}
 						}
 					} else {
@@ -157,7 +156,7 @@ public class TestMail extends AbstractSpringTestCase {
 			IOUtils.closeQuietly(inputStream);
 		}
 	}
-	
+
 	public void setImageService(ImageService imageService) {
 		this.imageService = imageService;
 	}

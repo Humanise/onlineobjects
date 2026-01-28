@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.context.FacesContext;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
 

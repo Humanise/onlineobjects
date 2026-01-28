@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.core.exceptions;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class SecurityException extends EndUserException {
 

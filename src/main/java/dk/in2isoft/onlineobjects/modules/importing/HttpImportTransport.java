@@ -1,22 +1,8 @@
 package dk.in2isoft.onlineobjects.modules.importing;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import dk.in2isoft.commons.http.HeaderUtil;
-import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.importing.ImportSession.Status;
 
 public class HttpImportTransport<T> implements ImportTransport {
@@ -34,11 +20,14 @@ public class HttpImportTransport<T> implements ImportTransport {
 		this.listener = listener;
 	}
 
+	@Override
 	public T getResult() {
 		return result;
 	}
 
+	@Override
 	public void start() {
+		/*
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod(uri);
 		InputStream inputStream = null;
@@ -80,9 +69,10 @@ public class HttpImportTransport<T> implements ImportTransport {
 			log.info("Url import closing: "+status);
 			IOUtils.closeQuietly(inputStream);
 			IOUtils.closeQuietly(outputStream);
-		}
+		}*/
 	}
 
+	@Override
 	public Status getStatus() {
 		return status;
 	}

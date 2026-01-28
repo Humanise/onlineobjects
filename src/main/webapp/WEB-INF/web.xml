@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app
+  xmlns="https://jakarta.ee/xml/ns/jakartaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-          http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-  version="3.0" metadata-complete="true">
-  <absolute-ordering />
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                      https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+  version="6.0">
 
   <display-name>OnlineObjects</display-name>
   <description>Web Application Foundation Framework</description>
@@ -28,11 +28,11 @@
   <listener>
     <listener-class>dk.in2isoft.onlineobjects.core.SessionListener</listener-class>
   </listener>
-
+  <!--
   <listener>
     <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
   </listener> 
-
+  -->
 
   <!-- Filters -->
   <filter>
@@ -59,28 +59,29 @@
   <!-- Faces -->
 
   <context-param>
-    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-name>jakarta.faces.STATE_SAVING_METHOD</param-name>
     <param-value>server</param-value>
   </context-param>
-  <!-- context-param> <param-name>javax.faces.PROJECT_STAGE</param-name>
+  <!-- context-param> <param-name>jakarta.faces.PROJECT_STAGE</param-name>
     <param-value>Development</param-value> </context-param -->
   <context-param>
-    <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+    <param-name>jakarta.faces.DEFAULT_SUFFIX</param-name>
     <param-value>.html .xhtml</param-value>
   </context-param>
   <context-param>
-    <param-name>javax.faces.SEPARATOR_CHAR</param-name>
+    <param-name>jakarta.faces.SEPARATOR_CHAR</param-name>
     <param-value>x</param-value>
   </context-param>
 
   <context-param>
-    <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+    <param-name>jakarta.faces.FACELETS_LIBRARIES</param-name>
     <param-value>/META-INF/onlineobjects.taglib.xml;/META-INF/in2igui.taglib.xml</param-value>
   </context-param>
 
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet-mapping>
@@ -88,7 +89,10 @@
     <url-pattern>/faces/*</url-pattern>
   </servlet-mapping>
 
-
+  <context-param>
+    <param-name>jakarta.faces.ENABLE_CDI_RESOLVER_CHAIN</param-name>
+    <param-value>false</param-value>
+  </context-param>
 
 
   <!-- Spring -->

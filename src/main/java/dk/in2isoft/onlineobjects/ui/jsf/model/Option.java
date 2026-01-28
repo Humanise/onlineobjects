@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.ui.jsf.model;
 
-import javax.faces.model.SelectItem;
+import jakarta.faces.model.SelectItem;
 
 public class Option extends SelectItem implements dk.in2isoft.in2igui.data.Option {
 

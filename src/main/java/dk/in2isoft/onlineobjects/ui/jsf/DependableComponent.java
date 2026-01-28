@@ -1,6 +1,6 @@
 package dk.in2isoft.onlineobjects.ui.jsf;
 
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 
 public interface DependableComponent {
 

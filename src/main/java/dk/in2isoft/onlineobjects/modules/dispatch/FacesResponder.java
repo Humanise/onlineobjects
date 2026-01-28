@@ -2,9 +2,9 @@ package dk.in2isoft.onlineobjects.modules.dispatch;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.ui.Request;

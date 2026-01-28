@@ -35,7 +35,7 @@
 		<tag-name>body</tag-name>
 		<component>
 			<component-type>onlineobjects.body</component-type>
-			<renderer-type>javax.faces.Body</renderer-type>
+			<renderer-type>jakarta.faces.Body</renderer-type>
 		</component>
 	</tag>
 	<tag>

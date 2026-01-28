@@ -5,13 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.PartialViewContext;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -21,8 +16,6 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -37,6 +30,12 @@ import dk.in2isoft.in2igui.jsf.LocationInputComponent;
 import dk.in2isoft.in2igui.jsf.TextInputComponent;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.ui.HUIService;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.PartialViewContext;
+import jakarta.faces.context.ResponseWriter;
+import jakarta.servlet.http.HttpServletRequest;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -50,7 +49,7 @@ import nu.xom.Elements;
 public class TestComponent extends AbstractSpringTestCase {
 
 	private static final Logger log = LogManager.getLogger(TestComponent.class);
-	
+
 	@Autowired
 	private HUIService HUIService;
 
@@ -74,7 +73,7 @@ public class TestComponent extends AbstractSpringTestCase {
 		EasyMock.expect(request.getHeader(EasyMock.anyString())).andReturn("").anyTimes();
 		EasyMock.expect(partialViewContext.isAjaxRequest()).andReturn(false).anyTimes();
 
-		
+
 	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
 	    PrintWriter printWriter = new PrintWriter(stream);
 		ResponseWriter responseWriter = new HtmlResponseWriter(printWriter, "text/html", Strings.UTF8, false, true, DisableUnicodeEscaping.Auto, false);
@@ -91,13 +90,13 @@ public class TestComponent extends AbstractSpringTestCase {
 		return new String(stream.toByteArray(), Strings.UTF8);
 
 	}
-	
+
 	@Test
 	public void testButton() throws IOException {
 	    ButtonComponent button = new ButtonComponent();
 		button.setId("myId");
 		button.setText("Button text");
-		
+
 		String rendering = render(button);
 		Assert.assertEquals("<a href=\"javascript://\" class=\"hui_button\" id=\"myId\">Button text</a>", rendering);
 
@@ -110,34 +109,34 @@ public class TestComponent extends AbstractSpringTestCase {
 	public void testTextInput() throws IOException {
 		TextInputComponent component = new TextInputComponent();
 		component.setId("myId");
-		
+
 		String jsfRendering = render(component);
 		Assert.assertEquals("<input class=\"hui_textinput\" id=\"myId\" />", jsfRendering);
-				
+
 		String huiRendering = HUIService.renderFragment("<text-input/>");
-		
+
 		String huiCleaned = clean(huiRendering);
 		String jsfCleaned = clean(jsfRendering);
 
 		Assert.assertEquals(huiCleaned, jsfCleaned);
-		
+
 	}
 
 	@Test
 	public void testLocationInput() throws IOException {
 		LocationInputComponent component = new LocationInputComponent();
 		component.setId("myId");
-		
+
 		String jsfRendering = render(component);
 		Assert.assertEquals("<span class=\"hui_locationinput\" id=\"myId\"><span class=\"hui_locationinput_latitude\"><span><input /></span></span><span class=\"hui_locationinput_longitude\"><span><input /></span></span><a href=\"javascript://\" class=\"hui_locationinput_picker\"></a></span>", jsfRendering);
-				
+
 		String huiRendering = HUIService.renderFragment("<location-input/>");
-		
+
 		String huiCleaned = clean(huiRendering);
 		String jsfCleaned = clean(jsfRendering);
 
 		Assert.assertEquals(huiCleaned, jsfCleaned);
-		
+
 	}
 
 	private String clean(String markup) {
@@ -148,11 +147,11 @@ public class TestComponent extends AbstractSpringTestCase {
 		Elements elements = huiXOM.getRootElement().getChildElements();
 		for (int i = 0; i < elements.size(); i++) {
 			sb.append(elements.get(i).toXML());
-			
+
 		}
 		return sb.toString();
 	}
-	
+
 	public void strip(Element element) {
 		if (element.getLocalName().equals("script")) {
 			element.detach();
@@ -173,7 +172,7 @@ public class TestComponent extends AbstractSpringTestCase {
             	   attribute.detach();
                }
             }
-			Elements elements = element.getChildElements();      
+			Elements elements = element.getChildElements();
             for (int i = 0; i < elements.size(); i++) {
                 strip(elements.get(i));
             }

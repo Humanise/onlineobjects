@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;

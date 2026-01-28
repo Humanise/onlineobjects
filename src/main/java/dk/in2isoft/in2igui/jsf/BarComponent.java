@@ -2,9 +2,9 @@ package dk.in2isoft.in2igui.jsf;
 
 import java.io.IOException;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Dependencies;

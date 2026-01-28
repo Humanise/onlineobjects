@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
 

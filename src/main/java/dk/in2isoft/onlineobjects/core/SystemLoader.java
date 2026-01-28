@@ -1,7 +1,7 @@
 package dk.in2isoft.onlineobjects.core;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import org.apache.commons.jcs.JCS;
 import org.apache.logging.log4j.LogManager;

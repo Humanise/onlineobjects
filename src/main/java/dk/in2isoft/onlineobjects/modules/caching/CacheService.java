@@ -1,5 +1,8 @@
 package dk.in2isoft.onlineobjects.modules.caching;
 
+import static org.ehcache.config.builders.CacheConfigurationBuilder.newCacheConfigurationBuilder;
+import static org.ehcache.config.builders.CacheManagerBuilder.newCacheManagerBuilder;
+
 import java.io.File;
 import java.io.Serializable;
 import java.time.Duration;
@@ -16,6 +19,13 @@ import org.apache.commons.jcs.access.CacheAccess;
 import org.apache.commons.jcs.engine.behavior.IElementAttributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.CacheConfiguration;
+import org.ehcache.config.ResourcePools;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.MemoryUnit;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ApplicationContextEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -28,15 +38,6 @@ import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.DiskStoreConfiguration;
-import net.sf.ehcache.config.PersistenceConfiguration;
-import net.sf.ehcache.config.PersistenceConfiguration.Strategy;
-import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 public class CacheService implements ApplicationListener<ApplicationContextEvent>, ModelEventListener {
 
@@ -56,22 +57,17 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 				return null;
 			}
 		}
-		Cache cache = getCache(perspective);
+		Cache<Serializable, T> cache = getCache(perspective);
 		Serializable key = entity.getId();
-		Element found = cache.get(key);
+		T found = cache.get(key);
 		if (found!=null) {
-			Object value = found.getObjectValue();
-			if (value!=null && perspective.isAssignableFrom(value.getClass())) {
-				log.trace("Hit");
-				return Code.cast(value);
-			}
+			return found;
 		}
 		try {
 			log.trace("Miss");
 			T value = producer.call();
-			Element element = new Element(key, value);
 			log.trace("Added");
-			cache.put(element);
+			cache.put(key, value);
 			return value;
 		} catch (Exception e) {
 			log.error("Unable to produce object for cache", e);
@@ -222,24 +218,31 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 		return null;
 	}
 
-	private Cache getCache(Class<?> cls) {
+	private <T> Cache<Serializable,T> getCache(Class<T> cls) {
 		String cacheName = cls.getName();
-		Cache cache = manager.getCache(cacheName);
+		Cache<Serializable, T> cache = manager.getCache(cacheName, Serializable.class, cls);
+
 		if (cache == null) {
+
+			ResourcePools pools = ResourcePoolsBuilder.heap(100).offheap(1, MemoryUnit.MB).build();
+			CacheConfiguration<Serializable,T> config = newCacheConfigurationBuilder(Serializable.class, cls, pools).build();
+			cache = manager.createCache(cacheName, config);
+			/*
 			int maxEntriesLocalHeap = 10;
-			cache = new Cache(new CacheConfiguration(cacheName, maxEntriesLocalHeap)
+			cache = new Cache(new org.ehcache.config.CacheConfiguration<String, ?>(cacheName, maxEntriesLocalHeap)
 					.memoryStoreEvictionPolicy(MemoryStoreEvictionPolicy.LFU).eternal(false).timeToLiveSeconds(60*60)
 					.timeToIdleSeconds(60*60)
 					.persistence(new PersistenceConfiguration().strategy(Strategy.LOCALTEMPSWAP)));
 			cache.setCacheManager(manager);
 			cache.initialise();
 			manager.addDecoratedCache(cache);
+			*/
 		}
 		return cache;
 	}
 
 	public void flushToDisk() {
-		manager.shutdown();
+		manager.close();
 		JCS.shutdown();
 		initManager();
 	}
@@ -252,10 +255,9 @@ public class CacheService implements ApplicationListener<ApplicationContextEvent
 	}
 
 	private void initManager() {
-		String path = new File(configurationService.getStorageDir(), "cache").getAbsolutePath();
-		DiskStoreConfiguration diskConfig = new DiskStoreConfiguration().path(path);
-		Configuration config = new Configuration().diskStore(diskConfig);
-		manager = CacheManager.create(config);
+		File file = new File(configurationService.getStorageDir(), "cache");
+
+		manager = newCacheManagerBuilder().with(CacheManagerBuilder.persistence(file)).build();
 
 		documentCache = JCS.getInstance("default");
 		log.debug("Document cache stats: {}", documentCache.getStats());

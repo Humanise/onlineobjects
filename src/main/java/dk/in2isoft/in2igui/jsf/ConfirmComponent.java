@@ -1,7 +1,7 @@
 package dk.in2isoft.in2igui.jsf;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.context.FacesContext;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Components;

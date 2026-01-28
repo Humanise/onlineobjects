@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,15 +24,16 @@ import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.SecurityService;
+import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
-import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
 import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.networking.NetworkService;
 import dk.in2isoft.onlineobjects.test.AbstractSpringTestCase;
 import dk.in2isoft.onlineobjects.test.TestableNetworkService;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.servlet.http.HttpServletResponse;
 
 //@RunWith(PowerMockRunner.class)
 //@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
@@ -46,7 +45,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 
 	@Autowired
 	private ModelService modelService;
-	
+
 	@Autowired
 	private SecurityService securityService;
 
@@ -54,7 +53,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 	private APIController apiController;
 
 	private String key;
-	
+
     @Configuration
     static class ContextConfiguration {
 
@@ -79,7 +78,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 		}
 		request.commit();
 	}
-	
+
 	@Test
 	public void testSignup() throws IOException, EndUserException {
 		MockHttpServletRequest httpRequest = new MockHttpServletRequest("POST", "/v1/signup");
@@ -130,7 +129,7 @@ public class TestAPIController extends AbstractSpringTestCase {
 		String quote = "knowledge is power";
 		httpRequest.addParameter("url", url);
 		httpRequest.addParameter("quote", quote);
-		
+
 		// Should fail without authorization
 		try {
 			apiController.addInternetAddress(request);
@@ -142,12 +141,12 @@ public class TestAPIController extends AbstractSpringTestCase {
 		// Add authorization
 		httpRequest.addHeader("Authorization", "Bearer " + key);
 		securityService.ensureUserSession(request);
-		
+
 		InternetAddressApiPerspective response = apiController.addInternetAddress(request);
 		assertEquals(url, response.getUrl());
 		assertEquals("Knowledge - Wikipedia", response.getTitle());
 		request.commit();
-		
+
 		httpRequest.removeAllParameters();
 		APISearchResult result = apiController.knowledgeList(request);
 		assertEquals(2, result.getTotalCount());
@@ -157,13 +156,13 @@ public class TestAPIController extends AbstractSpringTestCase {
 
 		KnowledgeListRow address = firstRowByType(result, "InternetAddress");
 		assertEquals("Knowledge - Wikipedia", address.getText());
-		
+
 		httpRequest.removeAllParameters();
 		httpRequest.addParameter("id", String.valueOf(response.getId()));
 		InternetAddressApiPerspective addressPerspective = apiController.viewAddress(request);
 		assertEquals("Knowledge From Wikipedia, the ", addressPerspective.getText().replaceAll("[\\s]+", " ").substring(0, 30));
 		request.commit();
-		
+
 		httpRequest.removeAllParameters();
 		httpRequest.addParameter("id", String.valueOf(statement.getId()));
 		apiController.deleteStatement(request);
@@ -173,14 +172,14 @@ public class TestAPIController extends AbstractSpringTestCase {
 		httpRequest.addParameter("id", String.valueOf(address.getId()));
 		apiController.deleteInternetAddress(request);
 		request.commit();
-		
+
 		operator.commit();
 	}
 
 	private KnowledgeListRow firstRowByType(APISearchResult result, String type) {
 		return result.getList().stream().filter(x -> x.getType().equals(type)).findFirst().get();
 	}
-	
+
 	private Request mock(MockHttpServletRequest httpRequest) throws SecurityException {
 		HttpServletResponse httpResponse = EasyMock.createMock(HttpServletResponse.class);
 		MockHttpSession httpSession = new MockHttpSession();

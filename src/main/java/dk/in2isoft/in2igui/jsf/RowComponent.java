@@ -3,8 +3,8 @@ package dk.in2isoft.in2igui.jsf;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.context.FacesContext;
 
 import com.google.common.collect.Maps;
 

@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload2.core.DiskFileItem;
+import org.apache.commons.fileupload2.core.DiskFileItemFactory;
+import org.apache.commons.fileupload2.core.FileUploadException;
+import org.apache.commons.fileupload2.core.ProgressListener;
+import org.apache.commons.fileupload2.jakarta.servlet6.JakartaServletDiskFileUpload;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,13 +37,15 @@ public class UploadImportTransport<T> implements ImportTransport {
 		this.request = request;
 	}
 
+	@Override
 	public void start() {
 
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setSizeThreshold(0);
+		DiskFileItemFactory factory = DiskFileItemFactory.builder().get();
+		//factory.setSizeThreshold(0);
 
-		ServletFileUpload upload = new ServletFileUpload(factory);
+		JakartaServletDiskFileUpload upload = new JakartaServletDiskFileUpload(factory);
 		ProgressListener progressListener = new ProgressListener() {
+			@Override
 			public void update(long pBytesRead, long pContentLength, int pItems) {
 				if (pContentLength == -1) {
 					progress = 0;
@@ -71,7 +73,7 @@ public class UploadImportTransport<T> implements ImportTransport {
 			for (DiskFileItem item : items) {
 				if (!item.isFormField()) {
 					log.info("Handling uploaded file: "+item.getName()+" - "+item.getContentType()+" ("+item.getSize()+"byte)");
-					File file = item.getStoreLocation();
+					File file = item.getPath().toFile();
 					importListener.processFile(file, item.getContentType(), item.getName(), parameters, request);
 					result = importListener.getResponse();
 				}
@@ -94,10 +96,12 @@ public class UploadImportTransport<T> implements ImportTransport {
 		return progress;
 	}
 
+	@Override
 	public Status getStatus() {
 		return status;
 	}
 
+	@Override
 	public T getResult() {
 		return result;
 	}

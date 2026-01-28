@@ -2,9 +2,9 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.IOException;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
 
