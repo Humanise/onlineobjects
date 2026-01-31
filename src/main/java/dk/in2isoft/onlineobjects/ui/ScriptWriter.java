@@ -58,7 +58,7 @@ public class ScriptWriter {
 	}
 
 	public void write(List<String[]> paths, String hash) throws IOException, FileNotFoundException {
-		if (!configurationService.isOptimizeResources() || configurationService.isDevelopmentMode()) {
+		if (!configurationService.isOptimizeAssets() || configurationService.isDevelopmentMode()) {
 			for (String[] path : paths) {
 				write(this.writer, path);
 			}

@@ -55,7 +55,7 @@ public class BodyComponent extends HtmlBody {
 		ScriptWriter writer = Components.getScriptWriter(context);
 		String js = writer.toString();
 
-		if (configurationService.isOptimizeResources()) {
+		if (configurationService.isOptimizeAssets()) {
 
 			DependencyService dependencyService = Components.getBean(DependencyService.class);
 

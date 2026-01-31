@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +20,12 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.exceptions.ConfigurationException;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class ConfigurationService implements InitializingBean {
 
 	private static Logger log = LogManager.getLogger(ConfigurationService.class);
 
-	private String baseUrl;
 	private String basePath;
 	private String storagePath;
 	private boolean developmentMode;
@@ -62,7 +60,7 @@ public class ConfigurationService implements InitializingBean {
 
 	private LifeCycleService lifeCycleService;
 
-	private boolean optimizeResources;
+	private boolean optimizeAssets;
 
 	private boolean simulateHttps;
 	private boolean disableCache;
@@ -166,12 +164,8 @@ public class ConfigurationService implements InitializingBean {
 		return lifeCycleService.getStartTime();
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
-
 	public String getBaseUrl() {
-		return baseUrl;
+		return "www." + rootDomain;
 	}
 
 	public void setDevelopmentMode(boolean developmentMode) {
@@ -182,12 +176,12 @@ public class ConfigurationService implements InitializingBean {
 		return developmentMode;
 	}
 
-	public boolean isOptimizeResources() {
-		return optimizeResources;
+	public boolean isOptimizeAssets() {
+		return optimizeAssets;
 	}
 
-	public void setOptimizeResources(boolean optimizeResources) {
-		this.optimizeResources = optimizeResources;
+	public void setOptimizeAssets(boolean optimizeAssets) {
+		this.optimizeAssets = optimizeAssets;
 	}
 
 	public void setStoragePath(String storagePath) {

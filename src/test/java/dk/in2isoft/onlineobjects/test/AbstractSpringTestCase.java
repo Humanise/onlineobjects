@@ -34,29 +34,29 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:applicationContext.test.xml")
 public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContextTests {
-	
+
 	@Autowired
 	protected ConfigurationService configurationService;
-	
+
 	@Autowired
 	private ApplicationContext context;
-	
+
 	@Autowired
 	protected ModelService modelService;
 
 	@Autowired
 	protected SecurityService securityService;
-	
+
 	private static boolean cleaned = false;
-	
+
 	@BeforeClass
 	public static void before() throws IOException {
 		if (!cleaned) {
 			Properties props = PropertiesLoaderUtils.loadAllProperties("configuration.test.properties");
-			String path = props.getProperty("storagePath");
-			
+			String path = props.getProperty("storage");
+
 			File storage = new File(path);
-			
+
 			File[] dirs = storage.listFiles();
 			for (File file : dirs) {
 				if (!file.isDirectory()) continue;
@@ -70,7 +70,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 			cleaned = true;
 		}
 	}
-	
+
 	@After
 	public void after() {
 		long x = System.currentTimeMillis() + 5000;
@@ -113,7 +113,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 	protected Privileged getAdminUser() {
 		return securityService.getAdminPrivileged();
 	}
-	
+
 	protected User getNewTestUser() {
 		User user = new User();
 		user.setUsername(getUniqueTestUserName());
@@ -151,7 +151,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		}
 		return null;
 	}
-	
+
 	protected File getOutputDir() {
 
 		String outputDir = getProperty("output.dir");
@@ -171,7 +171,7 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 		return dir;
 	}
 
-	
+
 	protected void assertFails(FailableRunnable runnable) {
 		boolean caught = false;
 		try {
@@ -181,16 +181,16 @@ public abstract class AbstractSpringTestCase extends AbstractJUnit4SpringContext
 			caught = true;
 		}
 		assertTrue(caught);
-		
+
 	}
-	
+
 	@FunctionalInterface
 	protected interface FailableRunnable {
 	    public abstract void run() throws EndUserException;
 	}
-	
+
 	// Wiring...
-	
+
 	public void setModelService(ModelService modelService) {
 		this.modelService = modelService;
 	}

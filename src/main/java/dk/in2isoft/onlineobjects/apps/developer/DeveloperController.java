@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -35,6 +32,8 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class DeveloperController extends ApplicationController {
 
@@ -111,7 +110,7 @@ public class DeveloperController extends ApplicationController {
 
 	@Override
 	public boolean isAllowed(Request request) {
-		return configurationService.isDevelopmentMode() || configurationService.isTestMode();
+		return configurationService.isDevelopmentMode();
 	}
 
 	@Path(exactly={"not-found"})

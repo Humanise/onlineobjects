@@ -93,7 +93,7 @@ public class HeadComponent extends AbstractComponent {
 
 
 		Request request = Components.getRequest();
-		if (!configurationService.isOptimizeResources()) {
+		if (!configurationService.isOptimizeAssets()) {
 			for (String url : graph.getStyles()) {
 			 	out.startElement("link").rel("stylesheet").type("text/css").href(DependencyService.pathToUrl(url)).endElement("link");
 			}
@@ -139,7 +139,7 @@ public class HeadComponent extends AbstractComponent {
 		String content = null;
 		if (file.exists()) {
 			content = Files.readString(file);
-			if (configurationService.isOptimizeResources()) {
+			if (configurationService.isOptimizeAssets()) {
 				content = scriptCompressor.compress(content);
 			}
 		}

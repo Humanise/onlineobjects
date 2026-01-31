@@ -2,15 +2,14 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 
 import java.io.IOException;
 
-import jakarta.faces.component.FacesComponent;
-import jakarta.faces.context.FacesContext;
-
 import org.apache.commons.lang.StringUtils;
 
 import dk.in2isoft.commons.jsf.AbstractComponent;
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.TagWriter;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.context.FacesContext;
 
 @FacesComponent(value=AnalyticsComponent.FAMILY)
 public class AnalyticsComponent extends AbstractComponent {
@@ -39,11 +38,18 @@ public class AnalyticsComponent extends AbstractComponent {
 			String url = "https://www.googletagmanager.com/gtag/js?id=" + code;
 			out.startScript().withAttribute("async", "async").withSrc(url).endScript();
 			out.startScript();
-			out.write("window.dataLayer = window.dataLayer || [];\n"
-					+ "  function gtag(){dataLayer.push(arguments);}\n"
-					+ "  gtag('js', new Date());\n"
-					+ "  gtag('storage', 'none');\n"
-					+ "  gtag('config', '" + code + "');");
+			out.write(String.format("""
+			window.dataLayer = window.dataLayer || [];
+			  function gtag(){dataLayer.push(arguments);}
+			  gtag('js', new Date());
+			  gtag('consent', 'default', {
+			    'analytics_storage': 'denied'
+			  });
+			  gtag('config', '%s', {
+			    'client_storage': 'none',
+			    'anonymize_ip': true
+			});""",
+			code));
 			out.endScript();
 		}
 	}

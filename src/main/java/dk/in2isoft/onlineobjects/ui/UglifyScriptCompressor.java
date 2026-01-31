@@ -27,6 +27,7 @@ public class UglifyScriptCompressor extends AbstractCommandLineInterface impleme
 		try {
 			File tempFile = File.createTempFile("uglifyin", ".js");
 			Files.overwriteTextFile(js, tempFile);
+
 			return execute(configuration.getUglifyPath() + " " + tempFile.getAbsolutePath() + " -c -m");
 		} catch (IOException e) {
 			log.error("Unable to compress js", e);

@@ -37,6 +37,9 @@ public abstract class AccountControllerBase extends ApplicationController {
 		if (path.startsWith("/status")) {
 			return true;
 		}
+		if (path.startsWith("/js/password.js")) {
+			return true;
+		}
 		return !securityService.isPublicUser(request.getSession());
 	}
 
@@ -45,6 +48,7 @@ public abstract class AccountControllerBase extends ApplicationController {
 		return true;
 	}
 
+	@Override
 	public List<Locale> getLocales() {
 		return Lists.newArrayList(new Locale("en"),new Locale("da"));
 	}

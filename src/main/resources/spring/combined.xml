@@ -44,29 +44,28 @@
 
 
   <bean id="configurationService" class="dk.in2isoft.onlineobjects.services.ConfigurationService" autowire="byType">
-    <property name="basePath" value="${basePath}" />
-    <property name="storagePath" value="${storagePath}" />
-    <property name="baseUrl" value="${baseUrl}" />
+    <property name="basePath" value="${path}" />
+    <property name="storagePath" value="${storage}" />
     <property name="port" value="${port}" />
     <property name="https" value="${https}" />
-    <property name="rootDomain" value="${rootDomain}" />
-    <property name="developmentMode" value="${developmentMode}" />
+    <property name="rootDomain" value="${domain}" />
+    <property name="developmentMode" value="${development}" />
     <property name="developmentUser" value="${development.user}" />
-    <property name="optimizeResources" value="${optimizeResources}" />
+    <property name="optimizeAssets" value="${assets.optimize}" />
     <property name="imageMagickPath" value="${imagemagick.path}" />
     <property name="uglifyPath" value="${uglifyjs.path}" />
     <property name="graphvizPath" value="${graphviz.path}" />
     <property name="analyticsCode" value="${analytics.code}" />
-    <property name="startScheduling" value="${startScheduling}" />
+    <property name="startScheduling" value="${scheduling.start}" />
     <property name="intelligenceEnabled" value="${intelligence.enabled}" />
     <property name="solrEnabled" value="${solr.enabled}" />
 
-    <property name="simulateHttps" value="${development.simulateHttps}" />
+    <property name="simulateHttps" value="${development.https}" />
     <property name="testMode" value="${testMode}" />
-    <property name="appleAppSiteAssociation" value="${appleAppSiteAssociation}" />
+    <property name="appleAppSiteAssociation" value="${apple.association}" />
     <property name="disableCache" value="${cache.disabled}"></property>
     <property name="monitoringMails" value="${monitoring.mails}" />
-    <property name="migrateDatabaseSchema" value="${migrateDatabaseSchema}" />
+    <property name="migrateDatabaseSchema" value="${database.migrate}" />
     <property name="anthropicApiKey" value="${intelligence.anthropic.key}" />
     <property name="ollamaUrl" value="${intelligence.ollama.url}" />
     <property name="languageModel" value="${intelligence.model}" />
