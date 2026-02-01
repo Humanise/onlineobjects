@@ -16,31 +16,24 @@ import dk.in2isoft.onlineobjects.test.EssentialTests;
 
 @Category(EssentialTests.class)
 public class TestEmailService extends AbstractSpringTestCase {
-	
+
 	@Autowired
-	private EmailService emailService;
-		
+	EmailService emailService;
+
 	@Test
 	public void testVelocity() throws EndUserException {
 		Map<String, Object> model = new HashMap<String, Object>();
-        model.put("invited-name", "Jonas Munk");
-        model.put("inviter-name", "John Andersen");
-        model.put("inviter-url", "http://www.google.com/");
-        model.put("invite-url", "http://www.duckduckgo.com/");
-        model.put("url", "http://www.in2isoft.dk/");
-        model.put("base-url", configurationService.getBaseUrl());
-        String html = emailService.applyTemplate(InvitationService.INVITATION_TEMPLATE, model);
-        Assert.assertTrue(html.contains("Jonas Munk"));
-        String mail = getProperty("mail.receiver.address");
-        String name = getProperty("mail.receiver.name");
-		emailService.sendHtmlMessage("Test HTML",html,mail,name);
-	}
+		model.put("invited_name", "Jonas Munk");
+		model.put("inviter_name", "John Andersen");
+		model.put("inviter_url", "http://www.google.com/");
+		model.put("invite_url", "http://www.duckduckgo.com/");
+		model.put("url", "http://www.in2isoft.dk/");
+		model.put("base_url", configurationService.getBaseUrl());
+		String html = emailService.applyTemplate(InvitationService.INVITATION_TEMPLATE, model);
+		Assert.assertTrue(html.contains("Jonas Munk"));
 
-	public void setEmailService(EmailService emailService) {
-		this.emailService = emailService;
-	}
-
-	public EmailService getEmailService() {
-		return emailService;
+		//String mail = getProperty("mail.receiver.address");
+		//String name = getProperty("mail.receiver.name");
+		//emailService.sendHtmlMessage("Test HTML", html, mail, name);
 	}
 }

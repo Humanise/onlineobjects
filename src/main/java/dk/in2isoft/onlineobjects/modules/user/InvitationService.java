@@ -94,11 +94,11 @@ public class InvitationService {
 		String inviterUrl = configurationService.getApplicationContext(PeopleController.MOUNT) + "/en/" + inviter.getUsername() + "/";
 		String url = configurationService.getApplicationContext(AccountController.MOUNT) + "/invitation.html?code=" + invitation.getCode();
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("invited-name", person.getName());
-		parameters.put("inviter-name", inviterPerson!=null ? inviterPerson.getFullName() : "");
-		parameters.put("inviter-url", inviterUrl);
-		parameters.put("invite-url", url);
-		parameters.put("base-url", configurationService.getBaseUrl());
+		parameters.put("invited_name", person.getName());
+		parameters.put("inviter_name", inviterPerson!=null ? inviterPerson.getFullName() : "");
+		parameters.put("inviter_url", inviterUrl);
+		parameters.put("invite_url", url);
+		parameters.put("base_url", configurationService.getBaseUrl());
         String html = emailService.applyTemplate(INVITATION_TEMPLATE, parameters);
 
 		emailService.sendHtmlMessage("Invitation til OnlineObjects", html, mail.getAddress(),person.getName());

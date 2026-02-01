@@ -496,7 +496,7 @@ public class MemberService {
 		Map<String,Object> parms = new HashMap<>();
 		parms.put("name", name);
 		parms.put("url", url.toString());
-		parms.put("base-url", "http://" + configurationService.getBaseUrl());
+		parms.put("base_url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailconfirmation-template.html", parms);
 
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, email.getAddress(),name);
@@ -539,7 +539,7 @@ public class MemberService {
 		String fullName = getFullName(user, operator);
 		parms.put("name", fullName);
 		parms.put("url", url.toString());
-		parms.put("base-url", "http://" + configurationService.getBaseUrl());
+		parms.put("base_url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/emailchange-template.html", parms);
 
 		emailService.sendHtmlMessage("Confirm e-mail for OnlineObjects", html, newEmail, fullName);

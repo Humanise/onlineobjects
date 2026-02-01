@@ -69,7 +69,7 @@ public class PasswordRecoveryService {
 		Map<String,Object> parms = new HashMap<String, Object>();
 		parms.put("name", person.getFullName());
 		parms.put("url",url.toString());
-		parms.put("base-url", "http://" + configurationService.getBaseUrl());
+		parms.put("base_url", "http://" + configurationService.getBaseUrl());
 		String html = emailService.applyTemplate("dk/in2isoft/onlineobjects/passwordrecovery-template.html", parms);
 
 		emailService.sendHtmlMessage("Reset password for OnlineObjects", html, email.getAddress(),person.getName());

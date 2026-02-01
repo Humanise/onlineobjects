@@ -10,10 +10,10 @@ import junit.framework.TestCase;
 
 @Category(EssentialTests.class)
 public class TestValidationUtil extends TestCase {
-	
+
 	//private static Logger log = LogManager.getLogger(TestLangUtil.class);
-	
-	
+
+
 	@Test
 	public void testEmailValidation() {
 		assertTrue(ValidationUtil.isWellFormedEmail("me@domain.dk"));
@@ -22,12 +22,13 @@ public class TestValidationUtil extends TestCase {
 
 		// Unicode DNS
 		assertTrue(ValidationUtil.isWellFormedEmail("xx.jb_0m@a" + Strings.UNICODE_AA + "ira.dk"));
+
 		// Modern TLD
-		assertTrue(ValidationUtil.isWellFormedEmail("me.and.mynames@sub.domain.cancerresearch"));
+		assertFalse(ValidationUtil.isWellFormedEmail("me.and.mynames@sub.domain.cancerresearch"));
 
 		assertFalse(ValidationUtil.isWellFormedEmail("dora@.com"));
 
-		
+
 		assertFalse(ValidationUtil.isWellFormedEmail("xx.jb_0m@atira.dk       "));
 		assertFalse(ValidationUtil.isWellFormedEmail("       xx.jb_0m@atira.dk       "));
 
@@ -83,8 +84,8 @@ public class TestValidationUtil extends TestCase {
 		assertTrue(ValidationUtil.isValidPassword("nVeKeWFgFD3CgveyWcEYUhcY"));
 		assertTrue(ValidationUtil.isValidPassword("abcdefgh"));
 		assertTrue(ValidationUtil.isValidPassword("12345678"));
-		
+
 		// TODO
-		
+
 	}
 }

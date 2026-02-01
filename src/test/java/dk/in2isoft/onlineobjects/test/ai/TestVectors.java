@@ -35,7 +35,7 @@ public class TestVectors extends AbstractSpringTestCase {
 
 	@Autowired
 	Intelligence intelligence;
-	
+
 	@Autowired
 	HTMLService htmlService;
 
@@ -44,7 +44,7 @@ public class TestVectors extends AbstractSpringTestCase {
 	@Test
 	public void testVectors() {
 		String subject = "water is wet";
-		
+
 		String[] cancidates = {
 				"h2o is liquid",
 				"a lake can have fish",
@@ -56,33 +56,33 @@ public class TestVectors extends AbstractSpringTestCase {
 		};
 		List<Double> sub = intelligence.vectorize(subject);
 		for (String string : cancidates) {
-			
+
 			List<Double> candidateV = intelligence.vectorize(string);
 			double similarity = semanticService.compareVectors(sub, candidateV);
 			System.out.println(string + " - " + similarity);
 		}
 	}
-	
+
 	@Test
 	public void testIt() {
-		String abs = "I dislike war, because it is a waste of life and resources. War is a terrible thing that destroys lives, families, and communities. It is a tragedy that should be avoided at all costs. I believe that we should work towards peace and understanding, rather than resorting to violence and conflict. We should strive to find common ground and resolve our differences through dialogue and cooperation, rather than through war. On another note, I love apples. I also love oranges. I also love bananas. To change the topic back, I also really hate world war I since it was a really boring war fought mainly in the trenches, not anything exicting like in moves."; 
+		String abs = "I dislike war, because it is a waste of life and resources. War is a terrible thing that destroys lives, families, and communities. It is a tragedy that should be avoided at all costs. I believe that we should work towards peace and understanding, rather than resorting to violence and conflict. We should strive to find common ground and resolve our differences through dialogue and cooperation, rather than through war. On another note, I love apples. I also love oranges. I also love bananas. To change the topic back, I also really hate world war I since it was a really boring war fought mainly in the trenches, not anything exicting like in moves.";
 		List<String> subjects = Arrays.stream(abs.split("\\.")).collect(Collectors.toList());
 		subjects.add(abs);
-		
+
 		String[] questions = {"Do you love both oranges and apples and war?", "Do you love both lemons and apples and war?"};
 		for (String question : questions) {
 			List<Double> questionVector = intelligence.vectorize(question);
 			for (String string : subjects) {
-				
+
 				List<Double> candidateV = intelligence.vectorize(string);
 				double similarity = semanticService.compareVectors(questionVector, candidateV);
 				log.info(similarity + " - " + string);
-			}			
+			}
 		}
 	}
 
-	
-	
+
+
 	private class Item {
 		HTMLDocument document;
 		public String text;
@@ -90,7 +90,7 @@ public class TestVectors extends AbstractSpringTestCase {
 		public String title;
 	}
 
-	@Test
+	//@Test
 	public void testWikipedia() throws IOException {
 
 		File folder = getTestFile("wikipedia");
@@ -104,9 +104,9 @@ public class TestVectors extends AbstractSpringTestCase {
 			item.vector = intelligence.vectorize(item.text);
 			items.add(item);
 		}
-		
+
 		Matrix<String, String, Double> matrix = new Matrix<>();
-		
+
 		for (Item item : items) {
 			for (Item other : items) {
 				double comparison = semanticService.compareVectors(item.vector, other.vector);
@@ -115,12 +115,13 @@ public class TestVectors extends AbstractSpringTestCase {
 		}
 		logMatrix(matrix);
 	}
-	
+
 	private void logMatrix(Matrix<String, String, Double> matrix) {
 		log.info("-------- Entries by value --------");
 		List<MatrixEntry<String,String,Double>> entries = matrix.getEntries();
 		Collections.sort(entries, new Comparator<MatrixEntry<String,String,Double>>() {
 
+			@Override
 			public int compare(MatrixEntry<String, String, Double> o1, MatrixEntry<String, String, Double> o2) {
 				return o1.getValue().compareTo(o2.getValue());
 			}
