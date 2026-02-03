@@ -42,14 +42,16 @@ public class AnalyticsComponent extends AbstractComponent {
 			window.dataLayer = window.dataLayer || [];
 			  function gtag(){dataLayer.push(arguments);}
 			  gtag('js', new Date());
-			  gtag('consent', 'default', {
-			    'analytics_storage': 'denied'
-			  });
 			  gtag('config', '%s', {
 			    'client_storage': 'none',
 			    'anonymize_ip': true
 			});""",
 			code));
+			/* This will completely disable GA
+			  gtag('consent', 'default', {
+			    'analytics_storage': 'denied'
+			  });
+			  */
 			out.endScript();
 		}
 	}
