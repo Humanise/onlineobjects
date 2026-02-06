@@ -36,11 +36,10 @@
         <artifactId>jetty-ee10-maven-plugin</artifactId>
         <version>12.1.5</version>
         <configuration>
-          <contextPath>/</contextPath>
           <webApp>
             <defaultsDescriptor>src/main/webapp/WEB-INF/jetty-defaults.xml</defaultsDescriptor>
+            <overrideDescriptor>src/main/webapp/WEB-INF/web-development.xml</overrideDescriptor>
           </webApp>
-          <jettyXml>src/main/webapp/WEB-INF/jetty.xml</jettyXml>
         </configuration>
       </plugin>
 
