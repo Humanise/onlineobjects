@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import jakarta.faces.application.Application;
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.context.FacesContext;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import com.google.gson.Gson;
@@ -27,6 +23,9 @@ import dk.in2isoft.onlineobjects.model.Person;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.faces.application.Application;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 
 public class DeveloperView extends AbstractView {
 

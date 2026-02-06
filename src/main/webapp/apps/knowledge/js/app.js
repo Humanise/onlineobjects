@@ -592,10 +592,7 @@ var appController = window.appController = {
   },
   _onQuestion : function(data) {
     this._changeItem(data);
-    hui.dom.setText(hui.find('#questionTitleText'), data.text);
-    hui.ui.get('questionAnswers').setData(data.answers);
-    hui.ui.get('questionWords').setData(data.words);
-    hui.ui.get('questionTags').setData(data.tags);
+    hui.controller('questions').show(data);
   },
   $render$questionAnswers : function(statement) {
     return this._render_relation(statement, {$remove: this._removeAnswerFromQuestion.bind(this)});
