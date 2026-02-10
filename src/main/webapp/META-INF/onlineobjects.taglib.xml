@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <facelet-taglib>
-	<namespace>http://www.onlineobjects.com/jsf</namespace>
+	<namespace>http://onlineobjects.org/jsf</namespace>
 
 	<function>
 		<function-name>json</function-name>

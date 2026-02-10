@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface View {
 
+	String value() default "";
 	String[] ui() default {};
 	String jsf() default "";
 

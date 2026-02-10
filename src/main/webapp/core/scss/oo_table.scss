@@ -1,0 +1,20 @@
+@use 'shared' as *;
+
+.oo_table {
+
+  td,th {
+    padding: 2px 4px;
+  }
+  > tbody > tr > th {
+    text-align: left;
+  }
+
+  &-bordered {
+    border-collapse: collapse;
+    
+    td,th {
+      border: 1px solid $divider-color;      
+    }
+  }
+
+}

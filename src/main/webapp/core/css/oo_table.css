@@ -1,0 +1,12 @@
+.oo_table td, .oo_table th {
+  padding: 2px 4px;
+}
+.oo_table > tbody > tr > th {
+  text-align: left;
+}
+.oo_table-bordered {
+  border-collapse: collapse;
+}
+.oo_table-bordered td, .oo_table-bordered th {
+  border: 1px solid #eee;
+}

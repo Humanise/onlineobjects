@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import jakarta.faces.context.FacesContext;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +34,10 @@ import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.modules.language.WordModification;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class Request implements Operator {
 
@@ -360,6 +359,10 @@ public class Request implements Operator {
 			throw new BadRequestException("No id");
 		}
 		return id;
+	}
+
+	public Optional<Long> getOptionalId() {
+		return Optional.ofNullable(getId((Long) null));
 	}
 
 	public Long getLong(String key, Long whenNullOrInvalid) {

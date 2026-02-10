@@ -9,5 +9,6 @@
 
   <bean id="developerComponentTestView" class="dk.in2isoft.onlineobjects.apps.developer.views.ComponentTestView" autowire="byType" scope="request" />
   <bean id="developerView" class="dk.in2isoft.onlineobjects.apps.developer.views.DeveloperView" autowire="byType" scope="request" />
+  <bean id="browseView" class="org.onlineobjects.apps.developer.BrowseView" scope="request" />
 
 </beans>

@@ -86,16 +86,23 @@ public class DeveloperController extends ApplicationController {
 
 	@Path(of = "/documents")
 	@View(ui = {"documents", "documents.xml"})
-	public void documents(Request request) {
-	}
+	public void documents(Request request) {}
 
 	@Path(expression = "/intelligence")
 	@View(jsf = "intelligence.xhtml")
 	public void intelligence(Request request) {}
 
+	@Path(expression = "/app")
+	@View("app/app.xml")
+	public void app(Request request) {}
+
 	@Path(expression = "/intelligence-raw")
 	@View(ui = {"intelligence.xml"})
 	public void intelligenceRaw(Request request) {}
+
+	@Path("/browse")
+	@View("browse.xhtml")
+	public void browse(Request request) {}
 
 	@Path(exactly = "mail")
 	public void mail(Request request) throws IOException {

@@ -95,6 +95,9 @@
     </property>
   </bean>
 
+  <bean id="model" class="org.onlineobjects.core.Model"/>
+
+
   <bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType" />
 
   <bean id="securityService" class="dk.in2isoft.onlineobjects.core.SecurityService" autowire="byType" />

@@ -35,27 +35,31 @@ import dk.in2isoft.onlineobjects.util.images.ImageMetaData;
 public class PhotosController extends PhotosControllerBase {
 
 
-	@Path(expression = "/(<language>)?")
-	@View(jsf = "front.xhtml")
+	@Path("/(<language>)?")
+	@View("front.xhtml")
 	public void front(Request request) {}
 
-	@Path(expression = "/<language>/photo/<integer>.html")
-	@View(jsf = "photo.xhtml")
+	@Path("/<language>/photo/<integer>.html")
+	@View("photo.xhtml")
 	public void photo(Request request) {}
 
-	@Path(expression = "/<language>/users/<username>")
-	@View(jsf = "user.xhtml")
+	@Path("/<language>/users/<username>")
+	@View("user.xhtml")
 	public void user(Request request) {}
 
-	@Path(expression = "/<language>/users/<username>/galleries")
-	@View(jsf = "galleries.xhtml")
+	@Path("/<language>/users/<username>/galleries")
+	@View("galleries.xhtml")
 	public void galleries(Request request) {}
 
-	@Path(expression = "/<language>/gallery/<integer>")
+	@Path("/<language>/gallery/<integer>")
 	@View(jsf = "gallery.xhtml")
 	public void gallery(Request request) {}
 
-	@Path(exactly="updateTitle")
+	@Path("/app")
+	@View("app.xml")
+	public void app(Request request) {}
+
+	@Path("updateTitle")
 	public void updateImageTitle(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		String title = request.getString("title");
@@ -64,7 +68,7 @@ public class PhotosController extends PhotosControllerBase {
 		modelService.update(image, request);
 	}
 
-	@Path(exactly="updateDescription")
+	@Path("updateDescription")
 	public void updateImageDescription(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		String description = request.getString("description");
@@ -73,7 +77,7 @@ public class PhotosController extends PhotosControllerBase {
 		modelService.update(image, request);
 	}
 
-	@Path(exactly="updateLocation")
+	@Path("updateLocation")
 	public void updateImageLocation(Request request) throws ModelException, SecurityException, NotFoundException {
 		long id = request.getInt("id");
 		ImageLocation location = request.getObject("location", ImageLocation.class);
@@ -81,7 +85,7 @@ public class PhotosController extends PhotosControllerBase {
 		imageService.updateImageLocation(image, location, request);
 	}
 
-	@Path(exactly="relateWord")
+	@Path("relateWord")
 	public void relateWordToImage(Request request) throws ModelException, SecurityException, NotFoundException {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");
@@ -93,7 +97,7 @@ public class PhotosController extends PhotosControllerBase {
 		}
 	}
 
-	@Path(exactly="removeWord")
+	@Path("removeWord")
 	public void removeWordFromImage(Request request) throws ModelException, SecurityException, NotFoundException {
 		long imageId = request.getInt("image");
 		long wordId = request.getInt("word");

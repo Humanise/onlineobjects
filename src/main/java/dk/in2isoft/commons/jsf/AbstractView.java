@@ -1,13 +1,14 @@
 package dk.in2isoft.commons.jsf;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import dk.in2isoft.onlineobjects.ui.Request;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.InitializingBean;
-
-import dk.in2isoft.onlineobjects.ui.Request;
 
 public abstract class AbstractView implements InitializingBean {
 
@@ -25,7 +26,12 @@ public abstract class AbstractView implements InitializingBean {
 	}
 
 	protected Request getRequest() {
-		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-		return Request.get((HttpServletRequest) context.getRequest(),(HttpServletResponse) context.getResponse());
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		if (facesContext != null) {
+			ExternalContext context = facesContext.getExternalContext();
+			return Request.get((HttpServletRequest) context.getRequest(),(HttpServletResponse) context.getResponse());
+		}
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		return Request.get(attributes.getRequest(),attributes.getResponse());
 	}
 }

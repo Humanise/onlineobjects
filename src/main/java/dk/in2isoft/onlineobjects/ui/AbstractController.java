@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
-
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.in2igui.FileBasedInterface;
@@ -23,6 +19,9 @@ import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.StupidProgrammerException;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 
 public abstract class AbstractController {
 
@@ -37,23 +36,26 @@ public abstract class AbstractController {
 		this.name = name;
 		Method[] methods = getClass().getDeclaredMethods();
 		for (Method method : methods) {
-			Path annotation = method.getAnnotation(Path.class);
+			Path path = method.getAnnotation(Path.class);
 
-			if (annotation!=null) {
-				String[] exactly = annotation.exactly();
+			if (path!=null) {
+				String[] exactly = path.exactly();
 				Responder responder = new Responder();
 				responder.method = method;
-				if (annotation.method() != dk.in2isoft.onlineobjects.core.Path.Method.NONE) {
-					responder.httpMethod = annotation.method().name();
+				if (path.method() != dk.in2isoft.onlineobjects.core.Path.Method.NONE) {
+					responder.httpMethod = path.method().name();
 				}
 				if (exactly.length > 0) {
 					responder.path = exactly;
 				}
-				else if (Strings.isNotBlank(annotation.expression())) {
-					responder.pattern = RestUtil.compile(annotation.expression());
+				else if (Strings.isNotBlank(path.expression())) {
+					responder.pattern = RestUtil.compile(path.expression());
 				}
-				else if (Strings.isNotBlank(annotation.of())) {
-					responder.pattern = RestUtil.compile(annotation.of());
+				else if (Strings.isNotBlank(path.of())) {
+					responder.pattern = RestUtil.compile(path.of());
+				}
+				else if (Strings.isNotBlank(path.value())) {
+					responder.pattern = RestUtil.compile(path.value());
 				}
 				else {
 					responder.path = new String[] {method.getName()};
@@ -134,17 +136,17 @@ public abstract class AbstractController {
 			Class<?> returnType = method.getReturnType();
 			View view = method.getDeclaredAnnotation(View.class);
 			if (view != null && view.ui().length > 0) {
-				FileBasedInterface ui = new FileBasedInterface(getFile(view.ui()), huiService);
-				if (result instanceof Map) {
-					Map<?,?> params = (Map<?, ?>) result;
-					for (Entry<?, ?> entry : params.entrySet()) {
-						ui.setParameter(entry.getKey().toString(), entry.getValue());
-					}
-				}
-				ui.render(request.getRequest(), request.getResponse());
+				renderHUI(request, result, view.ui());
 			}
 			else if (view != null && view.jsf().length() > 0) {
 				dispatchToJSF(request, view.jsf());
+			}
+			else if (view != null && view.value().length() > 0) {
+				if (view.value().endsWith(".xhtml")) {
+					dispatchToJSF(request, view.value());
+				} else if (view.value().endsWith(".xml")) {
+					renderHUI(request, result, view.value().split("/"));
+				}
 			}
 			else if (!returnType.equals(Void.TYPE)) {
 				request.sendObject(result);
@@ -165,6 +167,18 @@ public abstract class AbstractController {
 				throw new EndUserException(e);
 			}
 		}
+	}
+
+	private void renderHUI(Request request, Object result, String[] path)
+			throws IOException {
+		FileBasedInterface ui = new FileBasedInterface(getFile(path), huiService);
+		if (result instanceof Map) {
+			Map<?,?> params = (Map<?, ?>) result;
+			for (Entry<?, ?> entry : params.entrySet()) {
+				ui.setParameter(entry.getKey().toString(), entry.getValue());
+			}
+		}
+		ui.render(request.getRequest(), request.getResponse());
 	}
 
 	public final File getFile(String... path) {

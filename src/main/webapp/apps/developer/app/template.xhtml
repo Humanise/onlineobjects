@@ -1,0 +1,21 @@
+<c:view contentType="text/html"
+  xmlns:f="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jsf/core"
+  xmlns:gui="http://humanise.dk/ui"
+  xmlns:o="http://onlineobjects.org/jsf"
+  transient="true"
+>
+
+<o:doctype/>
+<o:html>
+  <o:head>
+    <title><f:insert name="title"/>OnlineObjects</title>
+    <o:fonts/>
+  </o:head>
+  <o:body>
+    <f:insert name="body"/>
+  </o:body>
+</o:html>
+<o:dependency from="local" src="developer.css"/>
+</c:view>

@@ -26,8 +26,8 @@ public class FrontController extends FrontControllerBase {
 	@View(jsf="mac.xhtml")
 	public void mac(Request request) {}
 
-	@Path(expression="/<language>/<folder>/<integer>")
-	@View(jsf="entity.xhtml")
-	public void entiry(Request request) {}
+	@Path("/<language>/<folder>/<integer>")
+	@View("entity.xhtml")
+	public void entity(Request request) {}
 
 }
