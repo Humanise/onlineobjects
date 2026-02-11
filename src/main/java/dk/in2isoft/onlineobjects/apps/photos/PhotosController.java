@@ -2,11 +2,14 @@ package dk.in2isoft.onlineobjects.apps.photos;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.google.common.collect.Lists;
 
+import dk.in2isoft.in2igui.data.ItemData;
 import dk.in2isoft.in2igui.data.ListData;
+import dk.in2isoft.in2igui.data.Option;
 import dk.in2isoft.onlineobjects.apps.photos.perspectives.GalleryModificationRequest;
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Path;
@@ -58,6 +61,28 @@ public class PhotosController extends PhotosControllerBase {
 	@Path("/app")
 	@View("app.xml")
 	public void app(Request request) {}
+
+	@Path("/app/galleries.json")
+	public List<Option> appGalleries(Request request) throws ModelException {
+		List<ImageGallery> galleries = photos.getUsersGalleries(request.getSession(), request);
+		return galleries.stream().map(this::asOption).toList();
+	}
+
+	@Path("/app/photos.json")
+	public List<Map<String,Object>> appPhotos(Request request) throws ModelException, NotFoundException {
+		Optional<Long> galleryId = request.getOptionalId("gallery");
+		if (galleryId.isPresent()) {
+			List<Image> images = photos.getUsersPhotosInGallery(request.getSession(), galleryId.get(), request);
+			return images.stream().map(this::extracted).toList();
+		} else {
+			List<Image> images = photos.getUsersPhotos(request.getSession(), request);
+			return images.stream().map(this::extracted).toList();
+		}
+	}
+
+	private Map<String, Object> extracted(Image image) {
+		return Map.of("id", image.getId(), "width", image.getWidth(), "height", image.getHeight());
+	}
 
 	@Path("updateTitle")
 	public void updateImageTitle(Request request) throws ModelException, SecurityException, NotFoundException {
@@ -289,5 +314,14 @@ public class PhotosController extends PhotosControllerBase {
 
 		ImageMetaData metaData = imageService.getMetaData(image);
 		return metaData;
+	}
+
+	private Option asOption(ImageGallery gallery) {
+		ItemData option = new ItemData();
+		option.setValue(gallery.getId());
+		option.setText(gallery.getName());
+		option.setIcon("common/folder");
+		option.setKind("ImageGallery");
+		return option;
 	}
 }

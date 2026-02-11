@@ -3,7 +3,7 @@ package dk.in2isoft.onlineobjects.apps.photos;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.collect.Lists;
+import org.onlineobjects.modules.photos.Photos;
 
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.core.Operator;
@@ -22,13 +22,15 @@ public class PhotosControllerBase extends ApplicationController {
 	protected ImageGalleryService imageGalleryService;
 	protected SecurityService securityService;
 	protected ImportService importService;
+	protected Photos photos;
 
 	public PhotosControllerBase() {
 		super("photos");
 	}
 
+	@Override
 	public List<Locale> getLocales() {
-		return Lists.newArrayList(new Locale("en"),new Locale("da"));
+		return List.of(new Locale("en"),new Locale("da"));
 	}
 
 	@Override
@@ -66,5 +68,9 @@ public class PhotosControllerBase extends ApplicationController {
 
 	public void setImageGalleryService(ImageGalleryService imageGalleryService) {
 		this.imageGalleryService = imageGalleryService;
+	}
+
+	public void setPhotos(Photos photos) {
+		this.photos = photos;
 	}
 }

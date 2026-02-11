@@ -38,15 +38,14 @@ public class PhotosLayoutView extends AbstractView {
 
 	private Image userImage;
 
+	@Override
 	public void before(Request request) throws Exception {
 		String[] path = request.getLocalPath();
 		String type = path[1];
-		long selected = 0l;
 		if ("users".equals(type)) {
 			username = path[2];
 			allImages = true;
 		} else if ("gallery".equals(type)) {
-			selected = photosGalleryView.getImageGallery().getId();
 			username = photosGalleryView.getUser().getUsername();
 		}
 		UsersPersonQuery query = new UsersPersonQuery().withUsername(username);
@@ -58,11 +57,7 @@ public class PhotosLayoutView extends AbstractView {
 		this.person = pair.getValue();
 		fullPersonName = personService.getFullPersonName(person, 14);
 		if (user!=null) {
-			Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
 			UserSession session = request.getSession();
-			if (user.getId() != session.getIdentity()) {
-				galleryQuery.withPublicView();
-			}
 			modifiable = this.user.getId() == session.getIdentity() && session.has(Ability.usePhotosApp);
 			userImage = modelService.getChild(user, Relation.KIND_SYSTEM_USER_IMAGE, Image.class, request);
 		}
@@ -71,7 +66,9 @@ public class PhotosLayoutView extends AbstractView {
 	private GalleryLink allPhotos;
 
 	public GalleryLink getAllPhotos() {
-		if (allPhotos != null) return allPhotos;
+		if (allPhotos != null) {
+			return allPhotos;
+		}
 		Query<Image> query = Query.after(Image.class).as(getRequest()).orderByCreated().descending();
 
 		List<Long> ids = modelService.listIds(query, getRequest());
@@ -85,7 +82,9 @@ public class PhotosLayoutView extends AbstractView {
 	private List<GalleryLink> galleryLinks;
 
 	public List<GalleryLink> getGalleryLinks() throws ModelException {
-		if (galleryLinks != null) return galleryLinks;
+		if (galleryLinks != null) {
+			return galleryLinks;
+		}
 		Request request = getRequest();
 		Query<ImageGallery> galleryQuery = Query.after(ImageGallery.class).as(user);
 		if (user.getId() != request.getIdentity()) {

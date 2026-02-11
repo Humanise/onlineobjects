@@ -6,13 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.onlineobjects.core.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.Privileged;
+import dk.in2isoft.onlineobjects.core.Query;
+import dk.in2isoft.onlineobjects.core.UserSession;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.model.Image;
+import dk.in2isoft.onlineobjects.model.ImageGallery;
 import dk.in2isoft.onlineobjects.model.Property;
+import dk.in2isoft.onlineobjects.model.Relation;
 import dk.in2isoft.onlineobjects.util.images.ImageInfo;
 import dk.in2isoft.onlineobjects.util.images.ImageService;
 import dk.in2isoft.onlineobjects.util.images.ImageTransformation;
@@ -20,6 +27,7 @@ import dk.in2isoft.onlineobjects.util.images.ImageTransformation;
 public class Photos {
 
 	private ImageService imageService;
+	private Model model;
 
 	public static List<Size> PHOTO_CONTAINER_SIZES = List.of(
 		Size.of(375, 530), // iPhone 6/7/8
@@ -45,7 +53,7 @@ public class Photos {
 	}
 
 	private float getSharpening(Size size) {
-		float sharpen = (float)size.getWidth() / 2000f;
+		float sharpen = size.getWidth() / 2000f;
 		sharpen = Math.max(0.2f, Math.min(sharpen, 1f));
 		return sharpen;
 	}
@@ -78,9 +86,9 @@ public class Photos {
 		  }
 		  else if (boxRatio > containerRatio) {
 		    width = container.getWidth();
-		    height = Math.round((float)container.getWidth()/(float)box.getWidth() * (float)box.getHeight());
+		    height = Math.round((float)container.getWidth()/(float)box.getWidth() * box.getHeight());
 		  } else {
-		    width = Math.round((float)container.getHeight()/(float)box.getHeight() * (float)box.getWidth());
+		    width = Math.round((float)container.getHeight()/(float)box.getHeight() * box.getWidth());
 		    height = container.getHeight();
 		  }
 		  return Size.of(width, height);
@@ -144,7 +152,28 @@ public class Photos {
 		this.imageService = imageService;
 	}
 
+	@Autowired
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
 	public ImageInfo getImageInfo(Image image, Operator operator) throws ModelException {
 		return imageService.getImageInfo(image, operator);
+	}
+
+	public List<ImageGallery> getUsersGalleries(Privileged privileged, Operator operator) {
+		Query<ImageGallery> query = Query.of(ImageGallery.class).as(privileged).orderByName().ascending();
+		return model.list(query, operator);
+	}
+
+	public List<Image> getUsersPhotos(Privileged privileged, Operator operator) {
+		Query<Image> query = Query.of(Image.class).as(privileged).orderByName().ascending();
+		return model.list(query, operator);
+	}
+
+	public List<Image> getUsersPhotosInGallery(UserSession session, Long id, Operator operator) throws ModelException, NotFoundException {
+		ImageGallery gallery = model.get(ImageGallery.class, id, operator).orElseThrow(() -> new NotFoundException());
+		List<Relation> relations = model.find().relations(operator).from(gallery).to(Image.class).list();
+		return relations.stream().map(r -> (Image) r.getTo()).toList();
 	}
 }

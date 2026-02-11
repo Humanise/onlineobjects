@@ -170,8 +170,9 @@ public class Request implements Operator {
 			return null;
 		}
 		String[] parts = domainName.split("\\.");
-		if (parts.length < 2)
+		if (parts.length < 2) {
 			return null;
+		}
 		Object[] sub = ArrayUtils.subarray(parts, 0, parts.length - 2);
 		return StringUtils.join(sub, ".");
 	}
@@ -363,6 +364,10 @@ public class Request implements Operator {
 
 	public Optional<Long> getOptionalId() {
 		return Optional.ofNullable(getId((Long) null));
+	}
+
+	public Optional<Long> getOptionalId(String parameter) {
+		return Optional.ofNullable(getId(parameter, (Long) null));
 	}
 
 	public Long getLong(String key, Long whenNullOrInvalid) {
@@ -638,7 +643,9 @@ public class Request implements Operator {
 
 	@Override
 	public Operator as(Privileged privileged) {
-		if (privileged.getIdentity() == this.getIdentity()) return this;
+		if (privileged.getIdentity() == this.getIdentity()) {
+			return this;
+		}
 		return new DelegatingOperator(this, privileged);
 	}
 

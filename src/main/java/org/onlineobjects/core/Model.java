@@ -9,6 +9,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 import dk.in2isoft.onlineobjects.core.Finder;
 import dk.in2isoft.onlineobjects.core.ModelService;
 import dk.in2isoft.onlineobjects.core.Operator;
+import dk.in2isoft.onlineobjects.core.Query;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
@@ -38,5 +39,9 @@ public class Model {
 
 	public Operator newAdminOperator() {
 		return modelService.newAdminOperator();
+	}
+
+	public <T extends Entity> List<T> list(Query<T> query, Operator operator) {
+		return modelService.list(query, operator);
 	}
 }

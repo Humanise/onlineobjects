@@ -1,97 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="uri:hui ../../../../hui/xslt/schema.xsd" xmlns="uri:hui" title="App" globals="false">
-  <controller url="/app/app.js"/>
-  <style url="/css/app.css"/>
-
+<gui xmlns="uri:hui" title="App" adaptive="true">
+  <source name="galleriesSource" url="/app/galleries.json"/>
+  <source name="imagesSource" url="/app/photos.json">
+    <parameter key="gallery"/>
+  </source>
+  <controller url="/js/app.js"/>
 
   <foundation name="foundation">
     <navigation>
       <overflow>
-        <selection value="everything" name="subsetSelection">
-          <option value="everything"><span class="selection selection-everything">Everything</span></option>
-          <option value="latest" text="Latest" symbol="add"/>
+        <selection value="latest" name="selector">
+          <option text="Alle billeder" icon="common/image" value="all"/>
+          <option text="Seneste" icon="common/time" value="latest"/>
+          <title>Album</title>
+          <option text="Personer" icon="common/folder" value="1"/>
+          <options source="galleriesSource"/>
         </selection>
       </overflow>
     </navigation>
     <results>
       <bar variant="layout">
-        <searchfield adaptive="true" name="search"/>
+        <segmented value="gallery" name="viewToggle">
+          <option icon="view/list" value="list"/>
+          <option icon="view/gallery" value="gallery"/>
+        </segmented>
+        <wide>
+          <searchfield adaptive="true"/>
+        </wide>
       </bar>
       <overflow>
-        <collection name="list"
-          selectable="true"
-          class="list"
-          selection-class="list_item-selected"
-        >
-          <empty>Someday something wil appear</empty>
-        </collection>
-
-        <div class="list_add">
-          <button text="Add something..." name="listAddButton"/>
-        </div>
-        <!--
-        <list name="list" variant="light"/>
-        -->
+        <fragment name="listView" visible="false">
+          <list/>
+        </fragment>
+        <fragment name="galleryView" visible="true">
+          <gallery name="gallery" source="imagesSource"/>
+        </fragment>
       </overflow>
     </results>
     <actions>
       <bar>
-        <button symbol="left" small="true" name="goBack"/>
-        <button symbol="right" small="true" name="goForward"/>
-        <button icon="common/new" text="Add" small="true" name="addButton"/>
+        <button text="Add" size="small" name="add"/>
         <flexible/>
-        <button text="Delete" small="true" name="deleteObject">
-          <confirm text="Are you sure?"/>
-        </button>
-        <button text="Add word" small="true" name="addWord"/>
-        <button text="Add tag" small="true" name="addTag"/>
-        <divider/>
-        <checkbox text="Favorite" name="favorite"/>
-        <checkbox text="Inbox" name="inbox"/>
-        <segmented value="formatted" name="viewMode">
-          <option text="Formatted" value="formatted"/>
-          <option text="Text" value="text"/>
-        </segmented>
+        <button symbol="left" size="small" name="goPrevious"/>
+        <button symbol="right" size="small" name="goNext"/>
       </bar>
     </actions>
     <content>
-      <overflow shadow-variant="white" name="mainScroller">
-        <fragment name="intro">
-          <div class="intro">
-            <div class="intro_graphic"> </div>
-            <p class="intro_title">Knowledge</p>
-            <ul>
-              <li><em>Store web pages</em> and read them <em>distraction free</em></li>
-              <li><em>Highlight statements</em> on stored web pages</li>
-              <li>Relate statements as <em>answers</em> to <em>questions</em></li>
-              <li>Mark statements as <em>supporting</em> or <em>contradicting</em> <em>hypotheses</em></li>
-            </ul>
-          </div>
-        </fragment>
-
-      </overflow>
+      <div id="image" style="height: 100%; display: flex; justify-content: center; align-content: center;">
+      </div>
+      <!--
+      <fragment name="contentView" height="full"/>
+        -->
     </content>
-    <!--      
-    <details>
-      <overflow>
-      <form padding="10">
-        <fields labels="above">
-          <field label="Title">
-            <text-input/>
-          </field>
-          <field label="Authors">
-            <object-input/>
-          </field>
-        </fields>
-        <buttons>
-          <button text="Update" submit="true" highlighted="true"/>
-        </buttons>
-      </form>
-      </overflow>
-    </details>
-      -->
   </foundation>
-
-
+    
+  <panel name="adder" title="Add something" width="300" padding="10" auto-hide='true'>
+    <form name="addForm">
+      <fields>
+        <field label="Title">
+          <text-input/>
+        </field>
+      </fields>
+      <buttons>
+        <button text="Add" highlighted="true"/>
+      </buttons>
+    </form>
+  </panel>
 </gui>
