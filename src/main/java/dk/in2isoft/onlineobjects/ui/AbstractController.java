@@ -55,7 +55,11 @@ public abstract class AbstractController {
 					responder.pattern = RestUtil.compile(path.of());
 				}
 				else if (Strings.isNotBlank(path.value())) {
-					responder.pattern = RestUtil.compile(path.value());
+					if (path.value().startsWith("/")) {
+						responder.pattern = RestUtil.compile(path.value());
+					} else {
+						responder.pattern = RestUtil.compile("/" + path.value());
+					}
 				}
 				else {
 					responder.path = new String[] {method.getName()};

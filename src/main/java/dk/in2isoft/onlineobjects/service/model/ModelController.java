@@ -377,13 +377,16 @@ public class ModelController extends ModelControllerBase {
 		if (entity instanceof User) {
 			var user = (User) entity;
 			var link = configurationService.getApplicationContext("photos", "/users/" + user.getUsername(), request);
-			response.addAction().text("Photos").url(link);
+			response.addAction().text("View photos").url(link);
 		}
 		if (entity instanceof Word) {
 			WordImpression impression = wordService.getImpression((Word) entity, request);
 			text = impression.getGlossary();
 			String url = configurationService.getApplicationContext("words", "word/" + impression.getWord().getText(), request);
 			response.addAction().text("View word").url(url);
+		}
+		if (configurationService.isDevelopmentMode()) {
+			response.addAction().text("Debug").url(configurationService.getApplicationContext("developer", "browse/?id=" + id, request));
 		}
 		response.setTitle(entity.getName());
 		response.setText(text);

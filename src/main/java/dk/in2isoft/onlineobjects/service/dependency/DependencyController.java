@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import dk.in2isoft.commons.util.RestUtil;
 import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.service.ServiceController;
@@ -15,15 +16,15 @@ import dk.in2isoft.onlineobjects.ui.Request;
 
 public class DependencyController extends ServiceController {
 
-	private static final String SCRIPT_PATH = "/([0-9]+)/([0-9]+)\\.js";
+	private static final String SCRIPT_PATH = "/(<integer>)/(<integer>).js";
 
-	private static final String STYLE_PATH = "/([0-9]+)/([0-9]+)\\.css";
+	private static final String STYLE_PATH = "/(<integer>)/(<integer>).css";
 	private final Logger clientSideLog = LogManager.getLogger("client");
 
 	private DependencyService dependencyService;
 
-	private Pattern scriptPattern = Pattern.compile(SCRIPT_PATH);
-	private Pattern stylePattern = Pattern.compile(STYLE_PATH);
+	private Pattern scriptPattern = RestUtil.compile(SCRIPT_PATH);
+	private Pattern stylePattern = RestUtil.compile(STYLE_PATH);
 
 	public DependencyController() {
 		super("dependency");

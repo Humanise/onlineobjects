@@ -72,48 +72,48 @@ import dk.in2isoft.onlineobjects.util.Messages;
 
 public class SetupController extends SetupControllerBase {
 
-	@Path(exactly = "applications.gui")
-	@View(ui = "applications.gui.xml")
+	@Path("applications.gui")
+	@View("applications.gui.xml")
 	public void applications(Request request) {}
 
-	@Path(exactly = "images.gui")
-	@View(ui = "images.gui.xml")
+	@Path("images.gui")
+	@View("images.gui.xml")
 	public void images(Request request) {}
 
-	@Path(expression = "/")
-	@View(ui = "index.gui.xml")
+	@Path("/")
+	@View("index.gui.xml")
 	public void index(Request request) {}
 
-	@Path(exactly = "indices.gui")
-	@View(ui = "indices.gui.xml")
+	@Path("indices.gui")
+	@View("indices.gui.xml")
 	public void indices(Request request) {}
 
-	@Path(exactly = "integration.gui")
-	@View(ui = "integration.gui.xml")
+	@Path("integration.gui")
+	@View("integration.gui.xml")
 	public void integration(Request request) {}
 
-	@Path(exactly = "internetaddresses.gui")
-	@View(ui = "internetaddresses.gui.xml")
+	@Path("internetaddresses.gui")
+	@View("internetaddresses.gui.xml")
 	public void internetaddresses(Request request) {}
 
-	@Path(exactly = "model.gui")
-	@View(ui = "model.gui.xml")
+	@Path("model.gui")
+	@View("model.gui.xml")
 	public void model(Request request) {}
 
-	@Path(exactly = "scheduler.gui")
-	@View(ui = "scheduler.gui.xml")
+	@Path("scheduler.gui")
+	@View("scheduler.gui.xml")
 	public void scheduler(Request request) {}
 
-	@Path(exactly = "settings.gui")
-	@View(ui = "settings.gui.xml")
+	@Path("settings.gui")
+	@View("settings.gui.xml")
 	public void settings(Request request) {}
 
-	@Path(exactly = "surveillance.gui")
-	@View(ui = "surveillance.gui.xml")
+	@Path("surveillance.gui")
+	@View("surveillance.gui.xml")
 	public void surveillance(Request request) {}
 
-	@Path(exactly = "users.gui")
-	@View(ui = "users.gui.xml")
+	@Path("users.gui")
+	@View("users.gui.xml")
 	public void users(Request request) {}
 
 
