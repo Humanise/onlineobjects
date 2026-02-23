@@ -47,6 +47,10 @@
     <filter-name>Compress</filter-name>
     <url-pattern>*.css</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>Compress</filter-name>
+    <url-pattern>*.svg</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>ui.dispatcher</filter-name>
     <filter-class>dk.in2isoft.onlineobjects.ui.Dispatcher</filter-class>
