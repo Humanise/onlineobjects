@@ -31,6 +31,7 @@ import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.services.DispatchingService;
+import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,6 +42,9 @@ public class DeveloperController extends ApplicationController {
 
 	@Autowired
 	Intelligence intelligence;
+
+	@Autowired
+	SemanticService semantics;
 
 	@Autowired
 	SolrService solr;
@@ -176,6 +180,15 @@ public class DeveloperController extends ApplicationController {
 	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
 	public void summarize(Request request) throws IOException {
 		intelligence.summarize(request.getString("text"), request.getResponse().getOutputStream());
+	}
+
+	@Path(of="/intelligence/compare", method = Method.POST)
+	public Object intelligenceCompare(Request request) throws IOException {
+		String first = request.getString("first");
+		String second = request.getString("second");
+		List<Double> v1 = intelligence.vectorize(first);
+		List<Double> v2 = intelligence.vectorize(second);
+		return semantics.compareVectors(v1, v2);
 	}
 
 	@Path(expression = "/solr", method = Method.GET)

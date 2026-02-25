@@ -24,6 +24,22 @@
     <content>
       <box title="Testing" width="800" top="40">
         <tabs>
+          <tab title="Vector" padding="10">
+            <form name="vectorForm">
+              <field label="First">
+                <text-input name="first" breaks="true" value="How wet is water?"/>
+              </field>
+              <field label="Second">
+                <text-input name="second" breaks="true" value="How wet is water?"/>
+              </field>
+              <field label="Output">
+                <div id="vectorOutput"></div>
+              </field>
+              <buttons>
+                <button text="Compare" submit="true"/>
+              </buttons>
+            </form>
+          </tab>
           <tab title="Prompt" padding="10">
             <form name="form">
               <field>

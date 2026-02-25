@@ -98,7 +98,8 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 	}
 
 	public List<Double> vectorize(String string) {
-		Object payload = Map.of("model", "nomic-embed-text", "input", string);
+		//Object payload = Map.of("model", "nomic-embed-text", "input", string);
+		Object payload = Map.of("model", "embeddinggemma", "input", string);
 		Optional<EmbeddingsResponse> response = fetch("embed", payload, EmbeddingsResponse.class);
 		return response.map(r -> r.embeddings.isEmpty() ? null : r.embeddings.get(0)).orElse(null);
 	}

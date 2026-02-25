@@ -35,5 +35,17 @@ hui.ui.listen({
         }
       });
     })
+  },
+  'vectorForm.submit!'(e) {
+    const values = e.source.getValues();
+    const output = hui.query('#vectorOutput');
+    output.text('...')
+    hui.request({
+      url: '/intelligence/compare',
+      parameters: values,
+      $success(xhr) {
+        output.text(xhr.responseText);
+      }
+    })
   }
 })
