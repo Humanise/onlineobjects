@@ -696,4 +696,14 @@ public class Request implements Operator {
 
 		return request.getHeader(HttpHeaders.REFERER);
 	}
+
+	public void compressResponse() {
+		if (response instanceof GZIPResponseWrapper) {
+			return;
+		}
+		String ae = request.getHeader("accept-encoding");
+		if (ae != null && ae.indexOf("gzip") != -1) {
+			this.response = new GZIPResponseWrapper(response);
+		}
+	}
 }

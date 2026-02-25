@@ -109,7 +109,7 @@ public abstract class AbstractController {
 		if (!file.exists()) {
 			urlPath = "jsf/" + getName() + "/" + path;
 		}
-
+		request.compressResponse();
 		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/" + urlPath);
 		request.getResponse().setContentType("text/html");
 		request.getResponse().setCharacterEncoding("UTF-8");
@@ -182,6 +182,7 @@ public abstract class AbstractController {
 				ui.setParameter(entry.getKey().toString(), entry.getValue());
 			}
 		}
+		//request.compressResponse();
 		ui.render(request.getRequest(), request.getResponse());
 	}
 
