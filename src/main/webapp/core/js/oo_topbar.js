@@ -242,7 +242,7 @@ oo.TopBar.prototype = {
     }
     setTimeout(function() {
       document.location.reload();
-    },500);
+    },100);
   },
   _doLogout : function() {
     this._userPanel.setBusy(true);
