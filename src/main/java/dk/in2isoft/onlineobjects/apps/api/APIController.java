@@ -9,8 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import com.google.common.collect.Lists;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,7 +21,6 @@ import dk.in2isoft.onlineobjects.core.Path;
 import dk.in2isoft.onlineobjects.core.Path.Method;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.SearchResult;
-import dk.in2isoft.onlineobjects.core.View;
 import dk.in2isoft.onlineobjects.core.exceptions.BadRequestException;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.Error;
@@ -51,12 +48,13 @@ import dk.in2isoft.onlineobjects.modules.language.WordModification;
 import dk.in2isoft.onlineobjects.modules.user.Agreement;
 import dk.in2isoft.onlineobjects.modules.user.ClientInfo;
 import dk.in2isoft.onlineobjects.ui.Request;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class APIController extends APIControllerBase {
 
 	@Path(expression = "/")
-	@View(ui = {"web", "front.gui.xml"})
-	public void front(Request request) throws IOException {
+	public void front(Request request) throws IOException, NotFoundException {
+		throw new NotFoundException();
 	}
 
 	@Path(exactly = { "v1.0", "language", "analyse" })
