@@ -697,6 +697,8 @@ public class Request implements Operator {
 		return request.getHeader(HttpHeaders.REFERER);
 	}
 
+	// This does not work when deployed – for unknown reasons
+	@Deprecated
 	public void compressResponse() {
 		if (response instanceof GZIPResponseWrapper) {
 			return;

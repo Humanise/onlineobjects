@@ -109,7 +109,7 @@ public abstract class AbstractController {
 		if (!file.exists()) {
 			urlPath = "jsf/" + getName() + "/" + path;
 		}
-		request.compressResponse();
+		//request.compressResponse(); XXX: THIS BREAKS WHEN DEPLOYED
 		RequestDispatcher dispatcher = context.getRequestDispatcher("/faces/" + urlPath);
 		request.getResponse().setContentType("text/html");
 		request.getResponse().setCharacterEncoding("UTF-8");
