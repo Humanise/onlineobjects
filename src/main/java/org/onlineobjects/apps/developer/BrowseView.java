@@ -28,6 +28,7 @@ public class BrowseView extends AbstractView {
 	private Entity entity;
 	private List<RelationPerspective> relationsFrom = new ArrayList<>();
 	private List<RelationPerspective> relationsTo = new ArrayList<>();
+	private List<Pair<String, String>> attributes = new ArrayList<>();
 	private List<Pair<String, String>> properties = new ArrayList<>();
 
 	private List<PrivilegeView> privileges;
@@ -38,7 +39,7 @@ public class BrowseView extends AbstractView {
 		Operator operator = model.newAdminOperator();
 
 		Long id = request.getOptionalId().orElseGet(() -> request.getSession().getIdentity());
-		entity = model.get(id, operator).orElseThrow();
+		entity = model.get(id, request).orElseThrow();
 		Locale locale = request.getLocale();
 
 		model.find().relations(operator).from(entity).stream(50).forEach(relation -> {
@@ -57,8 +58,11 @@ public class BrowseView extends AbstractView {
 		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(entity);
 		for (PropertyDescriptor descriptor : descriptors) {
 		    String propertyName = descriptor.getName();
+		    if ("properties".equals(propertyName)) {
+				continue;
+			}
 		    Object value = PropertyUtils.getProperty(entity, propertyName);
-		    properties.add(Pair.of(propertyName, value == null ? "<null>" : value.toString()));
+		    attributes.add(Pair.of(propertyName, value == null ? "<null>" : value.toString()));
 		}
 
 		entity.getProperties().stream().forEach(p -> {
@@ -68,6 +72,10 @@ public class BrowseView extends AbstractView {
 		this.privileges = model.getPrivileges(entity, getRequest()).stream().map(p -> {
 			return new PrivilegeView(p, find(p.getSubject()));
 		}).toList();
+	}
+
+	public long getId() {
+		return entity.getId();
 	}
 
 	public String getTitle() {
@@ -80,6 +88,10 @@ public class BrowseView extends AbstractView {
 
 	public List<Pair<String, String>> getProperties() {
 		return properties;
+	}
+
+	public List<Pair<String, String>> getAttributes() {
+		return attributes;
 	}
 
 	public List<PrivilegeView> getPrivileges() {

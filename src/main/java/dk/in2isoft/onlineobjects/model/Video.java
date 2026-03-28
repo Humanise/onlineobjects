@@ -17,15 +17,12 @@ public class Video extends Entity {
 		super();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
 
 	@Override
-	public String getNamespace() {
-		return NAMESPACE;
-	}
-
 	public String getIcon() {
 		return "common/object";
 	}

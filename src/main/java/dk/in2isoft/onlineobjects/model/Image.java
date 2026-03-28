@@ -20,15 +20,12 @@ public class Image extends Entity {
 		super();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
 
 	@Override
-	public String getNamespace() {
-		return NAMESPACE;
-	}
-
 	public String getIcon() {
 		return "common/image";
 	}

@@ -14,6 +14,7 @@ hui.ui.listen({
       }
     }
     window.wordView = this;
+    this._populateDiagram();
   },
 
   getText : function() {
@@ -61,18 +62,17 @@ hui.ui.listen({
     document.location = this.activeRelationUrl;
   },
 
-  $added$diagram : function() {
+  _populateDiagram : function() {
     var diagram = hui.ui.get('diagram');
     hui.ui.request({
       url : '/diagram.json',
       parameters : {word:this.getText()},
       $object : function(data) {
-        diagram.$objectsLoaded(data);
+        diagram.setData(data);
       }
     })
   },
   $open$diagram : function(node) {
-    hui.log(node);
     if (node.data) {
       if (node.data.type=='Item/Entity/Word') {
         document.location = node.data.name+'.html';

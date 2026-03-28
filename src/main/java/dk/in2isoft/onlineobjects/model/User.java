@@ -19,17 +19,14 @@ public class User extends Entity implements Privileged {
 		super();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
 
+	@Override
 	public String getIcon() {
 		return "common/user";
-	}
-
-	@Override
-	public String getNamespace() {
-		return NAMESPACE;
 	}
 
 	public String getUsername() {
@@ -59,12 +56,15 @@ public class User extends Entity implements Privileged {
 		this.salt = salt;
 	}
 
+	@Override
 	public long getIdentity() {
 		return getId();
 	}
 
 	public boolean hasAbility(Ability ability) {
-		if (ability == null) return false;
+		if (ability == null) {
+			return false;
+		}
 		return hasProperty(Property.KEY_ABILITY, ability.name());
 	}
 }

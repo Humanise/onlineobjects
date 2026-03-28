@@ -10,16 +10,13 @@ public class WebStructure extends Entity {
 		super();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
 
+	@Override
 	public String getIcon() {
 		return "Basic/Internet";
-	}
-
-	@Override
-	public String getNamespace() {
-		return NAMESPACE;
 	}
 }

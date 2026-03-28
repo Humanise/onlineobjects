@@ -16,57 +16,76 @@
       <c:set var="view" value="#{browseView}"/>
 
       <o:layout>
+        <div style="padding: 20px">
         <o:header>#{view.title}</o:header>
-      <p>#{view.type}</p>
-      <h2>Properties</h2>
-      <table class="oo_table oo_table-bordered">
-        <c:forEach var="prop" items="${view.properties}">
-          <tr>
-            <th>${prop.key}</th>
-            <td>${prop.value}</td>
-          </tr>
-        </c:forEach>
-      </table>
-      <h2>Privileges</h2>
-      <table class="oo_table oo_table-bordered">
-        <thead>
-          <th>Privileged</th>
-          <th>View</th>
-          <th>Alter</th>
-          <th>Reference</th>
-        </thead>
-        <tbody>
-        <c:forEach var="prop" items="${view.privileges}">
-          <tr>
-            <th>
-              <c:if test="${prop.privileged != null}">
-                ${prop.privileged.name}
-              </c:if>
-            </th>
-            <td>${prop.view}</td>
-            <td>${prop.alter}</td>
-            <td>${prop.reference}</td>
-          </tr>
-        </c:forEach>
-        </tbody>
-      </table>
+        <p data-id="#{view.id}">#{view.type}</p>
+        <h2>Attributes</h2>
 
-      <c:if test="#{not empty view.relationsFrom}">
-        <h2>Relations from this to others</h2>
-        <c:forEach items="#{view.relationsFrom}" var="rel">
-          <p><o:link href="#{rel.entity.href}">#{rel.entity.name} (#{rel.entity.type})</o:link> [#{rel.kind}]</p>
-        </c:forEach>
-      </c:if>
+        <table class="oo_table oo_table-bordered">
+          <c:forEach var="prop" items="${view.attributes}">
+            <tr>
+              <th>${prop.key}</th>
+              <td>${prop.value}</td>
+            </tr>
+          </c:forEach>
+        </table>
 
-      <c:if test="#{not empty view.relationsTo}">
-        <h2>Relations from others to this</h2>
-        <c:forEach items="#{view.relationsTo}" var="rel">
-          <p><o:link href="#{rel.entity.href}">#{rel.entity.name} (#{rel.entity.type})</o:link> [#{rel.kind}]</p>
-        </c:forEach>
-      </c:if>
-      <gui:diagram name="diagram"/>
-      </o:layout>
+        <h2>Properties</h2>
+        <c:if test="#{not empty view.properties}">
+        <table class="oo_table oo_table-bordered">
+          <c:forEach var="prop" items="${view.properties}">
+            <tr>
+              <th>${prop.key}</th>
+              <td>${prop.value}</td>
+            </tr>
+          </c:forEach>
+        </table>
+        </c:if>
+        <c:if test="#{empty view.properties}">- None -</c:if>
+
+        <h2>Privileges</h2>
+        <table class="oo_table oo_table-bordered">
+          <thead>
+            <th>Privileged</th>
+            <th>View</th>
+            <th>Alter</th>
+            <th>Reference</th>
+          </thead>
+          <tbody>
+          <c:forEach var="prop" items="${view.privileges}">
+            <tr>
+              <th>
+                <c:if test="${prop.privileged != null}">
+                  ${prop.privileged.name}
+                </c:if>
+              </th>
+              <td>${prop.view}</td>
+              <td>${prop.alter}</td>
+              <td>${prop.reference}</td>
+            </tr>
+          </c:forEach>
+          </tbody>
+        </table>
+
+        <c:if test="#{not empty view.relationsFrom}">
+          <h2>Relations from this to others</h2>
+          <c:forEach items="#{view.relationsFrom}" var="rel">
+            <p><o:link href="#{rel.entity.href}">#{rel.entity.name} (#{rel.entity.type})</o:link> [#{rel.kind}]</p>
+          </c:forEach>
+        </c:if>
+
+        <c:if test="#{not empty view.relationsTo}">
+          <h2>Relations from others to this</h2>
+          <c:forEach items="#{view.relationsTo}" var="rel">
+            <p><o:link href="#{rel.entity.href}">#{rel.entity.name} (#{rel.entity.type})</o:link> [#{rel.kind}]</p>
+          </c:forEach>
+        </c:if>
+        <gui:diagram name="diagram"/>
+        </div>
+        </o:layout>
       <o:dependency src="oo_table.css" from="core"/>
+      <o:dependency src="hui_control.js" from="hui"/>
+      <o:dependency src="browse.js" from="local"/>
     </ui:define>
 
 

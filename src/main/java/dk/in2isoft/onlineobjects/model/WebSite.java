@@ -10,16 +10,14 @@ public class WebSite extends Entity {
 		super();
 	}
 
+	@Override
 	public String getType() {
 		return TYPE;
 	}
 
+	@Override
 	public String getIcon() {
 		return "common/internet";
 	}
 
-	@Override
-	public String getNamespace() {
-		return NAMESPACE;
-	}
 }
