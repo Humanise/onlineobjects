@@ -52,7 +52,11 @@ public abstract class AbstractController {
 					responder.pattern = RestUtil.compile(path.expression());
 				}
 				else if (Strings.isNotBlank(path.of())) {
-					responder.pattern = RestUtil.compile(path.of());
+					if (path.of().startsWith("/")) {
+						responder.pattern = RestUtil.compile(path.of());
+					} else {
+						responder.pattern = RestUtil.compile("/" + path.of());
+					}
 				}
 				else if (Strings.isNotBlank(path.value())) {
 					if (path.value().startsWith("/")) {

@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onlineobjects.modules.intelligence.EmbeddingQuery;
+import org.onlineobjects.modules.intelligence.EmbeddingQuery.EmbeddingResult;
 
 import com.google.common.collect.Lists;
 
@@ -91,6 +93,26 @@ public class KnowledgeSuggester {
 		QuestionTrainingStream stream = new QuestionTrainingStream(operator, modelService, knowledgeService, semanticService);
 		DoccatModel model = DocumentCategorizerME.train("en", stream, new TrainingParameters(), factory);
 		return model;
+	}
+
+	public SuggestionsCategory suggestQuestionViaEmbedding(Statement statement, Operator operator) throws EndUserException {
+		SuggestionsCategory category = new SuggestionsCategory();
+		List<Suggestion> results = new ArrayList<>();
+		category.setSuggestions(results);
+
+		List<EmbeddingResult> embeddings = modelService.list(EmbeddingQuery.create(statement, operator), operator);
+		for (EmbeddingResult result : embeddings) {
+			Question question = modelService.get(Question.class, result.getItemId(), operator);
+			if (question != null) {
+				Suggestion suggestion = new Suggestion();
+				suggestion.setDescription(question.getText());
+				suggestion.setTarget(SimpleEntityPerspective.create(statement));
+				suggestion.setEntity(SimpleEntityPerspective.create(question));
+				suggestion.setStrength(result.getSimilarity());
+				results.add(suggestion);
+			}
+		}
+		return category;
 	}
 
 	public SuggestionsCategory suggestQuestion(Statement statement, Operator operator) throws EndUserException {

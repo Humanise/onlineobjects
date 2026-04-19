@@ -735,7 +735,7 @@ var appController = window.appController = {
 
   $render$statementSuggestions : function(obj) {
     return hui.build('div.perspective_relation', {children:[
-      hui.build('div.perspective_relation_title',{text: obj.description})
+      hui.build('div.perspective_relation_title',{text: obj.description + " - " + Math.round(obj.strength * 100) + '%'})
     ]});
   },
   $select$statementSuggestions : function(e) {

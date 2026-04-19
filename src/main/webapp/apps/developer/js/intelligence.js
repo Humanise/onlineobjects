@@ -1,13 +1,13 @@
-hui.ui.listen({
+hui.control({
   $ready : function() {
     oo.intelligence.getModels().then(models => {
       var drop = hui.ui.get('model');
-      drop.setItems(models.map(model => {return {value: model.id, text: model.description}}))
+      drop.setItems(models.map(model => ({value: model.id, text: model.description})))
       drop.selectFirst();
     })
   },
-  $submit$form : function(form) {
-    var values = form.getValues();
+  'form.submit!'(e) {
+    var values = e.source.getValues();
     var prompt = values.prompt;
     var model = hui.ui.get('model').getValue();
     var body;

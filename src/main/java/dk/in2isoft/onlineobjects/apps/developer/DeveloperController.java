@@ -53,58 +53,58 @@ public class DeveloperController extends ApplicationController {
 		super("developer");
 	}
 
-	@Path(expression = "/")
-	@View(jsf = "index.xhtml")
+	@Path("/")
+	@View("index.xhtml")
 	public void front(Request request) {
 		request.setVariable("test", "hest");
 	}
 
-	@Path(exactly = {"components.html"})
-	@View(jsf = "components.xhtml")
+	@Path("components.html")
+	@View("components.xhtml")
 	public void components(Request request) {
 	}
 
-	@Path(exactly = {"jsf.html"})
-	@View(jsf = "jsf.xhtml")
+	@Path("jsf.html")
+	@View("jsf.xhtml")
 	public void jsf(Request request) {
 	}
 
-	@Path(exactly = {"finder.html"})
-	@View(jsf = "finder.xhtml")
+	@Path("finder.html")
+	@View("finder.xhtml")
 	public void finder(Request request) {}
 
-	@Path(exactly = {"users"})
-	@View(jsf = "users.xhtml")
+	@Path("users")
+	@View("users.xhtml")
 	public void users(Request request) {
 	}
 
-	@Path(exactly = {"hui-test"})
-	@View(ui = {"hui.xml"})
+	@Path("hui-test")
+	@View("hui.xml")
 	public void hui(Request request) {
 	}
 
-	@Path(exactly = {"settings"})
-	@View(ui = {"settings.xml"})
+	@Path("settings")
+	@View("settings.xml")
 	public void settings(Request request) {
 	}
 
-	@Path(of = "/documents")
-	@View(ui = {"documents", "documents.xml"})
+	@Path("documents")
+	@View("documents/documents.xml")
 	public void documents(Request request) {}
 
-	@Path(expression = "/intelligence")
-	@View(jsf = "intelligence.xhtml")
+	@Path("intelligence")
+	@View("intelligence.xhtml")
 	public void intelligence(Request request) {}
 
-	@Path(expression = "/app")
+	@Path("app")
 	@View("app/app.xml")
 	public void app(Request request) {}
 
-	@Path(expression = "/intelligence-raw")
-	@View(ui = {"intelligence.xml"})
+	@Path("intelligence-raw")
+	@View("intelligence.xml")
 	public void intelligenceRaw(Request request) {}
 
-	@Path("/browse")
+	@Path("browse")
 	@View("browse.xhtml")
 	public void browse(Request request) {}
 
@@ -124,17 +124,17 @@ public class DeveloperController extends ApplicationController {
 		return configurationService.isDevelopmentMode();
 	}
 
-	@Path(exactly={"not-found"})
+	@Path("not-found")
 	public void throwNotFound(Request request) throws IOException, EndUserException {
 		throw new NotFoundException();
 	}
 
-	@Path(exactly={"bad-request"})
+	@Path("bad-request")
 	public void throwBadRequest(Request request) throws IOException, EndUserException {
 		throw new BadRequestException();
 	}
 
-	@Path(exactly={"settings", "data"}, method = Method.POST)
+	@Path(of="settings/data", method = Method.POST)
 	public void saveSettings(Request request) {
 		request.optionalBoolean("errors").ifPresent(value -> {
 			configurationService.setSimulateSporadicServerError(value);
@@ -144,7 +144,7 @@ public class DeveloperController extends ApplicationController {
 		});
 	}
 
-	@Path(exactly={"settings", "data"}, method = Method.GET)
+	@Path("settings/data")
 	public Map<String,Object> readSettings(Request request) {
 		return Map.of(
 			"errors", configurationService.isSimulateSporadicServerError(),
@@ -152,23 +152,23 @@ public class DeveloperController extends ApplicationController {
 		);
 	}
 
-	@Path(exactly={"intelligence", "vectorize"}, method = Method.GET)
+	@Path(of = "intelligence/vectorize", method = Method.GET)
 	public List<Double> vectorize(Request request) {
 		return intelligence.vectorize(request.getString("text"));
 	}
 
-	@Path(exactly={"intelligence", "prompt"}, method = Method.GET)
+	@Path(of = "intelligence/prompt", method = Method.GET)
 	public void prompt(Request request) throws IOException {
 		String prompt = intelligence.prompt(request.getString("prompt"));
 		request.getResponse().getWriter().print(prompt);
 	}
 
-	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.GET)
+	@Path(of = "intelligence/prompt/stream", method = Method.GET)
 	public void promptStream(Request request) throws IOException, BadRequestException {
 		promptStreamPost(request);
 	}
 
-	@Path(exactly={"intelligence", "prompt", "stream"}, method = Method.POST)
+	@Path(of = "intelligence/prompt/stream", method = Method.POST)
 	public void promptStreamPost(Request request) throws IOException, BadRequestException {
 		String prompt = request.getString("prompt", "Missing prompt");
 		String model = request.getString("model");
@@ -177,12 +177,12 @@ public class DeveloperController extends ApplicationController {
 		intelligence.prompt(prompt, m, stream);
 	}
 
-	@Path(exactly={"intelligence", "summarize"}, method = Method.GET)
+	@Path(of = "intelligence/summarize", method = Method.POST)
 	public void summarize(Request request) throws IOException {
 		intelligence.summarize(request.getString("text"), request.getResponse().getOutputStream());
 	}
 
-	@Path(of="/intelligence/compare", method = Method.POST)
+	@Path(of = "intelligence/compare", method = Method.POST)
 	public Object intelligenceCompare(Request request) throws IOException {
 		String first = request.getString("first");
 		String second = request.getString("second");
@@ -191,7 +191,7 @@ public class DeveloperController extends ApplicationController {
 		return semantics.compareVectors(v1, v2);
 	}
 
-	@Path(expression = "/solr", method = Method.GET)
+	@Path(of = "solr", method = Method.GET)
 	public Object solr(Request request) throws SolrServerException, IOException {
 		SolrClient client = solr.getClient();
 		final SolrQuery query = new SolrQuery("*:*");
@@ -204,7 +204,7 @@ public class DeveloperController extends ApplicationController {
 		return results;
 	}
 
-	@Path(expression = "/solr", method = Method.POST)
+	@Path(of = "solr", method = Method.POST)
 	public void putSolr(Request request) throws SolrServerException, IOException {
 		var doc = new SolrInputDocument();
 		doc.addField("id", Strings.generateRandomString(10));
@@ -213,12 +213,12 @@ public class DeveloperController extends ApplicationController {
 		solr.add(Collection.knowledge, doc);
 	}
 
-	@Path(expression = "/dav")
+	@Path("dav")
 	public void davRoot(Request request) throws IOException {
 		dav(request);
 	}
 
-	@Path(expression = "/dav<any>")
+	@Path("dav<any>")
 	public void dav(Request request) throws IOException {
 		HttpServletResponse response = request.getResponse();
 		HttpServletRequest httpServletRequest = request.getRequest();

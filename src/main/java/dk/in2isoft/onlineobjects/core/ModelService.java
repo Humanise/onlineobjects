@@ -51,6 +51,7 @@ import dk.in2isoft.onlineobjects.core.events.ModelEventType;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
 import dk.in2isoft.onlineobjects.core.exceptions.NotFoundException;
 import dk.in2isoft.onlineobjects.core.exceptions.SecurityException;
+import dk.in2isoft.onlineobjects.model.Embedding;
 import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Item;
 import dk.in2isoft.onlineobjects.model.LogEntry;
@@ -285,6 +286,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		return a.equals(b);
 	}
 
+	@Override
 	public void rollBack(Operation operation) {
 		operationCount--;
 		Session session = operation.getSession();
@@ -322,6 +324,14 @@ public class ModelService implements InitializingBean, OperationProvider {
 
 	public void create(LogEntry entry, Operator session) {
 		session.getOperation().getSession().save(entry);
+	}
+
+	public void create(Embedding embedding, Operator session) {
+		session.getOperation().getSession().persist(embedding);
+	}
+
+	public void update(Embedding embedding, Operator session) {
+		session.getOperation().getSession().merge(embedding);
 	}
 
 	public void create(Item item, Operator operator) throws ModelException, SecurityException {
@@ -374,7 +384,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		if (item instanceof Entity) {
 			deleteEntity((Entity)item, operator);
 		} else if (item instanceof Relation) {
-			deleteItem((Relation)item, operator);
+			deleteItem(item, operator);
 		}
 	}
 
@@ -402,12 +412,19 @@ public class ModelService implements InitializingBean, OperationProvider {
 			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
 		}
 		{
+			String hql = "delete Embedding e where e.entityId = :entityId";
+			MutationQuery q = session.createMutationQuery(hql);
+			q.setParameter("entityId", entity.getId());
+			int count = q.executeUpdate();
+			log.info("Deleting relation privileges for: " + entity.getClass().getSimpleName() + " (" + entity.getIcon() + "); count: " + count);
+		}
+		{
 			String hql = "from Relation relation where relation.from=:entity or relation.to=:entity";
 			Query<Relation> q = session.createQuery(hql, Relation.class);
 			q.setParameter("entity", entity);
 			ScrollableResults<Relation> results = q.scroll(ScrollMode.FORWARD_ONLY);
 			while (results.next()) {
-				Relation rel = (Relation) results.get();
+				Relation rel = results.get();
 				session.remove(rel);
 				operator.getOperation().addDeleteEvent(rel);
 			}
@@ -663,7 +680,7 @@ public class ModelService implements InitializingBean, OperationProvider {
 		Query<Privilege> q = session.createQuery(queryString, Privilege.class);
 		q.setParameter("object", item.getId());
 		q.setParameter("subject", privileged.getIdentity());
-		Privilege privilege = (Privilege) q.uniqueResult();
+		Privilege privilege = q.uniqueResult();
 		if (privilege != null) {
 			return privilege;
 		} else {

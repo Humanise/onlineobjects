@@ -200,7 +200,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		}
 	}
 
-	@Path(expression = "/app/favorite")
+	@Path("/app/favorite")
 	public void appChangeFavorite(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
@@ -212,7 +212,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		pileService.changeFavoriteStatus(entity, favorite, user, request);
 	}
 
-	@Path(expression = "/app/suggest")
+	@Path("/app/suggest")
 	public SuggestionsCategory suggest(Request request) throws IOException, EndUserException {
 		if (!request.getSession().has(Ability.earlyAdopter)) {
 			return new SuggestionsCategory();
@@ -221,7 +221,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.suggestQuestion(text, request);
 	}
 
-	@Path(expression = "/app/inbox")
+	@Path("/app/inbox")
 	public void appChangeInbox(Request request) throws ModelException, SecurityException, BadRequestException, NotFoundException {
 		Long id = request.getId();
 		String type = request.getString("type");
@@ -245,23 +245,25 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	// Statement
 
-	@Path(expression = "/app/statement/create")
+	@Path("/app/statement/create")
 	public StatementWebPerspective appCreateStatement(Request request) throws IOException, EndUserException {
 		String text = request.getString("text");
-		Statement statement = knowledgeService.createStatement(text, request);
-		return knowledgeService.getStatementWebPerspective(statement.getId(), request);
+		long id = knowledgeService.createStatement(text, request).getId();
+		request.commit();
+		return knowledgeService.getStatementWebPerspective(id, request);
 	}
 
-	@Path(expression = "/app/statement/update")
+	@Path("/app/statement/update")
 	public StatementWebPerspective appChangeStatement(Request request) throws EndUserException, IOException {
 		User user = modelService.getUser(request);
 		Long id = request.getId();
 		String text = request.getString("text", "Text is required");
 		knowledgeService.updateStatement(id, text, null, null, user, request);
+		request.commit();
 		return knowledgeService.getStatementWebPerspective(id, request);
 	}
 
-	@Path(expression = "/app/statement")
+	@Path("/app/statement")
 	public StatementWebPerspective appStatement(Request request) throws EndUserException, IOException {
 		/*try {
 			Thread.sleep(Math.round(Math.random()*1000));
@@ -270,7 +272,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getStatementWebPerspective(id, request);
 	}
 
-	@Path(expression = "/app/statement/add/question")
+	@Path("/app/statement/add/question")
 	public StatementWebPerspective appQuestionToStatement(Request request) throws EndUserException, IOException {
 		Long questionId = request.getLong("questionId");
 		Long statementId = request.getLong("statementId");
@@ -278,7 +280,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getStatementWebPerspective(statementId, request);
 	}
 
-	@Path(expression = "/app/statement/remove/question")
+	@Path("/app/statement/remove/question")
 	public StatementWebPerspective appRemoveStatementFromQuestion(Request request) throws EndUserException, IOException {
 		Long questionId = request.getLong("questionId");
 		Long statementId = request.getLong("statementId");
@@ -288,6 +290,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 
 	@Path(expression = "/app/statement/suggest")
 	public SuggestionsCategory suggestStatement(Request request) throws IOException, EndUserException {
+
 		if (!request.getSession().has(Ability.earlyAdopter)) {
 			return new SuggestionsCategory();
 		}

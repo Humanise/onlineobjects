@@ -5,10 +5,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
+import org.onlineobjects.modules.intelligence.EmbeddingModel;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,6 +69,10 @@ public class ConfigurationService implements InitializingBean {
 	private boolean disableCache;
 
 	private String anthropicApiKey;
+	private String ollamaCloudApiKey;
+	private String ollamaCloudUrl;
+	private String geminiApiKey;
+	private EmbeddingModel searchEmbeddingModel;
 
 
 	@Override
@@ -424,5 +431,43 @@ public class ConfigurationService implements InitializingBean {
 
 	public void setOllamaUrl(String ollamaUrl) {
 		this.ollamaUrl = ollamaUrl;
+	}
+
+	public String getOllamaCloudApiKey() {
+		return ollamaCloudApiKey;
+	}
+
+	public void setOllamaCloudApiKey(String ollamaCloudApiKey) {
+		this.ollamaCloudApiKey = ollamaCloudApiKey;
+	}
+
+	public String getOllamaCloudUrl() {
+		return ollamaCloudUrl;
+	}
+
+	public void setOllamaCloudUrl(String ollamaCloudUrl) {
+		this.ollamaCloudUrl = ollamaCloudUrl;
+	}
+
+	public String getGeminiApiKey() {
+		return geminiApiKey;
+	}
+
+	public void setGeminiApiKey(String geminiApiKey) {
+		this.geminiApiKey = geminiApiKey;
+	}
+
+	public void setSearchEmbeddingModel(String searchEmbeddingModel) {
+		if (Strings.isNotBlank(searchEmbeddingModel)) {
+			try {
+				this.searchEmbeddingModel = EmbeddingModel.valueOf(searchEmbeddingModel);
+			} catch (IllegalArgumentException e) {
+				log.error(e);
+			}
+		}
+	}
+
+	public Optional<EmbeddingModel> getSearchEmbeddingModel() {
+		return Optional.ofNullable(this.searchEmbeddingModel);
 	}
 }

@@ -72,7 +72,7 @@ public class WordsSearchView extends AbstractView {
 	@Override
 	protected void before(Request request) throws Exception {
 		checkRequest(request);
-		loadManager.failIfBusy();
+		loadManager.failIfBusy(request);
 		text = request.getString("text");
 		letter = request.getString("letter");
 		language = request.getString("language");
@@ -112,7 +112,7 @@ public class WordsSearchView extends AbstractView {
 	}
 
 	private void checkRequest(Request request) throws BadRequestException {
-		String ua = request.getUserAgent();
+		String ua = request.getUserAgent().orElse(null);
 		if (ua != null && (ua.contains("bingbot") || ua.contains("Googlebot"))) {
 			if (Strings.isNotBlank(request.getString("text"))) {
 				throw new BadRequestException("Bingbot and Googlebot cannot search by text since they have abused it");

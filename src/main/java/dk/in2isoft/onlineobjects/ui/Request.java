@@ -687,9 +687,9 @@ public class Request implements Operator {
 		return IOUtils.toString(request.getReader());
 	}
 
-	public String getUserAgent() {
+	public Optional<String> getUserAgent() {
 
-		return request.getHeader(HttpHeaders.USER_AGENT);
+		return Optional.ofNullable(request.getHeader(HttpHeaders.USER_AGENT));
 	}
 
 	public String getReferer() {

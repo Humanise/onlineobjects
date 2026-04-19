@@ -3,4 +3,5 @@
     <include file="classpath:database/2000-01-01-baseline.xml"/>
     <include file="classpath:database/2022-08-22-project.xml"/>
     <include file="classpath:database/2023-01-04-tag.xml"/>
+    <include file="classpath:database/2026-04-18-embedding.xml"/>
 </databaseChangeLog>

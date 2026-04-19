@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +33,7 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 	private List<LanguageModel> models;
 	private List<LanguageModelHost> hosts;
 	private List<LanguageModel> availableModels;
+	private List<Embedder> embedders;
 	private LanguageModel defaultModel;
 
 	public Intelligence() {
@@ -43,9 +43,14 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 		models.add(LanguageModel.of("ollama", "gpt-oss:20b", "GPT OSS 20b"));
 		models.add(LanguageModel.of("ollama", "gemma3:27b", "Gemma 3 - 27b"));
 		models.add(LanguageModel.of("ollama", "gemma3:12b", "Gemma 3 - 12b"));
+		models.add(LanguageModel.of("ollama", "gemma4:e4b", "Gemma 4 - e4b"));
 		models.add(LanguageModel.of("ollama", "qwen3:30b", "Qwen 3 - 30b"));
+		models.add(LanguageModel.of("ollama", "qwen3.5:9b", "Qwen 3.5 - 9b"));
 
 		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
+
+		models.add(LanguageModel.of("ollama-cloud", "gpt-oss:120b", "GPT OSS 120b"));
+
 	}
 
 	@Override
@@ -97,11 +102,14 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 
 	}
 
+	public Optional<EmbeddingInfo> embed(String string, EmbeddingModel model) {
+		return embedders.stream().filter(e -> e.accepts(model)).findFirst().map(e -> e.embed(string, model));
+	}
+
 	public List<Double> vectorize(String string) {
-		//Object payload = Map.of("model", "nomic-embed-text", "input", string);
-		Object payload = Map.of("model", "embeddinggemma", "input", string);
-		Optional<EmbeddingsResponse> response = fetch("embed", payload, EmbeddingsResponse.class);
-		return response.map(r -> r.embeddings.isEmpty() ? null : r.embeddings.get(0)).orElse(null);
+		Optional<EmbeddingModel> searchEmbeddingModel = getSearchEmbeddingModel();
+		if (searchEmbeddingModel.isEmpty()) return null;
+		return embed(string, searchEmbeddingModel.get()).map(EmbeddingInfo::getVector).orElseThrow();
 	}
 
 	public String prompt(String prompt) {
@@ -155,6 +163,21 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 		public String response;
 	}
 
+	public Optional<LanguageModel> getModelById(String id) {
+		for (LanguageModel model : models) {
+			if (id.equals(model.getId())) {
+				return Optional.of(model);
+			}
+		}
+		return Optional.empty();
+	}
+
+	public Optional<EmbeddingModel> getSearchEmbeddingModel() {
+		return configuration.getSearchEmbeddingModel();
+	}
+
+	// Wiring
+
 	@Autowired
 	public void setConfiguration(ConfigurationService configuration) {
 		this.configuration = configuration;
@@ -165,12 +188,8 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 		this.hosts = hosts;
 	}
 
-	public Optional<LanguageModel> getModelById(String id) {
-		for (LanguageModel model : models) {
-			if (id.equals(model.getId())) {
-				return Optional.of(model);
-			}
-		}
-		return Optional.empty();
+	@Autowired
+	public void setEmbedders(List<Embedder> embedders) {
+		this.embedders = embedders;
 	}
 }

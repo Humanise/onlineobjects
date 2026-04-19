@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="add-vector-extension" author="user">
+        <sql>CREATE EXTENSION IF NOT EXISTS vector;</sql>
+    </changeSet>
+    <changeSet author="jbm" id="create_embedding">
+        <sql>CREATE TABLE embedding (id serial PRIMARY KEY, embedding vector NOT NULL, model_id int8 NOT NULL, entity_id int8 NOT NULL, text varchar);</sql>
+    </changeSet>
+    <changeSet author="jbm" id="add_embedding_constraint">
+        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="embedding" constraintName="embedding_entity" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="entity" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -8,8 +8,10 @@ public @interface Path {
 
 	String value() default "";
 
+	@Deprecated
 	String[] exactly() default {};
 
+	@Deprecated
 	String expression() default "";
 
 	String of() default "";
