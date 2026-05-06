@@ -9,7 +9,7 @@ public class Suggestions {
 	private KnowledgeSuggester knowledgeSuggester;
 
 	public SuggestionsCategory suggestionsForStatement(Statement statement, Operator operator) throws EndUserException {
-		SuggestionsCategory category = knowledgeSuggester.suggestQuestion(statement, operator);
+		SuggestionsCategory category = knowledgeSuggester.suggestQuestionViaEmbedding(statement, operator);
 		category.setDescription("Suggested questions...");
 		return category;
 	}

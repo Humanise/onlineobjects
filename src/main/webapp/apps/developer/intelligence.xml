@@ -24,6 +24,27 @@
     <content>
       <box title="Testing" width="800" top="40">
         <tabs>
+          <tab title="Prompt" padding="10">
+            <form name="form">
+              <field>
+                <div style="display: flex; width: 100%">
+                  <div style="flex-grow: 1; padding-right: 10px;">
+                    <text-input name="prompt" breaks="true" value="How wet is water?"/>
+                  </div>
+                  <button text="Send" submit="true"/>
+                </div>
+              </field>
+              <field>
+                <radiobuttons value="raw" name="type">
+                  <radiobutton text="Raw prompt" value="raw"/>
+                  <radiobutton text="Summarize" value="summarize"/>
+                </radiobuttons>
+                <dropdown name="model"></dropdown>
+              </field>
+            </form>
+            <div id="result">
+            </div>
+          </tab>
           <tab title="Vector" padding="10">
             <form name="vectorForm">
               <field label="First">
@@ -33,34 +54,12 @@
                 <text-input name="second" breaks="true" value="How wet is water?"/>
               </field>
               <field label="Output">
-                <div id="vectorOutput"></div>
+                <div id="vectorOutput"> </div>
               </field>
               <buttons>
                 <button text="Compare" submit="true"/>
               </buttons>
             </form>
-          </tab>
-          <tab title="Prompt" padding="10">
-            <form name="form">
-              <field>
-            <div style="display: flex; width: 100%">
-              <div style="flex-grow: 1; padding-right: 10px;">
-                <text-input name="prompt" breaks="true" value="How wet is water?"/>
-              </div>
-              <button text="Send" submit="true"/>
-            </div>
-            </field>
-            <field>
-              <radiobuttons value="raw" name="type">
-                <radiobutton text="Raw prompt" value="raw"/>
-                <radiobutton text="Summarize" value="summarize"/>
-              </radiobuttons>
-              <dropdown name="model">
-            </dropdown>
-            </field>
-            </form>
-            <div id="result">
-            </div>
           </tab>
         </tabs>
       </box>

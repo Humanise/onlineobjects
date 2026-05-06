@@ -57,7 +57,7 @@ public class WordsWordView extends AbstractView {
 
 	@Override
 	protected void before(Request request) throws Exception {
-		loadManager.failIfBusy();
+		loadManager.failIfBusy(request);
 		StopWatch watch = new StopWatch();
 		watch.start();
 		String[] path = request.getLocalPath();
@@ -104,7 +104,7 @@ public class WordsWordView extends AbstractView {
 					Collections.sort(relations, ORDERING);
 					int size = 5000;
 					if (relations.size()>size) {
-						relations = (List<WordRelation>) relations.subList(0, size);
+						relations = relations.subList(0, size);
 					}
 					group.setRelations(relations);
 					relationsList.add(group);

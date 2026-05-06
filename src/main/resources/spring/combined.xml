@@ -69,6 +69,11 @@
     <property name="anthropicApiKey" value="${intelligence.anthropic.key}" />
     <property name="ollamaUrl" value="${intelligence.ollama.url}" />
     <property name="languageModel" value="${intelligence.model}" />
+    <property name="ollamaCloudUrl" value="${intelligence.ollama.cloud.url}" />
+    <property name="ollamaCloudApiKey" value="${intelligence.ollama.cloud.key}" />
+    <property name="geminiApiKey" value="${intelligence.gemini.key}" />
+    <property name="searchEmbeddingModel" value="${intelligence.embedding.search.model}" />
+    
   </bean>
 
   <bean id="emailService" class="dk.in2isoft.onlineobjects.services.EmailService" autowire="byType">
@@ -220,7 +225,18 @@
 
   <bean id="ollama" class="org.onlineobjects.modules.intelligence.Ollama" />
 
+  <bean id="geminiEmbedder" class="org.onlineobjects.modules.intelligence.GeminiEmbedder" />
+
+  <bean id="ollamaEmbedder" class="org.onlineobjects.modules.intelligence.OllamaEmbedder" />
+
+  <bean id="ollamaCloud" class="org.onlineobjects.modules.intelligence.OllamaCloud" />
+
   <bean id="solrService" class="org.onlineobjects.modules.index.SolrService" />
+
+  <bean class="org.onlineobjects.modules.index.EntityEmbedder" />
+  <bean class="org.onlineobjects.modules.index.EntityEmbeddingListener" />
+  
+  
 
 
   <!-- Tools -->

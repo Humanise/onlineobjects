@@ -687,9 +687,9 @@ public class Request implements Operator {
 		return IOUtils.toString(request.getReader());
 	}
 
-	public String getUserAgent() {
+	public Optional<String> getUserAgent() {
 
-		return request.getHeader(HttpHeaders.USER_AGENT);
+		return Optional.ofNullable(request.getHeader(HttpHeaders.USER_AGENT));
 	}
 
 	public String getReferer() {
@@ -697,6 +697,8 @@ public class Request implements Operator {
 		return request.getHeader(HttpHeaders.REFERER);
 	}
 
+	// This does not work when deployed – for unknown reasons
+	@Deprecated
 	public void compressResponse() {
 		if (response instanceof GZIPResponseWrapper) {
 			return;

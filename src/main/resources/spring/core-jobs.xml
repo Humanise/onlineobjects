@@ -72,6 +72,12 @@
   </bean>
 
   <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
+    <property name="jobClass" value="dk.in2isoft.onlineobjects.apps.knowledge.index.KnowledgeEmbeddingJob" />
+    <property name="name" value="knowledge-embedding" />
+    <property name="group" value="core" />
+  </bean>
+
+  <bean class="dk.in2isoft.onlineobjects.modules.scheduling.JobDescription">
     <property name="jobClass" value="dk.in2isoft.onlineobjects.modules.surveillance.SendReportJob" />
     <property name="name" value="sendreport" />
     <property name="group" value="monitoring" />

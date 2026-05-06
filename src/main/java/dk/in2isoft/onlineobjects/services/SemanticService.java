@@ -203,6 +203,7 @@ public class SemanticService {
 			list.add(Pair.of(entry.getKey(), entry.getValue()));
 		}
 		Collections.sort(list, new Comparator<Pair<String, Integer>>() {
+			@Override
 			public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
 				return o2.getValue().compareTo(o1.getValue());
 			}
@@ -231,6 +232,12 @@ public class SemanticService {
 		double[] ba = b.stream().mapToDouble(Double::doubleValue).toArray();
 		normalizeInPlace(na);
 		normalizeInPlace(ba);
+		return (findDotProduct(na, ba) + 1) / 2d;
+	}
+
+	public double compareVectors(double[] a, double[] b) {
+		double[] na = normalize(a);
+		double[] ba = normalize(b);
 		return (findDotProduct(na, ba) + 1) / 2d;
 	}
 
@@ -268,27 +275,25 @@ public class SemanticService {
 		return freq;
 	}
 
-	private double findEuclidianNorm(double[] doc)
-	{
-	   double sum=0;
-	   for (int i=0;i<doc.length;i++) {
-	      sum+=Math.pow(doc[i],2);
-	   }
-	   return Math.sqrt(sum);
+	public double findEuclidianNorm(double[] doc) {
+		double sum = 0;
+		for (int i = 0; i < doc.length; i++) {
+			sum += Math.pow(doc[i], 2);
+		}
+		return Math.sqrt(sum);
 	}
 
-	private double[] normalize(double[] doc)
-	{
+	public double[] normalize(double[] doc) {
 		int len = doc.length;
 		double[] norm = new double[len];
-		double euclidianNorm=findEuclidianNorm(doc);
-		for (int i=0;i<len;i++) {
-			norm[i]=doc[i]/euclidianNorm;
+		double euclidianNorm = findEuclidianNorm(doc);
+		for (int i = 0; i < len; i++) {
+			norm[i] = doc[i] / euclidianNorm;
 		}
 		return norm;
 	}
 
-	private double findDotProduct(double[] query, double[] doc)
+	public double findDotProduct(double[] query, double[] doc)
 	{
 		int len = query.length;
 		double sum=0;
