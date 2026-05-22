@@ -4,10 +4,6 @@ hui.on(function() {
   var size = Math.min(logo.clientWidth, logo.clientHeight);
   var done = false;
 
-  if (hui.browser.msie6 || hui.browser.msie7 || hui.browser.msie8) {
-    return;
-  }
-
   logo.innerHTML = '';
 
   var d = hui.ui.Drawing.create({width:size,height:size,parent:logo});
