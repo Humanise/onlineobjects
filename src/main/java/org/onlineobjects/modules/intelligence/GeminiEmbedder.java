@@ -21,6 +21,16 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 @ApplicationScope
 public class GeminiEmbedder implements Embedder {
 
+	private class TooManyRequests extends IOException {
+
+		private static final long serialVersionUID = 1L;
+
+		public TooManyRequests(String body) {
+			super(body);
+		}
+
+	}
+
 	private static Logger log = LogManager.getLogger(GeminiEmbedder.class);
 
 	private ConfigurationService configuration;
@@ -42,6 +52,32 @@ public class GeminiEmbedder implements Embedder {
 				"taskType", "SEMANTIC_SIMILARITY",
 				"output_dimensionality", model.getDimensions(),
 				"content", Map.of("parts", List.of(Map.of("text", text))));
+		try {
+			return request(model, payload);
+		} catch (TooManyRequests e) {
+			if (false) {
+				log.warn("Embedding is exhausted, trying again in 60s");
+				try {
+					// Wait for 60 seconds
+					Thread.sleep(1000 * 60);
+				} catch (InterruptedException ignore) {}
+				try {
+					return request(model, payload);
+				} catch (IOException e1) {
+					log.error(e);
+					return null;
+				}
+			} else {
+				log.error(e);
+				return null;
+			}
+		} catch (IOException e) {
+			log.error(e);
+			return null;
+		}
+	}
+
+	private EmbeddingInfo request(EmbeddingModel model, Object payload) throws IOException {
 		try (var client = HttpClients.createDefault()) {
 			ClassicHttpRequest request = ClassicRequestBuilder.post(getUrl(model))
 					.setEntity(new StringEntity(
@@ -53,7 +89,12 @@ public class GeminiEmbedder implements Embedder {
 				int code = response.getCode();
 				String body = EntityUtils.toString(response.getEntity());
 				if (code != 200) {
-					throw new IOException(body);
+					if (code == 429) {
+						// TODO: This should check if the quota is exceeded and retry later
+						throw new TooManyRequests(body);
+					} else {
+						throw new IOException(body);
+					}
 				}
             	var parsed = Strings.fromJson(body, Response.class);
             	if (parsed.isPresent()) {
@@ -64,11 +105,7 @@ public class GeminiEmbedder implements Embedder {
             	}
         		return null;
 			});
-
-		} catch (IOException e) {
-			log.error(e);
 		}
-		return null;
 	}
 
 	private String getUrl(EmbeddingModel model) {

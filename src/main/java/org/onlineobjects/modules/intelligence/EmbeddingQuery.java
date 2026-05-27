@@ -24,24 +24,27 @@ public class EmbeddingQuery implements CustomQuery<EmbeddingResult> {
 
 	private long privileged;
 	private long itemId;
+	private EmbeddingModel model;
+	private Class<? extends Entity> type;
 
 	@Override
 	public String getSQL() {
 		return """
 				SELECT
 					entity_id,
-					embedding <=> (select embedding from embedding where entity_id = :id)
+					embedding <=> (SELECT embedding FROM embedding WHERE entity_id = :id AND model_id = :model)
 				FROM embedding
 				WHERE entity_id IN (
-					select question.id from question
-					join privilege on privilege.object = question.id
-					and privilege.subject = :privileged
-					and privilege.view = true
+					SELECT other.id FROM :type as other
+					JOIN privilege ON privilege.object = other.id
+					AND privilege.subject = :privileged
+					AND privilege.view = true
 				)
+				AND model_id = :model
 				ORDER BY
-					(embedding <=> (select embedding from embedding where entity_id = :id))
+					(embedding <=> (SELECT embedding FROM embedding WHERE entity_id = :id AND model_id = :model))
 				LIMIT 20
-				""";
+				""".replace(":type", type.getSimpleName().toLowerCase());
 	}
 
 	@Override
@@ -64,13 +67,17 @@ public class EmbeddingQuery implements CustomQuery<EmbeddingResult> {
 	public void setParameters(NativeQuery<?> sql) {
 		sql.setParameter("id", itemId);
 		sql.setParameter("privileged", privileged);
+		sql.setParameter("model", model.getId());
+		//sql.setParameter("type", type.getSimpleName().toLowerCase());
 
 	}
 
-	public static EmbeddingQuery create(Entity entity, Privileged privleged) {
+	public static EmbeddingQuery create(EmbeddingModel model, Entity entity, Class<? extends Entity> type, Privileged privleged) {
 		EmbeddingQuery query = new EmbeddingQuery();
+		query.model = model;
 		query.privileged = privleged.getIdentity();
 		query.itemId = entity.getId();
+		query.type = type;
 		return query;
 	}
 }

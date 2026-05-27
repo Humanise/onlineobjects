@@ -74,7 +74,7 @@ hui.ui.listen({
   },
   $open$diagram : function(node) {
     if (node.data) {
-      if (node.data.type=='Item/Entity/Word') {
+      if (node.data.type == 'Word') {
         document.location = node.data.name+'.html';
       }
     }

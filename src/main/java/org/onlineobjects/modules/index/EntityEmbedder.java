@@ -1,6 +1,10 @@
 package org.onlineobjects.modules.index;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,10 +28,13 @@ public class EntityEmbedder {
 	private Intelligence intelligence;
 	private static Logger log = LogManager.getLogger(EntityEmbedder.class);
 
+	public Optional<EmbeddingInfo> embed(Entity entity) throws ModelException, SecurityException {
+		return embed(entity, Duration.ZERO);
+	}
 
-	public void embed(Entity entity) throws ModelException, SecurityException {
+	public Optional<EmbeddingInfo> embed(Entity entity, Duration delay) throws ModelException, SecurityException {
 		EmbeddingModel embeddingModel = intelligence.getSearchEmbeddingModel().orElse(null);
-		if (embeddingModel == null) return;
+		if (embeddingModel == null) return Optional.empty();
 		try (Operator operator = model.newAdminOperator()) {
 			Query<Embedding> query = Query.after(Embedding.class).withField("entityId", entity.getId()).withField("modelId", embeddingModel.getId());
 			Embedding embedding = model.search(query, operator).getFirst();
@@ -35,31 +42,51 @@ public class EntityEmbedder {
 				embedding = new Embedding();
 
 				String text = asString(entity);
+				try {
+					Thread.sleep(delay);
+				} catch (InterruptedException ignore) {}
 				EmbeddingInfo embeddingInfo = intelligence.embed(text, embeddingModel).orElse(null);
 				if (embeddingInfo == null) {
 					log.error("Unable to get embedding");
-					return;
+					return Optional.empty();
 				}
-				embedding.setEmbedding(embeddingInfo.getVector());
+				embedding.setEmbedding(embeddingInfo.getVector().stream().mapToDouble(e -> e).toArray());
 				embedding.setEntityId(entity.getId());
 				embedding.setModelId((long) embeddingModel.getId());
 				embedding.setText(text);
 				model.create(embedding, operator);
+				return Optional.of(embeddingInfo);
 			} else {
 				String text = asString(entity);
 
 				if (!Objects.equals(text, embedding.getText())) {
+					try {
+						Thread.sleep(delay);
+					} catch (InterruptedException ignore) {}
 					EmbeddingInfo embeddingInfo = intelligence.embed(text, embeddingModel).orElse(null);
 					if (embeddingInfo == null) {
 						log.error("Unable to get embedding");
-						return;
+						return Optional.empty();
 					}
-					embedding.setEmbedding(embeddingInfo.getVector());
+					embedding.setEmbedding(embeddingInfo.getVector().stream().mapToDouble(e -> e).toArray());
 					embedding.setText(text);
 					model.update(embedding, operator);
+					return Optional.of(embeddingInfo);
+				} else {
+					EmbeddingInfo info = EmbeddingInfo.create(convert(embedding.getEmbedding()), embeddingModel);
+					info.setText(text);
+					return Optional.of(info);
 				}
 			}
 		}
+	}
+
+	private List<Double> convert(float[] embedding) {
+	    List<Double> result = new ArrayList<>(embedding.length);
+	    for (float f : embedding) {
+	        result.add((double) f);
+	    }
+	    return result;
 	}
 
 	private String asString(Entity entity) {

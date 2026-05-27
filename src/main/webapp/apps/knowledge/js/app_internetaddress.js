@@ -283,6 +283,11 @@ hui.control({
     }})
   },
 
+  'suggestTagsInternetAddress.click!'() {
+    var item = appController.getCurrentItem();
+    var url = '/app/internetaddress/intel/tags?id=' + item.id;
+    this._intel(url);
+  },
   'summarizeInternetAddress.click!'() {
     var item = appController.getCurrentItem();
     var url = '/app/internetaddress/intel/summarize?id=' + item.id;

@@ -43,6 +43,7 @@ import dk.in2isoft.onlineobjects.model.Pile;
 import dk.in2isoft.onlineobjects.model.Property;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Relation;
+import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.language.WordImpression;
@@ -235,7 +236,7 @@ public class ModelController extends ModelControllerBase {
 		return diagram;
 	}
 
-	@Path
+	@Path("finder")
 	public FinderConfiguration finder(Request request) throws BadRequestException, ModelException, SecurityException {
 
 		List<String> types = request.getStrings("type");
@@ -245,8 +246,8 @@ public class ModelController extends ModelControllerBase {
 		String type = types.get(0);
 
 		FinderConfiguration config = new FinderConfiguration();
-		config.setTitle("Find " + types);
-		config.setListUrl("/service/model/finderList");
+		config.setTitle("Find " + Strings.join(types, ", "));
+		config.setListUrl("/service/model/finder/list");
 		config.setSearchParameter("text");
 
 		if (types.size() > 0) {
@@ -307,10 +308,27 @@ public class ModelController extends ModelControllerBase {
 			creation.setFormula(formula);
 
 		}
+		if (Statement.class.getSimpleName().equals(type)) {
+			Creation creation = config.addCreation();
+			creation.setUrl("/service/model/createFromFinder?type=" + type);
+			creation.setButton("New statement");
+			List<Object> formula = Lists.newArrayList();
+			{
+				Map<String,Object> field = Maps.newHashMap();
+				field.put("type","TextInput");
+				field.put("label","Statement");
+				Map<String,Object> options = Maps.newHashMap();
+				options.put("key","text");
+				field.put("options", options);
+				formula.add(field);
+			}
+			creation.setFormula(formula);
+
+		}
 		return config;
 	}
 
-	@Path
+	@Path("finder/list")
 	public <E extends Entity> void finderList(Request request) throws IOException, ModelException, ExplodingClusterFuckException {
 		String type = request.getString("type");
 		Class<? extends Entity> entityClass = modelService.getEntityClass(type);
@@ -355,7 +373,15 @@ public class ModelController extends ModelControllerBase {
 			String text = request.getString("text");
 			return knowledgeService.createHypothesis(text, request);
 		}
+		if (Statement.class.getSimpleName().equals(type)) {
+			String text = request.getString("text");
+			return asFinderResult(knowledgeService.createStatement(text, request));
+		}
 		throw new BadRequestException("Unknown type");
+	}
+
+	private Object asFinderResult(Statement entity) {
+		return Map.of("id", entity.getId(), "title", entity.getName(), "kind", entity.getClass().getSimpleName().toLowerCase());
 	}
 
 	@Path(exactly = {"intel","models"})

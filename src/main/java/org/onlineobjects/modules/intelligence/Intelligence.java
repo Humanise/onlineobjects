@@ -24,6 +24,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
+import jakarta.servlet.ServletOutputStream;
 
 @ApplicationScope
 public class Intelligence  implements ApplicationListener<ContextRefreshedEvent> {
@@ -152,6 +153,31 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 				+ "You should only state if you are certain about the author. "
 				+ "If you cannot detemine the author, simply reply with 'No author'. "
 				+ "\n\nWhat is the name of the author of the following text:\n" + StringUtils.abbreviate(text, 1000);
+		prompt(prompt, out);
+	}
+
+	public void suggestTags(String text, List<String> tags, ServletOutputStream out) {
+		String prompt = """
+				<assistant-spec>
+				<role>You are a skilled librarian</role>
+				<objective>
+				- Look carefully at the provided text and a list of possible tags
+				- Select the tags that are relevant to the text
+				</objective>
+				<rules>
+				- The selected tags can only be some of the provided possible tags
+				- Do not produce tags not in the list of possible tags
+				</rules>
+				<text>{text}</text>
+				<possible-tags>
+				{tags}
+				</possible-tags>
+				</assistant-spec>
+				<final-instruction>
+				Output only the relevant tags separated by semicolon and no other text
+				</final-instruction>
+				""";
+		prompt = prompt.replace("{text}", text).replace("{tags}", Strings.join(tags, "\n- "));
 		prompt(prompt, out);
 	}
 

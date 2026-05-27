@@ -2,6 +2,7 @@ package org.onlineobjects.modules.suggestion;
 
 import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
+import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Statement;
 
 public class Suggestions {
@@ -22,6 +23,12 @@ public class Suggestions {
 
 	public void setKnowledgeSuggester(KnowledgeSuggester knowledgeSuggester) {
 		this.knowledgeSuggester = knowledgeSuggester;
+	}
+
+	public SuggestionsCategory suggestStatement(Question question, Operator operator) throws EndUserException {
+		SuggestionsCategory category = knowledgeSuggester.suggestStatementViaEmbedding(question, operator);
+		category.setDescription("Suggested answers...");
+		return category;
 	}
 
 

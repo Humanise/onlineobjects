@@ -80,6 +80,7 @@ import dk.in2isoft.onlineobjects.model.TextHolding;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.model.Word;
 import dk.in2isoft.onlineobjects.modules.feeds.Feed;
+import dk.in2isoft.onlineobjects.modules.knowledge.InternetAddressApiPerspective;
 import dk.in2isoft.onlineobjects.modules.language.TagSelectionQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordByInternetAddressQuery;
 import dk.in2isoft.onlineobjects.modules.language.WordByMultipleTypesQuery;
@@ -318,10 +319,16 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getQuestionWebPerspective(id, request);
 	}
 
-	@Path(expression = "/app/question")
+	@Path("/app/question")
 	public QuestionWebPerspective appQuestion(Request request) throws EndUserException, IOException {
 		Long id = request.getId();
 		return knowledgeService.getQuestionWebPerspective(id, request);
+	}
+
+	@Path("/app/question/suggest/statement")
+	public SuggestionsCategory appQuestionSuggestStatement(Request request) throws EndUserException, IOException {
+		Question question = modelService.getRequired(Question.class, request.getId(), request);
+		return knowledgeService.suggestStatements(question, request);
 	}
 
 	@Path(expression = "/app/question/add/statement")
@@ -519,25 +526,34 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		return knowledgeService.getInternetAddressWebPerspective(id, request);
 	}
 
-	@Path(expression = "/app/internetaddress/intel/summarize", method = GET)
+	@Path(of = "/app/internetaddress/intel/summarize", method = GET)
 	public void internetAddressSummarize(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.summarize(text, request.getResponse().getOutputStream());
 	}
 
-	@Path(expression = "/app/internetaddress/intel/points", method = GET)
+	@Path(of = "/app/internetaddress/intel/tags", method = GET)
+	public void internetAddressSuggestTags(Request request) throws IOException, BadRequestException, EndUserException {
+		InternetAddressApiPerspective apiPerspective = knowledgeService.getAddressPerspective(request.getId(), request);
+		List<String> tags = tagSelection(request).stream().map(o -> o.getText()).toList();
+
+		var text = apiPerspective.getText();
+		intelligence.suggestTags(text, tags, request.getResponse().getOutputStream());
+	}
+
+	@Path(of = "/app/internetaddress/intel/points", method = GET)
 	public void internetAddressPoints(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.keyPoints(text, request.getResponse().getOutputStream());
 	}
 
-	@Path(expression = "/app/internetaddress/intel/people", method = GET)
+	@Path(of = "/app/internetaddress/intel/people", method = GET)
 	public void internetAddressPeople(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = knowledgeService.getAddressPerspective(request.getId(), request).getText();
 		intelligence.author(text, request.getResponse().getOutputStream());
 	}
 
-	@Path(expression = "/app/intel/define", method = GET)
+	@Path(of = "/app/intel/define", method = GET)
 	public void intelDefine(Request request) throws IOException, BadRequestException, EndUserException {
 		var text = request.getString("text");
 		var detailed = request.getBoolean("detailed");
@@ -550,7 +566,7 @@ public class KnowledgeController extends KnowledgeControllerBase {
 		intelligence.prompt(prompt, request.getResponse().getOutputStream());
 	}
 
-	@Path(expression = "/app/related", method = GET)
+	@Path(of = "/app/related", method = GET)
 	public List<SimpleEntityPerspective> related(Request request) throws IOException, BadRequestException, EndUserException {
 		if (!configurationService.isSolrEnabled()) {
 			return List.of();

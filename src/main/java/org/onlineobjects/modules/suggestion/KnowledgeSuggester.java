@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onlineobjects.modules.intelligence.EmbeddingModel;
 import org.onlineobjects.modules.intelligence.EmbeddingQuery;
 import org.onlineobjects.modules.intelligence.EmbeddingQuery.EmbeddingResult;
 
@@ -23,12 +24,14 @@ import dk.in2isoft.onlineobjects.core.Operator;
 import dk.in2isoft.onlineobjects.core.Privileged;
 import dk.in2isoft.onlineobjects.core.exceptions.EndUserException;
 import dk.in2isoft.onlineobjects.core.exceptions.ModelException;
+import dk.in2isoft.onlineobjects.model.Entity;
 import dk.in2isoft.onlineobjects.model.Question;
 import dk.in2isoft.onlineobjects.model.Statement;
 import dk.in2isoft.onlineobjects.model.User;
 import dk.in2isoft.onlineobjects.modules.caching.CacheEntry;
 import dk.in2isoft.onlineobjects.modules.caching.CacheService;
 import dk.in2isoft.onlineobjects.modules.knowledge.KnowledgeService;
+import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.services.SemanticService;
 import dk.in2isoft.onlineobjects.ui.data.SimpleEntityPerspective;
 import opennlp.tools.doccat.DoccatFactory;
@@ -44,6 +47,7 @@ public class KnowledgeSuggester {
 	private KnowledgeService knowledgeService;
 	private SemanticService semanticService;
 	private CacheService cacheService;
+	private ConfigurationService configurationService;
 
 	private enum ModelState {SYNCHED, INITIATING, UPDATING, IMPRECISE, EMPTY}
 
@@ -96,20 +100,49 @@ public class KnowledgeSuggester {
 	}
 
 	public SuggestionsCategory suggestQuestionViaEmbedding(Statement statement, Operator operator) throws EndUserException {
+
 		SuggestionsCategory category = new SuggestionsCategory();
 		List<Suggestion> results = new ArrayList<>();
 		category.setSuggestions(results);
+		EmbeddingModel model = configurationService.getSearchEmbeddingModel().orElse(null);
+		if (model != null) {
 
-		List<EmbeddingResult> embeddings = modelService.list(EmbeddingQuery.create(statement, operator), operator);
-		for (EmbeddingResult result : embeddings) {
-			Question question = modelService.get(Question.class, result.getItemId(), operator);
-			if (question != null) {
-				Suggestion suggestion = new Suggestion();
-				suggestion.setDescription(question.getText());
-				suggestion.setTarget(SimpleEntityPerspective.create(statement));
-				suggestion.setEntity(SimpleEntityPerspective.create(question));
-				suggestion.setStrength(result.getSimilarity());
-				results.add(suggestion);
+			List<EmbeddingResult> embeddings = modelService.list(EmbeddingQuery.create(model, statement, Question.class, operator), operator);
+			for (EmbeddingResult result : embeddings) {
+				Question question = modelService.get(Question.class, result.getItemId(), operator);
+				if (question != null) {
+					Suggestion suggestion = new Suggestion();
+					suggestion.setDescription(question.getText());
+					suggestion.setTarget(SimpleEntityPerspective.create(statement));
+					suggestion.setEntity(SimpleEntityPerspective.create(question));
+					suggestion.setStrength(result.getSimilarity());
+					results.add(suggestion);
+				}
+			}
+		}
+		return category;
+	}
+
+	public SuggestionsCategory suggestStatementViaEmbedding(Question question, Operator operator) throws EndUserException {
+		List<Long> existing = knowledgeService.getAnswers(question, operator).stream().map(Entity::getId).toList();
+		SuggestionsCategory category = new SuggestionsCategory();
+		List<Suggestion> results = new ArrayList<>();
+		category.setSuggestions(results);
+		EmbeddingModel model = configurationService.getSearchEmbeddingModel().orElse(null);
+		if (model != null) {
+
+			List<EmbeddingResult> embeddings = modelService.list(EmbeddingQuery.create(model, question, Statement.class, operator), operator);
+			for (EmbeddingResult result : embeddings) {
+				Statement statement = modelService.get(Statement.class, result.getItemId(), operator);
+				if (existing.contains(result.getItemId())) continue;
+				if (statement != null) {
+					Suggestion suggestion = new Suggestion();
+					suggestion.setDescription(statement.getText());
+					suggestion.setTarget(SimpleEntityPerspective.create(question));
+					suggestion.setEntity(SimpleEntityPerspective.create(statement));
+					suggestion.setStrength(result.getSimilarity());
+					results.add(suggestion);
+				}
 			}
 		}
 		return category;
@@ -206,4 +239,7 @@ public class KnowledgeSuggester {
 		this.knowledgeService = knowledgeService;
 	}
 
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
 }

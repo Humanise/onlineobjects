@@ -38,7 +38,7 @@ public class SimpleEntityPerspective {
 		SimpleEntityPerspective perspective = new SimpleEntityPerspective();
 		perspective.setId(entity.getId());
 		perspective.setName(entity.getName());
-		perspective.setType(entity.getType());
+		perspective.setType(entity.getClass().getSimpleName());
 		return perspective;
 	}
 }

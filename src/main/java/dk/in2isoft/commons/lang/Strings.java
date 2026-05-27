@@ -457,4 +457,15 @@ public class Strings {
 	public static String[] merge(String[] a, String[] b) {
 		return (String[]) ArrayUtils.addAll(a, b);
 	}
+
+	public static String join(List<String> types, String joiner) {
+		StringBuilder str = new StringBuilder();
+		for (String part : types) {
+			if (!str.isEmpty()) {
+				str.append(joiner);
+			}
+			str.append(part);
+		}
+		return str.toString();
+	}
 }

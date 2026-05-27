@@ -1,13 +1,15 @@
 package dk.in2isoft.onlineobjects.model;
 
-import java.util.List;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 public class Embedding {
 
 	private Long id;
 	private Long modelId;
 	private Long entityId;
-	private List<Double> embedding;
+	@JdbcTypeCode(SqlTypes.VECTOR)
+	private float[] embedding;
 	private String text;
 
 	public Long getId() {
@@ -34,12 +36,19 @@ public class Embedding {
 		this.entityId = entityId;
 	}
 
-	public List<Double> getEmbedding() {
+	public float[] getEmbedding() {
 		return embedding;
 	}
 
-	public void setEmbedding(List<Double> embedding) {
+	public void setEmbedding(float[] embedding) {
 		this.embedding = embedding;
+	}
+
+	public void setEmbedding(double[] doubles) {
+		this.embedding = new float[doubles.length];
+		for (int i = 0; i < doubles.length; i++) {
+			this.embedding[i] = (float) doubles[i];
+		}
 	}
 
 	public String getText() {

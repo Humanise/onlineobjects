@@ -594,42 +594,9 @@ var appController = window.appController = {
     this._changeItem(data);
     hui.controller('questions').show(data);
   },
-  $render$questionAnswers : function(statement) {
-    return this._render_relation(statement, {$remove: this._removeAnswerFromQuestion.bind(this)});
-  },
-  $select$questionAnswers : function(e) {
-    this.show(e.data);
-  },
-  $click$addAnswerToQuestion : function() {
-    hui.ui.get('answerFinder').show();
-  },
-  $select$answerFinder : function(answer) {
-    hui.ui.get('answerFinder').hide();
-    this._addAnswerToQuestion(answer)
-  },
-  _addAnswerToQuestion : function(statement) {
-    this._request({
-      url: '/app/question/add/answer',
-      parameters: {
-        answerId: statement.id,
-        answerType: statement.kind,
-        questionId: this._currentItem.id
-      }
-    }).then(this._onQuestion.bind(this));
-  },
   $select$statementFinder : function(statement) {
     hui.ui.get('statementFinder').hide();
     this.statementFinderHandler(statement);
-  },
-  _removeAnswerFromQuestion : function(answer) {
-    this._request({
-      url: '/app/question/remove/answer',
-      parameters: {
-        answerId: answer.id,
-        answerType: answer.type,
-        questionId: this._currentItem.id
-      }
-    }).then(this._onQuestion.bind(this));
   },
 
   $render$questionWords : function(obj) {
@@ -739,7 +706,7 @@ var appController = window.appController = {
     ]});
   },
   $select$statementSuggestions : function(e) {
-    this._addQuestionToStatement(e.data.entity.id)
+    this._addQuestionToStatement(e.data.entity, e.data.target)
   },
 
 
@@ -917,7 +884,7 @@ var appController = window.appController = {
         o.$failure = reject;
         o.$finally = end;
         hui.ui.request(o);
-      });    
+      });
     });
   },
   _removeStatementFromHypothesis : function(statement, relation) {

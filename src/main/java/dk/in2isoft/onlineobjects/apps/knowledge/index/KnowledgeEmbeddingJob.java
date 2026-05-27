@@ -1,8 +1,11 @@
 package dk.in2isoft.onlineobjects.apps.knowledge.index;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.onlineobjects.modules.index.EntityEmbedder;
+import org.onlineobjects.modules.intelligence.EmbeddingInfo;
 import org.onlineobjects.modules.intelligence.Intelligence;
 import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
@@ -37,15 +40,36 @@ public class KnowledgeEmbeddingJob extends JobBase implements InterruptableJob {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobStatus status = getStatus(context);
 		status.log("Starting embedding");
+		Duration delay = intelligence.getSearchEmbeddingModel().orElseThrow().getRequestDelay();
+
 		try (Operator operator = model.newAdminOperator()) {
 			var types = List.of(Statement.class, Question.class);
+			int total = 0;
+			int current = 0;
+			for (Class<? extends Entity> type : types) {
+				total += model.count(Query.after(type), operator);
+			}
 			for (Class<? extends Entity> type : types) {
 				Results<? extends Entity> scroll = model.scroll(Query.after(type), operator);
 				while (scroll.next() && !interrupted) {
 					try {
+						current++;
 						Entity entity = scroll.get();
-						embedder.embed(entity);
-						status.log("Embedding created for: " + entity.getName());
+						Optional<EmbeddingInfo> info = embedder.embed(entity, delay);
+						if (info.isEmpty()) {
+							status.warn("Missing embedding, trying again");
+							try {
+								// Wait for 60 secs
+								Thread.sleep(1000 * 60);
+							} catch (InterruptedException ignore) {}
+							Optional<EmbeddingInfo> again = embedder.embed(entity);
+							if (again.isEmpty()) {
+								status.error("Unable to create embedding af retry");
+							}
+						} else {
+							status.log("Embedding created for: " + entity.getName());
+						}
+						status.setProgress(current, total);
 					} catch (Exception e) {
 						status.error(e.getMessage(), e);
 					}

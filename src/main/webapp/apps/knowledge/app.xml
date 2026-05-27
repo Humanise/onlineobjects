@@ -169,6 +169,7 @@
             <div class="internetaddress_head js-internetaddress-head"> </div>
             <div class="intel">
               <div class="intel_actions">
+                <button name="suggestTagsInternetAddress" text="Tags" class="intel_action"/>
                 <button name="summarizeInternetAddress" text="Summarize" class="intel_action"/>
                 <button name="pointsInternetAddress" text="Key points" class="intel_action"/>
                 <button name="authorInternetAddress" text="Author" class="intel_action"/>
@@ -210,8 +211,24 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addAnswerToQuestion" text="Add answer"/>
+                <button name="addAnswerToQuestion" text="Add answer" variant="light" size="small"/>
               </div>
+
+              <pages height="full" name="pages">
+                <page key="list">
+                <div class="perspective_actions">
+                  <button text="Add answer" variant="light" size="small" click="hui.ui.get('pages').next()"/>
+                </div>
+                </page>
+                <page key="viewpage">
+                  <fragment name="questionSuggestionsFragment" visible="false">
+                    <div class="perspective_suggestionsx">
+                    <div class="perspective_heading">Suggested answers</div>
+                    <collection name="questionSuggestions"/>
+                    </div>
+                  </fragment>
+                 </page>
+                </pages>
             </div>
           </div>
         </fragment>
@@ -239,7 +256,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addQuestionToStatement" text="Add question"/>
+                <button name="addQuestionToStatement" text="Add question" variant="light" size="small"/>
               </div>
 
               <div class="perspective_heading">Supports</div>
@@ -249,7 +266,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addSupportToStatement" text="Add supporting"/>
+                <button name="addSupportToStatement" text="Add supporting" variant="light" size="small"/>
               </div>
 
               <div class="perspective_heading">Contradicts</div>
@@ -259,7 +276,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addContradictsToStatement" text="Add contradicting"/>
+                <button name="addContradictsToStatement" text="Add contradicting" variant="light" size="small"/>
               </div>
 
               <fragment name="statementSuggestionsFragment" visible="false">
@@ -287,7 +304,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addSupportToHypothesis" text="Add support"/>
+                <button name="addSupportToHypothesis" text="Add support" variant="light" size="small"/>
               </div>
               <div class="perspective_heading">Is contradicted by</div>
               <collection name="hypothesisContradicting">
@@ -296,7 +313,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addContradictionToHypothesis" text="Add contradiction"/>
+                <button name="addContradictionToHypothesis" text="Add contradiction" variant="light" size="small"/>
               </div>
               <div class="perspective_heading">Is answer to</div>
               <collection name="hypothesisQuestions">
@@ -305,7 +322,7 @@
                 </empty>
               </collection>
               <div class="perspective_actions">
-                <button name="addQuestionToHypothesis" text="Add question"/>
+                <button name="addQuestionToHypothesis" text="Add question" variant="light" size="small"/>
               </div>
             </div>
           </div>

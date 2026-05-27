@@ -58,7 +58,7 @@ public class WordsModelService {
 	private Map<String,Object> getData(Entity entity) {
 		Map<String,Object> data = Maps.newHashMap();
 		data.put("id", entity.getId());
-		data.put("type", entity.getType());
+		data.put("type", entity.getClass().getSimpleName());
 		data.put("name", entity.getName());
 		return data;
 	}

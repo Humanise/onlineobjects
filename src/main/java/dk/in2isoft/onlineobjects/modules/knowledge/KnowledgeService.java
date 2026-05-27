@@ -364,7 +364,7 @@ public class KnowledgeService {
 		SuggestionsCategory suggestionsForStatement = suggestions.suggestionsForStatement(statement, request);
 		Iterator<Suggestion> i = suggestionsForStatement.getSuggestions().iterator();
 		while (i.hasNext()) {
-			if (hasQuestion((Long) i.next().getEntity().getId(), perspective)) {
+			if (hasQuestion(i.next().getEntity().getId(), perspective)) {
 				i.remove();
 			}
 		}
@@ -467,7 +467,7 @@ public class KnowledgeService {
 		User user = modelService.getUser(request);
 		categorize(question, perspective, user, request);
 
-		List<Statement> statementAnswers = modelService.getParents(question, Relation.ANSWERS, Statement.class, request);
+		List<Statement> statementAnswers = getAnswers(question, request);
 		List<Hypothesis> hypothesisAnswers = modelService.getParents(question, Relation.ANSWERS, Hypothesis.class, request);
 
 		var answers = new ArrayList<KnowledgeWebPerspective>();
@@ -478,6 +478,10 @@ public class KnowledgeService {
 		addWords(question, perspective, request);
 		addTags(question, perspective, request);
 		return perspective;
+	}
+
+	public List<Statement> getAnswers(Question question, Operator operator) throws ModelException {
+		return modelService.getParents(question, Relation.ANSWERS, Statement.class, operator);
 	}
 
 	public HypothesisWebPerspective getHypothesisWebPerspective(Long id, Operator operator)
@@ -800,6 +804,10 @@ public class KnowledgeService {
 
 	public SuggestionsCategory suggestionsForStatement(Statement statement, Operator operator) throws EndUserException {
 		return suggestions.suggestionsForStatement(statement, operator);
+	}
+
+	public SuggestionsCategory suggestStatements(Question question, Operator operator) throws EndUserException {
+		return suggestions.suggestStatement(question, operator);
 	}
 
 	// Wiring...
