@@ -1,0 +1,1 @@
+exclude = "{*.{o,pyc},Icon\r,CVS,_darcs,_MTN,\{arch\},blib,*~.nib,repository,target,tmp,hs_*,lib,node_modules,package*,LICENSE}"
