@@ -27,6 +27,9 @@
           <tab title="Prompt" padding="10">
             <form name="form">
               <field>
+                <chat name="chat"/>
+              </field>
+              <field>
                 <div style="display: flex; width: 100%">
                   <div style="flex-grow: 1; padding-right: 10px;">
                     <text-input name="prompt" breaks="true" value="How wet is water?"/>

@@ -1,4 +1,7 @@
 hui.control({
+  components: {
+    model: 'model'
+  },
   $ready : function() {
     oo.intelligence.getModels().then(models => {
       var drop = hui.ui.get('model');
@@ -47,5 +50,27 @@ hui.control({
         output.text(xhr.responseText);
       }
     })
+  },
+  'chat.prompt!'(e) {
+    var chat = e.source;
+    var item = chat.startItem();
+    var model = this.components.model.getValue();
+
+    var url = '/intelligence/prompt/stream';
+    body = {
+      model: model,
+      prompt: e.value
+    }
+    oo.intelligence.stream({
+      url: url, 
+      method: 'POST', 
+      form: body,
+      $html : (str) => {
+        item.setHTML(str);
+      },
+      $finally: () => {
+        item.complete();
+      }
+    });
   }
 })
