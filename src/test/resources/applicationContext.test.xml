@@ -11,6 +11,7 @@
     <property name="locations">
       <list>
         <value>classpath:defaults.properties</value>
+        <value>classpath:defaults.test.properties</value>
         <value>classpath:configuration.test.properties</value>
       </list>
     </property>

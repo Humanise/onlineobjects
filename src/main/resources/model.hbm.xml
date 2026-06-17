@@ -32,7 +32,9 @@
                 <param name="increment_size">1</param>
             </generator>
         </id>
-        <property name="embedding" type="dk.in2isoft.onlineobjects.core.VectorUserType"/>
+        <property name="embedding" type="dk.in2isoft.onlineobjects.core.VectorUserType">
+          <column name="embedding" sql-type="vector"/>
+        </property>
         <property name="text"/>
         <property name="entityId" column="entity_id"/>
         <property name="modelId" column="model_id"/>
