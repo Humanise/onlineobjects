@@ -1,7 +1,6 @@
 package dk.in2isoft.onlineobjects.apps.knowledge.index;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,7 @@ public class KnowledgeSolrIndexReader {
 
 	public List<KnowledgeIndexDocument> findSimilar(String text, Privileged user) {
 
-		List<Double> vector = intelligence.vectorize(text);
+		float[] vector = intelligence.vectorize(text);
 
 		var query = new HashMap<String, String>();
 
@@ -40,19 +39,20 @@ public class KnowledgeSolrIndexReader {
 		}).collect(Collectors.toList());
 	}
 
-	private String buildQ(List<Double> vector) {
+	private String buildQ(float[] vector) {
 		StringBuilder q = new StringBuilder();
 		if (true) {
 			q.append("{!vectorSimilarity f=vector minReturn=0.7}[");
 		} else {
 			q.append("{!knn f=vector topK=10}[");
 		}
-		for (Iterator<Double> i = vector.iterator(); i.hasNext();) {
-			Double v = i.next();
-			q.append(v);
-			if (i.hasNext()) {
+		for (int i = 0; i < vector.length; i++) {
+			float f = vector[i];
+			if (i > 0) {
 				q.append(",");
 			}
+			q.append(f);
+
 		}
 		q.append("]");
 		return q.toString();

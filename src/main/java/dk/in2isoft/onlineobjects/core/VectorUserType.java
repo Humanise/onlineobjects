@@ -36,7 +36,9 @@ public class VectorUserType implements UserType<float[]> {
     public float[] nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws SQLException {
         String value = rs.getString(position);
-        if (value == null) return null;
+        if (value == null) {
+			return null;
+		}
         String trimmed = value.substring(1, value.length() - 1);
         String[] parts = trimmed.split(",");
         float[] floats = new float[parts.length];

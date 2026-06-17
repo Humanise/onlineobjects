@@ -1,7 +1,5 @@
 package dk.in2isoft.onlineobjects.apps.knowledge.index;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
@@ -40,7 +38,7 @@ public class KnowledgeSolrIndexWriter {
 				String inbox = document.getField("inbox").stringValue();
 				solrDoc.addField("inbox", "yes".equals(inbox));
 				if (Strings.isNotBlank(text)) {
-					List<Double> vector = intelligence.vectorize(text);
+					float[] vector = intelligence.vectorize(text);
 					solrDoc.addField("vector", vector);
 				}
 				solr.add(Collection.knowledge, solrDoc);

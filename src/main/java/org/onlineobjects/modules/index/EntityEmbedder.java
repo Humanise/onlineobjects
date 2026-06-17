@@ -1,8 +1,6 @@
 package org.onlineobjects.modules.index;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,7 +32,9 @@ public class EntityEmbedder {
 
 	public Optional<EmbeddingInfo> embed(Entity entity, Duration delay) throws ModelException, SecurityException {
 		EmbeddingModel embeddingModel = intelligence.getSearchEmbeddingModel().orElse(null);
-		if (embeddingModel == null) return Optional.empty();
+		if (embeddingModel == null) {
+			return Optional.empty();
+		}
 		try (Operator operator = model.newAdminOperator()) {
 			Query<Embedding> query = Query.after(Embedding.class).withField("entityId", entity.getId()).withField("modelId", embeddingModel.getId());
 			Embedding embedding = model.search(query, operator).getFirst();
@@ -50,7 +50,7 @@ public class EntityEmbedder {
 					log.error("Unable to get embedding");
 					return Optional.empty();
 				}
-				embedding.setEmbedding(embeddingInfo.getVector().stream().mapToDouble(e -> e).toArray());
+				embedding.setEmbedding(embeddingInfo.getVector());
 				embedding.setEntityId(entity.getId());
 				embedding.setModelId((long) embeddingModel.getId());
 				embedding.setText(text);
@@ -68,25 +68,17 @@ public class EntityEmbedder {
 						log.error("Unable to get embedding");
 						return Optional.empty();
 					}
-					embedding.setEmbedding(embeddingInfo.getVector().stream().mapToDouble(e -> e).toArray());
+					embedding.setEmbedding(embeddingInfo.getVector());
 					embedding.setText(text);
 					model.update(embedding, operator);
 					return Optional.of(embeddingInfo);
 				} else {
-					EmbeddingInfo info = EmbeddingInfo.create(convert(embedding.getEmbedding()), embeddingModel);
+					EmbeddingInfo info = EmbeddingInfo.create(embedding.getEmbedding(), embeddingModel);
 					info.setText(text);
 					return Optional.of(info);
 				}
 			}
 		}
-	}
-
-	private List<Double> convert(float[] embedding) {
-	    List<Double> result = new ArrayList<>(embedding.length);
-	    for (float f : embedding) {
-	        result.add((double) f);
-	    }
-	    return result;
 	}
 
 	private String asString(Entity entity) {

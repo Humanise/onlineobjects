@@ -1,11 +1,9 @@
 package org.onlineobjects.modules.intelligence;
 
-import java.util.List;
-
 public class EmbeddingInfo {
 
 	private EmbeddingModel model;
-	private List<Double> vector;
+	private float[] vector;
 	private String text;
 
 	public EmbeddingModel getModel() {
@@ -24,11 +22,11 @@ public class EmbeddingInfo {
 		this.text = text;
 	}
 
-	public List<Double> getVector() {
+	public float[] getVector() {
 		return vector;
 	}
 
-	public static EmbeddingInfo create(List<Double> vector, EmbeddingModel model) {
+	public static EmbeddingInfo create(float[] vector, EmbeddingModel model) {
 		EmbeddingInfo e = new EmbeddingInfo();
 		e.vector = vector;
 		e.model = model;

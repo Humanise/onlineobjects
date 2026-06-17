@@ -114,7 +114,7 @@ public class GeminiEmbedder implements Embedder {
 				return "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent";
 			case GEMINI_2_PREVIEW, GEMINI_2_PREVIEW_SMALL :
 				return "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2-preview:embedContent";
-			case OLLAMA_GEMINI :
+			case OLLAMA_GEMMA :
 				throw new IllegalStateException();
 		}
 		throw new IllegalStateException();
@@ -125,7 +125,7 @@ public class GeminiEmbedder implements Embedder {
 		this.configuration = configuration;
 	}
 
-	public record ResponseEmbedding(List<Double> values) {
+	public record ResponseEmbedding(float[] values) {
 
 	}
 

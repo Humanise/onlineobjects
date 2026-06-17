@@ -62,7 +62,7 @@ docker run -p 8080:8080 onlineobjects
 #### Calling endpoints
 
 ```
-curl -X POST -H "Content-type: application/x-www-form-urlencoded" -d 'prompt=What is the size of the universe?' http://developer.onlineobjects.test/intelligence/prompt/stream -N
+curl -X POST -H "Content-type: application/x-www-form-urlencoded" -d 'prompt=What is the size of the universe?' http://developer.onlineobjects.local/intelligence/prompt/stream -N
 ```
 
 ### Debugging

@@ -216,7 +216,7 @@ public class SemanticService {
 		return getWordFrequency(words);
 	}
 
-	public double compare(String text1, String text2, Language language) {
+	public float compare(String text1, String text2, Language language) {
 		text1 = text1.toLowerCase();
 		text2 = text2.toLowerCase();
 		String[] words1 = getWords(text1,language);
@@ -227,44 +227,36 @@ public class SemanticService {
 		return compare(words1, words2);
 	}
 
-	public double compareVectors(List<Double> a, List<Double> b) {
-		double[] na = a.stream().mapToDouble(Double::doubleValue).toArray();
-		double[] ba = b.stream().mapToDouble(Double::doubleValue).toArray();
-		normalizeInPlace(na);
-		normalizeInPlace(ba);
-		return (findDotProduct(na, ba) + 1) / 2d;
+	public float compareVectors(float[] a, float[] b) {
+		float[] na = normalize(a);
+		float[] ba = normalize(b);
+		return (findDotProduct(na, ba) + 1) / 2f;
 	}
 
-	public double compareVectors(double[] a, double[] b) {
-		double[] na = normalize(a);
-		double[] ba = normalize(b);
-		return (findDotProduct(na, ba) + 1) / 2d;
-	}
-
-	public double compare(String[] words1, String[] words2) {
+	public float compare(String[] words1, String[] words2) {
 		String[] allWords = (String[]) ArrayUtils.addAll(words1, words2);
 		allWords = getUniqueWords(allWords);
 
-		double[] freq1 = getFrequency(allWords,words1);
-		double[] freq2 = getFrequency(allWords,words2);
+		float[] freq1 = getFrequency(allWords,words1);
+		float[] freq2 = getFrequency(allWords,words2);
 
-		double[] norm1 = normalize(freq1);
-		double[] norm2 = normalize(freq2);
+		float[] norm1 = normalize(freq1);
+		float[] norm2 = normalize(freq2);
 
-		double comparison = findDotProduct(norm1,norm2);
-		if (Double.isNaN(comparison)) {
+		float comparison = findDotProduct(norm1,norm2);
+		if (Float.isNaN(comparison)) {
 			// TODO: Maybe div-by-zero in normalize
 			return 0;
 		}
 		return comparison;
 	}
 
-	public double compare(List<String> words1, List<String> words2) {
+	public float compare(List<String> words1, List<String> words2) {
 		return compare(Strings.toArray(words1),Strings.toArray(words2));
 	}
 
-	private double[] getFrequency(String[] keys,String[] words) {
-		double[] freq = new double[keys.length];
+	private float[] getFrequency(String[] keys,String[] words) {
+		float[] freq = new float[keys.length];
 		for (int i=0;i<words.length;i++) {
 			for (int j=0;j<keys.length;j++) {
 				if (words[i].equals(keys[j])) {
@@ -275,43 +267,31 @@ public class SemanticService {
 		return freq;
 	}
 
-	public double findEuclidianNorm(double[] doc) {
-		double sum = 0;
+	public float findEuclidianNorm(float[] doc) {
+		float sum = 0;
 		for (int i = 0; i < doc.length; i++) {
 			sum += Math.pow(doc[i], 2);
 		}
-		return Math.sqrt(sum);
+		return (float) Math.sqrt(sum);
 	}
 
-	public double[] normalize(double[] doc) {
+	public float[] normalize(float[] doc) {
 		int len = doc.length;
-		double[] norm = new double[len];
-		double euclidianNorm = findEuclidianNorm(doc);
+		float[] norm = new float[len];
+		float euclidianNorm = findEuclidianNorm(doc);
 		for (int i = 0; i < len; i++) {
 			norm[i] = doc[i] / euclidianNorm;
 		}
 		return norm;
 	}
 
-	public double findDotProduct(double[] query, double[] doc)
-	{
+	public float findDotProduct(float[] query, float[] doc) {
 		int len = query.length;
-		double sum=0;
-		for (int i=0;i<len;i++) {
-			sum+=query[i]*doc[i];
+		float sum = 0;
+		for (int i = 0; i < len; i++) {
+			sum += query[i] * doc[i];
 		}
 		return sum;
-	}
-
-	public static void normalizeInPlace(double a[]) {
-		double scale = 0;
-		for (int k = 0; k < a.length; k++) {
-			scale += a[k] * a[k];
-		}
-		scale = 1 / Math.sqrt(scale);
-		for (int k = 0; k < a.length; k++) {
-			a[k] *= scale;
-		}
 	}
 
 	public void lowercaseWords(String[] words) {

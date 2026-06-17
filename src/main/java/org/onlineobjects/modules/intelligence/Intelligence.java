@@ -107,9 +107,11 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 		return embedders.stream().filter(e -> e.accepts(model)).findFirst().map(e -> e.embed(string, model));
 	}
 
-	public List<Double> vectorize(String string) {
+	public float[] vectorize(String string) {
 		Optional<EmbeddingModel> searchEmbeddingModel = getSearchEmbeddingModel();
-		if (searchEmbeddingModel.isEmpty()) return null;
+		if (searchEmbeddingModel.isEmpty()) {
+			return null;
+		}
 		return embed(string, searchEmbeddingModel.get()).map(EmbeddingInfo::getVector).orElseThrow();
 	}
 
@@ -182,7 +184,7 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 	}
 
 	public static class EmbeddingsResponse {
-		public List<List<Double>> embeddings;
+		public List<float[]> embeddings;
 	}
 
 	public static class StreamResponse {

@@ -8,7 +8,7 @@ public enum EmbeddingModel {
 	GEMINI_1_SMALL(1, 768, 10),
 	GEMINI_2_PREVIEW(2, 3072, 10),
 	GEMINI_2_PREVIEW_SMALL(2, 768, 10),
-	OLLAMA_GEMINI(3, 768, 0)
+	OLLAMA_GEMMA(3, 768, 0)
 	;
 
 	private int id;

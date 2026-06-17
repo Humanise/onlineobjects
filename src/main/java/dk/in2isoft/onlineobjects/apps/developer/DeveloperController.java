@@ -153,7 +153,7 @@ public class DeveloperController extends ApplicationController {
 	}
 
 	@Path(of = "intelligence/vectorize", method = Method.GET)
-	public List<Double> vectorize(Request request) {
+	public float[] vectorize(Request request) {
 		return intelligence.vectorize(request.getString("text"));
 	}
 
@@ -186,8 +186,11 @@ public class DeveloperController extends ApplicationController {
 	public Object intelligenceCompare(Request request) throws IOException {
 		String first = request.getString("first");
 		String second = request.getString("second");
-		List<Double> v1 = intelligence.vectorize(first);
-		List<Double> v2 = intelligence.vectorize(second);
+		float[] v1 = intelligence.vectorize(first);
+		float[] v2 = intelligence.vectorize(second);
+		if (v1 == null || v2 == null) {
+			return "Vectors could not be generated";
+		}
 		return semantics.compareVectors(v1, v2);
 	}
 

@@ -31,19 +31,19 @@ import dk.in2isoft.onlineobjects.util.semantics.English;
 import dk.in2isoft.onlineobjects.util.semantics.Language;
 
 public class TestComparison extends AbstractSpringTestCase {
-	
+
 	private static Logger log = LogManager.getLogger(TestComparison.class);
-	
+
 	@Autowired
 	private SemanticService semanticService;
-	
+
 	@Autowired
 	private HTMLService htmlService;
-	
+
 	@Test
 	public void testSimply() throws Exception {
-		
-		double comparison = semanticService.compareVectors(List.of(1d), List.of(-1d));
+
+		double comparison = semanticService.compareVectors(new float[1], new float[-1]);
 		assertEquals(0.0d, comparison, 0d);
 	}
 
@@ -56,14 +56,14 @@ public class TestComparison extends AbstractSpringTestCase {
 
 		assertEquals(-1.0d, dotProduct, 0d);
 	}
-		
+
 	@Test
 	public void testWikipedia() throws Exception {
-		
+
 		File folder = getTestFile("wikipedia");
 		File[] files = folder.listFiles();
 		compareUrls(files, new English());
-		
+
 	}
 
 	private void compareUrls(File[] urls, Language language) {
@@ -83,7 +83,7 @@ public class TestComparison extends AbstractSpringTestCase {
 		}
 		watch.split();
 		log.info("Files read: " + watch.getSplitTime());
-		
+
 		Matrix<String, String, Double> matrix = new Matrix<String, String, Double>();
 		for (Entry<String, String> doc1 : docs.entrySet()) {
 			for (Entry<String, String> doc2 : docs.entrySet()) {
@@ -101,28 +101,29 @@ public class TestComparison extends AbstractSpringTestCase {
 				log.info("Comparing: {} to {} in {}", doc1.getKey(), doc2.getKey(), watch.getTime());
 			}
 		}
-		
-		
-		
+
+
+
 		log.info("\n"+matrix.toString());
 
 		StringBuilder entiretext = new StringBuilder();
 		for (String string : docs.values()) {
 			entiretext.append(" ").append(string);
 		}
-		
+
 		final Map<String, Integer> freq = semanticService.getWordFrequency(entiretext.toString().toLowerCase(),language);
 		Map<String, Integer> sorted = new java.util.TreeMap<String,Integer>(new Comparator<String>() {
+			@Override
 			public int compare(String o1, String o2) {
 				return freq.get(o1).compareTo(freq.get(o2));
 			}
 		});
 		sorted.putAll(freq);
-		
+
 		log.info("Frequency: "+freq);
-		
+
 		logMatrix(matrix);
-		
+
 	}
 
 	private void logMatrix(Matrix<String, String, Double> matrix) {
@@ -130,6 +131,7 @@ public class TestComparison extends AbstractSpringTestCase {
 		List<MatrixEntry<String,String,Double>> entries = matrix.getEntries();
 		Collections.sort(entries, new Comparator<MatrixEntry<String,String,Double>>() {
 
+			@Override
 			public int compare(MatrixEntry<String, String, Double> o1, MatrixEntry<String, String, Double> o2) {
 				return o1.getValue().compareTo(o2.getValue());
 			}

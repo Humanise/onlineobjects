@@ -68,6 +68,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		this.applicationContext = applicationContext;
 	}
 
+	@Override
 	public void onApplicationEvent(ApplicationContextEvent event) {
 		if (event instanceof ContextRefreshedEvent) {
 			try {
@@ -76,7 +77,9 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 						initializeJob(desc);
 					}
 				}
-				scheduler.start();
+				if (configurationService.isStartScheduling()) {
+					scheduler.start();
+				}
 			} catch (SchedulerException e) {
 				log.error("Problem starting scheduler", e);
 			}
@@ -105,6 +108,7 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 		}
 		job.getJobDataMap().put("schedulingSupportFacade", schedulingSupportFacade);
 		scheduler.addJob(job, true);
+		boolean active = configurationService.isStartScheduling() && !desc.isPaused();
 		if (Strings.isNotBlank(desc.getCron()) || desc.getRepeatMinutes()>0) {
 			if (Strings.isNotBlank(desc.getCron())) {
 				CronScheduleBuilder schedule = CronScheduleBuilder.cronSchedule(desc.getCron());
@@ -116,14 +120,15 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 				scheduler.scheduleJob(trigger);
 				triggerDescriptions.put(job.getKey(), "min:  "+desc.getRepeatMinutes());
 			}
-			if (desc.isPaused() || !configurationService.isStartScheduling()) {
-				scheduler.pauseJob(job.getKey());
-			}
+		}
+		if (!active) {
+			scheduler.pauseJob(job.getKey());
 		}
 	}
 
 
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		SchedulerFactory sf = new StdSchedulerFactory();
 		scheduler = sf.getScheduler();
@@ -317,6 +322,9 @@ public class SchedulingService implements ApplicationListener<ApplicationContext
 			if (jobDetail!=null) {
 				log("Running job",key);
 				scheduler.triggerJob(key, data);
+				if (!scheduler.isStarted()) {
+					scheduler.start();
+				}
 			}
 		} catch (SchedulerException e) {
 			log.error("Exception while running job", e);

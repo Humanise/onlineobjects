@@ -29,7 +29,7 @@ public class OllamaEmbedder implements Embedder {
 	@Override
 	public boolean accepts(EmbeddingModel model) {
 		switch (model) {
-			case OLLAMA_GEMINI : {
+			case OLLAMA_GEMMA : {
 				return true;
 			}
 			default :
