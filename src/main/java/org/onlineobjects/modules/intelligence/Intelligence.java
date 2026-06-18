@@ -52,6 +52,7 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 
 		models.add(LanguageModel.of("ollama-cloud", "gpt-oss:120b", "GPT OSS 120b"));
 
+		models.add(LanguageModel.of(Mistral.NAME, "mistral-small-2603", "Mistral small 2603"));
 	}
 
 	@Override

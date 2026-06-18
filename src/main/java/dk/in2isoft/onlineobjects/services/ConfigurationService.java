@@ -72,6 +72,7 @@ public class ConfigurationService implements InitializingBean {
 	private String ollamaCloudApiKey;
 	private String ollamaCloudUrl;
 	private String geminiApiKey;
+	private String mistralApiKey;
 	private EmbeddingModel searchEmbeddingModel;
 
 
@@ -469,5 +470,13 @@ public class ConfigurationService implements InitializingBean {
 
 	public Optional<EmbeddingModel> getSearchEmbeddingModel() {
 		return Optional.ofNullable(this.searchEmbeddingModel);
+	}
+
+	public String getMistralApiKey() {
+		return mistralApiKey;
+	}
+
+	public void setMistralApiKey(String mistralApiKey) {
+		this.mistralApiKey = mistralApiKey;
 	}
 }

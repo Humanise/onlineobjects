@@ -72,6 +72,7 @@
     <property name="ollamaCloudUrl" value="${intelligence.ollama.cloud.url}" />
     <property name="ollamaCloudApiKey" value="${intelligence.ollama.cloud.key}" />
     <property name="geminiApiKey" value="${intelligence.gemini.key}" />
+    <property name="mistralApiKey" value="${intelligence.mistral.key}" />
     <property name="searchEmbeddingModel" value="${intelligence.embedding.search.model}" />
     
   </bean>
@@ -222,6 +223,7 @@
   <bean id="intelligenceService" class="org.onlineobjects.modules.intelligence.Intelligence" depends-on="configurationService"/>
 
   <bean id="anthropic" class="org.onlineobjects.modules.intelligence.Anthropic" />
+  <bean id="mistral" class="org.onlineobjects.modules.intelligence.Mistral" />
 
   <bean id="ollama" class="org.onlineobjects.modules.intelligence.Ollama" />
 
