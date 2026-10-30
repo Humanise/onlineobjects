@@ -42,7 +42,7 @@ public class Anthropic implements LanguageModelHost {
 	public void prompt(String prompt, LanguageModel model, OutputStream out) {
 		String version = model.getParameters().get("version");
 		var payload = Map.of(
-			"model", "claude-sonnet-4-20250514",
+			"model", model.getId(),
 			"max_tokens", 1024,
 			"stream", true,
 			"messages", List.of(Map.of("role", "user", "content", prompt))

@@ -48,7 +48,8 @@ public class Intelligence  implements ApplicationListener<ContextRefreshedEvent>
 		models.add(LanguageModel.of("ollama", "qwen3:30b", "Qwen 3 - 30b"));
 		models.add(LanguageModel.of("ollama", "qwen3.5:9b", "Qwen 3.5 - 9b"));
 
-		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-20250514", "Claude Sonnet").withParameter("version", "2023-06-01"));
+		models.add(LanguageModel.of("anthropic", "claude-sonnet-4-5-20250929", "Claude Sonnet 4.5").withParameter("version", "2023-06-01"));
+		models.add(LanguageModel.of("anthropic", "claude-sonnet-5", "Claude Sonnet 5").withParameter("version", "2023-06-01"));
 
 		models.add(LanguageModel.of("ollama-cloud", "gpt-oss:120b", "GPT OSS 120b"));
 
