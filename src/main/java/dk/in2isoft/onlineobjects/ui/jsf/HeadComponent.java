@@ -3,11 +3,6 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 import java.io.File;
 import java.io.IOException;
 
-import jakarta.faces.component.FacesComponent;
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.component.visit.VisitResult;
-import jakarta.faces.context.FacesContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -23,6 +18,10 @@ import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.DependencyService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.ui.ScriptCompressor;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.visit.VisitResult;
+import jakarta.faces.context.FacesContext;
 
 @FacesComponent(value = HeadComponent.FAMILY)
 public class HeadComponent extends AbstractComponent {
@@ -106,12 +105,6 @@ public class HeadComponent extends AbstractComponent {
 			//getRequest().getResponse().addHeader("Link", "<"+styleUrl+">; rel=preload; as=style");
 		 	writeInlineJs(configurationService, out);
 		}
-		/*
-		out.write("<!--[if IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie8.css\"></link><![endif]-->");
-		out.write("<!--[if IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie7.css\"></link><![endif]-->");
-		out.write("<!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"" + request.getBaseContext() + "/hui/css/msie6.css\"></link><![endif]-->");
-		out.write("<!--[if lt IE 9]><script type=\"text/javascript\" src=\"" + request.getBaseContext() + "/hui/bin/compatibility.min.js\"></script><![endif]-->");
-		*/
 		out.newLine().startElement("script").withAttribute("data-hui-context", "/hui").withAttribute("data-hui-lang", request.getLanguage()).endElement("script");
 
 		out.startScript().newLine();
