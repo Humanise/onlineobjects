@@ -72,6 +72,11 @@ public class ModelController extends ModelControllerBase {
 		return modelService.getUser(request);
 	}
 
+	@Path("human")
+	public void markHuman(Request request) {
+		clients.markHuman(request);
+	}
+
 	@Path(exactly={"image","list"})
 	public void listImage(Request request) throws IOException, ModelException {
 		Query<Image> query = Query.after(Image.class).withPaging(0, 40).as(request.getSession()).orderByCreated().descending();

@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.onlineobjects.core.Client;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -67,6 +68,8 @@ public class Request implements Operator {
 
 	private String uri;
 
+	private Client client;
+
 	private Request(HttpServletRequest request, HttpServletResponse response) {
 		super();
 		this.response = response;
@@ -74,7 +77,11 @@ public class Request implements Operator {
 		this.decode();
 		this.localContext = new String[] {};
 		this.startTime = System.nanoTime();
-		//debug();
+		this.client = Client.newUndetermined();
+	}
+
+	public Client getClient() {
+		return client;
 	}
 
 	public static Request get(HttpServletRequest request, HttpServletResponse response) {
@@ -693,7 +700,6 @@ public class Request implements Operator {
 	}
 
 	public String getReferer() {
-
 		return request.getHeader(HttpHeaders.REFERER);
 	}
 
@@ -707,5 +713,13 @@ public class Request implements Operator {
 		if (ae != null && ae.indexOf("gzip") != -1) {
 			this.response = new GZIPResponseWrapper(response);
 		}
+	}
+
+	public boolean isHuman() {
+		return client.isHuman();
+	}
+
+	public boolean isBot() {
+		return client.isBot();
 	}
 }

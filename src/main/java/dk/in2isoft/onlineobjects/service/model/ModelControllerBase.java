@@ -1,5 +1,6 @@
 package dk.in2isoft.onlineobjects.service.model;
 
+import org.onlineobjects.core.Clients;
 import org.onlineobjects.modules.intelligence.Intelligence;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +29,7 @@ public class ModelControllerBase extends ServiceController {
 	protected PersonService personService;
 	protected KnowledgeService knowledgeService;
 	protected Intelligence intelligence;
+	protected Clients clients;
 
 	public ModelControllerBase() {
 		super("model");
@@ -88,5 +90,10 @@ public class ModelControllerBase extends ServiceController {
 	@Autowired
 	public void setIntelligence(Intelligence intelligence) {
 		this.intelligence = intelligence;
+	}
+
+	@Autowired
+	public void setClients(Clients clients) {
+		this.clients = clients;
 	}
 }

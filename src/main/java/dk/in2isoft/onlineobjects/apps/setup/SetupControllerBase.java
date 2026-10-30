@@ -3,6 +3,8 @@ package dk.in2isoft.onlineobjects.apps.setup;
 import java.util.List;
 import java.util.Locale;
 
+import org.onlineobjects.core.Clients;
+
 import dk.in2isoft.onlineobjects.apps.ApplicationController;
 import dk.in2isoft.onlineobjects.apps.words.LoadManager;
 import dk.in2isoft.onlineobjects.core.SecurityService;
@@ -28,11 +30,13 @@ public abstract class SetupControllerBase extends ApplicationController {
 	protected PasswordRecoveryService passwordRecoveryService;
 	protected CacheService cacheService;
 	protected LoadManager wordsLoadManager;
+	protected Clients clients;
 
 	public SetupControllerBase() {
 		super("setup");
 	}
 
+	@Override
 	public List<Locale> getLocales() {
 		return null;
 	}
@@ -85,5 +89,9 @@ public abstract class SetupControllerBase extends ApplicationController {
 
 	public void setWordsLoadManager(LoadManager loadManager) {
 		this.wordsLoadManager = loadManager;
+	}
+
+	public void setClients(Clients clients) {
+		this.clients = clients;
 	}
 }

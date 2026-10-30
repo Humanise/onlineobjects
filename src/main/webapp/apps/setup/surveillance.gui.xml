@@ -25,6 +25,8 @@
             <option icon="common/warning" text="Latest exceptions" value="latestExceptions"/>
             <option icon="view/list" text="Runtime log" value="liveLog"/>
             <option icon="view/list" text="Log" value="log"/>
+            <option icon="view/list" text="IPs" value="ips"/>
+            <option icon="view/list" text="Bot agents" value="botAgents"/>
           </selection>
         </overflow>
       </left>

@@ -10,16 +10,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onlineobjects.core.Clients;
 import org.springframework.util.StopWatch;
 
 import dk.in2isoft.commons.http.HeaderUtil;
@@ -35,6 +29,12 @@ import dk.in2isoft.onlineobjects.modules.dispatch.Responder;
 import dk.in2isoft.onlineobjects.modules.surveillance.SurveillanceService;
 import dk.in2isoft.onlineobjects.ui.Request;
 import dk.in2isoft.onlineobjects.util.Messages;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class DispatchingService {
 
@@ -44,6 +44,7 @@ public class DispatchingService {
 	private SecurityService securityService;
 	private SurveillanceService surveillanceService;
 	private ConfigurationService configurationService;
+	private Clients clients;
 
 	private List<Responder> responders;
 
@@ -62,6 +63,7 @@ public class DispatchingService {
 		stopWatch.start();
 		boolean handled = false;
 		Request request = Request.get(servletRequest, servletResponse);
+		clients.classify(request);
 		request.setOperationProvider(modelService);
 		Boolean shouldRollback = false;
 
@@ -264,5 +266,9 @@ public class DispatchingService {
 
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
+	}
+
+	public void setClients(Clients clients) {
+		this.clients = clients;
 	}
 }

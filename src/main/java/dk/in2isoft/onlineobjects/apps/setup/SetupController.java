@@ -694,6 +694,35 @@ public class SetupController extends SetupControllerBase {
 				writer.endRow();
 			}
 			writer.endList();
+		} else if ("ips".equals(kind)) {
+			ListWriter writer = new ListWriter(request);
+
+			writer.startList();
+
+			writer.startHeaders().header("IP").header("Type").endHeaders();
+
+			for (String ip : clients.getHumanIps()) {
+				writer.startRow();
+				writer.startCell().text(ip).endCell();
+				writer.startCell().text("Human").endCell();
+				writer.endRow();
+			}
+			writer.endList();
+		} else if ("botAgents".equals(kind)) {
+			ListWriter writer = new ListWriter(request);
+
+			writer.startList();
+
+			writer.startHeaders().header("Agent").header("Type").endHeaders();
+
+			for (String agent : clients.getBotAgents()) {
+				writer.startRow();
+				writer.startCell().text(agent).endCell();
+				writer.startCell().text("Robot").endCell();
+				writer.endRow();
+			}
+			writer.endList();
+
 		} else if ("log".equals(kind)) {
 			ListWriter writer = new ListWriter(request);
 

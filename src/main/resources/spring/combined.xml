@@ -102,6 +102,7 @@
   </bean>
 
   <bean id="model" class="org.onlineobjects.core.Model"/>
+  <bean id="clients" class="org.onlineobjects.core.Clients"/>
 
 
   <bean id="storageService" class="dk.in2isoft.onlineobjects.services.StorageService" autowire="byType" />

@@ -3,9 +3,7 @@ package dk.in2isoft.onlineobjects.ui.jsf;
 import java.io.File;
 import java.io.IOException;
 
-import jakarta.faces.component.FacesComponent;
-import jakarta.faces.component.html.HtmlBody;
-import jakarta.faces.context.FacesContext;
+import org.onlineobjects.core.Client;
 
 import dk.in2isoft.commons.jsf.Components;
 import dk.in2isoft.commons.jsf.Dependencies;
@@ -16,6 +14,9 @@ import dk.in2isoft.commons.lang.Files;
 import dk.in2isoft.commons.lang.Strings;
 import dk.in2isoft.onlineobjects.services.ConfigurationService;
 import dk.in2isoft.onlineobjects.ui.DependencyService;
+import jakarta.faces.component.FacesComponent;
+import jakarta.faces.component.html.HtmlBody;
+import jakarta.faces.context.FacesContext;
 
 @FacesComponent(BodyComponent.TYPE)
 @Dependencies(css={"/core/css/oo_body.css"},requires={OnlineObjectsComponent.class})
@@ -26,6 +27,7 @@ public class BodyComponent extends HtmlBody {
 	private boolean plain;
 	private boolean light;
 
+	@Override
 	public java.lang.String getStyleClass() {
 		if (plain) {
 			return null;
@@ -78,8 +80,13 @@ public class BodyComponent extends HtmlBody {
 				out.startScopedScript().write(js).endScopedScript();
 			}
 		}
-		out.flush();
 
+		Client client = Components.getRequest().getClient();
+		if (Client.Type.UNDETERMINED.equals(client.getType())) {
+			out.startScript().write("hui.on(['oo'], function() {oo.verifyClient()})").endScript();
+		}
+
+		out.flush();
 		super.encodeEnd(context);
 	}
 

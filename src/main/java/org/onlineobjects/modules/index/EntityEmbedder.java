@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.onlineobjects.modules.intelligence.EmbeddingInfo;
 import org.onlineobjects.modules.intelligence.EmbeddingModel;
 import org.onlineobjects.modules.intelligence.Intelligence;
@@ -32,16 +33,15 @@ public class EntityEmbedder {
 
 	public Optional<EmbeddingInfo> embed(Entity entity, Duration delay) throws ModelException, SecurityException {
 		EmbeddingModel embeddingModel = intelligence.getSearchEmbeddingModel().orElse(null);
-		if (embeddingModel == null) {
-			return Optional.empty();
-		}
+		if (embeddingModel == null) return Optional.empty();
+		String text = asString(entity);
+		if (Strings.isBlank(text)) return Optional.empty();
 		try (Operator operator = model.newAdminOperator()) {
 			Query<Embedding> query = Query.after(Embedding.class).withField("entityId", entity.getId()).withField("modelId", embeddingModel.getId());
 			Embedding embedding = model.search(query, operator).getFirst();
 			if (embedding == null) {
 				embedding = new Embedding();
 
-				String text = asString(entity);
 				try {
 					Thread.sleep(delay);
 				} catch (InterruptedException ignore) {}
@@ -57,8 +57,6 @@ public class EntityEmbedder {
 				model.create(embedding, operator);
 				return Optional.of(embeddingInfo);
 			} else {
-				String text = asString(entity);
-
 				if (!Objects.equals(text, embedding.getText())) {
 					try {
 						Thread.sleep(delay);

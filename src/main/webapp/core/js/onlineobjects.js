@@ -226,6 +226,15 @@ oo.recover = function() {
   });
 }
 
+oo.verifyClient = function() {
+  var l;
+  l  = function() {
+    fetch('/service/model/human');
+    document.body.removeEventListener('mousemove', l);
+  };
+  document.body.addEventListener('mousemove', l);
+}
+
 hui.on(['hui'],function() {
   hui.on(hui.find('.js-signup'),'click',function(e) {
     if (!hui.ui.Panel) return;
@@ -270,3 +279,5 @@ hui.on(['hui.ui'], () => {
     }
   })
 });
+
+hui.define('oo');
