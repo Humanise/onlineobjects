@@ -65,6 +65,7 @@ public class WordsWordView extends AbstractView {
 		text = getWord(path);
 		if (text!=null) {
 			Query<Word> query = Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text);
+			query.withoutField(Word.TEXT_FIELD, "TOP");
 			words = wordService.getImpressions(query, request);
 			for (WordImpression impression : words) {
 				Multimap<String, WordRelation> map = getRelations(impression, request);

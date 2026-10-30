@@ -2,7 +2,6 @@ package dk.in2isoft.onlineobjects.core;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -126,6 +125,11 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return this;
 	}
 
+	public Query<T> withoutField(String property, String str) {
+		fieldLimitations.add(new FieldLimitation(property, str, FieldLimitation.Comparison.NOT_EQUALS));
+		return this;
+	}
+
 	public Query<T> withFieldLike(String property, String str) {
 		fieldLimitations.add(new FieldLimitation(property, str, FieldLimitation.Comparison.LIKE));
 		return this;
@@ -182,6 +186,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return this;
 	}
 
+	@Override
 	public Query<T> as(Privileged... privileged) {
 		// TODO (Admin) should be ignored
 		if (privileged==null || privileged.length==1 && privileged[0]==null) {
@@ -273,16 +278,19 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 		return new Query<E>(className);
 	}
 
+	@Override
 	public org.hibernate.query.Query<T> createItemQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select distinct obj");
 		return Code.cast(createQuery(hql, clazz, session, false));
 	}
 
+	@Override
 	public org.hibernate.query.Query<Long> createCountQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select count(distinct obj.id)");
 		return Code.cast(createQuery(hql, Long.class, session, true));
 	}
 
+	@Override
 	public org.hibernate.query.Query<Long> createIdQuery(Session session) {
 		StringBuilder hql = new StringBuilder("select obj.id");
 		return Code.cast(createQuery(hql, Long.class, session, false));
@@ -357,7 +365,8 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			}
 		}
 		if (fieldLimitations.size() > 0) {
-			for (FieldLimitation limit : fieldLimitations) {
+			for (int i = 0; i < fieldLimitations.size(); i++) {
+				FieldLimitation limit = fieldLimitations.get(i);
 				if (limit.getComparison().equals(FieldLimitation.Comparison.IN)) {
 					hql.append(" and ");
 					if (limit.getFunction()!=null) {
@@ -368,7 +377,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 						hql.append(")");
 					}
 					hql.append(limit.getComparison());
-					hql.append("(:").append(limit.getProperty()).append(")");
+					hql.append("(:fieldLimitationValue").append(i).append(")");
 				} else {
 					hql.append(" and ");
 					if (limit.getFunction()!=null) {
@@ -379,7 +388,7 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 						hql.append(")");
 					}
 					hql.append(limit.getComparison());
-					hql.append(":").append(limit.getProperty());
+					hql.append(":fieldLimitationValue").append(i);
 				}
 			}
 		}
@@ -443,17 +452,18 @@ public class Query<T> extends AbstractModelQuery<T> implements IdQuery, ItemQuer
 			q.setFetchSize(pageSize);
 			q.setFirstResult(pageNumber * pageSize);
 		}
-		for (Iterator<FieldLimitation> i = fieldLimitations.iterator(); i.hasNext();) {
-			FieldLimitation limit = i.next();
+		for (int i = 0; i < fieldLimitations.size(); i++) {
+			FieldLimitation limit = fieldLimitations.get(i);
 			Object value = limit.getValue();
+			String parameter = "fieldLimitationValue" + i;
 			if (value instanceof Date) {
-				q.setParameter(limit.getProperty(), (Date) limit.getValue(), StandardBasicTypes.DATE);
+				q.setParameter(parameter, (Date) limit.getValue(), StandardBasicTypes.DATE);
 			} else if (value instanceof List<?>) {
-				q.setParameterList(limit.getProperty(), (List<?>) limit.getValue());
+				q.setParameterList(parameter, (List<?>) limit.getValue());
 			} else if (value instanceof Object[]) {
-				q.setParameterList(limit.getProperty(), (Object[]) limit.getValue());
+				q.setParameterList(parameter, (Object[]) limit.getValue());
 			} else {
-				q.setParameter(limit.getProperty(), value==null ? null : value.toString());
+				q.setParameter(parameter, value==null ? null : value.toString());
 			}
 		}
 		if (Strings.isDefined(words)) {

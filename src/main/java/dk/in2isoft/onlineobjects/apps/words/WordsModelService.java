@@ -69,6 +69,7 @@ public class WordsModelService {
 		Diagram diagram = new Diagram();
 		diagram.setMaxNodeCount(100);
 		Query<Word> query = Query.of(Word.class).withFieldLowercase(Word.TEXT_FIELD, text);
+		query.withoutField(Word.TEXT_FIELD, "TOP");
 		List<Word> words = modelService.search(query, operator).getList();
 		for (Word word : words) {
 			if (diagram.isFull()) {

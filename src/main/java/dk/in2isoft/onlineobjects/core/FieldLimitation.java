@@ -3,13 +3,14 @@ package dk.in2isoft.onlineobjects.core;
 public class FieldLimitation {
 
 	public enum Comparison {
-		EQUALS ("="), LESSTHAN ("<"), MORETHAN (">"), IN (" in "), LIKE (" like ");
+		EQUALS ("="), NOT_EQUALS ("!="), LESSTHAN ("<"), MORETHAN (">"), IN (" in "), LIKE (" like ");
 
 		private String x;
 		Comparison(String x) {
 			this.x = x;
 		}
 
+		@Override
 		public String toString() {
 			return x;
 		}
